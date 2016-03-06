@@ -1,0 +1,151 @@
+<title>UFO Behaviour<title>
+
+<head></head>
+<body>
+<h1>UFO Behaviour</h1>
+<br>
+To begin, UFOs have the following mission types:
+<li>Alien Harvest</li>
+<li>Alien Research</li>
+<li>Alien Abduction</li>
+<li>Alien Infiltration</li>
+<li>Alien Terror</li>
+<li>Alien Supply</li>
+<li>Alien Base</li>
+<li>Alien Retaliation</li>
+<br>
+The <b>Harvest</b>, <b>Research</b> and <b>Abduction</b> missions are similar.
+<li>UFO starts at a random location on the globe</li>
+<li>UFO proceeds to target site</li>
+<li>At target site, UFO lands, and waits for a bit.  (How long is "a bit"?)</li>
+<li>UFO takes off again, moves short, random distance away</li>
+<li>Lands and waits for a bit.</li>
+<li>Steps 4 and 5 are repeated a number of times</li>
+<li>UFO moves to departure point</li>
+<li>UFO leaves Earth</li>
+<li>If UFO is disturbed at a landing site, it will proceed to departure point and leave earth.</li>
+<li>If UFO is attacked while in the air, and not destroyed, it will continue on its mission.</li>
+<br>
+Notes:
+<li>The number of landings is variable. Usually either 0, 1, 2, or 3 times</li>
+<li>The UFO never starts it’s mission at an Alien base</li>
+<li>The only time a UFO ends at an alien base is when it is a supply mission.</li>
+<li>Once the Supply Ship finishes stocking the base, it immediately leaves.</li> 
+<li>Departure/start points are random points on the globe and AFAIK they never are the same.</li>
+<br>
+The <b>Alien Infiltration</b> mission is:
+<li>UFO starts at a random location on the globe</li>
+<li>UFO proceeds to target site</li>
+<li>If UFO reaches target site, UFO disappears.</li>
+<li>If UFO is attacked while in the air, and not destroyed, it will continue on its mission.</li>
+<br>
+The <b>Alien Terror</b> mission is:
+<li>UFO starts at a random location on the globe</li>
+<li>UFO proceeds to target site</li>
+<li>If UFO reaches target site, it lands, and landing zone becomes a terror site.</li>
+<li>After a period of time, UFO takes off, moves to departure point and leaves Earth.</li>
+<li>If UFO is attacked while in the air, and not destroyed, it will continue on its mission.</li>
+<br>
+The <b>Alien Supply</b> mission is:
+<li>UFO starts at a random location on the globe</li>
+<li>UFO proceeds to target location. Usually beside, but not IN, an Alien Base</li>
+<li>If UFO reaches target site, it lands.</li>
+<li>After a period of time (how long?), UFO takes off, moves to departure point and leaves Earth.</li>
+<li>If UFO is attacked while in the air, and not destroyed, it will continue on its mission.</li>
+<br>
+The <b>Alien Base</b> (construction) mission is:
+<li>Scout UFO starts at a random location on the globe</li>
+<li>UFO proceeds to target site</li>
+<li>At target site, UFO behaves like a research mission.</li>
+<li>After a while, UFO leaves</li>
+<li>Steps 1 to 4 are repeated for a number of “surveying” UFOs</li>
+<li>A little later, a Battleship UFO starts at a random location on the globe </li>
+<li>Battleship proceeds to target site</li>
+<li>At target site, UFO lands.</li>
+<li>After 4 to 10 days, UFO leaves, and an Alien base is left at the site.</li>
+<br>
+The <b>Alien Retaliation</b> mission is:
+<li>“Scouting” UFO starts at a random location on the globe</li>
+<li>UFO proceeds to target site  (somewhere near when Alien thinks X-Corp base might be.)</li>
+<li>At target site, UFO starts searching the area for a base.</li>
+<li>If scout is destroyed mission ends.</li>
+<li>If scout fails to locate base, mission ends.</li>
+<li>If a base is found, scout leaves area, and</li>
+<li>Battleship UFO starts at a random location on the globe</li>
+<li>UFO proceeds to target site (the base)</li>
+<li>If attack on base is successful, UFO flies to departure point and leaves Earth.</li>
+<br>
+Other notes:
+<li>UFO's never directly attack X-COM craft. X-COM is always the initiator of air-to-air attacks.</li>
+<li>Non-Retaliation UFOs do not detect the presence of X-COM bases (it's not their job). Retaliation scouts do the actual detecting, and according to the OSG have a detection range of 240 nautical miles.</li>
+<li>UFO crash sites last anywhere from 1-4 days on a map.</li>
+<li>Landed UFOs stick around for 4-12 hours, but this number is highly variable and probably depends on mission type and previous X-COM activity on the mission.</li>
+<li>Terror sites last anywhere from 4-10 hours, ut there is a bug in the game allowing you to extend the time-frame to infinity by always having at least one ship headed to the site at all times.</li>
+<li>Technically, on infiltration/base building excercises, the alien base is constructed before the Battleships arrive.</li>
+
+<h1>Multiple UFO behaviour</h1><br>
+According to MISSIONS.DAT in UFOpedia, UFOs generally don't work in isolation.<br>
+As discussed in the terror and alien base missions above, a a "mission" (or as shown in AIandCraftClasses.png, an "Invasion Task" involves a number of UFOs over a period of time.<br>
+<br>
+So, the sequences are:<br>
+<h3>Research</h3>
+<li>small scout</li>
+<li>1 week later, a medium scout</li>
+<li>1 week later, a large scout</li>
+<li>3 days later, a large scout</li>
+<br>
+<h3>Harvest</h3>
+<li>s.Scout</li>
+<li>3d	s.Scout</li>
+<li>1w	s.Scout</li>
+<li>3d	l.Scout</li>
+<li>3d	l.Scout</li>
+<li>1w	Harvester</li>
+<li>3d	Harvester</li>
+<li>1d	Battleship</li>
+<br>
+<h3>Abduction</h3>
+<li>s.Scout</li>
+<li>1w	m.Scout</li>
+<li>2w	l.Scout</li>
+<li>3d	Abductor</li>
+<li>3d	Abductor</li>
+<li>1h	Battleship</li>
+<br>
+<h3>Infiltration</h3>
+<li>s.Scout</li>
+<li>2w	m.Scout</li>
+<li>2w	m.Scout</li>
+<li>2w	l.Scout</li>
+<li>3d	l.Scout</li>
+<li>1h	Terrorship</li>
+<li>1h	Battleship</li>
+<li>1h	Supply</li>
+<li>1h	Battleship</li>
+<br>
+<h3>Base</h3>
+<li>s.Scout</li>
+<li>m.Scout</li>
+<li>l.Scout</li>
+<li>Supply</li>
+<li>Supply</li>  
+<li>Battleship</li><br>
+if you shoot down the supplys the battleship will not come for several weeks and a retaliation mission is started.
+<br>
+<h3>Terror</h3>
+<li>m.Scout</li>
+<li>1w	l.Scout</li>
+<li>1w	Terrorship</li>
+<li>1w	Terrorship</li><br>
+Each Terrorship will cause one terror mission, if it is not shot down before it lands.
+<br>
+<h3>Retaliation</h3>
+<li>s.Scout</li>
+<li>?       m.Scout</li>
+<li>32h*	m.Scout (<i>add 146.5h* if 1/0 shot down at first turning point</i>)</li>
+<li>52h*    l.Scout (<i>add 3d if 1/1 shot down at first turning point</i>)</li>
+<li>?	l.Scout</li>
+<li>?       Battleship</li>
+<li>?	Battleship</li>
+
+</body>

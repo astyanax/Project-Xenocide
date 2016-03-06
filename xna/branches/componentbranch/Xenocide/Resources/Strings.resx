@@ -1,0 +1,528 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BUTTON_ABANDON" xml:space="preserve">
+    <value>Abandon Game</value>
+  </data>
+  <data name="BUTTON_ADDPROJECT" xml:space="preserve">
+    <value>Add project</value>
+  </data>
+  <data name="BUTTON_BASE_INFORMATION" xml:space="preserve">
+    <value>Base Information</value>
+  </data>
+  <data name="BUTTON_BASES" xml:space="preserve">
+    <value>Bases</value>
+  </data>
+  <data name="BUTTON_BUILD_FACILITIES" xml:space="preserve">
+    <value>Build Facilities</value>
+  </data>
+  <data name="BUTTON_BUILD_NEW_BASE" xml:space="preserve">
+    <value>Build New Base</value>
+  </data>
+  <data name="BUTTON_BUY" xml:space="preserve">
+    <value>Buy</value>
+  </data>
+  <data name="BUTTON_CANCEL" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="BUTTON_CANCEL_NEW_BASE" xml:space="preserve">
+    <value>Cancel selecting site for new base</value>
+  </data>
+  <data name="BUTTON_CANCELPROJECT" xml:space="preserve">
+    <value>Cancel project</value>
+  </data>
+  <data name="BUTTON_CLOSE" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="BUTTON_DELETE" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="BUTTON_DOWN" xml:space="preserve">
+    <value>Down</value>
+  </data>
+  <data name="BUTTON_EQUIP_CRAFT" xml:space="preserve">
+    <value>Equip Craft</value>
+  </data>
+  <data name="BUTTON_FUNDS" xml:space="preserve">
+    <value>Funds</value>
+  </data>
+  <data name="BUTTON_GEOSCAPE" xml:space="preserve">
+    <value>Geoscape</value>
+  </data>
+  <data name="BUTTON_INTERCEPT" xml:space="preserve">
+    <value>Intercept</value>
+  </data>
+  <data name="BUTTON_LAST_POSITION" xml:space="preserve">
+    <value>Go to UFO's last known position</value>
+  </data>
+  <data name="BUTTON_LEFT" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="BUTTON_LOAD" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="BUTTON_LOAD_SAVED_GAME" xml:space="preserve">
+    <value>Load Saved Game</value>
+  </data>
+  <data name="BUTTON_MANUFACTURE" xml:space="preserve">
+    <value>Manufacture</value>
+  </data>
+  <data name="BUTTON_MANUFACTURING" xml:space="preserve">
+    <value>Manufacturing</value>
+  </data>
+  <data name="BUTTON_MONTHLY_COSTS" xml:space="preserve">
+    <value>Monthly Costs</value>
+  </data>
+  <data name="BUTTON_NEW_GAME" xml:space="preserve">
+    <value>New Game</value>
+  </data>
+  <data name="BUTTON_NO" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="BUTTON_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="BUTTON_OPTIONS" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="BUTTON_PATROL" xml:space="preserve">
+    <value>Patrol</value>
+  </data>
+  <data name="BUTTON_QUIT" xml:space="preserve">
+    <value>Quit</value>
+  </data>
+  <data name="BUTTON_RESEARCH" xml:space="preserve">
+    <value>Research</value>
+  </data>
+  <data name="BUTTON_RETURN_TO_BASE" xml:space="preserve">
+    <value>Return To Base</value>
+  </data>
+  <data name="BUTTON_RIGHT" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="BUTTON_RUN_TESTS" xml:space="preserve">
+    <value>Run Tests</value>
+  </data>
+  <data name="BUTTON_SAVE" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="BUTTON_SELL" xml:space="preserve">
+    <value>Sell</value>
+  </data>
+  <data name="BUTTON_SOLDIERS" xml:space="preserve">
+    <value>Soldiers</value>
+  </data>
+  <data name="BUTTON_STATISTICS" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
+  <data name="BUTTON_STORES" xml:space="preserve">
+    <value>Stores</value>
+  </data>
+  <data name="BUTTON_TIME_STOP" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="BUTTON_TIME_X3600" xml:space="preserve">
+    <value>x3600</value>
+  </data>
+  <data name="BUTTON_TIME_X60" xml:space="preserve">
+    <value>x60</value>
+  </data>
+  <data name="BUTTON_TIME_X86400" xml:space="preserve">
+    <value>x86400</value>
+  </data>
+  <data name="BUTTON_TRANSACTIONS" xml:space="preserve">
+    <value>Transactions</value>
+  </data>
+  <data name="BUTTON_TRANSFER" xml:space="preserve">
+    <value>Transfer</value>
+  </data>
+  <data name="BUTTON_TRANSFERS" xml:space="preserve">
+    <value>Transfers</value>
+  </data>
+  <data name="BUTTON_UFO_BY_COUNTRY" xml:space="preserve">
+    <value>UFO activity by Country</value>
+  </data>
+  <data name="BUTTON_UFO_BY_REGION" xml:space="preserve">
+    <value>UFO activity by Region</value>
+  </data>
+  <data name="BUTTON_UP" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="BUTTON_XCORP_BY_COUNTRY" xml:space="preserve">
+    <value>X-Corp activity by Country</value>
+  </data>
+  <data name="BUTTON_XCORP_BY_REGION" xml:space="preserve">
+    <value>X-Corp activity by Region</value>
+  </data>
+  <data name="BUTTON_XNET" xml:space="preserve">
+    <value>X-Net</value>
+  </data>
+  <data name="BUTTON_YES" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="BUTTON_ZOOM_IN" xml:space="preserve">
+    <value>Zoom In</value>
+  </data>
+  <data name="BUTTON_ZOOM_OUT" xml:space="preserve">
+    <value>Zoom Out</value>
+  </data>
+  <data name="DLG_BUILDFACILITY_BUILD_TIME_FORMAT" xml:space="preserve">
+    <value>{0} days</value>
+  </data>
+  <data name="DLG_BUILDFACILITY_COLUMN_BUILD_TIME" xml:space="preserve">
+    <value>Build Time</value>
+  </data>
+  <data name="DLG_BUILDFACILITY_COLUMN_COST" xml:space="preserve">
+    <value>Cost</value>
+  </data>
+  <data name="DLG_BUILDFACILITY_COLUMN_FACILITY" xml:space="preserve">
+    <value>Facility</value>
+  </data>
+  <data name="DLG_BUILDFACILITY_COLUMN_MAINTENANCE" xml:space="preserve">
+    <value>Maintenance</value>
+  </data>
+  <data name="DLG_NEWBASENAME" xml:space="preserve">
+    <value>Base Name</value>
+  </data>
+  <data name="DLG_RESEARCH_COLUMN_DAYSLEFT" xml:space="preserve">
+    <value>Days left</value>
+  </data>
+  <data name="DLG_RESEARCH_COLUMN_PROJECT" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="DLG_RESEARCH_COLUMN_SCIENTISTS" xml:space="preserve">
+    <value>Assigned Scientists</value>
+  </data>
+  <data name="EXCEPTION_NO_XNET_ENTRY_FOUND" xml:space="preserve">
+    <value>No X-Net entry found for {0}</value>
+  </data>
+  <data name="EXCEPTION_NOT_IMPLEMENTED" xml:space="preserve">
+    <value>Sorry. Not implemented Yet!</value>
+  </data>
+  <data name="EXCEPTION_UFOS_HAVE_NO_BASE" xml:space="preserve">
+    <value>UFOs don't have a homeBase</value>
+  </data>
+  <data name="EXCEPTION_UFOS_LACK_FUEL" xml:space="preserve">
+    <value>UFOs don't have fuel</value>
+  </data>
+  <data name="EXCEPTION_XML_ATTRIBUTE_NOT_FOUND" xml:space="preserve">
+    <value>Attribute "{0}" not found in XML file</value>
+  </data>
+  <data name="FAC_BARRACKS_FACILITY" xml:space="preserve">
+    <value>Barracks Facility</value>
+  </data>
+  <data name="FAC_BASE_ACCESS_FACILITY" xml:space="preserve">
+    <value>Base Access Facility</value>
+  </data>
+  <data name="FAC_ENGINEERING_FACILITY" xml:space="preserve">
+    <value>Engineering Facility</value>
+  </data>
+  <data name="FAC_GAIA_DEFENSE_ARRAY" xml:space="preserve">
+    <value>GAIA Defense Array</value>
+  </data>
+  <data name="FAC_GRAVITY_SHIELD_FACILITY" xml:space="preserve">
+    <value>Gravity Shield</value>
+  </data>
+  <data name="FAC_LANDING_PAD" xml:space="preserve">
+    <value>Landing Pad</value>
+  </data>
+  <data name="FAC_LASER_DEFENSE_ARRAY" xml:space="preserve">
+    <value>Laser Defense Array</value>
+  </data>
+  <data name="FAC_LONG_RANGE_NEUDAR" xml:space="preserve">
+    <value>Long Range Neudar</value>
+  </data>
+  <data name="FAC_MISSILE_DEFENSE_ARRAY" xml:space="preserve">
+    <value>Missile Defense Array</value>
+  </data>
+  <data name="FAC_NEURAL_SHIELDING_FACILITY" xml:space="preserve">
+    <value>Neural Shielding Facility</value>
+  </data>
+  <data name="FAC_PLASMA_DEFENSE_ARRAY" xml:space="preserve">
+    <value>Plasma Defense Array</value>
+  </data>
+  <data name="FAC_PSIONIC_TRAINING_FACILITY" xml:space="preserve">
+    <value>Psionic Training Facility</value>
+  </data>
+  <data name="FAC_RESEARCH_FACILITY" xml:space="preserve">
+    <value>Research Facility</value>
+  </data>
+  <data name="FAC_SHORT_RANGE_NEUDAR" xml:space="preserve">
+    <value>Short Range Neudar</value>
+  </data>
+  <data name="FAC_STORAGE_FACILITY" xml:space="preserve">
+    <value>Storage Facility</value>
+  </data>
+  <data name="FAC_TACHYON_EMISSIONS_DETECTOR" xml:space="preserve">
+    <value>Tachyon Emissions Detector</value>
+  </data>
+  <data name="FAC_XENOMORPH_HOLDING_FACILITY" xml:space="preserve">
+    <value>Xenomorph Holding Facility</value>
+  </data>
+  <data name="FACILITY_INFO_BUILD_COST" xml:space="preserve">
+    <value>Build Cost: {0}</value>
+  </data>
+  <data name="FACILITY_INFO_BUILD_TIME" xml:space="preserve">
+    <value>Build Time (days): {0}</value>
+  </data>
+  <data name="FACILITY_INFO_CAPACITY" xml:space="preserve">
+    <value>Capacity: {0}</value>
+  </data>
+  <data name="FACILITY_INFO_DEFENSE_ACCURACY" xml:space="preserve">
+    <value>Accuracy: {0}</value>
+  </data>
+  <data name="FACILITY_INFO_DEFENSE_DAMAGE" xml:space="preserve">
+    <value>Damage: {0}</value>
+  </data>
+  <data name="FACILITY_INFO_DEFENSE_RANGE" xml:space="preserve">
+    <value>Range (km): {0}</value>
+  </data>
+  <data name="FACILITY_INFO_MAINTENANCE_COST" xml:space="preserve">
+    <value>Maintenance Cost: {0}</value>
+  </data>
+  <data name="FACILITY_INFO_SCAN_ACCURACY" xml:space="preserve">
+    <value>Accuracy: {0}</value>
+  </data>
+  <data name="FACILITY_INFO_SCAN_DECODE" xml:space="preserve">
+    <value>Can determine UFO type, crew species and mission</value>
+  </data>
+  <data name="FACILITY_INFO_SCAN_RANGE" xml:space="preserve">
+    <value>Range (km): {0}</value>
+  </data>
+  <data name="FACILITY_INFO_SCRAP_VALUE" xml:space="preserve">
+    <value>Scrap Value: {0}</value>
+  </data>
+  <data name="FACILITY_INFO_SIZE" xml:space="preserve">
+    <value>Size: {0}m x {1}m</value>
+  </data>
+  <data name="MSGBOX_AEROSCAPE_START" xml:space="preserve">
+    <value>This is "aeroscape" screen, where an X-Corp craft attacks a UFO. However, as that's not implemented yet, click OK and code will pretend the attack was successful and the UFO crashed</value>
+  </data>
+  <data name="MSGBOX_BASE_NAMES_ARE_UNIQUE" xml:space="preserve">
+    <value>You already have a base called {0}.  You need to give the new base a different name.</value>
+  </data>
+  <data name="MSGBOX_BASE_NEEDS_NAME" xml:space="preserve">
+    <value>You must give the base a name.</value>
+  </data>
+  <data name="MSGBOX_CRASH_RECOVERY" xml:space="preserve">
+    <value>This is UFO crash recovery screen, where you get the chance to begin a battlescape mission. However, as that's not implemented yet, click OK and code will pretend the battlescape was successful</value>
+  </data>
+  <data name="MSGBOX_FINISHED_BUILDING_FACILITY" xml:space="preserve">
+    <value>Construction of {0} facility has been completed.</value>
+  </data>
+  <data name="MSGBOX_FUEL_LOW" xml:space="preserve">
+    <value>Aircraft {0} reports fuel low.  Returning to base.</value>
+  </data>
+  <data name="MSGBOX_MAX_EIGHT_BASES" xml:space="preserve">
+    <value>You can't have more than eight bases.</value>
+  </data>
+  <data name="MSGBOX_NO_FACILITY_SELECTED" xml:space="preserve">
+    <value>You need to select a facility.</value>
+  </data>
+  <data name="MSGBOX_NO_RESEARCHTOPIC_SELECTED" xml:space="preserve">
+    <value>No Research Project selected.</value>
+  </data>
+  <data name="MSGBOX_NO_SCIENTISTS_ADDED" xml:space="preserve">
+    <value>No Scientists added</value>
+  </data>
+  <data name="MSGBOX_ONLY_ONE_FACILITY_PER_BASE" xml:space="preserve">
+    <value>Bases can only have one {0} facility, and this base already has one.</value>
+  </data>
+  <data name="MSGBOX_RESEARCH_FINISHED" xml:space="preserve">
+    <value>You have finished researching {0}.</value>
+  </data>
+  <data name="RES_NAVIGATOR_INTERROGATION" xml:space="preserve">
+    <value>Interrogate Navigator</value>
+  </data>
+  <data name="SCREEN_BASEINFO_COLUMN_BUILDING" xml:space="preserve">
+    <value>Building</value>
+  </data>
+  <data name="SCREEN_BASEINFO_COLUMN_IDLE" xml:space="preserve">
+    <value>Idle</value>
+  </data>
+  <data name="SCREEN_BASEINFO_COLUMN_IN_USE" xml:space="preserve">
+    <value>In Use</value>
+  </data>
+  <data name="SCREEN_BASEINFO_COLUMN_SPACE_TYPE" xml:space="preserve">
+    <value>Type of Space</value>
+  </data>
+  <data name="SCREEN_BASEINFO_COLUMN_STAFF" xml:space="preserve">
+    <value>Staff Type</value>
+  </data>
+  <data name="SCREEN_BASEINFO_COLUMN_STAFF_TOTAL" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="SCREEN_BASEINFO_COLUMN_TOTAL" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="SCREEN_GEOSCAPE_FIRST_BASE" xml:space="preserve">
+    <value>Left click on location for first base.</value>
+  </data>
+  <data name="SCREEN_LOADSAVEGAME_DUPLICATE_FILENAME" xml:space="preserve">
+    <value>Save game with this name already exists. You need to delete it before you can create another with the same name.</value>
+  </data>
+  <data name="STORAGE_ALIENS_DISPLAY" xml:space="preserve">
+    <value>Xeno Containment</value>
+  </data>
+  <data name="STORAGE_CRAFT_DISPLAY" xml:space="preserve">
+    <value>Landing Pads</value>
+  </data>
+  <data name="STORAGE_ENGINEER_DISPLAY" xml:space="preserve">
+    <value>Workshop</value>
+  </data>
+  <data name="STORAGE_GEAR_DISPLAY" xml:space="preserve">
+    <value>General Storage</value>
+  </data>
+  <data name="STORAGE_PERSONNEL_DISPLAY" xml:space="preserve">
+    <value>Bunks</value>
+  </data>
+  <data name="STORAGE_PSI_TRAINING_DISPLAY" xml:space="preserve">
+    <value>Psi Training Tanks</value>
+  </data>
+  <data name="STORAGE_SCIENTIST_DISPLAY" xml:space="preserve">
+    <value>Laboratory</value>
+  </data>
+  <data name="STR_SCIENTISTS_MAX" xml:space="preserve">
+    <value>Scientists (Max. {0}):</value>
+  </data>
+  <data name="XENOERROR_CELL_HAS_NO_NEIGHBOURS" xml:space="preserve">
+    <value>You can't build there, all facilities must have a fully constructed neighbour.</value>
+  </data>
+  <data name="XENOERROR_DELETE_WILL_SPLIT_BASE" xml:space="preserve">
+    <value>You can't destory this facility.  All facilities must have access to the lift.</value>
+  </data>
+  <data name="XENOERROR_FACILITY_IS_IN_USE" xml:space="preserve">
+    <value>You can't destroy this facility, it is in use.</value>
+  </data>
+  <data name="XENOERROR_NONE" xml:space="preserve">
+    <value>Everything's Fine</value>
+  </data>
+  <data name="XENOERROR_POSITION_ALREADY_OCCUPIED" xml:space="preserve">
+    <value>You can't build there, that position is already in use.</value>
+  </data>
+  <data name="XENOERROR_POSITION_NOT_IN_BASE" xml:space="preserve">
+    <value>You can't build there, not all the facility will be inside the base.</value>
+  </data>
+  <data name="YESNOMSG_BUILD_BASE_HERE" xml:space="preserve">
+    <value>Cost: {0} Area: {1}</value>
+  </data>
+  <data name="YESNOMSG_DISMANTLE_FACILITY" xml:space="preserve">
+    <value>Dismantle {0}?</value>
+  </data>
+</root>

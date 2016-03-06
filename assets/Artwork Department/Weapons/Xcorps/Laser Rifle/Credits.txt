@@ -1,0 +1,13 @@
+Laser rifle credits:
+
+	mikker: Model
+	Fux0r: Optimization
+	Shinzon: Texture
+
+The archive should contain the following:
+
+	- Master PDF file of the diffuse texture
+	- Full set of High resolution textures
+	- Full set of Low resolution textures
+	- *.Max file of both the low-res and the high-res rifle
+	- 4 Renders of the rifle; Low-Res, High-Res, High-Res renders as seen on the forums

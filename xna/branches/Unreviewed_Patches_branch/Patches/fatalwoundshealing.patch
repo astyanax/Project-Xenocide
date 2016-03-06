@@ -1,0 +1,1187 @@
+Index: docs/ToDoList.html
+===================================================================
+--- docs/ToDoList.html	(revision 1854)
++++ docs/ToDoList.html	(working copy)
+@@ -1,6 +1,56 @@
+ <title>ToDo list</title>
+ <head></head>
+ <body>
++<b>XNA 0.5 - taken from dteviot's post</b>
++<li>2x2 Units.</li><ul>
++<li>Correctly size them, (Actually correctly scaling all units is probably needed, add a scale and size elements to combatant.xml)</li>
++<li>Draw at correct position on battlescape. (Because they cover 4 cells.)</li>
++<li>Line of sight/fire. Actually, these two might not be such a problem. For rule engine purposes, assume combatant is at center of north west cell on terrain. Then add a displacement vector of (+0.5, 0, +0.5) to draw centre of combatant at intersection of cells.</li>
++<li>X-Caps/tanks on battlescape</li>
++<li>Pathfinding</li></ul>
++<li>Civilians on battlescape terror missions. (Also when aliens attack an X-Corp outpost?)</li>
++<li>Better (or more fun) AI logic for alien forces on battlescape.</li>
++<li>Experience for X-Corp soldiers</li>
++<li>Reactions</li>
++<strike><li>Bleeding out of wounded soldiers.</li></strike>
++<li>Medkit healing</li>
++<li>Fatal wound should decreases stats</li>
++<li>Recovery of stun damage</li>
++<li>Explosions</li>
++<li>Grenades</li>
++<li>Rest of actions that items are capable of.</li><ul>
++<li>Psi attacks</li>
++<li>Psi probe</li>
++<li>Scan</li>
++<li>Hit</li></ul>
++<li>Waypoint (for BB launcher)</li>
++<li>Fire on battlescape</li>
++<li>Smoke on battlescape</li><ul>
++<li>Line of sight effects</li>
++<li>Stun damage</li></ul>
++<li>Ability for combatants to drop and pick up items on battlescape.</li>
++<li>Draw dropped items on the battlescape.</li>
++<li>Proximity mines</li>
++<li>Night missions.</li>
++<li>Rules engine: determine visibility</li>
++<li>Graphics engine: how to render?</li>
++<li>Cydona mission</li>
++<li>Allow X-Corp player to select troops that will defend an X-Corp outpost from alien attack.</li>
++<li>Generating battlescape terrain (esp. for different types of missions.)</li>
++<li>Destructible terrain</li><ul>
++<li>Just being able to destroy walls and floors.</li>
++<li>Major property damage when structural elements are destroyed. E.g. no "floating" building levels after the ground floor is destroyed.</li></ul>
++<li>Improved line-of-sight calculations, to allow for posture, combatant height, and terrain obstacles in way?</li>
++<li>Re-equip soldiers after battlescape mission/before starting new mission. Note logic is already there in CombatantInventory.RestoreLoadout() and SnapshotLoadout(), just need to hook up and deal with case of insufficient supplies in outpost.</li>
++<li>Aesthetically pleasing UI.</li>
++<li>Aesthetically pleasing rendering of battlescape terrain</li>
++<li>Related (maybe) only render part of scene that's in viewing fustrum</li>
++<li>Animate the combatants on the battlescape.</li>
++<li>Draw items in hands of combatants on battlescape.</li>
++<li>Fog of war: No information to player on terrain that hasn't been seen yet</li>
++<li>Sound</li>
++<li>Minimap</li>
++<br>
+ <b>Stuff that needs to be done now:</b>
+ <li>Document design, as it exists (This is an ongoing task)</li>
+ <li>Document items/inventory</li>
+@@ -12,7 +62,7 @@
+ <li>Add Fonts to StartSettings.xml, so people can try different fonts.</li>
+ <li>UnitTest for Shoot action</li>
+ <li>Cleanup ClipItemInfo and CraftWeaponItemInfo now that DamageInfo has been added to ItemInfo class</li>
+-<li>Weapons need to do random amounts of damage</li>
++<strike><li>Weapons need to do random amounts of damage</li></strike>
+ <li>Bugfix: should not be able to view inventory for terrorist units</li>
+ <li>Battlescape: Equip Soldier screen, needs to show soldier's name or alien species and rank.</li>
+ <li>Pathfinder, should check for impossible to reach conditions before doing search.  e.g. Target flying, in inaccessble terrain.</li>
+@@ -23,6 +73,9 @@
+ <br>
+ 
+ <b>Bugs that need immediate attention:</b>
++<li>Restore the game icon</li>
++<li>The game reports no ammo left for each weapon in a ship. One time should be fine.</li>
++<li>The UFO still remains when you have abandoned the mission. That's not the case in UFO Enemy Unknown.</li>
+ <br>
+ <br>
+ 
+Index: Xenocide/Source/Model/Battlescape/Battle.cs
+===================================================================
+--- Xenocide/Source/Model/Battlescape/Battle.cs	(revision 1854)
++++ Xenocide/Source/Model/Battlescape/Battle.cs	(working copy)
+@@ -55,25 +55,27 @@
+         /// <param name="mission">The type of mission. e.g. Attacking landed UFO, Terror site, etc.</param>
+         public Battle(Mission mission)
+         {
+-            this.mission = mission;
+-            this.terrain = mission.CreateTerrain();
++            this.mMission = mission;
++            this.mTerrain = mission.CreateTerrain();
+ 
+             // create the Alien, X-Corp, and Civilian Forces
+-            teams.Add(mission.CreateAlienTeam());
+-            teams.Add(mission.CreateXCorpTeam());
+-            teams.Add(mission.CreateCivilianTeam());
++            mTeams.Add(mission.CreateAlienTeam());
++            mTeams.Add(mission.CreateXCorpTeam());
++            mTeams.Add(mission.CreateCivilianTeam());
+ 
+-            terrain.DeployAlienTeam(teams[Team.Aliens]);
+-            terrain.DeployXCorpTeam(teams[Team.XCorp]);
++            mTerrain.DeployAlienTeam(mTeams[Team.Aliens]);
++            mTerrain.DeployXCorpTeam(mTeams[Team.XCorp]);
+ 
+             // initialise X-Corp soldiers
+-            foreach (Combatant soldier in teams[Team.XCorp].Combatants)
++            foreach (Combatant soldier in mTeams[Team.XCorp].Combatants)
+             {
+                 UpdateVisibility(soldier);
+                 soldier.Battlescape = this;
+             }
+ 
+-            alienAI = new TeamAI(this, teams[Team.Aliens], teams[Team.XCorp]);
++            mAlienAI = new TeamAI(this, mTeams[Team.Aliens], mTeams[Team.XCorp]);
++
++            mActiveTeam = Team.XCorp;
+         }
+ 
+         /// <summary>
+@@ -83,36 +85,44 @@
+         /// <returns>Combatant if found, null if nothing there</returns>
+         public Combatant FindCombatantAt(Vector3 position)
+         {
+-            int id = terrain.FindCombatantAt(position);
+-            return (0 == id) ? null : teams[(id >> 6) - 1].Combatants[id & 31];
++            int id = mTerrain.FindCombatantAt(position);
++            return (0 == id) ? null : mTeams[(id >> 6) - 1].Combatants[id & 31];
+         }
+ 
+         /// <summary>Perform actions that are done at start of turn</summary>
+         public void OnStartTurn()
+         {
+-            foreach (Team team in teams)
++            foreach (Team team in mTeams)
+             {
+                 team.OnStartTurn();
+             }
+         }
+ 
++        /// <summary>
++        /// Perform actions at end of turn
++        /// </summary>
++        public void OnEndOfTurn()
++        {
++            mTeams[mActiveTeam].OnEndOfTurn();
++        }
++
+         /// <summary>calculate which opposing combatants can see/are seen by a combatant</summary>
+         /// <param name="combatant">to do calcuations for</param>
+         public void UpdateVisibility(Combatant combatant)
+         {
+             // for X-Corp and civs the aliens are the enemy.  For aliens, X-Corp are enemy
+-            Team enemyTeam = teams[Team.Aliens];
++            Team enemyTeam = mTeams[Team.Aliens];
+             if (Team.Aliens == combatant.TeamId)
+             {
+-                enemyTeam = teams[Team.XCorp];
++                enemyTeam = mTeams[Team.XCorp];
+             }
+-            terrain.UpdateVisibility(combatant, enemyTeam.Combatants);
++            mTerrain.UpdateVisibility(combatant, enemyTeam.Combatants);
+         }
+ 
+         /// <summary>Mostly null references, so garbage collector gets everything</summary>
+         public void PostMissionCleanup()
+         {
+-            foreach (Combatant combatant in teams[Team.XCorp].Combatants)
++            foreach (Combatant combatant in mTeams[Team.XCorp].Combatants)
+             {
+                 combatant.PostMissionCleanup();
+             }
+@@ -122,10 +132,10 @@
+         public void AddToGround(Item item, Vector3 position)
+         {
+             List<Item> items = null;
+-            if (!groundContents.TryGetValue(position, out items))
++            if (!mGroundContents.TryGetValue(position, out items))
+             {
+                 items = new List<Item>();
+-                groundContents.Add(position, items);
++                mGroundContents.Add(position, items);
+             }
+             items.Add(item);
+         }
+@@ -133,15 +143,15 @@
+         /// <summary>Removes an item from a position</summary>
+         public void RemoveFromGround(Item item, Vector3 position)
+         {
+-            Debug.Assert(groundContents.ContainsKey(position));
+-            groundContents[position].Remove(item);
++            Debug.Assert(mGroundContents.ContainsKey(position));
++            mGroundContents[position].Remove(item);
+         }
+ 
+         /// <summary>Lists the items at a position</summary>
+         public IEnumerable<Item> ListGroundContents(Vector3 position)
+         {
+             List<Item> items = null;
+-            if (!groundContents.TryGetValue(position, out items))
++            if (!mGroundContents.TryGetValue(position, out items))
+             {
+                 items = new List<Item>();
+             }
+@@ -151,40 +161,60 @@
+         #region Fields
+ 
+         /// <summary>The type of mission. e.g. Attacking landed UFO, Terror site, etc.</summary>
+-        public Mission Mission { get { return mission; } }
++        public Mission Mission { get { return mMission; } }
+ 
+         /// <summary>The "landscape" the battle will be fought on</summary>
+-        public Terrain Terrain { get { return terrain; } }
++        public Terrain Terrain { get { return mTerrain; } }
+ 
+         /// <summary>The sides that are fighting (X-Corp, Alien and Civilians)</summary>
+-        public IList<Team> Teams { get { return teams; } }
++        public IList<Team> Teams { get { return mTeams; } }
+ 
+         /// <summary>The trajectory of projectile in transit on the battlescape</summary>
+-        public Trajectory Trajectory { get { return trajectory; } set { trajectory = value; } }
++        public Trajectory Trajectory { get { return mTrajectory; } set { mTrajectory = value; } }
+ 
+         /// <summary>The alien forces AI</summary>
+-        public TeamAI AlienAI { get { return alienAI; } }
++        public TeamAI AlienAI { get { return mAlienAI; } }
+ 
++        /// <summary>
++        /// The active team
++        /// </summary>
++        public int ActiveTeam
++        {
++            get
++            {
++                return mActiveTeam;
++            }
++            set
++            {
++                mActiveTeam = value;
++            }
++        }
++
+         /// <summary>The type of mission. e.g. Attacking landed UFO, Terror site, etc.</summary>
+-        private Mission mission;
++        private Mission mMission;
+ 
+         /// <summary>The "landscape" the battle will be fought on</summary>
+-        private Terrain terrain;
++        private Terrain mTerrain;
+ 
+         /// <summary>The sides that are fighting (X-Corp, Alien and Civilians)</summary>
+-        private List<Team> teams = new List<Team>();
++        private List<Team> mTeams = new List<Team>();
+ 
+         /// <summary>The alien forces AI</summary>
+-        private TeamAI alienAI;
++        private TeamAI mAlienAI;
+ 
+         /// <summary>The trajectory of projectile in transit on the battlescape</summary>
+         /// <remarks>Can't save a game while projectile is moving</remarks>
+         [NonSerialized]
+-        private Trajectory trajectory;
++        private Trajectory mTrajectory;
+ 
+         /// <summary>The items on the ground</summary>
+-        private Dictionary<Vector3, List<Item>> groundContents = new Dictionary<Vector3, List<Item>>();
++        private Dictionary<Vector3, List<Item>> mGroundContents = new Dictionary<Vector3, List<Item>>();
+ 
++        /// <summary>
++        /// The team that currently can take orders
++        /// </summary>
++        private int mActiveTeam;
++
+         #endregion
+     }
+ }
+Index: Xenocide/Source/Model/Battlescape/Combatants/Combatant.cs
+===================================================================
+--- Xenocide/Source/Model/Battlescape/Combatants/Combatant.cs	(revision 1854)
++++ Xenocide/Source/Model/Battlescape/Combatants/Combatant.cs	(working copy)
+@@ -51,17 +51,17 @@
+         /// <param name="teamId">Team (alien/X-Corp/Civilian) that owns this combatant</param>
+         public Combatant(CombatantInfo info, int teamId)
+         {
+-            this.inventory     = new CombatantInventory(this);
+-            this.combatantInfo = info;
+-            this.teamId        = teamId;
++            this.mInventory = new CombatantInventory(this);
++            this.mCombatantInfo = info;
++            this.mTeamId = teamId;
+             if (null != info)
+             {
+-                info.GenerateStats(this.stats);
+-                this.flyer      = info.Flyer;
+-                this.armorIndex = info.ArmorIndex;
++                info.GenerateStats(this.mStats);
++                this.mFlyer = info.Flyer;
++                this.mArmorIndex = info.ArmorIndex;
+                 if (null != info.Graphic)
+                 {
+-                    this.graphic = info.Graphic;
++                    this.mGraphic = info.Graphic;
+                 }
+                 else
+                 {
+@@ -73,7 +73,7 @@
+         /// <summary>Update Combatant in response to a turn on the battlescape starting</summary>
+         public void OnStartTurn()
+         {
+-            stats.OnStartTurn();
++            mStats.OnStartTurn();
+         }
+ 
+         /// <summary>Update combatant's state, based on passage of time</summary>
+@@ -82,17 +82,17 @@
+         public bool BattlescapeUpdate(double seconds)
+         {
+             // If combatant has no order, then obviously it's done
+-            if (null == order)
++            if (null == mOrder)
+             {
+                 return true;
+             }
+-            
++
+             // update order, and check if still running.
+-            order.Update(seconds);
+-            if (FinishCode.Executing != order.Finished)
++            mOrder.Update(seconds);
++            if (FinishCode.Executing != mOrder.Finished)
+             {
+                 // order is finished, so dispose of it
+-                order = null;
++                mOrder = null;
+                 return true;
+             }
+ 
+@@ -104,13 +104,13 @@
+         /// <param name="act">what was done</param>
+         public void RecordAchievement(Experience.Act act)
+         {
+-            experience.RecordAchievement(act);
++            mExperience.RecordAchievement(act);
+ 
+             // handle acts that are also recorded elsewhere
+             switch (act)
+             {
+                 case Experience.Act.KilledTarget:
+-                    ++stats[Statistic.Kills];
++                    ++mStats[Statistic.Kills];
+                     break;
+             }
+         }
+@@ -128,7 +128,7 @@
+ 
+             // angle between attack direction and combatant's facing
+             Armor.Side side = Armor.Side.Side;
+-            float dot   = Vector3.Dot(HeadingVector, direction);
++            float dot = Vector3.Dot(HeadingVector, direction);
+             float limit = (float)Math.Sqrt(0.5);
+             if (limit < dot)
+             {
+@@ -140,9 +140,36 @@
+             }
+ 
+             Vector2 damage = Armor.DamageInflicted(damageInfo, side);
+-            stats[Statistic.InjuryDamage] += (int)damage.X;
+-            stats[Statistic.StunDamage]  += (int)damage.Y;
++            mStats[Statistic.InjuryDamage] += (int)damage.X;
++            mStats[Statistic.StunDamage] += (int)damage.Y;
+ 
++            // Damage results in fatal wounds
++            // Randomize body part that gets the fatal wounds
++            int bodyPart = Xenocide.Rng.Next(6);
++            switch (bodyPart)
++            {
++                case (int)BodyParts.Head:
++                    mStats[Statistic.FatalWoundsHead] += Xenocide.GameBalance.GenerateFatalWounds((int)damage.X);
++                    break;
++                case (int)BodyParts.Body:
++                    mStats[Statistic.FatalWoundsBody] += Xenocide.GameBalance.GenerateFatalWounds((int)damage.X);
++                    break;
++                case (int)BodyParts.LeftArm:
++                    mStats[Statistic.FatalWoundsLeftArm] += Xenocide.GameBalance.GenerateFatalWounds((int)damage.X);
++                    break;
++                case (int)BodyParts.RightArm:
++                    mStats[Statistic.FatalWoundsRightArm] += Xenocide.GameBalance.GenerateFatalWounds((int)damage.X);
++                    break;
++                case (int)BodyParts.LeftLeg:
++                    mStats[Statistic.FatalWoundsLeftLeg] += Xenocide.GameBalance.GenerateFatalWounds((int)damage.X);
++                    break;
++                case (int)BodyParts.RightLeg:
++                    mStats[Statistic.FatalWoundsRightLeg] += Xenocide.GameBalance.GenerateFatalWounds((int)damage.X);
++                    break;
++                default:
++                    throw new IndexOutOfRangeException();
++            }
++
+             // additional processing of injury
+             // dead & unconscious combatants don't see anything.
+             if (!CanTakeOrders)
+@@ -152,7 +179,7 @@
+             // dead combatants don't block travel or line of sight
+             if (IsDead)
+             {
+-                battlescape.Terrain.RemoveCombatant(this);
++                mBattlescape.Terrain.RemoveCombatant(this);
+                 //ToDo: Play(ActionSound.Death);
+             }
+         }
+@@ -163,8 +190,8 @@
+         /// <returns>true if a path was found</returns>
+         public bool FindPath(Vector3 destination, IList<MoveData> path)
+         {
+-            return battlescape.Terrain.Pathfinder.FindPath(
+-                (int)position.X, (int)position.Y, (int)position.Z,
++            return mBattlescape.Terrain.Pathfinder.FindPath(
++                (int)mPosition.X, (int)mPosition.Y, (int)mPosition.Z,
+                 Flyer,
+                 (int)destination.X, (int)destination.Y, (int)destination.Z,
+                 path);
+@@ -187,7 +214,7 @@
+         {
+             if (IsInjured)
+             {
+-                --stats[Statistic.InjuryDamage];
++                --mStats[Statistic.InjuryDamage];
+             }
+         }
+ 
+@@ -206,15 +233,24 @@
+         /// <summary>Null out battlescape references, so garbage collector gets battlescape</summary>
+         public void PostMissionCleanup()
+         {
+-            ai          = null;
+-            battlescape = null;
++            mAI = null;
++            mBattlescape = null;
++            // TODO: Set recovery days if wounded.
++
++            // Fatal wounds are healed automatically after mission
++            mStats[Statistic.FatalWoundsHead] = 0;
++            mStats[Statistic.FatalWoundsBody] = 0;
++            mStats[Statistic.FatalWoundsLeftArm] = 0;
++            mStats[Statistic.FatalWoundsRightArm] = 0;
++            mStats[Statistic.FatalWoundsLeftLeg] = 0;
++            mStats[Statistic.FatalWoundsRightLeg] = 0;
+         }
+ 
+         /// <summary>Is combatant standing on an X-Corp exit tile?</summary>
+         /// <returns>true if combatant is on an exit tile</returns>
+         public bool IsOnExitTile()
+         {
+-            return battlescape.Terrain.GetGroundFace((int)position.X, (int)position.Y, (int)position.Z).IsExitTile;
++            return mBattlescape.Terrain.GetGroundFace((int)mPosition.X, (int)mPosition.Y, (int)mPosition.Z).IsExitTile;
+         }
+ 
+         /// <summary>Update combatant's members, to reflect the armor being worn</summary>
+@@ -227,40 +263,89 @@
+             }
+             else
+             {
+-                this.graphic = Xenocide.StaticTables.ItemList[Armor.Id].BattlescapeInfo.Graphic;
++                this.mGraphic = Xenocide.StaticTables.ItemList[Armor.Id].BattlescapeInfo.Graphic;
+             }
+-            this.flyer = Armor.Flyer;
++            this.mFlyer = Armor.Flyer;
+         }
+ 
+         /// <summary>Set 3D Model to that of X-Corp soldier with no armor</summary>
+         private void UseUnarmoredXCorpSolider()
+         {
+-            this.graphic = new Graphic(@"Characters\XCorp\FemaleShirt", 0, MathHelper.PiOver2, 0);
++            this.mGraphic = new Graphic(@"Characters\XCorp\FemaleShirt", 0, MathHelper.PiOver2, 0);
+         }
+ 
+         /// <summary>Tag combatant as seeing nothing</summary>
+         /// <remarks>Used when unit is unconscious/dead</remarks>
+         private void ClearOpponentsInView()
+         {
+-            int opposingTeam  = (Team.Aliens == teamId) ? Team.XCorp : Team.Aliens;
++            int opposingTeam = (Team.Aliens == mTeamId) ? Team.XCorp : Team.Aliens;
+             int combatantFlag = ~(1 << PlaceInTeam);
+-            foreach(Combatant combatant in battlescape.Teams[opposingTeam].Combatants)
++            foreach (Combatant combatant in mBattlescape.Teams[opposingTeam].Combatants)
+             {
+                 combatant.OponentsViewing &= combatantFlag;
+             }
+             OpponentsInView = 0;
+         }
+ 
++        /// <summary>
++        /// Increases the injury damage of the combatant due to fatal wounds.
++        /// </summary>
++        /// <remarks>The injury damage is increased by the number of fatal wounds. This function should 
++        /// be called when the turn of the team ends.</remarks>
++        public void Bleed()
++        {
++            mStats[Statistic.InjuryDamage] += TotalFatalWounds;
++            // dead combatants don't block travel or line of sight
++            if (IsDead)
++            {
++                if (mBattlescape != null)
++                {
++                    mBattlescape.Terrain.RemoveCombatant(this);   
++                }
++                //ToDo: Play(ActionSound.Death);
++                //TODO: Show that the soldier died from fatal wounds
++            }
++        }
++
++        public void Heal(BodyParts bodyPart)
++        {
++            switch (bodyPart)
++            {
++                case BodyParts.Head:
++                    mStats[Statistic.FatalWoundsHead] -= Xenocide.GameBalance.HealFatalWounds();
++                    break;
++                case BodyParts.Body:
++                    mStats[Statistic.FatalWoundsBody] -= Xenocide.GameBalance.HealFatalWounds();
++                    break;
++                case BodyParts.LeftArm:
++                    mStats[Statistic.FatalWoundsLeftArm] -= Xenocide.GameBalance.HealFatalWounds();
++                    break;
++                case BodyParts.RightArm:
++                    mStats[Statistic.FatalWoundsRightArm] -= Xenocide.GameBalance.HealFatalWounds();
++                    break;
++                case BodyParts.LeftLeg:
++                    mStats[Statistic.FatalWoundsLeftLeg] -= Xenocide.GameBalance.HealFatalWounds();
++                    break;
++                case BodyParts.RightLeg:
++                    mStats[Statistic.FatalWoundsRightLeg] -= Xenocide.GameBalance.HealFatalWounds();
++                    break;
++                default:
++                    throw new ArgumentException();
++            }
++            // Heal some injury damage
++            mStats[Statistic.InjuryDamage] -= Xenocide.GameBalance.HealInjuryDamage();
++        }
++
+         #region Constants
+ 
+         /// <summary>Combatant's field of view. (Computed as dot product of heading and unit vector to target)</summary>
+-        public const float DotFieldOfView = 0.7071f;
++        public const float DOTFIELDOFVIEW = 0.7071f;
+ 
+         /// <summary>How far can a combatant see (in cells)?</summary>
+-        public const int VisionRange = 20;
++        public const int VISIONRANGE = 20;
+ 
+-        /// <summary>Square of VisionRange</summary>
+-        public const int VisionRangeSquared = VisionRange * VisionRange;
++        /// <summary>Square of VISIONRANGE</summary>
++        public const int VISIONRANGESQUARED = VISIONRANGE * VISIONRANGE;
+ 
+         #endregion Constants
+ 
+@@ -269,7 +354,7 @@
+         /// <summary>
+         /// The items being carried by the combatant
+         /// </summary>
+-        public CombatantInventory Inventory { get { return inventory; } }
++        public CombatantInventory Inventory { get { return mInventory; } }
+ 
+         /// <summary>
+         /// The armor the combatant is "wearing"
+@@ -278,28 +363,28 @@
+             Justification = "Will throw if value is null")]
+         public Armor Armor
+         {
+-            get { return Xenocide.StaticTables.ArmorList[armorIndex]; }
++            get { return Xenocide.StaticTables.ArmorList[mArmorIndex]; }
+             set
+             {
+-                armorIndex = Xenocide.StaticTables.ArmorList.IndexOf(value.Id);
++                mArmorIndex = Xenocide.StaticTables.ArmorList.IndexOf(value.Id);
+                 AdjustStatsFromArmor();
+             }
+         }
+ 
+         /// <summary>Location on battlescape (in cells)</summary>
+-        public Vector3 Position { get { return position; } set { position = value; } }
++        public Vector3 Position { get { return mPosition; } set { mPosition = value; } }
+ 
+         /// <summary>Direction facing, in radians.  0 = along positive X axis, clockwise is positive</summary>
+         public float Heading
+         {
+-            get { return heading; }
++            get { return mHeading; }
+             set
+             {
+                 // normalize value to - Pi <= value <= Pi
+-                heading = value;
+-                if (MathHelper.Pi < Math.Abs(heading))
++                mHeading = value;
++                if (MathHelper.Pi < Math.Abs(mHeading))
+                 {
+-                    heading += MathHelper.Pi * -2 * Math.Sign(heading);
++                    mHeading += MathHelper.Pi * -2 * Math.Sign(mHeading);
+                 }
+             }
+         }
+@@ -307,114 +392,132 @@
+         /// <summary>Direction facing, as a vector</summary>
+         public Vector3 HeadingVector
+         {
+-            get { return new Vector3((float)Math.Cos(heading), 0, (float)-Math.Sin(heading)); }
++            get { return new Vector3((float)Math.Cos(mHeading), 0, (float)-Math.Sin(mHeading)); }
+         }
+ 
+         /// <summary>Assorted properties</summary>
+-        public CombatantInfo CombatantInfo { get { return combatantInfo; } }
++        public CombatantInfo CombatantInfo { get { return mCombatantInfo; } }
+ 
+         /// <summary>3D model to draw on battlescpe</summary>
+-        public Graphic Graphic { get { return graphic; } set { graphic = value; } }
++        public Graphic Graphic { get { return mGraphic; } set { mGraphic = value; } }
+ 
+         /// <summary>The various numerical values describing a soldier's capabilities</summary>
+-        public Stats Stats { get { return stats; } }
++        public Stats Stats { get { return mStats; } }
+ 
+         /// <summary>Order combatant is currently performing</summary>
+         public Order Order
+         {
+-            get { return order; }
+-            set { Debug.Assert((null == order) || (null == value)); order = value; }
++            get { return mOrder; }
++            set { Debug.Assert((null == mOrder) || (null == value)); mOrder = value; }
+         }
+ 
+         /// <summary>Can this combatant fly?</summary>
+-        public bool Flyer { get { return flyer; } }
++        public bool Flyer { get { return mFlyer; } }
+ 
+         /// <summary>Team (alien/X-Corp/Civilian) that owns this combatant</summary>
+-        public int TeamId { get { return teamId; } }
++        public int TeamId { get { return mTeamId; } }
+ 
+         /// <summary>Combatant's position in team array</summary>
+-        public int PlaceInTeam { get { return placeInTeam; } set { placeInTeam = value; } }
++        public int PlaceInTeam { get { return mPlaceInTeam; } set { mPlaceInTeam = value; } }
+ 
+         /// <summary>Unique code to ID this combatant on a battlescape</summary>
+         public byte CombatantId { get { return (byte)(((TeamId + 1) << 6) + PlaceInTeam); } }
+ 
+         /// <summary>Does combatant have injuries</summary>
+-        public bool IsInjured { get { return 0 < stats[Statistic.InjuryDamage]; } }
++        public bool IsInjured { get { return 0 < mStats[Statistic.InjuryDamage]; } }
+ 
+         /// <summary>Has combatant been killed?</summary>
+-        public bool IsDead { get { return stats[Statistic.Health] < stats[Statistic.InjuryDamage]; } }
++        public bool IsDead { get { return mStats[Statistic.Health] < mStats[Statistic.InjuryDamage]; } }
+ 
+         /// <summary>Is combatant not dead and not stunned?</summary>
+         public bool CanTakeOrders
+         {
+-            get { return (stats[Statistic.InjuryDamage] + stats[Statistic.StunDamage]) <= stats[Statistic.Health]; }
++            get { return (mStats[Statistic.InjuryDamage] + mStats[Statistic.StunDamage]) <= mStats[Statistic.Health]; }
+         }
+ 
+         /// <summary>Set of bits indicating the enemy forces that this combatant can see</summary>
+-        public int OpponentsInView { get { return opponentsInView; } set { opponentsInView = value; } }
++        public int OpponentsInView { get { return mOpponentsInView; } set { mOpponentsInView = value; } }
+ 
+         /// <summary>Set of bits indicating the enemy forces that can see this combatant</summary>
+-        public int OponentsViewing { get { return oponentsViewing; } set { oponentsViewing = value; } }
++        public int OponentsViewing { get { return mOponentsViewing; } set { mOponentsViewing = value; } }
+ 
+         /// <summary>The AI directly responsible for this combatant</summary>
+-        public CombatantAI AI { get { return ai; } set { ai = value; } }
++        public CombatantAI AI { get { return mAI; } set { mAI = value; } }
+ 
+         /// <summary>Battlescape combatant is currently on</summary>
+-        public Battle Battlescape { get { return battlescape; } set { battlescape = value; } }
++        public Battle Battlescape { get { return mBattlescape; } set { mBattlescape = value; } }
+ 
++        public int TotalFatalWounds { get { return mStats[Statistic.FatalWoundsHead] + mStats[Statistic.FatalWoundsBody] + mStats[Statistic.FatalWoundsLeftArm] + mStats[Statistic.FatalWoundsRightArm] + mStats[Statistic.FatalWoundsLeftLeg] + mStats[Statistic.FatalWoundsRightLeg]; } }
++
+         /// <summary>
+         /// The items being carried by the combatant
+         /// </summary>
+-        private CombatantInventory inventory;
++        private CombatantInventory mInventory;
+ 
+         /// <summary>
+         /// Index to armor the combatant is "wearning"
+         /// </summary>
+-        private int armorIndex = Xenocide.StaticTables.ArmorList.NoArmorIndex;
++        private int mArmorIndex = Xenocide.StaticTables.ArmorList.NoArmorIndex;
+ 
+         /// <summary>Location on battlescape (in cells)</summary>
+-        private Vector3 position;
++        private Vector3 mPosition;
+ 
+         /// <summary>Direction facing, in radians.  0 = along positive X axis, clockwise is positive</summary>
+-        private float heading;
++        private float mHeading;
+ 
+         /// <summary>Assorted properties</summary>
+-        private CombatantInfo combatantInfo;
++        private CombatantInfo mCombatantInfo;
+ 
+         /// <summary>3D model to draw on battlescpe</summary>
+-        private Graphic graphic;
++        private Graphic mGraphic;
+ 
+         /// <summary>The various numerical values describing a soldier's capabilities</summary>
+-        private Stats stats = new Stats();
++        private Stats mStats = new Stats();
+ 
+         /// <summary>Order combatant is currently performing</summary>
+         [NonSerialized]
+-        private Order order;
++        private Order mOrder;
+ 
+         /// <summary>Can this combatant fly?</summary>
+-        private bool flyer;
++        private bool mFlyer;
+ 
+         /// <summary>Team (alien/X-Corp/Civilian) that owns this combatant</summary>
+-        private int teamId;
++        private int mTeamId;
+ 
+         /// <summary>Combatant's position in team array</summary>
+-        private int placeInTeam;
++        private int mPlaceInTeam;
+ 
+         /// <summary>Acts done this battlescape mission that qualify as learning experience</summary>
+-        private Experience experience = new Experience();
++        private Experience mExperience = new Experience();
+ 
+         /// <summary>Set of bits indicating the enemy forces that this combatant can see</summary>
+-        private int opponentsInView;
++        private int mOpponentsInView;
+ 
+         /// <summary>Set of bits indicating the enemy forces that can see this combatant</summary>
+-        private int oponentsViewing;
++        private int mOponentsViewing;
+ 
+         /// <summary>The AI directly responsible for this combatant</summary>
+-        private CombatantAI ai;
++        private CombatantAI mAI;
+ 
+         /// <summary>Battlescape combatant is currently on</summary>
+-        private Battle battlescape;
++        private Battle mBattlescape;
+ 
+         #endregion Fields
++
++        #region Enumerations
++
++        /// <summary>
++        /// Enumeration over the available body parts
++        /// </summary>
++        public enum BodyParts { 
++            Head = 0,
++            Body = 1,
++            LeftArm = 2,
++            RightArm = 3,
++            LeftLeg = 4,
++            RightLeg = 5 
++        };
++
++        #endregion
+     }
+ }
+Index: Xenocide/Source/Model/Battlescape/Combatants/Statistic.cs
+===================================================================
+--- Xenocide/Source/Model/Battlescape/Combatants/Statistic.cs	(revision 1854)
++++ Xenocide/Source/Model/Battlescape/Combatants/Statistic.cs	(working copy)
+@@ -58,6 +58,36 @@
+         /// <summary>Number of points of physical injury combatant is suffering from</summary>
+         InjuryDamage,
+ 
++        /// <summary>
++        /// Number of fatal wounds in the head
++        /// </summary>
++        FatalWoundsHead,
++
++        /// <summary>
++        /// Number of fatal wounds in the body
++        /// </summary>
++        FatalWoundsBody,
++
++        /// <summary>
++        /// Number of fatal wounds in the left arm
++        /// </summary>
++        FatalWoundsLeftArm,
++
++        /// <summary>
++        /// Number of fatal wounds in the right arm
++        /// </summary>
++        FatalWoundsRightArm,
++
++        /// <summary>
++        /// Number of fatal wounds in the left leg
++        /// </summary>
++        FatalWoundsLeftLeg,
++
++        /// <summary>
++        /// Number of fatal wounds in the right leg
++        /// </summary>
++        FatalWoundsRightLeg,
++
+         /// <summary>Resistance to panic</summary>
+         Bravery,
+ 
+Index: Xenocide/Source/Model/Battlescape/Combatants/UnitTestCombatant.cs
+===================================================================
+--- Xenocide/Source/Model/Battlescape/Combatants/UnitTestCombatant.cs	(revision 1854)
++++ Xenocide/Source/Model/Battlescape/Combatants/UnitTestCombatant.cs	(working copy)
+@@ -36,6 +36,7 @@
+ using ProjectXenocide.Model.StaticData.Items;
+ using ProjectXenocide.Model.Geoscape;
+ using ProjectXenocide.Model.Geoscape.Outposts;
++using System.Collections;
+ 
+ namespace ProjectXenocide.Model.Battlescape.Combatants
+ {
+@@ -51,6 +52,7 @@
+         public static void RunTests()
+         {
+             TestHealing();
++            TestFatalWoundsAndBleeding();
+         }
+ 
+         /// <summary>
+@@ -60,15 +62,15 @@
+         private static void TestHealing()
+         {
+             // get a soldier
+-            GeoData   geoData   = Xenocide.GameState.GeoData;
+-            Person soldier      = Xenocide.StaticTables.ItemList["ITEM_PERSON_SOLDIER"].Manufacture() as Person;
++            GeoData geoData = Xenocide.GameState.GeoData;
++            Person soldier = Xenocide.StaticTables.ItemList["ITEM_PERSON_SOLDIER"].Manufacture() as Person;
+             geoData.Outposts.Add(OutpostInventory.ConstructTestOutpost());
+             geoData.Outposts[0].Inventory.Add(soldier, false);
+ 
+             // injure the solider
+             Combatant combatant = soldier.Combatant;
+             int injury = 5;
+-            combatant.Stats[Statistic.Health]       = injury;
++            combatant.Stats[Statistic.Health] = injury;
+             combatant.Stats[Statistic.InjuryDamage] = injury;
+ 
+             // 0 HP isn't dead, -1 is
+@@ -99,6 +101,86 @@
+             Debug.Assert(!combatant.IsDead);
+         }
+ 
++        /// <summary>
++        /// Basic can fit tests
++        /// </summary>
++        [Conditional("DEBUG")]
++        private static void TestFatalWoundsAndBleeding()
++        {
++            // get a soldier
++            GeoData geoData = Xenocide.GameState.GeoData;
++            Person soldier = Xenocide.StaticTables.ItemList["ITEM_PERSON_SOLDIER"].Manufacture() as Person;
++            geoData.Outposts.Add(OutpostInventory.ConstructTestOutpost());
++            geoData.Outposts[0].Inventory.Add(soldier, false);
++
++            // Setup random generator
++            List<int> randomNumbers = new List<int>();
++            randomNumbers.Add(14);
++            randomNumbers.Add(1);
++            randomNumbers.Add(1);
++            randomNumbers.Add(13);
++            randomNumbers.Add(2);
++            randomNumbers.Add(2);
++            Xenocide.Rng.RigDice(randomNumbers);
++
++            // Set health of soldier
++            Combatant combatant = soldier.Combatant;
++            combatant.Stats[Statistic.Health] = 35;
++
++            // Hit the soldier (should use up first random number for damage and second random 
++            // number for fatal wounds body part and third number for the fata wounds)
++            combatant.Hit(new DamageInfo(50, DamageType.Plasma), new Vector3(1, 0, 0));
++            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 15);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsHead] == 0);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsBody] == 2);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftArm] == 0);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsRightArm] == 0);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftLeg] == 0);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsRightLeg] == 0);
++            Debug.Assert(combatant.TotalFatalWounds == 2);
++            //Hit the soldier again
++            combatant.Hit(new DamageInfo(50, DamageType.Plasma), new Vector3(1, 0, 0));
++            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 29);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsHead] == 0);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsBody] == 2);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftArm] == 3);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsRightArm] == 0);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftLeg] == 0);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsRightLeg] == 0);
++            Debug.Assert(combatant.TotalFatalWounds == 5);
++
++            // Let the soldier bleed
++            combatant.Bleed();
++            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 34);
++
++            // Heal one wound
++            combatant.Heal(BodyParts.Body);
++            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 31);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsHead] == 0);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsBody] == 1);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftArm] == 3);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsRightArm] == 0);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftLeg] == 0);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsRightLeg] == 0);
++            Debug.Assert(combatant.TotalFatalWounds == 4);
++
++            // Let the soldier bleed again, the soldier should die from fatal wounds.
++            combatant.Bleed();
++            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 35);
++            combatant.Bleed();
++            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 39);
++            Debug.Assert(combatant.IsDead);
++
++            // Perform post mission cleanup
++            combatant.PostMissionCleanup();
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsHead] == 0);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsBody] == 0);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftArm] == 0);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsRightArm] == 0);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftLeg] == 0);
++            Debug.Assert(combatant.Stats[Statistic.FatalWoundsRightLeg] == 0);
++        }
++
+         #endregion UnitTests
+     }
+ }
+Index: Xenocide/Source/Model/Battlescape/Team.cs
+===================================================================
+--- Xenocide/Source/Model/Battlescape/Team.cs	(revision 1854)
++++ Xenocide/Source/Model/Battlescape/Team.cs	(working copy)
+@@ -56,6 +56,17 @@
+             }
+         }
+ 
++        /// <summary>
++        /// Perform actions after each turn
++        /// </summary>
++        public void OnEndOfTurn()
++        {
++            foreach (Combatant combatant in combatants)
++            {
++                combatant.Bleed();
++            }
++        }
++
+         /// <summary>Have all team members been defeated</summary>
+         /// <returns>true if team has been defeated</returns>
+         public bool IsDefeated()
+Index: Xenocide/Source/Model/Battlescape/Terrain/Terrain.cs
+===================================================================
+--- Xenocide/Source/Model/Battlescape/Terrain/Terrain.cs	(revision 1854)
++++ Xenocide/Source/Model/Battlescape/Terrain/Terrain.cs	(working copy)
+@@ -272,7 +272,7 @@
+                 bool      combatantVisible = false;
+                 int       enemyFlag        = (1 << ++i);
+                 // to be visible, must be in range and have a line of sight
+-                if ((Vector3.DistanceSquared(combatant.Position, enemy.Position) < Combatant.VisionRangeSquared) &&
++                if ((Vector3.DistanceSquared(combatant.Position, enemy.Position) < Combatant.VISIONRANGESQUARED) &&
+                     IsLineOfSight(combatant.Position, enemy.Position))
+                 {
+                     // Ignore Vertical component of difference
+@@ -282,13 +282,13 @@
+                     diff.Normalize();
+ 
+                     // combatant must be facing enemy for enemy to be visible
+-                    if ((Combatant.DotFieldOfView < Vector3.Dot(diff, combatant.HeadingVector)) || vertical)
++                    if ((Combatant.DOTFIELDOFVIEW < Vector3.Dot(diff, combatant.HeadingVector)) || vertical)
+                     {
+                         enemyVisible = true;
+                     }
+ 
+                     // enemy must be facing combatant for combatant to be visible
+-                    if ((Vector3.Dot(diff, enemy.HeadingVector) < -Combatant.DotFieldOfView) || vertical)
++                    if ((Vector3.Dot(diff, enemy.HeadingVector) < -Combatant.DOTFIELDOFVIEW) || vertical)
+                     {
+                         combatantVisible = true;
+                     }
+Index: Xenocide/Source/Model/StaticData/Battlescape/Armor.cs
+===================================================================
+--- Xenocide/Source/Model/StaticData/Battlescape/Armor.cs	(revision 1854)
++++ Xenocide/Source/Model/StaticData/Battlescape/Armor.cs	(working copy)
+@@ -130,7 +130,8 @@
+            Justification = "will throw if damageInfo is null")]
+         public Vector2 DamageInflicted(DamageInfo damageInfo, Side side)
+         {
+-            int points = damageInfo.Points;
++            // Get random damage
++            int points = Xenocide.GameBalance.RandomWeaponDamage(damageInfo.Points);
+             points -= plates[(int)side];
+             if (points < 0)
+             {
+Index: Xenocide/Source/Model/StaticData/Battlescape/UnitTestArmor.cs
+===================================================================
+--- Xenocide/Source/Model/StaticData/Battlescape/UnitTestArmor.cs	(revision 1854)
++++ Xenocide/Source/Model/StaticData/Battlescape/UnitTestArmor.cs	(working copy)
+@@ -72,13 +72,13 @@
+ 
+             // partially absorbed
+             damage = armor.DamageInflicted(new DamageInfo(18, DamageType.Piercing), Side.Under);
+-            Debug.Assert(8 == damage.X);
+-            Debug.Assert(1 == damage.Y);
++            Debug.Assert(26 >= damage.X && damage.X >= 1);
++            Debug.Assert(4 >= damage.Y && damage.Y >= 0);
+ 
+             // damage type modifier
+             damage = armor.DamageInflicted(new DamageInfo(18, DamageType.Fire), Side.Under);
+             Debug.Assert(0 == damage.X);
+-            Debug.Assert(1 == damage.Y);
++            Debug.Assert(0 <= damage.Y && 4 >= damage.Y);
+         }
+ 
+         #endregion UnitTests
+Index: Xenocide/Source/Model/StaticData/Items/Actions/ShootActionInfo.cs
+===================================================================
+--- Xenocide/Source/Model/StaticData/Items/Actions/ShootActionInfo.cs	(revision 1854)
++++ Xenocide/Source/Model/StaticData/Items/Actions/ShootActionInfo.cs	(working copy)
+@@ -111,7 +111,7 @@
+             Vector3 diff = target - combatant.Position;
+             diff.Y = 0;
+             diff.Normalize();
+-            if (Vector3.Dot(diff, combatant.HeadingVector) < Combatant.DotFieldOfView)
++            if (Vector3.Dot(diff, combatant.HeadingVector) < Combatant.DOTFIELDOFVIEW)
+             {
+                 return ActionError.WrongDirection;
+             }
+Index: Xenocide/Source/Model/StaticData/Items/DamageInfo.cs
+===================================================================
+--- Xenocide/Source/Model/StaticData/Items/DamageInfo.cs	(revision 1854)
++++ Xenocide/Source/Model/StaticData/Items/DamageInfo.cs	(working copy)
+@@ -60,8 +60,8 @@
+            Justification = "will throw if damageNode == null")]
+         public DamageInfo(XPathNavigator damageNode)
+         {
+-            points     = Util.GetIntAttribute(damageNode, "amount");
+-            damageType = Util.ParseEnum<DamageType>(Util.GetStringAttribute(damageNode, "type"));
++            mPoints = Util.GetIntAttribute(damageNode, "amount");
++            mDamageType = Util.ParseEnum<DamageType>(Util.GetStringAttribute(damageNode, "type"));
+         }
+ 
+         /// <summary>Construct a DamageInfo from an XML file</summary>
+@@ -69,23 +69,23 @@
+         /// <param name="damageType">Type of damage done</param>
+         public DamageInfo(int points, DamageType damageType)
+         {
+-            this.points     = points;
+-            this.damageType = damageType;
++            mPoints = points;
++            mDamageType = damageType;
+         }
+ 
+         #region Fields
+ 
+         /// <summary>damage (in points) inflicted by weapon</summary>
+-        public int Points { get { return points; } }
++        public int Points { get { return mPoints; } }
+ 
+         /// <summary>Type of damage done</summary>
+-        public DamageType DamageType { get { return damageType; } }
++        public DamageType DamageType { get { return mDamageType; } }
+ 
+         /// <summary>damage (in points) inflicted by weapon</summary>
+-        private int points;
++        private int mPoints;
+ 
+         /// <summary>Type of damage done</summary>
+-        private DamageType damageType;
++        private DamageType mDamageType;
+ 
+         #endregion
+     }
+Index: Xenocide/Source/Program.cs
+===================================================================
+--- Xenocide/Source/Program.cs	(revision 1854)
++++ Xenocide/Source/Program.cs	(working copy)
+@@ -44,7 +44,7 @@
+         {
+             // Set handler to catch exceptions
+             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionHandler);
+-
++            
+             if (CheckGraphicsHardware())
+             {
+                 using (Xenocide game = new Xenocide())
+Index: Xenocide/Source/UI/Screens/Battlescape/AlienTurnScreenState.cs
+===================================================================
+--- Xenocide/Source/UI/Screens/Battlescape/AlienTurnScreenState.cs	(revision 1854)
++++ Xenocide/Source/UI/Screens/Battlescape/AlienTurnScreenState.cs	(working copy)
+@@ -79,10 +79,17 @@
+             {
+                 if (!Battlescape.AlienAI.Update(gameTime.ElapsedRealTime.TotalMilliseconds / 1000.0f))
+                 {
++                    // Bleeding from fatal wounds
++                    Battlescape.OnEndOfTurn();
++
+                     //ToDo: any end of turn processing.
+                     // e.g. bleeding from wounds, recovering from stun, etc.
+ 
+                     CheckForEndOfBattle();
++
++                    // Give turn to XCorp
++                    // TODO: include civilians in the loop
++                    Battlescape.ActiveTeam = Team.XCorp;
+                 }
+             }
+ 
+Index: Xenocide/Source/UI/Screens/Battlescape/OrderCombatantScreenState.cs
+===================================================================
+--- Xenocide/Source/UI/Screens/Battlescape/OrderCombatantScreenState.cs	(revision 1854)
++++ Xenocide/Source/UI/Screens/Battlescape/OrderCombatantScreenState.cs	(working copy)
+@@ -93,6 +93,11 @@
+             /// <summary>User has clicked the "Finish Turn" button</summary>
+             public override void OnFinishTurnButton()
+             {
++                // Bleeding from fatal wounds
++                Battlescape.OnEndOfTurn();
++
++                // Give turn to Aliens
++                Battlescape.ActiveTeam = Team.Aliens;
+                 BattlescapeScreen.ChangeState(new AlienTurnScreenState(BattlescapeScreen));
+             }
+ 
+Index: Xenocide/Source/Xenocide.cs
+===================================================================
+--- Xenocide/Source/Xenocide.cs	(revision 1854)
++++ Xenocide/Source/Xenocide.cs	(working copy)
+@@ -47,6 +47,7 @@
+ using ProjectXenocide.Model;
+ 
+ using Xenocide.Resources;
++using ProjectXenocide.Source.Model.Battlescape;
+ 
+ #endregion
+ 
+@@ -78,6 +79,11 @@
+         private static StaticTables staticTables;
+ 
+         /// <summary>
++        /// Game balance class
++        /// </summary>
++        private static GameBalanceClass mGameBalance;
++
++        /// <summary>
+         /// Constructor
+         /// </summary>
+         public Xenocide() 
+@@ -88,6 +94,7 @@
+             screenManager = new ScreenManager();
+             staticTables  = new StaticTables();
+             staticTables.Populate();
++            mGameBalance = new GameBalanceClass(Difficulty.Easy);
+             gameState     = new GameState();
+             Components.Add(gui);
+         }
+@@ -289,5 +296,12 @@
+             get { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
+         }
+ 
++        /// <summary>
++        /// Game balance methods
++        /// </summary>
++        public static GameBalanceClass GameBalance
++        {
++            get { return mGameBalance; }
++        }
+     }
+ }
+Index: Xenocide/Xenocide.csproj
+===================================================================
+--- Xenocide/Xenocide.csproj	(revision 1854)
++++ Xenocide/Xenocide.csproj	(working copy)
+@@ -100,6 +100,7 @@
+     <Compile Include="Source\Model\Battlescape\Combatants\UnitTestCombatant.cs" />
+     <Compile Include="Source\Model\Battlescape\Combatants\UnitTestCombatantInventory.cs" />
+     <Compile Include="Source\Model\Battlescape\DamageType.cs" />
++    <Compile Include="Source\Model\GameBalanceClass.cs" />
+     <Compile Include="Source\Model\Battlescape\Missions\AlienSiteMission.cs" />
+     <Compile Include="Source\Model\Battlescape\Missions\CrewBuilder.cs" />
+     <Compile Include="Source\Model\Battlescape\Missions\Mission.cs" />

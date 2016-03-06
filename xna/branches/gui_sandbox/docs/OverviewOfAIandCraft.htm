@@ -1,0 +1,65 @@
+<html><head><title>Overview of how the AI and craft classes work.</title></head><body>
+<a href="AIandCraftClasses.png" title="AIandCraftClasses.png" target="_blank"><img src="AIandCraftClasses.png" height="586" width="665"></a><br>
+<b><u>Overview of how the AI and craft classes work.</u></b>
+The GeoData class is the root node. Every frame it's Update() function is
+called, with the amount of time the game's state is to be advanced by.
+The GeoData delegates the the Update() to the items it contains.
+Currently these are a list of HumanBases, and the Alien "Overmind".
+(And these subsequently delegate to their contained items, and so on.)<br><br>
+
+Conceptually, the Alien AI is made up of 3 layers. 
+<ul>
+<li>Overmind</li>
+<li>InvasionTask</li>
+<li>Craft</li>
+</ul>
+<br>
+<u>Overmind</u><br>
+This layer will be responsible for the big picture planning. That is
+deciding on the sorts of missions to undertake. E.g. deciding to try
+and harvest a country, Undertake offensive missions against X-Corp
+because the humans are getting annoying, Creating Bases, etc.
+<br>
+The Overmind owns a number of InvasionTasks
+<br>
+<br>
+<u>InvasionTask</u><br>
+Is responsible for a mission, or set of missions, that may involve one or more UFOs.<br>
+It's job is synchronization of behaviour between multiple UFOs.<br>E.g.
+In X-COM, a "retaliation task", is made up of a number of UFO missions,
+a number of scouting missions to find the base. Followed by a series of
+attacks on the base which attempt to destroy it. (If the scouting
+missions fail, the attack missions won't be launched.)<br>Likewise, a
+"research task" in X-COM is made up of a number of separate UFO
+research missions, with days or weeks separating each of the missions.<br>The InvasionTask will have a number of derived classes, one for each different type of mission.<br>The InvasionTask owns the UFOs that are currently "live" on the Geoscape<br><br><u>Craft</u><br>Each
+craft has its own "autonomous" AI. The AI is implemented as a 2 level
+Hierachial Finite State Machine (HFSM). The HFSM is built by the
+classes Mission MissionState, and their derived classes.<br><br>How this works is a bit hard to explain.  It's probably easier to give an example.<br>Consider the case of an intercept mission.  In the simplest form, the mission can be thought of as:<ul><li>Aircraft waits in a hanger (being refuelled, repaired, reloaded etc.)</li><li>Aircraft is launched, and tries to intercept a UFO.</li><li>When the aircraft reaches the UFO, the UFO is shot down</li><li>The aircraft flies back to its base.</li><li>Aircraft waits in a hanger (being refuelled, repaired, reloaded etc.)</li></ul><br>From this, you can see that the aircraft has 3 "states" during the mission:<ul><li>InBase</li><li>Intercepting</li><li>ReturningToBase</li></ul><br>In
+each of these states, the craft's behaviour is different, and the craft
+transitions from state to state when an "event" occurs. Also note,
+other events can occur and cause other state transitions. For example,
+if the aircraft runs short on fuel while in the "Intercepting" state,
+it must return to base. However, if the craft is in the
+"ReturningToBase" state when fuel is low, then the event can be ignored.<br><br>Thus,
+the update() method of the "MissionState" classes implements the
+behaviour of each state. The MissionState also implements the
+ICraftEvents interface, which provides a virtual function that is
+called for each "event" that may generate a state transition. Thus, if
+a state needs to implement behaviour in response to an event, the
+derived class just needs to override the appropriate virtual function.<br><br>Thus,
+we could build the missions by deriving a class from MissionState for
+each state of each mission type. (Which might result in a lot of very
+similar mission states and replicated code if some mission states had
+very similar behaviour.)<br><br>To reduce this, the "Mission" class exists:<ul>
+<li>It allows us to reuse a mission state in multiple missions (e.g.
+MoveToPostionState can be used in a Research mission, where a UFO needs
+to move between random locations on the globe, and in intercept
+missions, when the craft is returning to base.)</li>
+<li>It allows us to
+put code that may be common to all states in one place. E.g. If
+OnCraftDestroyed() does the same thing for every state in a mission,
+then we can put it's behaviour in OnCraftDestroyed() in the Mission,
+rather than each MissionState.</li>
+</ul>
+
+</body></html>

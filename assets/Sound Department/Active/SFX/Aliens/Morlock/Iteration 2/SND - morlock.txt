@@ -1,0 +1,26 @@
+Step vs. Step Light
+-------------------
+The "Step" set includes a low reverberated footstep to convey the weight of the Morlocks.
+It is intended to complement the primary generic footstep, which should be played simultaneously.
+In case the reverberated footstep clashes with the generic footstep, I've included a "Step light"
+set, which contains exactly the same samples, but with the reverberated footstep removed.  It may be
+that each sample set sounds more realistic with certain surface footstep sets.
+
+Death vs. Death Thud
+--------------------
+Similarly, the only difference between the "Death" and "Death thud" sets are some added samples of
+limbs hitting the floor in the "thud" set.  I included both because I am uncertain whether samples
+will be played for the aliens hitting the floor when dying.
+
+
+example.ogg
+-------------
+-The file "example.ogg" is an example of the samples as they are intended to be combined in the game.
+-Temporary (read: not in the repository) samples were used for primary footsteps (wood and metal surfaces).  
+-Note that 3 battlecries are played simultaneously (at staggered start times) from center, hard left, 
+ and hard right.  
+-Use this file as a reference for playing "breath" (accompanying walking here) and "panic" (accompanying 
+ running here) samples together.
+
+
+LfO (dereksmootz@hotmail.com)

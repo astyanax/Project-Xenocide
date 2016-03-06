@@ -1,0 +1,13 @@
+- Wind0019: Good Quality
+- Wind0020: Good Quality
+- Wind0028: Great Quality (too much high frequency)
+
+- Wind0029: Too much noise, good for city areas.
+- Wind0024: Sounds like the sea
+- Wind0030: Bad sample
+- Wind0031: Bad sample
+
+- Wind0005: Sounds like an spaceship, investigate posible source for engines.
+- Wind0006: Sounds like an spaceship, investigate posible source for engines.
+
+Rest of the samples are mediocre need a lot of tweaking to be used as sources.

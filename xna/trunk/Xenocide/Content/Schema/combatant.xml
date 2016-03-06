@@ -1,0 +1,1449 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<combatantdata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="CombatantConfig" xsi:schemaLocation="CombatantConfig combatant.xsd">
+
+  <!--
+    The sets of equipment that a combatant could be wearing
+    x and y are position of item, as given by InventoryLayout.cs
+        Inventory properties are stored in a grid like
+        +=+=+===+=====+
+        |g|h|f f|b b b|
+        +=+=+===+     |
+        |a a a a|b b b|
+        + +===+ +     |
+        |a|c c|a|b b b|
+        +=+=+=+=+=+===+
+        |d d|e e|i|   |
+        +===+===+=+===+
+        where
+            a = belt
+            b = backpack
+            c = right shoulder
+            d = right leg
+            e = left shoulder
+            f = left leg
+            g = right hand
+            h = left hand
+            i = armor
+-->
+  <loadout name="Sampling">
+    <item name="ITEM_STUN_LAUNCHER" x="0" y="0" />
+    <item name="ITEM_PSIONIC_PROBE" x="1" y="0" />
+    <item name="ITEM_STUN_BOMB"     x="4" y="0" />
+    <item name="ITEM_STUN_BOMB"     x="5" y="0" />
+    <item name="ITEM_STUN_BOMB"     x="6" y="0" />
+  </loadout>
+  <loadout name="LightPlasma">
+    <item name="ITEM_PLASMA_PISTOL"      x="0" y="0" />
+    <item name="ITEM_PLASMA_PISTOL_CLIP" x="2" y="3" />
+    <item name="ITEM_ALIEN_GRENADE"      x="1" y="2" />
+    <item name="ITEM_ALIEN_GRENADE"      x="2" y="2" />
+  </loadout>
+  <loadout name="MediumPlasma">
+    <item name="ITEM_PLASMA_RIFLE"      x="0" y="0" />
+    <item name="ITEM_PLASMA_RIFLE_CLIP" x="2" y="3" />
+    <item name="ITEM_ALIEN_GRENADE"     x="1" y="2" />
+    <item name="ITEM_ALIEN_GRENADE"     x="2" y="2" />
+  </loadout>
+  <loadout name="HeavyPlasma">
+    <item name="ITEM_HEAVY_PLASMA_RIFLE"      x="0" y="0" />
+    <item name="ITEM_HEAVY_PLASMA_RIFLE_CLIP" x="2" y="3" />
+    <item name="ITEM_ALIEN_GRENADE"           x="1" y="2" />
+    <item name="ITEM_ALIEN_GRENADE"           x="2" y="2" />
+  </loadout>
+  <loadout name="Grav">
+    <item name="ITEM_GRAVITY_DISTORTION_LAUNCHER" x="0" y="0" />
+    <item name="ITEM_GRAVITY_DISTORTION_DRONE"    x="4" y="0" />
+    <item name="ITEM_GRAVITY_DISTORTION_DRONE"    x="5" y="0" />
+    <item name="ITEM_GRAVITY_DISTORTION_DRONE"    x="6" y="0" />
+    <item name="ITEM_PLASMA_PISTOL"               x="0" y="1" />
+    <item name="ITEM_PLASMA_PISTOL_CLIP"          x="2" y="3" />
+  </loadout>
+  <!-- What an X-Corp soldier comes equiped with -->
+  <loadout name="XCorpDefault">
+    <item name="ITEM_ASSAULT_RIFLE"           x="0" y="0" />
+    <item name="ITEM_ASSAULT_RIFLE_CLIP"      x="4" y="0" />
+    <item name="ITEM_ASSAULT_RIFLE_CLIP"      x="4" y="1" />
+    <item name="ITEM_GRENADE"                 x="1" y="2" />
+    <item name="ITEM_GRENADE"                 x="2" y="2" />
+    <item name="ITEM_SMOKE_GRENADE"           x="2" y="3" />
+    <item name="ITEM_SMOKE_GRENADE"           x="3" y="3" />
+    <item name="ITEM_PROXIMITY_GRENADE"       x="0" y="1" />
+    <item name="ITEM_SATCHEL_CHARGE"          x="2" y="0" />
+    <item name="ITEM_SATCHEL_CHARGE"          x="0" y="3" />
+    <item name="ITEM_STUN_BATON"              x="6" y="0" />
+  </loadout>
+
+  <loadout name="Ventriculant">
+    <item name="ITEM_VENTRICULANT_WEAPON" x="0" y="0" />
+  </loadout>
+  <loadout name="Silabrate">
+    <item name="ITEM_SILABRATE_WEAPON" x="0" y="0" />
+  </loadout>
+  <loadout name="Spawn">
+    <item name="ITEM_SPAWN_WEAPON" x="0" y="0" />
+  </loadout>
+  <loadout name="Artopod">
+    <item name="ITEM_ARTOPOD_WEAPON" x="0" y="0" />
+  </loadout>
+  <loadout name="Terrordisc">
+    <item name="ITEM_TERRORDISC_WEAPON" x="0" y="0" />
+  </loadout>
+  <loadout name="Raptor">
+    <item name="ITEM_RAPTOR_WEAPON" x="0" y="0" />
+  </loadout>
+  <loadout name="Zombie">
+    <item name="ITEM_ZOMBIE_WEAPON" x="0" y="0" />
+  </loadout>
+
+  <armor id="None" front="0" side="0" rear="0" under = "0">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Fire"      physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.2" stun="0.25"/>
+      <susceptibility damageType="Acid"      physical="1.6" stun="0.25"/>
+      <susceptibility damageType="Smoke"     physical="1.0" stun="0.25"/>
+  </armor>
+  <armor id="ITEM_COMBAT_ARMOR" front="50" side="40" rear="30" under = "30">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Fire"      physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Smoke"     physical="1.0" stun="0.25"/>
+  </armor>
+  <armor id="ITEM_COMBAT_POWERSUIT" front="100" side="80" rear="70" under = "60">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Fire"      physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Smoke"     physical="1.0" stun="0.25"/>
+  </armor>
+  <armor id="ITEM_ANTI_GRAV_POWERSUIT" front="110" side="90" rear="80" under = "70" flyer="true">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Fire"      physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Smoke"     physical="1.0" stun="0.25"/>
+  </armor>
+  <armor id="Satyrian" front="8" side="6" rear="4" under="12">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.2" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.6" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="SatyrianLeader" front="16" side="12" rear="8" under="12">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.2" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.6" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="SatyrianCommander" front="24" side="18" rear="12" under="16">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.2" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.6" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+
+  <armor id="Grey" front="4" side="3" rear="2" under="2">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.2" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.6" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="Viper" front="20" side="18" rear="16" under="12">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="0.7" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="ViperLeader" front="20" side="24" rear="22" under="20">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="0.7" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="ViperCommander" front="26" side="26" rear="22" under="20">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="0.7" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="Cloak" front="35" side="35" rear="35" under="35">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="0.7" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="0.80"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="CloakLeader" front="40" side="40" rear="40" under="40">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="0.7" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="0.80"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="CloakCommander" front="45" side="45" rear="45" under="45">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="0.7" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="0.80"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="Morlock" front="20" side="20" rear="20" under="10">
+      <susceptibility damageType="Piercing"  physical="0.6" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="MorlockNavigator" front="24" side="24" rear="24" under="15">
+      <susceptibility damageType="Piercing"  physical="0.6" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="Raptor" front="28" side="28" rear="28" under="4">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="1.7" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="Spawn" front="34" side="34" rear="34" under="34">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="0.8" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="0.90"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="Silabrate" front="50" side="50" rear="50" under="10">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="0.0" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="1.3" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="0.90"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="Ventriculant" front="20" side="20" rear="20" under="20">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.2" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.6" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="Artopod" front="145" side="130" rear="100" under="90">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="0.8" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.5" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="0.8" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="TerrorDisc" front="34" side="34" rear="34" under="34">
+      <susceptibility damageType="Piercing"  physical="0.8" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="0.6" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="1.00"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="Zombie" front="4" side="4" rear="4" under="4">
+      <susceptibility damageType="Piercing"  physical="0.6" stun="0.125"/>
+      <susceptibility damageType="Fire"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Explosive" physical="0.8" stun="0.125"/>
+      <susceptibility damageType="Laser"     physical="0.7" stun="0.125"/>
+      <susceptibility damageType="Plasma"    physical="0.7" stun="0.125"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="0.00"/>
+      <susceptibility damageType="Melee"     physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Acid"      physical="1.0" stun="0.125"/>
+      <susceptibility damageType="Smoke"     physical="0.0" stun="0.125"/>
+  </armor>
+  <armor id="Tank" front="90" side="75" rear="60" under="60">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Fire"      physical="0.4" stun="0.25"/>
+      <susceptibility damageType="Explosive" physical="0.75" stun="0.25"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="0.00"/>
+      <susceptibility damageType="Melee"     physical="0.9" stun="0.25"/>
+      <susceptibility damageType="Acid"      physical="0.4" stun="0.25"/>
+      <susceptibility damageType="Smoke"     physical="1.0" stun="0.25"/>
+  </armor>
+  <armor id="HoverTank" front="130" side="130" rear="130" under="100">
+      <susceptibility damageType="Piercing"  physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Fire"      physical="0.4" stun="0.25"/>
+      <susceptibility damageType="Explosive" physical="0.75" stun="0.25"/>
+      <susceptibility damageType="Laser"     physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Plasma"    physical="1.0" stun="0.25"/>
+      <susceptibility damageType="Stun"      physical="0.0" stun="0.00"/>
+      <susceptibility damageType="Melee"     physical="0.9" stun="0.25"/>
+      <susceptibility damageType="Acid"      physical="0.4" stun="0.25"/>
+      <susceptibility damageType="Smoke"     physical="1.0" stun="0.25"/>
+  </armor>
+  <!-- Begin Humans -->
+  <!-- Note that the Human soldier is probably the only combatant that will have variable statistics -->
+  <combatant race="Human" rank="Soldier" armor="None">
+    <environments type="air"/>
+    <attributes>
+      <timeunits        mean="55" variance="5" xsi:type="normal"/>
+      <stamina          mean="50" variance="20" xsi:type="normal"/>
+      <health           mean="50" variance="20" xsi:type="normal"/>
+      <bravery          mean="50" variance="20" xsi:type="normal"/>
+      <reactions        mean="50" variance="20" xsi:type="normal"/>
+      <firingaccuracy   mean="50" variance="20" xsi:type="normal"/>
+      <throwingaccuracy mean="50" variance="20" xsi:type="normal"/>
+      <strength         mean="30" variance="10" xsi:type="normal"/>
+      <psistrength      mean="50" variance="50" xsi:type="normal"/>
+      <energyrecharge   base="50" xsi:type="core"/>
+      <victorypoints    base="20" xsi:type="core"/>
+      <melee            mean="50" variance="50" xsi:type="normal"/>
+    </attributes>
+    <equipment loadout="XCorpDefault"     odds="100"/>
+  </combatant>
+  <!-- End Humans -->		
+
+<combatant race="Satyrian" rank="Soldier" armor="Satyrian">
+    <itemref dead="ITEM_SATYRIAN_CORPSE" stunned="ITEM_SATYRIAN_SOLDIER"/>
+	<environments type="air martian"/>
+	<attributes flyer="true">
+		<timeunits             base="50" xsi:type="core"/>
+		<stamina               base="90" xsi:type="core"/>
+		<health                base="35" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="50" xsi:type="core"/>
+		<firingaccuracy        base="50" xsi:type="core"/>
+		<throwingaccuracy      base="58" xsi:type="core"/>
+		<strength              base="40" xsi:type="core"/>
+		<psistrength           base="35" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="12" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="70" xsi:type="core"/>
+		<intelligence          base="4"  xsi:type="core"/>
+		<standingheight        base="21" xsi:type="core"/>
+		<kneelingheight        base="16" xsi:type="core"/>
+		<floatingheight        base="2"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Satyrian" rank="Navigator" armor="Satyrian">
+    <itemref dead="ITEM_SATYRIAN_CORPSE" stunned="ITEM_SATYRIAN_NAVIGATOR"/>
+	<environments type="air martian"/>
+	<attributes flyer="true">
+		<timeunits             base="50" xsi:type="core"/>
+		<stamina               base="90" xsi:type="core"/>
+		<health                base="35" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="50" xsi:type="core"/>
+		<firingaccuracy        base="50" xsi:type="core"/>
+		<throwingaccuracy      base="58" xsi:type="core"/>
+		<strength              base="40" xsi:type="core"/>
+		<psistrength           base="35" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="14" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="70" xsi:type="core"/>
+		<intelligence          base="5"  xsi:type="core"/>
+		<standingheight        base="21" xsi:type="core"/>
+		<kneelingheight        base="16" xsi:type="core"/>
+		<floatingheight        base="2"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Satyrian" rank="Medic" armor="Satyrian">
+    <itemref dead="ITEM_SATYRIAN_CORPSE" stunned="ITEM_SATYRIAN_MEDIC"/>
+	<environments type="air martian"/>
+  <attributes flyer="true">
+		<timeunits             base="50" xsi:type="core"/>
+		<stamina               base="90" xsi:type="core"/>
+		<health                base="35" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="50" xsi:type="core"/>
+		<firingaccuracy        base="50" xsi:type="core"/>
+		<throwingaccuracy      base="58" xsi:type="core"/>
+		<strength              base="40" xsi:type="core"/>
+		<psistrength           base="35" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="16" xsi:type="core"/>
+		<aggression            base="1"  xsi:type="core"/>
+		<melee                 base="70" xsi:type="core"/>
+		<intelligence          base="6"  xsi:type="core"/>
+		<standingheight        base="21" xsi:type="core"/>
+		<kneelingheight        base="16" xsi:type="core"/>
+		<floatingheight        base="2"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Satyrian" rank="Engineer" armor="Satyrian">
+    <itemref dead="ITEM_SATYRIAN_CORPSE" stunned="ITEM_SATYRIAN_ENGINEER"/>
+	<environments type="air martian"/>
+  <attributes flyer="true">
+		<timeunits             base="50" xsi:type="core"/>
+		<stamina               base="90" xsi:type="core"/>
+		<health                base="35" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="50" xsi:type="core"/>
+		<firingaccuracy        base="50" xsi:type="core"/>
+		<throwingaccuracy      base="58" xsi:type="core"/>
+		<strength              base="40" xsi:type="core"/>
+		<psistrength           base="35" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="18" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="70" xsi:type="core"/>
+		<intelligence          base="7"  xsi:type="core"/>
+		<standingheight        base="21" xsi:type="core"/>
+		<kneelingheight        base="16" xsi:type="core"/>
+		<floatingheight        base="2"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Satyrian" rank="Leader" armor="SatyrianLeader">
+    <itemref dead="ITEM_SATYRIAN_CORPSE" stunned="ITEM_SATYRIAN_LEADER"/>
+	<environments type="air martian"/>
+  <attributes flyer="true">
+		<timeunits             base="55" xsi:type="core"/>
+		<stamina               base="95" xsi:type="core"/>
+		<health                base="40" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="60" xsi:type="core"/>
+		<firingaccuracy        base="60" xsi:type="core"/>
+		<throwingaccuracy      base="58" xsi:type="core"/>
+		<strength              base="47" xsi:type="core"/>
+		<psistrength           base="40" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="25" xsi:type="core"/>
+		<aggression            base="0"  xsi:type="core"/>
+		<melee                 base="70" xsi:type="core"/>
+		<intelligence          base="8"  xsi:type="core"/>
+		<standingheight        base="21" xsi:type="core"/>
+		<kneelingheight        base="16" xsi:type="core"/>
+		<floatingheight        base="2"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Satyrian" rank="Commander" armor="SatyrianCommander">
+    <itemref dead="ITEM_SATYRIAN_CORPSE" stunned="ITEM_SATYRIAN_COMMANDER"/>
+	<environments type="air martian"/>
+  <attributes flyer="true">
+		<timeunits             base="60" xsi:type="core"/>
+		<stamina               base="100" xsi:type="core"/>
+		<health                base="45" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="66" xsi:type="core"/>
+		<firingaccuracy        base="63" xsi:type="core"/>
+		<throwingaccuracy      base="65" xsi:type="core"/>
+		<strength              base="48" xsi:type="core"/>
+		<psistrength           base="45" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="35" xsi:type="core"/>
+		<aggression            base="0"  xsi:type="core"/>
+		<melee                 base="76" xsi:type="core"/>
+		<intelligence          base="8"  xsi:type="core"/>
+		<standingheight        base="21" xsi:type="core"/>
+		<kneelingheight        base="16" xsi:type="core"/>
+		<floatingheight        base="2"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Grey" rank="Soldier" armor="Grey">
+    <itemref dead="ITEM_GREY_CORPSE" stunned="ITEM_GREY_SOLDIER"/>
+	<environments type="air martian"/>
+	<attributes>
+		<timeunits             base="54" xsi:type="core"/>
+		<stamina               base="90" xsi:type="core"/>
+		<health                base="30" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="63" xsi:type="core"/>
+		<firingaccuracy        base="52" xsi:type="core"/>
+		<throwingaccuracy      base="58" xsi:type="core"/>
+		<strength              base="30" xsi:type="core"/>
+		<psistrength           base="40" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="10" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="76" xsi:type="core"/>
+		<intelligence          base="3"  xsi:type="core"/>
+		<standingheight        base="16" xsi:type="core"/>
+		<kneelingheight        base="12" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="3"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Grey" rank="Navigator" armor="Grey">
+    <itemref dead="ITEM_GREY_CORPSE" stunned="ITEM_GREY_NAVIGATOR"/>
+	<environments type="air martian"/>
+	<attributes>
+		<timeunits             base="54" xsi:type="core"/>
+		<stamina               base="90" xsi:type="core"/>
+		<health                base="30" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="63" xsi:type="core"/>
+		<firingaccuracy        base="52" xsi:type="core"/>
+		<throwingaccuracy      base="58" xsi:type="core"/>
+		<strength              base="30" xsi:type="core"/>
+		<psistrength           base="40" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="12" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="76" xsi:type="core"/>
+		<intelligence          base="4"  xsi:type="core"/>
+		<standingheight        base="16" xsi:type="core"/>
+		<kneelingheight        base="12" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="3"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Grey" rank="Medic" armor="Grey">
+    <itemref dead="ITEM_GREY_CORPSE" stunned="ITEM_GREY_MEDIC"/>
+	<environments type="air martian"/>
+	<attributes>
+		<timeunits             base="54" xsi:type="core"/>
+		<stamina               base="90" xsi:type="core"/>
+		<health                base="30" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="63" xsi:type="core"/>
+		<firingaccuracy        base="52" xsi:type="core"/>
+		<throwingaccuracy      base="58" xsi:type="core"/>
+		<strength              base="30" xsi:type="core"/>
+		<psistrength           base="40" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="14" xsi:type="core"/>
+		<aggression            base="1"  xsi:type="core"/>
+		<melee                 base="76" xsi:type="core"/>
+		<intelligence          base="5"  xsi:type="core"/>
+		<standingheight        base="16" xsi:type="core"/>
+		<kneelingheight        base="12" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="3"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Grey" rank="Engineer" armor="Grey">
+    <itemref dead="ITEM_GREY_CORPSE" stunned="ITEM_GREY_ENGINEER"/>
+	<environments type="air martian"/>
+	<attributes>
+		<timeunits             base="54" xsi:type="core"/>
+		<stamina               base="90" xsi:type="core"/>
+		<health                base="30" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="63" xsi:type="core"/>
+		<firingaccuracy        base="52" xsi:type="core"/>
+		<throwingaccuracy      base="58" xsi:type="core"/>
+		<strength              base="30" xsi:type="core"/>
+		<psistrength           base="40" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="16" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="76" xsi:type="core"/>
+		<intelligence          base="6"  xsi:type="core"/>
+		<standingheight        base="16" xsi:type="core"/>
+		<kneelingheight        base="12" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="3"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Grey" rank="Leader" armor="Grey">
+    <itemref dead="ITEM_GREY_CORPSE" stunned="ITEM_GREY_LEADER"/>
+	<environments type="air martian"/>
+	<attributes>
+		<timeunits             base="54" xsi:type="core"/>
+		<stamina               base="90" xsi:type="core"/>
+		<health                base="30" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="63" xsi:type="core"/>
+		<firingaccuracy        base="52" xsi:type="core"/>
+		<throwingaccuracy      base="58" xsi:type="core"/>
+		<strength              base="30" xsi:type="core"/>
+		<psistrength           base="50" xsi:type="core"/>
+		<psiskill              base="50" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="20" xsi:type="core"/>
+		<aggression            base="1"  xsi:type="core"/>
+		<melee                 base="76" xsi:type="core"/>
+		<intelligence          base="7"  xsi:type="core"/>
+		<standingheight        base="16" xsi:type="core"/>
+		<kneelingheight        base="12" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="3"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Grey" rank="Commander" armor="Grey">
+    <itemref dead="ITEM_GREY_CORPSE" stunned="ITEM_GREY_COMMANDER"/>
+	<environments type="air martian"/>
+	<attributes>
+		<timeunits             base="54" xsi:type="core"/>
+		<stamina               base="90" xsi:type="core"/>
+		<health                base="30" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="63" xsi:type="core"/>
+		<firingaccuracy        base="52" xsi:type="core"/>
+		<throwingaccuracy      base="58" xsi:type="core"/>
+		<strength              base="30" xsi:type="core"/>
+		<psistrength           base="50" xsi:type="core"/>
+		<psiskill              base="60" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="25" xsi:type="core"/>
+		<aggression            base="0"  xsi:type="core"/>
+		<melee                 base="76" xsi:type="core"/>
+		<intelligence          base="8"  xsi:type="core"/>
+		<standingheight        base="16" xsi:type="core"/>
+		<kneelingheight        base="12" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="3"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Viper" rank="Soldier" armor="Viper">
+    <itemref dead="ITEM_VIPER_CORPSE" stunned="ITEM_VIPER_SOLDIER"/>
+	<environments type="air martian"/>
+	<attributes>
+		<timeunits             base="40" xsi:type="core"/>
+		<stamina               base="80" xsi:type="core"/>
+		<health                base="45" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="45" xsi:type="core"/>
+		<firingaccuracy        base="58" xsi:type="core"/>
+		<throwingaccuracy      base="65" xsi:type="core"/>
+		<strength              base="47" xsi:type="core"/>
+		<psistrength           base="40" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="15" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="54" xsi:type="core"/>
+		<intelligence          base="2"  xsi:type="core"/>
+		<standingheight        base="18" xsi:type="core"/>
+		<kneelingheight        base="18" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Viper" x="0.0" y="90.0" z="0.0" scale="0.004" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Viper" rank="Navigator" armor="Viper">
+    <itemref dead="ITEM_VIPER_CORPSE" stunned="ITEM_VIPER_NAVIGATOR"/>
+	<environments type="air martian"/>
+	<attributes>
+		<timeunits             base="40" xsi:type="core"/>
+		<stamina               base="80" xsi:type="core"/>
+		<health                base="45" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="45" xsi:type="core"/>
+		<firingaccuracy        base="58" xsi:type="core"/>
+		<throwingaccuracy      base="65" xsi:type="core"/>
+		<strength              base="47" xsi:type="core"/>
+		<psistrength           base="40" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="17" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="54" xsi:type="core"/>
+		<intelligence          base="3"  xsi:type="core"/>
+		<standingheight        base="18" xsi:type="core"/>
+		<kneelingheight        base="18" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Viper" x="0.0" y="90.0" z="0.0" scale="0.004" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Viper" rank="Engineer" armor="Viper">
+    <itemref dead="ITEM_VIPER_CORPSE" stunned="ITEM_VIPER_ENGINEER"/>
+	<environments type="air martian"/>
+	<attributes>
+		<timeunits             base="40" xsi:type="core"/>
+		<stamina               base="80" xsi:type="core"/>
+		<health                base="45" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="45" xsi:type="core"/>
+		<firingaccuracy        base="58" xsi:type="core"/>
+		<throwingaccuracy      base="65" xsi:type="core"/>
+		<strength              base="47" xsi:type="core"/>
+		<psistrength           base="40" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="20" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="54" xsi:type="core"/>
+		<intelligence          base="4"  xsi:type="core"/>
+		<standingheight        base="18" xsi:type="core"/>
+		<kneelingheight        base="18" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Viper" x="0.0" y="90.0" z="0.0" scale="0.004" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Viper" rank="Leader" armor="ViperLeader">
+    <itemref dead="ITEM_VIPER_CORPSE" stunned="ITEM_VIPER_LEADER"/>
+	<environments type="air martian"/>
+	<attributes>
+		<timeunits             base="40" xsi:type="core"/>
+		<stamina               base="80" xsi:type="core"/>
+		<health                base="45" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="55" xsi:type="core"/>
+		<firingaccuracy        base="65" xsi:type="core"/>
+		<throwingaccuracy      base="65" xsi:type="core"/>
+		<strength              base="47" xsi:type="core"/>
+		<psistrength           base="45" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="28" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="54" xsi:type="core"/>
+		<intelligence          base="5"  xsi:type="core"/>
+		<standingheight        base="18" xsi:type="core"/>
+		<kneelingheight        base="18" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Viper" x="0.0" y="90.0" z="0.0" scale="0.004" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Viper" rank="Commander" armor="ViperCommander">
+    <itemref dead="ITEM_VIPER_CORPSE" stunned="ITEM_VIPER_COMMANDER"/>
+	<environments type="air martian"/>
+	<attributes>
+		<timeunits             base="45" xsi:type="core"/>
+		<stamina               base="84" xsi:type="core"/>
+		<health                base="55" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="65" xsi:type="core"/>
+		<firingaccuracy        base="58" xsi:type="core"/>
+		<throwingaccuracy      base="65" xsi:type="core"/>
+		<strength              base="47" xsi:type="core"/>
+		<psistrength           base="50" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="30" xsi:type="core"/>
+		<victorypoints         base="36" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="54" xsi:type="core"/>
+		<intelligence          base="6"  xsi:type="core"/>
+		<standingheight        base="18" xsi:type="core"/>
+		<kneelingheight        base="18" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Viper" x="0.0" y="90.0" z="0.0" scale="0.004" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Cloak" rank="Soldier" armor="Cloak">
+    <itemref dead="ITEM_CLOAK_CORPSE" stunned="ITEM_CLOAK_SOLDIER"/>
+	<environments type="air martian"/>
+	<attributes flyer="true">
+		<timeunits             base="68" xsi:type="core"/>
+		<stamina               base="96" xsi:type="core"/>
+		<health                base="55" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="75" xsi:type="core"/>
+		<firingaccuracy        base="74" xsi:type="core"/>
+		<throwingaccuracy      base="80" xsi:type="core"/>
+		<strength              base="48" xsi:type="core"/>
+		<psistrength           base="50" xsi:type="core"/>
+		<psiskill              base="40" xsi:type="core"/>
+		<energyrecharge        base="40" xsi:type="core"/>
+		<victorypoints         base="20" xsi:type="core"/>
+		<aggression            base="1"  xsi:type="core"/>
+		<melee                 base="85" xsi:type="core"/>
+		<intelligence          base="6"  xsi:type="core"/>
+		<standingheight        base="20" xsi:type="core"/>
+		<kneelingheight        base="15" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Cloak" rank="Leader" armor="CloakLeader">
+    <itemref dead="ITEM_CLOAK_CORPSE" stunned="ITEM_CLOAK_LEADER"/>
+	<environments type="air martian"/>
+  <attributes flyer="true">
+		<timeunits             base="68" xsi:type="core"/>
+		<stamina               base="96" xsi:type="core"/>
+		<health                base="55" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="75" xsi:type="core"/>
+		<firingaccuracy        base="74" xsi:type="core"/>
+		<throwingaccuracy      base="80" xsi:type="core"/>
+		<strength              base="48" xsi:type="core"/>
+		<psistrength           base="60" xsi:type="core"/>
+		<psiskill              base="45" xsi:type="core"/>
+		<energyrecharge        base="40" xsi:type="core"/>
+		<victorypoints         base="30" xsi:type="core"/>
+		<aggression            base="1"  xsi:type="core"/>
+		<melee                 base="85" xsi:type="core"/>
+		<intelligence          base="7"  xsi:type="core"/>
+		<standingheight        base="20" xsi:type="core"/>
+		<kneelingheight        base="15" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Cloak" rank="Commander" armor="CloakCommander">
+    <itemref dead="ITEM_CLOAK_CORPSE" stunned="ITEM_CLOAK_COMMANDER"/>
+	<environments type="air martian"/>
+  <attributes flyer="true">
+		<timeunits             base="68" xsi:type="core"/>
+		<stamina               base="96" xsi:type="core"/>
+		<health                base="55" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="75" xsi:type="core"/>
+		<firingaccuracy        base="74" xsi:type="core"/>
+		<throwingaccuracy      base="80" xsi:type="core"/>
+		<strength              base="48" xsi:type="core"/>
+		<psistrength           base="65" xsi:type="core"/>
+		<psiskill              base="50" xsi:type="core"/>
+		<energyrecharge        base="40" xsi:type="core"/>
+		<victorypoints         base="40" xsi:type="core"/>
+		<aggression            base="1"  xsi:type="core"/>
+		<melee                 base="85" xsi:type="core"/>
+		<intelligence          base="8"  xsi:type="core"/>
+		<standingheight        base="20" xsi:type="core"/>
+		<kneelingheight        base="15" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Morlock" rank="Soldier" armor="Morlock">
+    <itemref dead="ITEM_MORLOCK_CORPSE" stunned="ITEM_MORLOCK_SOLDIER"/>
+	<environments type="air martian"/>
+	<attributes>
+		<timeunits             base="56" xsi:type="core"/>
+		<stamina               base="90" xsi:type="core"/>
+		<health                base="125" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="60" xsi:type="core"/>
+		<firingaccuracy        base="54" xsi:type="core"/>
+		<throwingaccuracy      base="62" xsi:type="core"/>
+		<strength              base="70" xsi:type="core"/>
+		<psistrength           base="25" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="40" xsi:type="core"/>
+		<victorypoints         base="15" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="78" xsi:type="core"/>
+		<intelligence          base="2"  xsi:type="core"/>
+		<standingheight        base="21" xsi:type="core"/>
+		<kneelingheight        base="16" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Morlock" rank="Navigator" armor="MorlockNavigator">
+    <itemref dead="ITEM_MORLOCK_CORPSE" stunned="ITEM_MORLOCK_NAVIGATOR"/>
+	<environments type="air martian"/>
+	<attributes>
+		<timeunits             base="56" xsi:type="core"/>
+		<stamina               base="90" xsi:type="core"/>
+		<health                base="125" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="60" xsi:type="core"/>
+		<firingaccuracy        base="54" xsi:type="core"/>
+		<throwingaccuracy      base="62" xsi:type="core"/>
+		<strength              base="70" xsi:type="core"/>
+		<psistrength           base="25" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="40" xsi:type="core"/>
+		<victorypoints         base="17" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="78" xsi:type="core"/>
+		<intelligence          base="3"  xsi:type="core"/>
+		<standingheight        base="21" xsi:type="core"/>
+		<kneelingheight        base="16" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Morlock" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Sampling"     odds="10"/>
+	<equipment loadout="LightPlasma"  odds="60"/>
+	<equipment loadout="MediumPlasma" odds="10"/>
+	<equipment loadout="HeavyPlasma"  odds="10"/>
+	<equipment loadout="Grav"         odds="10"/>
+</combatant>
+
+<combatant race="Raptor" rank="Terrorist" armor="Raptor" ownerRace="Satyrian">
+    <itemref dead="ITEM_RAPTOR_CORPSE" stunned="ITEM_RAPTOR_TERRORIST"/>
+	<environments type="air martian"/>
+	<attributes carrier="Fixed">
+		<timeunits             base="62" xsi:type="core"/>
+		<stamina               base="90" xsi:type="core"/>
+		<health                base="148" xsi:type="core"/>
+		<bravery               base="90" xsi:type="core"/>
+		<reactions             base="64" xsi:type="core"/>
+		<firingaccuracy        base="0" xsi:type="core"/>
+		<throwingaccuracy      base="0" xsi:type="core"/>
+		<strength              base="90" xsi:type="core"/>
+		<psistrength           base="35" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="34" xsi:type="core"/>
+		<victorypoints         base="25" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="80" xsi:type="core"/>
+		<intelligence          base="2"  xsi:type="core"/>
+		<standingheight        base="23" xsi:type="core"/>
+		<kneelingheight        base="16" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Silibrate" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Raptor" odds="100"/>
+</combatant>
+
+<combatant race="Spawn" rank="Terrorist" armor="Spawn" ownerRace="Viper">
+    <itemref dead="ITEM_SPAWN_CORPSE" stunned="ITEM_SPAWN_TERRORIST"/>
+	<environments type="air martian"/>
+	<attributes carrier="Fixed">
+		<timeunits             base="110" xsi:type="core"/>
+		<stamina               base="140" xsi:type="core"/>
+		<health                base="96" xsi:type="core"/>
+		<bravery               base="100" xsi:type="core"/>
+		<reactions             base="70" xsi:type="core"/>
+		<firingaccuracy        base="0" xsi:type="core"/>
+		<throwingaccuracy      base="0" xsi:type="core"/>
+		<strength              base="110" xsi:type="core"/>
+		<psistrength           base="50" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="40" xsi:type="core"/>
+		<victorypoints         base="25" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="80" xsi:type="core"/>
+		<intelligence          base="4"  xsi:type="core"/>
+		<standingheight        base="21" xsi:type="core"/>
+		<kneelingheight        base="16" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Silibrate" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Spawn" odds="100"/>
+</combatant>
+
+<combatant race="Silabrate" rank="Terrorist" armor="Silabrate" ownerRace="Morlock">
+    <itemref dead="ITEM_SILABRATE_CORPSE" stunned="ITEM_SILABRATE_TERRORIST"/>
+	<environments type="air martian"/>
+	<attributes carrier="Fixed">
+		<timeunits             base="40" xsi:type="core"/>
+		<stamina               base="80" xsi:type="core"/>
+		<health                base="114" xsi:type="core"/>
+		<bravery               base="100" xsi:type="core"/>
+		<reactions             base="40" xsi:type="core"/>
+		<firingaccuracy        base="0" xsi:type="core"/>
+		<throwingaccuracy      base="0" xsi:type="core"/>
+		<strength              base="70" xsi:type="core"/>
+		<psistrength           base="80" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="40" xsi:type="core"/>
+		<victorypoints         base="20" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="80" xsi:type="core"/>
+		<intelligence          base="3"  xsi:type="core"/>
+		<standingheight        base="10" xsi:type="core"/>
+		<kneelingheight        base="10" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Silibrate" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Silabrate" odds="100"/>
+</combatant>
+
+<combatant race="Ventriculant" rank="Terrorist" armor="Ventriculant" ownerRace="Morlock">
+    <itemref dead="ITEM_VENTRICULANT_CORPSE" stunned="ITEM_VENTRICULANT_TERRORIST"/>
+	<environments type="air martian"/>
+	<attributes carrier="Fixed">
+		<timeunits             base="70" xsi:type="core"/>
+		<stamina               base="90" xsi:type="core"/>
+		<health                base="68" xsi:type="core"/>
+		<bravery               base="90" xsi:type="core"/>
+		<reactions             base="40" xsi:type="core"/>
+		<firingaccuracy        base="100" xsi:type="core"/>
+		<throwingaccuracy      base="0" xsi:type="core"/>
+		<strength              base="70" xsi:type="core"/>
+		<psistrength           base="60" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="40" xsi:type="core"/>
+		<victorypoints         base="20" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="80" xsi:type="core"/>
+		<intelligence          base="4"  xsi:type="core"/>
+		<standingheight        base="12" xsi:type="core"/>
+		<kneelingheight        base="12" xsi:type="core"/>
+		<floatingheight        base="6"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Silibrate" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Ventriculant" odds="100"/>
+</combatant>
+
+<combatant race="Artopod" rank="Terrorist" armor="Artopod" ownerRace="Cloak">
+    <itemref dead="ITEM_ARTOPOD_CORPSE" stunned="ITEM_ARTOPOD_TERRORIST"/>
+	<environments type="air martian"/>
+	<attributes carrier="Fixed">
+		<timeunits             base="62" xsi:type="core"/>
+		<stamina               base="90" xsi:type="core"/>
+		<health                base="96" xsi:type="core"/>
+		<bravery               base="110" xsi:type="core"/>
+		<reactions             base="64" xsi:type="core"/>
+		<firingaccuracy        base="60" xsi:type="core"/>
+		<throwingaccuracy      base="0" xsi:type="core"/>
+		<strength              base="90" xsi:type="core"/>
+		<psistrength           base="100" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="50" xsi:type="core"/>
+		<victorypoints         base="30" xsi:type="core"/>
+		<aggression            base="1"  xsi:type="core"/>
+		<melee                 base="80" xsi:type="core"/>
+		<intelligence          base="4"  xsi:type="core"/>
+		<standingheight        base="23" xsi:type="core"/>
+		<kneelingheight        base="16" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Silibrate" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Artopod" odds="100"/>
+</combatant>
+
+<combatant race="TerrorDisc" rank="Terrorist" armor="TerrorDisc" ownerRace="Grey">
+    <itemref dead="ITEM_TERROR_DISC_CORPSE" stunned="ITEM_TERROR_DISC_TERRORIST"/>
+	<environments type="air martian"/>
+	<attributes flyer="true" carrier="Fixed">
+		<timeunits             base="62" xsi:type="core"/>
+		<stamina               base="90" xsi:type="core"/>
+		<health                base="120" xsi:type="core"/>
+		<bravery               base="110" xsi:type="core"/>
+		<reactions             base="64" xsi:type="core"/>
+		<firingaccuracy        base="60" xsi:type="core"/>
+		<throwingaccuracy      base="0" xsi:type="core"/>
+		<strength              base="90" xsi:type="core"/>
+		<psistrength           base="100" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="50" xsi:type="core"/>
+		<victorypoints         base="20" xsi:type="core"/>
+		<aggression            base="1"  xsi:type="core"/>
+		<melee                 base="80" xsi:type="core"/>
+		<intelligence          base="5"  xsi:type="core"/>
+		<standingheight        base="15" xsi:type="core"/>
+		<kneelingheight        base="15" xsi:type="core"/>
+		<floatingheight        base="2"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+    <graphics model="Characters\Alien\Silibrate" x="90.0" y="90.0" z="0.0" />
+	<equipment loadout="Terrordisc" odds="100"/>
+</combatant>
+
+<combatant race="Zombie" rank="Terrorist" armor="Zombie" ownerRace="Human">
+	<environments type="air martian"/>
+	<attributes carrier="Fixed">
+		<timeunits             base="40" xsi:type="core"/>
+		<stamina               base="110" xsi:type="core"/>
+		<health                base="84" xsi:type="core"/>
+		<bravery               base="110" xsi:type="core"/>
+		<reactions             base="40" xsi:type="core"/>
+		<firingaccuracy        base="0" xsi:type="core"/>
+		<throwingaccuracy      base="0" xsi:type="core"/>
+		<strength              base="84" xsi:type="core"/>
+		<psistrength           base="80" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="20" xsi:type="core"/>
+		<victorypoints         base="18" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="80" xsi:type="core"/>
+		<intelligence          base="3"  xsi:type="core"/>
+		<standingheight        base="18" xsi:type="core"/>
+		<kneelingheight        base="18" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+	<equipment loadout="Zombie" odds="100"/>
+</combatant>
+
+<combatant race="Human" rank="Civilian" armor="None">
+	<environments type="air"/>
+	<attributes>
+		<timeunits             base="35" xsi:type="core"/>
+		<stamina               base="65" xsi:type="core"/>
+		<health                base="30" xsi:type="core"/>
+		<bravery               base="80" xsi:type="core"/>
+		<reactions             base="30" xsi:type="core"/>
+		<firingaccuracy        base="30" xsi:type="core"/>
+		<throwingaccuracy      base="50" xsi:type="core"/>
+		<strength              base="20" xsi:type="core"/>
+		<psistrength           base="5" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="20" xsi:type="core"/>
+		<victorypoints         base="0" xsi:type="core"/>
+		<aggression            base="0"  xsi:type="core"/>
+		<melee                 base="50" xsi:type="core"/>
+		<intelligence          base="1"  xsi:type="core"/>
+		<standingheight        base="21" xsi:type="core"/>
+		<kneelingheight        base="16" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="4"  xsi:type="core"/>
+	</attributes>
+</combatant>
+
+<combatant race="Tank" rank="Soldier" armor="Tank">
+	<environments type="air martian vacuum"/>
+	<attributes carrier="Fixed">
+		<timeunits             base="70" xsi:type="core"/>
+		<stamina               base="100" xsi:type="core"/>
+		<health                base="90" xsi:type="core"/>
+		<bravery               base="110" xsi:type="core"/>
+		<reactions             base="20" xsi:type="core"/>
+		<firingaccuracy        base="60" xsi:type="core"/>
+		<throwingaccuracy      base="0" xsi:type="core"/>
+		<strength              base="60" xsi:type="core"/>
+		<psistrength           base="100" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="50" xsi:type="core"/>
+		<victorypoints         base="20" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="70" xsi:type="core"/>
+		<intelligence          base="3"  xsi:type="core"/>
+		<standingheight        base="16" xsi:type="core"/>
+		<kneelingheight        base="16" xsi:type="core"/>
+		<floatingheight        base="0"  xsi:type="core"/>
+		<motionscannerblipsize base="30"  xsi:type="core"/>
+	</attributes>
+</combatant>
+
+<combatant race="HoverTank" rank="Soldier" armor="HoverTank">
+	<environments type="air martian vacuum"/>
+	<attributes flyer="true" carrier="Fixed">
+		<timeunits             base="100" xsi:type="core"/>
+		<stamina               base="100" xsi:type="core"/>
+		<health                base="90" xsi:type="core"/>
+		<bravery               base="110" xsi:type="core"/>
+		<reactions             base="30" xsi:type="core"/>
+		<firingaccuracy        base="60" xsi:type="core"/>
+		<throwingaccuracy      base="0" xsi:type="core"/>
+		<strength              base="60" xsi:type="core"/>
+		<psistrength           base="100" xsi:type="core"/>
+		<psiskill              base="0" xsi:type="core"/>
+		<energyrecharge        base="50" xsi:type="core"/>
+		<victorypoints         base="20" xsi:type="core"/>
+		<aggression            base="2"  xsi:type="core"/>
+		<melee                 base="70" xsi:type="core"/>
+		<intelligence          base="3"  xsi:type="core"/>
+		<standingheight        base="12" xsi:type="core"/>
+		<kneelingheight        base="12" xsi:type="core"/>
+		<floatingheight        base="6"  xsi:type="core"/>
+		<motionscannerblipsize base="30"  xsi:type="core"/>
+	</attributes>
+</combatant>
+
+<!-- rank is pretty much irrelevant for XCAPs, so I've picked one at random-->
+
+<!-- dteviot - I'm 98% sure the rest of stuff in file is obsolete garbage, so I've left it in, but commented it out. -->
+
+<!--
+		<combatant race="RACE_HOVERTANK" rank="RANK_SOLDIER">
+			<environments type="air martian vacuum"/>
+		
+			<attributes>
+				<timeunits             base="100" xsi:type="core"/>
+				<stamina               base="150" xsi:type="core"/>
+				<health                base="90"  xsi:type="core"/>
+				<reactions             base="80"  xsi:type="core"/>
+				<firingaccuracy        base="90"  xsi:type="core"/>
+				<frontarmour           base="130" xsi:type="core"/>
+				<sidearmour            base="130" xsi:type="core"/>
+				<reararmour            base="130" xsi:type="core"/>
+				<underarmour           base="70"  xsi:type="core"/>
+				<floatingheight        base="2"   xsi:type="core"/>
+				<flyer>true</flyer>
+			</attributes>
+			
+			<carrier name="LO_Single_Turret">
+				<item name="ITEM_GAIA_MISSILE_LAUNCHER" location="turret" removable="false"/>
+			</carrier>
+
+      <susceptibilities>
+        <susceptibility damageType="Piercing"  physical="1.0" stun="0.0"/>
+        <susceptibility damageType="Fire"      physical="1.0" stun="0.0"/>
+        <susceptibility damageType="Explosive" physical="1.0" stun="0.0"/>
+        <susceptibility damageType="Laser"     physical="1.0" stun="0.0"/>
+        <susceptibility damageType="Plasma"    physical="1.0" stun="0.0"/>
+        <susceptibility damageType="Stun"      physical="0.0" stun="0.0"/>
+        <susceptibility damageType="Melee"     physical="1.0" stun="0.0"/>
+        <susceptibility damageType="Acid"      physical="1.0" stun="0.0"/>
+        <susceptibility damageType="Smoke"     physical="1.0" stun="0.0"/>
+      </susceptibilities>
+
+		</combatant>				
+-->
+
+<!--  XCAPs stuff -->
+<!--  Here because seems best place for this info -->
+<!--
+    <item name="ITEM_XCAP-AG_GAIA" xsi:type="itemType">
+        <storage type="STORAGE_GEAR" units="30" />
+        <price buy="0" sell="1043000" />
+        <damage type="DAMAGE_EXPLOSIVE" amount="1000"></damage>
+        <capacity value="4" />
+        <throw time="1000"></throw>
+    </item>
+    <item name="ITEM_XCAP_CANNON" xsi:type="itemType">
+        <storage type="STORAGE_GEAR" units="30" />
+        <price buy="420000" sell="340000" />
+        <damage type="DAMAGE_EXPLOSIVE" amount="1000"></damage>
+        <capacity value="4" />
+        <throw time="1000"></throw>
+    </item>
+    <item name="ITEM_XCAP_ROCKET" xsi:type="itemType">
+        <storage type="STORAGE_GEAR" units="30" />
+        <price buy="480000" sell="360000" />
+        <damage type="DAMAGE_EXPLOSIVE" amount="1000"></damage>
+        <capacity value="4" />
+        <throw time="1000"></throw>
+    </item>
+    <item name="ITEM_XCAP-AG_PLASMA" xsi:type="itemType">
+        <storage type="STORAGE_GEAR" units="30" />
+        <price buy="0" sell="980000" />
+        <damage type="DAMAGE_EXPLOSIVE" amount="1000"></damage>
+        <capacity value="1000" />
+        <throw time="1000"></throw>
+    </item>
+    <item name="ITEM_XCAP_LASER" xsi:type="itemType">
+        <storage type="STORAGE_GEAR" units="30" />
+        <price buy="0" sell="594000" />
+        <damage type="DAMAGE_EXPLOSIVE" amount="1000"></damage>
+        <capacity value="1000" />
+        <throw time="1000"></throw>
+    </item>
+-->		
+</combatantdata>

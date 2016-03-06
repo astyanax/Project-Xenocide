@@ -1,0 +1,1627 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ITEM_UNIQUE_NAME_FORMAT" xml:space="preserve">
+    <value>{0}-{1}</value>
+  </data>
+  <data name="BUTTON_ABANDON" xml:space="preserve">
+    <value>Abandon Game</value>
+  </data>
+  <data name="BUTTON_ADDPROJECT" xml:space="preserve">
+    <value>Add project</value>
+  </data>
+  <data name="BUTTON_ADVANCE_TIME" xml:space="preserve">
+    <value>Advance Time</value>
+  </data>
+  <data name="BUTTON_BASE_INFORMATION" xml:space="preserve">
+    <value>Base Information</value>
+  </data>
+  <data name="BUTTON_BASES" xml:space="preserve">
+    <value>Bases</value>
+  </data>
+  <data name="BUTTON_BUILD_FACILITIES" xml:space="preserve">
+    <value>Build Facilities</value>
+  </data>
+  <data name="BUTTON_BUILD_NEW_BASE" xml:space="preserve">
+    <value>Build New Base</value>
+  </data>
+  <data name="BUTTON_BUY" xml:space="preserve">
+    <value>Buy</value>
+  </data>
+  <data name="BUTTON_BUY_LESS" xml:space="preserve">
+    <value>Buy Less</value>
+  </data>
+  <data name="BUTTON_BUY_MORE" xml:space="preserve">
+    <value>Buy More</value>
+  </data>
+  <data name="BUTTON_CANCEL" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="BUTTON_CANCEL_NEW_BASE" xml:space="preserve">
+    <value>Cancel selecting site for new base</value>
+  </data>
+  <data name="BUTTON_CANCEL_TARGETING" xml:space="preserve">
+    <value>Cancel Target Selection</value>
+  </data>
+  <data name="BUTTON_CANCELPROJECT" xml:space="preserve">
+    <value>Cancel project</value>
+  </data>
+  <data name="BUTTON_CLOSE" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="BUTTON_CONFIRM" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="BUTTON_DELETE" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="BUTTON_DOWN" xml:space="preserve">
+    <value>Down</value>
+  </data>
+  <data name="BUTTON_EMPTY_POD_1" xml:space="preserve">
+    <value>Empty Pod 1</value>
+  </data>
+  <data name="BUTTON_EMPTY_POD_2" xml:space="preserve">
+    <value>Empty Pod 2</value>
+  </data>
+  <data name="BUTTON_EQUIP_CRAFT" xml:space="preserve">
+    <value>Equip Craft</value>
+  </data>
+  <data name="BUTTON_FUNDING" xml:space="preserve">
+    <value>Funding</value>
+  </data>
+  <data name="BUTTON_FUNDS" xml:space="preserve">
+    <value>Funds ($k)</value>
+  </data>
+  <data name="BUTTON_GEOSCAPE" xml:space="preserve">
+    <value>Geoscape</value>
+  </data>
+  <data name="BUTTON_INTERCEPT" xml:space="preserve">
+    <value>Intercept</value>
+  </data>
+  <data name="BUTTON_LAST_POSITION" xml:space="preserve">
+    <value>Go to UFO's last known position</value>
+  </data>
+  <data name="BUTTON_LEFT" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="BUTTON_LOAD" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="BUTTON_LOAD_SAVED_GAME" xml:space="preserve">
+    <value>Load Saved Game</value>
+  </data>
+  <data name="BUTTON_MANUFACTURE" xml:space="preserve">
+    <value>Manufacture</value>
+  </data>
+  <data name="BUTTON_MANUFACTURING" xml:space="preserve">
+    <value>Manufacturing</value>
+  </data>
+  <data name="BUTTON_MONTHLY_COSTS" xml:space="preserve">
+    <value>Monthly Costs</value>
+  </data>
+  <data name="BUTTON_NEW_GAME" xml:space="preserve">
+    <value>New Game</value>
+  </data>
+  <data name="BUTTON_NEW_TARGET" xml:space="preserve">
+    <value>New Target</value>
+  </data>
+  <data name="BUTTON_NO" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="BUTTON_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="BUTTON_OPTIONS" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="BUTTON_PATROL" xml:space="preserve">
+    <value>Patrol</value>
+  </data>
+  <data name="BUTTON_QUIT" xml:space="preserve">
+    <value>Quit</value>
+  </data>
+  <data name="BUTTON_RESEARCH" xml:space="preserve">
+    <value>Research</value>
+  </data>
+  <data name="BUTTON_RETURN_TO_BASE" xml:space="preserve">
+    <value>Return To Base</value>
+  </data>
+  <data name="BUTTON_RIGHT" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="BUTTON_RUN_TESTS" xml:space="preserve">
+    <value>Run Unit Tests</value>
+  </data>
+  <data name="BUTTON_SAVE" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="BUTTON_SELL" xml:space="preserve">
+    <value>Sell</value>
+  </data>
+  <data name="BUTTON_SELL_LESS" xml:space="preserve">
+    <value>Sell Less</value>
+  </data>
+  <data name="BUTTON_SELL_MORE" xml:space="preserve">
+    <value>Sell More</value>
+  </data>
+  <data name="BUTTON_SET_POD_1" xml:space="preserve">
+    <value>Set Pod 1</value>
+  </data>
+  <data name="BUTTON_SET_POD_2" xml:space="preserve">
+    <value>Set Pod 2</value>
+  </data>
+  <data name="BUTTON_SOLDIERS" xml:space="preserve">
+    <value>Soldiers</value>
+  </data>
+  <data name="BUTTON_STATISTICS" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
+  <data name="BUTTON_STORES" xml:space="preserve">
+    <value>Stores</value>
+  </data>
+  <data name="BUTTON_TIME_STOP" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="BUTTON_TIME_X3600" xml:space="preserve">
+    <value>1 Hr</value>
+  </data>
+  <data name="BUTTON_TIME_X60" xml:space="preserve">
+    <value>1 Min</value>
+  </data>
+  <data name="BUTTON_TIME_X86400" xml:space="preserve">
+    <value>1 Day</value>
+  </data>
+  <data name="BUTTON_TRANSACTIONS" xml:space="preserve">
+    <value>Transactions</value>
+  </data>
+  <data name="BUTTON_TRANSFER" xml:space="preserve">
+    <value>Transfer</value>
+  </data>
+  <data name="BUTTON_TRANSFERS" xml:space="preserve">
+    <value>Transfers</value>
+  </data>
+  <data name="BUTTON_UFO_BY_COUNTRY" xml:space="preserve">
+    <value>UFO activity by Country</value>
+  </data>
+  <data name="BUTTON_UFO_BY_REGION" xml:space="preserve">
+    <value>UFO activity by Region</value>
+  </data>
+  <data name="BUTTON_UP" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="BUTTON_XCORP_BY_COUNTRY" xml:space="preserve">
+    <value>X-Corp activity by Country</value>
+  </data>
+  <data name="BUTTON_XCORP_BY_REGION" xml:space="preserve">
+    <value>X-Corp activity by Region</value>
+  </data>
+  <data name="BUTTON_XNET" xml:space="preserve">
+    <value>X-Net</value>
+  </data>
+  <data name="BUTTON_YES" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="BUTTON_ZOOM_IN" xml:space="preserve">
+    <value>In</value>
+  </data>
+  <data name="BUTTON_ZOOM_OUT" xml:space="preserve">
+    <value>Out</value>
+  </data>
+  <data name="DLG_SOUND_MUSIC_ON" xml:space="preserve">
+    <value>Music On</value>
+  </data>
+  <data name="DLG_SOUND_SOUND_ON" xml:space="preserve">
+    <value>Sound On</value>
+  </data>
+  <data name="CLIP_UNLIMITED" xml:space="preserve">
+    <value>Unlimited</value>
+  </data>
+  <data name="COUNTRY_ATTITUDE_HAPPY" xml:space="preserve">
+    <value>Happy</value>
+  </data>
+  <data name="COUNTRY_ATTITUDE_HOSTILE" xml:space="preserve">
+    <value>Hostile</value>
+  </data>
+  <data name="COUNTRY_ATTITUDE_NEUTRAL" xml:space="preserve">
+    <value>Neutral</value>
+  </data>
+  <data name="COUNTRY_ATTITUDE_UNHAPPY" xml:space="preserve">
+    <value>Unhappy</value>
+  </data>
+  <data name="DLG_BUILDFACILITY_BUILD_TIME_FORMAT" xml:space="preserve">
+    <value>{0} days</value>
+  </data>
+  <data name="DLG_BUILDFACILITY_COLUMN_BUILD_TIME" xml:space="preserve">
+    <value>Build Time</value>
+  </data>
+  <data name="DLG_BUILDFACILITY_COLUMN_COST" xml:space="preserve">
+    <value>Cost</value>
+  </data>
+  <data name="DLG_BUILDFACILITY_COLUMN_FACILITY" xml:space="preserve">
+    <value>Facility</value>
+  </data>
+  <data name="DLG_BUILDFACILITY_COLUMN_MAINTENANCE" xml:space="preserve">
+    <value>Maintenance</value>
+  </data>
+  <data name="DLG_LAUNCH_INTERCEPT_COLUMN_AMMO" xml:space="preserve">
+    <value>Ammo%</value>
+  </data>
+  <data name="DLG_LAUNCH_INTERCEPT_COLUMN_BASE" xml:space="preserve">
+    <value>Base</value>
+  </data>
+  <data name="DLG_LAUNCH_INTERCEPT_COLUMN_CREW" xml:space="preserve">
+    <value>Crew</value>
+  </data>
+  <data name="DLG_LAUNCH_INTERCEPT_COLUMN_FUEL" xml:space="preserve">
+    <value>Fuel%</value>
+  </data>
+  <data name="DLG_LAUNCH_INTERCEPT_COLUMN_HULL" xml:space="preserve">
+    <value>Hull%</value>
+  </data>
+  <data name="DLG_LAUNCH_INTERCEPT_COLUMN_HWP" xml:space="preserve">
+    <value>HWPs</value>
+  </data>
+  <data name="DLG_LAUNCH_INTERCEPT_COLUMN_NAME" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="DLG_LAUNCH_INTERCEPT_COLUMN_PODS" xml:space="preserve">
+    <value>Pods</value>
+  </data>
+  <data name="DLG_NEWBASENAME" xml:space="preserve">
+    <value>Base Name</value>
+  </data>
+  <data name="SCREEN_RESEARCH_COLUMN_PROJECT" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="SCREEN_RESEARCH_COLUMN_SCIENTISTS" xml:space="preserve">
+    <value>Scientists</value>
+  </data>
+  <data name="DLG_TRACKINGLOST_LOST_TRACKING" xml:space="preserve">
+    <value>Craft {0} lost tracking on UFO.</value>
+  </data>
+  <data name="EXCEPTION_NO_XNET_ENTRY_FOUND" xml:space="preserve">
+    <value>No X-Net entry found for {0}</value>
+  </data>
+  <data name="EXCEPTION_NOT_IMPLEMENTED" xml:space="preserve">
+    <value>Sorry. Not implemented Yet!</value>
+  </data>
+  <data name="EXCEPTION_UFOS_HAVE_NO_BASE" xml:space="preserve">
+    <value>UFOs don't have a homeBase</value>
+  </data>
+  <data name="EXCEPTION_UFOS_LACK_FUEL" xml:space="preserve">
+    <value>UFOs don't have fuel</value>
+  </data>
+  <data name="EXCEPTION_XML_ATTRIBUTE_NOT_FOUND" xml:space="preserve">
+    <value>Attribute "{0}" not found in XML file</value>
+  </data>
+  <data name="FACILITY_INFO_BUILD_COST" xml:space="preserve">
+    <value>Build Cost: {0}</value>
+  </data>
+  <data name="FACILITY_INFO_BUILD_TIME" xml:space="preserve">
+    <value>Build Time (days): {0}</value>
+  </data>
+  <data name="FACILITY_INFO_CAPACITY" xml:space="preserve">
+    <value>Capacity: {0}</value>
+  </data>
+  <data name="FACILITY_INFO_DEFENSE_ACCURACY" xml:space="preserve">
+    <value>Accuracy: {0}</value>
+  </data>
+  <data name="FACILITY_INFO_DEFENSE_DAMAGE" xml:space="preserve">
+    <value>Damage: {0}</value>
+  </data>
+  <data name="FACILITY_INFO_DEFENSE_RANGE" xml:space="preserve">
+    <value>Range (km): {0}</value>
+  </data>
+  <data name="FACILITY_INFO_MAINTENANCE_COST" xml:space="preserve">
+    <value>Maintenance Cost: {0}</value>
+  </data>
+  <data name="FACILITY_INFO_SCAN_ACCURACY" xml:space="preserve">
+    <value>Accuracy: {0}</value>
+  </data>
+  <data name="FACILITY_INFO_SCAN_DECODE" xml:space="preserve">
+    <value>Can determine UFO type, crew species and mission</value>
+  </data>
+  <data name="FACILITY_INFO_SCAN_RANGE" xml:space="preserve">
+    <value>Range (km): {0}</value>
+  </data>
+  <data name="FACILITY_INFO_SCRAP_VALUE" xml:space="preserve">
+    <value>Scrap Value: {0}</value>
+  </data>
+  <data name="FACILITY_INFO_SIZE" xml:space="preserve">
+    <value>Size: {0}m x {1}m</value>
+  </data>
+  <data name="ITEM_STATS_CRAFT_ACCELERATION" xml:space="preserve">
+    <value>Acceleration: {0} G's</value>
+  </data>
+  <data name="ITEM_STATS_CRAFT_CARGO_SPACE" xml:space="preserve">
+    <value>Max Soldiers: {0}</value>
+  </data>
+  <data name="ITEM_STATS_CRAFT_CLIP_DAMAGE" xml:space="preserve">
+    <value>Damage Inflicted: {0}</value>
+  </data>
+  <data name="ITEM_STATS_CRAFT_CLIP_SIZE" xml:space="preserve">
+    <value>Shots: {0}</value>
+  </data>
+  <data name="ITEM_STATS_CRAFT_DAMAGE_CAPACITY" xml:space="preserve">
+    <value>Damage Capacity: {0}</value>
+  </data>
+  <data name="ITEM_STATS_CRAFT_FUEL_CAPACITY" xml:space="preserve">
+    <value>Fuel Capacity: {0}</value>
+  </data>
+  <data name="ITEM_STATS_CRAFT_HWP_CAPACITY" xml:space="preserve">
+    <value>Max X-Caps: {0}</value>
+  </data>
+  <data name="ITEM_STATS_CRAFT_MAX_SPEED" xml:space="preserve">
+    <value>Max Speed: {0}  meters/sec</value>
+  </data>
+  <data name="ITEM_STATS_CRAFT_WEAPON_ACCURACY" xml:space="preserve">
+    <value>Accuracy: {0}</value>
+  </data>
+  <data name="ITEM_STATS_CRAFT_WEAPON_PODS" xml:space="preserve">
+    <value>Weapon Pods: {0}</value>
+  </data>
+  <data name="ITEM_STATS_CRAFT_WEAPON_RANGE" xml:space="preserve">
+    <value>Weapon Range: {0} km</value>
+  </data>
+  <data name="ITEM_STATS_PRICE_BUY" xml:space="preserve">
+    <value>Buy Price: {0}</value>
+  </data>
+  <data name="ITEM_STATS_PRICE_SELL" xml:space="preserve">
+    <value>Sell Income: {0}</value>
+  </data>
+  <data name="ITEM_STATS_STORAGE_TYPE" xml:space="preserve">
+    <value>Storage Needed: {0}</value>
+  </data>
+  <data name="ITEM_STATS_STORAGE_UNITS" xml:space="preserve">
+    <value>Storage Size: {0}</value>
+  </data>
+  <data name="MGSBOX_BASE_OUT_OF_CRAFT_SUPPLIES" xml:space="preserve">
+    <value>Base {0} has run out of {1}, which are needed to resupply {2}</value>
+  </data>
+  <data name="MSGBOX_AIRCRAFT_ORDERS_BASE" xml:space="preserve">
+    <value>Base: {0}</value>
+  </data>
+  <data name="MSGBOX_AIRCRAFT_ORDERS_FUEL" xml:space="preserve">
+    <value>Fuel: {0}%</value>
+  </data>
+  <data name="MSGBOX_AIRCRAFT_ORDERS_SPEED" xml:space="preserve">
+    <value>Speed: {0} meters/sec</value>
+  </data>
+  <data name="MSGBOX_BASE_NAME_CHANGED" xml:space="preserve">
+    <value>The base name has been changed.</value>
+  </data>
+  <data name="MSGBOX_BASE_NAMES_ARE_UNIQUE" xml:space="preserve">
+    <value>You already have a base called {0}.  You need to give the base a different name.</value>
+  </data>
+  <data name="MSGBOX_BASE_NEEDS_NAME" xml:space="preserve">
+    <value>You must give the base a name.</value>
+  </data>
+  <data name="MSGBOX_CANNOT_BUILD_ON_WATER" xml:space="preserve">
+    <value>Sorry but you cannot build a base over water</value>
+  </data>
+  <data name="MSGBOX_CANT_FIT" xml:space="preserve">
+    <value>Base doesn't have enough free storage space for the selected item(s).</value>
+  </data>
+  <data name="MSGBOX_CRAFT_NOT_IN_BASE" xml:space="preserve">
+    <value>You can't change {0}.  It's not in its home base.</value>
+  </data>
+  <data name="MSGBOX_START_BATTLESCAPE" xml:space="preserve">
+    <value>This is the start Battlescape screen, where you get the chance to begin a battlescape mission between {0} and {1}.</value>
+  </data>
+  <data name="MSGBOX_FINISHED_BUILDING_FACILITY" xml:space="preserve">
+    <value>Construction of {0} facility has been completed.</value>
+  </data>
+  <data name="MSGBOX_FUEL_LOW" xml:space="preserve">
+    <value>Aircraft {0} reports fuel low.  Returning to base.</value>
+  </data>
+  <data name="MSGBOX_INSUFFICIENT_FUNDS" xml:space="preserve">
+    <value>You don't have enough money for that.</value>
+  </data>
+  <data name="MSGBOX_MAX_EIGHT_BASES" xml:space="preserve">
+    <value>You can't have more than eight bases.</value>
+  </data>
+  <data name="MSGBOX_NO_CRAFT_SELECTED" xml:space="preserve">
+    <value>No Craft Selected</value>
+  </data>
+  <data name="MSGBOX_NO_FACILITY_SELECTED" xml:space="preserve">
+    <value>You need to select a facility.</value>
+  </data>
+  <data name="MSGBOX_NO_INTERCEPT_CRAFT_SELECTED" xml:space="preserve">
+    <value>No craft selected</value>
+  </data>
+  <data name="MSGBOX_NO_PURCHASE_SELECTED" xml:space="preserve">
+    <value>You need to select an item</value>
+  </data>
+  <data name="MSGBOX_NO_SALE_SELECTED" xml:space="preserve">
+    <value>No item selected</value>
+  </data>
+  <data name="MSGBOX_NO_WEAPON_SELECTED" xml:space="preserve">
+    <value>No Weapon Selected</value>
+  </data>
+  <data name="MSGBOX_ONLY_ONE_FACILITY_PER_BASE" xml:space="preserve">
+    <value>Bases can only have one {0} facility, and this base already has one.</value>
+  </data>
+  <data name="MSGBOX_POD_ALREADY_HAS_WEAPON" xml:space="preserve">
+    <value>This pod is aready equiped with a weapon</value>
+  </data>
+  <data name="MSGBOX_RESEARCH_FINISHED" xml:space="preserve">
+    <value>You have finished researching {0}.</value>
+  </data>
+  <data name="MSGBOX_TERROR_MISSION_STARTED" xml:space="preserve">
+    <value>Terror mission started at {0}</value>
+  </data>
+  <data name="MSGBOX_UFO_DETECTED" xml:space="preserve">
+    <value>{0} detected</value>
+  </data>
+  <data name="MSGBOX_UFOINFO_CRAFT_TYPE" xml:space="preserve">
+    <value>Craft Type: {0}</value>
+  </data>
+  <data name="MSGBOX_UFOINFO_MISSION" xml:space="preserve">
+    <value>Mission: {0}</value>
+  </data>
+  <data name="MSGBOX_UFOINFO_RACE" xml:space="preserve">
+    <value>Race: {0}</value>
+  </data>
+  <data name="MSGBOX_UFOINFO_SIZE" xml:space="preserve">
+    <value>Size: {0}</value>
+  </data>
+  <data name="MSGBOX_UFOINFO_SPEED" xml:space="preserve">
+    <value>Speed: {0} meters/sec</value>
+  </data>
+  <data name="MSGBOX_UFOINFO_ZONE" xml:space="preserve">
+    <value>Zone: {0}</value>
+  </data>
+  <data name="POD_COUNT_STATUS" xml:space="preserve">
+    <value>{0}/{1}</value>
+  </data>
+  <data name="SCREEN_AEROSCAPE_ARMOUR_STOPPED_IT" xml:space="preserve">
+    <value>{0} wasn't even scratched!</value>
+  </data>
+  <data name="SCREEN_AEROSCAPE_CRAFT_CANT_FIGHT" xml:space="preserve">
+    <value>{0} can't fight</value>
+  </data>
+  <data name="SCREEN_AEROSCAPE_CRAFT_CRASHED" xml:space="preserve">
+    <value>{0} crashed</value>
+  </data>
+  <data name="SCREEN_AEROSCAPE_CRAFT_DESTROYED" xml:space="preserve">
+    <value>{0} was destroyed</value>
+  </data>
+  <data name="SCREEN_AEROSCAPE_HULL_DAMAGED" xml:space="preserve">
+    <value>{0} was damaged</value>
+  </data>
+  <data name="SCREEN_AEROSCAPE_HULL_LEFT" xml:space="preserve">
+    <value>Hull Integrity: {0}%</value>
+  </data>
+  <data name="SCREEN_AEROSCAPE_LOG_TIME" xml:space="preserve">
+    <value>Time = {0} seconds</value>
+  </data>
+  <data name="SCREEN_AEROSCAPE_WEAPON_FIRED" xml:space="preserve">
+    <value>Firing {0}</value>
+  </data>
+  <data name="SCREEN_AEROSCAPE_WEAPON_HIT" xml:space="preserve">
+    <value>{0} hit</value>
+  </data>
+  <data name="SCREEN_AEROSCAPE_WEAPON_MISSED" xml:space="preserve">
+    <value>{0} missed</value>
+  </data>
+  <data name="SCREEN_BASEINFO_COLUMN_BUILDING" xml:space="preserve">
+    <value>Building</value>
+  </data>
+  <data name="SCREEN_BASEINFO_COLUMN_IDLE" xml:space="preserve">
+    <value>Idle</value>
+  </data>
+  <data name="SCREEN_BASEINFO_COLUMN_IN_USE" xml:space="preserve">
+    <value>In Use</value>
+  </data>
+  <data name="SCREEN_BASEINFO_COLUMN_SPACE_TYPE" xml:space="preserve">
+    <value>Type of Space</value>
+  </data>
+  <data name="SCREEN_BASEINFO_COLUMN_STAFF" xml:space="preserve">
+    <value>Staff Type</value>
+  </data>
+  <data name="SCREEN_BASEINFO_COLUMN_STAFF_TOTAL" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="SCREEN_BASEINFO_COLUMN_TOTAL" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="SCREEN_BASES_FUNDS" xml:space="preserve">
+    <value>Funds: ${0}</value>
+  </data>
+  <data name="SCREEN_BATTLESCAPE_REPORT_COLUMN_ITEM" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="SCREEN_BATTLESCAPE_REPORT_COLUMN_QUANTITY" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="SCREEN_BATTLESCAPE_REPORT_COLUMN_SCORE" xml:space="preserve">
+    <value>Score</value>
+  </data>
+  <data name="SCREEN_BATTLESCAPE_REPORT_RECOVERED_ITEMS_LABEL" xml:space="preserve">
+    <value>Recovered Items:</value>
+  </data>
+  <data name="SCREEN_BATTLESCAPE_REPORT_ROW_TOTAL" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_BASE_NAME" xml:space="preserve">
+    <value>Base: {0}</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_COLUMN_AMMO" xml:space="preserve">
+    <value>Ammo%</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_COLUMN_CLIP_SIZE" xml:space="preserve">
+    <value>Clip Size</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_COLUMN_CRAFT_NAME" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_COLUMN_CREW" xml:space="preserve">
+    <value>Crew</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_COLUMN_FUEL" xml:space="preserve">
+    <value>Fuel%</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_COLUMN_HULL" xml:space="preserve">
+    <value>Hull%</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_COLUMN_HWP" xml:space="preserve">
+    <value>HWPs</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_COLUMN_ITEM" xml:space="preserve">
+    <value>Weapon</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_COLUMN_PODS" xml:space="preserve">
+    <value>Pods</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_COLUMN_QUANTITY_IN_BASE" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_COLUMN_ROUNDS_IN_BASE" xml:space="preserve">
+    <value>Rounds in Base</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_IRRELEVANT" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_POD_AMMO" xml:space="preserve">
+    <value>Ammo: {0}</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_POD_CLIP_SIZE" xml:space="preserve">
+    <value>Clip Size: {0}</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_POD_EMPTY" xml:space="preserve">
+    <value>Weapon: &lt;none&gt;</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_POD_NAME" xml:space="preserve">
+    <value>Pod {0}</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_POD_NO_CLIP" xml:space="preserve">
+    <value>Clip Size: Unlimited</value>
+  </data>
+  <data name="SCREEN_EQUIP_CRAFT_POD_WEAPON" xml:space="preserve">
+    <value>Weapon: {0}</value>
+  </data>
+  <data name="SCREEN_GEOSCAPE_FIRST_BASE" xml:space="preserve">
+    <value>Left click on location for first base.</value>
+  </data>
+  <data name="SCREEN_LOADSAVEGAME_DUPLICATE_FILENAME" xml:space="preserve">
+    <value>Save game with this name already exists. You need to delete it before you can create another with the same name.</value>
+  </data>
+  <data name="SCREEN_MONTHLYREPORT_COLUMN_ATTITUDE" xml:space="preserve">
+    <value>Attitude</value>
+  </data>
+  <data name="SCREEN_MONTHLYREPORT_COLUMN_CHANGE" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="SCREEN_MONTHLYREPORT_COLUMN_COUNTRY" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="SCREEN_MONTHLYREPORT_COLUMN_FUNDS" xml:space="preserve">
+    <value>Funding</value>
+  </data>
+  <data name="SCREEN_MONTHLYREPORT_MONTH" xml:space="preserve">
+    <value>Month: {0}</value>
+  </data>
+  <data name="SCREEN_MONTHLYREPORT_ROW_TOTAL" xml:space="preserve">
+    <value>TOTAL:</value>
+  </data>
+  <data name="SCREEN_MONTHLYREPORT_SCORE" xml:space="preserve">
+    <value>Score: {0}</value>
+  </data>
+  <data name="SCREEN_PURCHASE_COLUMN_COST_PER_UNIT" xml:space="preserve">
+    <value>$ Each</value>
+  </data>
+  <data name="SCREEN_PURCHASE_COLUMN_ITEM" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="SCREEN_PURCHASE_COLUMN_QUANTITY" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="SCREEN_PURCHASE_COLUMN_QUANTITY_IN_BASE" xml:space="preserve">
+    <value>On hand</value>
+  </data>
+  <data name="SCREEN_PURCHASE_FUNDS" xml:space="preserve">
+    <value>Current Funds:${0}</value>
+  </data>
+  <data name="SCREEN_PURCHASE_TOTAL_COST" xml:space="preserve">
+    <value>Total Cost:${0}</value>
+  </data>
+  <data name="SCREEN_SELL_COLUMN_ITEM" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="SCREEN_SELL_COLUMN_QUANTITY" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="SCREEN_SELL_COLUMN_QUANTITY_IN_BASE" xml:space="preserve">
+    <value>On Hand</value>
+  </data>
+  <data name="SCREEN_SELL_COLUMN_VALUE_PER_UNIT" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="SCREEN_SELL_FUNDS" xml:space="preserve">
+    <value>Current Funds:${0}</value>
+  </data>
+  <data name="SCREEN_SELL_TOTAL_VALUE" xml:space="preserve">
+    <value>Value of Sales:${0}</value>
+  </data>
+  <data name="SCREEN_STATISTICS_COLUMN_APRIL" xml:space="preserve">
+    <value>Apr</value>
+  </data>
+  <data name="SCREEN_STATISTICS_COLUMN_AUGUST" xml:space="preserve">
+    <value>Aug</value>
+  </data>
+  <data name="SCREEN_STATISTICS_COLUMN_DECEMBER" xml:space="preserve">
+    <value>Dec</value>
+  </data>
+  <data name="SCREEN_STATISTICS_COLUMN_FEBRUARY" xml:space="preserve">
+    <value>Feb</value>
+  </data>
+  <data name="SCREEN_STATISTICS_COLUMN_JANUARY" xml:space="preserve">
+    <value>Jan</value>
+  </data>
+  <data name="SCREEN_STATISTICS_COLUMN_JULY" xml:space="preserve">
+    <value>Jul</value>
+  </data>
+  <data name="SCREEN_STATISTICS_COLUMN_JUNE" xml:space="preserve">
+    <value>Jun</value>
+  </data>
+  <data name="SCREEN_STATISTICS_COLUMN_MARCH" xml:space="preserve">
+    <value>Mar</value>
+  </data>
+  <data name="SCREEN_STATISTICS_COLUMN_MAY" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="SCREEN_STATISTICS_COLUMN_NOVEMBER" xml:space="preserve">
+    <value>Nov</value>
+  </data>
+  <data name="SCREEN_STATISTICS_COLUMN_OCTOBER" xml:space="preserve">
+    <value>Oct</value>
+  </data>
+  <data name="SCREEN_STATISTICS_COLUMN_SEPTEMBER" xml:space="preserve">
+    <value>Sep</value>
+  </data>
+  <data name="SCREEN_STATISTICS_COLUMN_SERIES" xml:space="preserve">
+    <value>Series</value>
+  </data>
+  <data name="SCREEN_STATISTICS_SERIES_ALIEN_SCORE" xml:space="preserve">
+    <value>Alien total score</value>
+  </data>
+  <data name="SCREEN_STATISTICS_SERIES_BALANCE" xml:space="preserve">
+    <value>Balance</value>
+  </data>
+  <data name="SCREEN_STATISTICS_SERIES_FUNDING" xml:space="preserve">
+    <value>Funding</value>
+  </data>
+  <data name="SCREEN_STATISTICS_SERIES_MAINTENANCE" xml:space="preserve">
+    <value>Maintenance</value>
+  </data>
+  <data name="SCREEN_STATISTICS_SERIES_PURCHACES" xml:space="preserve">
+    <value>Purchaces</value>
+  </data>
+  <data name="SCREEN_STATISTICS_SERIES_SALES" xml:space="preserve">
+    <value>Sales</value>
+  </data>
+  <data name="SCREEN_STATISTICS_SERIES_XCORP_SCORE" xml:space="preserve">
+    <value>X-Corp total score</value>
+  </data>
+  <data name="STORAGE_ALIENS_DISPLAY" xml:space="preserve">
+    <value>Xeno Containment</value>
+  </data>
+  <data name="STORAGE_CRAFT_DISPLAY" xml:space="preserve">
+    <value>Landing Pads</value>
+  </data>
+  <data name="STORAGE_ENGINEER_DISPLAY" xml:space="preserve">
+    <value>Workshop</value>
+  </data>
+  <data name="STORAGE_GEAR_DISPLAY" xml:space="preserve">
+    <value>General Storage</value>
+  </data>
+  <data name="STORAGE_PERSONNEL_DISPLAY" xml:space="preserve">
+    <value>Bunks</value>
+  </data>
+  <data name="STORAGE_PSI_TRAINING_DISPLAY" xml:space="preserve">
+    <value>Psi Training Tanks</value>
+  </data>
+  <data name="STORAGE_SCIENTIST_DISPLAY" xml:space="preserve">
+    <value>Laboratory</value>
+  </data>
+  <data name="STR_SCIENTISTS_MAX" xml:space="preserve">
+    <value>Scientists (Max. {0}):</value>
+  </data>
+  <data name="TERROR_SITE_NAME" xml:space="preserve">
+    <value>Terror site: {0}</value>
+  </data>
+  <data name="TEST_LONGTEXT" xml:space="preserve">
+    <value>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur bibendum, orci vel imperdiet pretium, purus ligula viverra leo, ut condimentum mauris risus porta tellus. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Etiam non magna vel justo placerat aliquet. Vivamus sit amet sapien. Praesent luctus. Quisque vehicula ipsum in metus. Maecenas blandit, orci non auctor sollicitudin, tellus lacus porttitor lacus, eu consectetuer mauris purus nec quam. Quisque malesuada quam nec metus mattis porta. Etiam ligula. Donec accumsan augue in nunc. Quisque eu justo ac sem malesuada ultrices. Nullam fermentum. Praesent sed nulla et enim eleifend dictum. Cras arcu.</value>
+    <comment>Lorum ipsum passage for testing text layout.</comment>
+  </data>
+  <data name="UFO_MISSION_ABDUCTION" xml:space="preserve">
+    <value>Abduction</value>
+  </data>
+  <data name="UFO_MISSION_HARVEST" xml:space="preserve">
+    <value>Harvest</value>
+  </data>
+  <data name="UFO_MISSION_INFILTRATION" xml:space="preserve">
+    <value>Infiltration</value>
+  </data>
+  <data name="UFO_MISSION_OUTPOST" xml:space="preserve">
+    <value>Base</value>
+  </data>
+  <data name="UFO_MISSION_RESEARCH" xml:space="preserve">
+    <value>Research</value>
+  </data>
+  <data name="UFO_MISSION_RETALIATION" xml:space="preserve">
+    <value>Retaliation</value>
+  </data>
+  <data name="UFO_MISSION_SUPPLY" xml:space="preserve">
+    <value>Supply</value>
+  </data>
+  <data name="UFO_MISSION_TERROR" xml:space="preserve">
+    <value>Terror</value>
+  </data>
+  <data name="UFO_NAME" xml:space="preserve">
+    <value>UFO-{0}</value>
+  </data>
+  <data name="UFO_SIZE_LARGE" xml:space="preserve">
+    <value>Large</value>
+  </data>
+  <data name="UFO_SIZE_MEDIUM" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="UFO_SIZE_SMALL" xml:space="preserve">
+    <value>Small</value>
+  </data>
+  <data name="UFO_SIZE_VERY_LARGE" xml:space="preserve">
+    <value>Very Large</value>
+  </data>
+  <data name="UFO_SIZE_VERY_SMALL" xml:space="preserve">
+    <value>Very Small</value>
+  </data>
+  <data name="XENOERROR_CELL_HAS_NO_NEIGHBOURS" xml:space="preserve">
+    <value>You can't build there, all facilities must have a fully constructed neighbour.</value>
+  </data>
+  <data name="XENOERROR_DELETE_WILL_SPLIT_BASE" xml:space="preserve">
+    <value>You can't destory this facility.  All facilities must have access to the lift.</value>
+  </data>
+  <data name="XENOERROR_FACILITY_IS_IN_USE" xml:space="preserve">
+    <value>You can't destroy this facility, it is in use.</value>
+  </data>
+  <data name="XENOERROR_NONE" xml:space="preserve">
+    <value>Everything's Fine</value>
+  </data>
+  <data name="XENOERROR_POSITION_ALREADY_OCCUPIED" xml:space="preserve">
+    <value>You can't build there, that position is already in use.</value>
+  </data>
+  <data name="XENOERROR_POSITION_NOT_IN_BASE" xml:space="preserve">
+    <value>You can't build there, not all the facility will be inside the base.</value>
+  </data>
+  <data name="YESNOMSG_BUILD_BASE_HERE" xml:space="preserve">
+    <value>Build this base now? Cost: {0} Area: {1}</value>
+  </data>
+  <data name="YESNOMSG_DISMANTLE_FACILITY" xml:space="preserve">
+    <value>Dismantle {0}?</value>
+  </data>
+  <data name="YESNOMSG_TARGET_ALIEN_SITE" xml:space="preserve">
+    <value>Target {0}?</value>
+  </data>
+  <data name="YESNOMSG_TARGET_GEOPOSITION" xml:space="preserve">
+    <value>Patrol location?</value>
+  </data>
+  <data name="YESNOMSG_TARGET_UFO" xml:space="preserve">
+    <value>Target {0}?</value>
+  </data>
+  <data name="ALIEN_OUTPOST_SITE_NAME" xml:space="preserve">
+    <value>Alien Outpost-{0}</value>
+  </data>
+  <data name="MSGBOX_ALIEN_ACTIVITY_DISCOVERED" xml:space="preserve">
+    <value>Alien Activity Discovered: {0}</value>
+  </data>
+  <data name="MSGBOX_OUTPOST_ATTACKING_UFO_CRASHED" xml:space="preserve">
+    <value>Base {0} defenses shot down {1}. Check crash site for survivors and salvage.</value>
+  </data>
+  <data name="MSGBOX_OUTPOST_ATTACKING_UFO_VAPOURIZED" xml:space="preserve">
+    <value>Base {0} defenses vapourized {1}.</value>
+  </data>
+  <data name="MSGBOX_DEFENSE_FACILITY_HIT" xml:space="preserve">
+    <value>{0} hit target.</value>
+  </data>
+  <data name="MSGBOX_DEFENSE_FACILITY_MISSED" xml:space="preserve">
+    <value>{0} missed target.</value>
+  </data>
+  <data name="BUTTON_CANCEL_FACILITY" xml:space="preserve">
+    <value>Cancel New Facility</value>
+  </data>
+  <data name="MSGBOX_UNABLE_TO_SAVE_FILE" xml:space="preserve">
+    <value>Unable to save file: {0}</value>
+  </data>
+  <data name="MSGBOX_NOT_CARRYING_SOLDIERS" xml:space="preserve">
+    <value>{0} is not carring any troops.  It can't attack {1}</value>
+  </data>
+  <data name="SLIDER_MUSIC" xml:space="preserve">
+    <value>Music Slider</value>
+  </data>
+  <data name="SLIDER_SOUND" xml:space="preserve">
+    <value>Sound Slider</value>
+  </data>
+  <data name="BUTTON_SOUND" xml:space="preserve">
+    <value>Sound Options</value>
+  </data>
+  <data name="DLG_SOUND_MUSIC_VOLUME" xml:space="preserve">
+    <value>Music Volume</value>
+  </data>
+  <data name="DLG_SOUND_SOUND_VOLUME" xml:space="preserve">
+    <value>Sound Volume</value>
+  </data>
+  <data name="BUTTON_CAMERA" xml:space="preserve">
+    <value>Reset Camera</value>
+  </data>
+  <data name="RANK_CIVILIAN_DISPLAY" xml:space="preserve">
+    <value>Civilian</value>
+  </data>
+  <data name="RANK_COMMANDER_DISPLAY" xml:space="preserve">
+    <value>Commander</value>
+  </data>
+  <data name="RANK_ENGINEER_DISPLAY" xml:space="preserve">
+    <value>Engineer</value>
+  </data>
+  <data name="RANK_LEADER_DISPLAY" xml:space="preserve">
+    <value>Leader</value>
+  </data>
+  <data name="RANK_MEDIC_DISPLAY" xml:space="preserve">
+    <value>Medic</value>
+  </data>
+  <data name="RANK_NAVIGATOR_DISPLAY" xml:space="preserve">
+    <value>Navigator</value>
+  </data>
+  <data name="RANK_SOLDIER_DISPLAY" xml:space="preserve">
+    <value>Soldier</value>
+  </data>
+  <data name="RANK_TERRORIST_DISPLAY" xml:space="preserve">
+    <value>Terrorist</value>
+  </data>
+  <data name="EXCEPTION_UNKNOWN_ALIEN_RANK" xml:space="preserve">
+    <value>Unknown alien rank in XML: {0}</value>
+  </data>
+  <data name="SCREEN_RESEARCH_IDLE_SCIENTISTS" xml:space="preserve">
+    <value>You currently have {0} idle scientists who could be working.</value>
+  </data>
+  <data name="BUTTON_ALIEN_MISSION" xml:space="preserve">
+    <value>Alien Mission</value>
+  </data>
+  <data name="BUTTON_CANCEL_ALIEN_MISSION" xml:space="preserve">
+    <value>Cancel Alien Mission Site</value>
+  </data>
+  <data name="MSGBOX_SHIPMENT_ARRIVED" xml:space="preserve">
+    <value>Shipment arrived at base {0}</value>
+  </data>
+  <data name="FORMAT_CURRENCY" xml:space="preserve">
+    <value>${0:#,##0}</value>
+  </data>
+  <data name="BUTTON_MOVE_LESS" xml:space="preserve">
+    <value>Transfer Less</value>
+  </data>
+  <data name="BUTTON_MOVE_MORE" xml:space="preserve">
+    <value>Transfer More</value>
+  </data>
+  <data name="MSGBOX_DESTINATION_CANT_FIT_ITEMS" xml:space="preserve">
+    <value>Destination Base doesn't have enough free storage space for the selected item(s)</value>
+  </data>
+  <data name="MSGBOX_NEED_2_BASES_TO_TRANSFER" xml:space="preserve">
+    <value>In order to transfer items between bases, you must have at least two base.</value>
+  </data>
+  <data name="MSGBOX_SOURCE_AND_DESTINATION_SAME" xml:space="preserve">
+    <value>When transferring, you can't send items to the same Base they're comming from.</value>
+  </data>
+  <data name="SCREEN_TRANSFER_COLUMN_ITEM" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="SCREEN_TRANSFER_COLUMN_QUANTITY" xml:space="preserve">
+    <value>Moving</value>
+  </data>
+  <data name="SCREEN_TRANSFER_COLUMN_QUANTITY_DESTINAION" xml:space="preserve">
+    <value>In 2nd Base</value>
+  </data>
+  <data name="SCREEN_TRANSFER_COLUMN_QUANTITY_IN_BASE" xml:space="preserve">
+    <value>In Base</value>
+  </data>
+  <data name="SCREEN_TRANSFER_SOURCE" xml:space="preserve">
+    <value>Moving items from: {0}</value>
+  </data>
+  <data name="SCREEN_TRANSFER_TOTAL_COST" xml:space="preserve">
+    <value>Shipping cost: ${0}</value>
+  </data>
+  <data name="SCREEN_LOADSAVEGAME_VERSION_CONFLICT" xml:space="preserve">
+    <value>The saved game was saved with a different xenocide version!</value>
+  </data>
+  <data name="EXCEPTION_UNREACHABLE_RESEARCH_TOPIC" xml:space="preserve">
+    <value>The Research Topic {0} is unreachable</value>
+  </data>
+  <data name="EXCEPTION_MISSING_XNET_ENTRY" xml:space="preserve">
+    <value>xnet.xml is missing {0}</value>
+  </data>
+  <data name="EXCEPTION_UNREACHABLE_XNET_ENTRY" xml:space="preserve">
+    <value>The X-Net entry {0} is missing from research.xml</value>
+  </data>
+  <data name="BUTTON_LESS_SCIENTISTS" xml:space="preserve">
+    <value>Less Scientists</value>
+  </data>
+  <data name="BUTTON_MORE_SCIENTISTS" xml:space="preserve">
+    <value>More Scientists</value>
+  </data>
+  <data name="ETA_NEVER" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="MSGBOX_NO_IDLE_SCIENTISTS" xml:space="preserve">
+    <value>There are no idle scientists</value>
+  </data>
+  <data name="MSGBOX_NO_PROJECT_SELECTED" xml:space="preserve">
+    <value>No project selected</value>
+  </data>
+  <data name="SCREEN_RESEARCH_COLUMN_ETA" xml:space="preserve">
+    <value>ETA (days)</value>
+  </data>
+  <data name="DLG_MESSAGEBOX_TITLE" xml:space="preserve">
+    <value>Notice</value>
+  </data>
+  <data name="DLG_YESNO_TITLE" xml:space="preserve">
+    <value>Please Confirm</value>
+  </data>
+  <data name="PERSON_NAME_ORDER" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="BUTTON_ADD_IDLE_SCIENTISTS" xml:space="preserve">
+    <value>Add All Idle Scientists</value>
+  </data>
+  <data name="BUTTON_REMOVE_ALL_SCIENTISTS" xml:space="preserve">
+    <value>Remove All Scientists</value>
+  </data>
+  <data name="EXCEPTION_MISSING_FACILITY" xml:space="preserve">
+    <value>facility.xml is missing {0}</value>
+  </data>
+  <data name="EXCEPTION_MISSING_ITEM" xml:space="preserve">
+    <value>item.xml is missing {0}</value>
+  </data>
+  <data name="EXCEPTION_UNREACHABLE_FACILITY" xml:space="preserve">
+    <value>The facility {0} is missing from research.xml</value>
+  </data>
+  <data name="EXCEPTION_UNREACHABLE_ITEM" xml:space="preserve">
+    <value>The item {0} is missing from research.xml</value>
+  </data>
+  <data name="SCREEN_SOLDIERS_LIST_COLUMN_ATTRIBUTE" xml:space="preserve">
+    <value>Attribute</value>
+  </data>
+  <data name="ERROR_INSUFFICIENT_MATERIAL_FOR_BUILD" xml:space="preserve">
+    <value>Base does not have enough {0} for build.</value>
+  </data>
+  <data name="ERROR_INSUFFICIENT_SPACE_FOR_BUILD" xml:space="preserve">
+    <value>There is not enough free workspace in this base.</value>
+  </data>
+  <data name="SCREEN_GEOSCAPE_FUNDS" xml:space="preserve">
+    <value>Funds:</value>
+  </data>
+  <data name="SCREEN_MANUFACTURE_IDLE_ENGINEERS" xml:space="preserve">
+    <value>You currently have {0} idle engineers in this base that could be working.</value>
+  </data>
+  <data name="BUTTON_ADD_IDLE_ENGINEERS" xml:space="preserve">
+    <value>Add all idle engineers</value>
+  </data>
+  <data name="BUTTON_BUILD_LESS" xml:space="preserve">
+    <value>Build Less</value>
+  </data>
+  <data name="BUTTON_BUILD_MORE" xml:space="preserve">
+    <value>Build More</value>
+  </data>
+  <data name="BUTTON_CANCEL_BUILD" xml:space="preserve">
+    <value>Cancel Build</value>
+  </data>
+  <data name="BUTTON_LESS_ENGINEERS" xml:space="preserve">
+    <value>Remove one engineer</value>
+  </data>
+  <data name="BUTTON_MORE_ENGINEERS" xml:space="preserve">
+    <value>Add one enginer</value>
+  </data>
+  <data name="BUTTON_REMOVE_ALL_ENGINEERS" xml:space="preserve">
+    <value>Remove all engineers</value>
+  </data>
+  <data name="MSGBOX_NO_BUILDABLE_TECHNOLOGIES" xml:space="preserve">
+    <value>Your haven't researched anything that your engineers can build.</value>
+  </data>
+  <data name="SCREEN_MANUFACTURE_COLUMN_BUILD_QUANTITY" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="SCREEN_MANUFACTURE_COLUMN_ENGINEERS" xml:space="preserve">
+    <value>Engineers</value>
+  </data>
+  <data name="SCREEN_MANUFACTURE_COLUMN_ETA" xml:space="preserve">
+    <value>ETA (days)</value>
+  </data>
+  <data name="SCREEN_MANUFACTURE_COLUMN_PROJECT" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="SCREEN_MANUFACTURE_COLUMN_QUANTITY_AVAILABLE" xml:space="preserve">
+    <value>Quantity Available</value>
+  </data>
+  <data name="SCREEN_MANUFACTURE_COLUMN_QUANTITY_NEEDED" xml:space="preserve">
+    <value>Quantity Needed</value>
+  </data>
+  <data name="SCREEN_MANUFACTURE_COLUMN_RESOURCE" xml:space="preserve">
+    <value>Resource</value>
+  </data>
+  <data name="SCREEN_MANUFACTURE_REPORT_ROW_HOURS" xml:space="preserve">
+    <value>Hours</value>
+  </data>
+  <data name="SCREEN_MANUFACTURE_REPORT_ROW_MONEY" xml:space="preserve">
+    <value>Money</value>
+  </data>
+  <data name="SCREEN_MANUFACTURE_REPORT_ROW_WORKSPACE" xml:space="preserve">
+    <value>Workspace</value>
+  </data>
+  <data name="ERROR_INSUFFICIENT_FUNDS_FOR_BUILD" xml:space="preserve">
+    <value>You don't have enough money to be able to build this.</value>
+  </data>
+  <data name="ERROR_INSUFFICIENT_SPACE_FOR_BUILT_ITEM" xml:space="preserve">
+    <value>This outpost doesn't have enough space to hold the finished item.</value>
+  </data>
+  <data name="ERROR_INSUFFICIENT_RESEARCH_FOR_BUILD" xml:space="preserve">
+    <value>You can't build something you haven't researched.</value>
+  </data>
+  <data name="MSGBOX_BUILD_PROJECT_ABORTED" xml:space="preserve">
+    <value>Manufacturing of {0} at base {1} has been stopped. {2}</value>
+  </data>
+  <data name="MSGBOX_BUILD_PROJECT_FINISHED" xml:space="preserve">
+    <value>Base {0} has finished manufacturing {1}.</value>
+  </data>
+  <data name="MSGBOX_CANT_BUILD_ITEM" xml:space="preserve">
+    <value>You can't build {0}. {1}</value>
+  </data>
+  <data name="MSGBOX_NO_IDLE_ENGINEERS" xml:space="preserve">
+    <value>There are no idle engineers.</value>
+  </data>
+  <data name="SCREEN_SOLDIERS_LIST_COLUMN_VALUE" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="MSGBOX_NO_PSI_TRAINING_SPACE" xml:space="preserve">
+    <value>This base doesn't have any empty psi training pods.</value>
+  </data>
+  <data name="BUTTON_ASSIGN_TO_CRAFT" xml:space="preserve">
+    <value>Assign to Craft</value>
+  </data>
+  <data name="BUTTON_EQUIP_SOLDIER" xml:space="preserve">
+    <value>Equip</value>
+  </data>
+  <data name="BUTTON_PSI_TRAIN" xml:space="preserve">
+    <value>Toggle psi training</value>
+  </data>
+  <data name="MSGBOX_TOO_LATE_FOR_PSI_TRAINING" xml:space="preserve">
+    <value>Staff can only start psi training at the beginning of a month.</value>
+  </data>
+  <data name="SCREEN_SOLDIERS_LIST_IN_PSI_TRAINING" xml:space="preserve">
+    <value>In progress</value>
+  </data>
+  <data name="SCREEN_SOLDIERS_LIST_NOT_PSI_TRAINING" xml:space="preserve">
+    <value>Not training</value>
+  </data>
+  <data name="SCREEN_SOLDIERS_LIST_ROW_AIRCRAFT" xml:space="preserve">
+    <value>Aircraft</value>
+  </data>
+  <data name="SCREEN_SOLDIERS_LIST_ROW_PSI_TRAINING" xml:space="preserve">
+    <value>Psi Training</value>
+  </data>
+  <data name="BUTTON_REAL_TIME" xml:space="preserve">
+    <value>Run in real time</value>
+  </data>
+  <data name="SCREEN_BASEINFO_ROW_DEFENSE_STRENGTH" xml:space="preserve">
+    <value>Defense Strength</value>
+  </data>
+  <data name="SCREEN_MONTHLY_COSTS_COLUMN_PER_UNIT" xml:space="preserve">
+    <value>Cost Per Unit</value>
+  </data>
+  <data name="SCREEN_MONTHLY_COSTS_COLUMN_QUANTITY" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="SCREEN_MONTHLY_COSTS_COLUMN_TOTAL" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="SCREEN_MONTHLY_COSTS_ROW_BASE_MAINTENANCE" xml:space="preserve">
+    <value>Base maintenance</value>
+  </data>
+  <data name="SCREEN_MONTHLY_COSTS_ROW_TOTAL" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="SCREEN_SHOW_TRANSFERS_COLUMN_ETA" xml:space="preserve">
+    <value>ETA (hours)</value>
+  </data>
+  <data name="SCREEN_SHOW_TRANSFERS_COLUMN_ITEM" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="SCREEN_SHOW_TRANSFERS_COLUMN_QUANTITY" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="EXCEPTION_CLONING_UNIQUE_ITEM" xml:space="preserve">
+    <value>Unique items can't be cloned</value>
+  </data>
+  <data name="SCREEN_STORES_COLUMN_ITEM" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="SCREEN_STORES_COLUMN_QUANTITY" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="SCREEN_STORES_COLUMN_SPACE_USED" xml:space="preserve">
+    <value>Space Used</value>
+  </data>
+  <data name="MSGBOX_GAME_OVER_BAD_DEBT" xml:space="preserve">
+    <value>Game Over.  You've had two months with an End of month debt exceeding {0}.</value>
+  </data>
+  <data name="MSGBOX_GAME_OVER_LOW_SCORE" xml:space="preserve">
+    <value>Game Over. You've had two months in a row with a score of less than {0}.</value>
+  </data>
+  <data name="BUTTON_ADD_SOLDIER" xml:space="preserve">
+    <value>Assign Soldier</value>
+  </data>
+  <data name="BUTTON_ADD_XCAP" xml:space="preserve">
+    <value>Assign xcap</value>
+  </data>
+  <data name="BUTTON_REMOVE_SOLDIER" xml:space="preserve">
+    <value>Unassign Soldier</value>
+  </data>
+  <data name="BUTTON_REMOVE_XCAP" xml:space="preserve">
+    <value>Unassign xcap</value>
+  </data>
+  <data name="BUTTON_SOLDIER_DOWN" xml:space="preserve">
+    <value>Decrease Position</value>
+  </data>
+  <data name="BUTTON_SOLDIER_UP" xml:space="preserve">
+    <value>Increase Position</value>
+  </data>
+  <data name="MSGBOX_CRAFT_EMPTY" xml:space="preserve">
+    <value>Craft empty</value>
+  </data>
+  <data name="MSGBOX_CRAFT_FULL_HUMANS" xml:space="preserve">
+    <value>Craft at full passanger capacity</value>
+  </data>
+  <data name="MSGBOX_CRAFT_FULL_XCAPS" xml:space="preserve">
+    <value>Craft at full xcap capacity</value>
+  </data>
+  <data name="MSGBOX_NO_MORE_XCAPS_CRAFT" xml:space="preserve">
+    <value>No more xcaps of this type in craft</value>
+  </data>
+  <data name="MSGBOX_NO_MORE_XCAPS_OUTPOST" xml:space="preserve">
+    <value>No more xcaps of this type in outpost!</value>
+  </data>
+  <data name="MSGBOX_NO_POSITION" xml:space="preserve">
+    <value>No such position</value>
+  </data>
+  <data name="MSGBOX_NO_SOLDIER_SELECTED" xml:space="preserve">
+    <value>No soldier selected</value>
+  </data>
+  <data name="MSGBOX_NO_XCAP_SELECTED" xml:space="preserve">
+    <value>No xcap selected</value>
+  </data>
+  <data name="MSGBOX_SOLDIER_ALREADY_ASSIGNED_OTHER_CRAFT" xml:space="preserve">
+    <value>Soldier already assigned to a different craft</value>
+  </data>
+  <data name="MSGBOX_SOLDIER_ALREADY_ASSIGNED_THIS_CRAFT" xml:space="preserve">
+    <value>Soldier already assigned to this craft</value>
+  </data>
+  <data name="MSGBOX_SOLDIER_NOT_ASSIGNED" xml:space="preserve">
+    <value>Soldier not assigned to any craft</value>
+  </data>
+  <data name="NON_APPLICABLE" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="SCREEN_ASSIGN_CRAFT_COLUMN_ASSIGNED_COUNT" xml:space="preserve">
+    <value>Assigned to craft</value>
+  </data>
+  <data name="SCREEN_ASSIGN_CRAFT_COLUMN_ASSIGNED_CRAFT" xml:space="preserve">
+    <value>Assigned craft</value>
+  </data>
+  <data name="SCREEN_ASSIGN_CRAFT_COLUMN_AVAILABLE" xml:space="preserve">
+    <value>Available</value>
+  </data>
+  <data name="SCREEN_ASSIGN_CRAFT_COLUMN_POSITION_CRAFT" xml:space="preserve">
+    <value>Position in craft</value>
+  </data>
+  <data name="SCREEN_ASSIGN_CRAFT_COLUMN_SOLDIER_NAME" xml:space="preserve">
+    <value>Soldier name</value>
+  </data>
+  <data name="SCREEN_ASSIGN_CRAFT_COLUMN_XCAP_TYPE" xml:space="preserve">
+    <value>Xcap type</value>
+  </data>
+  <data name="SOLDIER_COUNT_STATUS" xml:space="preserve">
+    <value>{0}/{1}</value>
+  </data>
+  <data name="UNASSIGNED" xml:space="preserve">
+    <value>Unassigned</value>
+  </data>
+  <data name="XCAP_COUNT_STATUS" xml:space="preserve">
+    <value>{0}/{1}</value>
+  </data>
+  <data name="MSGBOX_NO_ITEM_SELECTED" xml:space="preserve">
+    <value>No item selected</value>
+  </data>
+  <data name="SCREEN_EQUIP_SOLDIER_AMMO_QUANTITY" xml:space="preserve">
+    <value>Rounds: {0}</value>
+  </data>
+  <data name="SCREEN_EQUIP_SOLDIER_AMMO_TYPE" xml:space="preserve">
+    <value>Ammo: {0}</value>
+  </data>
+  <data name="ITEM_STATS_CLIP_DAMAGE" xml:space="preserve">
+    <value>Damage Inflicted: {0} ({1})</value>
+  </data>
+  <data name="EXCEPTION_NONE_ARMOR_MISSING" xml:space="preserve">
+    <value>No "None" armor type has been defined</value>
+  </data>
+  <data name="ITEM_STATS_ARMOR_FRONT" xml:space="preserve">
+    <value>Front Side: {0}</value>
+  </data>
+  <data name="ITEM_STATS_ARMOR_REAR" xml:space="preserve">
+    <value>Rear Side: {0}</value>
+  </data>
+  <data name="ITEM_STATS_ARMOR_SIDE" xml:space="preserve">
+    <value>Left/Right Side: {0}</value>
+  </data>
+  <data name="ITEM_STATS_ARMOR_UNDER" xml:space="preserve">
+    <value>Underside: {0}</value>
+  </data>
+  <data name="ARMOR_TYPE_NONE" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="SCREEN_SOLDIERS_LIST_ROW_ARMOR" xml:space="preserve">
+    <value>Armor</value>
+  </data>
+  <data name="BUTTON_SCROLL_LEFT" xml:space="preserve">
+    <value>Scroll Left</value>
+  </data>
+  <data name="BUTTON_SCROLL_RIGHT" xml:space="preserve">
+    <value>Scroll Right</value>
+  </data>
+  <data name="RACE_ARTOPOD" xml:space="preserve">
+    <value>Artopod</value>
+  </data>
+  <data name="RACE_CLOAK" xml:space="preserve">
+    <value>Cloak</value>
+  </data>
+  <data name="RACE_GREY" xml:space="preserve">
+    <value>Grey</value>
+  </data>
+  <data name="RACE_HOVERTANK" xml:space="preserve">
+    <value>Hover Tank</value>
+  </data>
+  <data name="RACE_HUMAN" xml:space="preserve">
+    <value>Human</value>
+  </data>
+  <data name="RACE_MORLOCK" xml:space="preserve">
+    <value>Morlock</value>
+  </data>
+  <data name="RACE_RAPTOR" xml:space="preserve">
+    <value>Raptor</value>
+  </data>
+  <data name="RACE_SATYRIAN" xml:space="preserve">
+    <value>Satyrian</value>
+  </data>
+  <data name="RACE_SILABRATE" xml:space="preserve">
+    <value>Silabrate</value>
+  </data>
+  <data name="RACE_SPAWN" xml:space="preserve">
+    <value>Spawn</value>
+  </data>
+  <data name="RACE_TANK" xml:space="preserve">
+    <value>Tank</value>
+  </data>
+  <data name="RACE_TERRORDISC" xml:space="preserve">
+    <value>Terror-disc</value>
+  </data>
+  <data name="RACE_VENTRICULANT" xml:space="preserve">
+    <value>Ventriculant</value>
+  </data>
+  <data name="RACE_VIPER" xml:space="preserve">
+    <value>Viper</value>
+  </data>
+  <data name="RACE_ZOMBIE" xml:space="preserve">
+    <value>Zombie</value>
+  </data>
+  <data name="STATISTIC_BRAVERY" xml:space="preserve">
+    <value>Bravery</value>
+  </data>
+  <data name="STATISTIC_FIRING_ACCURACY" xml:space="preserve">
+    <value>Firing Accuracy</value>
+  </data>
+  <data name="STATISTIC_HEALTH" xml:space="preserve">
+    <value>Health</value>
+  </data>
+  <data name="STATISTIC_PSI_SKILL" xml:space="preserve">
+    <value>Psi Skill</value>
+  </data>
+  <data name="STATISTIC_PSI_STRENGTH" xml:space="preserve">
+    <value>Psi Strength</value>
+  </data>
+  <data name="STATISTIC_REACTIONS" xml:space="preserve">
+    <value>Reactions</value>
+  </data>
+  <data name="STATISTIC_STAMINA" xml:space="preserve">
+    <value>Stamina</value>
+  </data>
+  <data name="STATISTIC_STRENGTH" xml:space="preserve">
+    <value>Strength</value>
+  </data>
+  <data name="STATISTIC_THROWING_ACCURCY" xml:space="preserve">
+    <value>Throwing Accuracy</value>
+  </data>
+  <data name="STATISTIC_TIMEUNITS" xml:space="preserve">
+    <value>Time units</value>
+  </data>
+  <data name="BUTTON_ABORT_MISSION" xml:space="preserve">
+    <value>Abort Mission</value>
+  </data>
+  <data name="BUTTON_DEBUG_BATTLESCAPE" xml:space="preserve">
+    <value>Debug Battlescape</value>
+  </data>
+  <data name="BUTTON_TOP_LEVEL" xml:space="preserve">
+    <value>Top Level</value>
+  </data>
+  <data name="SCREEN_EQUIP_SOLDIER_BACKPACK" xml:space="preserve">
+    <value>Backpack</value>
+  </data>
+  <data name="SCREEN_EQUIP_SOLDIER_BELT" xml:space="preserve">
+    <value>Belt</value>
+  </data>
+  <data name="SCREEN_EQUIP_SOLDIER_LEFT_HAND" xml:space="preserve">
+    <value>Left Hand</value>
+  </data>
+  <data name="SCREEN_EQUIP_SOLDIER_LEFT_LEG" xml:space="preserve">
+    <value>Left Leg</value>
+  </data>
+  <data name="SCREEN_EQUIP_SOLDIER_LEFT_SHOULDER" xml:space="preserve">
+    <value>Left Shoulder</value>
+  </data>
+  <data name="SCREEN_EQUIP_SOLDIER_RIGHT_HAND" xml:space="preserve">
+    <value>Right Hand</value>
+  </data>
+  <data name="SCREEN_EQUIP_SOLDIER_RIGHT_LEG" xml:space="preserve">
+    <value>Right Leg</value>
+  </data>
+  <data name="SCREEN_EQUIP_SOLDIER_RIGHT_SHOULDER" xml:space="preserve">
+    <value>Right Shoulder</value>
+  </data>
+  <data name="EXCEPTION_BITMAP_WRONG_SIZE" xml:space="preserve">
+    <value>Texture Atlas Bitmap dimensions differ from expected.</value>
+  </data>
+  <data name="EXCEPTION_USING_V1_1_SHADER" xml:space="preserve">
+    <value>Only Shader v1.1 available. Game will run, but graphics are going to be horrible.</value>
+  </data>
+  <data name="BUTTON_FINISH_TURN" xml:space="preserve">
+    <value>Finish Turn</value>
+  </data>
+  <data name="SCREEN_BATTLESCAPE_COMBATANT_STATS" xml:space="preserve">
+    <value>TUs: {0}/{1}, Health Max/Wound/Stun/Left {2}/{3}/{4}/{5} ToDo: other stats to show</value>
+  </data>
+  <data name="EXCEPTION_NO_SHADER_CARD_FOUND" xml:space="preserve">
+    <value>Can't run.  You must have a graphics card that is at least capable of shader v1.1.  And shader 2.0 is strongly recommended.</value>
+  </data>
+  <data name="BUTTON_RIGHT_HAND" xml:space="preserve">
+    <value>Right Hand</value>
+  </data>
+  <data name="ACTION_AIMED_SHOT" xml:space="preserve">
+    <value>Aimed Shot</value>
+  </data>
+  <data name="ACTION_AUTO_SHOT" xml:space="preserve">
+    <value>Auto Shot</value>
+  </data>
+  <data name="ACTION_SHOOT_MENU_ENTRY" xml:space="preserve">
+    <value>{0}: Accuracy: {1}%, TUs: {2}</value>
+  </data>
+  <data name="ACTION_SNAP_SHOT" xml:space="preserve">
+    <value>Snap Shot</value>
+  </data>
+  <data name="ITEM_STATS_SHOOT_ACTION" xml:space="preserve">
+    <value>{0}: Accuracy: {1}%, TUs: {2}%</value>
+  </data>
+  <data name="EXCEPTION_UFO_CREW_TOO_BIG" xml:space="preserve">
+    <value>There are too many aliens crewing a UFO.  Maximum crew size is 32.</value>
+  </data>
+  <data name="ACTION_ERROR_INSUFFICENT_AMMO" xml:space="preserve">
+    <value>Weapon has insufficent Ammunition to do this.</value>
+  </data>
+  <data name="ACTION_ERROR_INSUFFICENT_TUS" xml:space="preserve">
+    <value>Soldier has insufficent TUs remaining this turn to do this.</value>
+  </data>
+  <data name="ACTION_ERROR_NO_LINE_OF_SIGHT" xml:space="preserve">
+    <value>Soldier can't see the target.</value>
+  </data>
+  <data name="ACTION_ERROR_NONE" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="ACTION_ERROR_OUT_OF_RANGE" xml:space="preserve">
+    <value>Target is out of range.</value>
+  </data>
+  <data name="ACTION_ERROR_NOT_FACING_TARGET" xml:space="preserve">
+    <value>Soldier is not facing target</value>
+  </data>
+  <data name="DLG_PICKACTION_COLUMN_ACTION" xml:space="preserve">
+    <value>Pick Action</value>
+  </data>
+  <data name="MSGBOX_NO_ACTION_SELECTED" xml:space="preserve">
+    <value>No Action selected</value>
+  </data>
+  <data name="BUTTON_EQUIPMENT" xml:space="preserve">
+    <value>Equipment</value>
+  </data>
+  <data name="BUTTON_CREDITS" xml:space="preserve">
+    <value>Credits</value>
+  </data>
+  <data name="STATISTIC_DAYS_HIRED" xml:space="preserve">
+    <value>Days Hired</value>
+  </data>
+  <data name="STATISTIC_INJURY_DAMAGE" xml:space="preserve">
+    <value>Damage</value>
+  </data>
+  <data name="STATISTIC_INTERNAL_ONLY" xml:space="preserve">
+    <value>BUG! You should never see this string.</value>
+  </data>
+  <data name="STATISTIC_KILLS" xml:space="preserve">
+    <value>Kills</value>
+  </data>
+  <data name="STATISTIC_MISSIONS" xml:space="preserve">
+    <value>Missions</value>
+  </data>
+  <data name="STATISTIC_STUN_DAMAGE" xml:space="preserve">
+    <value>Stun Damage</value>
+  </data>
+  <data name="STATISTIC_TIME_UNITS_LEFT" xml:space="preserve">
+    <value>Time Units left</value>
+  </data>
+  <data name="SCREEN_BATTLESCAPE_REPORT_CAPTURED" xml:space="preserve">
+    <value>Captured</value>
+  </data>
+  <data name="SCREEN_BATTLESCAPE_REPORT_COLUMN_ACTION" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="SCREEN_BATTLESCAPE_REPORT_KILLED" xml:space="preserve">
+    <value>Killed</value>
+  </data>
+  <data name="SCREEN_BATTLESCAPE_REPORT_ROW_ALIEN_CASUALTY" xml:space="preserve">
+    <value>{0} {1} {2}</value>
+  </data>
+  <data name="SCREEN_BATTLESCAPE_REPORT_ROW_XCORP_KIA" xml:space="preserve">
+    <value>{0} Killed</value>
+  </data>
+  <data name="SCREEN_BATTLESCAPE_REPORT_AIRCRAFT_LOST" xml:space="preserve">
+    <value>{0} destroyed</value>
+  </data>
+</root>

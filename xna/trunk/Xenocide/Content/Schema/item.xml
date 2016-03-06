@@ -1,0 +1,2028 @@
+<?xml version="1.0" ?>
+<itemList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="ItemConfig item.xsd"
+    xmlns="ItemConfig">
+
+<item id="ITEM_XENIUM-122" name="XENIUM-122" xsi:type="troopItemType" score="0.1">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="0" sell="5000" />
+    <battlescapeInfo armor="0">
+      <carryInfo xSize="1" ySize="1" mass="3" equipable="false" bothHands="false" spriteTop="0" spriteLeft="0" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<!-- items that only exist in a base -->
+
+<item id="ITEM_ALIEN_COMPOSITES" name="Alien Composites" xsi:type="itemType" score="1">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="0" sell="6500" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="10" />
+        <cost hours="100" money="3000" />
+    </construct>
+</item>
+
+<item id="ITEM_ALIEN_BREEDING_CHAMBER" name="Breeding Chamber" xsi:type="itemType" score="0">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="0" sell="40000" />
+</item>
+
+<item id="ITEM_ALIEN_MEDICAL_ROOM" name="Medical Room" xsi:type="itemType" score="2">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="0" sell="9000" />
+</item>
+
+<item id="ITEM_BIOLOGICAL_RESEARCH_ROOM" name="Biological Research Room" xsi:type="itemType" score="2">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="0" sell="38000" />
+</item>
+
+<item id="ITEM_ALIEN_NAVIGATION_SYSTEMS" name="Navigation System" xsi:type="itemType" score="5">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="0" sell="80000" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="18" />
+        <cost hours="1600" money="150000">
+            <material type="ITEM_ALIEN_COMPOSITES" quantity="3" />
+        </cost>
+    </construct>
+</item>
+
+<item id="ITEM_ALIEN_NUTRIENTS" name="Alien Nutrients" xsi:type="itemType" score="2">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="0" sell="5000" />
+</item>
+
+<item id="ITEM_ALIEN_RECREATION" name="Alien Recreation" xsi:type="itemType" score="2">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="0" sell="20000" />
+</item>
+
+<item id="ITEM_XENIUM_REACTOR" name="Xenium Reactor" xsi:type="itemType" score="20">
+    <storage type="STORAGE_GEAR" units="7" />
+    <price buy="0" sell="250000" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="22" />
+        <cost hours="1400" money="130000">
+            <material type="ITEM_XENIUM-122" quantity="16" />
+            <material type="ITEM_ALIEN_COMPOSITES" quantity="5" />
+        </cost>
+    </construct>
+</item>
+
+<item id="ITEM_UFO_CONSTRUCTION" name="UFO Construction" xsi:type="itemType" score="0">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="0" sell="20000" />
+</item>
+
+<!-- Staff, the types of people the player can hire.-->
+
+  <item id="ITEM_PERSON_ENGINEER" name="Engineer" xsi:type="personItemType" score="0">
+    <storage type="STORAGE_PERSONNEL" units="1" />
+    <price buy="50000" sell="0" />
+    <statistics monthlySalary="25000" worksIn="STORAGE_ENGINEER" skillLevel="1"/>
+  </item>
+
+  <item id="ITEM_PERSON_SCIENTIST" name="Scientist" xsi:type="personItemType" score="0">
+    <storage type="STORAGE_PERSONNEL" units="1" />
+    <price buy="60000" sell="0" />
+    <statistics monthlySalary="30000" worksIn="STORAGE_SCIENTIST" skillLevel="1"/>
+  </item>
+
+  <item id="ITEM_PERSON_SOLDIER" name="Soldier" xsi:type="personItemType" score="0">
+    <storage type="STORAGE_PERSONNEL" units="1" />
+    <price buy="40000" sell="0" />
+    <statistics monthlySalary="20000" worksIn="STORAGE_PSI_TRAINING" skillLevel="1"/>
+  </item>
+
+<!-- WEAPONS Due to order of construction issues, clip must appear BEFORE weapon.-->
+
+<item id="ITEM_PISTOL_CLIP" name="Pistol Clip" xsi:type="clipItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="70" sell="52" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="1" mass="3" equipable="true" bothHands="false" spriteTop="1" spriteLeft="0" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="12">
+      <ammoName name="ITEM_PISTOL_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+    <damage type="Piercing" amount="26" />
+  </item>
+
+<item id="ITEM_PISTOL" name="Pistol" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="800" sell="600" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="2" mass="5" equipable="true" bothHands="false" spriteTop="0" spriteLeft="1" />
+      <graphics model="Weapons\Xcorps\pistol" x="0.0" y="0.0" z="180.0"/>
+    </battlescapeInfo>
+    <ammo capacity="12">
+      <ammoName name="ITEM_PISTOL_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+      <shoot percentage="0.18" name="ACTION_SNAP_SHOT"  accuracy="0.6" range="35.0" />
+      <shoot percentage="0.30" name="ACTION_AIMED_SHOT" accuracy="0.78" range="35.0" />
+    </actions>
+</item>
+
+<item id="ITEM_ASSAULT_RIFLE_CLIP" name="Assault Rifle Clip" xsi:type="clipItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="200" sell="150" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="1" mass="3" equipable="true" bothHands="false" spriteTop="2" spriteLeft="0" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="20">
+      <ammoName name="ITEM_ASSAULT_RIFLE_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+    <damage type="Piercing" amount="30" />
+</item>
+
+<item id="ITEM_ASSAULT_RIFLE" name="Assault Rifle" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="3000" sell="2250" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="3" mass="8" equipable="true" bothHands="true" spriteTop="0" spriteLeft="2" />
+      <graphics model="Weapons\Xcorps\assault rifle" x="-90.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="20">
+      <ammoName name="ITEM_ASSAULT_RIFLE_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+      <shoot percentage="0.35" name="ACTION_AUTO_SHOT"  accuracy="0.35" range="30.0" shots="3"/>
+      <shoot percentage="0.25" name="ACTION_SNAP_SHOT"  accuracy="0.6"  range="30.0" />
+      <shoot percentage="0.8"  name="ACTION_AIMED_SHOT" accuracy="1.1"  range="35.0" />
+    </actions>
+</item>
+
+<item id="ITEM_R_C_HE_CLIP" name="RC HE Clip" xsi:type="clipItemType" score="0">
+  <storage type="STORAGE_GEAR" units="1" />
+  <price buy="700" sell="560" />
+  <battlescapeInfo armor="255">
+    <carryInfo xSize="2" ySize="1" mass="5" equipable="true" bothHands="false" spriteTop="0" spriteLeft="3" />
+    <graphics model="" x="0.0" y="0.0" z="0.0"/>
+  </battlescapeInfo>
+  <ammo capacity="14">
+    <ammoName name="ITEM_R_C_HE_CLIP"/>
+  </ammo>
+  <actions>
+    <throw percentage="0.25" />
+  </actions>
+  <damage type="Explosive" amount="44" />
+</item>
+
+<item id="ITEM_R_C_AP_CLIP" name="RC AP Clip" xsi:type="clipItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="500" sell="400" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="1" mass="5" equipable="true" bothHands="false" spriteTop="1" spriteLeft="3" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="14">
+      <ammoName name="ITEM_R_C_AP_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+    <damage type="Piercing" amount="42" />
+</item>
+
+<item id="ITEM_R_C_IN_CLIP" name="RC IN clip" xsi:type="clipItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="650" sell="520" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="1" mass="14" equipable="true" bothHands="false" spriteTop="2" spriteLeft="3" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="14">
+      <ammoName name="ITEM_R_C_IN_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+    <damage type="Fire" amount="48" />
+</item>
+
+<item id="ITEM_REPEATER_CANNON" name="Repeater Cannon" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="3" />
+    <price buy="13500" sell="10125" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="19" equipable="true" bothHands="true" spriteTop="0" spriteLeft="5" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="14">
+      <ammoName name="ITEM_R_C_HE_CLIP"/>
+      <ammoName name="ITEM_R_C_AP_CLIP"/>
+      <ammoName name="ITEM_R_C_IN_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+      <shoot percentage="0.4"  name="ACTION_AUTO_SHOT" accuracy="0.32" range="30.0" shots="3"/>
+      <shoot percentage="0.33" name="ACTION_SNAP_SHOT" accuracy="0.56" range="30.0" />
+      <shoot percentage="0.8"  name="ACTION_AIMED_SHOT" accuracy="0.82" range="30.0" />
+    </actions>
+</item>
+
+<item id="ITEM_H_C_HE_CLIP" name="HC HE Clip" xsi:type="clipItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="500" sell="275" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="1" mass="6" equipable="true" bothHands="false" spriteTop="3" spriteLeft="0" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="6">
+      <ammoName name="ITEM_H_C_HE_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+    <damage type="Explosive" amount="52" />
+</item>
+
+<item id="ITEM_H_C_AP_CLIP" name="HC AP Clip" xsi:type="clipItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="300" sell="225" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="1" mass="6" equipable="true" bothHands="false" spriteTop="4" spriteLeft="0" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="6">
+      <ammoName name="ITEM_H_C_AP_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+    <damage type="Piercing" amount="56" />
+</item>
+
+<item id="ITEM_H_C_IN_CLIP" name="HC IN Clip" xsi:type="clipItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="400" sell="300" />
+     <battlescapeInfo armor="255">
+       <carryInfo xSize="2" ySize="1" mass="6" equipable="true" bothHands="false" spriteTop="5" spriteLeft="0" />
+       <graphics model="" x="0.0" y="0.0" z="0.0"/>
+     </battlescapeInfo>
+     <ammo capacity="6">
+      <ammoName name="ITEM_H_C_IN_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+    <damage type="Fire" amount="60" />
+</item>
+
+<item id="ITEM_HEAVY_CANNON" name="Heavy Cannon" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="3" />
+    <price buy="6400" sell="4800" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="18" equipable="true" bothHands="true" spriteTop="3" spriteLeft="2" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="6">
+      <ammoName name="ITEM_H_C_HE_CLIP"/>
+      <ammoName name="ITEM_H_C_AP_CLIP"/>
+      <ammoName name="ITEM_H_C_IN_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+      <shoot percentage="0.33" name="ACTION_SNAP_SHOT"  accuracy="0.6" range="30.0" />
+      <shoot percentage="0.8"  name="ACTION_AIMED_SHOT" accuracy="0.9" range="30.0" />
+    </actions>
+  </item>
+
+<item id="ITEM_GRAVITY_DISTORTION_DRONE" name="Gravity Distortion Drone" xsi:type="clipItemType" score="1">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="0" sell="17028" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="3" />
+        <cost hours="220" money="8000">
+            <material type="ITEM_XENIUM-122" quantity="3" />
+        </cost>
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="2" mass="3" equipable="true" bothHands="false" spriteTop="3" spriteLeft="8" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="1">
+      <ammoName name="ITEM_GRAVITY_DISTORTION_DRONE"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+    <damage type="Explosive" amount="200" />
+</item>
+
+<item id="ITEM_GRAVITY_DISTORTION_LAUNCHER" name="Gravity Distortion Launcher" xsi:type="guidedWeaponItemType" score="5">
+    <storage type="STORAGE_GEAR" units="3" />
+    <price buy="0" sell="144000" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="5" />
+        <cost hours="1200" money="90000">
+            <material type="ITEM_ALIEN_COMPOSITES" quantity="1" />
+        </cost>
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="16" equipable="true" bothHands="true" spriteTop="3" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="1">
+      <ammoName name="ITEM_GRAVITY_DISTORTION_DRONE"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+      <guide percentage="0.8" name="ACTION_AIMED_SHOT" accuracy="1.2" waypoints="10" />
+    </actions>
+  </item>
+
+<item id="ITEM_LASER_PISTOL" name="Laser Pistol" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="0" sell="20000" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="2" />
+            <cost hours="300" money="8000" />
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="2" mass="7" equipable="true" bothHands="false" spriteTop="4" spriteLeft="4" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <shoot percentage="0.25" name="ACTION_AUTO_SHOT"  accuracy="0.28" range="30.0" shots="3"/>
+      <shoot percentage="0.2"  name="ACTION_SNAP_SHOT"  accuracy="0.4"  range="30.0" />
+      <shoot percentage="0.55" name="ACTION_AIMED_SHOT" accuracy="0.68" range="35.0" />
+    </actions>
+    <damage type="Laser" amount="46" />
+  </item>
+
+<item id="ITEM_LASER_RIFLE" name="Laser Rifle" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="0" sell="36900" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="3" />
+        <cost hours="400" money="20000" />
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="3" mass="10" equipable="true" bothHands="true" spriteTop="0" spriteLeft="7" />
+      <graphics model="Weapons\Xcorps\Laser Rifle" x="0.0" y="90.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <shoot percentage="0.34" name="ACTION_AUTO_SHOT"  accuracy="0.46" range="30.0" shots="3"/>
+      <shoot percentage="0.25" name="ACTION_SNAP_SHOT"  accuracy="0.65" range="30.0" />
+      <shoot percentage="0.5"  name="ACTION_AIMED_SHOT" accuracy="1.0"  range="35.0" />
+    </actions>
+    <damage type="Laser" amount="60" />
+  </item>
+
+<item id="ITEM_HEAVY_LASER_RIFLE" name="Heavy Laser Rifle" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="3" />
+    <price buy="0" sell="61000" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="4" />
+	<cost hours="700" money="32000" />
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="18" equipable="true" bothHands="true" spriteTop="0" spriteLeft="8" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <shoot percentage="0.33" name="ACTION_SNAP_SHOT"  accuracy="0.50" range="30.0" />
+      <shoot percentage="0.75" name="ACTION_AIMED_SHOT" accuracy="0.84" range="35.0" />
+    </actions>
+    <damage type="Laser" amount="85" />
+  </item>
+
+<item id="ITEM_PLASMA_PISTOL_CLIP" name="Plasma Pistol Clip" xsi:type="clipItemType" score="1">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="0" sell="4440" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="3" />
+        <cost hours="60" money="2000">
+            <material type="ITEM_XENIUM-122" quantity="1" />
+        </cost>
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="1" mass="3" equipable="true" bothHands="false" spriteTop="2" spriteLeft="1" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="26">
+      <ammoName name="ITEM_PLASMA_PISTOL_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+    <damage type="Plasma" amount="52" />
+</item>
+
+<item id="ITEM_PLASMA_PISTOL" name="Plasma Pistol" xsi:type="rangedWeaponItemType" score="3">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="0" sell="84000" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="3" />
+        <cost hours="600" money="56000">
+            <material type="ITEM_ALIEN_COMPOSITES" quantity="1" />
+        </cost>
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="2" mass="3" equipable="true" bothHands="false" spriteTop="4" spriteLeft="5" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="26">
+      <ammoName name="ITEM_PLASMA_PISTOL_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+      <shoot percentage="0.3" name="ACTION_AUTO_SHOT"  accuracy="0.5"  range="30.0" shots="3"/>
+      <shoot percentage="0.3" name="ACTION_SNAP_SHOT"  accuracy="0.65" range="35.0" />
+      <shoot percentage="0.6" name="ACTION_AIMED_SHOT" accuracy="0.85" range="35.0" />
+    </actions>
+  </item>
+
+<item id="ITEM_PLASMA_RIFLE_CLIP" name="Plasma Rifle Clip" xsi:type="clipItemType" score="1">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="0" sell="6290" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="4" />
+        <cost hours="80" money="3000">
+            <material type="ITEM_XENIUM-122" quantity="2" />
+        </cost>
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="1" mass="3" equipable="true" bothHands="false" spriteTop="3" spriteLeft="4" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="28">
+      <ammoName name="ITEM_PLASMA_RIFLE_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+    <damage type="Plasma" amount="80" />
+</item>
+
+<item id="ITEM_PLASMA_RIFLE" name="Plasma Rifle" xsi:type="rangedWeaponItemType" score="4">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="0" sell="126500" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="4" />
+        <cost hours="820" money="88000">
+            <material type="ITEM_ALIEN_COMPOSITES" quantity="1" />
+        </cost>
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="3" mass="5" equipable="true" bothHands="true" spriteTop="3" spriteLeft="9" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="28">
+      <ammoName name="ITEM_PLASMA_RIFLE_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+      <shoot percentage="0.36" name="ACTION_AUTO_SHOT"  accuracy="0.55" range="30.0" shots="3"/>
+      <shoot percentage="0.3"  name="ACTION_SNAP_SHOT"  accuracy="0.86" range="35.0" />
+      <shoot percentage="0.6"  name="ACTION_AIMED_SHOT" accuracy="1"    range="35.0" />
+    </actions>
+  </item>
+
+<item id="ITEM_HEAVY_PLASMA_RIFLE_CLIP" name="Heavy Plasma Rifle Clip" xsi:type="clipItemType" score="1">
+    <storage type="STORAGE_GEAR" units="3" />
+    <price buy="0" sell="9590" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="4" />
+        <cost hours="80" money="6000">
+            <material type="ITEM_XENIUM-122" quantity="3" />
+        </cost>
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="1" mass="3" equipable="true" bothHands="false" spriteTop="3" spriteLeft="5" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="35">
+      <ammoName name="ITEM_HEAVY_PLASMA_RIFLE_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+    <damage type="Plasma" amount="115" />
+</item>
+
+<item id="ITEM_HEAVY_PLASMA_RIFLE" name="Heavy Plasma Rifle" xsi:type="rangedWeaponItemType" score="5">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="0" sell="171600" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="4" />
+        <cost hours="1000" money="122000">
+            <material type="ITEM_ALIEN_COMPOSITES" quantity="1" />
+        </cost>
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="8" equipable="true" bothHands="true" spriteTop="6" spriteLeft="0" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="35">
+      <ammoName name="ITEM_HEAVY_PLASMA_RIFLE_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+      <shoot percentage="0.35" name="ACTION_AUTO_SHOT"  accuracy="0.5"  range="30.0" shots="3"/>
+      <shoot percentage="0.3"  name="ACTION_SNAP_SHOT"  accuracy="0.75" range="35.0" />
+      <shoot percentage="0.6"  name="ACTION_AIMED_SHOT" accuracy="1.1"  range="35.0" />
+    </actions>
+</item>
+
+<item id="ITEM_R_L_SMALL_ROCKET" name="Small Rocket" xsi:type="clipItemType" score="0">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="600" sell="480" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="3" mass="6" equipable="true" bothHands="false" spriteTop="6" spriteLeft="2" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="1">
+      <ammoName name="ITEM_R_L_SMALL_ROCKET"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+    <damage type="Explosive" amount="75" />
+</item>
+
+<item id="ITEM_R_L_LARGE_ROCKET" name="Large Rocket" xsi:type="clipItemType" score="0">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="900" sell="720" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="3" mass="8" equipable="true" bothHands="false" spriteTop="6" spriteLeft="3" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="1">
+      <ammoName name="ITEM_R_L_LARGE_ROCKET"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+    <damage type="Explosive" amount="100" />
+</item>
+
+<item id="ITEM_R_L_IC_ROCKET" name="Incendary Rocket" xsi:type="clipItemType" score="0">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="1200" sell="960" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="3" mass="8" equipable="true" bothHands="false" spriteTop="6" spriteLeft="4" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="1">
+      <ammoName name="ITEM_R_L_IC_ROCKET"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+    <damage type="Fire" amount="90" />
+</item>
+
+<item id="ITEM_ROCKET_LAUNCHER" name="Rocket Launcher" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="4" />
+    <price buy="4000" sell="3000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="10" equipable="true" bothHands="true" spriteTop="6" spriteLeft="5" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="1">
+      <ammoName name="ITEM_R_L_SMALL_ROCKET"/>
+      <ammoName name="ITEM_R_L_LARGE_ROCKET"/>
+      <ammoName name="ITEM_R_L_IC_ROCKET"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+      <shoot percentage="0.45" name="ACTION_SNAP_SHOT"  accuracy="0.55" range="35.0" />
+      <shoot percentage="0.75" name="ACTION_AIMED_SHOT" accuracy="1.15" range="35.0" />
+    </actions>
+  </item>
+
+<item id="ITEM_STUN_BATON" name="Stun Batton" xsi:type="meleeWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="1260" sell="945" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="3" mass="6" equipable="true" bothHands="false" spriteTop="6" spriteLeft="7" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <hit percentage="0.3"/>
+    </actions>
+    <damage type="Stun" amount="65" />
+  </item>
+
+<item id="ITEM_STUN_BOMB" name="Stun Bomb" xsi:type="clipItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="0" sell="15200" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="2" />
+        <cost hours="200" money="7000">
+            <material type="ITEM_XENIUM-122" quantity="1" />
+        </cost>
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="1" mass="3" equipable="true" bothHands="false" spriteTop="5" spriteLeft="8" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="1">
+      <ammoName name="ITEM_STUN_BOMB"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+    <damage type="Stun" amount="90" />
+</item>
+
+<item id="ITEM_STUN_LAUNCHER" name="Stun Launcher" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="0" sell="120000" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="3" />
+        <cost hours="900" money="78000">
+            <material type="ITEM_ALIEN_COMPOSITES" quantity="1" />
+        </cost>
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="10" equipable="true" bothHands="true" spriteTop="6" spriteLeft="8" />
+      <graphics model="Weapons\Alien\stun launcher" x="-90.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <ammo capacity="1">
+      <ammoName name="ITEM_STUN_BOMB"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+      <shoot percentage="0.4"  name="ACTION_SNAP_SHOT"  accuracy="0.65" range="30.0" />
+      <shoot percentage="0.75" name="ACTION_AIMED_SHOT" accuracy="1.1"  range="35.0" />
+    </actions>
+  </item>
+
+<!-- EQUIPMENT -->
+
+<item id="ITEM_MOTION_SENSOR" name="Motion Sensor" xsi:type="equipmentItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="0" sell="45600" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="4" />
+        <cost hours="220" money="34000" />
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="1" mass="3" equipable="true" bothHands="false" spriteTop="9" spriteLeft="8" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <action percentage="0.25" name="ACTION_SCAN" xsi:type="customActionType" />
+    </actions>
+  </item>
+    
+<!-- need a new class for armor, to hold it's extra properties. -->
+
+<item id="ITEM_COMBAT_ARMOR" name="Combat Armor" xsi:type="equipmentItemType" score="0">
+    <storage type="STORAGE_GEAR" units="8" />
+    <price buy="0" sell="54000" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="12" />
+        <cost hours="800" money="22000">
+            <material type="ITEM_ALIEN_COMPOSITES" quantity="4" />
+        </cost>
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="2" equipable="true" bothHands="false" spriteTop="0" spriteLeft="10" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <armorInfo armorType="ITEM_COMBAT_ARMOR" />
+</item>
+
+<item id="ITEM_COMBAT_POWERSUIT" name="Powered Armor" xsi:type="equipmentItemType" score="0">
+  <storage type="STORAGE_GEAR" units="8" />
+  <price buy="0" sell="85000" />
+  <construct>
+    <facility type="FAC_ENGINEERING_FACILITY" space="16" />
+    <cost hours="1000" money="42000">
+      <material type="ITEM_XENIUM-122" quantity="5" />
+      <material type="ITEM_ALIEN_COMPOSITES" quantity="5" />
+        </cost>
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="2" equipable="true" bothHands="false" spriteTop="3" spriteLeft="10" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <armorInfo armorType="ITEM_COMBAT_POWERSUIT" />
+</item>
+
+<item id="ITEM_ANTI_GRAV_POWERSUIT" name="Anti-grav Powersuit" xsi:type="equipmentItemType" score="0">
+    <storage type="STORAGE_GEAR" units="8" />
+    <price buy="0" sell="115000" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="16" />
+        <cost hours="1400" money="58000">
+            <material type="ITEM_XENIUM-122" quantity="16" />
+            <material type="ITEM_ALIEN_COMPOSITES" quantity="5" />
+        </cost>
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="2" equipable="true" bothHands="false" spriteTop="6" spriteLeft="10" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <armorInfo armorType="ITEM_ANTI_GRAV_POWERSUIT" />
+</item>
+
+<item id="ITEM_FIELD_MEDICAL_KIT" name="Med Kit" xsi:type="equipmentItemType" score="0">
+  <storage type="STORAGE_GEAR" units="1" />
+  <price buy="0" sell="46500" />
+  <construct>
+    <facility type="FAC_ENGINEERING_FACILITY" space="4" />
+    <cost hours="420" money="28000" />
+  </construct>
+  <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="2" mass="5" equipable="true" bothHands="false" spriteTop="9" spriteLeft="9" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <action time="10" name="ACTION_USE_MEDICAL_KIT" xsi:type="customActionType" />
+    </actions>
+  </item>
+
+<item id="ITEM_FLASHPOD" name="Flashpod" xsi:type="grenadeWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="60" sell="40" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="1" mass="3" equipable="true" bothHands="false" spriteTop="9" spriteLeft="0" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <prime percentage="0.5" />
+    </actions>
+    <damage type="Melee" amount="60" />
+  </item>
+
+<item id="ITEM_GRENADE" name="Grenade" xsi:type="grenadeWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="300" sell="240" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="1" mass="3" equipable="true" bothHands="false" spriteTop="9" spriteLeft="1" />
+      <graphics model="Weapons\Xcorps\grenade" x="-90.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <prime percentage="0.5" />
+    </actions>
+    <damage type="Explosive" amount="50" />
+</item>
+
+<item id="ITEM_SMOKE_GRENADE" name="Smoke Grenade" xsi:type="grenadeWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="150" sell="120" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="1" mass="3" equipable="true" bothHands="false" spriteTop="9" spriteLeft="3" />
+      <graphics model="Weapons\Xcorps\smoke-grenade" x="-90.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <prime percentage="0.5" />
+    </actions>
+    <damage type="Smoke" amount="60" />
+</item>
+
+<item id="ITEM_PROXIMITY_GRENADE" name="Proximity Grenade" xsi:type="grenadeWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="500" sell="400" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="1" mass="3" equipable="true" bothHands="false" spriteTop="10" spriteLeft="3" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <prime percentage="0.5" />
+    </actions>
+    <damage type="Explosive" amount="70" />
+</item>
+
+<item id="ITEM_SATCHEL_CHARGE" name="Satchel Charge" xsi:type="grenadeWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="2" />
+    <price buy="1500" sell="1200" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="1" mass="6" equipable="true" bothHands="false" spriteTop="11" spriteLeft="8" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <prime percentage="0.5" />
+    </actions>
+    <damage type="Explosive" amount="110" />
+</item>
+
+<item id="ITEM_ALIEN_GRENADE" name="Alien Grenade" xsi:type="grenadeWeaponItemType" score="1">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="0" sell="14850" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="2" />
+        <cost hours="200" money="6700">
+            <material type="ITEM_XENIUM-122" quantity="2" />
+        </cost>
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="1" mass="3" equipable="true" bothHands="false" spriteTop="11" spriteLeft="3" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <prime percentage="0.5" />
+    </actions>
+    <damage type="Explosive" amount="90" />
+</item>
+
+<item id="ITEM_PSIONIC_PROBE" name="Psi Probe" xsi:type="equipmentItemType" score="1">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="0" sell="304000" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="4" />
+        <cost hours="1200" money="262000">
+            <material type="ITEM_XENIUM-122" quantity="1" />
+        </cost>
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="2" mass="5" equipable="true" bothHands="false" spriteTop="10" spriteLeft="0" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <action percentage="0.5" name="ACTION_USE_PSIONIC_PROBE" xsi:type="customActionType" />
+    </actions>
+</item>
+
+<item id="ITEM_PSIONIC_AMPLIFIER" name="Psi Amp" xsi:type="equipmentItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="0" sell="194700" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="4" />
+        <cost hours="500" money="160000">
+            <material type="ITEM_XENIUM-122" quantity="1" />
+        </cost>
+    </construct>
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="1" ySize="3" mass="10" equipable="true" bothHands="false" spriteTop="9" spriteLeft="2" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <action time="25" name="ACTION_PANIC_UNIT"   xsi:type="customActionType" />
+      <action time="25" name="ACTION_MIND_CONTROL" xsi:type="customActionType" />
+    </actions>
+  </item>
+
+<!-- Items that represent terrorist's integral weapons -->
+
+<item id="ITEM_TERRORDISC_WEAPON" name="" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="0" />
+    <price buy="0" sell="0" />
+    <battlescapeInfo armor="255" virtual="true">
+      <carryInfo xSize="1" ySize="1" mass="1" equipable="true" bothHands="false" spriteTop="0" spriteLeft="0" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <shoot time="30" name="ACTION_SNAP_SHOT"  accuracy="0.75" range="30.0" />
+      <shoot time="60" name="ACTION_AIMED_SHOT" accuracy="1.10" range="35.0" />
+    </actions>
+    <damage type="Plasma" amount="130" />
+  </item>
+
+<item id="ITEM_ARTOPOD_WEAPON" name="" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="0" />
+    <price buy="0" sell="0" />
+    <battlescapeInfo armor="255" virtual="true">
+      <carryInfo xSize="1" ySize="1" mass="1" equipable="true" bothHands="false" spriteTop="0" spriteLeft="0" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <shoot time="30" name="ACTION_SNAP_SHOT"  accuracy="0.75" range="30.0" />
+      <shoot time="35" name="ACTION_AUTO_SHOT"  accuracy="0.50" range="30.0" shots="3"/>
+      <shoot time="60" name="ACTION_AIMED_SHOT" accuracy="1.10" range="35.0" />
+    </actions>
+    <damage type="Laser" amount="100" />
+  </item>
+
+<item id="ITEM_SILABRATE_WEAPON" name="" xsi:type="meleeWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="0" />
+    <price buy="0" sell="0" />
+    <battlescapeInfo armor="255" virtual="true">
+      <carryInfo xSize="1" ySize="1" mass="1" equipable="true" bothHands="false" spriteTop="0" spriteLeft="0" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <hit time="15" name="ACTION_HIT" />
+    </actions>
+    <damage type="Melee" amount="70" />
+  </item>
+
+<item id="ITEM_VENTRICULANT_WEAPON" name="" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="0" />
+    <price buy="0" sell="0" />
+    <battlescapeInfo armor="255" virtual="true">
+      <carryInfo xSize="1" ySize="1" mass="1" equipable="true" bothHands="false" spriteTop="0" spriteLeft="0" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <shoot time="30" name="ACTION_SNAP_SHOT"  accuracy="0.75" range="1.0" />
+      <shoot time="60" name="ACTION_AIMED_SHOT" accuracy="1.10" range="1.0" />
+    </actions>
+    <damage type="Acid" amount="140" />
+  </item>
+
+<item id="ITEM_SPAWN_WEAPON" name="" xsi:type="meleeWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="0" />
+    <price buy="0" sell="0" />
+    <battlescapeInfo armor="255" virtual="true">
+      <carryInfo xSize="1" ySize="1" mass="1" equipable="true" bothHands="false" spriteTop="0" spriteLeft="0" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <hit time="15" name="ACTION_HIT" />
+    </actions>
+    <damage type="Melee" amount="110" />
+  </item>
+
+<item id="ITEM_RAPTOR_WEAPON" name="" xsi:type="meleeWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="0" />
+    <price buy="0" sell="0" />
+    <battlescapeInfo armor="255" virtual="true">
+      <carryInfo xSize="1" ySize="1" mass="1" equipable="true" bothHands="false" spriteTop="0" spriteLeft="0" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <hit time="15" name="ACTION_HIT" />
+    </actions>
+    <damage type="Melee" amount="90" />
+  </item>
+
+<item id="ITEM_ZOMBIE_WEAPON" name="" xsi:type="meleeWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="0" />
+    <price buy="0" sell="0" />
+    <battlescapeInfo armor="255" virtual="true">
+      <carryInfo xSize="1" ySize="1" mass="1" equipable="true" bothHands="false" spriteTop="0" spriteLeft="0" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+      <hit time="15" name="ACTION_HIT" />
+    </actions>
+    <damage type="Melee" amount="84" />
+  </item>
+
+<!-- ALIENS -->
+
+<item id="ITEM_GREY_CORPSE" name="Grey Corpse" xsi:type="troopItemType" score="5">
+    <storage type="STORAGE_GEAR" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="30" equipable="false" bothHands="false" spriteTop="9" spriteLeft="4" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_GREY_SOLDIER" name="Grey Soldier" xsi:type="troopItemType" score="20">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="30" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_GREY_NAVIGATOR" name="Grey Navigator" xsi:type="troopItemType" score="24">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="30" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_GREY_MEDIC" name="Grey Medic" xsi:type="troopItemType" score="28">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="30" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_GREY_ENGINEER" name="Grey Engineer" xsi:type="troopItemType" score="32">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="30" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_GREY_LEADER" name="Grey Leader" xsi:type="troopItemType" score="40">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="30" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_GREY_COMMANDER" name="Grey Commander" xsi:type="troopItemType" score="50">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="30" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_MORLOCK_CORPSE" name="Morlock Corpse" xsi:type="troopItemType" score="5">
+    <storage type="STORAGE_GEAR" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="40" equipable="false" bothHands="false" spriteTop="9" spriteLeft="4" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_MORLOCK_SOLDIER" name="Morlock Soldier" xsi:type="troopItemType" score="30">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="40" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+  </item>
+
+<item id="ITEM_MORLOCK_NAVIGATOR" name="Morlock Navigator" xsi:type="troopItemType" score="34">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="40" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+  </item>
+
+<item id="ITEM_MORLOCK_ENGINEER" name="Morlock Engineer" xsi:type="troopItemType" score="38">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="40" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+  </item>
+
+<item id="ITEM_VIPER_CORPSE" name="Viper Corpse" xsi:type="troopItemType" score="5">
+    <storage type="STORAGE_GEAR" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="40" equipable="false" bothHands="false" spriteTop="9" spriteLeft="4" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_VIPER_SOLDIER" name="Viper Soldier" xsi:type="troopItemType" score="30">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="40" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_VIPER_NAVIGATOR" name="Viper Navigator" xsi:type="troopItemType" score="34">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="40" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_VIPER_ENGINEER" name="Viper Engineer" xsi:type="troopItemType" score="40">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="40" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_VIPER_LEADER" name="Viper Leader" xsi:type="troopItemType" score="56">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="40" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_VIPER_COMMANDER" name="Viper Commander" xsi:type="troopItemType" score="72">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="40" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_SILABRATE_CORPSE" name="Silabrate Corpse" xsi:type="troopItemType" score="3">
+    <storage type="STORAGE_GEAR" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="40" equipable="false" bothHands="false" spriteTop="9" spriteLeft="4" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_SILABRATE_TERRORIST" name="Silabrate Terrorist" xsi:type="troopItemType" score="40">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="40" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_VENTRICULANT_CORPSE" name="Ventriculant Corpse" xsi:type="troopItemType" score="3">
+    <storage type="STORAGE_GEAR" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="35" equipable="false" bothHands="false" spriteTop="9" spriteLeft="4" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_VENTRICULANT_TERRORIST" name="Ventriculant Terrorist" xsi:type="troopItemType" score="40">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="35" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_CLOAK_CORPSE" name="Cloak Corpse" xsi:type="troopItemType" score="5">
+    <storage type="STORAGE_GEAR" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="25" equipable="false" bothHands="false" spriteTop="9" spriteLeft="4" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_CLOAK_SOLDIER" name="Cloak Soldier" xsi:type="troopItemType" score="40">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="25" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_CLOAK_LEADER" name="Cloak Leader" xsi:type="troopItemType" score="60">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="25" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_CLOAK_COMMANDER" name="Cloak Commander" xsi:type="troopItemType" score="80">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="25" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_ARTOPOD_CORPSE" name="Artopod Corpse" xsi:type="troopItemType" score="3">
+    <storage type="STORAGE_GEAR" units="10" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="80" equipable="false" bothHands="false" spriteTop="9" spriteLeft="4" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_ARTOPOD_TERRORIST" name="Artopod Terrorist" xsi:type="troopItemType" score="60">
+    <storage type="STORAGE_ALIENS" units="10" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="80" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_TERROR_DISC_CORPSE" name="Terror-Disc Corpse" xsi:type="troopItemType" score="3">
+    <storage type="STORAGE_GEAR" units="10" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="80" equipable="false" bothHands="false" spriteTop="9" spriteLeft="4" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_TERROR_DISC_TERRORIST" name="Terror-Disc Terrorist" xsi:type="troopItemType" score="40">
+    <storage type="STORAGE_ALIENS" units="10" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="80" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_SATYRIAN_CORPSE" name="Satyrian Corpse" xsi:type="troopItemType" score="5">
+    <storage type="STORAGE_GEAR" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="20" equipable="false" bothHands="false" spriteTop="9" spriteLeft="4" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_SATYRIAN_SOLDIER" name="Satyrian Soldier" xsi:type="troopItemType" score="24">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="20" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_SATYRIAN_NAVIGATOR" name="Satyrian Navigator" xsi:type="troopItemType" score="28">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="20" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_SATYRIAN_MEDIC" name="Satyrian Medic" xsi:type="troopItemType" score="32">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="20" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_SATYRIAN_ENGINEER" name="Satyrian Engineer" xsi:type="troopItemType" score="36">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="20" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_SATYRIAN_LEADER" name="Satyrian Leader" xsi:type="troopItemType" score="50">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="20" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_SATYRIAN_COMMANDER" name="Satyrian Commander" xsi:type="troopItemType" score="70">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="20" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_SPAWN_CORPSE" name="Spawn Corpse" xsi:type="troopItemType" score="3">
+    <storage type="STORAGE_GEAR" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="40" equipable="false" bothHands="false" spriteTop="9" spriteLeft="4" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_SPAWN_TERRORIST" name="Spawn Terrorist" xsi:type="troopItemType" score="50">
+    <storage type="STORAGE_ALIENS" units="4" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="40" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_RAPTOR_CORPSE" name="Raptor Corpse" xsi:type="troopItemType" score="3">
+    <storage type="STORAGE_GEAR" units="10" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="80" equipable="false" bothHands="false" spriteTop="9" spriteLeft="4" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<item id="ITEM_RAPTOR_TERRORIST" name="Raptor Terrorist" xsi:type="troopItemType" score="50">
+    <storage type="STORAGE_ALIENS" units="10" />
+    <price buy="0" sell="20000" />
+    <battlescapeInfo armor="255">
+      <carryInfo xSize="2" ySize="3" mass="80" equipable="false" bothHands="false" spriteTop="9" spriteLeft="6" />
+      <graphics model="" x="0.0" y="0.0" z="0.0"/>
+    </battlescapeInfo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+</item>
+
+<!-- Craft armaments (Not Battlescape items) -->
+
+<item id="ITEM_SIDEWINDER_LIGHT_MISSILE_CLIP" name="Sidewinder Missile" xsi:type="clipItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="3000" sell="2400" />
+    <ammo capacity="1">
+      <ammoName name="ITEM_SIDEWINDER_LIGHT_MISSILE_CLIP"/>
+    </ammo>
+    <damage type="Explosive" amount="70" />
+</item>
+
+<item id="ITEM_SIDEWINDER_LIGHT_MISSILE_LAUNCHER" name="Sidewinder Launcher" xsi:type="craftWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="8" />
+    <price buy="16000" sell="12000" />
+    <ammo capacity="6">
+      <ammoName name="ITEM_SIDEWINDER_LIGHT_MISSILE_CLIP"/>
+    </ammo>
+    <shoot time="15" name="ACTION_SHIP_SHOT" accuracy="0.7" range="30000" />
+</item>
+
+<item id="ITEM_TITAN_HEAVY_MISSILE_CLIP" name="Titan Missile" xsi:type="clipItemType" score="0">
+    <storage type="STORAGE_GEAR" units="5" />
+    <price buy="9000" sell="7200" />
+    <ammo capacity="1">
+      <ammoName name="ITEM_TITAN_HEAVY_MISSILE_CLIP"/>
+    </ammo>
+    <damage type="Explosive" amount="100" />
+</item>
+
+<item id="ITEM_TITAN_HEAVY_MISSILE_LAUNCHER" name="Titan Launcher" xsi:type="craftWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="10" />
+    <price buy="17000" sell="12750" />
+    <ammo capacity="3">
+      <ammoName name="ITEM_TITAN_HEAVY_MISSILE_CLIP"/>
+    </ammo>
+    <shoot time="20" name="ACTION_SHIP_SHOT" accuracy="0.8" range="60000" />
+</item>
+
+<item id="ITEM_GAIA_MISSILE_CLIP" name="GAIA Missile" xsi:type="clipItemType" score="0">
+    <storage type="STORAGE_GEAR" units="3" />
+    <price buy="0" sell="53300" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="6" />
+        <cost hours="600" money="28000">
+            <material type="ITEM_XENIUM-122" quantity="4" />
+        </cost>
+    </construct>
+    <ammo capacity="1">
+      <ammoName name="ITEM_GAIA_MISSILE_CLIP"/>
+    </ammo>
+    <damage type="Explosive" amount="230" />
+</item>
+
+<item id="ITEM_GAIA_MISSILE_LAUNCHER" name="GAIA Launcher" xsi:type="craftWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="20" />
+    <price buy="0" sell="281100" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="6" />
+        <cost hours="400" money="242000">
+            <material type="ITEM_ALIEN_COMPOSITES" quantity="1" />
+        </cost>
+    </construct>
+    <ammo capacity="2">
+      <ammoName name="ITEM_GAIA_MISSILE_CLIP"/>
+    </ammo>
+    <shoot time="25" name="ACTION_SHIP_SHOT" accuracy="1" range="65000" />
+</item>
+
+<item id="ITEM_PLASMA_CANNON" name="Plasma Cannon" xsi:type="craftWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="12" />
+    <price buy="0" sell="267300" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="8" />
+        <cost hours="500" money="226000">
+            <material type="ITEM_XENIUM-122" quantity="15" />
+        </cost>
+    </construct>
+    <damage type="Plasma" amount="140" />
+    <shoot time="6" name="ACTION_SHIP_SHOT" accuracy="0.5" range="52000" />
+</item>
+
+<item id="ITEM_LASER_CANNON" name="Laser Cannon" xsi:type="craftWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="20" />
+    <price buy="0" sell="211000" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="6" />
+        <cost hours="300" money="182000" />
+    </construct>
+    <damage type="Laser" amount="70" />
+    <shoot time="4" name="ACTION_SHIP_SHOT" accuracy="0.35" range="21000" />
+</item>
+
+<item id="ITEM_CANNON_CLIP" name="Cannon Clip" xsi:type="clipItemType" score="0">
+    <storage type="STORAGE_GEAR" units="1" />
+    <price buy="1240" sell="1012" />
+    <ammo capacity="50">
+      <ammoName name="ITEM_CANNON_CLIP"/>
+    </ammo>
+    <damage type="Piercing" amount="10" />
+</item>
+
+<item id="ITEM_CANNON" name="Cannon" xsi:type="craftWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="15" />
+    <price buy="30000" sell="22500" />
+    <ammo capacity="200">
+      <ammoName name="ITEM_CANNON_CLIP"/>
+    </ammo>
+    <shoot time="2" name="ACTION_SHIP_SHOT" accuracy="0.25" range="10000" />
+</item>
+
+<!-- These are the weapons used by UFOs. Put here so we only need one craft weapon class. -->
+
+<item id="ITEM_UFO_RECON_WEAPON" name="Recon UFO Weapon" xsi:type="craftWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="15" />
+    <price buy="0" sell="0" />
+    <damage type="Plasma" amount="20" />
+    <shoot time="15" name="ACTION_SHIP_SHOT" accuracy="1.4" range="15000" />
+</item>
+
+<item id="ITEM_UFO_ESCORT_WEAPON" name="Escort UFO Weapon" xsi:type="craftWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="15" />
+    <price buy="0" sell="0" />
+    <damage type="Plasma" amount="20" />
+    <shoot time="15" name="ACTION_SHIP_SHOT" accuracy="1.4" range="34000" />
+</item>
+
+<item id="ITEM_UFO_REAPER_WEAPON" name="Reaper UFO Weapon" xsi:type="craftWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="15" />
+    <price buy="0" sell="0" />
+    <damage type="Plasma" amount="40" />
+    <shoot time="15" name="ACTION_SHIP_SHOT" accuracy="1.4" range="22000" />
+</item>
+
+<item id="ITEM_UFO_COLLECTOR_WEAPON" name="Collector UFO Weapon" xsi:type="craftWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="15" />
+    <price buy="0" sell="0" />
+    <damage type="Plasma" amount="40" />
+    <shoot time="15" name="ACTION_SHIP_SHOT" accuracy="1.4" range="20000" />
+</item>
+
+<item id="ITEM_UFO_INTIMIDATOR_WEAPON" name="Intimidator UFO Weapon" xsi:type="craftWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="15" />
+    <price buy="0" sell="0" />
+    <damage type="Plasma" amount="120" />
+    <shoot time="15" name="ACTION_SHIP_SHOT" accuracy="1.4" range="42000" />
+</item>
+
+<item id="ITEM_UFO_JUGGERNAUT_WEAPON" name="Juggernaut UFO Weapon" xsi:type="craftWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="15" />
+    <price buy="0" sell="0" />
+    <damage type="Plasma" amount="140" />
+    <shoot time="15" name="ACTION_SHIP_SHOT" accuracy="1.4" range="65000" />
+</item>
+
+<item id="ITEM_UFO_FREIGHTER_WEAPON" name="Freighter UFO Weapon" xsi:type="craftWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="15" />
+    <price buy="0" sell="0" />
+    <damage type="Plasma" amount="60" />
+    <shoot time="15" name="ACTION_SHIP_SHOT" accuracy="1.4" range="36000" />
+</item>
+
+<!-- CRAFT -->
+
+<item id="ITEM_XC-1_GRYPHON" name="Gryphon" xsi:type="craftItemType" score="250">
+    <storage type="STORAGE_CRAFT" units="1" />
+    <price buy="600000" sell="0" />
+    <craftInfo>
+        <specs>
+            <engine acceleration="3" maxSpeed="1080" consumptionRate="126" maxFuel="1000" fuelType="hydrogen"/>
+            <hull hardness="0.1" maxDamage="100" />
+        </specs>
+        <mantainance montlyCost="600000" repairCost="150"/>
+        <capacity numHardpoints="2" maxHumans="0" maxXcaps="0" />
+    </craftInfo>
+</item>
+
+<item id="ITEM_XC-11_CONDOR" name="Condor" xsi:type="craftItemType" score="200">
+    <storage type="STORAGE_CRAFT" units="1" />
+    <price buy="500000" sell="0" />
+    <craftInfo>
+        <specs>
+            <engine acceleration="2" maxSpeed="391" consumptionRate="42" maxFuel="1500" fuelType="hydrogen"/>
+            <hull hardness="0.3" maxDamage="150" />
+        </specs>
+        <mantainance montlyCost="500000" repairCost="150"/>
+        <capacity numHardpoints="0" maxHumans="14" maxXcaps="2" />
+    </craftInfo>
+</item>
+
+<item id="ITEM_XC-2_STARFIRE" name="Starfire" xsi:type="craftItemType" score="250">
+    <storage type="STORAGE_CRAFT" units="1" />
+    <price buy="0" sell="0" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="30" />
+        <cost hours="14000" money="400000">
+            <material type="ITEM_ALIEN_COMPOSITES" quantity="65" />
+            <material type="ITEM_ALIEN_NAVIGATION_SYSTEMS" quantity="1" />
+            <material type="ITEM_XENIUM_REACTOR" quantity="1" />
+        </cost>
+    </construct>
+    <craftInfo>
+        <specs>
+            <engine acceleration="9" maxSpeed="2161" consumptionRate="1.2" maxFuel="4" fuelType="xenium"/>
+            <hull hardness="0.3" maxDamage="500" />
+        </specs>
+        <mantainance montlyCost="0" repairCost="250"/>
+        <capacity numHardpoints="2" maxHumans="0" maxXcaps="0" />
+    </craftInfo>
+</item>
+
+<item id="ITEM_XC-22_ECLIPSE" name="Eclipse" xsi:type="craftItemType" score="300">
+    <storage type="STORAGE_CRAFT" units="1" />
+    <price buy="0" sell="0" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="34" />
+        <cost hours="18000" money="600000">
+            <material type="ITEM_ALIEN_COMPOSITES" quantity="85" />
+            <material type="ITEM_ALIEN_NAVIGATION_SYSTEMS" quantity="1" />
+            <material type="ITEM_XENIUM_REACTOR" quantity="1" />
+        </cost>
+    </construct>
+    <craftInfo>
+        <specs>
+            <engine acceleration="8" maxSpeed="1595" consumptionRate="1.2" maxFuel="6" fuelType="xenium"/>
+            <hull hardness="0.3" maxDamage="800" />
+        </specs>
+        <mantainance montlyCost="0" repairCost="500"/>
+        <capacity numHardpoints="1" maxHumans="12" maxXcaps="0" />
+    </craftInfo>
+</item>
+
+<item id="ITEM_XC-33_VENGEANCE" name="Vengeance" xsi:type="craftItemType" score="400">
+    <storage type="STORAGE_CRAFT" units="1" />
+    <price buy="0" sell="0" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="36" />
+        <cost hours="34000" money="900000">
+            <material type="ITEM_ALIEN_COMPOSITES" quantity="120" />
+            <material type="ITEM_ALIEN_NAVIGATION_SYSTEMS" quantity="1" />
+            <material type="ITEM_XENIUM_REACTOR" quantity="2" />
+        </cost>
+    </construct>
+    <craftInfo>
+        <specs>
+            <engine acceleration="10" maxSpeed="2778" consumptionRate="1.2" maxFuel="12" fuelType="xenium"/>
+            <hull hardness="0.3" maxDamage="1200" />
+        </specs>
+        <mantainance montlyCost="0" repairCost="1000"/>
+        <capacity numHardpoints="2" maxHumans="26" maxXcaps="4" />
+    </craftInfo>
+</item>
+
+<!-- XCAPS -->
+<!-- This is just the XCAP info for storing in a base (and purchase/sale). Combat stats for these are found in combatants.xml. -->
+<!-- Need to create xml classes for XCAPs (at moment using itemType), and must define range info yet. -->
+
+<item id="ITEM_XCAP-AG_GAIA" name="GAIA XCAP" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="30" />
+    <price buy="0" sell="1043000" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="30" />
+        <cost hours="1400" money="900000">
+            <material type="ITEM_XENIUM-122" quantity="25" />
+            <material type="ITEM_ALIEN_COMPOSITES" quantity="8" />
+        </cost>
+    </construct>
+    <xcapInfo chassis="HoverTank"/>
+    <ammo capacity="8">
+      <ammoName name="ITEM_GRAVITY_DISTORTION_DRONE"/>
+    </ammo>
+    <actions>
+      <guide percentage="0.66" name="ACTION_AIMED_SHOT" accuracy="1.2" waypoints="10" />
+    </actions>
+</item>
+
+<item id="ITEM_XCAP_CANNON_CLIP" name="XCAP Cannon Clip" xsi:type="clipItemType" score="0">
+    <storage type="STORAGE_GEAR" units="16" />
+    <price buy="6000" sell="3000" />
+    <ammo capacity="30">
+      <ammoName name="ITEM_XCAP_CANNON_CLIP"/>
+    </ammo>
+    <actions>
+      <throw percentage="0.25" />
+    </actions>
+    <damage type="Piercing" amount="60" />
+</item>
+
+<item id="ITEM_XCAP_CANNON" name="Cannon XCAP" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="30" />
+    <price buy="420000" sell="340000" />
+    <xcapInfo chassis="Tank"/>
+    <ammo capacity="30">
+      <ammoName name="ITEM_XCAP_CANNON_CLIP"/>
+    </ammo>
+    <actions>
+      <shoot percentage="0.33" name="ACTION_SNAP_SHOT"  accuracy="0.6" range="30.0"/>
+      <shoot percentage="0.80" name="ACTION_AIMED_SHOT" accuracy="0.9" range="35.0"/>
+    </actions>
+</item>
+
+<item id="ITEM_XCAP_ROCKET" name="Rocket XCAP" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="30" />
+    <price buy="480000" sell="360000" />
+    <xcapInfo chassis="Tank"/>
+    <ammo capacity="8">
+      <ammoName name="ITEM_R_L_LARGE_ROCKET"/>
+    </ammo>
+    <actions>
+      <shoot percentage="0.45" name="ACTION_SNAP_SHOT"  accuracy="0.55" range="30.0"/>
+      <shoot percentage="0.75" name="ACTION_AIMED_SHOT" accuracy="1.15" range="35.0"/>
+    </actions>
+</item>
+
+<item id="ITEM_XCAP-AG_PLASMA" name="Plasma XCAP" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="30" />
+    <price buy="0" sell="980000" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="30" />
+        <cost hours="1200" money="850000">
+            <material type="ITEM_XENIUM-122" quantity="30" />
+            <material type="ITEM_ALIEN_COMPOSITES" quantity="5" />
+        </cost>
+    </construct>
+    <xcapInfo chassis="HoverTank"/>
+    <actions>
+      <shoot percentage="0.3" name="ACTION_SNAP_SHOT"  accuracy="0.85" range="30.0"/>
+      <shoot percentage="0.6" name="ACTION_AIMED_SHOT" accuracy="1.00" range="35.0"/>
+    </actions>
+    <damage type="Plasma" amount="110"/>
+</item>
+
+<item id="ITEM_XCAP_LASER" name="Laser XCAP" xsi:type="rangedWeaponItemType" score="0">
+    <storage type="STORAGE_GEAR" units="30" />
+    <price buy="0" sell="594000" />
+    <construct>
+        <facility type="FAC_ENGINEERING_FACILITY" space="25" />
+        <cost hours="1200" money="500000" />
+    </construct>
+    <xcapInfo chassis="Tank"/>
+    <actions>
+      <shoot percentage="0.33" name="ACTION_SNAP_SHOT"  accuracy="0.50" range="30.0"/>
+      <shoot percentage="0.75" name="ACTION_AIMED_SHOT" accuracy="0.85" range="35.0"/>
+    </actions>
+    <damage type="Laser" amount="110"/>
+</item>
+
+<!-- UFOs -->
+
+<item id="ITEM_UFO_PROBE" name="Probe UFO" xsi:type="ufoItemType" score="100">
+    <storage type="STORAGE_CRAFT" units="1" />
+    <price buy="0" sell="0" />
+    <ufoInfo maxSpeed="1132" size="VERY_SMALL">
+        <hull hardness="0.3" maxDamage="50"/>
+        <salvage>
+            <material type="ITEM_ALIEN_COMPOSITES" quantity="1" />
+        </salvage>
+        <crew rank="Soldier" minEasy="1" minHard="1" extra="0" />
+    </ufoInfo>
+</item>
+
+<item id="ITEM_UFO_RECON" name="Recon UFO" xsi:type="ufoItemType" score="150">
+    <storage type="STORAGE_CRAFT" units="1" />
+    <price buy="0" sell="0" />
+    <ufoInfo maxSpeed="1235" size="SMALL">
+        <hull hardness="0.3" maxDamage="200"/>
+        <weapon name="ITEM_UFO_RECON_WEAPON"/>
+        <salvage>
+            <material type="ITEM_ALIEN_COMPOSITES"         quantity="11" />
+            <material type="ITEM_XENIUM-122"               quantity="50" />
+            <material type="ITEM_ALIEN_NAVIGATION_SYSTEMS" quantity="2" />
+            <material type="ITEM_XENIUM_REACTOR"           quantity="1" />
+        </salvage>
+        <crew rank="Soldier"   minEasy="2" minHard="4" extra="2" />
+        <crew rank="Navigator" minEasy="1" minHard="2" extra="1" />
+    </ufoInfo>
+</item>
+
+<item id="ITEM_UFO_ESCORT" name="Escort UFO" xsi:type="ufoItemType" score="250">
+    <storage type="STORAGE_CRAFT" units="1" />
+    <price buy="0" sell="0" />
+    <ufoInfo maxSpeed="1389" size="SMALL">
+        <hull hardness="0.3" maxDamage="250"/>
+        <weapon name="ITEM_UFO_ESCORT_WEAPON"/>
+        <salvage>
+            <material type="ITEM_ALIEN_COMPOSITES"         quantity="35" />
+            <material type="ITEM_XENIUM-122"               quantity="50" />
+            <material type="ITEM_ALIEN_NAVIGATION_SYSTEMS" quantity="2" />
+            <material type="ITEM_XENIUM_REACTOR"           quantity="1" />
+        </salvage>
+        <crew rank="Soldier"   minEasy="1" minHard="3" extra="5" />
+        <crew rank="Navigator" minEasy="1" minHard="1" extra="1" />
+        <crew rank="Engineer"  minEasy="1" minHard="2" extra="1" />
+    </ufoInfo>
+</item>
+
+<item id="ITEM_UFO_REAPER" name="Reaper UFO" xsi:type="ufoItemType" score="500">
+    <storage type="STORAGE_CRAFT" units="1" />
+    <price buy="0" sell="0" />
+    <ufoInfo maxSpeed="2058" size="MEDIUM">
+        <hull hardness="0.3" maxDamage="500"/>
+        <weapon name="ITEM_UFO_REAPER_WEAPON"/>
+        <salvage>
+            <material type="ITEM_ALIEN_COMPOSITES"         quantity="97" />
+            <material type="ITEM_XENIUM-122"               quantity="100" />
+            <material type="ITEM_ALIEN_NAVIGATION_SYSTEMS" quantity="10" />
+            <material type="ITEM_XENIUM_REACTOR"           quantity="2" />
+            <material type="ITEM_ALIEN_NUTRIENTS"          quantity="14" />
+            <material type="ITEM_ALIEN_MEDICAL_ROOM"       quantity="4" />
+        </salvage>
+        <crew rank="Soldier"   minEasy="5" minHard="9" extra="4" />
+        <crew rank="Navigator" minEasy="1" minHard="2" extra="0" />
+        <crew rank="Medic"     minEasy="1" minHard="2" extra="0" />
+        <crew rank="Engineer"  minEasy="2" minHard="2" extra="0" />
+        <crew rank="Leader"    minEasy="1" minHard="1" extra="1" />
+    </ufoInfo>
+</item>
+
+<item id="ITEM_UFO_COLLECTOR" name="Collector UFO" xsi:type="ufoItemType" score="500">
+    <storage type="STORAGE_CRAFT" units="1" />
+    <price buy="0" sell="0" />
+    <ufoInfo maxSpeed="2212" size="MEDIUM">
+        <hull hardness="0.3" maxDamage="500"/>
+        <weapon name="ITEM_UFO_COLLECTOR_WEAPON"/>
+        <salvage>
+            <material type="ITEM_ALIEN_COMPOSITES"         quantity="70" />
+            <material type="ITEM_XENIUM-122"               quantity="100" />
+            <material type="ITEM_ALIEN_NAVIGATION_SYSTEMS" quantity="5" />
+            <material type="ITEM_XENIUM_REACTOR"           quantity="2" />
+            <material type="ITEM_BIOLOGICAL_RESEARCH_ROOM" quantity="4" />
+        </salvage>
+        <crew rank="Soldier"   minEasy="3" minHard="5" extra="4" />
+        <crew rank="Navigator" minEasy="1" minHard="1" extra="1" />
+        <crew rank="Medic"     minEasy="2" minHard="4" extra="0" />
+        <crew rank="Engineer"  minEasy="2" minHard="2" extra="0" />
+        <crew rank="Leader"    minEasy="1" minHard="1" extra="0" />
+    </ufoInfo>
+</item>
+
+<item id="ITEM_UFO_INTIMIDATOR" name="Intimidator UFO" xsi:type="ufoItemType" score="1000">
+    <storage type="STORAGE_CRAFT" units="1" />
+    <price buy="0" sell="0" />
+    <ufoInfo maxSpeed="2469" size="LARGE">
+        <hull hardness="0.3" maxDamage="1200"/>
+        <weapon name="ITEM_UFO_INTIMIDATOR_WEAPON"/>
+        <salvage>
+            <material type="ITEM_ALIEN_COMPOSITES"         quantity="92" />
+            <material type="ITEM_XENIUM-122"               quantity="200" />
+            <material type="ITEM_ALIEN_NAVIGATION_SYSTEMS" quantity="8" />
+            <material type="ITEM_XENIUM_REACTOR"           quantity="4" />
+            <material type="ITEM_ALIEN_RECREATION"         quantity="8" />
+        </salvage>
+        <crew rank="Terrorist" minEasy="2" minHard="6" extra="4" />
+        <crew rank="Soldier"   minEasy="4" minHard="6" extra="1" />
+        <crew rank="Navigator" minEasy="1" minHard="2" extra="0" />
+        <crew rank="Medic"     minEasy="1" minHard="1" extra="0" />
+        <crew rank="Engineer"  minEasy="1" minHard="2" extra="0" />
+        <crew rank="Leader"    minEasy="1" minHard="1" extra="0" />
+    </ufoInfo>
+</item>
+
+<item id="ITEM_UFO_JUGGERNAUT" name="Juggernaut UFO" xsi:type="ufoItemType" score="1400">
+    <storage type="STORAGE_CRAFT" units="1" />
+    <price buy="0" sell="0" />
+    <ufoInfo maxSpeed="2572" size="VERY_LARGE">
+        <hull hardness="0.3" maxDamage="3000"/>
+        <weapon name="ITEM_UFO_JUGGERNAUT_WEAPON"/>
+        <salvage>
+            <material type="ITEM_ALIEN_COMPOSITES"         quantity="231" />
+            <material type="ITEM_XENIUM-122"               quantity="200" />
+            <material type="ITEM_ALIEN_NAVIGATION_SYSTEMS" quantity="4" />
+            <material type="ITEM_XENIUM_REACTOR"           quantity="4" />
+            <material type="ITEM_ALIEN_RECREATION"         quantity="24" />
+        </salvage>
+        <crew rank="Terrorist" minEasy="0" minHard="4" extra="2" />
+        <crew rank="Soldier"   minEasy="4" minHard="8" extra="4" />
+        <crew rank="Navigator" minEasy="1" minHard="2" extra="0" />
+        <crew rank="Medic"     minEasy="1" minHard="2" extra="0" />
+        <crew rank="Engineer"  minEasy="1" minHard="2" extra="0" />
+        <crew rank="Leader"    minEasy="1" minHard="3" extra="0" />
+        <crew rank="Commander" minEasy="1" minHard="1" extra="0" />
+    </ufoInfo>
+</item>
+
+<item id="ITEM_UFO_ALIEN_FREIGHTER" name="Freighter UFO" xsi:type="ufoItemType" score="800">
+    <storage type="STORAGE_CRAFT" units="1" />
+    <price buy="0" sell="0" />
+    <ufoInfo maxSpeed="1646" size="LARGE">
+        <hull hardness="0.3" maxDamage="2200"/>
+        <weapon name="ITEM_UFO_FREIGHTER_WEAPON"/>
+        <salvage>
+            <material type="ITEM_ALIEN_COMPOSITES"         quantity="141" />
+            <material type="ITEM_XENIUM-122"               quantity="150" />
+            <material type="ITEM_ALIEN_NAVIGATION_SYSTEMS" quantity="4" />
+            <material type="ITEM_XENIUM_REACTOR"           quantity="3" />
+            <material type="ITEM_ALIEN_NUTRIENTS"          quantity="20" />
+            <material type="ITEM_ALIEN_MEDICAL_ROOM"       quantity="2" />
+        </salvage>
+        <crew rank="Soldier"   minEasy="5" minHard="7" extra="6" />
+        <crew rank="Navigator" minEasy="1" minHard="2" extra="0" />
+        <crew rank="Medic"     minEasy="1" minHard="2" extra="0" />
+        <crew rank="Engineer"  minEasy="1" minHard="2" extra="0" />
+        <crew rank="Leader"    minEasy="1" minHard="1" extra="1" />
+    </ufoInfo>
+</item>
+
+  <!-- Dummy entry, exists to list goodies (and aliens) found in an alien outpost mission -->
+  <item id="ITEM_UFO_DUMMY_ALIEN_OUTPOST" name="" xsi:type="ufoItemType" score="0">
+    <storage type="STORAGE_CRAFT" units="0" />
+    <price buy="0" sell="0" />
+    <ufoInfo maxSpeed="1" size="VERY_LARGE">
+      <hull hardness="0" maxDamage="1"/>
+      <salvage>
+        <material type="ITEM_ALIEN_COMPOSITES"         quantity="45" />
+        <material type="ITEM_XENIUM-122"               quantity="50" />
+        <material type="ITEM_XENIUM_REACTOR"           quantity="1" />
+        <material type="ITEM_ALIEN_RECREATION"         quantity="55" />
+      </salvage>
+      <crew rank="Terrorist" minEasy="1" minHard="5" extra="2" />
+      <crew rank="Soldier"   minEasy="5" minHard="7" extra="4" />
+      <crew rank="Navigator" minEasy="1" minHard="2" extra="0" />
+      <crew rank="Medic"     minEasy="1" minHard="1" extra="0" />
+      <crew rank="Engineer"  minEasy="1" minHard="2" extra="0" />
+      <crew rank="Leader"    minEasy="2" minHard="4" extra="0" />
+      <crew rank="Commander" minEasy="1" minHard="1" extra="0" />
+    </ufoInfo>
+  </item>
+
+  <!-- Dummy entry, exists to list the aliens found on cydona mission part 1 -->
+  <item id="ITEM_UFO_DUMMY_CYDONA_PART_1" name="" xsi:type="ufoItemType" score="0">
+    <storage type="STORAGE_CRAFT" units="0" />
+    <price buy="0" sell="0" />
+    <ufoInfo maxSpeed="1" size="VERY_LARGE">
+      <hull hardness="0" maxDamage="1"/>
+      <crew rank="Terrorist" minEasy="2" minHard="4" extra="0" />
+      <crew rank="Soldier"   minEasy="4" minHard="6" extra="0" />
+      <crew rank="Leader"    minEasy="3" minHard="5" extra="0" />
+      <crew rank="Commander" minEasy="3" minHard="5" extra="0" />
+    </ufoInfo>
+  </item>
+
+  <!-- Dummy entry, exists to list the aliens found on cydona mission part 2 -->
+  <item id="ITEM_UFO_DUMMY_CYDONA_PART_2" name="" xsi:type="ufoItemType" score="0">
+    <storage type="STORAGE_CRAFT" units="0" />
+    <price buy="0" sell="0" />
+    <ufoInfo maxSpeed="1" size="VERY_LARGE">
+      <hull hardness="0" maxDamage="1"/>
+      <crew rank="Terrorist" minEasy="10" minHard="19" extra="0" />
+      <crew rank="Soldier"   minEasy="2"  minHard="4"  extra="0" />
+      <crew rank="Leader"    minEasy="1"  minHard="3"  extra="0" />
+      <crew rank="Commander" minEasy="3"  minHard="5"  extra="0" />
+    </ufoInfo>
+  </item>
+
+</itemList>

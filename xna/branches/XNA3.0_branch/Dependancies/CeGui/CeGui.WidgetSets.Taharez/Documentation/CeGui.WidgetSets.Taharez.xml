@@ -1,0 +1,2006 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CeGui.WidgetSets.Taharez</name>
+    </assembly>
+    <members>
+        <member name="F:CeGui.WidgetSets.Taharez.TLTitleBar.ImagesetName">
+            <summary>
+            	Name of the imageset to use for rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLTitleBar.LeftEndSectionImageName">
+            <summary>
+            	Name of the image to use for the left section of the title bar.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLTitleBar.MiddleSectionImageName">
+            <summary>
+            	Name of the image to use for the middle section of the title bar.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLTitleBar.RightEndSectionImageName">
+            <summary>
+            	Name of the image to use for the right section of the title bar.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLTitleBar.SysAreaMiddleImageName">
+            <summary>
+            	Name of the image to use for the middle section of the sys buttons area.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLTitleBar.SysAreaRightImageName">
+            <summary>
+            	Name of the image to use for the right section of the sys buttons area.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLTitleBar.NormalCursorImageName">
+            <summary>
+            	Name of the image to use as the mouse cursor for this window.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLTitleBar.leftImage">
+            <summary>
+            	Image object used for the left edge of the title bar.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLTitleBar.middleImage">
+            <summary>
+            	Image object used for the middle section of the title bar.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLTitleBar.rightImage">
+            <summary>
+            	Image object used for the right edge of the title bar.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLTitleBar.sysMidImage">
+            <summary>
+            	Image object used for the system area (middle section).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLTitleBar.sysRightImage">
+            <summary>
+            	Image object used for the system area (right end section).
+            </summary>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLComboBox">
+            <summary>
+            Summary description for TLComboBox.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLComboBox.#ctor(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLComboBox.DrawSelf(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="z"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLComboBox.LayoutComponentWidgets">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLComboBox.CreatePushButton">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLComboBox.CreateEditBox">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLComboBox.CreateDropList">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb">
+            <summary>
+            Widget used as the thumb for the mini horizontal scrollbar in the Taharez Gui Scheme.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.ImagesetName">
+            <summary>
+            	Name of the imageset to use for rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.NormalImageName">
+            <summary>
+            	Name of the image to use for normal rendering (used for sizes only)..
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.NormalLeftImageName">
+            <summary>
+            	Name of the image to use for normal rendering (top end).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.NormalMiddleImageName">
+            <summary>
+            	Name of the image to use for normal rendering (mid section).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.NormalRightImageName">
+            <summary>
+            	Name of the image to use for normal rendering (bottom end).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.HighlightLeftImageName">
+            <summary>
+            	Name of the image to use for hover / highlighted rendering (top end).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.HighlightMiddleImageName">
+            <summary>
+            	Name of the image to use for hover / highlighted rendering (mid section).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.HighlightRightImageName">
+            <summary>
+            	Name of the image to use for hover / highlighted rendering (bottom end).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.normalImage">
+            <summary>
+            	Image to render in normal state (used to get sizes only)
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.normalLeftImage">
+            <summary>
+            	Image to render in normal state (left end)
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.normalMiddleImage">
+            <summary>
+            	Image to render in normal state (mid section)
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.normalRightImage">
+            <summary>
+            	Image to render in normal state (right end)
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.highlightLeftImage">
+            <summary>
+            	Image to render in highlighted state (left end).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.highlightMiddleImage">
+            <summary>
+            	Image to render in highlighted state (mid section).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.highlightRightImage">
+            <summary>
+            	Image to render in highlighted state (right end).
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.DrawNormal(System.Single)">
+            <summary>
+            	Render thumb in the normal state.
+            </summary>
+            <param name="z">Z value for rendering.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.DrawHover(System.Single)">
+            <summary>
+            	Render thumb in the normal state.
+            </summary>
+            <param name="z">Z value for rendering.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbarThumb.OnSized(CeGui.GuiEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar">
+            <summary>
+            Mini horizontal scrollbar widget for the Taharez Gui Scheme.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.ImagesetName">
+            <summary>
+            	Name of the Imageset to use for rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.ScrollbarBodyImageName">
+            <summary>
+            	Name of image to use for the main body of the scroll bar
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.LeftButtonNormalImageName">
+            <summary>
+            	Name of image to use for the left button in normal state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.LeftButtonHighlightImageName">
+            <summary>
+            	Name of image to use for the left button in highlighted state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.RightButtonNormalImageName">
+            <summary>
+            	Name of image to use for the right button in normal state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.RightButtonHighlightImageName">
+            <summary>
+            	Name of image to use for the right button in the highlighted state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.ThumbPositionY">
+            <summary>
+            Relative Y co-ordinate for the thumb.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.ThumbHeight">
+            <summary>
+            Relative height of the thumb.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.BodyPositionY">
+            <summary>
+            Relative Y co-ordinate for the body imagery.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.BodyHeight">
+            <summary>
+            Relative height for the body imagery.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.ThumbType">
+            <summary>
+            	Type of the thumb to create.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.ButtonType">
+            <summary>
+            	Type of the buttons to create.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.bodyImage">
+            <summary>
+            Image for body segment.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.CreateIncreaseButton">
+            <summary>
+            create a PushButton based widget to use as the increaseButton button for this scroll bar.
+            </summary>
+            <returns>A reference to a PushButton widget for use in the scrollbar</returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.CreateDecreaseButton">
+            <summary>
+            create a PushButton based widget to use as the decreaseButton button for this scroll bar.
+            </summary>
+            <returns>A reference to a PushButton widget for use in the scrollbar</returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.CreateThumb">
+            <summary>
+            create a Thumb based widget to use as the thumb for this scrollbar.
+            </summary>
+            <returns>A reference to a thumb widget for use in this scrollbar.</returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.LayoutComponentWidgets">
+            <summary>
+            Layout the scrollbar component widgets.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.UpdateThumb">
+            <summary>
+            Update the size and position of the thumb to best represent the current state of the scrollbar.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.GetPositionFromThumb">
+            <summary>
+            Return value that best represents current scroll position given the current location of the thumb.
+            </summary>
+            <returns>float value that, given the thumb widget position, best represents the current scroll position for the scrollbar.</returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.GetAdjustDirectionFromPoint(System.Drawing.PointF)">
+            <summary>
+            Given window location <paramref name="point"/>, return a value indicating what change should be 
+            made to the scroll position.
+            </summary>
+            <param name="point">Point describing a pixel position in window space.</param>
+            <returns>
+            - -1 to indicate scroll position should be moved to a lower setting.
+            -  0 to indicate scroll position should not be moved.
+            - +1 to indicate scroll position should be moved to a higher setting.
+            </returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniHorizontalScrollbar.DrawSelf(System.Single)">
+            <summary>
+            	Perform the actual rendering for this Scrollbar widget.
+            </summary>
+            <param name="z">float value specifying the base Z co-ordinate that should be used when rendering.</param>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLListHeaderSegment">
+            <summary>
+            ListHeaderSegment widget for the Taharez Gui Scheme.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeaderSegment.ImagesetName">
+            <summary>
+            Name of the imageset to use for rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeaderSegment.BackdropNormalImageName">
+            <summary>
+            Image to use for segment backdrop in normal state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeaderSegment.BackdropHoverImageName">
+            <summary>
+            Image to use for segment backdrop when mouse is hovering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeaderSegment.SplitterNormalImageName">
+            <summary>
+            Image to use for splitter / sizing bar in normal state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeaderSegment.SplitterHoverImageName">
+            <summary>
+            Image to use for splitter / sizing bar in hovering state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeaderSegment.SortUpImageName">
+            <summary>
+            Image to use for 'sort ascending' indicator.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeaderSegment.SortDownImageName">
+            <summary>
+            Image to use for 'sort descending' indicator.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeaderSegment.NormalMouseCursorImageName">
+            <summary>
+            Image to use for mouse when not sizing.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeaderSegment.SizingMouseCursorImageName">
+            <summary>
+            Image to use for mouse when sizing.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeaderSegment.MovingMouseCursorImageName">
+            <summary>
+            Image to use for mouse when moving.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeaderSegment.backNormalImage">
+            <summary>
+            image for normal backdrop.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeaderSegment.backHoverImage">
+            <summary>
+            image for hover backdrop.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeaderSegment.splitterNormalImage">
+            <summary>
+            image for normal splitter.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeaderSegment.splitterHoverImage">
+            <summary>
+            image for hover splitter.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeaderSegment.sortAscendImage">
+            <summary>
+            image for 'sort ascending' icon.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeaderSegment.sortDescendImage">
+            <summary>
+            image for 'sort descending' icon.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLListHeaderSegment.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLListHeaderSegment.DrawSelf(System.Single)">
+            <summary>
+            	Perform rendering for this widget.
+            </summary>
+            <param name="z">Z value to use for rendering.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLListHeaderSegment.RenderSegmentImagery(CeGui.Vector3,System.Single,CeGui.Rect)">
+            <summary>
+            Method to draw a copy of the widget.
+            </summary>
+            <param name="position">Screen position to draw at</param>
+            <param name="alpha">Alpha (transparency) value to use</param>
+            <param name="clipper">Clipping rectangle to use when drawing</param>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLFrameWindow">
+            <summary>A frame window using the 'Taharez' look</summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLFrameWindow.ImagesetName">
+            <summary>Name of the imageset to use for rendering</summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLFrameWindow.TopLeftFrameImageName">
+            <summary>The image for the top left corner of the window</summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLFrameWindow.TopRightFrameImageName">
+            <summary>The image for the top right corner of the window</summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLFrameWindow.BottomLeftFrameImageName">
+            <summary>The image for the bottom left corner of the window</summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLFrameWindow.BottomRightFrameImageName">
+            <summary>The image for the bottom right corner of the window</summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLFrameWindow.LeftFrameImageName">
+            <summary>The image for the left side of the window</summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLFrameWindow.RightFrameImageName">
+            <summary>The image for the right side of the window</summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLFrameWindow.TopFrameImageName">
+            <summary>The image for the top side of the window</summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLFrameWindow.BottomFrameImageName">
+            <summary>The image for the bottom side of the window</summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLFrameWindow.frame">
+            <summary>
+            	Handles the frame for the window.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLFrameWindow.clientBrush">
+            <summary>
+            	Handles the client clearing brush for the window.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLFrameWindow.frameLeftSize">
+            <summary>
+            	Width of the left frame edge in pixels.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLFrameWindow.frameRightSize">
+            <summary>
+            	Width of the right frame edge in pixels.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLFrameWindow.frameTopSize">
+            <summary>
+            	Height of the top frame edge in pixels.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLFrameWindow.frameBottomSize">
+            <summary>
+            	Height of the bottom frame edge in pixels.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLFrameWindow.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLFrameWindow.GetSizingRect">
+            <summary>
+            	Return a Rect that describes, in window relative pixel co-ordinates,
+            	the outer edge of the sizing area for this window.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLFrameWindow.StoreFrameSizes">
+            <summary>
+            	Store the sizes for the frame edges.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLFrameWindow.CreateCloseButton">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLFrameWindow.CreateTitleBar">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLFrameWindow.LayoutComponentWidgets">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLFrameWindow.DrawSelf(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="z"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLFrameWindow.OnSized(CeGui.GuiEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLFrameWindow.OnAlphaChanged(CeGui.GuiEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="P:CeGui.WidgetSets.Taharez.TLFrameWindow.UnclippedInnerRect">
+            <summary>
+            	Return a Rect object that describes, unclipped, the inner rectangle for this window.	
+            </summary>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLListbox">
+            <summary>
+            Standard Listbox widget for the Taharez Gui Scheme.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.ImagesetName">
+            <summary>
+            	Name of the Imageset to use for rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.TopLeftImageName">
+            <summary>
+            Name of the image to use for the top-left corner of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.TopRightImageName">
+            <summary>
+            Name of the image to use for the top-right corner of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.BottomLeftImageName">
+            <summary>
+            Name of the image to use for the bottom left corner of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.BottomRightImageName">
+            <summary>
+            Name of the image to use for the bottom right corner of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.LeftEdgeImageName">
+            <summary>
+            Name of the image to use for the left edge of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.RightEdgeImageName">
+            <summary>
+            Name of the image to use for the right edge of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.TopEdgeImageName">
+            <summary>
+            Name of the image to use for the top edge of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.BottomEdgeImageName">
+            <summary>
+            Name of the image to use for the bottom edge of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.BackgroundImageName">
+            <summary>
+            Name of the image to use for the box background.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.SelectionBrushImageName">
+            <summary>
+            Name of the image to use for the selection highlight brush.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.MouseCursorImageName">
+            <summary>
+            Name of the image to use for the mouse cursor.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.HorzScrollbarTypeName">
+            <summary>
+            Type name of widget to be created as horizontal scroll bar.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.VertScrollbarTypeName">
+            <summary>
+            Type name of widget to be created as vertical scroll bar.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.frame">
+            <summary>
+            Used for the frame of the list box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.background">
+            <summary>
+            Used for the background area of the list box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.leftFrameSize">
+            <summary>
+            Width of the left frame edge in pixels.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.rightFrameSize">
+            <summary>
+            Width of the right frame edge in pixels.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.topFrameSize">
+            <summary>
+            Height of the top frame edge in pixels.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListbox.bottomFrameSize">
+            <summary>
+            Height of the bottom frame edge in pixels.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLListbox.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLListbox.StoreFrameSizes">
+            <summary>
+            Store sizes for the frame edges.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLListbox.CreateVerticalScrollbar">
+            <summary>
+            Create a Widget to be used as the vertical scrollbar in this Listbox.
+            </summary>
+            <returns>A Scrollbar based object.</returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLListbox.CreateHorizontalScrollbar">
+            <summary>
+            Create a widget to be used as the horizontal scrollbar in this Listbox.
+            </summary>
+            <returns>A Scrollbar based object.</returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLListbox.LayoutComponentWidgets">
+            <summary>
+            Layout the component widgets of this Listbox.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLListbox.RenderListboxBaseImagery(System.Single)">
+            <summary>
+            Perform rendering of the widget control frame and other 'static' areas.  This
+            method should not render the actual items.  Note that the items are typically
+            rendered to layer 3, other layers can be used for rendering imagery behind and
+            infront of the items.
+            </summary>
+            <param name="z">base z co-ordinate (layer 0)</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLListbox.OnSized(CeGui.GuiEventArgs)">
+            <summary>
+                 Event trigger method for the <see cref="!:CEGUI.Window.Sized"/> event.
+            </summary>
+            <param name="e">Event information.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLListbox.OnAlphaChanged(CeGui.GuiEventArgs)">
+            <summary>
+                 Event trigger method for the <see cref="!:CEGUI.Window.AlphaChanged"/> event.
+            </summary>
+            <param name="e">Event information.</param>
+        </member>
+        <member name="P:CeGui.WidgetSets.Taharez.TLListbox.ListRenderArea">
+            <summary>
+            Get the Rect that describes, in un-clipped pixels, the window relative area
+            that is to be used for rendering list items.
+            </summary>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLGuiBuilder">
+            <summary>
+            Gui builder and widget factory for the Taharez CEGUI theme
+            </summary>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLProgressBar">
+            <summary>
+            	Standard progress bar for the Taharez Gui Scheme.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLProgressBar.ImagesetName">
+            <summary>
+            	Name of the imageset to use for rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLProgressBar.ContainerLeftImageName">
+            <summary>
+            	Name of the image to use for the left end of the progress container.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLProgressBar.ContainerMiddleImageName">
+            <summary>
+            	Name of the image to use for the middle of the progress container.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLProgressBar.ContainerRightImageName">
+            <summary>
+            	Name of the image to use for the right end of the progress container.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLProgressBar.DimSegmentImageName">
+            <summary>
+            	Name of the image to use for dim / unlit segments.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLProgressBar.BrightSegmentImageName">
+            <summary>
+            	Name of the image to use for bright / lit segments.
+            </summary>	
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLProgressBar.FirstSegmentOffsetRatioX">
+            <summary>
+            	Value used to calculate required offset for first segment.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLProgressBar.SegmentOverlapRatio">
+            <summary>
+            	Value used to calculate amount of overlap required for segments.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLProgressBar.left">
+            <summary>
+            	Container left end image.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLProgressBar.middle">
+            <summary>
+            	Container middle image.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLProgressBar.right">
+            <summary>
+            	Container right end image.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLProgressBar.dimSegment">
+            <summary>
+            	Dim segment image.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLProgressBar.litSegment">
+            <summary>
+            	Lit segment image.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLProgressBar.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLProgressBar.DrawSelf(System.Single)">
+            <summary>
+            	Perform rendering for this widget.
+            </summary>
+            <param name="z">Z value to use for rendering.</param>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLListHeader">
+            <summary>
+            ListHeader widget for the Taharez Gui Scheme.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLListHeader.SegmentWidgetType">
+            <summary>
+            Type of window/widget to create for the segments.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLListHeader.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLListHeader.CreateNewSegment(System.String)">
+            <summary>
+            Create a ListHeaderSegment of an appropriate sub-class type.
+            </summary>
+            <param name="name">Unique name for the new segment widget</param>
+            <returns></returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLListHeader.DestroyListSegment(CeGui.Widgets.ListHeaderSegment)">
+            <summary>
+            Destroy the given ListHeaderSegment.
+            </summary>
+            <param name="segment">ListHeaderSegment to be destroyed.</param>
+            <returns></returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLListHeader.DrawSelf(System.Single)">
+            <summary>
+                Perform the actual rendering for this Window.
+            </summary>
+            <param name="z">float value specifying the base Z co-ordinate that should be used when rendering.</param>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.ImagesetName">
+            <summary>
+            	Name of the imageset to use for rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.LeftNormalImageName">
+            <summary>
+            	Name of the image to use for the left end of the button (normal).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.MiddleNormalImageName">
+            <summary>
+            	Name of the image to use for the middle of the button (normal).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.RightNormalImageName">
+            <summary>
+            	Name of the image to use for the right end of the button (normal).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.LeftHighlightImageName">
+            <summary>
+            	Name of the image to use for the left end of the button (hover / highlighted).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.MiddleHighlightImageName">
+            <summary>
+            	Name of the image to use for the middle of the button (hover / highlighted).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.RightHighlightImageName">
+            <summary>
+            	Name of the image to use for the right end of the button (hover / highlighted).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.LeftPushedImageName">
+            <summary>
+            	Name of the image to use for the left end of the button (pushed state).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.MiddlePushedImageName">
+            <summary>
+            	Name of the image to use for the middle of the button (pushed state).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.RightPushedImageName">
+            <summary>
+            	Name of the image to use for the right end of the button (pushed state).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.autoscaleImages">
+            <summary>
+            	When true custom images will be scaled to the same size as the button.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.useStandardImagery">
+            <summary>
+            	true if button standard imagery should be drawn.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.useNormalImage">
+            <summary>
+            	true if an image should be drawn for the normal state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.useHoverImage">
+            <summary>
+            	true if an image should be drawn for the highlighted state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.usePushedImage">
+            <summary>
+            	true if an image should be drawn for the pushed state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.useDisabledImage">
+            <summary>
+            	true if an image should be drawn for the disabled state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.normalImage">
+            <summary>
+            	RenderableImage used when rendering an image in the normal state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.hoverImage">
+            <summary>
+            	RenderableImage used when rendering an image in the highlighted state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.pushedImage">
+            <summary>
+            	RenderableImage used when rendering an image in the pushed state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.disabledImage">
+            <summary>
+            	RenderableImage used when rendering an image in the disabled state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.leftSectionNormal">
+            <summary>
+            	Image to use when rendering the button left section (normal state).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.middleSectionNormal">
+            <summary>
+            	Image to use when rendering the button middle section (normal state).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.rightSectionNormal">
+            <summary>
+            	Image to use when rendering the button right section (normal state).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.leftSectionHover">
+            <summary>
+            	Image to use when rendering the button left section (hover state).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.middleSectionHover">
+            <summary>
+            	Image to use when rendering the button middle section (hover state).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.rightSectionHover">
+            <summary>
+            	Image to use when rendering the button right section (hover state).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.leftSectionPushed">
+            <summary>
+            	Image to use when rendering the button left section (pushed state).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.middleSectionPushed">
+            <summary>
+            	Image to use when rendering the button middle section (pushed state).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLButton.rightSectionPushed">
+            <summary>
+            	Image to use when rendering the button right section (pushed state).
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLButton.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLButton.SetNormalImage(CeGui.RenderableImage)">
+            <summary>
+            	Set the details of the image to render for the button in the normal state.
+            </summary>
+            <param name="image">
+            	RenderableImage object with all the details for the image.  Note that an internal copy of the Renderable image is made and
+            	ownership of <paramref name="image"/> remains with client code.  If this parameter is NULL, rendering of an image for this 
+            	button state is disabled.
+            </param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLButton.SetHoverImage(CeGui.RenderableImage)">
+            <summary>
+            	Set the details of the image to render for the button in the hover state.
+            </summary>
+            <param name="image">
+            	RenderableImage object with all the details for the image.  Note that an internal copy of the Renderable image is made and
+            	ownership of <paramref name="image"/> remains with client code.  If this parameter is NULL, rendering of an image for this 
+            	button state is disabled.
+            </param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLButton.SetPushedImage(CeGui.RenderableImage)">
+            <summary>
+            	Set the details of the image to render for the button in the pushed state.
+            </summary>
+            <param name="image">
+            	RenderableImage object with all the details for the image.  Note that an internal copy of the Renderable image is made and
+            	ownership of <paramref name="image"/> remains with client code.  If this parameter is NULL, rendering of an image for this 
+            	button state is disabled.
+            </param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLButton.SetDisabledImage(CeGui.RenderableImage)">
+            <summary>
+            	Set the details of the image to render for the button in the disabled state.
+            </summary>
+            <param name="image">
+            	RenderableImage object with all the details for the image.  Note that an internal copy of the Renderable image is made and
+            	ownership of <paramref name="image"/> remains with client code.  If this parameter is NULL, rendering of an image for this 
+            	button state is disabled.
+            </param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLButton.DrawDisabled(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="z"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLButton.DrawNormal(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="z"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLButton.DrawHover(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="z"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLButton.DrawPushed(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="z"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLButton.OnSized(CeGui.GuiEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="P:CeGui.WidgetSets.Taharez.TLButton.CustomImageryAutoSized">
+            <summary>
+            	Get/Set whether of not custom button image areas are auto-scaled to the size of the button.
+            </summary>
+            <value>
+            	true if client specified custom image areas are re-sized when the button size changes.  
+            	false if image areas will remain unchanged when the button is sized.
+            </value>
+        </member>
+        <member name="P:CeGui.WidgetSets.Taharez.TLButton.StandardImageryEnabled">
+            <summary>
+            	Get/Set whether or not rendering of the standard imagery is enabled.
+            </summary>
+            <value>true if the standard button imagery will be rendered, false if no standard rendering will be performed.</value>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLStaticText">
+            <summary>
+            Summary description for TLStaticText.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLStaticText.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name">Name of this widget.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLStaticText.Initialize">
+            <summary>
+            	Init this widget.
+            </summary>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLSlider">
+            <summary>
+            Summary description for TLSlider.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLSlider.ImagesetName">
+            <summary>
+            	Name of the imageset to use for rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLSlider.ContainerImageName">
+            <summary>
+            	Name of the image to use for rendering the slider container.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLSlider.ThumbType">
+            <summary>
+            	Type of the thumb to create.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLSlider.ContainerPaddingX">
+            <summary>
+            	Layout constant.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLSlider.containerImage">
+            <summary>
+            	Reference to the image to render as the slider container.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLSlider.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLSlider.CreateThumb">
+            <summary>
+            	Create a Thumb based widget to use as the thumb for this slider.
+            </summary>
+            <returns>A reference to a thumb widget for use in this slider.</returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLSlider.LayoutComponentWidgets">
+            <summary>
+            	Layout the slider component widgets.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLSlider.GetValueFromThumb">
+            <summary>
+            	Return value that best represents current slider value given the current location of the thumb.
+            </summary>
+            <returns>float value that, given the thumb widget position, best represents the current value for the slider.</returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLSlider.GetAdjustDirectionFromPoint(System.Drawing.PointF)">
+            <summary>
+            	Given window location <paramref name="point"/>, return a value indicating what change should be 
+            	made to the slider.
+            </summary>
+            <param name="point">Point describing a pixel position in window space.</param>
+            <returns>
+            	- -1 to indicate slider should be moved to a lower setting.
+            	-  0 to indicate slider should not be moved.
+            	- +1 to indicate slider should be moved to a higher setting.
+            </returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLSlider.UpdateThumb">
+            <summary>
+            	Update the size and location of the thumb to properly represent the current state of the slider.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLSlider.DrawSelf(System.Single)">
+            <summary>
+            	Perform the actual rendering for this Slider.
+            </summary>
+            <param name="z">float value specifying the base Z co-ordinate that should be used when rendering.</param>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLRadioButton">
+            <summary>
+            Summary description for TLRadioButton.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLRadioButton.ImagesetName">
+            <summary>
+            	Name of the imageset to use for rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLRadioButton.NormalImageName">
+            <summary>
+            	Name of the image to use for the normal state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLRadioButton.HighlightImageName">
+            <summary>
+            	Name of the image to use for the highlighted state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLRadioButton.CheckMarkImageName">
+            <summary>
+            	Name of the image to use for the check / selected mark.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLRadioButton.LabelPadding">
+            <summary>
+            	Pixel padding value for text label (space between image and text label).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLRadioButton.normalImage">
+            <summary>
+            	Image to use when rendering in normal state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLRadioButton.hoverImage">
+            <summary>
+            	Image to use when rendering in hover / highlighted state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLRadioButton.checkMarkImage">
+            <summary>
+            	Image to use when rendering the check-mark.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLRadioButton.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLRadioButton.DrawCheckbox(CeGui.Image,System.Single,System.Boolean)">
+            <summary>
+            	Helper method for common rendering code for the checkmark.
+            </summary>
+            <param name="image">Image to use.</param>
+            <param name="z">Z value to use.</param>
+            <param name="drawDisabled">Will use white if false, or greyed if true.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLRadioButton.DrawNormal(System.Single)">
+            <summary>
+            	Render the checkbox in the 'normal' state.
+            </summary>
+            <param name="z">Z value for rendering.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLRadioButton.DrawPushed(System.Single)">
+            <summary>
+            	Render the checkbox in the 'pushed' state.
+            </summary>
+            <param name="z">Z value for rendering.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLRadioButton.DrawHover(System.Single)">
+            <summary>
+            	Render the checkbox in the 'hover' state.
+            </summary>
+            <param name="z">Z value for rendering.</param>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb">
+            <summary>
+            Widget used as the thumb for the mini vertical scrollbar in the Taharez Gui Scheme.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.ImagesetName">
+            <summary>
+            	Name of the imageset to use for rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.NormalImageName">
+            <summary>
+            	Name of the image to use for normal rendering (used for sizes only)..
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.NormalTopImageName">
+            <summary>
+            	Name of the image to use for normal rendering (top end).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.NormalMiddleImageName">
+            <summary>
+            	Name of the image to use for normal rendering (mid section).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.NormalBottomImageName">
+            <summary>
+            	Name of the image to use for normal rendering (bottom end).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.HighlightTopImageName">
+            <summary>
+            	Name of the image to use for hover / highlighted rendering (top end).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.HighlightMiddleImageName">
+            <summary>
+            	Name of the image to use for hover / highlighted rendering (mid section).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.HighlightBottomImageName">
+            <summary>
+            	Name of the image to use for hover / highlighted rendering (bottom end).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.normalImage">
+            <summary>
+            	Image to render in normal state (used to get sizes only)
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.normalTopImage">
+            <summary>
+            	Image to render in normal state (top end)
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.normalMiddleImage">
+            <summary>
+            	Image to render in normal state (mid section)
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.normalBottomImage">
+            <summary>
+            	Image to render in normal state (bottom end)
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.highlightTopImage">
+            <summary>
+            	Image to render in highlighted state (top end).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.highlightMiddleImage">
+            <summary>
+            	Image to render in highlighted state (mid section).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.highlightBottomImage">
+            <summary>
+            	Image to render in highlighted state (bottom end).
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.DrawNormal(System.Single)">
+            <summary>
+            	Render thumb in the normal state.
+            </summary>
+            <param name="z">Z value for rendering.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.DrawHover(System.Single)">
+            <summary>
+            	Render thumb in the normal state.
+            </summary>
+            <param name="z">Z value for rendering.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbarThumb.OnSized(CeGui.GuiEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar">
+            <summary>
+            Mini vertical scrollbar widget for the Taharez Gui Scheme.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.ImagesetName">
+            <summary>
+            	Name of the Imageset to use for rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.ScrollbarBodyImageName">
+            <summary>
+            	Name of image to use for the main body of the scroll bar
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.UpButtonNormalImageName">
+            <summary>
+            	Name of image to use for the up button in normal state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.UpButtonHighlightImageName">
+            <summary>
+            	Name of image to use for the up button in highlighted state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.DownButtonNormalImageName">
+            <summary>
+            	Name of image to use for the down button in normal state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.DownButtonHighlightImageName">
+            <summary>
+            	Name of image to use for the down button in the highlighted state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.ThumbPositionX">
+            <summary>
+            Relative X co-ordinate for the thumb.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.ThumbWidth">
+            <summary>
+            Relative width of the thumb.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.BodyPositionX">
+            <summary>
+            Relative X co-ordinate for the body imagery.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.BodyWidth">
+            <summary>
+            Relative width for the body imagery.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.ThumbType">
+            <summary>
+            	Type of the thumb to create.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.ButtonType">
+            <summary>
+            	Type of the buttons to create.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.bodyImage">
+            <summary>
+            Image for body segment.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.CreateIncreaseButton">
+            <summary>
+            create a PushButton based widget to use as the increaseButton button for this scroll bar.
+            </summary>
+            <returns>A reference to a PushButton widget for use in the scrollbar</returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.CreateDecreaseButton">
+            <summary>
+            create a PushButton based widget to use as the decreaseButton button for this scroll bar.
+            </summary>
+            <returns>A reference to a PushButton widget for use in the scrollbar</returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.CreateThumb">
+            <summary>
+            create a Thumb based widget to use as the thumb for this scrollbar.
+            </summary>
+            <returns>A reference to a thumb widget for use in this scrollbar.</returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.LayoutComponentWidgets">
+            <summary>
+            Layout the scrollbar component widgets.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.UpdateThumb">
+            <summary>
+            Update the size and position of the thumb to best represent the current state of the scrollbar.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.GetPositionFromThumb">
+            <summary>
+            Return value that best represents current scroll position given the current location of the thumb.
+            </summary>
+            <returns>float value that, given the thumb widget position, best represents the current scroll position for the scrollbar.</returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.GetAdjustDirectionFromPoint(System.Drawing.PointF)">
+            <summary>
+            Given window location <paramref name="point"/>, return a value indicating what change should be 
+            made to the scroll position.
+            </summary>
+            <param name="point">Point describing a pixel position in window space.</param>
+            <returns>
+            - -1 to indicate scroll position should be moved to a lower setting.
+            -  0 to indicate scroll position should not be moved.
+            - +1 to indicate scroll position should be moved to a higher setting.
+            </returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMiniVerticalScrollbar.DrawSelf(System.Single)">
+            <summary>
+            	Perform the actual rendering for this Scrollbar widget.
+            </summary>
+            <param name="z">float value specifying the base Z co-ordinate that should be used when rendering.</param>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLComboDropList">
+            <summary>
+            Summary description for TLComboDropList.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.ImagesetName">
+            <summary>
+            	Name of the imageset to use for rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.TopLeftImageName">
+            <summary>
+            	Name of the image to use for the top-left corner of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.TopRightImageName">
+            <summary>
+            	Name of the image to use for the top-right corner of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.BottomLeftImageName">
+            <summary>
+            	Name of the image to use for the bottom left corner of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.BottomRightImageName">
+            <summary>
+            	Name of the image to use for the bottom right corner of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.LeftEdgeImageName">
+            <summary>
+            	Name of the image to use for the left edge of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.RightEdgeImageName">
+            <summary>
+            	Name of the image to use for the right edge of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.TopEdgeImageName">
+            <summary>
+            	Name of the image to use for the top edge of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.BottomEdgeImageName">
+            <summary>
+            	Name of the image to use for the bottom edge of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.BackgroundImageName">
+            <summary>
+            	Name of the image to use for the box background.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.SelectionBrushImageName">
+            <summary>
+            	Name of the image to use for the selection highlight brush.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.MouseCursorImageName">
+            <summary>
+            	Name of the image to use for the mouse cursor.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.HorzScrollbarTypeName">
+            <summary>
+            	Type name of widget to be created as horizontal scroll bar.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.VertScrollbarTypeName">
+            <summary>
+            	Type name of widget to be created as vertical scroll bar.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.frame">
+            <summary>
+            	Used for the frame of the drop-list box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.background">
+            <summary>
+            `Used for the background area of the drop-list box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.frameLeftSize">
+            <summary>
+            	Width of the left frame edge in pixels.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.frameRightSize">
+            <summary>
+            	Width of the right frame edge in pixels.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.frameTopSize">
+            <summary>
+            	Height of the top frame edge in pixels.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLComboDropList.frameBottomSize">
+            <summary>
+            	Height of the bottom frame edge in pixels.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLComboDropList.StoreFrameSizes">
+            <summary>
+            	Store the sizes for the frame edges.
+            </summary>
+        </member>
+        <member name="P:CeGui.WidgetSets.Taharez.TLComboDropList.ListRenderArea">
+            <summary>
+            	Return a Rect object describing, in un-clipped pixels, the window
+            	relative area that is to be used for rendering list items.
+            </summary>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLEditBox">
+            <summary>
+            	Single line editbox.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLEditBox.ImagesetName">
+            <summary>
+            	Name of the Imageset containing the imagery to use.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLEditBox.ContainerLeftImageName">
+            <summary>
+            	Name of the image to use for the left end of the container.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLEditBox.ContainerMiddleImageName">
+            <summary>
+            	Name of the image to use for the middle of the container.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLEditBox.ContainerRightImageName">
+            <summary>
+            	Name of the image to use for the right end of the container.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLEditBox.CaratImageName">
+            <summary>
+            	Name of the image to use for the carat.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLEditBox.SelectionBrushImageName">
+            <summary>
+            	Name of the image to use for the selection brush.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLEditBox.MouseCursorImageName">
+            <summary>
+            	Name of the image used for the mouse cursor.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLEditBox.TextPaddingRatio">
+            <summary>
+            	Used to generate padding distance for text.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLEditBox.left">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLEditBox.middle">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLEditBox.right">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLEditBox.carat">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLEditBox.selection">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLEditBox.lastTextOffset">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLEditBox.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name">Name of this widget.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLEditBox.GetTextIndexFromPosition(System.Drawing.PointF)">
+            <summary>
+            
+            </summary>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLEditBox.Initialize">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLEditBox.GetTextPaddingPixels">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLEditBox.DrawSelf(System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="z"></param>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLSliderThumb">
+            <summary>
+            Summary description for TLSliderThumb.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLSliderThumb.ImagesetName">
+            <summary>
+            	Name of the imageset to use for rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLSliderThumb.NormalImageName">
+            <summary>
+            	Name of the image to use for normal rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLSliderThumb.HighlightImageName">
+            <summary>
+            	Name of the image to use for hover / highlighted rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLSliderThumb.normalImage">
+            <summary>
+            	Image to render in normal state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLSliderThumb.highlightImage">
+            <summary>
+            	Image to render in highlighted state.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLSliderThumb.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLSliderThumb.DrawNormal(System.Single)">
+            <summary>
+            	Render thumb in the normal state.
+            </summary>
+            <param name="z">Z value for rendering.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLSliderThumb.DrawHover(System.Single)">
+            <summary>
+            	Render thumb in the hover state.
+            </summary>
+            <param name="z">Z value for rendering.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLSliderThumb.DrawPushed(System.Single)">
+            <summary>
+            	Render thumb in the pushed state.
+            </summary>
+            <param name="z">Z value for rendering.</param>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLMultiColumnList">
+            <summary>
+            Multi-columned Listbox (a.k.a grid) widget for the Taharez Gui Scheme.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.ImagesetName">
+            <summary>
+            	Name of the Imageset to use for rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.TopLeftImageName">
+            <summary>
+            Name of the image to use for the top-left corner of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.TopRightImageName">
+            <summary>
+            Name of the image to use for the top-right corner of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.BottomLeftImageName">
+            <summary>
+            Name of the image to use for the bottom left corner of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.BottomRightImageName">
+            <summary>
+            Name of the image to use for the bottom right corner of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.LeftEdgeImageName">
+            <summary>
+            Name of the image to use for the left edge of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.RightEdgeImageName">
+            <summary>
+            Name of the image to use for the right edge of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.TopEdgeImageName">
+            <summary>
+            Name of the image to use for the top edge of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.BottomEdgeImageName">
+            <summary>
+            Name of the image to use for the bottom edge of the box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.BackgroundImageName">
+            <summary>
+            Name of the image to use for the box background.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.SelectionBrushImageName">
+            <summary>
+            Name of the image to use for the selection highlight brush.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.MouseCursorImageName">
+            <summary>
+            Name of the image to use for the mouse cursor.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.HorzScrollbarTypeName">
+            <summary>
+            Type name of widget to be created as horizontal scroll bar.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.VertScrollbarTypeName">
+            <summary>
+            Type name of widget to be created as vertical scroll bar.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.ListHeaderTypeName">
+            <summary>
+            Type name of widget to be created as the list header.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.frame">
+            <summary>
+            Used for the frame of the list box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.background">
+            <summary>
+            Used for the background area of the list box.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.leftFrameSize">
+            <summary>
+            Width of the left frame edge in pixels.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.rightFrameSize">
+            <summary>
+            Width of the right frame edge in pixels.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.topFrameSize">
+            <summary>
+            Height of the top frame edge in pixels.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLMultiColumnList.bottomFrameSize">
+            <summary>
+            Height of the bottom frame edge in pixels.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMultiColumnList.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMultiColumnList.StoreFrameSizes">
+            <summary>
+            Store sizes for the frame edges.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMultiColumnList.CreateVerticalScrollbar">
+            <summary>
+            Create a Widget to be used as the vertical scrollbar in this Listbox.
+            </summary>
+            <returns>A Scrollbar based object.</returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMultiColumnList.CreateHorizontalScrollbar">
+            <summary>
+            Create a widget to be used as the horizontal scrollbar in this Listbox.
+            </summary>
+            <returns>A Scrollbar based object.</returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMultiColumnList.CreateListHeader">
+            <summary>
+            	Create and return a ListHeaer widget for use as the column headers.
+            </summary>
+            <returns>ListHeader based object.</returns>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMultiColumnList.LayoutComponentWidgets">
+            <summary>
+            Layout the component widgets of this Listbox.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMultiColumnList.RenderBaseImagery(System.Single)">
+            <summary>
+            Perform rendering of the widget control frame and other 'static' areas.  This
+            method should not render the actual items.  Note that the items are typically
+            rendered to layer 3, other layers can be used for rendering imagery behind and
+            infront of the items.
+            </summary>
+            <param name="z">base z co-ordinate (layer 0)</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMultiColumnList.OnSized(CeGui.GuiEventArgs)">
+            <summary>
+                 Event trigger method for the <see cref="!:CEGUI.Window.Sized"/> event.
+            </summary>
+            <param name="e">Event information.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLMultiColumnList.OnAlphaChanged(CeGui.GuiEventArgs)">
+            <summary>
+                 Event trigger method for the <see cref="!:CEGUI.Window.AlphaChanged"/> event.
+            </summary>
+            <param name="e">Event information.</param>
+        </member>
+        <member name="P:CeGui.WidgetSets.Taharez.TLMultiColumnList.ListRenderArea">
+            <summary>
+            Get the Rect that describes, in un-clipped pixels, the window relative area
+            that is to be used for rendering list items.
+            </summary>
+        </member>
+        <member name="T:CeGui.WidgetSets.Taharez.TLCheckbox">
+            <summary>
+            Summary description for TLCheckbox.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLCheckbox.ImagesetName">
+            <summary>
+            	Name of the imageset to use for rendering.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLCheckbox.NormalImageName">
+            <summary>
+            	Name of the image to use for the normal state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLCheckbox.HighlightImageName">
+            <summary>
+            	Name of the image to use for the highlighted state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLCheckbox.CheckMarkImageName">
+            <summary>
+            	Name of the image to use for the check / selected mark.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLCheckbox.LabelPadding">
+            <summary>
+            	Pixel padding value for text label (space between image and text label).
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLCheckbox.normalImage">
+            <summary>
+            	Image to use when rendering in normal state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLCheckbox.hoverImage">
+            <summary>
+            	Image to use when rendering in hover / highlighted state.
+            </summary>
+        </member>
+        <member name="F:CeGui.WidgetSets.Taharez.TLCheckbox.checkMarkImage">
+            <summary>
+            	Image to use when rendering the check-mark.
+            </summary>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLCheckbox.#ctor(System.String,System.String)">
+            <summary>
+            	Constructor.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLCheckbox.DrawCheckbox(CeGui.Image,System.Single,System.Boolean)">
+            <summary>
+            	Helper method for common rendering code for the checkmark.
+            </summary>
+            <param name="image">Image to use.</param>
+            <param name="z">Z value to use.</param>
+            <param name="drawDisabled">Will use white if false, or greyed if true.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLCheckbox.DrawNormal(System.Single)">
+            <summary>
+            	Render the checkbox in the 'normal' state.
+            </summary>
+            <param name="z">Z value for rendering.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLCheckbox.DrawPushed(System.Single)">
+            <summary>
+            	Render the checkbox in the 'pushed' state.
+            </summary>
+            <param name="z">Z value for rendering.</param>
+        </member>
+        <member name="M:CeGui.WidgetSets.Taharez.TLCheckbox.DrawHover(System.Single)">
+            <summary>
+            	Render the checkbox in the 'hover' state.
+            </summary>
+            <param name="z">Z value for rendering.</param>
+        </member>
+    </members>
+</doc>

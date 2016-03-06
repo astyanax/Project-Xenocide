@@ -1,0 +1,228 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns="CombatantConfig"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+		targetNamespace="CombatantConfig"
+		elementFormDefault="qualified"
+		attributeFormDefault="unqualified">
+	<xsd:include schemaLocation="basic.xsd"/>
+
+	<xsd:complexType name="timeType">
+		<xsd:attribute name="days" type="xsd:nonNegativeInteger" default="0"/>
+		<xsd:attribute name="hours" type="xsd:nonNegativeInteger" default="0"/>
+	</xsd:complexType>
+	<xsd:simpleType name="all_const">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="all"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="packet">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:positiveInteger">
+				<xsd:attribute name="type" use="required">
+					<xsd:simpleType>
+						<xsd:union memberTypes="money_const itemID"/>
+					</xsd:simpleType>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="distribution" abstract="true">
+	</xsd:complexType>
+	<xsd:complexType name="uniform">
+		<xsd:complexContent>
+		<xsd:extension base="distribution">
+			<xsd:attribute name="min" type="xsd:positiveInteger"/>
+			<xsd:attribute name="max" type="xsd:positiveInteger"/>
+		</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="normal">
+		<xsd:complexContent>
+		<xsd:extension base="distribution">
+			<xsd:attribute name="mean" type="xsd:positiveInteger"/>
+			<xsd:attribute name="variance" type="xsd:nonNegativeInteger"/>
+		</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="core">
+		<xsd:complexContent>
+		<xsd:extension base="distribution">
+			<xsd:attribute name="base" type="xsd:nonNegativeInteger" use="required"/>
+		</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+  <xsd:complexType name="susceptibility">
+    <!-- 
+      This specifies how many points of physical and stun damage are applied to 
+      combatant, for each point of this type of damage the weapon does to the combatant.
+    -->
+    <xsd:attribute name="damageType" type="damageTypeEnum" use="required"/>
+    <xsd:attribute name="physical"   type="xsd:float"      use="required"/>
+    <xsd:attribute name="stun"       type="xsd:float"      use="required"/>
+  </xsd:complexType>
+
+	<!-- names of the different loadouts -->
+	<xsd:simpleType name="loadoutEnum">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Sampling"/>
+			<xsd:enumeration value="LightPlasma"/>
+			<xsd:enumeration value="MediumPlasma"/>
+			<xsd:enumeration value="HeavyPlasma"/>
+			<xsd:enumeration value="Grav"/>
+			<xsd:enumeration value="XCorpDefault"/>
+			
+			<xsd:enumeration value="Ventriculant"/>
+			<xsd:enumeration value="Silabrate"/>
+			<xsd:enumeration value="Spawn"/>
+			<xsd:enumeration value="Artopod"/>
+			<xsd:enumeration value="Terrordisc"/>
+			<xsd:enumeration value="Raptor"/>
+			<xsd:enumeration value="Zombie"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+  <!-- Loadouts (set of items combatant can be equiped with) -->
+  <xsd:element name="loadout">
+    <xsd:complexType>
+    <xsd:sequence>
+      <!-- 
+        This specifies an item, and where its located
+        Co-cordinates are given by InventoryLayout.cs
+      -->
+      <xsd:element name="item" minOccurs="1" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:attribute name="name" type="itemID"                 use="required"/>
+          <xsd:attribute name="x"    type="xsd:nonNegativeInteger" use="required"/>
+          <xsd:attribute name="y"    type="xsd:nonNegativeInteger" use="required"/>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+      <xsd:attribute name="name" type="loadoutEnum" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!-- Armor type -->
+  <xsd:element name="armor">
+    <xsd:complexType>
+    <xsd:sequence>
+		<!-- 
+		This specifies how many points of physical and stun damage are applied to 
+		combatant, for each point of damage of type done to the combatant.
+		-->
+		<xsd:element name="susceptibility" type="susceptibility" minOccurs="9" maxOccurs="9" />
+    </xsd:sequence>
+    <xsd:attribute name="id"    type="armorTypeEnum"          use="required"/>
+    <xsd:attribute name="front" type="xsd:nonNegativeInteger" use="required"/>
+    <xsd:attribute name="side"  type="xsd:nonNegativeInteger" use="required"/>
+    <xsd:attribute name="rear"  type="xsd:nonNegativeInteger" use="required"/>
+    <xsd:attribute name="under" type="xsd:nonNegativeInteger" use="required"/>
+    <!-- does this armor give the wearer the ability to fly? -->
+    <xsd:attribute name="flyer" type="xsd:boolean"            use="optional" default="0"/>
+    </xsd:complexType>
+</xsd:element>
+
+	<!-- where the combatant can carry items -->
+	<xsd:simpleType name="carrierEnum">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Humanoid"/>   <!-- Typical soldier inventory configuration -->
+			<xsd:enumeration value="Fixed"/>      <!-- Items are fixed, and cant' be viewed or changed. e.g. X-Cap, terrorist -->
+		</xsd:restriction>
+	</xsd:simpleType>
+
+  <!-- Equipment type -->
+  <!-- 
+      List of possible loadouts combatant could have, and the odds of
+      having each loadout
+  -->
+  <xsd:element name="equipment">
+    <xsd:complexType>
+      <xsd:attribute name="loadout" type="loadoutEnum"            use="required"/>
+      <xsd:attribute name="odds"    type="xsd:nonNegativeInteger" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!-- Graphics type -->
+  <xsd:element name="graphics">
+    <xsd:complexType>
+      <xsd:annotation>
+        <xsd:documentation>The image/model to put in the view window.
+          x, y and z are the rotations in degress about the x, y and z axis to do to the
+          model to put it into it's desired orientation when showing in Battlescape
+        </xsd:documentation>
+      </xsd:annotation>
+      <xsd:attribute name="model" type="xsd:string" use="required" />
+      <xsd:attribute name="x"     type="xsd:float"  use="required" />
+      <xsd:attribute name="y"     type="xsd:float"  use="required" />
+      <xsd:attribute name="z"     type="xsd:float"  use="required" />
+      <xsd:attribute name="scale" type="xsd:float"  use="optional" default="0.0"/>
+    </xsd:complexType>
+  </xsd:element>
+	
+  <!-- Combatant type -->
+  <xsd:element name="combatant">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="itemref" minOccurs="0" maxOccurs="1">
+				    <!-- Item type to convert this combatant to at end of battlescape -->
+					<xsd:complexType>
+						<xsd:attribute name="dead"    type="itemID" use="required"/>
+						<xsd:attribute name="stunned" type="itemID" use="required"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="environments">
+					<xsd:complexType>
+						<xsd:attribute name="type" use="required">
+							<xsd:simpleType>
+								<xsd:list itemType="environmentType"/>
+							</xsd:simpleType>
+						</xsd:attribute>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="attributes">
+					<xsd:complexType>
+						<xsd:all>
+							<xsd:element name="timeunits" type="distribution"/>
+							<xsd:element name="stamina" type="distribution"/>
+							<xsd:element name="health" type="distribution"/>
+							<xsd:element name="bravery" type="distribution" minOccurs="0"/>
+							<xsd:element name="reactions" type="distribution"/>
+							<xsd:element name="firingaccuracy" type="distribution"/>
+							<xsd:element name="throwingaccuracy" type="distribution" minOccurs="0"/>
+							<xsd:element name="strength" type="distribution" minOccurs="0"/>
+							<xsd:element name="psistrength" type="distribution" minOccurs="0"/>
+							<xsd:element name="psiskill" type="distribution" minOccurs="0"/>
+							<xsd:element name="energyrecharge" type="distribution" minOccurs="0"/>
+							<xsd:element name="victorypoints" type="distribution" minOccurs="0"/>
+							<xsd:element name="aggression" type="distribution" minOccurs="0"/>
+							<xsd:element name="melee" type="distribution" minOccurs="0"/>
+							<xsd:element name="intelligence" type="distribution" minOccurs="0"/>
+							<xsd:element name="standingheight" type="distribution" minOccurs="0"/>
+							<xsd:element name="kneelingheight" type="distribution" minOccurs="0"/>
+							<xsd:element name="floatingheight" type="distribution" minOccurs="0"/>
+							<xsd:element name="motionscannerblipsize" type="distribution" minOccurs="0"/>
+						</xsd:all>
+						<xsd:attribute name="flyer"   type="xsd:boolean" use="optional" default="false"/>
+						<xsd:attribute name="carrier" type="carrierEnum" use="optional" default="Humanoid"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element ref="graphics"  minOccurs="0" maxOccurs="1"/>
+				<xsd:element ref="equipment" minOccurs="0"  maxOccurs="unbounded"/>
+			</xsd:sequence>
+			<xsd:attribute name="race"      type="raceTypeEnum"  use="required"/>
+			<xsd:attribute name="rank"      type="rankTypeEnum"  use="required"/>
+			<xsd:attribute name="armor"     type="armorTypeEnum" use="required"/>
+
+            <!-- If terrorist, the race that uses this terror unit -->
+			<xsd:attribute name="ownerRace" type="raceTypeEnum" use="optional"/>
+    </xsd:complexType>
+	</xsd:element>
+	<xsd:element name="combatantdata">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="loadout"   maxOccurs="unbounded"/>
+				<xsd:element ref="armor"     maxOccurs="unbounded"/>
+				<xsd:element ref="combatant" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

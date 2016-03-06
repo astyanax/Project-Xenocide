@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<project
+  xmlns="http://nant.sf.net/schemas/nant-0.85.win32.net-1.0.xsd"
+  name="CeGui"
+  default="compile"
+>
+
+  <!--
+    This property can be overriden on the command line and controls whether
+    we build in debug or release mode
+  -->
+  <property overwrite="false" name="configuration" value="release" />
+
+  <!--
+    Set Optimization flags depending on the selected build configuration
+  -->
+  <property if="${configuration == 'release'}" name="optimize" value="true" />
+  <property if="${configuration == 'debug'}" name="optimize" value="false" />
+
+  <!--
+    Enable or disable debug informations depending on the selected build configuration
+  -->
+  <property if="${configuration == 'release'}" name="debug" value="None" />
+  <property if="${configuration == 'debug'}" name="debug" value="Full" />
+
+  <!--
+    Compile the sources to an assembly
+  -->
+  <target name="compile" description="Compile the assembly">
+
+    <!-- Display the exactt build configuration we're using for this compile -->
+    <echo message="optimization enabled: ${optimize}" />
+    <echo message="debugging informations: ${debug}" />
+
+    <!-- Create the output directory if it doesn't exist yet -->
+    <mkdir dir="bin/${configuration}" />
+
+    <!-- The compiling itself -->
+    <csc
+      target="library" 
+      output="bin/${configuration}/CeGui.dll" 
+      optimize="${optimize}"
+      debug="${debug}"
+    >
+      <references>
+        <include name="System.Drawing.dll" />
+	<include name="System.Windows.Forms.dll" />
+      </references>
+      <sources>
+        <include name="Source/**/*.cs" />
+        <include name="Properties/**/*.cs" />
+      </sources>
+    </csc>
+
+  </target>
+
+  <!--
+    Removes all intermediate files created by the build process
+  -->
+  <target name="clean" description="Remove intermediate files">
+
+    <delete dir="bin" />
+    <delete dir="obj" />
+
+  </target>
+
+</project>
+

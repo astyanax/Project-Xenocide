@@ -1,0 +1,17 @@
+Xenocide v. 0.4.0.1836 Progress release installer
+
+PLEASE READ THIS!
+
+This setup programm will install the computer game "Xenocide", developed by the "Project Xenocide" Team on your computer.
+"Xenocide" is based on the XNA framework, thus you will need a few prequesites.
+
+You have 2 ways to make sure you can run XNA games:
+    1) Select all prerequisites to be downloaded during installation and RUN THEM MANUALLY after the installation finishes - you will find them right on your desktop
+    OR
+    2) Don't select any prerequisites and run the automatic XNA Requirements Checker/Installer at the end of the installation process
+
+Additionally you will be able to download a better globe texture and the audio pack via this installer. Both will automatically be installed once downloaded. 
+
+THIS IS A PROGRESS RELEASE, NOT A FULLY PLAYABLE VERSION!!!!
+
+For more information and our latest progress please visit http://www.projectxenocide.com

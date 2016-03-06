@@ -1,0 +1,1138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Project Xenocide
+Proposed Xenocide Technology Tree 
+
+Created By: Cpt. Boxershorts 
+Create Date: 23/01/2004 10:55AM
+
+Edited by: centurion
+Edit Date: 5.9.2004
+Edit Notes: butchered to get a sample
+
+Edited by: Azrael
+Edit Date: 03/04/2005 and onwards
+Edit Notes: Filled the tree and edited it many, many, many times.
+
+Edited by: Mad
+Edit Date: 28.06.2006
+Edit notes: AC is now a prequisite for Silabrate research
+		
+-->
+<researchtopics title="X-Com Tech Tree"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="ResearchConfig"
+	xsi:schemaLocation="ResearchConfig
+		research.xsd">
+	
+<!--STARTING TECHNOLOGY-->
+	<topic id="RES_STARTING_TECHNOLOGY" name="" time="0">
+		<prerequisite>
+		</prerequisite>		
+		<grants quantity="AllOf">
+			<itemref name="ITEM_XC-1_GRYPHON" />
+			<xnetref name="XNET_XC-1_GRYPHON" />
+			<itemref name="ITEM_XC-11_CONDOR" />
+			<xnetref name="XNET_XC-11_CONDOR" />
+			<itemref name="ITEM_SIDEWINDER_LIGHT_MISSILE_LAUNCHER" />
+			<itemref name="ITEM_SIDEWINDER_LIGHT_MISSILE_CLIP" />
+			<xnetref name="XNET_SIDEWINDER_LIGHT_MISSILE" />
+			<itemref name="ITEM_TITAN_HEAVY_MISSILE_CLIP" />
+			<itemref name="ITEM_TITAN_HEAVY_MISSILE_LAUNCHER" />
+			<xnetref name="XNET_TITAN_HEAVY_MISSILE" />
+			<itemref name="ITEM_CANNON_CLIP" />
+			<itemref name="ITEM_CANNON" />
+			<xnetref name="XNET_CANNON" />
+			<itemref name="ITEM_XCAP_CANNON_CLIP" />
+			<itemref name="ITEM_XCAP_CANNON" />
+			<xnetref name="XNET_XCAP,_CANNON" />
+			<itemref name="ITEM_XCAP_ROCKET" />
+			<xnetref name="XNET_XCAP,_ROCKET" />
+			<xnetref name="XNET_XCAP_CHASSIS" />
+			<itemref name="ITEM_PISTOL_CLIP" />
+			<itemref name="ITEM_PISTOL" />
+			<xnetref name="XNET_PISTOL" />
+			<itemref name="ITEM_ASSAULT_RIFLE_CLIP" />
+			<itemref name="ITEM_ASSAULT_RIFLE" />
+			<xnetref name="XNET_ASSAULT_RIFLE" />
+			<itemref name="ITEM_H_C_HE_CLIP" />
+			<itemref name="ITEM_H_C_AP_CLIP" />
+			<itemref name="ITEM_H_C_IN_CLIP" />
+			<itemref name="ITEM_HEAVY_CANNON" />
+			<xnetref name="XNET_HEAVY_CANNON" />
+			<itemref name="ITEM_R_C_HE_CLIP" />
+			<itemref name="ITEM_R_C_AP_CLIP" />
+			<itemref name="ITEM_R_C_IN_CLIP" />
+			<itemref name="ITEM_REPEATER_CANNON" />
+			<xnetref name="XNET_REPEATER_CANNON" />
+			<itemref name="ITEM_R_L_SMALL_ROCKET" />
+			<itemref name="ITEM_R_L_LARGE_ROCKET" />
+			<itemref name="ITEM_R_L_IC_ROCKET" />
+			<itemref name="ITEM_ROCKET_LAUNCHER" />
+			<xnetref name="XNET_ROCKET_LAUNCHER" />
+			<itemref name="ITEM_GRENADE" />
+			<xnetref name="XNET_GRENADE" />
+			<itemref name="ITEM_PROXIMITY_GRENADE" />
+			<xnetref name="XNET_PROXIMITY_GRENADE" />
+			<itemref name="ITEM_SATCHEL_CHARGE" />
+			<xnetref name="XNET_SATCHEL_CHARGE" />
+			<itemref name="ITEM_STUN_BATON" />
+			<xnetref name="XNET_STUN_BATON" />
+			<itemref name="ITEM_FLASHPOD" />
+			<xnetref name="XNET_FLASHPOD" />
+			<itemref name="ITEM_SMOKE_GRENADE" />
+			<xnetref name="XNET_SMOKE_GRENADE" />
+			<facilityref name="FAC_BASE_ACCESS_FACILITY" />
+			<xnetref name="XNET_BASE_ACCESS_FACILITY" />
+			<facilityref name="FAC_BARRACKS_FACILITY" />
+			<xnetref name="XNET_BARRACKS_FACILITY" />
+			<facilityref name="FAC_RESEARCH_FACILITY" />
+			<xnetref name="XNET_RESEARCH_FACILITY" />
+			<facilityref name="FAC_ENGINEERING_FACILITY" />
+			<xnetref name="XNET_ENGINEERING_FACILITY" />
+			<facilityref name="FAC_LANDING_PAD" />
+			<xnetref name="XNET_LANDING_PAD" />
+			<facilityref name="FAC_STORAGE_FACILITY" />
+			<xnetref name="XNET_STORAGE_FACILITY" />
+			<facilityref name="FAC_XENOMORPH_HOLDING_FACILITY" />
+			<xnetref name="XNET_XENOMORPH_HOLDING_FACILITY" />
+			<facilityref name="FAC_SHORT_RANGE_NEUDAR" />
+			<xnetref name="XNET_SHORT_RANGE_NEUDAR" />
+			<facilityref name="FAC_LONG_RANGE_NEUDAR" />
+			<xnetref name="XNET_LONG_RANGE_NEUDAR" />
+			<facilityref name="FAC_MISSILE_DEFENSE_ARRAY" />
+			<xnetref name="XNET_MISSILE_DEFENSE_ARRAY" />
+			<itemref name="ITEM_PERSON_ENGINEER" />
+			<itemref name="ITEM_PERSON_SCIENTIST" />
+			<itemref name="ITEM_PERSON_SOLDIER" />
+			<xnetref name="XNET_STANDARD-ISSUE_BATTLEDRESS_UNIFORM" />
+		</grants>
+	</topic>
+									
+<!--ALIEN RESEARCH TOPICS-->
+<!--Alien Navigator Interrogation-->
+	<topic id="RES_NAVIGATOR_INTERROGATION" name="Navigator Interrogation" time="180">
+		<prerequisite>
+			<AnyOneOf>
+			    <itemref name="ITEM_SATYRIAN_NAVIGATOR"/>
+			    <itemref name="ITEM_GREY_NAVIGATOR"/>
+        		<itemref name="ITEM_VIPER_NAVIGATOR"/>
+    			<itemref name="ITEM_MORLOCK_NAVIGATOR"/>
+			</AnyOneOf>
+		</prerequisite>		
+		<grants quantity="OneOf">
+				<xnetref name="XNET_ALIEN_ABDUCTIONS"/>
+				<xnetref name="XNET_ALIEN_HARVEST"/>
+				<xnetref name="XNET_ALIEN_INFILTRATIONS"/>
+				<xnetref name="XNET_ALIEN_RESEARCH"/>
+				<xnetref name="XNET_ALIEN_RETALIATION"/>
+				<xnetref name="XNET_ALIEN_SUPPLY"/>
+				<xnetref name="XNET_ALIEN_TERROR"/>
+				<xnetref name="XNET_ALIEN_BASE"/>
+		</grants>
+	</topic>
+
+<!--Alien Engineer Interrogation-->
+	<topic id="RES_ENGINEER_INTERROGATION" name="Engineer Interrogation" time="180" persists="true">
+		<prerequisite>
+			<AnyOneOf>
+    			<itemref name="ITEM_SATYRIAN_ENGINEER"/>
+    			<itemref name="ITEM_VIPER_ENGINEER"/>
+    			<itemref name="ITEM_GREY_ENGINEER"/>
+    			<itemref name="ITEM_MORLOCK_ENGINEER"/>
+      </AnyOneOf>
+		</prerequisite>		
+		<grants quantity="OneOf">
+			<xnetref name="XNET_PROBE"/>
+			<xnetref name="XNET_RECON"/>
+			<xnetref name="XNET_ESCORT"/>
+			<xnetref name="XNET_REAPER"/>
+			<xnetref name="XNET_COLLECTOR"/>
+			<xnetref name="XNET_JUGGERNAUT"/>
+			<xnetref name="XNET_INTIMIDATOR"/>
+			<xnetref name="XNET_ALIEN_FREIGHTER"/>
+		</grants>
+	</topic>
+
+<!--Alien Medic Interrogation-->
+	<topic id="RES_MEDIC_INTERROGATION" name="Medic Interrogation" time="180" persists="true">
+		<prerequisite>
+			<AnyOneOf>
+			    <itemref name="ITEM_SATYRIAN_MEDIC" />
+			    <itemref name="ITEM_GREY_MEDIC" />
+			</AnyOneOf>
+		</prerequisite>		
+		<grants quantity="OneOf">
+				<xnetref name="XNET_GREY"/>
+				<xnetref name="XNET_GREY_AUTOPSY"/>
+				<xnetref name="XNET_MORLOCK"/>
+				<xnetref name="XNET_MORLOCK_AUTOPSY"/>
+				<xnetref name="XNET_CLOAK"/>
+				<xnetref name="XNET_CLOAK_AUTOPSY"/>
+				<xnetref name="XNET_ARTOPOD"/>
+				<xnetref name="XNET_ARTOPOD_AUTOPSY"/>
+				<xnetref name="XNET_TERROR-DISC"/>
+				<xnetref name="XNET_TERROR-DISC_AUTOPSY"/>
+				<xnetref name="XNET_SILABRATE"/>
+				<xnetref name="XNET_SILABRATE_AUTOPSY"/>
+				<xnetref name="XNET_VENTRICULANT"/>
+				<xnetref name="XNET_VENTRICULANT_AUTOPSY"/>
+				<xnetref name="XNET_VIPER"/>
+				<xnetref name="XNET_VIPER_AUTOPSY"/>
+				<xnetref name="XNET_SATYRIAN"/>
+				<xnetref name="XNET_SATYRIAN_AUTOPSY"/>
+				<xnetref name="XNET_SPAWN"/>
+				<xnetref name="XNET_SPAWN_AUTOPSY"/>
+				<xnetref name="XNET_RAPTOR"/>
+				<xnetref name="XNET_RAPTOR_AUTOPSY"/>
+		</grants>
+	</topic>
+
+<!--Alien Leader Interrogation-->
+	<topic id="RES_LEADER_INTERROGATION" name="Leader Interrogation" time="180">
+		<prerequisite>
+			<AnyOneOf>
+			    <itemref name="ITEM_SATYRIAN_LEADER"/>
+			    <itemref name="ITEM_GREY_LEADER"/>
+			    <itemref name="ITEM_VIPER_LEADER"/>
+			    <itemref name="ITEM_CLOAK_LEADER"/>
+			</AnyOneOf>
+		</prerequisite>		
+		<grants quantity="AllOf">
+			<xnetref name="XNET_ALIEN_INFILTRATIONS"/>
+		</grants>
+	</topic>	
+
+<!--Alien Commander Interrogation-->
+	<topic id="RES_COMMANDER_INTERROGATION" name="Commander Interrogation" time="180">
+		<prerequisite>
+			<AnyOneOf>
+			    <itemref name="ITEM_SATYRIAN_COMMANDER"/>
+			    <itemref name="ITEM_GREY_COMMANDER"/>
+			    <itemref name="ITEM_VIPER_COMMANDER"/>
+			    <itemref name="ITEM_CLOAK_COMMANDER"/>
+			</AnyOneOf>
+		</prerequisite>		
+		<grants quantity="AllOf">
+			<xnetref name="XNET_ALIEN_BASE"/>
+		</grants>
+	</topic>	
+	
+<!--Alien Origins -->
+	<topic id="RES_ALIEN_ORIGINS" name="Alien Origins" time="300">
+		<prerequisite>
+			<AnyOneOf>
+				<itemref name="ITEM_GREY_SOLDIER"/>
+				<itemref name="ITEM_GREY_NAVIGATOR"/>
+				<itemref name="ITEM_GREY_MEDIC"/>
+				<itemref name="ITEM_GREY_ENGINEER"/>
+				<itemref name="ITEM_GREY_LEADER"/>
+				<itemref name="ITEM_GREY_COMMANDER"/>
+
+				<itemref name="ITEM_SATYRIAN_SOLDIER"/>
+				<itemref name="ITEM_SATYRIAN_NAVIGATOR"/>
+				<itemref name="ITEM_SATYRIAN_MEDIC"/>
+				<itemref name="ITEM_SATYRIAN_ENGINEER"/>
+				<itemref name="ITEM_SATYRIAN_LEADER"/>
+				<itemref name="ITEM_SATYRIAN_COMMANDER"/>
+
+				<itemref name="ITEM_MORLOCK_SOLDIER"/>
+				<itemref name="ITEM_MORLOCK_NAVIGATOR"/>
+				<itemref name="ITEM_MORLOCK_ENGINEER"/>
+
+				<itemref name="ITEM_VIPER_SOLDIER"/>
+				<itemref name="ITEM_VIPER_NAVIGATOR"/>
+				<itemref name="ITEM_VIPER_ENGINEER"/>
+				<itemref name="ITEM_VIPER_LEADER"/>
+				<itemref name="ITEM_VIPER_COMMANDER"/>
+
+				<itemref name="ITEM_CLOAK_SOLDIER"/>
+				<itemref name="ITEM_CLOAK_LEADER"/>
+				<itemref name="ITEM_CLOAK_COMMANDER"/>
+
+				<itemref name="ITEM_RAPTOR_TERRORIST"/>
+				<itemref name="ITEM_SPAWN_TERRORIST"/>
+				<itemref name="ITEM_SILABRATE_TERRORIST"/>
+				<itemref name="ITEM_VENTRICULANT_TERRORIST"/>
+				<itemref name="ITEM_ARTOPOD_TERRORIST"/>
+				<itemref name="ITEM_TERROR_DISC_TERRORIST"/>
+			</AnyOneOf>
+		</prerequisite>		
+		<grants quantity="AllOf">
+			<xnetref name="XNET_ALIEN_ORIGINS"/>
+		</grants>
+	</topic>
+
+<!--Paradigm Shift: Offensive Operations -->
+	<topic id="RES_PARADIGM_SHIFT_OFFENSIVE_OPERATIONS" name="Offensive Operations" time="500">
+		<prerequisite>
+			<xnetref name="XNET_ALIEN_ORIGINS"/>
+			<topicref name="RES_LEADER_INTERROGATION"/>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_PARADIGM_SHIFT:_OFFENSIVE_OPERATIONS"/>
+		</grants>
+	</topic>	
+
+
+<!--Thanatos: Project Xenocide -->
+	<topic id="RES_THANATOS_OPERATION_XENOCIDE" name="Thanatos Operation" time="600">
+		<prerequisite>
+			<xnetref name="XNET_PARADIGM_SHIFT:_OFFENSIVE_OPERATIONS"/>
+			<topicref name="RES_COMMANDER_INTERROGATION"/>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_THANATOS:_OPERATION_XENOCIDE"/>
+		</grants>
+	</topic>	
+
+<!--Alien Goal -->
+	<topic id="RES_ALIEN_GOAL" name="Alien Goal" time="200">
+		<prerequisite>
+			<xnetref name="XNET_ALIEN_BREEDING"/>
+			<xnetref name="XNET_PLASMA_PRINCIPLES"/>
+			<xnetref name="XNET_ALIEN_ABDUCTIONS"/>
+			<xnetref name="XNET_ALIEN_RESEARCH"/>
+			<xnetref name="XNET_ALIEN_HARVEST"/>
+			<xnetref name="XNET_ALIEN_RETALIATION"/>
+			<xnetref name="XNET_ALIEN_TERROR"/>
+			<xnetref name="XNET_ALIEN_INFILTRATIONS"/>
+			<xnetref name="XNET_THANATOS:_OPERATION_XENOCIDE"/>
+			<xnetref name="XNET_ALIEN_MEDICAL_ROOM"/>
+			<xnetref name="XNET_UFO_CONSTRUCTION"/>
+			<xnetref name="XNET_ALIEN_BASE"/>
+			<xnetref name="XNET_PSIONIC_AMPLIFIER"/>
+			<xnetref name="XNET_ALIEN_NUTRIENTS"/>
+			<xnetref name="XNET_BIOLOGICAL_RESEARCH_ROOM"/>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_THE_ALIEN_GOAL"/>
+		</grants>
+	</topic>
+
+<!--UFO Construction -->
+	<topic id="RES_UFO_CONSTRUCTION" name="UFO Construction" time="450">
+		<prerequisite>
+			<xnetref name="XNET_ALIEN_NAVIGATION_SYSTEMS" />
+			<xnetref name="XNET_XENIUM_REACTOR" />
+			<xnetref name="XNET_ALIEN_COMPOSITES" />
+			<xnetref name="XNET_XENIUM-122" />
+			<itemref name="ITEM_UFO_CONSTRUCTION" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_UFO_CONSTRUCTION" />
+		</grants>
+
+	</topic>
+
+<!--HUMAN CRAFT-->
+<!--XC-2 Starfire-->
+	<topic id="RES_XC-2_STARFIRE" name="XC-2 Starfire" time="600">
+		<prerequisite>
+			<xnetref name="XNET_UFO_CONSTRUCTION"/>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_XC-2_STARFIRE"/>
+			<itemref name="ITEM_XC-2_STARFIRE"/>
+		</grants>
+	</topic>	
+
+<!--XC-22 Eclipse-->
+	<topic id="RES_XC-22_ECLIPSE" name="XC-22 Eclipse" time="700">
+		<prerequisite>
+			<xnetref name="XNET_XC-2_STARFIRE"/>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_XC-22_ECLIPSE"/>
+			<itemref name="ITEM_XC-22_ECLIPSE"/>
+		</grants>
+	</topic>	
+
+<!--XC-33 Vengeance-->
+	<topic id="RES_XC-33_VENGEANCE" name="XC-33 Vengeance" time="900">
+		<prerequisite>
+			<xnetref name="XNET_XC-22_ECLIPSE"/>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_XC-33_VENGEANCE"/>
+			<itemref name="ITEM_XC-33_VENGEANCE"/>
+		</grants>
+	</topic>
+
+<!--ARMAMENTS-->
+<!--GAIA Missile-->
+	<topic id="RES_GAIA_MISSILE" name="GAIA Missile" time="880">
+		<prerequisite>
+			<xnetref name="XNET_GRAVITY_DISTORTION_LAUNCHER"/>
+			<xnetref name="XNET_GRAVITY_DISTORTION_DRONE"/>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_GAIA_MISSILE"/>
+			<itemref name="ITEM_GAIA_MISSILE_LAUNCHER"/>
+			<itemref name="ITEM_GAIA_MISSILE_CLIP"/>
+		</grants>
+	</topic>
+
+<!--Laser Cannon-->
+	<topic id="RES_LASER_CANNON" name="Laser Cannon" time="420">
+		<prerequisite>
+			<xnetref name="XNET_HEAVY_LASER_RIFLE"/>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_LASER_CANNON"/>
+			<xnetref name="XNET_XCAP,_LASER"/>
+			<itemref name="ITEM_LASER_CANNON"/>
+			<itemref name="ITEM_XCAP_LASER"/>
+		</grants>
+	</topic>
+
+<!--Plasma Cannon-->
+	<topic id="RES_PLASMA_CANNON" name="Plasma Cannon" time="660">
+		<prerequisite>
+			<xnetref name="XNET_PLASMA_PRINCIPLES"/>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_PLASMA_CANNON"/>
+			<itemref name="ITEM_PLASMA_CANNON"/>
+		</grants>
+	</topic>
+
+<!--WEAPONS-->
+<!--Plasma Principles-->
+	<topic id="RES_PLASMA_PRINCIPLES" name="Plasma Principles" time="50">
+		<prerequisite>
+			<xnetref name="XNET_HEAVY_PLASMA_RIFLE_CLIP" />
+			<xnetref name="XNET_HEAVY_PLASMA_RIFLE" />
+			<AnyOneOf>
+				<AllOf>
+					<xnetref name="XNET_PLASMA_PISTOL" />
+					<xnetref name="XNET_PLASMA_PISTOL_CLIP" />
+				</AllOf>
+				<AllOf>
+					<xnetref name="XNET_PLASMA_RIFLE" />
+					<xnetref name="XNET_PLASMA_RIFLE_CLIP" />
+				</AllOf>
+			</AnyOneOf>
+		 </prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_PLASMA_PRINCIPLES"/>
+		</grants>		
+	</topic>
+
+	
+<!--Plasma Pistol -->
+	<topic id="RES_PLASMA_PISTOL" name="Plasma Pistol" time="600">
+		<prerequisite>
+			<itemref name="ITEM_PLASMA_PISTOL" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_PLASMA_PISTOL" /> 
+			<xnetref name="XNET_PLASMA_PISTOL" /> 
+		</grants>
+	</topic>
+	
+<!--Plasma Pistol Clip -->
+	<topic id="RES_PLASMA_PISTOL_CLIP" name="Plasma Pistol Clip" time="400">
+		<prerequisite>
+			<itemref name="ITEM_PLASMA_PISTOL_CLIP" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_PLASMA_PISTOL_CLIP" />
+			<xnetref name="XNET_PLASMA_PISTOL_CLIP" />
+		</grants>
+	</topic>
+	
+<!--Plasma Rifle -->
+	<topic id="RES_PLASMA_RIFLE" name="Plasma Rifle" time="700">
+		<prerequisite>
+			<itemref name="ITEM_PLASMA_RIFLE" />
+		</prerequisite>
+		<cost money="2000">
+		    <item type="ITEM_PLASMA_RIFLE" quantity="1"/>
+		</cost>
+		<bonus>
+			<topicref name="RES_PLASMA_RIFLE_CLIP" bonus="10"/>
+			<topicref name="RES_PLASMA_CANNON" bonus="15"/>
+		</bonus>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_PLASMA_RIFLE" /> 
+			<xnetref name="XNET_PLASMA_RIFLE" /> 
+		</grants>
+	</topic>
+
+<!--Plasma Rifle Clip -->
+	<topic id="RES_PLASMA_RIFLE_CLIP" name="Plasma Rifle Clip" time="400">
+		<prerequisite>
+			<itemref name="ITEM_PLASMA_RIFLE_CLIP" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_PLASMA_RIFLE_CLIP" />
+			<xnetref name="XNET_PLASMA_RIFLE_CLIP" />
+		</grants>
+	</topic>
+
+<!--Heavy Plasma Rifle-->
+	<topic id="RES_HEAVY_PLASMA_RIFLE" name="Heavy Plasma Rifle" time="800">
+		<prerequisite>
+			<itemref name="ITEM_HEAVY_PLASMA_RIFLE" />
+		</prerequisite>
+		<cost money="2000">
+		    <item type="ITEM_HEAVY_PLASMA_RIFLE" quantity="1"/>
+		</cost>
+		<bonus>
+			<topicref name="RES_PLASMA_PISTOL_CLIP" bonus="10"/>
+			<topicref name="RES_PLASMA_CANNON" bonus="15"/>
+		</bonus>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_HEAVY_PLASMA_RIFLE" /> 
+			<xnetref name="XNET_HEAVY_PLASMA_RIFLE" /> 
+		</grants>
+	</topic>
+
+<!--Heavy Plasma Clip-->
+	<topic id="RES_HEAVY_PLASMA_RIFLE_CLIP" name="Heavy Plasma Rifle Clip" time="400">
+		<prerequisite>
+			<itemref name="ITEM_HEAVY_PLASMA_RIFLE_CLIP" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_HEAVY_PLASMA_RIFLE_CLIP" />
+			<xnetref name="XNET_HEAVY_PLASMA_RIFLE_CLIP" />
+		</grants>
+	</topic>
+
+<!--Laser Principles -->
+	<topic id="RES_LASER_PRINCIPLES" name="Laser Principles" time="50">
+		<prerequisite>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_LASER_PRINCIPLES" />
+		</grants>
+	</topic>
+
+<!--Laser Pistol-->
+	<topic id="RES_LASER_PISTOL" name="Laser Pistol" time="100">
+		<prerequisite>
+			<xnetref name="XNET_LASER_PRINCIPLES" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_LASER_PISTOL" />
+			<xnetref name="XNET_LASER_PISTOL" />
+		</grants>
+	</topic>
+
+<!--Laser Rifle -->
+	<topic id="RES_LASER_RIFLE" name="Laser Rifle" time="300">
+		<prerequisite>
+			<xnetref name="XNET_LASER_PISTOL" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_LASER_RIFLE" />
+			<xnetref name="XNET_LASER_RIFLE" />
+		</grants>
+	</topic>
+				
+<!--Heavy Laser Rifle-->
+	<topic id="RES_HEAVY_LASER_RIFLE" name="Heavy Laser Rifle" time="460">
+		<prerequisite>
+			<xnetref name="XNET_LASER_RIFLE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_HEAVY_LASER_RIFLE" />
+			<xnetref name="XNET_HEAVY_LASER_RIFLE" />
+		</grants>
+	</topic>				
+
+<!--Alien Grenade-->
+	<topic id="RES_ALIEN_GRENADE" name="Alien Grenade" time="200">
+		<prerequisite>
+			<itemref name="ITEM_ALIEN_GRENADE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_ALIEN_GRENADE" />
+			<xnetref name="XNET_ALIEN_GRENADE" />
+		</grants>
+	</topic>				
+
+<!--Gravity Distortion Launcher -->
+	<topic id="RES_GRAVITY_DISTORTION_LAUNCHER" name="Gravity Distortion Launcher" time="900">
+		<prerequisite>
+			<itemref name="ITEM_GRAVITY_DISTORTION_LAUNCHER" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_GRAVITY_DISTORTION_LAUNCHER" />
+			<xnetref name="XNET_GRAVITY_DISTORTION_LAUNCHER" />
+		</grants>
+	</topic>
+
+<!-- Gravity Distortion Drone -->
+	<topic id="RES_GRAVITY_DISTORTION_DRONE" name="Gravity Distortion Drone" time="300">
+		<prerequisite>
+			<itemref name="ITEM_GRAVITY_DISTORTION_DRONE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_GRAVITY_DISTORTION_DRONE" />
+			<xnetref name="XNET_GRAVITY_DISTORTION_DRONE" />
+		</grants>
+	</topic>
+
+<!--Stun Launcher -->
+	<topic id="RES_STUN_LAUNCHER" name="Stun Launcher" time="550">
+		<prerequisite>
+			<itemref name="ITEM_STUN_LAUNCHER" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_STUN_LAUNCHER" />
+			<xnetref name="XNET_STUN_LAUNCHER" />
+		</grants>
+	</topic>
+	
+<!--Stun Bomb -->
+	<topic id="RES_STUN_BOMB" name="Stun Bomb" time="180">
+		<prerequisite>
+			<itemref name="ITEM_STUN_BOMB" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_STUN_BOMB" />
+			<xnetref name="XNET_STUN_BOMB" />
+		</grants>
+	</topic>	
+
+<!--EQUIPMENT-->
+
+<!--Field Medical Kit-->
+	<topic id="RES_FIELD_MEDICAL_KIT" name="Med Kit" time="210">
+		<prerequisite>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_FIELD_MEDICAL_KIT" />
+			<xnetref name="XNET_FIELD_MEDICAL_KIT" />
+		</grants>
+	</topic>
+
+<!--Motion Sensor-->
+	<topic id="RES_MOTION_SENSOR" name="Motion Sensor" time="180">
+		<prerequisite>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_MOTION_SENSOR" />
+			<xnetref name="XNET_MOTION_SENSOR" />
+		</grants>
+	</topic>
+
+<!--Combat Armor -->
+	<topic id="RES_COMBAT_ARMOR" name="Combat Armor" time="180">
+		<prerequisite>
+			<xnetref name="XNET_ALIEN_COMPOSITES" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_COMBAT_ARMOR" />
+			<xnetref name="XNET_COMBAT_ARMOR" />
+		</grants>
+	</topic>
+
+<!--Combat Powersuit -->
+	<topic id="RES_COMBAT_POWERSUIT" name="Powered Armor" time="205">
+		<prerequisite>
+			<xnetref name="XNET_COMBAT_ARMOR" />
+			<xnetref name="XNET_XENIUM-122" />
+			<xnetref name="XNET_XENIUM_REACTOR" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_COMBAT_POWERSUIT" />
+			<xnetref name="XNET_COMBAT_POWERSUIT" />
+		</grants>
+	</topic>
+	
+<!--Antigrav Powersuit -->
+	<topic id="RES_ANTIGRAV_POWERSUIT" name="Anti-grav Armor" time="330">
+		<prerequisite>
+			<xnetref name="XNET_COMBAT_POWERSUIT" />
+			<xnetref name="XNET_ALIEN_NAVIGATION_SYSTEMS" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_ANTI_GRAV_POWERSUIT" />
+			<xnetref name="XNET_ANTIGRAV_POWERSUIT" />
+		</grants>
+	</topic>	
+
+<!--Psionic Probe -->
+	<topic id="RES_PSIONIC_PROBE" name="Psi Probe" time="600">
+		<prerequisite>
+			<itemref name="ITEM_PSIONIC_PROBE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_PSIONIC_PROBE" />
+			<xnetref name="XNET_PSIONIC_PROBE" />
+		</grants>
+	</topic>
+
+<!--Psionic Amplifier -->
+	<topic id="RES_PSIONIC_AMPLIFIER" name="Psi Amp" time="500">
+		<prerequisite>
+			<xnetref name="XNET_PSIONIC_TRAINING_FACILITY" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<itemref name="ITEM_PSIONIC_AMPLIFIER" />
+			<xnetref name="XNET_PSIONIC_AMPLIFIER" />
+		</grants>
+	</topic>
+
+<!--ALIENS-->
+<!--Grey -->
+	<topic id="RES_GREY" name="Grey" time="180">
+		<prerequisite>
+			<AnyOneOf>
+				<itemref name="ITEM_GREY_SOLDIER"/>
+				<itemref name="ITEM_GREY_NAVIGATOR"/>
+				<itemref name="ITEM_GREY_ENGINEER"/>
+				<itemref name="ITEM_GREY_LEADER" />
+				<itemref name="ITEM_GREY_COMMANDER" />
+			</AnyOneOf>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_GREY" />
+		</grants>
+	</topic>
+
+<!--Grey Autopsy-->
+	<topic id="RES_GREY_AUTOPSY" name="Grey Autopsy" time="180">
+		<prerequisite>
+		    <itemref name="ITEM_GREY_CORPSE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_GREY_AUTOPSY"/>
+		</grants>
+	</topic>
+	
+<!--Satyrian -->
+	<topic id="RES_SATYRIAN" name="Satyrian" time="180">
+		<prerequisite>
+			<AnyOneOf>
+				<itemref name="ITEM_SATYRIAN_SOLDIER"/>
+				<itemref name="ITEM_SATYRIAN_NAVIGATOR"/>
+				<itemref name="ITEM_SATYRIAN_ENGINEER"/>
+				<itemref name="ITEM_SATYRIAN_LEADER" />
+				<itemref name="ITEM_SATYRIAN_COMMANDER" />
+			</AnyOneOf>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_SATYRIAN"/>
+		</grants>
+	</topic>
+	
+<!--Satyrian Autopsy -->
+	<topic id="RES_SATYRIAN_AUTOPSY" name="Satyrian Autopsy" time="180">
+		<prerequisite>
+		    <itemref name="ITEM_SATYRIAN_CORPSE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_SATYRIAN_AUTOPSY" />
+		</grants>
+	</topic>
+
+<!--Morlock -->
+	<topic id="RES_MORLOCK" name="Morlock" time="180">
+		<prerequisite>
+			<AnyOneOf>
+				<itemref name="ITEM_MORLOCK_SOLDIER"/>
+				<itemref name="ITEM_MORLOCK_NAVIGATOR"/>
+				<itemref name="ITEM_MORLOCK_ENGINEER"/>
+			</AnyOneOf>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_MORLOCK"/>
+		</grants>
+	</topic>
+	
+<!--Morlock Autopsy -->
+	<topic id="RES_MORLOCK_AUTOPSY" name="Morlock Autopsy" time="180">
+		<prerequisite>
+			<itemref name="ITEM_MORLOCK_CORPSE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_MORLOCK_AUTOPSY" />
+		</grants>
+	</topic>
+
+<!--Viper -->
+	<topic id="RES_VIPER" name="Viper" time="180">
+		<prerequisite>
+			<AnyOneOf>
+				<itemref name="ITEM_VIPER_SOLDIER"/>
+				<itemref name="ITEM_VIPER_NAVIGATOR"/>
+				<itemref name="ITEM_VIPER_ENGINEER"/>
+				<itemref name="ITEM_VIPER_LEADER" />
+				<itemref name="ITEM_VIPER_COMMANDER" />
+			</AnyOneOf>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_VIPER"/>
+		</grants>
+	</topic>
+	
+<!--Viper Autopsy -->
+	<topic id="RES_VIPER_AUTOPSY" name="Viper Autopsy" time="180">
+		<prerequisite>
+		    <itemref name="ITEM_VIPER_CORPSE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_VIPER_AUTOPSY" />
+		</grants>
+	</topic>
+	
+<!--Cloak -->
+	<topic id="RES_CLOAK" name="Cloak" time="180">
+		<prerequisite>
+			<AnyOneOf>
+				<itemref name="ITEM_CLOAK_SOLDIER"/>
+				<itemref name="ITEM_CLOAK_LEADER" />
+				<itemref name="ITEM_CLOAK_COMMANDER" />
+			</AnyOneOf>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_CLOAK"/>
+		</grants>
+	</topic>
+
+<!--Cloak Autopsy -->
+	<topic id="RES_CLOAK_AUTOPSY" name="Cloak Autopsy" time="180">
+		<prerequisite>
+		    <itemref name="ITEM_CLOAK_CORPSE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_CLOAK_AUTOPSY" />
+		</grants>
+	</topic>
+
+<!--Ventriculant -->
+	<topic id="RES_VENTRICULANT" name="Ventriculant" time="180">
+		<prerequisite>
+			<itemref name="ITEM_VENTRICULANT_TERRORIST"/>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_VENTRICULANT"/>
+		</grants>
+	</topic>
+
+<!--Ventriculant Autopsy -->
+	<topic id="RES_VENTRICULANT_AUTOPSY" name="Ventriculant Autopsy" time="180">
+		<prerequisite>
+		    <itemref name="ITEM_VENTRICULANT_CORPSE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_VENTRICULANT_AUTOPSY" />
+		</grants>
+	</topic>
+
+<!--Spawn -->
+	<topic id="RES_SPAWN" name="Spawn" time="180">
+		<prerequisite>
+			<itemref name="ITEM_SPAWN_TERRORIST"/>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_SPAWN"/>
+		</grants>
+	</topic>
+
+<!--Spawn Autopsy -->
+	<topic id="RES_SPAWN_AUTOPSY" name="Spawn Autopsy" time="180">
+		<prerequisite>
+		    <itemref name="ITEM_SPAWN_CORPSE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_SPAWN_AUTOPSY" />
+		</grants>
+	</topic>
+
+<!--Raptor -->
+	<topic id="RES_RAPTOR" name="Raptor" time="180">
+		<prerequisite>
+			<itemref name="ITEM_RAPTOR_TERRORIST" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_RAPTOR"/>
+		</grants>
+	</topic>
+
+<!--Raptor Autopsy -->
+	<topic id="RES_RAPTOR_AUTOPSY" name="Raptor Autopsy" time="180">
+		<prerequisite>
+		    <itemref name="ITEM_RAPTOR_CORPSE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_RAPTOR_AUTOPSY" />
+		</grants>
+	</topic>	
+
+<!--Silabrate -->
+	<topic id="RES_SILABRATE" name="Silabrate" time="180">
+		<prerequisite>
+			<itemref name="ITEM_SILABRATE_TERRORIST" />
+			<xnetref name="XNET_ALIEN_COMPOSITES" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_SILABRATE"/>
+		</grants>
+	</topic>
+	
+<!--Silabrate Autopsy -->
+	<topic id="RES_SILABRATE_AUTOPSY" name="Silabrate Autopsy" time="180">
+		<prerequisite>
+		   <xnetref name="XNET_ALIEN_COMPOSITES" />
+		    <itemref name="ITEM_SILABRATE_CORPSE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_SILABRATE_AUTOPSY" />
+		</grants>
+	</topic>
+	
+<!--Artopod -->
+	<topic id="RES_ARTOPOD" name="Artopod" time="180">
+		<prerequisite>
+			<itemref name="ITEM_ARTOPOD_TERRORIST" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_ARTOPOD"/>
+		</grants>
+	</topic>
+	
+<!--Artopod Autopsy -->
+	<topic id="RES_ARTOPOD_AUTOPSY" name="Artopod Autopsy" time="180">
+		<prerequisite>
+		    <itemref name="ITEM_ARTOPOD_CORPSE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_ARTOPOD_AUTOPSY" />
+		</grants>
+	</topic>	
+
+<!--Terror-Disc -->
+	<topic id="RES_TERROR-DISC" name="Terror-Disc" time="180">
+		<prerequisite>
+			<itemref name="ITEM_TERROR_DISC_TERRORIST" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_TERROR-DISC"/>
+		</grants>
+	</topic>
+	
+<!--Terror-Disc Autopsy -->
+	<topic id="RES_TERROR-DISC_AUTOPSY" name="Terror-Disc Autopsy" time="180">
+		<prerequisite>
+		    <itemref name="ITEM_TERROR_DISC_CORPSE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_TERROR-DISC_AUTOPSY" />
+		</grants>
+	</topic>	
+
+<!-- UFO COMPONENTS -->
+<!--Xenium-122 -->
+	<topic id="RES_XENIUM-122" name="Xenium-122" time="450">
+		<prerequisite>
+			<itemref name="ITEM_XENIUM-122" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_XENIUM-122" />
+		</grants>
+	</topic>
+
+<!--Xenium Reactor -->
+	<topic id="RES_XENIUM_REACTOR" name="Xenium Reactor" time="450">
+		<prerequisite>
+			<itemref name="ITEM_XENIUM_REACTOR" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_XENIUM_REACTOR" />
+			<itemref name="ITEM_XENIUM_REACTOR" />
+		</grants>
+	</topic>
+
+<!--Alien Composites -->
+	<topic id="RES_ALIEN_COMPOSITES" name="Alien Composites" time="400">
+		<prerequisite>
+			<itemref name="ITEM_ALIEN_COMPOSITES" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_ALIEN_COMPOSITES" />
+			<itemref name="ITEM_ALIEN_COMPOSITES" />
+		</grants>		
+	</topic>
+
+<!--Alien Navigation Systems -->
+	<topic id="RES_ALIEN_NAVIGATION_SYSTEMS" name="Navigation System" time="450">
+		<prerequisite>
+			<itemref name="ITEM_ALIEN_NAVIGATION_SYSTEMS" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_ALIEN_NAVIGATION_SYSTEMS" />
+			<itemref name="ITEM_ALIEN_NAVIGATION_SYSTEMS" />
+		</grants>
+	</topic>
+
+<!--Alien Nutrients -->
+	<topic id="RES_ALIEN_NUTRIENTS" name="Alien Nutrients" time="150">
+		<prerequisite>
+			<itemref name="ITEM_ALIEN_NUTRIENTS" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_ALIEN_NUTRIENTS" />
+		</grants>
+	</topic>
+
+<!--Alien Recreation -->
+	<topic id="RES_ALIEN_RECREATION" name="Alien Recreation" time="150">
+		<prerequisite>
+			<itemref name="ITEM_ALIEN_RECREATION" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_ALIEN_RECREATION" />
+		</grants>
+	</topic>
+
+<!-- Alien Medical Room -->
+	<topic id="RES_ALIEN_MEDICAL_ROOM" name="Medical Room" time="150">
+		<prerequisite>
+			<itemref name="ITEM_ALIEN_MEDICAL_ROOM" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_ALIEN_MEDICAL_ROOM" />
+		</grants>
+	</topic>
+
+<!--Alien Breeding -->
+	<topic id="RES_ALIEN_BREEDING" name="Alien Breeding" time="150">
+		<prerequisite>
+			<itemref name="ITEM_ALIEN_BREEDING_CHAMBER" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_ALIEN_BREEDING" />
+		</grants>
+	</topic>
+
+<!--Biological Research Room -->
+	<topic id="RES_BIOLOGICAL_RESEARCH_ROOM" name="Biological Research Room" time="150">
+		<prerequisite>
+			<itemref name="ITEM_BIOLOGICAL_RESEARCH_ROOM" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_BIOLOGICAL_RESEARCH_ROOM" />
+		</grants>				
+	</topic>
+
+<!--FACILITIES-->
+<!--Psionic Training Facility-->	
+	<topic id="RES_PSIONIC_TRAINING_FACILITY" name="Psi Training Facility" time="420">
+		<prerequisite>
+			<AnyOneOf>
+				<itemref name="ITEM_CLOAK_SOLDIER"/>
+				<itemref name="ITEM_CLOAK_LEADER"/>
+				<itemref name="ITEM_CLOAK_COMMANDER"/>
+				<itemref name="ITEM_GREY_LEADER" />
+				<itemref name="ITEM_GREY_COMMANDER" />
+			</AnyOneOf>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_PSIONIC_TRAINING_FACILITY" />
+			<facilityref name="FAC_PSIONIC_TRAINING_FACILITY" />
+		</grants>				
+	</topic>
+
+<!--Plasma Defense Array-->
+	<topic id="RES_PLASMA_DEFENSE_ARRAY" name="Plasma Defense Array" time="620">
+		<prerequisite>
+			<xnetref name="XNET_PLASMA_CANNON" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_PLASMA_DEFENSE_ARRAY" />
+			<facilityref name="FAC_PLASMA_DEFENSE_ARRAY" />
+		</grants>				
+	</topic>
+
+<!--Laser Defense Facility-->
+	<topic id="RES_LASER_DEFENSE_ARRAY" name="Laser Defense Array" time="510">
+		<prerequisite>
+			<xnetref name="XNET_LASER_CANNON" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_LASER_DEFENSE_ARRAY" />
+			<facilityref name="FAC_LASER_DEFENSE_ARRAY" />
+		</grants>				
+	</topic>
+
+<!--GAIA Defense Array-->	
+	<topic id="RES_GAIA_DEFENSE_ARRAY" name="GAIA Defense Array" time="800">
+		<prerequisite>
+			<xnetref name="XNET_XC-33_VENGEANCE" />
+			<xnetref name="XNET_GAIA_MISSILE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_GAIA_DEFENSE_ARRAY" />
+			<facilityref name="FAC_GAIA_DEFENSE_ARRAY" />
+		</grants>				
+	</topic>
+	
+<!--Neural Shielding Facility-->	
+	<topic id="RES_NEURAL_SHIELDING_FACILITY" name="Neural Shielding Facility" time="360">
+		<prerequisite>
+			<xnetref name="XNET_PSIONIC_TRAINING_FACILITY"/>	
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_NEURAL_SHIELDING_FACILITY" />
+			<facilityref name="FAC_NEURAL_SHIELDING_FACILITY" />
+		</grants>				
+	</topic>				
+
+<!--Tachyon Emissions Detector-->	
+	<topic id="RES_TACHYON_EMISSIONS_DETECTOR" name="Tachyon Emissions Detector" time="670">
+		<prerequisite>
+			<AnyOneOf>
+				<topicref name="RES_NAVIGATOR_INTERROGATION"/>
+			</AnyOneOf>
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_TACHYON_EMISSIONS_DETECTOR" />
+			<facilityref name="FAC_TACHYON_EMISSIONS_DETECTOR" />
+		</grants>
+	</topic>	
+
+<!--Gravity Shield-->	
+	<topic id="RES_GRAVITY_SHIELD_FACILITY" name="Gravity Shield Facility" time="930">
+		<prerequisite>
+			<xnetref name="XNET_XC-22_ECLIPSE"/>	
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_GRAVITY_SHIELD_FACILITY" />
+			<facilityref name="FAC_GRAVITY_SHIELD_FACILITY" />
+		</grants>				
+	</topic>	
+
+<!-- XCAPs -->
+<!-- XCAP-AG, GAIA -->
+	<topic id="RES_XCAP-AG_GAIA" name="GAIA XCAP" time="0">
+		<prerequisite>
+			<xnetref name="XNET_GAIA_MISSILE" />
+			<xnetref name="XNET_XC-2_STARFIRE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_XCAP-AG,_GDL" />
+			<xnetref name="XNET_XCAP-AG_CHASSIS" />
+			<itemref name="ITEM_XCAP-AG_GAIA" />
+		</grants>
+	</topic>	
+
+<!-- XCAP-AG, Plasma -->
+	<topic id="RES_XCAP-AG_PLASMA" name="PLASMA XCAP" time="0">
+		<prerequisite>
+			<xnetref name="XNET_PLASMA_CANNON" />
+			<xnetref name="XNET_XC-2_STARFIRE" />
+		</prerequisite>
+		<grants quantity="AllOf">
+			<xnetref name="XNET_XCAP-AG,_PLASMA" />
+			<xnetref name="XNET_XCAP-AG_CHASSIS" />
+			<itemref name="ITEM_XCAP-AG_PLASMA" />
+		</grants>
+	</topic>
+
+</researchtopics>
+

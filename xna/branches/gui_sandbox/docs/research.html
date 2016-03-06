@@ -1,0 +1,54 @@
+<title>Research</title>
+<head></head>
+<body>
+<h1>Research</h1>
+The research tree comprises the set of &quot;topics&quot; that can be researched.
+<br />
+Each topic is made of:
+<ul>
+<li> Prerequsites - conditions that must be satisfied before the project can start</li>
+<li> Cost (Persondays) of research required </li>
+<li> Grants - what player gets for researching the topic</li>
+</ul>
+
+The basic types of prerequisite conditions are:
+<ul>
+<li> Having completed a specific research topic.</li>
+<li> Having access to a specific a X-Net entry. (That is not necesarily true as every topic has a reference in the XNET, you can think of it as a root with automatic unlocking and the rest depends on the attached grant ).</li>
+<li> Having a specific type of artifact in a base's store. (Dead aliens are artifacts too).</li>
+<li> Having a specific type of captured alien (species and rank) in a base. (live aliens are a different story, as there are other requirements).</li>
+<li> Having ability to build a specific base facility. I would put it as: &quot;Having built a specific base facility&quot; instead of having the ability to do so as that is similar to the XNet entry).</li>
+</ul>
+Additional notes
+<ul>
+<li>Also, the prerequisite conditions for a project may be satisfied by a combination of &quot;basic prerequisites.&quot;  For example, having any one of a set of requirements. (e.g. Leader integration can be satisfied by having one of several species of leader.)  Or requiring all requirements of the set. (e.g. Alien goal) Or a combination of the above.</li>
+<li>Also, some topics are automatically granted at the start of the game.  This give player access to the starting technologies.</li>
+<li>Some topics don't need to be researched, they're automatically granted when all prerequisites have been satisfied.  (e.g. The GAIA X-CAP becomes available as soon as the Eclipse and Gaia missiles have been researched.)  This is indicated in the XML file with a time of 0. This is an special corner case that can be handled directly by a grant.</li>
+<li> If a project has an item as a prerequisite, one instance of the item is consumed by the project.</li>
+<li> If a project has a combatant as a prerequisite, the combatant is &quot;consumed&quot; by the project.</li>
+</ul>
+Types of grants:
+<ul>
+<li> A new research project.</li>
+<li> Add an entry to X-Net.</li>
+<li> Unlock ability to build and use an item.</li>
+<li> Unlock ability to build a base facility</li>
+</ul>
+Additional notes
+<ul>
+<li> A project may have a set of things it can &quot;grant&quot;. It will grant either all items in the set, or only one randomly chosen item from the set.</li>
+<li> If a project can grant &quot;Any one of&quot; the grants in a set, then the project can be researched multiple times, with each time giving a different grant, until all topics have been unlocked.</li>
+</ul>
+Additionally, we will add some sanity checks against the research tree.  (especially, as users are supposed to be able to alter the tree in development.)  Some tests we could do are:
+<ul>
+<li> Making sure that every item (in items.xml) can be granted by one or more research projects.</li>
+<li> Making sure that every X-Net entry can be granted by one or more research projects.</li>
+<li> Making sure that there are no research topics that are inaccessible.  (e.g. a topic depends on another topic that isn't in the tree, or a there's a loop in the prerequisites.  E.g. Topic &quot;A&quot; has Topic &quot;B&quot; as a prereq, but &quot;B&quot; has &quot;A&quot; as a prereq, or even deeper trees)</li>
+<br />
+<br />
+Topics to expand on further
+<br />
+</ul>&lt;requirements for research project manager&gt;<br />
+&lt;research projects have similarities to manufacturing projects&gt;
+
+</body>

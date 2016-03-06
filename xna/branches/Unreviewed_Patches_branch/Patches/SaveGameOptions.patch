@@ -1,0 +1,296 @@
+Index: Model/GameOptions.cs
+===================================================================
+--- Model/GameOptions.cs	(revision 0)
++++ Model/GameOptions.cs	(revision 0)
+@@ -0,0 +1,78 @@
++﻿#region Copyright
++/*
++--------------------------------------------------------------------------------
++This source file is part of Xenocide
++  by  Project Xenocide Team
++
++For the latest info on Xenocide, see http://www.projectxenocide.com/
++
++This work is licensed under the Creative Commons
++Attribution-NonCommercial-ShareAlike 2.5 License.
++
++To view a copy of this license, visit
++http://creativecommons.org/licenses/by-nc-sa/2.5/
++or send a letter to Creative Commons, 543 Howard Street, 5th Floor,
++San Francisco, California, 94105, USA.
++--------------------------------------------------------------------------------
++*/
++
++/*
++* @file GameOptions.cs
++* @date Created: 2009/10/19
++* @author File creator: John Perrin
++* @author Credits: none
++*/
++#endregion
++
++#region Using Statements
++using System;
++using System.Collections.Generic;
++using System.Text; 
++#endregion
++
++namespace ProjectXenocide.Model
++{
++	/// <summary>
++	/// This class holds a list of game options that are persisted when saving out of an options
++	/// dialog, and are applied on launch of the game.
++	/// </summary>
++	[Serializable]
++	public class GameOptions
++	{
++		public GameOptions(string GameVersion)
++		{
++			gameVersion = GameVersion;
++		}
++
++		/// <summary>
++		/// Persisted sound volume, defaulted to max
++		/// </summary>
++		private float soundVolume = 1.0f;
++		public float SoundVolume
++		{
++			get { return soundVolume; }
++			set { soundVolume = value; }
++		}
++
++		/// <summary>
++		/// Persisted Game Volume, defaulted to max
++		/// </summary>
++		private float musicVolume = 1.0f;
++		public float MusicVolume
++		{
++			get { return musicVolume; }
++			set { musicVolume = value; }
++		}
++
++		/// <summary>
++		/// Persisted Game Volume, defaulted to max
++		/// </summary>
++		private string gameVersion = string.Empty;
++		public string GameVersion
++		{
++			get { return gameVersion; }
++			set { gameVersion = value; }
++		}
++		
++	}
++}
+Index: UI/Dialogs/SoundOptionsDialog.cs
+===================================================================
+--- UI/Dialogs/SoundOptionsDialog.cs	(revision 1854)
++++ UI/Dialogs/SoundOptionsDialog.cs	(working copy)
+@@ -31,9 +31,10 @@
+ using System.Text;
+ 
+ using CeGui;
++
+ using ProjectXenocide.UI.Screens;
+-
+-
++using ProjectXenocide.Utils;
++using ProjectXenocide.Model;
+ using ProjectXenocide.Model.Geoscape;
+ using ProjectXenocide.Model.Geoscape.Vehicles;
+ 
+@@ -164,6 +165,27 @@
+         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+         public void OnSaveClicked(object sender, CeGui.GuiEventArgs e)
+         {
++			GameOptions gameOptions;
++
++			if (GameFiles.DoesFileExist(@".\XeNAcide\options", @"SoundData"))
++				 gameOptions = GameFiles.Load<GameOptions>(@".\XeNAcide\options", @"SoundData");
++			else
++				 gameOptions = new GameOptions(Xenocide.CurrentVersion);
++
++			gameOptions.MusicVolume = musicSlider.Value;
++			gameOptions.SoundVolume = soundSlider.Value;
++
++			try
++			{
++				GameFiles.Save(gameOptions, gameOptionsLocation, gameOptionsFile);				
++			}
++			catch 
++			{
++				//Util.ShowMessageBox(Strings.MSGBOX_UNABLE_TO_SAVE_FILE, err.Message);
++				//TODO - It's not the end of the world if you can't save game options but it would
++				//be nice to save to a log file for details of the error.      
++			}
++
+             // close this dialog
+             ScreenManager.CloseDialog(this);
+         }
+@@ -178,6 +200,8 @@
+             Xenocide.AudioSystem.MusicVolume = musicLast;
+             Xenocide.AudioSystem.SoundVolume = soundLast;
+ 
++
++
+             // close this dialog
+             ScreenManager.CloseDialog(this);
+         }
+@@ -196,6 +220,15 @@
+         /// </summary>
+         private float soundLast = Xenocide.AudioSystem.SoundVolume;
+ 
++		/// <summary>
++		/// Where to save the options data
++		/// </summary>
++		private string gameOptionsLocation = @".\XeNAcide\Options";
++
++		/// <summary>
++		/// Name of the file for the options data
++		/// </summary>
++		private string gameOptionsFile = "SoundData";
+         #endregion
+ 
+         #region Constants
+Index: Utils/Util.cs
+===================================================================
+--- Utils/Util.cs	(revision 1854)
++++ Utils/Util.cs	(working copy)
+@@ -35,12 +35,15 @@
+ using System.Threading;
+ using System.IO;
+ using System.Globalization;
++using System.Xml.Serialization;
++using System.Runtime.Serialization.Formatters.Binary;
+ 
+ using Microsoft.Xna.Framework;
+ using Microsoft.Xna.Framework.Input;
+ using Microsoft.Xna.Framework.Graphics;
++using Microsoft.Xna.Framework.GamerServices;
++using Microsoft.Xna.Framework.Storage;
+ 
+-
+ using ProjectXenocide.Model;
+ using ProjectXenocide.Model.Geoscape;
+ using ProjectXenocide.UI.Screens;
+@@ -56,6 +59,81 @@
+ 
+ namespace ProjectXenocide.Utils
+ {
++
++	/// <summary>
++	/// Provides some common methods for persisting game data
++	/// </summary>
++	public static class GameFiles
++	{
++		/// <summary>
++		/// Get the container (directory) holding the saved files
++		/// </summary>
++		/// <returns>the container</returns>
++		private static StorageContainer GetContainer(string saveDirectory)
++		{
++			// this bit is dummy on windows
++			IAsyncResult result = Guide.BeginShowStorageDeviceSelector(PlayerIndex.One, null, null);
++			StorageDevice device = Guide.EndShowStorageDeviceSelector(result);
++
++			// Now open container(directory)
++			return device.OpenContainer(saveDirectory);
++		}
++
++		/// <summary>
++		/// Will check to see if a file exists.
++		/// </summary>
++		/// <param name="locationToCheck">Folder to check for file</param>
++		/// <param name="fileToCheck">File Name to check for</param>
++		/// <returns></returns>
++		public static bool DoesFileExist(string locationToCheck, string fileToCheck)
++		{
++			using (StorageContainer container = GetContainer(locationToCheck))
++			{
++				return File.Exists(Path.Combine(container.Path, fileToCheck));
++			}
++		}
++
++		/// <summary>
++		/// This method will seralize and save a class of type T.  
++		/// </summary>
++		/// <typeparam name="T">Parameter Type</typeparam>
++		/// <param name="objectToSave">Typed parameter, this will be saved.</param>
++		/// <param name="locationToSave">Folder to save to</param>
++		/// <param name="fileToSave">File to Save to</param>
++		public static void Save<T>(T objectToSave, string locationToSave, string fileToSave)
++		{
++			using (StorageContainer container = GetContainer(locationToSave))
++			{
++				string filename = Path.Combine(container.Path, fileToSave);
++				using (FileStream stream = File.Create(filename))
++				{
++					BinaryFormatter formatter = new BinaryFormatter();
++					formatter.Serialize(stream, objectToSave);
++				}
++			}
++		}
++
++		/// <summary>
++		/// Loads an file of type T from a specified file.
++		/// </summary>
++		/// <typeparam name="T">Type of object that will be returned.</typeparam>
++		/// <param name="loadLocation">folder to load from</param>
++		/// <param name="loadFile">file to load from</param>
++		/// <returns></returns>
++		public static T Load<T>(string loadLocation, string loadFile)
++		{
++			using (StorageContainer container = GetContainer(loadLocation))
++			{
++				using (FileStream stream = File.Open(Path.Combine(container.Path, loadFile), FileMode.Open))
++				{
++					BinaryFormatter formatter = new BinaryFormatter();
++					return (T)formatter.Deserialize(stream);
++				}
++			}
++		}
++	}
++
++
+     /// <summary>
+     /// Used to pick an element at random from a set, where
+     /// the different elements may have different selection probabilities
+Index: Xenocide.cs
+===================================================================
+--- Xenocide.cs	(revision 1854)
++++ Xenocide.cs	(working copy)
+@@ -117,8 +117,35 @@
+ 
+             InitializeCegui();
+             InitializeAudioSystem();
++			InitializeGameOptions();
+         }
+ 
++
++		/// <summary>
++		/// Load and apply the persisted game options if an options file exists.
++		/// </summary>
++		public static void InitializeGameOptions()
++		{
++			// If the gameoptions file exists and is of the correct version then attempt to load it.
++			// At the moment this just stores sound option data, graphics options may be best off in a seperate file.
++			// At the moment version compatability is set to the assembly version, but for options data this might be too
++			// strict and could follow it's own versioning.
++			if(GameFiles.DoesFileExist(	@".\XeNAcide\options", @"SoundData"))
++			{
++				GameOptions gameOptions = GameFiles.Load<GameOptions>(@".\XeNAcide\options", @"SoundData");
++
++				if (gameOptions.GameVersion == Xenocide.CurrentVersion)
++				{
++					Xenocide.AudioSystem.MusicVolume = gameOptions.MusicVolume;
++					Xenocide.AudioSystem.SoundVolume = gameOptions.SoundVolume;
++				}
++				else
++				{
++					//TODO - Remove old version of file?
++				}
++			}
++		}
++
+         /// <summary>
+         /// Set up CeGui to do the work
+         /// </summary>

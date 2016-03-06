@@ -1,0 +1,53 @@
+Porting notes for CeGui#
+
+This file contains important informations about the porting process.
+
+
+== File Names ==
+
+The file names have been changed to include the original CeGui file names. This makes
+it easier to see where a specific ported class originated from.
+
+The following simple scheme is used to translate from the original file names to the
+CeGui# ones: Take the 'include/CEGUIUDim.h' and 'src/CEGUIUDim.cpp' combination for
+example, containing three C++ classes: UDim, URect and UVector2.
+
+In CeGui#, this should translate to these files:
+
+  * CEGUIUDim.cs - contains no code but only porting informations. Here porters can
+                   leave messages and important informations about why and how some
+                   things where ported to their successors
+
+  * CEGUIUDim.UDim.cs - the code for the UDim class
+  * CEGUIUDim.URect.cs - the code for the URect class
+  * CEGUIUDim.UVector2.cs - the code for the UVector2 class
+
+Sometimes it's reasonable not to port a class because there already is a pretty good
+equivalent in the .NET framework. In this case, just create the file with the
+porting informations as shown above and leave a message telling which .NET framework
+class you're using instead.
+
+
+== Class and Variable Names ==
+
+Try to keep as close to the original as possible but adjust casing to match the standard
+.NET framework coding guidelines, which are:
+
+  * Protected or publicly visible identifiers use NormalCase names
+  * Private identifiers (with the exception of classes) use camelCase names
+
+
+== Markers ==
+
+Do a full-text search for "TODO" in the code. Things that are not fully ported, need
+additional thinking and the like have been marked with this tag
+
+Do a full-text search for "not implemented" or "NotImplemented". Dummy methods that
+have not been ported yet will typically throw a NotImplementedException
+
+
+== Exceptions ==
+
+NullObjectException -> ArgumentNullException
+InvalidRequestException -> ArgumentException
+UnknownObjectException -> UnknownObjectException

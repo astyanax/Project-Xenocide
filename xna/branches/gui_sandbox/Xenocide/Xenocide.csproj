@@ -1,0 +1,693 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{4CBCAB54-8149-4883-83AC-CE4EFE0B039E}</ProjectGuid>
+    <ProjectTypeGuids>{9F340DF3-2AED-4330-AC16-78AC2D9B4738};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Xenocide</RootNamespace>
+    <AssemblyName>Xenocide</AssemblyName>
+    <XnaFrameworkVersion>v1.0</XnaFrameworkVersion>
+    <XnaPlatform>Windows</XnaPlatform>
+    <ApplicationIcon>Source\Game.ico</ApplicationIcon>
+    <XNAGlobalContentPipelineAssemblies>Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll;Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll;Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll;Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</XNAGlobalContentPipelineAssemblies>
+    <XNAProjectContentPipelineAssemblies>
+    </XNAProjectContentPipelineAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\x86\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <DocumentationFile>bin\x86\Debug\Xenocide.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x86\Release</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="mscorlib">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Source\GUISystem\Frame.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Frame</Name>
+    </Compile>
+    <Compile Include="Source\GUISystem\FrameTitleBar.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>FrameTitleBar</Name>
+    </Compile>
+    <Compile Include="Source\GUISystem\GUIComponent.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>GUIComponent</Name>
+    </Compile>
+    <Compile Include="Source\GUISystem\GUIContainer.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>GUIContainer</Name>
+    </Compile>
+    <Compile Include="Source\GUISystem\GUIManager.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>GUIManager</Name>
+    </Compile>
+    <Compile Include="Source\GUISystem\InputManager.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>InputManager</Name>
+    </Compile>
+    <Compile Include="Source\GUISystem\IGUIBuilder.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>IGUIBuilder</Name>
+    </Compile>
+    <Compile Include="Source\GUISystem\OneImageSkin.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>OneImageSkin</Name>
+    </Compile>
+    <Compile Include="Source\GUISystem\OneQuadComponent.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>OneQuadComponent</Name>
+    </Compile>
+    <Compile Include="Source\GUISystem\Position.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Position</Name>
+    </Compile>
+    <Compile Include="Source\GUISystem\Quad.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Quad</Name>
+    </Compile>
+    <Compile Include="Source\GUISystem\StaticImage.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>StaticImage</Name>
+    </Compile>
+    <Compile Include="Source\GUISystem\StaticText.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>StaticText</Name>
+    </Compile>
+    <Compile Include="Source\GUISystem\XenoGUIBuilder.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>XenoGUIBuilder</Name>
+    </Compile>
+    <Compile Include="Source\Model\GameState.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>GameState</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\AI\InvasionTask.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>InvasionTask</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\AI\Overmind.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Overmind</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\AI\ResearchTask.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>ResearchTask</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Craft\Aircraft.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Aircraft</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Craft\Craft.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Craft</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Craft\CraftEvents.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>CraftEvents</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Craft\InBaseState.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>InBaseState</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Craft\InterceptCraftState.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>InterceptCraftState</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Craft\InterceptMission.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>InterceptMission</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Craft\Mission.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Mission</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Craft\MissionState.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>MissionState</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Craft\MoveToPositionState.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>MoveToPositionState</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Craft\NoOrdersMission.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>NoOrdersMission</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Craft\PatrolMission.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>PatrolMission</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Craft\PatrolState.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>PatrolState</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Craft\ResearchMission.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>ResearchMission</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Craft\ReturnToBaseState.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>ReturnToBaseState</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Craft\Ufo.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Ufo</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Craft\WaitState.cs">
+      <SubType>Code</SubType>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>WaitState</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\GeoData.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>GeoData</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\GeoEvents\GeoEvent.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>GeoEvent</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\GeoEvents\StartAeroscapeGeoEvent.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>StartAeroscapeGeoEvent</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\GeoEvents\StartBattlescapeGeoEvent.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>StartBattlescapeGeoEvent</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\GeoEvents\TrackingLostGeoEvent.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>TrackingLostGeoEvent</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\GeoPosition.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>GeoPosition</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\GeoTime.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>GeoTime</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\HumanBases\BaseCapacities.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>BaseCapacities</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\HumanBases\BaseCapacityInfo.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>BaseCapacityInfo</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\HumanBases\BaseStatistics.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>BaseStatistics</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\HumanBases\FacilityHandle.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>FacilityHandle</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\HumanBases\HumanBase.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>HumanBase</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\HumanBases\Floorplan.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Floorplan</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\XNetState.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>XNetState</Name>
+    </Compile>
+    <Compile Include="Source\Model\StaticData\Facilities\DefenseFacilityInfo.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>DefenseFacilityInfo</Name>
+    </Compile>
+    <Compile Include="Source\Model\StaticData\Facilities\FacilityInfo.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>FacilityInfo</Name>
+    </Compile>
+    <Compile Include="Source\Model\StaticData\Facilities\FacilityInfoCollection.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>FacilityInfoList</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Research\ResearchGrant.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>ResearchGrant</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Research\ResearchGraph.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>ResearchGraph</Name>
+    </Compile>
+    <Compile Include="Source\Model\StaticData\Facilities\ScanFacilityInfo.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>ScanFacilityInfo</Name>
+    </Compile>
+    <Compile Include="Source\Model\StaticData\Facilities\SpecialFacilityInfo.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>SpecialFacilityInfo</Name>
+    </Compile>
+    <Compile Include="Source\Model\StaticData\Facilities\StorageFacilityInfo.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>StorageFacilityInfo</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Research\ResearchPreRequisite.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>ResearchPreRequisite</Name>
+    </Compile>
+    <Compile Include="Source\Model\Geoscape\Research\ResearchTopic.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>ResearchTopic</Name>
+    </Compile>
+    <Compile Include="Source\Model\StaticData\XNet\XNetEntryCollection.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>XNetEntryCollection</Name>
+    </Compile>
+    <Compile Include="Source\Model\StaticTables.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>StaticTables</Name>
+    </Compile>
+    <Compile Include="Source\Model\StaticData\XNetEntry.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>XNetEntry</Name>
+    </Compile>
+    <Compile Include="Source\Model\StaticData\XNetStatisticsLink.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>XNetStatisticsLink</Name>
+    </Compile>
+    <Compile Include="Source\Program.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Program</Name>
+    </Compile>
+    <Compile Include="Source\Research\AllOfGrant.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>AllOfGrant</Name>
+    </Compile>
+    <Compile Include="Source\Research\AllOfPrerequisite.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>AllOfPrerequisite</Name>
+    </Compile>
+    <Compile Include="Source\Research\AnyOfPrerequisite.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>AnyOfPrerequisite</Name>
+    </Compile>
+    <Compile Include="Source\Research\InitialTechPrerequisite.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>InitialTechPrerequisite</Name>
+    </Compile>
+    <Compile Include="Source\Research\ITechGrant.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>ITechGrant</Name>
+    </Compile>
+    <Compile Include="Source\Research\ITechPrerequisite.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>ITechPrerequisite</Name>
+    </Compile>
+    <Compile Include="Source\Research\OneOfGrant.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>OneOfGrant</Name>
+    </Compile>
+    <Compile Include="Source\Research\ResearchTree.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>ResearchTree</Name>
+    </Compile>
+    <Compile Include="Source\Services\ISavegameService.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>ISavegameService</Name>
+    </Compile>
+    <Compile Include="Source\UI\Dialogs\AddResearchDialog.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>AddResearchDialog</Name>
+    </Compile>
+    <Compile Include="Source\UI\Dialogs\BuildFacilityDialog.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>BuildFacilityDialog</Name>
+    </Compile>
+    <Compile Include="Source\UI\Dialogs\Dialog.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Dialog</Name>
+    </Compile>
+    <Compile Include="Source\UI\Dialogs\MessageBoxDialog.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>MessageBoxDialog</Name>
+    </Compile>
+    <Compile Include="Source\UI\Dialogs\NameNewBaseDialog.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>NameNewBaseDialog</Name>
+    </Compile>
+    <Compile Include="Source\UI\Dialogs\OptionsDialog.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>OptionsDialog</Name>
+    </Compile>
+    <Compile Include="Source\UI\Dialogs\ResearchDialog.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>ResearchDialog</Name>
+    </Compile>
+    <Compile Include="Source\UI\Dialogs\StartAeroscapeDialog.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>StartAeroscapeDialog</Name>
+    </Compile>
+    <Compile Include="Source\UI\Dialogs\StartBattlescapeDialog.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>StartBattlescapeDialog</Name>
+    </Compile>
+    <Compile Include="Source\UI\Dialogs\TrackingLostDialog.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>TrackingLostDialog</Name>
+    </Compile>
+    <Compile Include="Source\UI\Dialogs\YesNoDialog.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>YesNoDialog</Name>
+    </Compile>
+    <Compile Include="Source\UI\Scenes\Common\PolarScene.cs">
+      <SubType>Code</SubType>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>PolarScene</Name>
+    </Compile>
+    <Compile Include="Source\UI\Scenes\Facility\BuildTimes.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>BuildTimes</Name>
+    </Compile>
+    <Compile Include="Source\UI\Scenes\Facility\FacilityModels.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>FacilityModels</Name>
+    </Compile>
+    <Compile Include="Source\UI\Scenes\Facility\FacilityScene.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>FacilityScene</Name>
+    </Compile>
+    <Compile Include="Source\UI\Scenes\Facility\Grid.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Grid</Name>
+    </Compile>
+    <Compile Include="Source\UI\Scenes\Geoscape\EarthGlobe.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>EarthGlobe</Name>
+    </Compile>
+    <Compile Include="Source\UI\Scenes\Geoscape\GeoMarker.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>GeoMarker</Name>
+    </Compile>
+    <Compile Include="Source\UI\Scenes\Geoscape\GeoscapeScene.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>GeoscapeScene</Name>
+    </Compile>
+    <Compile Include="Source\UI\Scenes\Geoscape\SkyBox.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>SkyBox</Name>
+    </Compile>
+    <Compile Include="Source\UI\Scenes\Geoscape\SphereMesh.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>SphereMesh</Name>
+    </Compile>
+    <Compile Include="Source\UI\Scenes\XNet\XNetScene.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>XNetScene</Name>
+    </Compile>
+    <Compile Include="Source\UI\Screens\BaseInfoScreen.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>BaseInfoScreen</Name>
+    </Compile>
+    <Compile Include="Source\UI\Screens\BasesScreen.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>BasesScreen</Name>
+    </Compile>
+    <Compile Include="Source\UI\Screens\Frame.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Frame</Name>
+    </Compile>
+    <Compile Include="Source\UI\Screens\GeoscapeScreen.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>GeoscapeScreen</Name>
+    </Compile>
+    <Compile Include="Source\UI\Screens\IScreenManager.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>IScreenManager</Name>
+    </Compile>
+    <Compile Include="Source\UI\Screens\LoadSaveGameScreen.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>LoadSaveGameScreen</Name>
+    </Compile>
+    <Compile Include="Source\UI\Screens\Misc.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Misc</Name>
+    </Compile>
+    <Compile Include="Source\UI\Screens\PolarScreen.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>PolarScreen</Name>
+    </Compile>
+    <Compile Include="Source\UI\Screens\Screen.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Screen</Name>
+    </Compile>
+    <Compile Include="Source\UI\Screens\ScreenManager.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>ScreenManager</Name>
+    </Compile>
+    <Compile Include="Source\UI\Screens\StartScreen.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>StartScreen</Name>
+    </Compile>
+    <Compile Include="Source\UI\Screens\StatisticsScreen.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>StatisticsScreen</Name>
+    </Compile>
+    <Compile Include="Source\UI\Screens\XNetScreen.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>XNetScreen</Name>
+    </Compile>
+    <Compile Include="Source\Utils\Util.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Util</Name>
+    </Compile>
+    <Compile Include="Source\Xenocide.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Xenocide</Name>
+    </Compile>
+    <Compile Include="Source\XenoError.cs">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>XenoError</Name>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Textures\HPC-earth-map.jpg">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>TextureImporter</Importer>
+      <Processor>SpriteTextureProcessor</Processor>
+      <Name>HPC-earth-map</Name>
+    </Content>
+    <Content Include="Content\Textures\skybox.jpg">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>TextureImporter</Importer>
+      <Processor>SpriteTextureProcessor</Processor>
+      <Name>skybox</Name>
+    </Content>
+    <Content Include="Content\Textures\BuildTimes.png">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>TextureImporter</Importer>
+      <Processor>SpriteTextureProcessor</Processor>
+      <Name>BuildTimes</Name>
+    </Content>
+    <Content Include="Source\Game.ico">
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Game</Name>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dependancies\CeGui\CeGui.Renderers.Xna\CeGui.Renderers.Xna.csproj">
+      <Project>{DD297D8C-8046-458C-922C-D69C87044040}</Project>
+      <Name>CeGui.Renderers.Xna</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dependancies\CeGui\CeGui.WidgetSets.Taharez\CeGui.WidgetSets.Taharez.csproj">
+      <Project>{F2EC7536-1149-43A4-B92B-DCC2BACECCCF}</Project>
+      <Name>CeGui.WidgetSets.Taharez</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dependancies\CeGui\CeGui\CeGui.csproj">
+      <Project>{41AE7F18-8C96-43E7-98D8-1E9D83081CD6}</Project>
+      <Name>CeGui</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Models\Stun Launcher.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>Stun Launcher</Name>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Strings.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <XNAUseContentPipeline>false</XNAUseContentPipeline>
+      <Name>Strings</Name>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Models\Facility\alien_containment.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>alien_containment</Name>
+    </Content>
+    <Content Include="Content\Models\Facility\barracks.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>barracks</Name>
+    </Content>
+    <Content Include="Content\Models\Facility\base_access.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>base_access</Name>
+    </Content>
+    <Content Include="Content\Models\Facility\gaia_defense.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>gaia_defense</Name>
+    </Content>
+    <Content Include="Content\Models\Facility\generalstorage.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>generalstorage</Name>
+    </Content>
+    <Content Include="Content\Models\Facility\grav_shield.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>grav_shield</Name>
+    </Content>
+    <Content Include="Content\Models\Facility\laser_defense.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>laser_defense</Name>
+    </Content>
+    <Content Include="Content\Models\Facility\launch_pad.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>launch_pad</Name>
+    </Content>
+    <Content Include="Content\Models\Facility\long_range_neudar.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>long_range_neudar</Name>
+    </Content>
+    <Content Include="Content\Models\Facility\missile_defense.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>missile_defense</Name>
+    </Content>
+    <Content Include="Content\Models\Facility\neural_shield.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>neural_shield</Name>
+    </Content>
+    <Content Include="Content\Models\Facility\plasma_defense.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>plasma_defense</Name>
+    </Content>
+    <Content Include="Content\Models\Facility\psi_training.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>psi_training</Name>
+    </Content>
+    <Content Include="Content\Models\Facility\research_facility.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>research_facility</Name>
+    </Content>
+    <Content Include="Content\Models\Facility\short_range_neudar.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>short_range_neudar</Name>
+    </Content>
+    <Content Include="Content\Models\Facility\tachyon_detector.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>tachyon_detector</Name>
+    </Content>
+    <Content Include="Content\Models\Facility\workshop.x">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Name>workshop</Name>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Fonts\XenoFont.spritefont">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Name>XenoFont</Name>
+    </Content>
+    <Content Include="Content\Textures\ui\xenolook_window.png">
+      <XNAUseContentPipeline>true</XNAUseContentPipeline>
+      <Importer>TextureImporter</Importer>
+      <Processor>SpriteTextureProcessor</Processor>
+      <Name>xenolook_window</Name>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA\Game Studio Express\v1.0\Microsoft.Xna.ContentPipeline.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA\Game Studio Express\v1.0\Microsoft.Xna.Common.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

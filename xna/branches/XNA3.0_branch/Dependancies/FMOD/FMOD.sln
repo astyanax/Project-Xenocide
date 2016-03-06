@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C# Express 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FMOD", "FMOD\FMOD.csproj", "{A9195092-2370-414B-8EA0-A3748AB648C8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A9195092-2370-414B-8EA0-A3748AB648C8}.Debug|x86.ActiveCfg = Debug|x86
+		{A9195092-2370-414B-8EA0-A3748AB648C8}.Debug|x86.Build.0 = Debug|x86
+		{A9195092-2370-414B-8EA0-A3748AB648C8}.Release|x86.ActiveCfg = Release|x86
+		{A9195092-2370-414B-8EA0-A3748AB648C8}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

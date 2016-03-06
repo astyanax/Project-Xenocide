@@ -1,0 +1,220 @@
+<title>Roadmap</title>
+<head>
+</head>
+
+<body>
+
+<h1>Development Roadmap</h1>
+
+<h2>Iteration 1: Initial Geoscape.</h2>
+<ol>
+<strike><li>Geoscape screen with basic buttons.</li></strike>
+<strike><li>Earth globe showing on screen.</li></strike>
+<strike><li>Add sun, have sun move according to date/time.</li></strike>
+<strike><li>Buttons to control game speed.</li></strike>
+<strike><li>Skybox</li></strike>
+<strike><li>Buttons to move camera's position.</li></strike>
+<strike><li>Draw bases (pyramid) on screen at randomly chosen geoposition.</li></strike>
+<strike><li>Code to compute geoposition of a  mouse click on earth globe.</li></strike>
+<li>Base creation sequence.</li>
+<strike><li>Save/Load game time to file</li></strike>
+<strike><li>Document project structure:  file locations, how the main loop works.</li></strike>
+</ol>
+
+<h2>Iteration 2: Craft AI.</h2>
+<ol>
+<li>Specify Requirements.</li>
+<li>Document design.</li>
+<li>Build.</li>
+</ol>
+
+Need to document this phase better.
+Things I need to cover:
+<ol>
+<li>UFO mission types (and behaviour during missions.)</li>
+<li>Alien Overmind AI.</li>
+<li>UFO AI.</li>
+<li>Human craft mission types (and behaviours)</li>
+<li>Human craft AI.</li>
+<li>Repair/Refuel/Rearm of Human craft at bases.</li>
+</ol>
+<br>
+Geoscape behaviour.
+<ol>
+<li>UFO is repeatedly spawned (with 6 hour intervals) on research like mission.</li>
+<li>If right click mouse, Geosceen will pan with mouse movement.  (Stops when right click again.)</li>
+<li>Intercept button - launches interceptor at UFO.</li>
+<li>If reaches UFO, UFO "crashes"</li>
+<li>If Intercept a Intercept crashed UFO, "battlescape mission"</li>
+<li>If don't intercept a second time, after 12 hours UFO "repairs" itself and flys away.</li>
+<li>If UFO escapes, get "Patrol/Return to Base/Go to UFOs last known position" dialog</li>
+<li>If craft runs low on fuel, returns to base.</li>
+<li>Interceptor refuels when in base.</li>
+<li>Left clicking on the geoscape sends interceptor to "patrol" the indicated position.</li>
+</ol>
+<br>
+Geoscape Stuff that hasn't been implemented yet.
+<ol>
+<li>Radar detection/visibility</li>
+<li>Click on position on Geoscape to select craft/UFO/Base etc.</li>
+<li>Waypoints are not shown on Geoscape.</li>
+<li>Create Base.</li>
+<li>Multiple bases.  (Although in principle, not difficult)</li>
+<li>Multiple simultateous UFOs (Although in principle, not difficult)</li>
+<li>Multiple Interceptors(Although in principle, not difficult)</li>
+<li>Intercept dialog </li>
+<li>Multiple UFO mission types.  (Not much point, at moment, current mission is ideal for testing)</li>
+<li>Multiple craft/ufo types.</li>
+<li>UFO target selection (for UFO missions) doesn't know about countries</li>
+</ol>
+<br>
+Observation:
+<ol>
+In X-Com human craft have only two missions:
+<li>Patrol</li>
+<li>Intercept</li>
+</ol>
+<br>
+And four "states"
+<ol>
+<li>Patrolling</li>
+<li>Intercepting</li>
+<li>Returning to base</li>
+<li>In Base</li>
+</ol>
+
+<strike><h2>Iteration 3:  X-Net</h2>
+Reason for doing this: test out XML parser.
+<ol>
+<li>Document requirements</li>
+<li>Document design.</li>
+<li>Implement.</li>
+</ol>
+
+Requirements: 
+<ol>
+<li>Is single screen.  With "tree" on RHS.  LHS has 3D image + Text</li>
+<li>Will only show items that user has researched.</li>
+<li>Want it to show which entries player has read, and which player hasn't</li>
+</ol>
+</strike>
+
+<h2>Iteration 4: Layout Base Facilities.</h2>
+<ol>
+<strike><li>Document design (this has already been somewhat done.)</li></strike>
+<strike><li>Allow user to pick location on geoscape for every base (including first)</li></strike>
+<strike><li>Allow user to put access lift at any position on base</li></strike>
+<strike><li>Allow user to pick a facility, and put on 3D image. (facility must be adjacent to fully constructed facility)</li></strike>
+<strike><li>Allow user to destroy facilities.  Removing facility must not split base</li></strike>
+<strike><li>Track state of facilities under construction.</li></strike>
+<strike><li>Update base's capability, as facilities are constructed.</li></strike>
+<li>Hook up radar, to detect UFOs.</li>
+<strike><li>Load/Save to file.</li></strike>
+<li>User funding.  (Expenditure to buy, monthly maintenance.)</li>
+<li>Base Information Screen</li>
+<ol>
+<li>Name of the currently selected base.</li>
+<li>Icons for all bases, same as ones shown on "Bases" screen.  (Probably just a side effect of desire to provide a way to "jump" between the "base information" screens for different bases.)</li>
+<li>Total number of soldiers in base</li>
+<li>Number of "idle" soldiers (wounded, or not assigned to a craft and not Psi training) in base</li>
+<li>Total number of engineers in base</li>
+<li>Number of idle engineers in base</li>
+<li>Total number of scientists in base</li>
+<li>Number of idle scientists in base</li>
+<li>Total number of people the base can hold in base</li>
+<li>Number of people in the base.  Check Includes people being transferred TO the base, does not include people being transferred FROM the base.</li>
+<strike><li>Base's total storage capacity</li></strike>
+<li>Base's storage capacity that is in use, includes space that will be used by items currently in transit.  (Either purchased or transferred.)</li>
+<strike><li>Base's total laboratory capacity</li></strike>
+<li>Base's laboratory capacity that is in use</li>
+<strike><li>Base's total workshop capacity</li></strike>
+<li>Base's workshop capacity that is in use</li>
+<strike><li>Number of hangers in base</li></strike>
+<li>Number of base's hangers that are in use.</li>
+<strike><li>Total "alien containment" space.</li></strike>
+<li>Available "alien containment" space.</li>
+<li>Base's defence strength.  It just adds up values for each defence installation.</li>
+<strike><li>If base has a short range neudar</li></strike>
+<strike><li>If base has a long range neudar.</li></strike>
+<strike><li>If base has a tachyon detector</li></strike>
+<strike><li>If base has a Gravity Shield</li></strike>
+<strike><li>If base has a Mind Shield</li></strike>
+</ol>
+</ol>
+
+<h2>Iteration 5: People.</h2>
+(People are probably the easiest things to test base capacity with.)
+<ol>
+<li>Define the people objects.</li>
+<li>User can buy/sell/transfer people.</li>
+<li>Load/Save to file</li>
+<li>Monthly salary, Hiring fees.</li>
+<li>Allocate scientists to labs?</li>
+</ol>
+
+<h2>Iteration 6: Items</h2>
+<ol>
+<li>Class hierarchy for items.</li>
+<li>Allow user to buy/sell/transfer items.</li>
+<li>Initial phase, just worry about storing items in a base.</li>
+<li>Mapping items to craft</li>
+<li>Load/Save to file</li>
+<li>Don't cover, equip craft with weapons.</li>
+<li>Don't cover, equip soldiers.</li>
+</ol>
+
+<h2>Iteration 7: Research</h2>
+<ol>
+<li>Read the research tree.</li>
+<li>Determine when prerequistes are satisified.  (Item in base, Technology researched.)</li>
+<li>Show research projects that player can start.</li>
+<li>Assign staff for projects.</li>
+<li>Advance projects over time.</li>
+<li>Tie into X-Net.</li>
+<li>Present research when finished.</li>
+<li>Load/Save to file</li>
+</ol>
+
+<h2>Iteration 8: Production</h2>
+Similar to Research
+<ol>
+<li>Only allow building items that have been researched.
+</ol>
+
+<h2>Iteration 9: Statistics screen.</h2>
+<ol>
+<li>UFO activity</li>
+<li>X-Corp activity</li>
+<li>Monthy financial numbers.</li>
+<li>Need to track this information, and display it.</li>
+</ol>
+
+<h2>Iteration 10: User settings</h2>
+<ol>
+<li>Difficulty</li>
+<li>Options?  (Volume, other?)</li>
+</ol>
+
+<h2>Iteration 11: Aeroscape</h2>
+<ol>
+<li>Specify Requirements.</li>
+<li>Document design.</li>
+</ol>
+
+<h2>Iteration 12: Sound</h2>
+<ol>
+<li>Specify Requirements.</li>
+<li>Document design.</li>
+</ol>
+
+<h2>Iteration 13: Items- Revisited</h2>
+<ol>
+<li>Equip soldiers with items.</li>
+<li>Crew craft with soldiers.</li>
+<li>Can't equip troops with items that haven't been researched.</li>
+</ol>
+
+<h2>Iteration 14: Battlescape</h2>
+Steal as much as possible from UFO2000
+
+<body>

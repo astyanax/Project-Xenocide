@@ -1,0 +1,1156 @@
+Index: Xenocide/Source/Model/Geoscape/AI/BuildOutpostTask.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/AI/BuildOutpostTask.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/AI/BuildOutpostTask.cs	(working copy)
+@@ -98,13 +98,12 @@
+         /// Give a UFO a mission
+         /// </summary>
+         /// <param name="ufo">Ufo to give mission to</param>
+-        protected override void GiveMission(Ufo ufo)
++        protected override void GiveMission(Ufo ufo, int numLandings, int numSublandings)
+         {
+             // First half of UFOs are "scouting", other half do the "building"
+             if (NextUfoToLaunch <= ufosInMission / 2)
+             {
+-                const int numLandings = 6;
+-                ufo.Mission = new ResearchMission(ufo, Centroid, numLandings);
++                ufo.Mission = new ResearchMission(ufo, Centroid, numLandings, numSublandings);
+             }
+             else
+             {
+Index: Xenocide/Source/Model/Geoscape/AI/InfiltrationTask.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/AI/InfiltrationTask.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/AI/InfiltrationTask.cs	(working copy)
+@@ -98,10 +98,9 @@
+         /// Give a UFO a mission
+         /// </summary>
+         /// <param name="ufo">Ufo to give mission to</param>
+-        protected override void GiveMission(Ufo ufo)
++        protected override void GiveMission(Ufo ufo, int numLandings, int numSubLandings)
+         {
+-            const int numLandings = 3;
+-            ufo.Mission = new ResearchMission(ufo, Centroid, numLandings);
++            ufo.Mission = new ResearchMission(ufo, Centroid, numLandings, numSubLandings);
+         }
+ 
+         /// <summary>
+Index: Xenocide/Source/Model/Geoscape/AI/InvasionTask.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/AI/InvasionTask.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/AI/InvasionTask.cs	(working copy)
+@@ -174,13 +174,19 @@
+             // start location is 1/4 world away from start
+             GeoPosition start = target.RandomLocation(Math.PI * 0.5);
+ 
++            if (Xenocide.GameState.GeoData.Planet.IsPositionOverWater(start))
++                start = Xenocide.GameState.GeoData.Planet.GetClosetLand(start);
++
+             // construct the UFO
+             Ufo ufo = new Ufo(taskPlan.Launches[nextUfoToLaunch].UfoType, start, this);
+             
++
++            GiveMission(ufo,
++                        taskPlan.Launches[nextUfoToLaunch].Landings,
++                        taskPlan.Launches[nextUfoToLaunch].SubLandings);
++
+             // assign UFO appropriate mission
+             ++nextUfoToLaunch;
+-            GiveMission(ufo);
+-
+             // track it.  And prepare for next launch
+             AddUfo(ufo);
+             if (StillUfosToLaunch)
+@@ -228,7 +234,7 @@
+         /// Give a UFO a mission
+         /// </summary>
+         /// <param name="ufo">Ufo to give mission to</param>
+-        protected abstract void GiveMission(Ufo ufo);
++        protected abstract void GiveMission(Ufo ufo, int landings, int subLandings);
+ 
+         /// <summary>
+         /// Does the task have more UFOs to launch
+Index: Xenocide/Source/Model/Geoscape/AI/ResearchTask.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/AI/ResearchTask.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/AI/ResearchTask.cs	(working copy)
+@@ -60,10 +60,9 @@
+         /// Give a UFO a mission
+         /// </summary>
+         /// <param name="ufo">Ufo to give mission to</param>
+-        protected override void GiveMission(Ufo ufo)
++        protected override void GiveMission(Ufo ufo, int numLandings, int numSubLandings)
+         {
+-            const int numLandings = 3;
+-            ufo.Mission = new ResearchMission(ufo, Centroid, numLandings);
++            ufo.Mission = new ResearchMission(ufo, Centroid, numLandings,numSubLandings);
+         }
+     }
+ }
+Index: Xenocide/Source/Model/Geoscape/AI/RetaliationTask.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/AI/RetaliationTask.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/AI/RetaliationTask.cs	(working copy)
+@@ -102,13 +102,12 @@
+         /// Give a UFO a mission
+         /// </summary>
+         /// <param name="ufo">Ufo to give mission to</param>
+-        protected override void GiveMission(Ufo ufo)
++        protected override void GiveMission(Ufo ufo, int numLandings, int numSubLandings)
+         {
+             if (locatedOutpost)
+             {
+                 // Outpost has been located, so just go for it.
+-                const int numLandings = 1;
+-                ufo.Mission = new RetaliationMission(ufo, outpost.Position, outpost, numLandings);
++                ufo.Mission = new RetaliationMission(ufo, outpost.Position, outpost, numLandings,numLandings);
+             }
+             else
+             {
+@@ -116,14 +115,12 @@
+                 if ((null != outpost) && Xenocide.Rng.RollDice(outpost.Detectability()))
+                 {
+                     // Given enough time, the UFO will find the outpost
+-                    const int numLandings = 6;
+-                    ufo.Mission = new RetaliationMission(ufo, Centroid, outpost, numLandings);
++                    ufo.Mission = new RetaliationMission(ufo, Centroid, outpost, numLandings,numSubLandings);
+                 }
+                 else
+                 {
+                     // UFO isn't going to find the outpost (or there isn't one)
+-                    const int numLandings = 6;
+-                    ufo.Mission = new ResearchMission(ufo, Centroid, numLandings);
++                    ufo.Mission = new ResearchMission(ufo, Centroid, numLandings, numSubLandings);
+                 }
+             }
+         }
+Index: Xenocide/Source/Model/Geoscape/AI/SupplyOutpostTask.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/AI/SupplyOutpostTask.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/AI/SupplyOutpostTask.cs	(working copy)
+@@ -101,7 +101,7 @@
+         /// Give a UFO a mission
+         /// </summary>
+         /// <param name="ufo">Ufo to give mission to</param>
+-        protected override void GiveMission(Ufo ufo)
++        protected override void GiveMission(Ufo ufo, int landings, int subLandings)
+         {
+             ufo.Mission = new SupplyOutpostMission(ufo, outpost.Position);
+ 
+Index: Xenocide/Source/Model/Geoscape/AI/TaskFactory.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/AI/TaskFactory.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/AI/TaskFactory.cs	(working copy)
+@@ -51,12 +51,14 @@
+         /// <param name="ufoType">Type of UFO to launch</param>
+         /// <param name="earliestLaunch">Min time, in hours, before UFO can be launched</param>
+         /// <param name="latestLaunch">Max time, in hourse, befoure UFO must be launched</param>
+-        public LaunchPlan(String ufoType, float earliestLaunch, float latestLaunch)
++        public LaunchPlan(String ufoType, float earliestLaunch, float latestLaunch, int landings, int subLandings)
+         {
+             Debug.Assert(earliestLaunch <= latestLaunch);
+             this.ufoType = ufoType;
+             this.earliestLaunch = earliestLaunch;
+             this.latestLaunch = latestLaunch;
++            this.numLandings = landings;
++            this.numSubLandings = subLandings;
+         }
+ 
+         /// <summary>
+@@ -94,6 +96,19 @@
+         /// </summary>
+         private float latestLaunch;
+ 
++        private int numLandings;
++        /// <summary>
++        /// How many times the ufo should land before it reaches it's final destination
++        /// </summary>
++        public int Landings { get { return numLandings; } }
++
++        private int numSubLandings;
++        /// <summary>
++        /// How many point of interest (slower speed sub locations) should the ufo stop at before
++        /// committing to the landing point
++        /// </summary>
++        public int SubLandings { get { return numSubLandings; } }
++
+         #endregion Fields
+     }
+     
+@@ -292,84 +307,87 @@
+         {
+             plans = new List<TaskPlan>();
+ 
++            // Don't forget, number of landings includes the final destaination.  A value of 1 will
++            // take them directly to thier final destination.  
++
+             // Research
+             List<LaunchPlan> launches = new List<LaunchPlan>();
+-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",   20.0f,  30.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_RECON",  132.0f, 204.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 132.0f, 204.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f, 120.0f));
++            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",   20.0f,  30.0f, 1, 2));
++            launches.Add(new LaunchPlan("ITEM_UFO_RECON",  132.0f, 204.0f, 2, 2));
++            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 132.0f, 204.0f, 2, 2));
++            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f, 120.0f,  3, 1));
+             plans.Add(new TaskPlan(Strings.UFO_MISSION_RESEARCH, 20.0f, launches));
+ 
+             // Harvest
+             launches = new List<LaunchPlan>();
+-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",       48.0f, 120.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",       48.0f, 120.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",      132.0f, 204.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",      48.0f, 120.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",      48.0f, 120.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_REAPER",     132.0f, 204.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_REAPER",      48.0f, 120.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT",  20.0f,  30.0f));
++            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",       48.0f, 120.0f, 1, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",       48.0f, 120.0f, 1, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",      132.0f, 204.0f, 1, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",      48.0f, 120.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",      48.0f, 120.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_REAPER",     132.0f, 204.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_REAPER",      48.0f, 120.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT",  20.0f, 30.0f,  2, 3));
+             plans.Add(new TaskPlan(Strings.UFO_MISSION_HARVEST, 30.0f, launches));
+ 
+             // Abduction
+             launches = new List<LaunchPlan>();
+-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",      132.0f, 204.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_RECON",      132.0f, 204.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",     240.0f, 432.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_COLLECTOR",   48.0f, 120.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_COLLECTOR",   48.0f, 120.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT",   0.5f,   2.5f));
++            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",    132.0f, 204.0f, 1, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_RECON",    132.0f, 204.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",   240.0f, 432.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_COLLECTOR", 48.0f, 120.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_COLLECTOR", 48.0f, 120.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 0.5f,   2.5f, 2, 3));
+             plans.Add(new TaskPlan(Strings.UFO_MISSION_ABDUCTION, 50.0f, launches));
+ 
+             // Infiltration
+             launches = new List<LaunchPlan>();
+-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",         240.0f, 432.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_RECON",         240.0f, 432.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_RECON",         240.0f, 432.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",        240.0f, 432.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",         48.0f, 120.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR",     0.5f,   2.5f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR",     0.5f,   2.5f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 0.5f,   2.5f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT",      0.5f,   2.5f));
++            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",         240.0f, 432.0f, 1, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_RECON",         240.0f, 432.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_RECON",         240.0f, 432.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",        240.0f, 432.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",         48.0f, 120.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR",     0.5f, 2.5f,   2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR",     0.5f, 2.5f,   2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 0.5f, 2.5f,   2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT",      0.5f, 2.5f,   2, 3));
+             plans.Add(new TaskPlan(Strings.UFO_MISSION_INFILTRATION, 150.0f, launches));
+ 
+             // Outpost
+             launches = new List<LaunchPlan>();
+-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",           132.0f, 204.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_RECON",           132.0f, 204.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",          132.0f, 204.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER",   0.5f,   2.5f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER",   0.5f,   2.5f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT",        0.5f,   2.5f));
++            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",           132.0f, 204.0f, 1, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_RECON",           132.0f, 204.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",          132.0f, 204.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 0.5f,   2.5f,   2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 0.5f,   2.5f,   2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT",      0.5f,   2.5f,   2, 3));
+             plans.Add(new TaskPlan(Strings.UFO_MISSION_OUTPOST, 50.0f, launches));
+ 
+             // Terror (note, no score for the UFO, it's the terror site that earns the points)
+             launches = new List<LaunchPlan>();
+-            launches.Add(new LaunchPlan("ITEM_UFO_RECON",         2.5f,   2.5f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",      132.0f, 204.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR", 132.0f, 204.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR", 132.0f, 204.0f));
++            launches.Add(new LaunchPlan("ITEM_UFO_RECON",         2.5f,   2.5f, 1, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",      132.0f, 204.0f, 1, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR", 132.0f, 204.0f, 1, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR", 132.0f, 204.0f, 1, 3));
+             plans.Add(new TaskPlan(Strings.UFO_MISSION_TERROR, 0.0f, launches));
+ 
+             // Retaliation
+             launches = new List<LaunchPlan>();
+-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",      50.0f,  50.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_RECON",      32.0f,  72.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_RECON",      48.0f, 120.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",     48.0f, 120.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",     48.0f, 120.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",     48.0f, 120.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 48.0f, 120.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 48.0f, 120.0f));
++            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",      50.0f, 50.0f,  1, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_RECON",      32.0f, 72.0f,  2, 2));
++            launches.Add(new LaunchPlan("ITEM_UFO_RECON",      48.0f, 120.0f, 2, 2));
++            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",     48.0f, 120.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",     48.0f, 120.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",     48.0f, 120.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 48.0f, 120.0f, 2, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 48.0f, 120.0f, 2, 3));
+             plans.Add(new TaskPlan(Strings.UFO_MISSION_RETALIATION, 0.0f, launches));
+ 
+             // Supply
+             launches = new List<LaunchPlan>();
+-            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 240.0f, 432.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR",     240.0f, 432.0f));
+-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT",      240.0f, 432.0f));
++            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 240.0f, 432.0f, 1, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR",     240.0f, 432.0f, 1, 3));
++            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT",      240.0f, 432.0f, 1, 3));
+             plans.Add(new TaskPlan(Strings.UFO_MISSION_SUPPLY, 3.0f, launches));
+         }
+ 
+Index: Xenocide/Source/Model/Geoscape/AI/TerrorTask.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/AI/TerrorTask.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/AI/TerrorTask.cs	(working copy)
+@@ -84,9 +84,9 @@
+         /// Give a UFO a mission
+         /// </summary>
+         /// <param name="ufo">Ufo to give mission to</param>
+-        protected override void GiveMission(Ufo ufo)
++        protected override void GiveMission(Ufo ufo, int landings, int subLandings )
+         {
+-            ufo.Mission = new TerrorMission(ufo, city, !StillUfosToLaunch);
++            ufo.Mission = new TerrorMission(ufo, city, !StillUfosToLaunch, landings, subLandings);
+         }
+ 
+         #region fields
+Index: Xenocide/Source/Model/Geoscape/Geography/GeoBitmap.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Geography/GeoBitmap.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Geography/GeoBitmap.cs	(working copy)
+@@ -133,6 +133,84 @@
+             }
+         }
+ 
++        public GeoPosition GetClosestLandPosition(GeoPosition location)
++        {
++
++  
++            Vector2 pixelCoords = ToXY(location);
++            long x = (int)pixelCoords.X;
++            int index = rowIndexes[(int)pixelCoords.Y];
++            long position = 0;
++
++            // this is the pixel range to search for on this line
++
++            long westLandLeftPixel = 0;
++            long westLandRightPixel = 0;
++            long eastLandLeftPixel = 0;
++            long eastLandRightPixel = 0;
++
++            long landingPixel = 0;
++
++            bool westLandFound = false;
++            bool eastLandFound = false;
++
++
++            while (position < this.width)
++            {
++                position += tuples[index].Count;
++
++                // if the position is to the left of the marked position and is land, it's a candiate for
++                // closeed land to the west, we keep on writing this every time we hit land up to the position itself
++                if (tuples[index].Index == 1 && x > position)
++                {
++                    westLandFound = true;
++                    westLandLeftPixel = position - tuples[index].Count;
++                    westLandRightPixel = position;
++                }
++
++                // after we have passed the marked position, the first land we hit is the left most land
++                if (tuples[index].Index == 1 && x < position && !eastLandFound)
++                {
++                    eastLandFound = true;
++                    eastLandLeftPixel = position - tuples[index].Count;
++                    eastLandRightPixel = position;
++                    break;
++                }
++
++                ++index;
++            }
++
++            if (!westLandFound && !eastLandFound)
++            {
++                return GetClosestLandPosition(FromXY((long)pixelCoords.X,(long) pixelCoords.Y + 1));
++            }
++
++            if (westLandFound && !eastLandFound)
++            {
++               landingPixel = westLandLeftPixel + Xenocide.Rng.Next((int)(westLandRightPixel - westLandLeftPixel)); 
++            }
++
++            if (!westLandFound && eastLandFound)
++            {
++                landingPixel = eastLandLeftPixel + Xenocide.Rng.Next((int)(eastLandRightPixel - eastLandLeftPixel));
++            }
++
++            if (westLandFound && eastLandFound)
++            {
++                // see if right side of west is closer than left side of east
++                if ((x - westLandRightPixel) < (eastLandLeftPixel - x))
++                {
++                    landingPixel = westLandLeftPixel + Xenocide.Rng.Next((int)(westLandRightPixel - westLandLeftPixel));
++                }
++                else
++                {
++                    landingPixel = eastLandLeftPixel + Xenocide.Rng.Next((int)(eastLandRightPixel - eastLandLeftPixel));
++                }
++
++            }
++            return FromXY((long)landingPixel,(long)pixelCoords.Y);
++        }
++
+         /// <summary>
+         /// Picks a random coordinate, that has the property given by the 
+         /// element at propertyIndex of properties
+@@ -467,7 +545,7 @@
+                     Debug.Assert(Xenocide.GameState.GeoData.Planet.GetCountryAtLocation(pos) == c);
+                 }
+             }
+-        }
++        }        
+ 
+         /// <summary>
+         /// Test the Lat/Long "corners", and a couple of cities
+Index: Xenocide/Source/Model/Geoscape/Geography/LandMaskedGeoBitmap.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Geography/LandMaskedGeoBitmap.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Geography/LandMaskedGeoBitmap.cs	(working copy)
+@@ -100,6 +100,19 @@
+             return terrainBitmap.GetPropertyIndexOfLocation(location) == waterIndex;
+         }
+ 
++        private GeoPosition GetClosestLand(GeoPosition location)
++        {
++            GeoPosition landingLocation;
++
++            // if it's land were done
++            if (!IsWater(location))
++                landingLocation = location;
++            else
++                landingLocation = terrainBitmap.GetClosestLandPosition(location);
++
++            return landingLocation;
++        }
++
+         #region fields
+ 
+         /// <summary>
+Index: Xenocide/Source/Model/Geoscape/Geography/Planet.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Geography/Planet.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Geography/Planet.cs	(working copy)
+@@ -356,6 +356,16 @@
+         }
+ 
+         /// <summary>
++        /// Takes a geo-position and attempts to work out the closet land, and then a random point within 
++        /// that land strip
++        /// </summary>
++        /// <param name="pos"></param>
++        /// <returns>'Closet' land position to input geo-position</returns>
++        public GeoPosition GetClosetLand(GeoPosition pos)
++        {
++            return terrainBitmap.GetClosestLandPosition(pos);
++        }
++        /// <summary>
+         /// Override of ToString
+         /// </summary>
+         /// <returns>the name of this planet</returns>
+Index: Xenocide/Source/Model/Geoscape/Geography/UnitTestPlanet.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Geography/UnitTestPlanet.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Geography/UnitTestPlanet.cs	(working copy)
+@@ -62,6 +62,8 @@
+         {
+             TestSelectRandomRegion();
+             TestSelectCountryToInfiltrate();
++            TestGetClosetLand();
++
+         }
+ 
+         /// <summary>
+@@ -91,6 +93,31 @@
+             planet.ClearInfiltrationMissions();
+         }
+ 
++
++        /// <summary>
++        /// Test SelectRandomRegion()
++        /// </summary>
++        [Conditional("DEBUG")]
++        public static void TestGetClosetLand()
++        {
++            Planet planet = PlanetParser.Parse(Xenocide.StaticTables.DataDirectory + "planets.xml");
++
++            for (int i=0; i < 1000 ;i++)
++            {
++                long x = (long)Xenocide.Rng.Next(1350);
++                long y = (long)Xenocide.Rng.Next(675);
++
++                GeoPosition pos = planet.terrainBitmap.FromXY(x, y);
++
++                if (planet.IsPositionOverWater(pos))
++                    pos = planet.GetClosetLand(pos);
++
++                Debug.Assert(!planet.IsPositionOverWater(pos));
++            }
++        }
++
++
++
+         #endregion UnitTests
+     }
+ }
+Index: Xenocide/Source/Model/Geoscape/Vehicles/Craft.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Vehicles/Craft.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Vehicles/Craft.cs	(working copy)
+@@ -334,7 +334,16 @@
+             mission.OnDestinationReached();
+         }
+ 
++
+         /// <summary>
++        /// Respond to this craft reaching a sub destination
++        /// </summary>
++        public virtual void OnSubDestinationReached()
++        {
++            mission.OnSubDestinationReached();
++        }
++
++        /// <summary>
+         /// Respond to timer finishing counting down.
+         /// </summary>
+         /// <remarks>default behaviour is delegate to mission</remarks>
+Index: Xenocide/Source/Model/Geoscape/Vehicles/CraftEvents.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Vehicles/CraftEvents.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Vehicles/CraftEvents.cs	(working copy)
+@@ -47,6 +47,11 @@
+         void OnDestinationReached();
+ 
+         /// <summary>
++        /// Respond to this craft reaching a destination point of interest
++        /// </summary>
++        void OnSubDestinationReached();
++
++        /// <summary>
+         /// Respond to a specified period of time elapsing
+         /// </summary>
+         void OnTimerFinished();
+Index: Xenocide/Source/Model/Geoscape/Vehicles/Missions/AttackAlienSiteMission.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Vehicles/Missions/AttackAlienSiteMission.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Vehicles/Missions/AttackAlienSiteMission.cs	(working copy)
+@@ -60,7 +60,7 @@
+             base(craft)
+         {
+             this.target = target;
+-            SetState(new MoveToPositionState(this, target.Position));
++            SetState(new MoveToPositionState(this, target.Position,MissionState.MoveToPositionStateType.LandingDestination,this.Craft.MaxSpeed));
+             target.AddInbound(Craft);
+         }
+ 
+Index: Xenocide/Source/Model/Geoscape/Vehicles/Missions/Mission.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Vehicles/Missions/Mission.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Vehicles/Missions/Mission.cs	(working copy)
+@@ -80,6 +80,10 @@
+             }
+             state = newState;
+             state.OnEnterState();
++
++            // if we are entering a wait state, this indicates that a UFO has landed
++            WaitState waitState = newState as WaitState;
++            isLanded = (waitState != null); 
+         }
+ 
+         /// <summary>
+@@ -106,7 +110,17 @@
+             State.OnDestinationReached();
+         }
+ 
++
+         /// <summary>
++        /// Respond to this craft reaching a destination point of interest
++        /// </summary>
++        /// <remarks>default behaviour is delegate to state</remarks>
++        public virtual void OnSubDestinationReached()
++        {
++            State.OnSubDestinationReached();
++        }
++
++        /// <summary>
+         /// Respond to timer finishing counting down.
+         /// </summary>
+         /// <remarks>default behaviour is delegate to state</remarks>
+@@ -256,6 +270,16 @@
+         /// </summary>
+         private Craft craft;
+ 
++
++        /// <summary>
++        /// Is the missions craft on the ground
++        /// </summary>
++        public bool  IsLanded { get { return isLanded; } }
++
++        /// <summary>
++        /// Is the missions craft on the ground
++        /// </summary>
++        private bool isLanded;
+         #endregion
+     }
+ }
+Index: Xenocide/Source/Model/Geoscape/Vehicles/Missions/ResearchMission.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Vehicles/Missions/ResearchMission.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Vehicles/Missions/ResearchMission.cs	(working copy)
+@@ -57,9 +57,9 @@
+         /// <param name="craft">craft that "owns" this mission</param>
+         /// <param name="target">The center of the area the UFO is targeting</param>
+         /// <param name="landings">Number of times the craft is to land</param>
+-        public ResearchMission(Craft craft, GeoPosition target, int landings)
++        public ResearchMission(Craft craft, GeoPosition target, int landings, int sublandings)
+             :
+-            base(craft, target, landings)
++            base(craft, target, landings, sublandings)
+         {
+         }
+ 
+@@ -78,7 +78,7 @@
+         protected override GeoPosition OnCalcFinalLandingSite()
+         {
+             // for most missions, just pick yet another landing site
+-            return PickRandomLandingSite();
++            return PickRandomLandingSite(MissionState.MoveToPositionStateType.LandingDestination);
+         }
+     }
+ }
+Index: Xenocide/Source/Model/Geoscape/Vehicles/Missions/RetaliationMission.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Vehicles/Missions/RetaliationMission.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Vehicles/Missions/RetaliationMission.cs	(working copy)
+@@ -54,9 +54,9 @@
+         /// <param name="numLandings">Number of landings craft will perform (including attack on outpost)</param>
+         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
+             Justification = "will throw if outpost is null")]
+-        public RetaliationMission(Craft craft, GeoPosition initialDestination, Outpost outpost, int numLandings)
++        public RetaliationMission(Craft craft, GeoPosition initialDestination, Outpost outpost, int numLandings, int subLandings)
+             :
+-            base(craft, initialDestination, numLandings)
++            base(craft, initialDestination, numLandings, subLandings)
+         {
+             this.outpost = outpost;
+         }
+@@ -84,7 +84,7 @@
+ 
+             // leave earth
+             GeoPosition exit = outpost.Position.RandomLocation((float)Math.PI / 2.0f);
+-            SetState(new MoveToPositionState(this, exit));
++            SetState(new MoveToPositionState(this, exit,MissionState.MoveToPositionStateType.LandingDestination,Craft.MaxSpeed  ));
+         }
+ 
+         /// <summary>
+Index: Xenocide/Source/Model/Geoscape/Vehicles/Missions/SupplyOutpostMission.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Vehicles/Missions/SupplyOutpostMission.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Vehicles/Missions/SupplyOutpostMission.cs	(working copy)
+@@ -58,7 +58,7 @@
+             Justification = "will throw if target is null")]
+         public SupplyOutpostMission(Craft craft, GeoPosition target)
+             :
+-            base(craft, target.RandomLocationDistantBykm(20), 1)
++            base(craft, target.RandomLocationDistantBykm(20), 1,0)
+         {
+         }
+ 
+@@ -87,7 +87,7 @@
+         protected override GeoPosition OnCalcFinalLandingSite()
+         {
+             // for most missions, just pick yet another landing site
+-            return PickRandomLandingSite();
++            return PickRandomLandingSite(MissionState.MoveToPositionStateType.LandingDestination);
+         }
+ 
+         #region Fields
+Index: Xenocide/Source/Model/Geoscape/Vehicles/Missions/TerrorMission.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Vehicles/Missions/TerrorMission.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Vehicles/Missions/TerrorMission.cs	(working copy)
+@@ -54,9 +54,9 @@
+         /// <param name="attackCity">Will the UFO actually drop off an assult team?</param>
+         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
+             Justification = "will throw if city is null")]
+-        public TerrorMission(Ufo ufo, City city, bool attackCity)
++        public TerrorMission(Ufo ufo, City city, bool attackCity, int numLandings, int numSubLandings)
+             :
+-            base(ufo, city.Position.RandomLocationDistantBykm(500), numLandings)
++            base(ufo, city.Position.RandomLocationDistantBykm(500), numLandings, numSubLandings)
+         {
+             this.city       = city;
+             this.attackCity = attackCity;
+@@ -76,7 +76,7 @@
+ 
+             // and leave earth
+             GeoPosition exit = city.Position.RandomLocation((float)Math.PI / 2.0f);
+-            SetState(new MoveToPositionState(this, exit));
++            SetState(new MoveToPositionState(this, exit,MissionState.MoveToPositionStateType.LandingDestination,Craft.MaxSpeed ));
+         }
+ 
+         /// <summary>
+@@ -105,11 +105,6 @@
+         private City city;
+ 
+         /// <summary>
+-        /// A terror mission UFO will land 4 times before heading to the target city
+-        /// </summary>
+-        private const int numLandings = 5;
+-
+-        /// <summary>
+         /// Will the UFO actually drop off an assult team?
+         /// </summary>
+         private bool attackCity;
+Index: Xenocide/Source/Model/Geoscape/Vehicles/Missions/UfoMission.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Vehicles/Missions/UfoMission.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Vehicles/Missions/UfoMission.cs	(working copy)
+@@ -30,6 +30,8 @@
+ using System.Collections.Generic;
+ using System.Text;
+ 
++using ProjectXenocide.Model.Geoscape.Geography;
++
+ #endregion
+ 
+ namespace ProjectXenocide.Model.Geoscape.Vehicles
+@@ -51,19 +53,22 @@
+     [Serializable]
+     public abstract class UfoMission : Mission
+     {
++
+         /// <summary>
+         /// Constructor
+         /// </summary>
+         /// <param name="craft">craft that "owns" this mission</param>
+         /// <param name="target">The center of the area the UFO is targeting</param>
+         /// <param name="landings">Number of times the craft is to land</param>
+-        protected UfoMission(Craft craft, GeoPosition target, int landings)
++        protected UfoMission(Craft craft, GeoPosition target, int landings, int subLandings)
+             :
+             base(craft)
+         {
+             this.target   = new GeoPosition(target);
+             this.landings = landings;
+-            SetState(new MoveToPositionState(this, target));
++            this.subLandings = subLandings;
++            this.baseSubLandings = subLandings;
++            SetState(new MoveToPositionState(this, target, MissionState.MoveToPositionStateType.LandingDestination, craft.MaxSpeed));
+         }
+ 
+         /// <summary>
+@@ -71,7 +76,8 @@
+         /// </summary>
+         public override void OnTimerFinished()
+         {
+-            SetState(new MoveToPositionState(this, CalcNewDestination()));
++            MissionState.MoveToPositionStateType stateType = MissionState.MoveToPositionStateType.LandingDestination;
++            SetState(new MoveToPositionState(this, CalcNewDestination(stateType), stateType,Craft.MaxSpeed ));
+         }
+ 
+         /// <summary>
+@@ -79,13 +85,27 @@
+         /// </summary>
+         public override void OnDestinationReached()
+         {
+-            --landings;
+-            if (0 < landings)
++
++            ProjectXenocide.Utils.Util.GeoTimeDebugWriteLine("Destination {0}", landings);
++
++            if (subLandings == baseSubLandings)
+             {
++            
++                SetState(new MoveToPositionState(this, 
++                                                 CalcNewDestination(MissionState.MoveToPositionStateType.PointOfInterst), 
++                                                 MissionState.MoveToPositionStateType.PointOfInterst,
++                                                 Craft.MaxSpeed * GetRandomSpeedModifier()));
++                return;
++            }
++           
++            if (1 < landings)
++            {
++                
+                 // "sample" this site
+                 SetState(new WaitState(this, CalcSecondsOnGround()));
++                subLandings = baseSubLandings;
+             }
+-            else if (0 == landings)
++            else if (1 == landings)
+             {
+                 OnFinalLandingSiteReached();
+             }
+@@ -94,8 +114,27 @@
+                 // tell owner we're done
+                 Craft.OnMissionFinished();
+             }
++            --landings;
+         }
+ 
++        public override void OnSubDestinationReached()
++        {
++            ProjectXenocide.Utils.Util.GeoTimeDebugWriteLine("Point {0} of {1}", subLandings, baseSubLandings);
++            if (subLandings > 1)
++                SetState(new MoveToPositionState(   this, 
++                                                    CalcNewDestination(MissionState.MoveToPositionStateType.PointOfInterst), 
++                                                    MissionState.MoveToPositionStateType.PointOfInterst, 
++                                                    Craft.MaxSpeed * GetRandomSpeedModifier()));
++
++            if(subLandings ==1)
++                SetState(new MoveToPositionState(this,
++                                                   target,
++                                                   MissionState.MoveToPositionStateType.LandingDestination,
++                                                   Craft.MaxSpeed));
++              
++
++            subLandings--;
++        }
+         /// <summary>
+         /// Respond to this craft finishing a dogfight with another craft
+         /// </summary>
+@@ -115,11 +154,35 @@
+         /// Pick a random landing site somewhere near the target
+         /// </summary>
+         /// <returns>Landing site</returns>
+-        public GeoPosition PickRandomLandingSite()
++        public GeoPosition PickRandomLandingSite(MissionState.MoveToPositionStateType state)
+         {
+-            return target.RandomLocationDistantBykm(1000 + Xenocide.Rng.Next(1000));
++            int range = 0;
++
++            if (state == MissionState.MoveToPositionStateType.LandingDestination)
++                range = 1000;
++            else
++                range = 250;
++
++            int rndRange = Xenocide.Rng.Next(range);
++            GeoPosition site = target.RandomLocationDistantBykm(range + rndRange);
++
++        
++            if (Xenocide.GameState.GeoData.Planet.IsPositionOverWater(site)
++               && state == MissionState.MoveToPositionStateType.LandingDestination)
++                site = Xenocide.GameState.GeoData.Planet.GetClosetLand(site);
++
++            return site;
+         }
+ 
++        public double GetRandomSpeedModifier()
++        {
++            double minimumSpeed = 0.6;
++
++            minimumSpeed += (Xenocide.Rng.Next(400))/1000;
++
++            return minimumSpeed;
++
++        }
+         /// <summary>
+         /// Called when UFO reaches final landing site.  May be:
+         /// City for terror mission
+@@ -152,12 +215,17 @@
+         /// Figure out where UFO should go next
+         /// </summary>
+         /// <returns>Where UFO should go next</returns>
+-        private GeoPosition CalcNewDestination()
++        private GeoPosition CalcNewDestination(MissionState.MoveToPositionStateType stateType)
+         {
++            if (stateType == MissionState.MoveToPositionStateType.PointOfInterst)
++            {
++                return PickRandomLandingSite(stateType);
++            }
++      
+             if (1 < landings)
+             {
+                 // We've got another sampling to do, pick somewhere around target location
+-                return PickRandomLandingSite();
++                return PickRandomLandingSite(stateType);
+             }
+             if (1 == landings)
+             {
+@@ -182,6 +250,16 @@
+         /// </summary>
+         private int landings;
+ 
++        /// <summary>
++        /// Number if investagative sub stops a ufo makes prior to landing
++        /// </summary>
++        private int subLandings;
++
++        /// <summary>
++        /// the original amount of subLandings specifed.  When we target a new main destination,
++        /// we need to set back to this amount
++        /// </summary>
++        private int baseSubLandings;
+         #endregion
+     }
+ }
+Index: Xenocide/Source/Model/Geoscape/Vehicles/States/InterceptCraftState.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Vehicles/States/InterceptCraftState.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Vehicles/States/InterceptCraftState.cs	(working copy)
+@@ -145,10 +145,14 @@
+                 UfoSiteMission battlescapeMission = new UfoSiteMission(target, Mission.Craft);
+                 geoevent = new StartBattlescapeGeoEvent(battlescapeMission);
+             }
+-            else if (Mission.Craft.IsArmed)
++            else if (Mission.Craft.IsArmed && !target.Mission.IsLanded && !target.IsCrashed)
+             {
+                 geoevent = new StartAeroscapeGeoEvent(Mission.Craft, target);
+             }
++            else if (Mission.Craft.IsArmed && (target.Mission.IsLanded || target.IsCrashed))
++            {
++                Mission.SetState(new PatrolState(Mission,Mission.Craft.Position));
++            }
+             if (null != geoevent)
+             {
+                 Xenocide.GameState.GeoData.QueueEvent(geoevent);
+Index: Xenocide/Source/Model/Geoscape/Vehicles/States/MissionState.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Vehicles/States/MissionState.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Vehicles/States/MissionState.cs	(working copy)
+@@ -44,6 +44,12 @@
+     [Serializable]
+     abstract public class MissionState : ICraftEvents
+     {
++
++        public enum MoveToPositionStateType
++        {
++            LandingDestination,
++            PointOfInterst
++        }
+         /// <summary>
+         /// Constructor
+         /// </summary>
+@@ -117,7 +123,14 @@
+         /// <remarks>default behaviour is to ignore</remarks>
+         public virtual void OnDestinationReached() { }
+ 
++
+         /// <summary>
++        /// Respond to this craft reaching a destination point of interest
++        /// </summary>
++        /// <remarks>default behaviour is to ignore</remarks>
++        public virtual void OnSubDestinationReached() { }
++
++        /// <summary>
+         /// Respond to timer finishing counting down.
+         /// </summary>
+         /// <remarks>default behaviour is to ignore</remarks>
+Index: Xenocide/Source/Model/Geoscape/Vehicles/States/MoveToPositionState.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Vehicles/States/MoveToPositionState.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Vehicles/States/MoveToPositionState.cs	(working copy)
+@@ -43,6 +43,7 @@
+     [Serializable]
+     public class MoveToPositionState : MissionState
+     {
++
+         /// <summary>
+         /// Constructor
+         /// </summary>
+@@ -50,11 +51,12 @@
+         /// <param name="destination">Where the craft is going</param>
+         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
+             Justification = "Is validated in base class")]
+-        public MoveToPositionState(Mission mission, GeoPosition destination)
++        public MoveToPositionState(Mission mission, GeoPosition destination, MoveToPositionStateType stateType , double craftSpeed)
+             :
+-            base(mission, mission.Craft.MaxSpeed)
++            base(mission, craftSpeed)
+         {
+             this.destination = new GeoPosition(destination);
++            this.stateType = stateType;
+         }
+ 
+         /// <summary>
+@@ -69,15 +71,22 @@
+             float targetDistance = craft.Position.Distance(destination);
+             float azimuth = craft.Position.GetAzimuth(destination);
+ 
++
+             // figure out how far we can travel in this time slice
+-            double range = craft.MaxSpeed * milliseconds / 1000.0;
++            
++            double range = CurrentSpeed * milliseconds / 1000.0;
+ 
+             // now move craft towards target, or put it AT target
+             if (targetDistance <= range)
+             {
+-                Util.GeoTimeDebugWriteLine("{0} has reached destination", craft.Name);
++                Util.GeoTimeDebugWriteLine("{0} has reached {1}", craft.Name, stateType.ToString());
+                 craft.Position = destination;
+-                Mission.OnDestinationReached();
++
++                if(stateType == MoveToPositionStateType.LandingDestination)
++                    Mission.OnDestinationReached();
++
++                if (stateType == MoveToPositionStateType.PointOfInterst)
++                    Mission.OnSubDestinationReached();
+             }
+             else
+             {
+@@ -95,5 +104,7 @@
+         /// Where the craft is going
+         /// </summary>
+         private GeoPosition destination;
++
++        private MoveToPositionStateType stateType;
+     }
+ }
+Index: Xenocide/Source/Model/Geoscape/Vehicles/States/ReturnToBaseState.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Vehicles/States/ReturnToBaseState.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Vehicles/States/ReturnToBaseState.cs	(working copy)
+@@ -48,7 +48,7 @@
+             Justification = "Is validated in base class")]
+         public ReturnToBaseState(Mission mission)
+             :
+-            base(mission, mission.Craft.HomeBase.Position)
++            base(mission, mission.Craft.HomeBase.Position,MoveToPositionStateType.LandingDestination,mission.Craft.MaxSpeed)
+         {
+         }
+     }
+Index: Xenocide/Source/Model/Geoscape/Vehicles/UnitTestUfo.cs
+===================================================================
+--- Xenocide/Source/Model/Geoscape/Vehicles/UnitTestUfo.cs	(revision 1878)
++++ Xenocide/Source/Model/Geoscape/Vehicles/UnitTestUfo.cs	(working copy)
+@@ -81,7 +81,7 @@
+             GeoPosition start  = new GeoPosition((float)Math.PI * 0.4f,  0);
+             GeoPosition end    = new GeoPosition((float)Math.PI * -0.4f, 0);
+             Ufo ufo = new Ufo("ITEM_UFO_RECON", start, null);
+-            ufo.Mission = new ResearchMission(ufo, end, 1);
++            ufo.Mission = new ResearchMission(ufo, end, 1,2);
+ 
+             float radarRange = (float)GeoPosition.KilometersToRadians((radar.FacilityInfo as ScanFacilityInfo).Range);
+             while (!end.IsWithin(ufo.Position, (float)GeoPosition.KilometersToRadians(20)))
+@@ -106,7 +106,7 @@
+             end = new GeoPosition((float)Math.PI * -0.6f, 0);
+             ufo.Position = new GeoPosition((float)Math.PI * 0.6f, 0);
+             ufo.Mission.Abort();
+-            ufo.Mission = new ResearchMission(ufo, end, 1);
++            ufo.Mission = new ResearchMission(ufo, end, 1,2);
+             radarRange = (float)GeoPosition.KnotsToRadians(700);
+             while (!end.IsWithin(ufo.Position, (float)GeoPosition.KilometersToRadians(20)))
+             {
+@@ -132,7 +132,7 @@
+             GeoPosition start = new GeoPosition();
+             GeoPosition end = new GeoPosition((float)Math.PI * -0.4f, 0);
+             Ufo ufo = new Ufo("ITEM_UFO_RECON", start, null);
+-            ufo.Mission = new ResearchMission(ufo, end, 3);
++            ufo.Mission = new ResearchMission(ufo, end, 3,3);
+ 
+             double twelvehours = 12 * 3600 * 1000.0;
+ 
+Index: Xenocide/Source/UI/Scenes/Geoscape/GeoHud.cs
+===================================================================
+--- Xenocide/Source/UI/Scenes/Geoscape/GeoHud.cs	(revision 1878)
++++ Xenocide/Source/UI/Scenes/Geoscape/GeoHud.cs	(working copy)
+@@ -331,8 +331,7 @@
+             private const float fullCircle = 360.0f;
+ 
+             // text area flash animation control values
+-            private const int flashAnimStartSeed = 1000;
+-            private const int flashAnimStartThreshold = 900;
++            private const int flashAnimStartChance = 30;
+             private const int flashStartFrame = 8;
+             private const int flashEndFrame = 18;
+             private const float flashSpeed = 300.0f;
+@@ -439,10 +438,7 @@
+                 if (flashCheckTime > flashCheckInterval)
+                 {
+                     flashCheckTime = 0;
+-                    Random rnd = new Random(DateTime.Now.Millisecond);
+-                    int decide = rnd.Next(flashAnimStartSeed);
+-
+-                    if (decide > flashAnimStartThreshold)
++                    if(Xenocide.Rng.RollDice(flashAnimStartChance))
+                     {
+                         inFlash = true;
+                         flashAnimTime = 0;
+Index: Xenocide/Source/UI/Scenes/Geoscape/GeoscapeScene.cs
+===================================================================
+--- Xenocide/Source/UI/Scenes/Geoscape/GeoscapeScene.cs	(revision 1878)
++++ Xenocide/Source/UI/Scenes/Geoscape/GeoscapeScene.cs	(working copy)
+@@ -224,7 +224,14 @@
+             {
+                 if (ufo.IsKnownToXCorp)
+                 {
+-                    var iconType = ufo.IsCrashed ? GeoHud.HudIconTypes.UfoCrash : GeoHud.HudIconTypes.UfoFly;
++                    GeoHud.HudIconTypes iconType =  GeoHud.HudIconTypes.UfoFly;
++
++                    if(ufo.Mission.IsLanded)
++                        iconType = GeoHud.HudIconTypes.UfoLand;
++
++                    if(ufo.IsCrashed)
++                       iconType =  GeoHud.HudIconTypes.UfoCrash;
++
+                     geoHud.DrawIcon(device, ufo, basicEffect, gameTime, cameraGeoPos, ufo.Name, iconType);
+                 }
+             }
+@@ -237,8 +244,19 @@
+                 {
+                     if (!ufo.IsKnownToXCorp)
+                     {
+-                        var iconType = ufo.IsCrashed ? GeoHud.HudIconTypes.UfoCrash : GeoHud.HudIconTypes.UfoFly;
++                        GeoHud.HudIconTypes iconType;
++
++                        if (!ufo.Mission.IsLanded)
++                        {
++                            iconType = ufo.IsCrashed ? GeoHud.HudIconTypes.UfoCrash : GeoHud.HudIconTypes.UfoFly;
++
++                        }
++                        else
++                        {
++                            iconType = GeoHud.HudIconTypes.UfoLand;
++                        }
+                         geoHud.DrawIcon(device, ufo, basicEffect, gameTime, cameraGeoPos, ufo.Name, iconType);
++
+                     }
+                 }
+             }
+Index: Xenocide/Source/UI/Screens/GeoscapeScreen.cs
+===================================================================
+--- Xenocide/Source/UI/Screens/GeoscapeScreen.cs	(revision 1878)
++++ Xenocide/Source/UI/Screens/GeoscapeScreen.cs	(working copy)
+@@ -105,6 +105,7 @@
+         /// </summary>
+         protected override void CreateCeguiWidgets()
+         {
++
+             SetView(0.00f, 0.00f, 0.745f, 1f);
+ 
+             // add text giving the time
+@@ -483,6 +484,9 @@
+                         {
+                             // Overmind starts sending missions near location of X-Corp base
+                             GeoPosition target = pos.RandomLocationDistantBykm(500);
++                            if (Xenocide.GameState.GeoData.Planet.IsPositionOverWater(target))
++                                target = Xenocide.GameState.GeoData.Planet.GetClosetLand(target);
++
+                             Xenocide.GameState.GeoData.Overmind.BeginFirstMissions(target);
+                         }
+                         Xenocide.ScreenManager.QueueDialog(new NameNewBaseDialog(pos, isFirstBase));

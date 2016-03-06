@@ -1,0 +1,277 @@
+CREDITS (hit esc key to exit)
+
+Federico Andras "Red Knight" Lois
+Senior Cat Herder
+
+
+
+ART TEAM
+
+Aaron R. "Vaaish" Dickey
+Head of AWD
+
+Jasin "Darkhomb" Windisch
+
+Vadim "Shinzon" Farafontov
+
+
+
+
+CREATIVE TEXT TEAM
+
+Matthias "Mad" Vossen
+Head of CTD
+
+Basil "kafros" Anastasiou
+
+Dettmar J. "Zombie" Behm
+
+Astyanax
+
+
+
+PROGRAMMING TEAM
+
+David "dteviot" Teviotdale
+Head of PRG and C# Code Monkey
+
+Daniel "SupSuper" Albano
+
+Oded "StaffSargeant" Coster
+
+Centurion
+
+
+
+Also thanks to:
+
+Boris "reist" Peterbarg (PRG)
+
+Derek "LfO" Smootz (SND)
+
+Geerzo (PRG)
+
+Guyver6 (PRG)
+
+Jan "Rincewind" Eickmann (PRG)
+
+Juho "Garo" Makinen (PRG)
+
+Lars "LarsW" Wolter
+
+Matias "Azrael" Lanio (CTD)
+
+Michael Bo "mikker" Magling (AWD)
+
+Thomas "Atex" Torf (SND)
+
+A_dxman (CTD)
+
+amessier (PRG)
+
+Ancalagon (CTD)
+
+
+Anglachel (AWD)
+
+Anthraxus (CTD)
+
+Aosar (CTD)
+
+arrendek (PRG)
+
+Beetle (PRG)
+
+BenchBoy (AWD)
+
+Black Dash (AWD)
+
+blane.. (SND)
+
+Blehm 98 (CTD)
+
+blob (PRG)
+
+bpuk (PRG)
+
+Breunor (AWD)
+
+captainmikey (PRG)
+
+Cavoe (SND)
+
+coolp (CTD)
+
+CopyBass (CTD)
+
+Cpl. Facehugger (CTD)
+
+Cpt. Boxershorts (CTD)
+
+Crix Dorius (AWD)
+
+cyberdrift (PRG)
+
+Danny252 (CTD)
+
+Darkside (PRG)
+
+Deimos (AWD)
+
+demich (AWD)
+
+Denevive (AWD)
+
+Der Dude (SND)
+
+dipstick (CTD)
+
+eamon (AWD)
+
+exio82 (PRG)
+
+Exo2000 (AWD)
+
+Extralucas (CTD)
+
+Fatal Error (AWD)
+
+fidel (AWD)
+
+flam (SND)
+
+Foozball (CTD)
+
+Fred the Goat (CTD)
+
+fux0r666 (AWD)
+
+gambino (AWD)
+
+Gangsta (AWD)
+
+Global Motion (SND)
+
+GreatGold (CTD)
+
+gregie (AWD)
+
+gregie (PRG)
+
+Hailfire22 (CTD)
+
+hippyjon (SND)
+
+Historian (CTD)
+
+Hymie the Control Robot (PRG)
+
+Ion (AWD)
+
+JakeDrake (PRG)
+
+Jim69 (AWD)
+
+JOLLY (SND)
+
+j'ordos (AWD)
+
+Judge_Deadd (CTD)
+
+Kamikazee (CtD)
+
+kelargo (PRG)
+
+Kenshiro (AWD)
+
+Kikanaide (CTD)
+
+KillZone (CTD)
+
+K-Tana (CTD)
+
+larsiusprime (CTD)
+
+LordT (CTD)
+
+M4st3r (PRG)
+
+MagicAndy (AWD)
+
+mamutas (PRG)
+
+Marquis (AWD)
+
+MarS (AWD)
+
+Maverick (PRG)
+
+McBob (AWD)
+
+Mindblighter (AWD)
+
+Moriarty (CTD)
+
+nixnihil (CTD)
+
+oddjob (AWD)
+
+P|c (AWD)
+
+Pi Masta (PRG)
+
+PopeBij (AWD)
+
+Qonfused (CTD)
+
+Raven Squad (AWD)
+
+Raven Squad (SND)
+
+Ruivo (CTD)
+
+RustedSoul (CTD)
+
+Ryan Versaw (PRG)
+
+samsamsam (AWD)
+
+Sinscale17 (CTD)
+
+space captain (SND)
+
+Stow (SND)
+
+Syntax Error (CTD)
+
+tamat (AWD)
+
+testarossa (AWD)
+
+Tiskaite (SND)
+
+Tsereve (CTD)
+
+tzuchan (CTD)
+
+UnFleshed One (PRG)
+
+valerian (AWD)
+
+warhamster (CTD)
+
+Xer0 (SND)
+
+
+
+Special thanks go to:
+
+Micah Gibson for hosting Project Xenocide on xcomufo.com
+Jeffrey "Mindstormmaster" Wong for administrating xcomufo.com
+Stewart for administrating the forums
+
+and of course to the Gollop brothers and the whole development team behind the original X-COM series!
+
+Thanks to the National Aeronautics and Space Administration for providing earth maps free of charge.
+
+Also thanks to everyone else who deserves credit but was forgot due to sudden Alien abduction of the writer.

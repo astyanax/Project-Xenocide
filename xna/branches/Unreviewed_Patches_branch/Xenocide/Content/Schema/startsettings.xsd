@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="StartSettingConfig" xmlns="StartSettingConfig" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:include schemaLocation="basic.xsd" />
+  <xs:complexType name="outpostLayoutType">
+    <xs:annotation>
+      <xs:documentation source="dteviot">
+        The facilities in the starting X-Corp outpost.
+        Note.  It's vital that this list starts with the access facility, and then each
+        additional facility must be placed adjacent one that has been previously supplied.
+        I.e. Facilities will be constructed in the order they appear in this list, and must
+        have a route to the access lift.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence maxOccurs="unbounded">
+      <xs:element name="facility">
+        <xs:annotation>
+          <xs:documentation>
+            The type of facility, and co-ordinates of it's top left corner
+            relative to the top left corner of the outpost
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:attribute name="type" type="facilityID" use="required" />
+          <xs:attribute name="top" type="xs:nonNegativeInteger" use="required" />
+          <xs:attribute name="left" type="xs:nonNegativeInteger" use="required" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="inventoryType">
+    <xs:annotation>
+      <xs:documentation source="dteviot">items in the initial X-Corp outpost</xs:documentation>
+    </xs:annotation>
+    <xs:sequence maxOccurs="unbounded">
+      <xs:element name="stock">
+        <xs:annotation>
+          <xs:documentation>The type of item, and number of units.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:attribute name="type"     type="itemID"                use="required" />
+          <xs:attribute name="quantity" type="xs:nonNegativeInteger" use="required" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cheatsType">
+    <xs:annotation>
+      <xs:documentation source="dteviot">Which cheats are turned on</xs:documentation>
+    </xs:annotation>
+    <xs:sequence />
+    <xs:attribute name="showAllXNetEntries" type="xs:boolean" use="required">
+      <xs:annotation>
+        <xs:documentation source="dteviot">Show all entries in X-Net regardless of if they're discovered or not</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="showUndetectedUfos" type="xs:boolean" use="required">
+      <xs:annotation>
+        <xs:documentation source="dteviot">Show UFOs on Geoscape, even when they are not on Radar?</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="controlAlienMissions" type="xs:boolean" use="required">
+      <xs:annotation>
+        <xs:documentation source="cgoat">Show Alien Mission button on Geoscape, which allows manually starting alien missions.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="xcorpCantLooseAtStartOfMonth" type="xs:boolean" use="required">
+      <xs:annotation>
+        <xs:documentation source="dteviot">X-Corp won't loose the game if have a low score or big debit at end of month.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="showAllAliens" type="xs:boolean" use="required">
+      <xs:annotation>
+        <xs:documentation source="dteviot">Show aliens on battlescape, regardless of being in line of sight of an X-Corp soldier or not.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="playerControlsAliens" type="xs:boolean" use="required">
+      <xs:annotation>
+        <xs:documentation source="dteviot">Can the player control the battlescape alien forces the same way the player can control the X-Corp forces?</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="startSettings">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="outpostLayout" type="outpostLayoutType" />
+        <xs:element name="inventory" type="inventoryType" />
+        <xs:element name="cheats" type="cheatsType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

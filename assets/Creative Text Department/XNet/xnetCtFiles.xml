@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xnetfiles>
+<!--Human Craft-->
+  <category name="Human Craft">
+	<entry id="XNET_XC-1_GRYPHON" name="XC-1 Gryphon Interceptor" file="Human Craft\XC-1 Gryphon.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_XC-1_GRYPHON" />
+        <graphics model="XC1.mesh" camera="AUTO"/>
+    </entry>
+	<entry id="XNET_XC-2_STARFIRE" name="XC-2 Starfire Hybrid Interceptor" file="Human Craft\XC-2 Starfire.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_XC-2_STARFIRE" />
+	</entry>
+	<entry id="XNET_XC-11_CONDOR" name="XC-11 Condor Transport" file="Human Craft\XC-11 Condor.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_XC-11_CONDOR" />
+	</entry>
+	<entry id="XNET_XC-22_ECLIPSE" name="XC-22 Eclipse Hybrid Transport" file="Human Craft\XC-22 Eclipse.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_XC-22_ECLIPSE" />
+	</entry>
+	<entry id="XNET_XC-33_VENGEANCE" name="XC-33 Vengeance" file="Human Craft\XC-33 Vengeance.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_XC-33_VENGEANCE" />
+        <graphics model="XC33.mesh" camera="AUTO"/>
+	</entry>
+  </category>
+
+  <category name="Armament">
+	<entry id="XNET_CANNON" name="Cannon" file="Armaments\Cannon.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_CANNON" />
+	</entry>
+	<entry id="XNET_LASER_CANNON" name="Laser Cannon" file="Armaments\Laser Cannon.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_LASER_CANNON" />
+	</entry>
+	<entry id="XNET_PLASMA_CANNON" name="Plasma Cannon" file="Armaments\Plasma Cannon.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_PLASMA_CANNON" />
+	</entry>
+	<entry id="XNET_GAIA_MISSILE" name="GAIA Missile" file="Armaments\GAIA Missile.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_GAIA_MISSILE_LAUNCHER" />
+	</entry>
+	<entry id="XNET_SIDEWINDER_LIGHT_MISSILE" name="Sidewinder Light Missile" file="Armaments\Sidewinder Light Missile.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_SIDEWINDER_LIGHT_MISSILE_LAUNCHER" />
+        <graphics model="Stingray.mesh" camera="AUTO"/>
+	</entry>
+	<entry id="XNET_TITAN_HEAVY_MISSILE" name="Titan Heavy Missile" file="Armaments\Titan Heavy Missile.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_TITAN_HEAVY_MISSILE_LAUNCHER" />
+	</entry>
+  </category>
+
+<!--XCAP-->
+  <category name="XCAP">
+	<entry id="XNET_XCAP_CHASSIS" name="XCAP Chassis" file="XCAPS\XCAP Chassis.rtf">
+	</entry>
+	<entry id="XNET_XCAP,_CANNON" name="XCAP, Cannon" file="XCAPS\XCAP, Cannon.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_XCAP_CANNON" />
+	</entry>
+	<entry id="XNET_XCAP,_ROCKET" name="XCAP, Rocket" file="XCAPS\XCAP, Rocket.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_XCAP_ROCKET" />
+	</entry>
+	<entry id="XNET_XCAP,_LASER" name="XCAP, Laser" file="XCAPS\XCAP, Laser.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_XCAP_LASER" />
+	</entry>
+	<entry id="XNET_XCAP-AG,_GDL" name="XCAP-AG, GDL" file="XCAPS\XCAP-AG, GDL.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_XCAP-AG_GAIA" />
+	</entry>
+	<entry id="XNET_XCAP-AG,_PLASMA" name="XCAP-AG, Plasma" file="XCAPS\XCAP-AG, Plasma.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_XCAP-AG_PLASMA" />
+	</entry>
+	<entry id="XNET_XCAP-AG_CHASSIS" name="XCAP-AG Chassis" file="XCAPS\XCAP-AG Chassis.rtf">
+	</entry>
+  </category>
+
+<!--Weapons-->
+  <category name="Weapons">
+	<entry id="XNET_PLASMA_PRINCIPLES" name="Plasma Principles" file="Weapons\Plasma Principles.rtf">
+	</entry>
+	<entry id="XNET_PLASMA_PISTOL" name="Plasma Pistol" file="Weapons\Plasma Pistol.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_PLASMA_PISTOL" />
+	</entry>
+	<entry id="XNET_PLASMA_PISTOL_CLIP" name="Plasma Pistol Clip" file="Weapons\Plasma Pistol Clip.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_PLASMA_PISTOL_CLIP" />
+	</entry>
+	<entry id="XNET_PLASMA_RIFLE" name="Plasma Rifle" file="Weapons\Plasma Rifle.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_PLASMA_RIFLE" />
+	</entry>
+	<entry id="XNET_PLASMA_RIFLE_CLIP" name="Plasma Rifle Clip" file="Weapons\Plasma Rifle Clip.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_PLASMA_RIFLE_CLIP" />
+	</entry>
+	<entry id="XNET_HEAVY_PLASMA_RIFLE" name="Heavy Plasma Rifle" file="Weapons\Heavy Plasma Rifle.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_HEAVY_PLASMA_RIFLE" />
+	</entry>
+	<entry id="XNET_HEAVY_PLASMA_RIFLE_CLIP" name="Heavy Plasma Rifle Clip" file="Weapons\Heavy Plasma Rifle Clip.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_HEAVY_PLASMA_RIFLE_CLIP" />
+	</entry>
+	<entry id="XNET_GRAVITY_DISTORTION_LAUNCHER" name="Gravity Distortion Launcher" file="Weapons\Gravity Distortion Launcher.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_GRAVITY_DISTORTION_LAUNCHER" />
+	</entry>
+	<entry id="XNET_GRAVITY_DISTORTION_DRONE" name="Gravity Distortion Drone" file="Weapons\Gravity Distortion Drone.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_GRAVITY_DISTORTION_DRONE" />
+	</entry>
+	<entry id="XNET_LASER_PRINCIPLES" name="Laser Principles" file="Weapons\Laser Principles.rtf">
+	</entry>
+	<entry id="XNET_LASER_PISTOL" name="Laser Pistol" file="Weapons\Laser Pistol.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_LASER_PISTOL" />
+        <graphics model="laser.mesh" camera="PISTOL"/>
+	</entry>
+	<entry id="XNET_LASER_RIFLE" name="Laser Rifle" file="Weapons\Laser Rifle.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_LASER_RIFLE" />
+	</entry>
+	<entry id="XNET_HEAVY_LASER_RIFLE" name="Heavy Laser Rifle" file="Weapons\Heavy Laser Rifle.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_HEAVY_LASER_RIFLE" />
+	</entry>
+	<entry id="XNET_PISTOL" name="Pistol" file="Weapons\Pistol.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_PISTOL" />
+	</entry>
+	<entry id="XNET_ASSAULT_RIFLE" name="Assault Rifle" file="Weapons\Assault Rifle.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_ASSAULT_RIFLE" />
+        <graphics model="Assault Rifle.mesh" camera="AUTO"/>
+	</entry>
+	<entry id="XNET_HEAVY_CANNON" name="Heavy Cannon" file="Weapons\Heavy Cannon.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_HEAVY_CANNON" />
+	</entry>
+	<entry id="XNET_REPEATER_CANNON" name="Repeater Cannon" file="Weapons\Repeater Cannon.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_REPEATER_CANNON" />
+	</entry>
+	<entry id="XNET_STUN_BATON" name="Stun Baton" file="Weapons\Stun Baton.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_STUN_BATON" />
+	</entry>
+	<entry id="XNET_STUN_LAUNCHER" name="Stun Launcher" file="Weapons\Stun Launcher.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_STUN_LAUNCHER" />
+        <graphics model="Stun Launcher.mesh" camera="AUTO"/>
+	</entry>
+	<entry id="XNET_STUN_BOMB" name="Stun Bomb" file="Weapons\Stun Bomb.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_STUN_BOMB" />
+	</entry>
+	<entry id="XNET_ROCKET_LAUNCHER" name="Rocket Launcher" file="Weapons\Rocket Launcher.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_ROCKET_LAUNCHER" />
+	</entry>
+  </category>
+
+<!--Equipment-->
+  <category name="Equipment">
+	<entry id="XNET_MOTION_SENSOR" name="Motion Sensor" file="Equipment\Motion Sensor.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_MOTION_SENSOR" />
+	</entry>
+	<entry id="XNET_SATCHEL_CHARGE" name="Satchel Charge" file="Equipment\Satchel Charge.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_SATCHEL_CHARGE" />
+	</entry>
+	<entry id="XNET_GRENADE" name="Grenade" file="Equipment\Grenade.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_GRENADE" />
+	</entry>
+	<entry id="XNET_PROXIMITY_GRENADE" name="Proximity Grenade" file="Equipment\Proximity Grenade.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_PROXIMITY_GRENADE" />
+	</entry>
+	<entry id="XNET_ALIEN_GRENADE" name="Alien Grenade" file="Equipment\Alien Grenade.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_ALIEN_GRENADE" />
+	</entry>
+	<entry id="XNET_SMOKE_GRENADE" name="Smoke Grenade" file="Equipment\Smoke Grenade.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_SMOKE_GRENADE" />
+	</entry>
+	<entry id="XNET_FLASHPOD" name="Flashpod" file="Equipment\Flashpod.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_FLASHPOD" />
+	</entry>
+	<entry id="XNET_FIELD_MEDICAL_KIT" name="Field Medical Kit" file="Equipment\Field Medical Kit.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_FIELD_MEDICAL_KIT" />
+	</entry>
+	<entry id="XNET_PSIONIC_PROBE" name="Psionic Probe" file="Equipment\Psionic Probe.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_PSIONIC_PROBE" />
+	</entry>
+	<entry id="XNET_PSIONIC_AMPLIFIER" name="Psionic Amplifier" file="Equipment\Psionic Amplifier.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_PSIONIC_AMPLIFIER" />
+	</entry>
+	<entry id="XNET_STANDARD-ISSUE_BATTLEDRESS_UNIFORM" name="Standard Issue Battle Dress" file="Equipment\Standard Issue Battledress Uniform.rtf">
+	</entry>
+	<entry id="XNET_COMBAT_ARMOR" name="Combat Armor" file="Equipment\Combat Armor.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_COMBAT_ARMOR" />
+	</entry>
+	<entry id="XNET_COMBAT_POWERSUIT" name="Combat Powersuit" file="Equipment\Combat Powersuit.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_COMBAT_POWERSUIT" />
+	</entry>
+	<entry id="XNET_ANTIGRAV_POWERSUIT" name="Anti-Grav Powersuit" file="Equipment\Anti-Grav Powersuit.rtf">
+        <statisticsLink objectType="ITEM" object="ITEM_ANTI_GRAV_POWERSUIT" />
+	</entry>
+  </category>
+
+<!--Facilities-->
+  <category name="Facilities">
+	<entry id="XNET_BASE_ACCESS_FACILITY" name="Base Access Facility" file="Facilities/Base Access Facility.rtf">
+        <statisticsLink objectType="FACILITY" object="FAC_BASE_ACCESS_FACILITY" />
+        <graphics model="base_access.mesh" camera="FACILITY"/>
+	</entry>
+	<entry id="XNET_BARRACKS_FACILITY" name="Barracks Facility" file="Facilities/Barracks Facility.rtf">
+        <statisticsLink objectType="FACILITY" object="FAC_BARRACKS_FACILITY" />
+        <graphics model="barracks.mesh" camera="FACILITY"/>
+	</entry>
+	<entry id="XNET_RESEARCH_FACILITY" name="Research Facility" file="Facilities/Research Facility.rtf">
+        <statisticsLink objectType="FACILITY" object="FAC_RESEARCH_FACILITY" />
+        <graphics model="research_facility.mesh" camera="FACILITY"/>
+	</entry>
+	<entry id="XNET_ENGINEERING_FACILITY" name="Engineering Facility" file="Facilities/Engineering Facility.rtf">
+        <statisticsLink objectType="FACILITY" object="FAC_ENGINEERING_FACILITY" />
+        <graphics model="workshop.mesh" camera="FACILITY"/>
+	</entry>
+	<entry id="XNET_LANDING_PAD" name="Landing Pad" file="Facilities/Landing Pad.rtf">
+        <statisticsLink objectType="FACILITY" object="FAC_LANDING_PAD" />
+        <graphics model="launch_pad.mesh" camera="FACILITY"/>
+	</entry>
+	<entry id="XNET_PSIONIC_TRAINING_FACILITY" name="Psionic Training Facility" file="Facilities/Psionic Training Facility.rtf">
+        <statisticsLink objectType="FACILITY" object="FAC_PSIONIC_TRAINING_FACILITY" />
+	</entry>
+	<entry id="XNET_LASER_DEFENSE_ARRAY" name="Laser Defense Array" file="Facilities/Laser Defense Array.rtf">
+        <statisticsLink objectType="FACILITY" object="FAC_LASER_DEFENSE_ARRAY" />
+	</entry>
+	<entry id="XNET_MISSILE_DEFENSE_ARRAY" name="Missile Defense Array" file="Facilities/Missile Defense Array.rtf">
+        <statisticsLink objectType="FACILITY" object="FAC_MISSILE_DEFENSE_ARRAY" />
+	</entry>
+	<entry id="XNET_PLASMA_DEFENSE_ARRAY" name="Plasma Defense Array" file="Facilities/Plasma Defense Array.rtf">
+        <statisticsLink objectType="FACILITY" object="FAC_PLASMA_DEFENSE_ARRAY" />
+	</entry>
+	<entry id="XNET_STORAGE_FACILITY" name="Storage Facility" file="Facilities/Storage Facility.rtf">
+        <statisticsLink objectType="FACILITY" object="FAC_STORAGE_FACILITY" />
+        <graphics model="generalstorage.mesh" camera="FACILITY"/>
+	</entry>
+	<entry id="XNET_XENOMORPH_HOLDING_FACILITY" name="Xenomorph Holding Facility" file="Facilities/Xenomorph Holding Facility.rtf">
+        <statisticsLink objectType="FACILITY" object="FAC_XENOMORPH_HOLDING_FACILITY" />
+        <graphics model="alien_containment.mesh" camera="FACILITY"/>
+	</entry>
+	<entry id="XNET_GAIA_DEFENSE_ARRAY" name="GAIA Defense Array" file="Facilities/GAIA Defense Array.rtf">
+        <statisticsLink objectType="FACILITY" object="FAC_GAIA_DEFENSE_ARRAY" />
+	</entry>
+	<entry id="XNET_NEURAL_SHIELDING_FACILITY" name="Neural Shielding Facility" file="Facilities/Neural Shielding Facility.rtf">
+        <statisticsLink objectType="FACILITY" object="FAC_NEURAL_SHIELDING_FACILITY" />
+	</entry>
+	<entry id="XNET_SHORT_RANGE_NEUDAR" name="Short Range Neudar" file="Facilities/Short Range NEUDAR.rtf">
+        <statisticsLink objectType="FACILITY" object="FAC_SHORT_RANGE_NEUDAR" />
+        <graphics model="short_range_neudar.mesh" camera="FACILITY"/>
+	</entry>
+	<entry id="XNET_LONG_RANGE_NEUDAR" name="Long Range Neudar" file="Facilities/Long Range NEUDAR.rtf">
+        <statisticsLink objectType="FACILITY" object="FAC_LONG_RANGE_NEUDAR" />
+	</entry>
+	<entry id="XNET_TACHYON_EMISSIONS_DETECTOR" name="Tachyon Emissions Detector" file="Facilities/Tachyon Emissions Detector.rtf">
+        <statisticsLink objectType="FACILITY" object="FAC_TACHYON_EMISSIONS_DETECTOR" />
+	</entry>
+	<entry id="XNET_GRAVITY_SHIELD_FACILITY" name="Gravity Shield" file="Facilities/Gravity Shield Facility.rtf">	
+        <statisticsLink objectType="FACILITY" object="FAC_GRAVITY_SHIELD_FACILITY" />
+	</entry>
+  </category>
+
+  <category name="Aliens">
+	<entry id="XNET_GREY" name="Grey" file="Aliens/Grey.rtf">
+	</entry>
+	<entry id="XNET_GREY_AUTOPSY" name="Grey Autopsy" file="Aliens/Grey Autopsy.rtf">
+	</entry>
+	<entry id="XNET_MORLOCK" name="Morlock" file="Aliens/Morlock.rtf">
+	</entry>
+	<entry id="XNET_MORLOCK_AUTOPSY" name="Morlock Autopsy" file="Aliens/Morlock Autopsy.rtf">
+	</entry>
+	<entry id="XNET_SATYRIAN" name="Satyrian" file="Aliens/Satyrian.rtf">
+	</entry>
+	<entry id="XNET_SATYRIAN_AUTOPSY" name="Satyrian Autopsy" file="Aliens/Satyrian Autopsy.rtf">
+	</entry>
+	<entry id="XNET_VIPER" name="Viper" file="Aliens/Viper.rtf">
+	</entry>
+	<entry id="XNET_VIPER_AUTOPSY" name="Viper Autopsy" file="Aliens/Viper Autopsy.rtf">
+	</entry>
+	<entry id="XNET_CLOAK" name="Cloak" file="Aliens/Cloak.rtf">
+	</entry>
+	<entry id="XNET_CLOAK_AUTOPSY" name="Cloak Autopsy" file="Aliens/Cloak Autopsy.rtf">
+	</entry>
+	<entry id="XNET_VENTRICULANT" name="Ventriculant" file="Aliens/Ventriculant.rtf">
+	</entry>
+	<entry id="XNET_VENTRICULANT_AUTOPSY" name="Ventriculant Autopsy" file="Aliens/Ventriculant Autopsy.rtf">
+	</entry>
+	<entry id="XNET_SPAWN" name="Spawn" file="Aliens/Spawn.rtf">
+	</entry>
+	<entry id="XNET_SPAWN_AUTOPSY" name="Spawn Autopsy" file="Aliens/Spawn Autopsy.rtf">
+	</entry>
+	<entry id="XNET_RAPTOR" name="Raptor" file="Aliens/Raptor.rtf">
+	</entry>
+	<entry id="XNET_RAPTOR_AUTOPSY" name="Raptor Autopsy" file="Aliens/Raptor Autopsy.rtf">
+	</entry>
+	<entry id="XNET_SILABRATE" name="Silabrate" file="Aliens/Silabrate.rtf">
+	</entry>
+	<entry id="XNET_SILABRATE_AUTOPSY" name="Silabrate Autopsy" file="Aliens/Silabrate Autopsy.rtf">
+	</entry>
+	<entry id="XNET_ARTOPOD" name="Artopod" file="Aliens/Artopod.rtf">
+	</entry>
+	<entry id="XNET_ARTOPOD_AUTOPSY" name="Artopod Autopsy" file="Aliens/Artopod Autopsy.rtf">
+	</entry>
+	<entry id="XNET_TERROR-DISC" name="Terror-Disc" file="Aliens/Terror-Disc.rtf">
+	</entry>
+	<entry id="XNET_TERROR-DISC_AUTOPSY" name="Terror-Disc Autopsy" file="Aliens/Terror-Disc Autopsy.rtf">
+	</entry>
+</category>
+
+  <category name="Alien Research">
+	<entry id="XNET_ALIEN_ORIGINS" name="Alien Origins" file="Alien Research\Alien Origins.rtf">
+	</entry>
+	<entry id="XNET_PARADIGM_SHIFT:_OFFENSIVE_OPERATIONS" name="Paradigm Shift: Offensive Operations" file="Alien Research\Paradigm Shift Offensive Operations.rtf">
+	</entry>
+	<entry id="XNET_THANATOS:_OPERATION_XENOCIDE" name="Thanatos: Operation Xenocide" file="Alien Research\Thanatos Operation Xenocide.rtf">
+	</entry>
+	<entry id="XNET_ALIEN_RESEARCH" name="Alien Research" file="Alien Research\Alien Research.rtf">
+	</entry>
+	<entry id="XNET_ALIEN_TERROR" name="Alien Terror" file="Alien Research\Alien Terror.rtf">
+	</entry>
+	<entry id="XNET_ALIEN_HARVEST" name="Alien Harvest" file="Alien Research/Alien Harvest.rtf">
+	</entry>
+	<entry id="XNET_ALIEN_ABDUCTIONS" name="Alien Abductions" file="Alien Research\Alien Abductions.rtf">
+	</entry>
+	<entry id="XNET_ALIEN_RETALIATION" name="Alien Retaliation" file="Alien Research\Alien Retaliation.rtf">
+	</entry>
+	<entry id="XNET_ALIEN_BASE" name="Alien Base" file="Alien Research\Alien Base.rtf">
+	</entry>
+	<entry id="XNET_ALIEN_SUPPLY" name="Alien Supply" file="Alien Research\Alien Supply.rtf">
+	</entry>
+	<entry id="XNET_ALIEN_INFILTRATIONS" name="Alien Infiltration" file="Alien Research\Alien Infiltration.rtf">
+	</entry>
+	<entry id="XNET_THE_ALIEN_GOAL" name="The Alien Goal" file="Alien Research\The Alien Goal.rtf">
+	</entry>
+  </category>
+
+  <category name="UFO Components">
+	<entry id="XNET_XENIUM_REACTOR" name="Xenium Reactor" file="UFO Components\Xenium Reactor.rtf">
+	</entry>
+	<entry id="XNET_UFO_CONSTRUCTION" name="UFO Construction" file="Alien Research\UFO Construction.rtf">
+	</entry>
+	<entry id="XNET_ALIEN_NAVIGATION_SYSTEMS" name="Alien Navigation Systems" file="UFO Components\Alien Navigation Systems.rtf">
+	</entry>
+	<entry id="XNET_ALIEN_NUTRIENTS" name="Alien Nutrients" file="UFO Components\Alien Nutrients.rtf">
+	</entry>
+	<entry id="XNET_ALIEN_BREEDING" name="Alien Breeding" file="Alien Research\Alien Breeding.rtf">
+	</entry>
+	<entry id="XNET_ALIEN_RECREATION" name="Alien Recreation" file="UFO Components\Alien Recreation.rtf">
+	</entry>
+	<entry id="XNET_ALIEN_COMPOSITES" name="Alien Composites" file="UFO Components\Alien Composites.rtf">
+	</entry>
+	<entry id="XNET_BIOLOGICAL_RESEARCH_ROOM" name="Biological Research Room" file="UFO Components\Biological Research Room.rtf">
+	</entry>
+	<entry id="XNET_ALIEN_MEDICAL_ROOM" name="Alien Medical Room" file="UFO Components\Alien Medical Room.rtf">
+	</entry>
+	<entry id="XNET_XENIUM-122" name="Xenium-122" file="UFO Components\Xenium-122.rtf">
+	</entry>
+  </category>
+
+  <category name="Alien Craft">
+	<entry id="XNET_PROBE" name="Probe" file="UFOs\Probe UFO.rtf">
+		<statisticsLink objectType="ITEM" object="ITEM_UFO_PROBE" />
+	</entry>
+	<entry id="XNET_RECON" name="Recon" file="UFOs\Recon UFO.rtf">
+		<statisticsLink objectType="ITEM" object="ITEM_UFO_RECON" />
+      <graphics model="mediumscout.mesh" camera="FACILITY"/>
+	</entry>
+	<entry id="XNET_ESCORT" name="Escort" file="UFOs\Escort UFO.rtf">
+		<statisticsLink objectType="ITEM" object="ITEM_UFO_ESCORT" />
+	</entry>
+	<entry id="XNET_REAPER" name="Reaper" file="UFOs\Reaper UFO.rtf">
+		<statisticsLink objectType="ITEM" object="ITEM_UFO_REAPER" />
+	</entry>
+	<entry id="XNET_COLLECTOR" name="Collector" file="UFOs\Collector UFO.rtf">
+		<statisticsLink objectType="ITEM" object="ITEM_UFO_COLLECTOR" />
+	</entry>
+	<entry id="XNET_JUGGERNAUT" name="Juggernaut" file="UFOs\Juggernaut UFO.rtf">
+		<statisticsLink objectType="ITEM" object="ITEM_UFO_JUGGERNAUT" />
+	</entry>
+	<entry id="XNET_INTIMIDATOR" name="Intimidator" file="UFOs\Intimidator UFO.rtf">
+		<statisticsLink objectType="ITEM" object="ITEM_UFO_INTIMIDATOR" />
+	</entry>
+	<entry id="XNET_ALIEN_FREIGHTER" name="Alien Freighter" file="UFOs\Alien Freighter.rtf">
+		<statisticsLink objectType="ITEM" object="ITEM_UFO_ALIEN_FREIGHTER" />
+	</entry>
+</category>
+</xnetfiles>

@@ -1,0 +1,15 @@
+Scheduler and Appointments.
+
+As mentioned in “Getting Modal Dialogs to Work”, in the Geoscape, the game’s state is updated by calling each object’s Update() member with the elapsed time slice.  However, there are a number of cases where an object’s state won’t change for a significant period of time.  (E.g. Building a facility in an outpost.) In which case the processing consists of counting down a timer, and then reacting.
+So, in order to minimise the duplication of this logic (and to improve efficiency) the Appointment and Scheduler classes have been created.  The Appointment task represents an event that will occur at a known time in the future.  The Scheduler keeps a list of these appointments. Each update(), it checks to see which, if any, have occurred and then fires them.  The efficiency gains come by sorting the list in soonest first order, so if there are no events to fire, only one test is necessary.
+
+The next question to ask is “which events can be put in the scheduler?”  Obviously, any event that’s just waiting on a period of time to elapse is a good candidate.  So, construction of a facility in an outpost, or an event that occurs at regular intervals is an ideal candidate.
+
+A research or construction project is also a possible candidate.  However, this is a bit of a problem because once a project is started, it’s possible that the number of people assigned to the project will be changed.  Which will require recalculating the end time, based on number of man-hours devoted up to the time of the change, the new number of people working on the project, and the number of hours required for the project.
+
+The situation becomes even more complicated in the case of a craft returning to its outpost to refuel (with Xenium).
+Initially, it looks a simple problem, we know the amount of fuel the craft needs, and we know the refuel rate, so we can calculate when the craft will finish refuelling.  However, there’s a whole bunch of complications.
+1.	What happens if there’s sufficient Xenium in the outpost at the start of the period, but during the period all the Xenium in the outpost is transferred/sold?  Well, we can work around that by removing the required Xenium at the start.
+2.	However, there’s a bigger problem.  What happens if the outpost doesn’t have enough Xenium at the start?  Well, we can compute when the fuel would run out, and raise a warning message at that point.  However, how do we restart the refuelling when the outpost acquires more Xenium?
+3.	Also, what happens if the player decides to launch the Craft before it’s fully refuelled?  Well, we can solve that by not allowing the craft to leave the base while it’s being refuelled.  But we don’t want to do that, even if it is an X-Com 1 behaviour.
+At any rate, I’ve decided NOT to use the scheduler for handling Craft.

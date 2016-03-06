@@ -1,0 +1,218 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{41AE7F18-8C96-43E7-98D8-1E9D83081CD6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CeGui</RootNamespace>
+    <AssemblyName>CeGui</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>Documentation\CeGui.xml</DocumentationFile>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <NoWarn>1591; 1572; 1570; 1574; 1573</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>Documentation\CeGui.xml</DocumentationFile>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <NoWarn>1591; 1572; 1570; 1574; 1573</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\CEGUIColour.cs" />
+    <Compile Include="Source\CEGUIColour.Colour.cs">
+      <DependentUpon>CEGUIColour.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\CEGUIColourRect.ColourRect.cs">
+      <DependentUpon>CEGUIColourRect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\CEGUIColourRect.cs" />
+    <Compile Include="Source\CEGUIImageSet.cs" />
+    <Compile Include="Source\CEGUIImageSet.ImageSet.cs">
+      <DependentUpon>CEGUIImageSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\CEGUIProperty.Property.cs">
+      <DependentUpon>CEGUIProperty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\CEGUIPropertySet.PropertySet.cs">
+      <DependentUpon>CEGUIPropertySet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\CEGUIRect.cs" />
+    <Compile Include="Source\CEGUIRect.Rect.cs">
+      <DependentUpon>CEGUIRect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\CEGUIRenderer.cs" />
+    <Compile Include="Source\CEGUIRenderer.Renderer.cs">
+      <DependentUpon>CEGUIRenderer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\CEGUIWindowProperties.cs" />
+    <Compile Include="Source\CEGUIWindowProperties.Properties.cs">
+      <DependentUpon>CEGUIWindowProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Collections.cs" />
+    <Compile Include="Source\Elements\BaseButton.cs" />
+    <Compile Include="Source\Elements\Checkbox.cs" />
+    <Compile Include="Source\Elements\ComboBox.cs" />
+    <Compile Include="Source\Elements\ComboDropList.cs" />
+    <Compile Include="Source\Elements\EditBox.cs" />
+    <Compile Include="Source\Elements\FrameWindow.cs" />
+    <Compile Include="Source\Elements\ListBox.cs" />
+    <Compile Include="Source\Elements\ListboxItem.cs" />
+    <Compile Include="Source\Elements\ListboxTextItem.cs" />
+    <Compile Include="Source\Elements\ListHeader.cs" />
+    <Compile Include="Source\Elements\ListHeaderSegment.cs" />
+    <Compile Include="Source\Elements\MultiColumnList.cs" />
+    <Compile Include="Source\Elements\ProgressBar.cs" />
+    <Compile Include="Source\Elements\PushButton.cs" />
+    <Compile Include="Source\Elements\RadioButton.cs" />
+    <Compile Include="Source\Elements\Scrollbar.cs" />
+    <Compile Include="Source\Elements\Slider.cs" />
+    <Compile Include="Source\Elements\Static.cs" />
+    <Compile Include="Source\Elements\StaticImage.cs" />
+    <Compile Include="Source\Elements\StaticText.cs" />
+    <Compile Include="Source\Elements\Thumb.cs" />
+    <Compile Include="Source\Elements\TitleBar.cs" />
+    <Compile Include="Source\Enums.cs" />
+    <Compile Include="Source\EventArgs.cs" />
+    <Compile Include="Source\Exceptions.cs" />
+    <Compile Include="Source\Falagard\AbsoluteDimension.cs" />
+    <Compile Include="Source\Falagard\BaseDimension.cs" />
+    <Compile Include="Source\CEGUIUDim.cs" />
+    <Compile Include="Source\CEGUIUDim.URect.cs">
+      <DependentUpon>CEGUIUDim.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\CEGUIUDim.UVector2.cs">
+      <DependentUpon>CEGUIUDim.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\CEGUIUDim.UDim.cs">
+      <DependentUpon>CEGUIUDim.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\CEGUIVector.cs" />
+    <Compile Include="Source\CEGUIPropertySet.cs" />
+    <Compile Include="Source\Falagard\CEGUIFalImagerySection.cs" />
+    <Compile Include="Source\Falagard\CEGUIFalImagerySection.ImagerySection.cs">
+      <DependentUpon>CEGUIFalImagerySection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Falagard\CEGUIFalPropertyDefinitionBase.cs" />
+    <Compile Include="Source\Falagard\CEGUIFalPropertyDefinitionBase.PropertyDefinitionBase.cs">
+      <DependentUpon>CEGUIFalPropertyDefinitionBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Falagard\CEGUIFalPropertyLinkDefinition.cs" />
+    <Compile Include="Source\Falagard\CEGUIFalPropertyLinkDefinition.PropertyLinkDefinition.cs">
+      <DependentUpon>CEGUIFalPropertyLinkDefinition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Falagard\CEGUIFalStateImagery.cs" />
+    <Compile Include="Source\Falagard\CEGUIFalStateImagery.StateImagery.cs">
+      <DependentUpon>CEGUIFalStateImagery.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Falagard\CEGUIFalWidgetLookFeel.cs" />
+    <Compile Include="Source\Falagard\CEGUIFalWidgetLookFeel.WidgetLookFeel.cs">
+      <DependentUpon>CEGUIFalWidgetLookFeel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\CEGUIPoint.cs" />
+    <Compile Include="Source\CEGUIPoint.Point.cs">
+      <DependentUpon>CEGUIPoint.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Falagard\ComponentArea.cs" />
+    <Compile Include="Source\Falagard\Dimension.cs" />
+    <Compile Include="Source\Falagard\Enums.cs" />
+    <Compile Include="Source\Falagard\FalagardComponentBase.cs" />
+    <Compile Include="Source\Falagard\FontDimension.cs" />
+    <Compile Include="Source\Falagard\FrameComponent.cs" />
+    <Compile Include="Source\Falagard\ImageDimension.cs" />
+    <Compile Include="Source\Falagard\ImageryComponent.cs" />
+    <Compile Include="Source\Falagard\LayerSpecification.cs" />
+    <Compile Include="Source\Falagard\NamedArea.cs" />
+    <Compile Include="Source\Falagard\PropertyDefinition.cs" />
+    <Compile Include="Source\Falagard\PropertyDimension.cs" />
+    <Compile Include="Source\Falagard\PropertyInitializer.cs" />
+    <Compile Include="Source\Falagard\SectionSpecification.cs" />
+    <Compile Include="Source\Falagard\TextComponent.cs" />
+    <Compile Include="Source\Falagard\WidgetComponent.cs" />
+    <Compile Include="Source\Falagard\WidgetDimension.cs" />
+    <Compile Include="Source\Font.cs" />
+    <Compile Include="Source\FontManager.cs" />
+    <Compile Include="Source\GuiBuilder.cs" />
+    <Compile Include="Source\GuiSheet.cs" />
+    <Compile Include="Source\GuiSystem.cs" />
+    <Compile Include="Source\CEGUIImage.cs" />
+    <Compile Include="Source\CEGUIImage.Image.cs">
+      <DependentUpon>CEGUIImage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\ImageSetManager.cs" />
+    <Compile Include="Source\Logger.cs" />
+    <Compile Include="Source\MouseCursor.cs" />
+    <Compile Include="Source\CEGUIProperty.cs" />
+    <Compile Include="Source\RenderableElement.cs" />
+    <Compile Include="Source\RenderableFrame.cs" />
+    <Compile Include="Source\RenderableImage.cs" />
+    <Compile Include="Source\RenderCache.cs" />
+    <Compile Include="Source\Scheme.cs" />
+    <Compile Include="Source\SchemeManager.cs" />
+    <Compile Include="Source\Texture.cs" />
+    <Compile Include="Source\TextUtil.cs" />
+    <Compile Include="Source\Vector2.cs" />
+    <Compile Include="Source\Vector3.cs" />
+    <Compile Include="Source\WidgetProperties.cs" />
+    <Compile Include="Source\Window.cs" />
+    <Compile Include="Source\WindowManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Falagard.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="GUILayout.xsd">
+      <SubType>
+      </SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Imageset.xsd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>
+      </SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ChangeLog.txt" />
+    <Content Include="Port.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

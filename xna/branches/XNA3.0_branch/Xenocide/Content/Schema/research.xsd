@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns="ResearchConfig"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="ResearchConfig"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+	<xsd:include schemaLocation="basic.xsd"/>
+	<xsd:simpleType name="researchGrantQuantity">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="AllOf"/>
+			<xsd:enumeration value="OneOf"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="refheap">
+		<xsd:sequence>
+		    <xsd:choice  minOccurs="0" maxOccurs="unbounded">
+			    <xsd:element ref="topicref" minOccurs="0" maxOccurs="unbounded"/>
+			    <xsd:element ref="itemref" minOccurs="0" maxOccurs="unbounded"/>
+			    <xsd:element ref="xnetref" minOccurs="0" maxOccurs="unbounded"/>
+			    <xsd:element ref="combatantref" minOccurs="0" maxOccurs="unbounded"/> 
+			    <xsd:element ref="facilityref" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:choice>
+			<xsd:element name="AnyOneOf" type="refheap" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="AllOf" type="refheap" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="AnyOneOf" type="refheap"/>
+	<xsd:element name="AllOf" type="refheap"/>
+    <xsd:element name="topicref">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base="xsd:string">
+					<xsd:attribute name="name" type="researchID" use="required"/>
+					<xsd:attribute name="priority" type="xsd:string" use="optional"/>
+		            <xsd:attribute name="bonus" type="xsd:positiveInteger" use="optional"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="itemref">
+		<xsd:complexType>
+			<xsd:attribute name="name" type="itemID" use="required"/>
+            <xsd:attribute name="bonus" type="xsd:positiveInteger" use="optional"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="facilityref">
+		<xsd:complexType>
+			<xsd:attribute name="name" type="facilityID" use="required"/>
+            <xsd:attribute name="bonus" type="xsd:positiveInteger" use="optional"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="combatantref">
+	    <xsd:complexType>
+		    <xsd:attribute name="name" type="itemID" use="required"/>
+		    <xsd:attribute name="rank" type="rankTypeEnum" use="required"/>
+	    </xsd:complexType>
+	</xsd:element>
+	<xsd:element name="rankref">
+	    <xsd:complexType>
+		    <xsd:attribute name="rank" type="rankTypeEnum" use="required"/>
+            <xsd:attribute name="bonus" type="xsd:positiveInteger" use="optional"/>
+	    </xsd:complexType>
+	</xsd:element>
+	<xsd:element name="xnetref">
+		<xsd:complexType>
+			<xsd:attribute name="name" type="xnetID" use="required"/>
+            <xsd:attribute name="bonus" type="xsd:positiveInteger" use="optional"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="topic">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="prerequisite" type="refheap"/>
+				<xsd:element name="cost" minOccurs="0" maxOccurs="1">
+					<xsd:complexType>
+		                <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+			                <xsd:element name="item">
+            					<xsd:complexType>
+                        			<xsd:attribute name="type" type="itemID" use="required"/>
+                        			<xsd:attribute name="quantity" type="xsd:positiveInteger" use="required"/>
+            					</xsd:complexType>
+        					</xsd:element>
+			            </xsd:sequence>
+                        <xsd:attribute name="money" type="xsd:nonNegativeInteger"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="bonus" minOccurs="0" maxOccurs="1">
+					<xsd:complexType>
+		                <xsd:choice  minOccurs="1" maxOccurs="unbounded">
+			                <xsd:element ref="topicref" minOccurs="0" maxOccurs="unbounded"/>
+			                <xsd:element ref="itemref" minOccurs="0" maxOccurs="unbounded"/>
+			                <xsd:element ref="xnetref" minOccurs="0" maxOccurs="unbounded"/>
+			                <xsd:element ref="rankref" minOccurs="0" maxOccurs="unbounded"/> 
+			                <xsd:element ref="facilityref" minOccurs="0" maxOccurs="unbounded"/>
+			            </xsd:choice>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="grants">
+		            <xsd:complexType>
+		                <xsd:choice  minOccurs="1" maxOccurs="unbounded">
+			                <xsd:element ref="topicref" minOccurs="0" maxOccurs="unbounded"/>
+			                <xsd:element ref="itemref" minOccurs="0" maxOccurs="unbounded"/>
+			                <xsd:element ref="xnetref" minOccurs="0" maxOccurs="unbounded"/>
+			                <xsd:element ref="combatantref" minOccurs="0" maxOccurs="unbounded"/> 
+			                <xsd:element ref="facilityref" minOccurs="0" maxOccurs="unbounded"/>
+			            </xsd:choice>
+			            <xsd:attribute name="quantity" type="researchGrantQuantity" use="required"/>
+		            </xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="id" type="researchID" use="required"/>
+			<xsd:attribute name="name" type="xsd:string" use="required"/>
+			<xsd:attribute name="persists" type="xsd:boolean" default="false"/>
+			<xsd:attribute name="time" type="xsd:nonNegativeInteger"/>
+			<xsd:attribute name="facility" type="facilityID" default="FAC_RESEARCH_FACILITY"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="researchtopics">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="topic" maxOccurs="unbounded"/>
+			</xsd:sequence>
+			<xsd:attribute name="title" type="xsd:string" use="required"/>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

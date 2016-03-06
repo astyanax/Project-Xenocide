@@ -1,0 +1,191 @@
+<?xml version="1.0"?>
+<xs:schema xmlns="PlanetConfig"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="PlanetConfig"
+  elementFormDefault="qualified"
+  attributeFormDefault="unqualified">
+
+  <xs:complexType name="colorType">
+    <xs:attribute name="R" type="xs:int"/>
+    <xs:attribute name="G" type="xs:int"/>
+    <xs:attribute name="B" type="xs:int"/>
+  </xs:complexType>
+
+  <!-- GeoPosition-->
+  <xs:complexType name="geopositionType">
+    <xs:annotation>
+      <xs:documentation>A position on the Geoscape</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="latitude" type="xs:float" use="required">
+      <xs:annotation>
+        <xs:documentation>latitude of position, in degrees.  +ve values are north, -ve are south</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="longitude" type="xs:float" use="required">
+      <xs:annotation>
+        <xs:documentation>longitude of position, in degrees.  +ve values are East, -ve are west</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <!-- Mission Preference-->
+  <xs:complexType name="missionPriorityType">
+    <xs:annotation>
+      <xs:documentation>Relative priorities for alien missions</xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="research"     type="xs:nonNegativeInteger" use="required" />
+    <xs:attribute name="harvest"      type="xs:nonNegativeInteger" use="required" />
+    <xs:attribute name="abduction"    type="xs:nonNegativeInteger" use="required" />
+    <xs:attribute name="infiltration" type="xs:nonNegativeInteger" use="required" />
+    <xs:attribute name="outpost"      type="xs:nonNegativeInteger" use="required" />
+  </xs:complexType>
+
+  <!-- City definition -->
+  <xs:complexType name="cityType">
+    <xs:annotation>
+      <xs:documentation>Basic information for a city</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="geoposition" type="geopositionType" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>The location of this city on the globe</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"  use="required">
+      <xs:annotation>
+        <xs:documentation>The name of this city</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <!-- terrain -->
+  <xs:complexType name="terrainType">
+    <xs:annotation>
+      <xs:documentation>A type of terrain, water, mountain, swamp, etc.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="colorKey" type="colorType" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>The RGB value associated with terrain of this type on the bitmap</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"  use="required">
+      <xs:annotation>
+        <xs:documentation>The name of this type of terrain</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <!-- Country definition (A geographical area that funds X-Corp) -->
+  <xs:complexType name="countryType">
+    <xs:annotation>
+      <xs:documentation>Basic information for a country. e.g. France, Germany</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="colorKey" type="colorType" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>The RGB value associated with this country's area on the bitmap</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="funds">
+        <xs:annotation>
+          <xs:documentation>Control $ per month country will give X-Corp</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:attribute name="seed" type="xs:nonNegativeInteger" use="required">
+            <xs:annotation>
+              <xs:documentation>Seed used to determine starting value (between 100% and 200% of this value)</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="cap" type="xs:nonNegativeInteger" use="required">
+            <xs:annotation>
+              <xs:documentation>Maximum $ per month</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"  use="required">
+      <xs:annotation>
+        <xs:documentation>The name of the country</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <!-- Region definition  (a geographical area that will attract UFO activity) -->
+  <xs:complexType name="regionType">
+    <xs:annotation>
+      <xs:documentation>A collection of countries making up a geographical region</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="missionPriority" type="missionPriorityType" minOccurs="1" maxOccurs="1" />
+      <xs:element name="colorKey" type="colorType" minOccurs="1" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>The RGB value associated with this region's area on the bitmap</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>The name of the region</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+
+    <xs:attribute name="baseBuildCost" type="xs:nonNegativeInteger" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The cost to build a base in this region.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+
+    <xs:attribute name="alienAttackPriority" type="xs:nonNegativeInteger" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          Relative zone priorities for alien attacks.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <!-- definition of a planet (a set of regions) and terrains -->
+  <xs:complexType name="planetType">
+    <xs:sequence>
+      <xs:element name="region" type="regionType" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:element name="country" type="countryType" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:element name="city" type="cityType" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:element name="terrain" type="terrainType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>The name of the planet</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="regionBitmap" type="xs:string"  use="required">
+      <xs:annotation>
+        <xs:documentation>Path to the bitmap file used to define regions</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="countryBitmap" type="xs:string"  use="required">
+      <xs:annotation>
+        <xs:documentation>Path to the bitmap file used to define countries</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="terrainBitmap" type="xs:string"  use="required">
+      <xs:annotation>
+        <xs:documentation>Path to the bitmap file used to define terrains</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:element name="planets">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="planet" type="planetType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<facilities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="FacilityConfig facility.xsd" xmlns="FacilityConfig">
+	<facility xsi:type="storageFacilityType" id="FAC_STORAGE_FACILITY" name="Storage Facility">
+		<size xSize="1" ySize="1"/>
+		<build time="10" cost="150000" maintenance="5000" scrapRevenue="1000"/>
+		<graphics model="Facility\generalstorage" />
+		<storage type="STORAGE_GEAR" capacity="500"/>
+	</facility>
+	<facility xsi:type="storageFacilityType" id="FAC_XENOMORPH_HOLDING_FACILITY" name="Xenomorph Holding Facility">
+		<size xSize="1" ySize="1"/>
+		<build time="18" cost="400000" maintenance="15000" scrapRevenue="1000"/>
+		<graphics model="Facility\alien_containment" />
+		<storage type="STORAGE_ALIENS" capacity="100"/>
+	</facility>
+		<facility xsi:type="scanningFacilityType" id="FAC_SHORT_RANGE_NEUDAR" name="Short Range Neudar Facility">
+		<size xSize="1" ySize="1"/>
+		<build time="12" cost="500000" maintenance="10000" scrapRevenue="1000"/>
+		<graphics model="Facility\short_range_neudar" />
+		<scanning range="2780" accuracy="0.10" decode="0"/>
+	</facility>
+		<facility xsi:type="scanningFacilityType" id="FAC_LONG_RANGE_NEUDAR" name="Long Range Neudar Facility">
+		<size xSize="1" ySize="1" />
+		<build time="25" cost="800000" maintenance="15000" scrapRevenue="1000"/>
+		<graphics model="Facility\long_range_neudar" />
+		<scanning range="4170" accuracy="0.20" decode="0"/>
+	</facility>
+	<facility xsi:type="scanningFacilityType" id="FAC_TACHYON_EMISSIONS_DETECTOR" name="Tachyon Emissions Facility">
+		<size xSize="1" ySize="1" />
+		<build time="26" cost="1400000" maintenance="30000" scrapRevenue="1000"/>
+		<graphics model="Facility\tachyon_detector" />
+		<scanning range="4448" accuracy="1.0"  decode="1"/>
+	</facility>
+	<facility xsi:type="facilityType" id="FAC_BASE_ACCESS_FACILITY" name="Base Access Facility">
+		<size xSize="1" ySize="1"/>
+		<build time="0" cost="0" maintenance="4000" scrapRevenue="1000"/>
+		<graphics model="Facility\base_access" />
+	</facility>
+	<facility xsi:type="storageFacilityType" id="FAC_LANDING_PAD" name="Landing Pad">
+		<size xSize="2" ySize="2"/>
+		<build time="25" cost="200000" maintenance="25000" scrapRevenue="1000"/>
+		<graphics model="Facility\launch_pad" />
+		<storage type="STORAGE_CRAFT" capacity="1"/>
+	</facility>
+	<facility xsi:type="projectFacilityType" id="FAC_RESEARCH_FACILITY" name="Research Facility">
+		<size xSize="1" ySize="1"/>
+		<build time="26" cost="750000" maintenance="30000" scrapRevenue="1000"/>
+		<graphics model="Facility\research_facility" />
+		<storage type="STORAGE_SCIENTIST" capacity="50"/>
+		<project projectmaxsize="10" productivityboost="77.7" outputType="research"/>
+	</facility>
+	<facility xsi:type="projectFacilityType" id="FAC_ENGINEERING_FACILITY" name="Engineering Facility">
+		<size xSize="1" ySize="1"/>
+		<build time="32" cost="800000" maintenance="35000" scrapRevenue="1000"/>
+		<graphics model="Facility\workshop" />
+		<storage type="STORAGE_ENGINEER" capacity="50"/>
+		<project projectmaxsize="7" productivityboost="1" outputType="production"/>
+	</facility>
+	<facility xsi:type="storageFacilityType" id="FAC_BARRACKS_FACILITY" name="Barracks Facility">
+		<size xSize="1" ySize="1"/>
+		<build time="16" cost="400000" maintenance="10000" scrapRevenue="1000"/>
+		<graphics model="Facility\barracks" />
+		<storage type="STORAGE_PERSONNEL" capacity="50"/>
+	</facility>
+	<facility xsi:type="storageFacilityType" id="FAC_PSIONIC_TRAINING_FACILITY" name="Psi Training Facility">
+		<size xSize="1" ySize="1"/>
+		<build time="24" cost="750000" maintenance="16000" scrapRevenue="1000"/>
+		<graphics model="Facility\psi_training" />
+		<storage type="STORAGE_PSI_TRAINING" capacity="10"/>
+	</facility>
+	<facility xsi:type="defenseFacilityType" id="FAC_MISSILE_DEFENSE_ARRAY" name="Missile Defense Array">
+		<size xSize="1" ySize="1"/>
+		<build time="16" cost="200000" maintenance="5000" scrapRevenue="1000"/>
+		<graphics model="Facility\missile_defense" />
+		<defense range="10" accuracy="0.5" damage="500"/>
+	</facility>
+	<facility xsi:type="defenseFacilityType" id="FAC_LASER_DEFENSE_ARRAY" name="Laser Defense Array">
+		<size xSize="1" ySize="1"/>
+		<build time="24" cost="400000" maintenance="10000" scrapRevenue="1000"/>
+		<graphics model="Facility\laser_defense" />
+		<defense range="10" accuracy="0.6" damage="600"/>
+	</facility>
+	<facility xsi:type="defenseFacilityType" id="FAC_PLASMA_DEFENSE_ARRAY" name="Plasma Defense Array">
+		<size xSize="1" ySize="1"/>
+		<build time="34" cost="600000" maintenance="12000" scrapRevenue="1000"/>
+		<graphics model="Facility\plasma_defense" />
+		<defense range="40" accuracy="0.7" damage="900"/>
+	</facility>
+	<facility xsi:type="defenseFacilityType" id="FAC_GAIA_DEFENSE_ARRAY" name="GAIA Defense Array">
+		<size xSize="1" ySize="1"/>
+		<build time="34" cost="800000" maintenance="14000" scrapRevenue="1000"/>
+		<graphics model="Facility\gaia_defense" />
+		<defense range="100" accuracy="0.8" damage="1200"/>
+	</facility>
+	<facility xsi:type="shieldFacilityType" id="FAC_GRAVITY_SHIELD_FACILITY" name="Gravity Shield">
+		<size xSize="1" ySize="1"/>
+		<build time="38" cost="1200000" maintenance="15000" scrapRevenue="1000"/>
+		<graphics model="Facility\grav_shield" />
+		<shield shieldType="gravity" efficiency="0.99"/>
+	</facility>
+	<facility xsi:type="shieldFacilityType" id="FAC_NEURAL_SHIELDING_FACILITY" name="Neural Shield Facility">
+		<size xSize="1" ySize="1"/>
+		<build time="33" cost="1300000" maintenance="5000" scrapRevenue="1000"/>
+		<graphics model="Facility\neural_shield" />
+		<shield shieldType="mind" efficiency="0.99"/>
+	</facility>
+</facilities>

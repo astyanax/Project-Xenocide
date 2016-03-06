@@ -1,0 +1,435 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectGuid>{8B08A31E-3258-4AD6-8D4A-4E9C9E6CAFC3}</ProjectGuid>
+    <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Xenocide</RootNamespace>
+    <AssemblyName>Xenocide</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <XnaFrameworkVersion>v3.0</XnaFrameworkVersion>
+    <XnaPlatform>Windows</XnaPlatform>
+    <XnaCrossPlatformGroupID>35dfd450-afcb-4357-9b09-3e4dc400008c</XnaCrossPlatformGroupID>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <Thumbnail>
+    </Thumbnail>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\x86\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <XnaCompressContent>false</XnaCompressContent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x86\Release</OutputPath>
+    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <XnaCompressContent>true</XnaCompressContent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86">
+      <Private>False</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=3.0.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=MSIL">
+      <Private>False</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="mscorlib">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\XenocideResourceManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Source\ErrorDialogue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\ErrorDialogue.Designer.cs">
+      <DependentUpon>ErrorDialogue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Model\Battlescape\AI\Combatant\CombatantAI.cs" />
+    <Compile Include="Source\Model\Battlescape\AI\Team\TeamAI.cs" />
+    <Compile Include="Source\Model\Battlescape\Battle.cs" />
+    <Compile Include="Source\Model\Battlescape\BattleLog.cs" />
+    <Compile Include="Source\Model\Battlescape\Combatants\Combatant.cs" />
+    <Compile Include="Source\Model\Battlescape\Combatants\CombatantInventory.cs" />
+    <Compile Include="Source\Model\Battlescape\Combatants\Experience.cs" />
+    <Compile Include="Source\Model\Battlescape\Combatants\InventoryLayout.cs" />
+    <Compile Include="Source\Model\Battlescape\Combatants\Orders\MoveOrder.cs" />
+    <Compile Include="Source\Model\Battlescape\Combatants\Orders\Order.cs" />
+    <Compile Include="Source\Model\Battlescape\Combatants\Orders\ShootOrder.cs" />
+    <Compile Include="Source\Model\Battlescape\Combatants\Orders\UnitTestMoveOrder.cs" />
+    <Compile Include="Source\Model\Battlescape\Combatants\Orders\UnitTestShootOrder.cs" />
+    <Compile Include="Source\Model\Battlescape\Combatants\Statistic.cs" />
+    <Compile Include="Source\Model\Battlescape\Combatants\Stats.cs" />
+    <Compile Include="Source\Model\Battlescape\Combatants\UnitTestCombatant.cs" />
+    <Compile Include="Source\Model\Battlescape\Combatants\UnitTestCombatantInventory.cs" />
+    <Compile Include="Source\Model\Battlescape\DamageType.cs" />
+    <Compile Include="Source\Model\Battlescape\Missions\AlienSiteMission.cs" />
+    <Compile Include="Source\Model\Battlescape\Missions\CrewBuilder.cs" />
+    <Compile Include="Source\Model\Battlescape\Missions\Mission.cs" />
+    <Compile Include="Source\Model\Battlescape\Missions\MockMission.cs" />
+    <Compile Include="Source\Model\Battlescape\Missions\UfoSiteMission.cs" />
+    <Compile Include="Source\Model\Battlescape\Missions\UnitTestCrewBuilder.cs" />
+    <Compile Include="Source\Model\Battlescape\Missions\UnitTestMission.cs" />
+    <Compile Include="Source\Model\Battlescape\Missions\XCorpOutpostMission.cs" />
+    <Compile Include="Source\Model\Battlescape\Projectiles\Trajectory.cs" />
+    <Compile Include="Source\Model\Battlescape\Projectiles\UnitTestTrajectory.cs" />
+    <Compile Include="Source\Model\Battlescape\Team.cs" />
+    <Compile Include="Source\Model\Battlescape\Terrain\Cell.cs" />
+    <Compile Include="Source\Model\Battlescape\Terrain\CellFaceTexture.cs" />
+    <Compile Include="Source\Model\Battlescape\Terrain\MoveData.cs" />
+    <Compile Include="Source\Model\Battlescape\Terrain\Pathfinder.cs" />
+    <Compile Include="Source\Model\Battlescape\Terrain\Terrain.cs" />
+    <Compile Include="Source\Model\Battlescape\Terrain\TerrainBuilders\MazeTerrainBuilder.cs" />
+    <Compile Include="Source\Model\Battlescape\Terrain\TerrainBuilders\RandomCityTerrainBuilder.cs" />
+    <Compile Include="Source\Model\Battlescape\Terrain\TerrainBuilders\TerrainBuilder.cs" />
+    <Compile Include="Source\Model\Battlescape\Terrain\TerrainBuilders\TestTerrainBuilder.cs" />
+    <Compile Include="Source\Model\Battlescape\Terrain\TerrainPathfinding.cs" />
+    <Compile Include="Source\Model\Battlescape\Terrain\UnitTestPathfinder.cs" />
+    <Compile Include="Source\Model\Battlescape\Terrain\UnitTestTerrainPathfinding.cs" />
+    <Compile Include="Source\Model\Common\Difficulty.cs" />
+    <Compile Include="Source\Model\Common\Race.cs" />
+    <Compile Include="Source\Model\Common\Technology.cs" />
+    <Compile Include="Source\Model\Common\TechnologyManager.cs" />
+    <Compile Include="Source\Model\GameOptions.cs" />
+    <Compile Include="Source\Model\GameState.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\AlienMission.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\AlienSite.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\BuildOutpostTask.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\InfiltrationTask.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\InvasionTask.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\OutpostAlienSite.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\Overmind.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\RaceSelector.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\ResearchTask.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\RetaliationTask.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\SupplyOutpostTask.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\TaskFactory.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\TerrorMissionAlienSite.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\TerrorTask.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\UnitTestBuildOutpostTask.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\UnitTestInfiltrationTask.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\UnitTestInvasionTask.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\UnitTestRetaliationTask.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\UnitTestSupplyOutpostTask.cs" />
+    <Compile Include="Source\Model\Geoscape\AI\UnitTestTerrorTask.cs" />
+    <Compile Include="Source\Model\Geoscape\Appointments\RepeatingActivities.cs" />
+    <Compile Include="Source\Model\Geoscape\GeoData.cs" />
+    <Compile Include="Source\Model\Geoscape\GeoEvents\FacilityFinishedGeoEvent.cs" />
+    <Compile Include="Source\Model\Geoscape\GeoEvents\FuelLowGeoEvent.cs" />
+    <Compile Include="Source\Model\Geoscape\GeoEvents\GameOverGeoEvent.cs" />
+    <Compile Include="Source\Model\Geoscape\GeoEvents\GeoEvent.cs" />
+    <Compile Include="Source\Model\Geoscape\GeoEvents\MessageBoxGeoEvent.cs" />
+    <Compile Include="Source\Model\Geoscape\GeoEvents\ResearchFinishedGeoEvent.cs" />
+    <Compile Include="Source\Model\Geoscape\GeoEvents\StartAeroscapeGeoEvent.cs" />
+    <Compile Include="Source\Model\Geoscape\GeoEvents\StartBattlescapeGeoEvent.cs" />
+    <Compile Include="Source\Model\Geoscape\GeoEvents\StartOfMonthGeoEvent.cs" />
+    <Compile Include="Source\Model\Geoscape\GeoEvents\TrackingLostGeoEvent.cs" />
+    <Compile Include="Source\Model\Geoscape\GeoEvents\UfoAttackingOutpostGeoEvent.cs" />
+    <Compile Include="Source\Model\Geoscape\Geography\City.cs" />
+    <Compile Include="Source\Model\Geoscape\Geography\Country.cs" />
+    <Compile Include="Source\Model\Geoscape\Geography\GeoBitmap.cs" />
+    <Compile Include="Source\Model\Geoscape\Geography\IGeoBitmapProperty.cs" />
+    <Compile Include="Source\Model\Geoscape\Geography\LandMaskedGeoBitmap.cs" />
+    <Compile Include="Source\Model\Geoscape\Geography\Planet.cs" />
+    <Compile Include="Source\Model\Geoscape\Geography\PlanetParser.cs" />
+    <Compile Include="Source\Model\Geoscape\Geography\PlanetRegion.cs" />
+    <Compile Include="Source\Model\Geoscape\Geography\Terrain.cs" />
+    <Compile Include="Source\Model\Geoscape\Geography\UnitTestPlanet.cs" />
+    <Compile Include="Source\Model\Geoscape\GeoPosition.cs" />
+    <Compile Include="Source\Model\Geoscape\GeoTime.cs" />
+    <Compile Include="Source\Model\Geoscape\Misc\Shipment.cs" />
+    <Compile Include="Source\Model\Geoscape\Outposts\FacilityConstructedAppointment.cs" />
+    <Compile Include="Source\Model\Geoscape\Outposts\FacilityHandle.cs" />
+    <Compile Include="Source\Model\Geoscape\Outposts\Floorplan.cs" />
+    <Compile Include="Source\Model\Geoscape\Outposts\Outpost.cs" />
+    <Compile Include="Source\Model\Geoscape\Outposts\OutpostCapacities.cs" />
+    <Compile Include="Source\Model\Geoscape\Outposts\OutpostCapacityInfo.cs" />
+    <Compile Include="Source\Model\Geoscape\Outposts\OutpostInventory.cs" />
+    <Compile Include="Source\Model\Geoscape\Outposts\OutpostStatistics.cs" />
+    <Compile Include="Source\Model\Geoscape\Outposts\UnitTestOutpostInventory.cs" />
+    <Compile Include="Source\Model\Geoscape\Projects\BuildProject.cs" />
+    <Compile Include="Source\Model\Geoscape\Projects\BuildProjectManager.cs" />
+    <Compile Include="Source\Model\Geoscape\Projects\Project.cs" />
+    <Compile Include="Source\Model\Geoscape\Projects\ProjectManager.cs" />
+    <Compile Include="Source\Model\Geoscape\Projects\ResearchProject.cs" />
+    <Compile Include="Source\Model\Geoscape\Projects\ResearchProjectManager.cs" />
+    <Compile Include="Source\Model\Geoscape\Projects\UnitTestBuildProjectManager.cs" />
+    <Compile Include="Source\Model\Geoscape\Projects\UnitTestResearchProjectManager.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\Aircraft.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\AttackResult.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\Craft.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\CraftEvents.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\Missions\AttackAlienSiteMission.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\Missions\InterceptMission.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\Missions\Mission.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\Missions\NoOrdersMission.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\Missions\PatrolMission.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\Missions\ResearchMission.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\Missions\RetaliationMission.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\Missions\SupplyOutpostMission.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\Missions\TerrorMission.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\Missions\UfoMission.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\Missions\UnitTestAttackAlienSiteMission.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\States\InBaseState.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\States\InterceptCraftState.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\States\MissionState.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\States\MoveToPositionState.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\States\PatrolState.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\States\ReturnToBaseState.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\States\WaitState.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\Ufo.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\UnitTestAircraft.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\UnitTestUfo.cs" />
+    <Compile Include="Source\Model\Geoscape\Vehicles\WeaponPod.cs" />
+    <Compile Include="Source\Model\Geoscape\XCorp\Bank.cs" />
+    <Compile Include="Source\Model\Geoscape\XCorp\Person.cs" />
+    <Compile Include="Source\Model\Geoscape\XCorp\XCorp.cs" />
+    <Compile Include="Source\Model\Misc\AlienRank.cs" />
+    <Compile Include="Source\Model\Misc\Appointment.cs" />
+    <Compile Include="Source\Model\Misc\DelegatingAppointment.cs" />
+    <Compile Include="Source\Model\Misc\MonthlyLog.cs" />
+    <Compile Include="Source\Model\Misc\Scheduler.cs" />
+    <Compile Include="Source\Model\Misc\ScoreLog.cs" />
+    <Compile Include="Source\Model\Misc\Series.cs" />
+    <Compile Include="Source\Model\StaticData\Battlescape\Armor.cs" />
+    <Compile Include="Source\Model\StaticData\Battlescape\ArmorCollection.cs" />
+    <Compile Include="Source\Model\StaticData\Battlescape\CombatantFactory.cs" />
+    <Compile Include="Source\Model\StaticData\Battlescape\CombatantInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Battlescape\CombatantInfoDistribution.cs" />
+    <Compile Include="Source\Model\StaticData\Battlescape\CombatantInfoLoadoutChoice.cs" />
+    <Compile Include="Source\Model\StaticData\Battlescape\LoadoutInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Battlescape\UnitTestArmor.cs" />
+    <Compile Include="Source\Model\StaticData\Battlescape\UnitTestCombatantFactory.cs" />
+    <Compile Include="Source\Model\StaticData\Common\Graphic.cs" />
+    <Compile Include="Source\Model\StaticData\Common\ItemLine.cs" />
+    <Compile Include="Source\Model\StaticData\Facilities\DefenseFacilityInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Facilities\FacilityInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Facilities\FacilityInfoCollection.cs" />
+    <Compile Include="Source\Model\StaticData\Facilities\ScanFacilityInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Facilities\SpecialFacilityInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Facilities\StorageFacilityInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Initialization\Cheats.cs" />
+    <Compile Include="Source\Model\StaticData\Initialization\StartSettings.cs" />
+    <Compile Include="Source\Model\StaticData\Items\Actions\ActionInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Items\Actions\ShootActionInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Items\AircraftItemInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Items\AmmoInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Items\BaseOnlyItemInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Items\BattlescapeInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Items\BuildInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Items\CarryInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Items\ClipItemInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Items\CraftItemInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Items\CraftWeaponItemInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Items\DamageInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Items\Item.cs" />
+    <Compile Include="Source\Model\StaticData\Items\ItemCollection.cs" />
+    <Compile Include="Source\Model\StaticData\Items\ItemInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Items\PeopleNames.cs" />
+    <Compile Include="Source\Model\StaticData\Items\PersonItemInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Items\UfoItemInfo.cs" />
+    <Compile Include="Source\Model\StaticData\Items\UnitTestItemHandle.cs" />
+    <Compile Include="Source\Model\StaticData\Research\ItemPrerequisite.cs" />
+    <Compile Include="Source\Model\StaticData\Research\MultiPrerequisite.cs" />
+    <Compile Include="Source\Model\StaticData\Research\Prerequisite.cs" />
+    <Compile Include="Source\Model\StaticData\Research\ResearchGraph.cs" />
+    <Compile Include="Source\Model\StaticData\Research\ResearchReward.cs" />
+    <Compile Include="Source\Model\StaticData\Research\ResearchTopic.cs" />
+    <Compile Include="Source\Model\StaticData\Research\TechnologyPrerequisite.cs" />
+    <Compile Include="Source\Model\StaticData\Research\UnitTestResearchGraph.cs" />
+    <Compile Include="Source\Model\StaticData\XNet\XNetEntry.cs" />
+    <Compile Include="Source\Model\StaticData\XNet\XNetEntryCollection.cs" />
+    <Compile Include="Source\Model\StaticData\XNet\XNetStatisticsLink.cs" />
+    <Compile Include="Source\Model\StaticTables.cs" />
+    <Compile Include="Source\Program.cs" />
+    <Compile Include="Source\Services\ISavegameService.cs" />
+    <Compile Include="Source\UI\Dialogs\AircraftOrdersDialog.cs" />
+    <Compile Include="Source\UI\Dialogs\AlienMissionDialog.cs" />
+    <Compile Include="Source\UI\Dialogs\BuildFacilityDialog.cs" />
+    <Compile Include="Source\UI\Dialogs\Dialog.cs" />
+    <Compile Include="Source\UI\Dialogs\LaunchInterceptDialog.cs" />
+    <Compile Include="Source\UI\Dialogs\MessageBoxDialog.cs" />
+    <Compile Include="Source\UI\Dialogs\NameNewBaseDialog.cs" />
+    <Compile Include="Source\UI\Dialogs\OptionsDialog.cs" />
+    <Compile Include="Source\UI\Dialogs\PickActionDialog.cs" />
+    <Compile Include="Source\UI\Dialogs\SoundOptionsDialog.cs" />
+    <Compile Include="Source\UI\Dialogs\StartBattlescapeDialog.cs" />
+    <Compile Include="Source\UI\Dialogs\TrackingLostDialog.cs" />
+    <Compile Include="Source\UI\Dialogs\UfoInfoDialog.cs" />
+    <Compile Include="Source\UI\Dialogs\YesNoDialog.cs" />
+    <Compile Include="Source\UI\Scenes\Battlescape\BattlescapeScene.cs" />
+    <Compile Include="Source\UI\Scenes\Battlescape\Camera.cs" />
+    <Compile Include="Source\UI\Scenes\Battlescape\CellCursorLineMeshBuilder.cs" />
+    <Compile Include="Source\UI\Scenes\Battlescape\CombatantMeshes.cs" />
+    <Compile Include="Source\UI\Scenes\Battlescape\FacilityMesh.cs" />
+    <Compile Include="Source\UI\Scenes\Battlescape\PathMeshBuilder.cs" />
+    <Compile Include="Source\UI\Scenes\Battlescape\ProjectileMesh.cs" />
+    <Compile Include="Source\UI\Scenes\Battlescape\TerrainMesh.cs" />
+    <Compile Include="Source\UI\Scenes\Common\LineMesh.cs" />
+    <Compile Include="Source\UI\Scenes\Common\LineMeshBuilder.cs" />
+    <Compile Include="Source\UI\Scenes\Common\PolarScene.cs" />
+    <Compile Include="Source\UI\Scenes\Common\TextureAtlas.cs" />
+    <Compile Include="Source\UI\Scenes\EquipSoldier\EquipSoldierScene.cs" />
+    <Compile Include="Source\UI\Scenes\EquipSoldier\InventoryLocation.cs" />
+    <Compile Include="Source\UI\Scenes\Facility\BuildTimes.cs" />
+    <Compile Include="Source\UI\Scenes\Facility\FacilityModels.cs" />
+    <Compile Include="Source\UI\Scenes\Facility\FacilityScene.cs" />
+    <Compile Include="Source\UI\Scenes\Facility\Grid.cs" />
+    <Compile Include="Source\UI\Scenes\Geoscape\EarthGlobe.cs" />
+    <Compile Include="Source\UI\Scenes\Geoscape\GeoHud.cs" />
+    <Compile Include="Source\UI\Scenes\Geoscape\GeoMarker.cs" />
+    <Compile Include="Source\UI\Scenes\Geoscape\GeoscapeScene.cs" />
+    <Compile Include="Source\UI\Scenes\Geoscape\SkyBox.cs" />
+    <Compile Include="Source\UI\Scenes\Geoscape\SphereMesh.cs" />
+    <Compile Include="Source\UI\Scenes\Statistics\Graph.cs" />
+    <Compile Include="Source\UI\Scenes\Statistics\StatisticsScene.cs" />
+    <Compile Include="Source\UI\Scenes\XNet\XNetScene.cs" />
+    <Compile Include="Source\UI\Screens\AeroscapeScreen.cs" />
+    <Compile Include="Source\UI\Screens\AssignToCraftScreen.cs" />
+    <Compile Include="Source\UI\Screens\BaseInfoScreen.cs" />
+    <Compile Include="Source\UI\Screens\BasesScreen.cs" />
+    <Compile Include="Source\UI\Screens\BattlescapeReportScreen.cs" />
+    <Compile Include="Source\UI\Screens\Battlescape\AlienTurnScreenState.cs" />
+    <Compile Include="Source\UI\Screens\Battlescape\BattlescapeScreen.cs" />
+    <Compile Include="Source\UI\Screens\Battlescape\BattlescapeScreenState.cs" />
+    <Compile Include="Source\UI\Screens\Battlescape\LocationOrderCombatantScreenState.cs" />
+    <Compile Include="Source\UI\Screens\Battlescape\MoveOrderCombatantScreenState.cs" />
+    <Compile Include="Source\UI\Screens\Battlescape\OrderCombatantScreenState.cs" />
+    <Compile Include="Source\UI\Screens\CreditsScreen.cs" />
+    <Compile Include="Source\UI\Screens\EquipCraftScreen.cs" />
+    <Compile Include="Source\UI\Screens\EquipSoldierScreen.cs" />
+    <Compile Include="Source\UI\Screens\EquipSoldier\EquipSoldierScreenBattlescapeController.cs" />
+    <Compile Include="Source\UI\Screens\EquipSoldier\EquipSoldierScreenBattlescapeItemSource.cs" />
+    <Compile Include="Source\UI\Screens\EquipSoldier\EquipSoldierScreenController.cs" />
+    <Compile Include="Source\UI\Screens\EquipSoldier\EquipSoldierScreenInOutpostController.cs" />
+    <Compile Include="Source\UI\Screens\EquipSoldier\EquipSoldierScreenItemSource.cs" />
+    <Compile Include="Source\UI\Screens\Frame.cs" />
+    <Compile Include="Source\UI\Screens\GeoscapeScreen.cs" />
+    <Compile Include="Source\UI\Screens\GeoscapeScreenState.cs" />
+    <Compile Include="Source\UI\Screens\IScreenManager.cs" />
+    <Compile Include="Source\UI\Screens\LoadSaveGameScreen.cs" />
+    <Compile Include="Source\UI\Screens\MakeTransferScreen.cs" />
+    <Compile Include="Source\UI\Screens\ManufactureScreen.cs" />
+    <Compile Include="Source\UI\Screens\Misc.cs" />
+    <Compile Include="Source\UI\Screens\MonthlyCostsScreen.cs" />
+    <Compile Include="Source\UI\Screens\MonthlyReportScreen.cs" />
+    <Compile Include="Source\UI\Screens\PolarScreen.cs" />
+    <Compile Include="Source\UI\Screens\PurchaseScreen.cs" />
+    <Compile Include="Source\UI\Screens\ResearchScreen.cs" />
+    <Compile Include="Source\UI\Screens\Screen.cs" />
+    <Compile Include="Source\UI\Screens\ScreenManager.cs" />
+    <Compile Include="Source\UI\Screens\SellScreen.cs" />
+    <Compile Include="Source\UI\Screens\ShowTransfersScreen.cs" />
+    <Compile Include="Source\UI\Screens\SoldiersListScreen.cs" />
+    <Compile Include="Source\UI\Screens\StartScreen.cs" />
+    <Compile Include="Source\UI\Screens\StatisticsScreen.cs" />
+    <Compile Include="Source\UI\Screens\StoresScreen.cs" />
+    <Compile Include="Source\UI\Screens\TransactionLineItem.cs" />
+    <Compile Include="Source\UI\Screens\XNetScreen.cs" />
+    <Compile Include="Source\Utils\Random.cs" />
+    <Compile Include="Source\Utils\SpiteMap.cs" />
+    <Compile Include="Source\Utils\Util.cs" />
+    <Compile Include="Source\Xenocide.cs" />
+    <Compile Include="Source\XenoError.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <NestedContentProject Include="Content\Content.contentproj">
+      <Project>83dc9365-c6fd-4abf-a4fd-cca60af11ac5</Project>
+      <Visible>False</Visible>
+    </NestedContentProject>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\ErrorDialogue.resx">
+      <DependentUpon>ErrorDialogue.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TaharezLook.imageset">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\XenoNew.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Source\Game.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dependancies\CeGui\CeGui.Renderers.Xna\CeGui.Renderers.Xna.csproj">
+      <Project>{DD297D8C-8046-458C-922C-D69C87044040}</Project>
+      <Name>CeGui.Renderers.Xna</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dependancies\CeGui\CeGui.WidgetSets.Taharez\CeGui.WidgetSets.Taharez.csproj">
+      <Project>{F2EC7536-1149-43A4-B92B-DCC2BACECCCF}</Project>
+      <Name>CeGui.WidgetSets.Taharez</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dependancies\CeGui\CeGui\CeGui.csproj">
+      <Project>{41AE7F18-8C96-43E7-98D8-1E9D83081CD6}</Project>
+      <Name>CeGui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dependancies\FMOD\FMOD\FMOD.csproj">
+      <Project>{A9195092-2370-414B-8EA0-A3748AB648C8}</Project>
+      <Name>FMOD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tests\Xenocide.Test\Xenocide.Test.csproj">
+      <Project>{211AA0F7-38FF-4F3C-8C25-D0AD60768A3B}</Project>
+      <Name>Xenocide.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xenocide.Pipeline\Xenocide.Pipeline.csproj">
+      <Project>{90FE36F1-4A31-4848-AA5C-088F26056C79}</Project>
+      <Name>Xenocide.Pipeline</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+    <GenerateResource Sources=".\Resources\Strings.resx" PublicClass="false" StronglyTypedLanguage="C#" StronglyTypedFilename=".\Resources\Strings.Designer.cs" StronglyTypedClassName="Strings" StronglyTypedNamespace="ProjectXenocide.Resources" />
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

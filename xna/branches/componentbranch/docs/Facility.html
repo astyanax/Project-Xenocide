@@ -1,0 +1,99 @@
+<title>Facility</title>
+<head>
+</head>
+
+<body>
+<h1>Facility</h1>
+In the current design, there are 17 unique facilities, which can be grouped into 4 classes, which I have named:
+<ul>
+	<li>Storage</li>
+	<li>Scan</li>
+	<li>Defence</li>
+	<li>Special</li>
+</ul>
+
+<b>Storage Facilities</b><br>
+In simple terms, these increase the quantity of some "material" that can be "stored" in a base. The "storage" facilities are:
+<ul>
+	<li>Landing Pad</li>
+	<li>Barracks Facility</li>
+	<li>Xenomorph Holding Facility</li>
+	<li>Storage Facility</li>
+	<li>Psionic Training Facility</li>
+	<li>Research Facility</li>
+	<li>Engineering Facility</li>
+</ul>
+Notes on storage type
+<ul>
+	<li>Some people might wonder why the Psionic Training, Research and Engineering facilities are on this list. Well, the Research Facility increases the number of "working scientists" that a base can hold.</li>
+    <li>The easiest way to model these facilities is to give the base a "capacity" for each type of "material". Then when a facility is constructed the relevant base's "capacity" is increased. (And decreased when the facility is destroyed.)</li>
+	<li>A facility can't be destroyed if it's in use. As the "material" is owned by the base, not a facility, test is checking if destruction of the facility would reduce the base's "capacity" below the level currently present in the base.</li>
+	<li>Beyond needing to know when a facility finishes being built, the facility does not change over time. It doesn't need to implement update(gametime).</li>
+	<li>What about start/end of month Psi training? Answer, that's not the responsibility of the Facility. That's done in the "start of month" processing. (Aside, it's probably easier to work with "start of month", because "end of month" varies depending on the month.)</li>
+	<li>What about research projects? Answer, the research manager is responsible for tracking them, not the facility.</li>
+</ul>
+
+<b>Scan Facilities</b><br>
+These detect UFOs. The "scan" facilities are:
+<ul>
+	<li>Short Range Neudar</li>
+	<li>Long Range Neudar</li>
+	<li>Tachyon Emissions Detector</li>
+</ul>
+Notes on scan type
+<ul>
+    <li>These facilities do need to implement an update(gametime) function, because they need to check each "time period" to see if they've detected any UFOs.</li>
+    <li>In X-COM, despite what Ufopedia says, having more than one of each type of Neudar in a base doesn't help. So, we will not allow a base to have more than one of each type of scan facility.</li>
+</ul>
+<b>Defence Facilities</b><br>
+These facilities shoot at UFOs when UFOs try to attack a base. The defence facilities are:
+<ul>
+	<li>Missile Defence Array</li>
+	<li>Laser Defence Array</li>
+	<li>Plasma Defence Array</li>
+	<li>GAIA Defence Array</li>
+</ul>
+Notes on defence type
+<ul>
+	<li>These facilities only come into play when a UFO is attacking the base and gets into range.</li>
+	<li>When the attacking UFO gets into range, then each facility gets to take one shot at the UFO. (Or 2 shots if a Gravity Shield is present in the base.)</li>
+	<li>So, defence facilities don't need to update their state with an update(gametime). They're just called as part of the sequence for an "Alien Attack on X-Corp" base.</li>
+</ul>
+
+<b>Special Facilities</b><br>
+These are facilities that don't belong to a class. That is, each one is unique, with no other facility like it. The special facilities are:
+<ul>
+	<li>Base Access Facility</li>
+	<li>Gravity Shield Facility</li>
+	<li>Neural Shielding Facility</li>
+</ul>
+Notes on these types
+<ul>
+	<li>Base Access Facility: Every base must have one, and only one, of these. It must be the first facility that is built when a base is constructed, and is the core around which all other facilities are constructed. Beyond this, it adds nothing.</li>
+	<li>Gravity Shield Facility : A base can have no more than one of these. If one is present, then each defence facility gets to twice at attacking UFOs. So no update() function is needed, we just check to see if base has one of these as part of an "Alien Attack on X-Corp".</li>
+	<li>Neural Shielding Facility : A base can have no more than one of these. Reduces the "visibility" of a base. So needs to be called when we calculate a base's "visibility". Again, no update() function is needed.</li>
+</ul>
+
+<b>Common Facility Behaviour</b><br>
+<ul>
+	<li>Build cost</li>
+	<li>Build time</li>
+	<li>Size</li>
+	<li>canBuild(Base&amp; base)</li>
+	<li>canDestroy(Base&amp; base)</li>
+	<li>onFinishedBuilding(Base&amp; base)</li>
+	<li>onDestroy(Base&amp; base)</li>
+</ul>
+
+I'd propose the following set of classes for hooking facilities to bases.<br>
+(UML diagram attached, note that it doesn't show member functions nor all attributes for classes.)<br>
+<a href="Facility.png" title="Facility.png" target="_blank">
+	<img src="Facility.png" height="293" width="641">
+</a>
+<br>
+The basic idea is that the FacilityInfo classes are flyweights, holding the "class properties" (build cost, size, etc.) and functionality, but not the instance data. Actual instances of facilities are represented by the FacilityHandle class. Which holds build state.<br>
+The Base class owns a FloorPlan and a Capacities.<br>
+The FloorPlan is responsible for managing the FacilityHandles. Really, it just keeps track of the position of the facilities in the base (probably in an array) and their build state. (As you can guess, I haven't quite figured out the exact division of responsibility between FacilityHandle and FloorPlan classes.) For performance reasons, the FloorPlan will probably also hold a list of "updateable" facilities. That is, facilities that need to get called on an update(game time). Currently it's only the scan facilities, but it might be others later.<br>
+The Capacities is responsible for tracking the "storage capacities" granted by the facilities. As discussed above in Storage Facilities.<br>
+
+</body>

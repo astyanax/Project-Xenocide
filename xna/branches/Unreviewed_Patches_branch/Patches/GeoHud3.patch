@@ -1,0 +1,757 @@
+Index: Content/Content.contentproj
+===================================================================
+--- Content/Content.contentproj	(revision 1854)
++++ Content/Content.contentproj	(working copy)
+@@ -537,6 +537,13 @@
+       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+     </None>
+   </ItemGroup>
++  <ItemGroup>
++    <Compile Include="Textures\Geoscape\IconSpriteMap.png">
++      <Name>IconSpriteMap</Name>
++      <Importer>TextureImporter</Importer>
++      <Processor>TextureProcessor</Processor>
++    </Compile>
++  </ItemGroup>
+   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\v3.0\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
+   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+        Other similar extension points exist, see Microsoft.Common.targets.
+Index: Content/Textures/Geoscape/IconSpriteMap.png
+===================================================================
+Cannot display: file marked as a binary type.
+svn:mime-type = application/octet-stream
+
+Property changes on: Content\Textures\Geoscape\IconSpriteMap.png
+___________________________________________________________________
+Added: svn:mime-type
+   + application/octet-stream
+
+Index: Source/UI/Scenes/Geoscape/GeoHud.cs
+===================================================================
+--- Source/UI/Scenes/Geoscape/GeoHud.cs	(revision 0)
++++ Source/UI/Scenes/Geoscape/GeoHud.cs	(revision 0)
+@@ -0,0 +1,409 @@
++﻿#region Copyright
++/*
++--------------------------------------------------------------------------------
++This source file is part of Xenocide
++  by  Project Xenocide Team
++
++For the latest info on Xenocide, see http://www.projectxenocide.com/
++
++This work is licensed under the Creative Commons
++Attribution-NonCommercial-ShareAlike 2.5 License.
++
++To view a copy of this license, visit
++http://creativecommons.org/licenses/by-nc-sa/2.5/
++or send a letter to Creative Commons, 543 Howard Street, 5th Floor,
++San Francisco, California, 94105, USA.
++--------------------------------------------------------------------------------
++*/
++
++/*
++* @file BaseInfoScreen.cs
++* @date Created: 2009/10/20
++* @author File creator: John Perrin
++* @author Credits: none
++*/
++#endregion
++
++#region Using Statements
++using System;
++using System.Collections.Generic;
++using System.Text;
++using System.Diagnostics;
++
++
++using Microsoft.Xna.Framework;
++using Microsoft.Xna.Framework.Graphics;
++using Microsoft.Xna.Framework.Content;
++using Microsoft.Xna.Framework.Input;
++
++using ProjectXenocide.Utils;
++using ProjectXenocide.Model;
++using ProjectXenocide.Model.Geoscape;
++using ProjectXenocide.Model.Geoscape.Outposts;
++using ProjectXenocide.Model.Geoscape.Vehicles;
++using ProjectXenocide.Model.Geoscape.AI;
++using ProjectXenocide.UI.Scenes.Common;
++
++
++
++
++#endregion
++
++namespace ProjectXenocide.UI.Scenes.Geoscape
++{
++	/// <summary>
++	/// Used to draw an icon representation of a point of interest on the geoscape
++	/// </summary>
++	class GeoHud 
++	{
++		SpriteBatch hudSprites;
++		String selectedItem = "";
++		MouseState mouseState;
++		string TempSelectedItem;
++		string tipText = string.Empty;
++		Texture2D iconTex;
++		SpriteMap iconSprites;
++
++
++		/// <summary>
++		/// Represnets the cells in the icon spritemaps
++		/// </summary>
++		private enum hudIcons
++		{
++			XcomBaseInner,
++			XcomBaseOuter,
++			XcomCraftInner,
++			XcomCraftOuter,
++			UFOFlyInner,
++			UFOFlyOuter,
++			UFOLandInner,
++			UFOLandOuter,
++			UFOCrashInner,
++			UFOCrashOuter,
++			TerrorInner,
++			TerrorOuter,
++			AlienBaseInner,
++			AlienBAseOuter,
++			Free1,
++			Free2
++		}
++
++		private const float OCCLUDEDISTANCE = 1.2f;
++		private float rotAngle = 0.0f;
++
++		/// <summary>
++		/// Set from the geoscape.  We'll be using this to work out if our objects have passed over the
++		/// visible horizon and should be considered not in view.
++		/// </summary>
++		public float RotationAngle
++		{
++			set { rotAngle = value; }
++		}
++
++		/// <summary>
++		/// Load the graphic content of the scene
++		/// </summary>
++		/// <param name="content">content manager that fetches the content</param>
++		/// <param name="device">the display</param>
++		public void LoadContent(ContentManager content, GraphicsDevice device)
++		{
++			hudSprites = new SpriteBatch(device);
++			iconTex = content.Load<Texture2D>(@"Content\Textures\Geoscape\IconSpriteMap");
++			iconSprites = new SpriteMap(iconTex,4,4);
++		}
++
++
++		/// <summary>
++		/// Starts the icon rendering process
++		/// </summary>
++		public void Begin()
++		{
++			mouseState = Mouse.GetState();
++			TempSelectedItem = string.Empty;
++			tipText = string.Empty;
++			rotAngle -= 0.05f;
++			hudSprites.Begin();
++			if (rotAngle == -360.0f)
++				rotAngle = 0.0f;
++		}
++
++		/// <summary>
++		/// finishes the icon rendering process
++		/// </summary>
++		/// <returns></returns>
++		public string End()
++		{
++			selectedItem = TempSelectedItem;
++			hudSprites.End();
++			return tipText;
++		}
++
++		#region Icon Methods
++		/// <summary>
++		/// Draws an UFO icon, it will determine wether the ufo is landed or crashed or flying.  
++		/// </summary>
++		/// <param name="device"></param>
++		/// <param name="uFO"></param>
++		/// <param name="basicEffect"></param>
++		/// <param name="gameTime"></param>
++		/// <param name="distanceToStablePos"></param>
++		public void DrawUFOIcon(GraphicsDevice device, Ufo uFO, BasicEffect basicEffect, GameTime gameTime, float distanceToStablePos)
++		{
++			Vector2 screenPos = Get2DProjection(uFO, device, basicEffect);
++
++			float angle = 0.0f;
++
++			if (distanceToStablePos < OCCLUDEDISTANCE)
++			{
++				if (Hovering(screenPos))
++				{
++					angle = rotAngle;
++					PlayMouseOver(uFO.Name);
++					TempSelectedItem = uFO.Name;
++					tipText = uFO.Name;
++				}
++
++				if (uFO.IsCrashed)
++					DrawIcon(hudIcons.UFOCrashInner, hudIcons.UFOCrashOuter, screenPos, angle);
++				else
++					DrawIcon(hudIcons.UFOFlyInner, hudIcons.UFOFlyOuter, screenPos, angle);
++			}
++			else
++			{
++				if (uFO.IsCrashed)
++					CreateBlip(screenPos,Color.Gray);
++				else
++					CreateBlip(screenPos, Color.DarkRed);
++			}
++		}
++
++
++		/// <summary>
++		/// Draws an alien base
++		/// </summary>
++		/// <param name="device"></param>
++		/// <param name="ufoBase"></param>
++		/// <param name="basicEffect"></param>
++		/// <param name="gameTime"></param>
++		/// <param name="distanceToStablePos"></param>
++		public void DrawAlienBase(GraphicsDevice device, AlienSite ufoBase, BasicEffect basicEffect, GameTime gameTime, float distanceToStablePos)
++		{
++			Vector2 screenPos = Get2DProjection(ufoBase, device, basicEffect);
++
++			float angle = 0.0f;
++
++			if (distanceToStablePos < OCCLUDEDISTANCE)
++			{
++				if (Hovering(screenPos))
++				{
++					angle = rotAngle;
++					PlayMouseOver(ufoBase.Name);
++					TempSelectedItem = ufoBase.Name;
++					tipText = ufoBase.Name;
++				}
++
++				DrawIcon(hudIcons.AlienBaseInner, hudIcons.AlienBAseOuter, screenPos, angle);
++			}
++			else
++			{
++				CreateBlip(screenPos, Color.Pink);
++			}
++		}
++
++		/// <summary>
++		/// Draws a terror site
++		/// </summary>
++		/// <param name="device"></param>
++		/// <param name="terrorSite"></param>
++		/// <param name="basicEffect"></param>
++		/// <param name="gameTime"></param>
++		/// <param name="distanceToStablePos"></param>
++		public void DrawTerrorSite(GraphicsDevice device, TerrorMissionAlienSite terrorSite, BasicEffect basicEffect, GameTime gameTime, float distanceToStablePos)
++		{
++			Vector2 screenPos = Get2DProjection(terrorSite, device, basicEffect);
++			float angle = 0.0f;
++
++			if (distanceToStablePos < OCCLUDEDISTANCE)
++			{
++				if (Hovering(screenPos))
++				{
++					angle = rotAngle;
++					PlayMouseOver(terrorSite.Name);
++					TempSelectedItem = terrorSite.Name;
++					tipText = terrorSite.Name;
++				}
++
++				DrawIcon(hudIcons.TerrorInner ,hudIcons.TerrorOuter, screenPos, angle);
++			}
++			else
++			{
++				CreateBlip(screenPos, Color.Orange);
++			}
++		}
++
++		/// <summary>
++		/// draws an Xcorp aircraft
++		/// </summary>
++		/// <param name="device"></param>
++		/// <param name="airCraft"></param>
++		/// <param name="basicEffect"></param>
++		/// <param name="gameTime"></param>
++		/// <param name="distanceToStablePos"></param>
++		public void DrawAircraftIcon(GraphicsDevice device, Aircraft airCraft, BasicEffect basicEffect, GameTime gameTime, float distanceToStablePos)
++		{
++			Vector2 screenPos = Get2DProjection(airCraft, device, basicEffect);
++
++			float angle = 0.0f;
++			if (distanceToStablePos < OCCLUDEDISTANCE)
++			{
++				if (Hovering(screenPos))
++				{
++					angle = rotAngle;
++					TempSelectedItem = airCraft.Name;
++					PlayMouseOver(airCraft.Name);
++					tipText = string.Format("Aircraft:{2}\r\nFuel:{0}%\r\nDamage:{1}%\r\n", airCraft.FuelPercent.ToString(), airCraft.HullPercent.ToString(),airCraft.Name);
++				}
++
++				DrawIcon(hudIcons.XcomCraftInner, hudIcons.XcomCraftOuter, screenPos, angle);
++			}
++			else
++			{
++				CreateBlip(screenPos,  Color.DarkGreen);
++			}
++		}
++
++		/// <summary>
++		/// Draws an xcorp base
++		/// </summary>
++		/// <param name="device"></param>
++		/// <param name="outpost"></param>
++		/// <param name="basicEffect"></param>
++		/// <param name="gameTime"></param>
++		/// <param name="StaticPosition"></param>
++		public void DrawOutpostIcon(GraphicsDevice device, Outpost outpost, BasicEffect basicEffect, GameTime gameTime, float StaticPosition)
++		{	
++			Vector2 screenPos = Get2DProjection(outpost, device, basicEffect);
++
++			float angle = 0.0f;
++
++			if (StaticPosition < OCCLUDEDISTANCE)
++			{
++				#region Intercept/Recovery
++				Color oInterceptCol = Color.DarkRed;
++				Color oRecoveryCol = Color.DarkBlue;
++
++
++				foreach (Aircraft craft in outpost.Fleet)
++				{
++					if (craft.IsArmed &&
++						craft.FuelPercent == 100 &&
++						craft.InBase &&
++						craft.WeaponPods.Count > 0)
++						oInterceptCol = Color.Red;
++				}
++
++				foreach (Aircraft craft in outpost.Fleet)
++				{
++					if (craft.FuelPercent == 100 &&
++						craft.InBase &&
++						craft.CanCarrySoldiers)
++						oRecoveryCol = Color.Blue;
++				}
++				#endregion;
++
++				if (Hovering(screenPos))
++				{
++					TempSelectedItem = outpost.Name;
++					PlayMouseOver(outpost.Name);
++					angle = rotAngle;
++					tipText = string.Format("{0}\r\n",outpost.Name);
++				}
++
++				DrawIcon(hudIcons.XcomBaseInner, hudIcons.XcomBaseOuter, screenPos, angle);
++			}
++			else
++			{
++				CreateBlip(screenPos, Color.DarkBlue);
++			}
++		}
++		#endregion
++
++		#region private methods
++		/// </summary>
++		/// <param name="geoposition">position on globe (in polar radians)</param>
++		/// <returns>World matrix used by Draw</returns>
++		private static Vector2 Get2DProjection<T>(T geoObject, GraphicsDevice device, BasicEffect effect) where T : IGeoPosition
++		{
++			Vector3 geoPos = geoObject.Position.Polar;
++			Matrix World;
++
++			geoPos.Z = 1.0f;
++
++			World = Matrix.CreateRotationX(-geoPos.Y)
++				* Matrix.CreateRotationY(geoPos.X)
++				* Matrix.CreateTranslation(GeoPosition.PolarToCartesian(geoPos));
++
++			Vector3 projectedPosition = device.Viewport.Project(Vector3.Zero, effect.Projection, effect.View, World);
++			return new Vector2(projectedPosition.X, projectedPosition.Y);
++		}
++
++
++		/// <summary>
++		/// Draws an icon representing an object on the geoscape.  At the moment icons have a static inner
++		/// and a rotating outer.
++		/// </summary>
++		/// <param name="innerSprite"></param>
++		/// <param name="outerSprite"></param>
++		/// <param name="position"></param>
++		/// <param name="angle"></param>
++		private void DrawIcon(hudIcons innerSprite, hudIcons outerSprite, Vector2 position, float angle)
++		{
++			SpriteItem inner = iconSprites[(int)innerSprite];
++			inner.Draw(hudSprites, position, Color.White, 0.0f, new Vector2((inner.Width / 2), (inner.Height / 2)), 1.0F, SpriteEffects.None, 0.0F);
++			SpriteItem outer = iconSprites[(int)outerSprite];
++			outer.Draw(hudSprites, position, Color.White, angle, new Vector2((outer.Width / 2), (outer.Height / 2)), 1.0F, SpriteEffects.None, 0.0F);
++		}
++
++
++		/// <summary>
++		///  Create a blip used to reprensent the object when it moves out of view on the geoscape
++		/// </summary>
++		/// <param name="position"></param>
++		/// <param name="color"></param>
++		private void CreateBlip(Vector2 position, Color color)
++		{
++			SpriteItem inner = iconSprites[(int)hudIcons.XcomCraftInner];
++			inner.Draw(hudSprites, position, color, 0.0f, new Vector2((inner.Width / 2), (inner.Height / 2)), 0.5F, SpriteEffects.None, 0.0F);
++		}
++
++		/// <summary>
++		/// Determines if the mouse point is psoitioned over a given position
++		/// </summary>
++		/// <param name="position"></param>
++		/// <returns></returns>
++		private bool Hovering(Vector2 position)
++		{
++			return mouseState.X >= position.X - 16 &&
++			mouseState.X <= position.X + 16 &&
++			mouseState.Y >= position.Y - 16 &&
++			mouseState.Y <= position.Y + 16 &&
++			TempSelectedItem == String.Empty;
++		}
++
++		/// <summary>
++		/// If selected object wasnt selected in the last pass, play the mouse over soundeffect.
++		/// </summary>
++		/// <param name="objectName"></param>
++		private void PlayMouseOver(string objectName)
++		{
++			if (selectedItem != objectName)
++			{
++				Xenocide.AudioSystem.PlaySound("Menu\\buttonover.ogg");
++			}
++		}
++		#endregion
++
++
++
++	}
++}
+Index: Source/UI/Scenes/Geoscape/GeoscapeScene.cs
+===================================================================
+--- Source/UI/Scenes/Geoscape/GeoscapeScene.cs	(revision 1867)
++++ Source/UI/Scenes/Geoscape/GeoscapeScene.cs	(working copy)
+@@ -57,9 +57,24 @@
+         EarthGlobe  earth     = new EarthGlobe();
+         SkyBox      skybox    = new SkyBox();
+         GeoMarker   geomarker = new GeoMarker();
++		GeoHud      geoHud    = new GeoHud();
+         Effect      effect;
+         String      geoTechnique = String.Empty;
+ 
++		private GeoPosition centerLocation;
++
++		public GeoPosition CenterLocation
++		{
++			set { centerLocation = value; }
++		}
++
++		private string toolTipText = string.Empty;
++
++		public string ToolTipText
++		{
++			get { return toolTipText; }
++		}
++
+         /// <summary>
+         /// Constructor
+         /// </summary>
+@@ -114,6 +129,7 @@
+                 earth.LoadContent(device);
+                 skybox.LoadContent(content, device);
+                 geomarker.LoadContent(device);
++				geoHud.LoadContent(content, device);
+                 effect = content.Load<Effect>(@"Content\Shaders\GeoscapeShader");
+ 
+                 // figure out which shader we call to render the geoscape
+@@ -194,26 +210,33 @@
+             effect.Parameters["Projection"].SetValue(basicEffect.Projection);
+             effect.Parameters["LightDirection"].SetValue(basicEffect.DirectionalLight0.Direction);
+ 
+-            earth.Draw(device, effect);
++			earth.Draw(device, effect);
+ 
+             // Draw the X-Corp outposts
+             geomarker.setupEffect(device, basicEffect);
++
+             basicEffect.Alpha = 0.2f;
+             basicEffect.DiffuseColor = new Vector3(0.0f, 1.0f, 0.0f);
++
++			GeoPosition pos = new GeoPosition(CameraPosition.X , CameraPosition.Y );
++
++			geoHud.Begin();
+             foreach (Outpost outpost in Xenocide.GameState.GeoData.Outposts)
+             {
+-                geomarker.Draw(device, outpost.Position.Polar, basicEffect);
++				//geomarker.Draw(device, outpost.Position.Polar, basicEffect);
++				geoHud.DrawOutpostIcon(device, outpost, basicEffect, gameTime, outpost.Position.Distance(pos));
+             }
+ 
+             // Draw the X-Corp craft
+             basicEffect.DiffuseColor = new Vector3(0.0f, 0.0f, 1.0f);
+             foreach (Outpost outpost in Xenocide.GameState.GeoData.Outposts)
+             {
+-                foreach (Craft craft in outpost.Fleet)
++                foreach (Aircraft craft in outpost.Fleet)
+                 {
+                     if (!craft.InBase)
+                     {
+-                        geomarker.Draw(device, craft.Position.Polar, basicEffect);
++                       // geomarker.Draw(device, craft.Position.Polar, basicEffect);
++						geoHud.DrawAircraftIcon(device, craft, basicEffect, gameTime, craft.Position.Distance(pos));
+                     }
+                 }
+             }
+@@ -224,7 +247,8 @@
+             {
+                 if (ufo.IsKnownToXCorp)
+                 {
+-                    geomarker.Draw(device, ufo.Position.Polar, basicEffect);
++                    //geomarker.Draw(device, ufo.Position.Polar, basicEffect);
++					geoHud.DrawUFOIcon(device, ufo, basicEffect, gameTime, ufo.Position.Distance(pos));
+                 }
+             }
+ 
+@@ -236,7 +260,8 @@
+                 {
+                     if (!ufo.IsKnownToXCorp)
+                     {
+-                        geomarker.Draw(device, ufo.Position.Polar, basicEffect);
++                       // geomarker.Draw(device, ufo.Position.Polar, basicEffect);
++						geoHud.DrawUFOIcon(device, ufo, basicEffect, gameTime, ufo.Position.Distance(pos));
+                     }
+                 }
+             }
+@@ -247,10 +272,22 @@
+             {
+                 if (site.IsKnownToXCorp)
+                 {
+-                    geomarker.Draw(device, site.Position.Polar, basicEffect);
++					if (site.GetType() == typeof(TerrorMissionAlienSite))
++					{
++						//geomarker.Draw(device, site.Position.Polar, basicEffect);
++					if (site.GetType() == typeof(TerrorMissionAlienSite))
++						geoHud.DrawTerrorSite(device, (TerrorMissionAlienSite)site, basicEffect, gameTime, site.Position.Distance(pos));
++					}
++					else
++					{
++						//geomarker.Draw(device, site.Position.Polar, basicEffect);
++						geoHud.DrawAlienBase(device, site, basicEffect, gameTime, site.Position.Distance(pos));
++					}
+                 }
+             }
+ 
++			toolTipText = geoHud.End();
++
+             // Draw Nav Paths
+ 
+             // Draw Radar
+Index: Source/UI/Screens/GeoscapeScreen.cs
+===================================================================
+--- Source/UI/Screens/GeoscapeScreen.cs	(revision 1867)
++++ Source/UI/Screens/GeoscapeScreen.cs	(working copy)
+@@ -108,12 +108,15 @@
+             SetView(0.00f, 0.00f, 0.745f, 1f);
+ 
+             // add text giving the time
+-            gameTimeTop = AddStaticText(0.7574f, 0.08f, 0.2275f, 0.05f);
++			gameTimeTop = AddStaticText(0.7574f, 0.08f, 0.2275f, 0.05f);
+             gameTimeHour = AddStaticText(0.79f, 0.10f, 0.4275f, 0.08f);
+             gameTimeSec = AddStaticText(0.888f, 0.115f, 0.4275f, 0.08f);
+             fundsText = AddStaticText(0.754f, 0.02f, 0.2275f, 0.04125f);
+             fundsAmount = AddStaticText(0.84f, 0.015f, 0.2275f, 0.04125f);
++			sceneToolTip = AddStaticText(0.7475f, 0.25f, 0.3f, 0.3f);
+ 
++			sceneToolTip.VerticalAlignment = CeGui.VerticalAlignment.Top;
++
+             // Set Font and color for text
+             SetTimeFont(gameTimeTop, "GeoTime");
+             SetTimeFont(gameTimeHour, "GeoTimeBig");
+@@ -126,6 +129,7 @@
+             timeHourButton = AddButton("BUTTON_TIME_X3600", 0.8675f, 0.18f, 0.050f, 0.04125f, "PlanetView\\speedfast.ogg");
+             timeDayButton = AddButton("BUTTON_TIME_X86400", 0.9275f, 0.18f, 0.050f, 0.04125f, "PlanetView\\speedveryfast.ogg");
+ 
++			
+             interceptButton = AddButton("BUTTON_INTERCEPT", 0.7475f, 0.51f, 0.2275f, 0.04125f);
+             basesButton = AddButton("BUTTON_BASES", 0.7475f, 0.56f, 0.2275f, 0.04125f);
+             researchButton = AddButton("BUTTON_RESEARCH", 0.7475f, 0.61f, 0.2275f, 0.04125f);
+@@ -134,6 +138,7 @@
+             xnetButton = AddButton("BUTTON_XNET", 0.7475f, 0.76f, 0.2275f, 0.04125f);
+             optionsButton = AddButton("BUTTON_OPTIONS", 0.7475f, 0.81f, 0.2275f, 0.04125f);
+ 
++			
+             // move camera buttons
+             cameraUpButton = AddStaticImageButton("BUTTON_UP", 0.7890f, 0.885f, 0.020f, 0.03125f, "PanUpNormal", "PanUpPushed", "Menu\\buttonclick1_ok.ogg");
+             cameraDownButton = AddStaticImageButton("BUTTON_DOWN", 0.7890f, 0.965f, 0.020f, 0.03125f, "PanDownNormal", "PanDownPushed", "Menu\\buttonclick1_ok.ogg");
+@@ -213,6 +218,7 @@
+         private CeGui.Widgets.StaticText gameTimeSec;
+         private CeGui.Widgets.StaticText fundsText;
+         private CeGui.Widgets.StaticText fundsAmount;
++		private CeGui.Widgets.StaticText sceneToolTip;
+ 
+         //Used to keep track of time and avoid updating if needed.
+         private string gameTimeText;
+@@ -256,6 +262,11 @@
+             // as this will make CeGui recompute all render quads.
+             DateTime time = Xenocide.GameState.GeoData.GeoTime.Time;
+             String newTime = time.ToString();
++
++			// render hover text even if game time is not ticking
++			sceneToolTip.Text = geoscapeScene.ToolTipText;
++			sceneToolTip.VerticalFormat = CeGui.VerticalTextFormat.Top;
++
+             if (gameTimeText != newTime)
+             {
+                 CultureInfo culture = Thread.CurrentThread.CurrentCulture;
+@@ -283,6 +294,10 @@
+                 gameTimeHour.Text = time.ToString("HH:mm", culture);
+                 gameTimeSec.Text = time.ToString(":ss", culture);
+ 
++
++
++				
++
+                 //Set time
+                 gameTimeText = newTime;
+             }
+@@ -297,6 +312,8 @@
+         public override void SaveState()
+         {
+             oldCameraPosition = Scene.CameraPosition;
++
++
+         }
+ 
+         #endregion
+@@ -576,6 +593,7 @@
+         /// </summary>
+         private static Vector3 oldCameraPosition = new Vector3(0.0f, 0.0f, 3.5f);
+ 
++
+         #endregion fields
+     }
+ }
+Index: Source/Utils/SpiteMap.cs
+===================================================================
+--- Source/Utils/SpiteMap.cs	(revision 0)
++++ Source/Utils/SpiteMap.cs	(revision 0)
+@@ -0,0 +1,106 @@
++﻿/*
++ * SpriteItem and SpriteMap classes are from the Ziggyware tutorials section.
++ * 
++ * http://www.ziggyware.com/readarticle.php?article_id=141
++ * 
++ * /*
++* @file SpriteMap.cs
++* @date Created: 2009/10/21
++* @author File creator: John Perrin
++* @author Credits: none
++*/
++
++
++using Microsoft.Xna.Framework;
++using Microsoft.Xna.Framework.Graphics;
++
++namespace ProjectXenocide.Utils
++{
++	/// <summary>
++	/// This structure just stores a texture and rectangle specifying the area within the
++	/// texture which will be rendered.
++	/// </summary>
++	public struct SpriteItem
++	{
++		private Texture2D tex;
++		private Rectangle srcrect;
++
++		public SpriteItem(Texture2D texture, Rectangle srcrect)
++		{
++			this.tex = texture;
++			this.srcrect = srcrect;
++		}
++
++		public int Width
++		{
++			get { return srcrect.Width; }
++		}
++
++		public int Height
++		{
++			get { return srcrect.Height; }
++		}
++
++		public void Draw(SpriteBatch batch, Rectangle destrect, Color color)
++		{
++			batch.Draw(tex, destrect, srcrect, color);
++		}
++
++		public void Draw(SpriteBatch batch, Vector2 pos, Color color)
++		{
++			batch.Draw(tex, pos, srcrect, color);
++		}
++
++		public void Draw(SpriteBatch batch, Rectangle destrect, Color color, float rotation, Vector2 origin, SpriteEffects effect, float layerdepth)
++		{
++			batch.Draw(tex, destrect, srcrect, color, rotation, origin, effect, layerdepth);
++		}
++
++		public void Draw(SpriteBatch batch, Vector2 pos, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effect, float layerdepth)
++		{
++			batch.Draw(tex, pos, srcrect, color, rotation, origin, scale, effect, layerdepth);
++		}
++
++		public void Draw(SpriteBatch batch, Vector2 pos, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effect, float layerdepth)
++		{
++			batch.Draw(tex, pos, srcrect, color, rotation, origin, scale, effect, layerdepth);
++		}
++	}
++
++	public class SpriteMap
++	{
++		private Texture2D tex;
++		private int gridx, gridy;
++		private int mulx, muly;
++
++		public SpriteMap(Texture2D texture, int gridx, int gridy)
++		{
++			this.tex = texture;
++			this.gridx = gridx;
++			this.gridy = gridy;
++
++			// Calculate the width and height of each tile within the sprite map.
++			this.mulx = tex.Width / gridx;
++			this.muly = tex.Height / gridy;
++		}
++
++		public SpriteItem this[int frame]
++		{
++			get
++			{
++				// Extract the right area of the sprite for the given frame.
++				int x = frame % gridx;
++				int y = frame / gridx;
++				Rectangle srcrect = new Rectangle(x * mulx, y * muly, mulx, muly);
++
++				// Create a SpriteItem object and return it to the caller.
++				return new SpriteItem(tex, srcrect);
++			}
++		}
++
++		public void Dispose()
++		{
++			tex.Dispose();
++		}
++	}
++}

@@ -1,0 +1,107 @@
+<title>Getting Modal Dialogs to Work</title>
+<head></head>
+
+<body>
+<h1>Getting Modal Dialogs to Work</h1><br>
+In X-COM, all dialogs are modal. That is, when the dialog is up,
+everything else stops. (Actually, this might not be 100% true. It could
+be argued that the "click on base position" dialog that comes up when
+you want to create a base is a modeless dialog. However, it can be
+implemented by just adding a couple of widgets to the geoscreen, so I'm
+going to ignore it.)<br>
+<br>
+OK, so start with a simple dialog, say the
+screen that pops up when the UFO that an aircraft is chasing
+disappears. It has some text, and two buttons "patrol last position of
+UFO" and "return to base" that the user can click. Depending on which
+button is clicked, the craft will change its behaviour from "intercept"
+to either "patrol" or "return to base".
+<br>Now, there are a couple of points we need to note here.
+<ol type="1">
+<li>Currently the "message pump" in Xenocide has the game object calling
+the screen manager's "update()" and "draw()" members every frame. And
+the screen manager delegates the calls to the geoscreen's update() and
+draw().</li>
+<li> The geoscreen's update() calls the gamestate's update() to update the state of the game.</li>
+<li> The message box will need to be put up because of something happening during this update() event.</li>
+<li>Now, in windows, dialogs are synchronous. That is, you call a DoModal()
+function of the dialog, and the "flow of control" halts while the
+dialog runs. When the user finally clicks on a button, the DoModal()
+call returns and the logic continues. That is, the logic looks
+something like:<br>
+
+<br>gamestate.Update()<br>{<br>&nbsp;&nbsp;&nbsp;&nbsp;&#8230;<br>&nbsp;&nbsp;&nbsp;&nbsp;Update UFO positions<br>&nbsp;&nbsp;&nbsp;&nbsp;&#8230;<br>&nbsp;&nbsp;&nbsp;&nbsp;if (ufo.Escapes)<br>&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ufoEscapedDialog.DoModal();<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (ufoEscapedDialog.UsersChoice == "Patrol")<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aircraft.SetMission(Patrol);<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else if (ufoEscapedDialog.UsersChoice == "ReturnToBase")<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aircraft.SetMission(ReturnToBase);<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;&nbsp;&#8230;<br>&nbsp;&nbsp;&nbsp;&nbsp;Update Aircraft positions<br>}<br></li>
+<li> Unfortunately, I can't see any simple way to implement a synchronous dialog, (because of the update()/draw() pump.)</li>
+<li>However, the dialog behaviour we want isn't that different from how
+screens behave. That is, if we switch from the geoscreen to the base
+management screen, game time stops, because the base management screen
+does not call the gamestate's update() function.</li>
+<li> So, a possible implementation of a modal dialog would be to add a "dialog"
+member to the screen manager class. We set this member when there is a
+dialog to show. When the dialog is set, the screen manager will draw
+both the screen and the dialog, but it won't call the screen's update()
+method.</li>
+<li> So, the implementation goes (conceptually) like this:
+<ul><li> An event requiring a dialog occurs during the gamestate's update() method</li>
+<li> An appropriate dialog object is created.</li>
+<li>The screen manager's dialog member variable is set to this object, and
+the gamestate's update() function continues for this cycle.</li>
+<li> Now, for each cycle the screen manager ignores update() calls, but delegates draw() to both the current screen and dialog.</li>
+<li>When the user finally clicks on one of the choice buttons in the
+dialog, the dialog will update the game state (e.g. set the aircraft's
+mission to the appropriate value) and removes itself from the screen
+manager.</li>
+<li> Now each cycle, the screen manager will pump update() calls to the screen.</li>
+</ul></li></ol><br>
+This is complicated by three additional factors:
+<ul>
+<li>Dialogs may be nested. That is, one dialog calls another dialog. For
+example, a "save game" dialog may want to call a "message box" to give
+the user an error message.</li>
+<li> When a modal dialog is up, the
+controls of its "parent" screen or dialog need to be disabled. And then
+re-enabled when the dialog is dismissed.</li>
+<li> We could have multiple events occurring during a single update() that require a dialog box.</li>
+</ul><br>
+<u>Nesting dialogs</u><br>
+This is probably the easiest problem to solve. Instead of the screen manager
+having a single "dialog" member, we make it a stack.<br>
+<br><u>Disabling Parent</u><br>
+Trivial.  CeGui# has commands for disabling and enabling the widgets on a Window.<br>
+<br>
+<u>Multiple Events requiring a dialog</u><br>
+What do we do if during an update(), multiple events occur that require user
+interaction? This can happen, because our updates() can "contain" up to
+a minute of game time. So: assume during an update the following events
+all occur:<ul>
+<li>A research topic is completed.</li>
+<li> A UFO manages to escape.</li>
+<li> aircraft pursuing the UFO runs low on fuel.</li>
+<li> An aircraft arrives at a terror site.</li>
+<li> End of month occurs.</li>
+</ul><br>
+Here's my thoughts on the matter:<ul>
+<li>In addition to the stack of "dialogs that are being shown", we also need a queue of "dialogs to show".</li>
+<li>Note that some of these dialogs may result in a switching of screen.
+(e.g. The terror site could spawn an entire battlescape mission.) And
+that the new screen may potentially have its own "dialogs to show".</li>
+<li>A possible solution would be to prioritize the queue, so that dialogs
+will not generate a screen swap are shown before screens that might,
+and both are shown before screens that could generate "dialogs to
+show". E.g. in the above list of events, they would be displayed in: <ul>
+<li> A UFO manages to escape.</li>
+<li> aircraft pursuing the UFO runs low on fuel.</li>
+<li> A research topic is completed.</li>
+<li> End of month occurs.</li>
+<li> An aircraft arrives at a terror site.</li>
+</ul>
+</li>
+<li> Unfortunately, this doesn't work.  While it will work in 99% of cases (because normally we won't have more than one dialog stacked up) it fails if we have two dialogs stacked that might generate dialogs to show.  e.g. We have craft reach two UFO crash sites simultaneously, and wish to start battlescape missions.
+I believe the solution is as follows:
+<ul>
+<li>We provide a queue in the GeoData.</li>
+<li>We put into this queue <b>events</b> (not screens/dialogs) that could cause a screen change.  E.g. end of month, craft reaching a mission site, etc. </li>
+<li>When GeoData().update() is called, it checks the queue to see if there are any events. If there are, then <b>instead of calling update() for GeoData's members the topmost event is popped off the queue and executed.</b>
+</ul>
+</li></ul>
+</body></html>

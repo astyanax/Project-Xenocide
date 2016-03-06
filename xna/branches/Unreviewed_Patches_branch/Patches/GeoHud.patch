@@ -1,0 +1,1120 @@
+Index: Unreviewed_Patches_branch/Xenocide/Content/Content.contentproj
+===================================================================
+--- Unreviewed_Patches_branch/Xenocide/Content/Content.contentproj	(revision 1854)
++++ Unreviewed_Patches_branch/Xenocide/Content/Content.contentproj	(working copy)
+@@ -461,6 +461,11 @@
+       <Importer>FontDescriptionImporter</Importer>
+       <Processor>FontDescriptionProcessor</Processor>
+     </Compile>
++    <Compile Include="Shaders\RoundLine.fx">
++      <Name>RoundLine</Name>
++      <Importer>EffectImporter</Importer>
++      <Processor>EffectProcessor</Processor>
++    </Compile>
+     <None Include="Textures\Battlescape\textureAtlas.png">
+       <Name>textureAtlas</Name>
+       <Importer>TextureImporter</Importer>
+Index: Unreviewed_Patches_branch/Xenocide/Content/Shaders/RoundLine.fx
+===================================================================
+--- Unreviewed_Patches_branch/Xenocide/Content/Shaders/RoundLine.fx	(revision 0)
++++ Unreviewed_Patches_branch/Xenocide/Content/Shaders/RoundLine.fx	(revision 0)
+@@ -0,0 +1,277 @@
++// RoundLine.fx
++// By Michael D. Anderson
++// Version 3.00, Mar 12 2009
++//
++// Note that there is a (rho, theta) pair, used in the VS, that tells how to 
++// scale and rotate the entire line.  There is also a different (rho, theta) 
++// pair, used within the PS, that indicates what part of the line each pixel 
++// is on.
++
++
++// Data shared by all lines:
++matrix viewProj;
++float time;
++float lineRadius;
++float4 lineColor;
++float blurThreshold = 0.95;
++
++// Per-line instance data:
++float4 instanceData[200]; // (x0, y0, rho, theta)
++
++
++struct VS_INPUT
++{
++	float4 pos : POSITION;
++	float2 vertRhoTheta : NORMAL;
++	float2 vertScaleTrans : TEXCOORD0;
++	float instanceIndex : TEXCOORD1;
++};
++
++
++struct VS_OUTPUT
++{
++	float4 position : POSITION;
++	float3 polar : TEXCOORD0;
++	float2 posModelSpace : TEXCOORD1;
++};
++
++
++VS_OUTPUT MyVS( VS_INPUT In )
++{
++	VS_OUTPUT Out = (VS_OUTPUT)0;
++	float4 pos = In.pos;
++
++	float x0 = instanceData[In.instanceIndex].x;
++	float y0 = instanceData[In.instanceIndex].y;
++	float rho = instanceData[In.instanceIndex].z;
++	float theta = instanceData[In.instanceIndex].w;
++
++	// Scale X by lineRadius, and translate X by rho, in worldspace
++	// based on what part of the line we're on
++	float vertScale = In.vertScaleTrans.x;
++	float vertTrans = In.vertScaleTrans.y;
++	pos.x *= (vertScale * lineRadius);
++	pos.x += (vertTrans * rho);
++
++	// Always scale Y by lineRadius regardless of what part of the line we're on
++	pos.y *= lineRadius;
++	
++	// Now the vertex is adjusted for the line length and radius, and is 
++	// ready for the usual world/view/projection transformation.
++
++	// World matrix is rotate(theta) * translate(p0)
++	matrix worldMatrix = 
++	{
++		cos(theta), sin(theta), 0, 0,
++		-sin(theta), cos(theta), 0, 0,
++		0, 0, 1, 0,
++		x0, y0, 0, 1 
++	};
++	
++	Out.position = mul(mul(pos, worldMatrix), viewProj);
++	
++	Out.polar = float3(In.vertRhoTheta, 0);
++
++	Out.posModelSpace.xy = pos.xy;
++
++	return Out;
++}
++
++
++// Helper function used by several pixel shaders to blur the line edges
++float BlurEdge( float rho )
++{
++	if( rho < blurThreshold )
++	{
++		return 1.0f;
++	}
++	else
++	{
++		float normrho = (rho - blurThreshold) * 1 / (1 - blurThreshold);
++		return 1 - normrho;
++	}
++}
++
++
++float4 MyPSStandard( float3 polar : TEXCOORD0 ) : COLOR0
++{
++	float4 finalColor;
++	finalColor.rgb = lineColor.rgb;
++	finalColor.a = lineColor.a * BlurEdge( polar.x );
++	return finalColor;
++}
++
++
++float4 MyPSNoBlur() : COLOR0
++{
++	float4 finalColor = lineColor;
++	return finalColor;
++}
++
++
++float4 MyPSAnimatedLinear( float3 polar : TEXCOORD0, float2 posModelSpace: TEXCOORD1 ) : COLOR0
++{
++	float4 finalColor;
++	float modulation = sin( ( posModelSpace.x * 0.1 + time * 0.05 ) * 80 * 3.14159) * 0.5 + 0.5;
++	finalColor.rgb = lineColor.rgb * modulation;
++	finalColor.a = lineColor.a * BlurEdge( polar.x );
++	return finalColor;
++}
++
++
++float4 MyPSAnimatedRadial( float3 polar : TEXCOORD0 ) : COLOR0
++{
++	float4 finalColor;
++	float modulation = sin( ( -polar.x * 0.1 + time * 0.05 ) * 20 * 3.14159) * 0.5 + 0.5;
++	finalColor.rgb = lineColor.rgb * modulation;
++	finalColor.a = lineColor.a * BlurEdge( polar.x );
++	return finalColor;
++}
++
++
++float4 MyPSModern( float3 polar : TEXCOORD0 ) : COLOR0
++{
++	float4 finalColor;
++	finalColor.rgb = lineColor.rgb;
++
++	float rho = polar.x;
++
++	float a;
++	float blurThreshold = 0.25;
++	
++	if( rho < blurThreshold )
++	{
++		a = 1.0f;
++	}
++	else
++	{
++		float normrho = (rho - blurThreshold) * 1 / (1 - blurThreshold);
++		a = normrho;
++	}
++	
++	finalColor.a = lineColor.a * a;
++
++	return finalColor;
++}
++
++
++float4 MyPSTubular( float3 polar : TEXCOORD0 ) : COLOR0
++{
++	float4 finalColor = lineColor;
++	finalColor.a *= polar.x;
++	finalColor.a = finalColor.a * BlurEdge( polar.x );
++	return finalColor;
++}
++
++
++float4 MyPSGlow( float3 polar : TEXCOORD0 ) : COLOR0
++{
++	float4 finalColor = lineColor;
++	finalColor.a *= 1 - polar.x;
++	return finalColor;
++}
++
++
++technique Standard
++{
++	pass P0
++	{
++		CullMode = CW;
++		AlphaBlendEnable = true;
++		SrcBlend = SrcAlpha;
++		DestBlend = InvSrcAlpha;
++		BlendOp = Add;
++		vertexShader = compile vs_1_1 MyVS();
++		pixelShader = compile ps_2_0 MyPSStandard();
++	}
++}
++
++
++technique NoBlur
++{
++	pass P0
++	{
++		CullMode = CW;
++		AlphaBlendEnable = true;
++		SrcBlend = SrcAlpha;
++		DestBlend = InvSrcAlpha;
++		BlendOp = Add;
++		vertexShader = compile vs_1_1 MyVS();
++		pixelShader = compile ps_2_0 MyPSNoBlur();
++	}
++}
++
++
++technique AnimatedLinear
++{
++	pass P0
++	{
++		CullMode = CW;
++		AlphaBlendEnable = true;
++		SrcBlend = SrcAlpha;
++		DestBlend = InvSrcAlpha;
++		BlendOp = Add;
++		vertexShader = compile vs_1_1 MyVS();
++		pixelShader = compile ps_2_0 MyPSAnimatedLinear();
++	}
++}
++
++
++technique AnimatedRadial
++{
++	pass P0
++	{
++		CullMode = CW;
++		AlphaBlendEnable = true;
++		SrcBlend = SrcAlpha;
++		DestBlend = InvSrcAlpha;
++		BlendOp = Add;
++		vertexShader = compile vs_1_1 MyVS();
++		pixelShader = compile ps_2_0 MyPSAnimatedRadial();
++	}
++}
++
++
++technique Modern
++{
++	pass P0
++	{
++		CullMode = CW;
++		AlphaBlendEnable = true;
++		SrcBlend = SrcAlpha;
++		DestBlend = InvSrcAlpha;
++		BlendOp = Add;
++		vertexShader = compile vs_1_1 MyVS();
++		pixelShader = compile ps_2_0 MyPSModern();
++	}
++}
++
++
++technique Tubular
++{
++	pass P0
++	{
++		CullMode = CW;
++		AlphaBlendEnable = true;
++		SrcBlend = SrcAlpha;
++		DestBlend = InvSrcAlpha;
++		BlendOp = Add;
++		vertexShader = compile vs_1_1 MyVS();
++		pixelShader = compile ps_2_0 MyPSTubular();
++	}
++}
++
++
++technique Glow
++{
++	pass P0
++	{
++		CullMode = CW;
++		AlphaBlendEnable = true;
++		SrcBlend = SrcAlpha;
++		DestBlend = InvSrcAlpha;
++		BlendOp = Add;
++		vertexShader = compile vs_1_1 MyVS();
++		pixelShader = compile ps_2_0 MyPSGlow();
++	}
++}
+Index: Unreviewed_Patches_branch/Xenocide/Source/UI/Scenes/Geoscape/GeoHud.cs
+===================================================================
+--- Unreviewed_Patches_branch/Xenocide/Source/UI/Scenes/Geoscape/GeoHud.cs	(revision 0)
++++ Unreviewed_Patches_branch/Xenocide/Source/UI/Scenes/Geoscape/GeoHud.cs	(revision 0)
+@@ -0,0 +1,287 @@
++﻿
++#region Using Statements
++using System;
++using System.Collections.Generic;
++using System.Text;
++using System.Diagnostics;
++using System.Drawing;
++
++using Microsoft.Xna.Framework;
++using Microsoft.Xna.Framework.Graphics;
++using Microsoft.Xna.Framework.Content;
++using Microsoft.Xna.Framework.Input;
++
++using ProjectXenocide.Utils;
++using ProjectXenocide.Model;
++using ProjectXenocide.Model.Geoscape;
++using ProjectXenocide.Model.Geoscape.Outposts;
++using ProjectXenocide.Model.Geoscape.Vehicles;
++using ProjectXenocide.Model.Geoscape.AI;
++using ProjectXenocide.UI.Scenes.Common;
++
++
++
++
++#endregion
++
++namespace ProjectXenocide.UI.Scenes.Geoscape
++{
++	/// <summary>
++	/// Used to draw an icon representation of a point of interest on the geoscape
++	/// </summary>
++	class GeoHud 
++	{
++		BasicEffect basicEffect;
++		RoundLineManager roundLineManager;
++		Matrix viewProjMatrix;
++		Matrix lineprojMatrix;
++		Matrix lineviewMatrix;
++		float linecameraX = 0;
++		float linecameraY = 0;
++		float linecameraZoom = 100;
++		SpriteBatch hudText;
++		String selectedItem = "";
++		SpriteFont hudFont;
++		MouseState mouseState;
++		string TempSelectedItem;
++		
++
++		/// </summary>
++		/// <param name="geoposition">position on globe (in polar radians)</param>
++		/// <returns>World matrix used by Draw</returns>
++		public static Vector2 Get2DProjection<T>(T geoObject,GraphicsDevice device, BasicEffect effect)  where T : IGeoPosition 
++		{
++			Vector3 geoPos = geoObject.Position.Polar;
++			Matrix World;
++	
++			geoPos.Z = 1.0f;
++
++			World = Matrix.CreateRotationX(-geoPos.Y)
++				* Matrix.CreateRotationY(geoPos.X)
++				* Matrix.CreateTranslation(GeoPosition.PolarToCartesian(geoPos));
++
++			Vector3 projectedPosition = device.Viewport.Project(Vector3.Zero, effect.Projection, effect.View, World);
++			return  new Vector2(projectedPosition.X, projectedPosition.Y);	
++		}
++
++		/// <summary>
++		/// Load the graphic content of the scene
++		/// </summary>
++		/// <param name="content">content manager that fetches the content</param>
++		/// <param name="device">the display</param>
++
++		public void LoadContent(ContentManager content, GraphicsDevice device)
++		{
++			hudText = new SpriteBatch(device);
++			hudFont = content.Load<SpriteFont>(@"Content\SpriteFont1");
++			roundLineManager = new RoundLineManager();
++			roundLineManager.Init(device, content);
++
++			Create2DProjectionMatrix(device);
++
++			lineviewMatrix = Matrix.CreateTranslation(-linecameraX, -linecameraY, 0) * Matrix.CreateScale(1.0f / linecameraZoom, 1.0f / linecameraZoom, 1.0f);
++			viewProjMatrix = lineviewMatrix * lineprojMatrix;
++		}
++
++
++		public void DrawUFOIcon(GraphicsDevice device, Ufo uFO, BasicEffect basicEffect, GameTime gameTime)
++		{
++			Vector2 screenPos = Get2DProjection(uFO, device, basicEffect);
++
++			Disc oDisc = new Disc(0.025f, 0.025f);
++			oDisc.Pos = new Vector2((screenPos.X / 3) - 100,
++										-(screenPos.Y / 3) + 100);
++
++			Microsoft.Xna.Framework.Graphics.Color oCol;
++			if (gameTime.TotalRealTime.Seconds % 2 == 0)
++			{
++				oCol = Microsoft.Xna.Framework.Graphics.Color.DarkRed;
++			}
++			else
++			{
++				oCol = Microsoft.Xna.Framework.Graphics.Color.Red;
++			}
++
++			Vector2 screenText = screenPos;
++
++			if (mouseState.X >= screenPos.X - 13 &&
++				mouseState.X <= screenPos.X + 13 &&
++				mouseState.Y >= screenPos.Y - 13 &&
++				mouseState.Y <= screenPos.Y + 13)
++			{
++				TempSelectedItem = uFO.Name;
++				if (selectedItem != uFO.Name)
++				{
++					Xenocide.AudioSystem.PlaySound("Menu\\buttonover.ogg");
++				}
++				oCol = Microsoft.Xna.Framework.Graphics.Color.Pink;
++				screenText.X += 15;
++				hudText.DrawString(hudFont, uFO.Name, screenText, Microsoft.Xna.Framework.Graphics.Color.Cyan);
++
++			}
++
++			//dude.Pos = new Vector2(7.5f, 0.5f);
++			roundLineManager.Draw(oDisc, 2, oCol, viewProjMatrix, (float)gameTime.TotalRealTime.TotalSeconds, "AnimatedRadial");
++		}
++
++
++
++		public void DrawAircraftIcon(GraphicsDevice device, Aircraft airCraft, BasicEffect basicEffect, GameTime gameTime)
++		{
++
++			Vector2 screenPos = Get2DProjection(airCraft, device, basicEffect);
++
++			Microsoft.Xna.Framework.Graphics.Color oCol;
++			if (gameTime.TotalRealTime.Seconds % 2 == 0)
++			{
++				oCol = Microsoft.Xna.Framework.Graphics.Color.DarkGreen;
++			}
++			else
++			{
++				oCol = Microsoft.Xna.Framework.Graphics.Color.Green;
++			}
++			Vector2 screenText = screenPos;
++
++			if (mouseState.X >= screenPos.X - 13 &&
++				mouseState.X <= screenPos.X + 13 &&
++				mouseState.Y >= screenPos.Y - 13 &&
++				mouseState.Y <= screenPos.Y + 13)
++			{
++				TempSelectedItem = airCraft.Name;
++				if (selectedItem != airCraft.Name)
++				{
++					Xenocide.AudioSystem.PlaySound("Menu\\buttonover.ogg");
++				}
++				oCol = Microsoft.Xna.Framework.Graphics.Color.Yellow;
++				screenText.X += 15;
++				hudText.DrawString(hudFont, airCraft.Name, screenText, Microsoft.Xna.Framework.Graphics.Color.Cyan);
++
++			}
++
++			roundLineManager.Draw(CreateHudIcon(screenPos, 2, "Base"), 0.5f, oCol, viewProjMatrix, (float)gameTime.TotalRealTime.TotalSeconds, "Tubular");
++		}
++
++
++		public void DrawOutpostIcon(GraphicsDevice device, Outpost outpost, BasicEffect basicEffect, GameTime gameTime)
++		{
++			
++			Vector2 screenPos = Get2DProjection(outpost, device, basicEffect);
++
++			Microsoft.Xna.Framework.Graphics.Color oBaseCol = Microsoft.Xna.Framework.Graphics.Color.DarkBlue;
++
++			if (gameTime.TotalRealTime.Seconds % 2 == 0)
++				oBaseCol = Microsoft.Xna.Framework.Graphics.Color.Blue;
++
++			Microsoft.Xna.Framework.Graphics.Color oInterceptCol = Microsoft.Xna.Framework.Graphics.Color.Black;
++			foreach (Aircraft craft in outpost.Fleet)
++			{
++				if (craft.IsArmed &&
++					craft.FuelPercent == 100 &&
++					craft.InBase &&
++					craft.WeaponPods.Count > 0)
++					oInterceptCol = Microsoft.Xna.Framework.Graphics.Color.Yellow;
++
++			}
++
++			Vector2 screenText = screenPos;
++
++			string hover = "NoBlur";
++			if (mouseState.X >= screenPos.X - 13 &&
++				mouseState.X <= screenPos.X + 13 &&
++				mouseState.Y >= screenPos.Y - 13 &&
++				mouseState.Y <= screenPos.Y + 13)
++			{
++				TempSelectedItem = outpost.Name;
++				if (selectedItem != outpost.Name)
++				{
++
++					Xenocide.AudioSystem.PlaySound("Menu\\buttonover.ogg");
++				}
++				oBaseCol = Microsoft.Xna.Framework.Graphics.Color.Gold;
++				screenText.X += 15;
++				hudText.DrawString(hudFont, outpost.Name, screenText, Microsoft.Xna.Framework.Graphics.Color.Cyan);
++				hover = "Glow";
++			}
++
++
++
++			roundLineManager.Draw(CreateHudIcon(screenPos, 4, "Intercept"), 0.5f, oInterceptCol, viewProjMatrix, (float)gameTime.TotalRealTime.TotalSeconds, "Glow");
++			roundLineManager.Draw(CreateHudIcon(screenPos, 4, "Base"), 0.5f, oBaseCol, viewProjMatrix, (float)gameTime.TotalRealTime.TotalSeconds, hover);
++		}
++
++
++		/// <summary>
++		/// Create a simple 2D projection matrix
++		/// </summary>
++		private void Create2DProjectionMatrix(GraphicsDevice device)
++		{
++			//Projection matrix ignores Z and just squishes X or Y to balance the upcoming viewport stretch
++			float projScaleX;
++			float projScaleY;
++			float width = device.Viewport.Width;
++			float height = device.Viewport.Height;
++
++
++			if (width > height)
++			{
++				// Wide window
++				projScaleX = height / width;
++				projScaleY = 1.0f;
++			}
++			else
++			{
++				// Tall window
++				projScaleX = 1.0f;
++				projScaleY = width / height;
++			}
++			lineprojMatrix = Matrix.CreateScale(1.0f, 1.0f, 0.0f);
++			lineprojMatrix.M43 = 0f;
++		}
++
++		public void Begin()
++		{
++			mouseState = Mouse.GetState();
++			TempSelectedItem = string.Empty;
++			hudText.Begin();
++		}
++
++		public void End()
++		{
++			selectedItem = TempSelectedItem;
++			hudText.End();
++		}
++
++
++
++		private List<RoundLine> CreateHudIcon(Vector2 Position, float scale, string Icon)
++		{
++			float baseX = (Position.X / 3) - 100;
++			float baseY = -(Position.Y / 3) + 100;
++
++			List<RoundLine> HudIcon = new List<RoundLine>();
++
++			switch (Icon)
++			{
++				case "Base":
++					HudIcon.Add(new RoundLine(baseX - scale, baseY + (scale / 2f), baseX - scale, baseY + scale));
++					HudIcon.Add(new RoundLine(baseX - scale, baseY + scale, baseX - (scale / 2f), baseY + scale));
++					HudIcon.Add(new RoundLine(baseX + (scale / 2f), baseY + scale, baseX + scale, baseY + scale));
++					HudIcon.Add(new RoundLine(baseX + scale, baseY + (scale / 2f), baseX + scale, baseY + scale));
++					HudIcon.Add(new RoundLine(baseX - scale, baseY - (scale / 2f), baseX - scale, baseY - scale));
++					HudIcon.Add(new RoundLine(baseX - scale, baseY - scale, baseX - (scale / 2f), baseY - scale));
++					HudIcon.Add(new RoundLine(baseX + (scale / 2f), baseY - scale, baseX + scale, baseY - scale));
++					HudIcon.Add(new RoundLine(baseX + scale, baseY - scale, baseX + scale, baseY - (scale / 2f)));
++					break;
++				case "Intercept":
++					HudIcon.Add(new RoundLine(baseX - scale, baseY + (scale / 2), baseX - scale, baseY - (scale / 2f)));
++					break;
++				case "Recovery":
++					HudIcon.Add(new RoundLine(baseX + scale, baseY + (scale / 2), baseX + scale, baseY - (scale / 2f)));
++					break;
++			}
++			return HudIcon;
++
++		}
++
++	}
++}
+Index: Unreviewed_Patches_branch/Xenocide/Source/UI/Scenes/Geoscape/GeoscapeScene.cs
+===================================================================
+--- Unreviewed_Patches_branch/Xenocide/Source/UI/Scenes/Geoscape/GeoscapeScene.cs	(revision 1854)
++++ Unreviewed_Patches_branch/Xenocide/Source/UI/Scenes/Geoscape/GeoscapeScene.cs	(working copy)
+@@ -57,6 +57,7 @@
+         EarthGlobe  earth     = new EarthGlobe();
+         SkyBox      skybox    = new SkyBox();
+         GeoMarker   geomarker = new GeoMarker();
++		GeoHud      geoHud    = new GeoHud();
+         Effect      effect;
+         String      geoTechnique = String.Empty;
+ 
+@@ -114,6 +115,7 @@
+                 earth.LoadContent(device);
+                 skybox.LoadContent(content, device);
+                 geomarker.LoadContent(device);
++				geoHud.LoadContent(content, device);
+                 effect = content.Load<Effect>(@"Content\Shaders\GeoscapeShader");
+ 
+                 // figure out which shader we call to render the geoscape
+@@ -200,20 +202,24 @@
+             geomarker.setupEffect(device, basicEffect);
+             basicEffect.Alpha = 0.2f;
+             basicEffect.DiffuseColor = new Vector3(0.0f, 1.0f, 0.0f);
++
++			geoHud.Begin();
+             foreach (Outpost outpost in Xenocide.GameState.GeoData.Outposts)
+             {
+-                geomarker.Draw(device, outpost.Position.Polar, basicEffect);
++               // geomarker.Draw(device, outpost.Position.Polar, basicEffect);
++				geoHud.DrawOutpostIcon(device, outpost, basicEffect,gameTime);
+             }
+ 
+             // Draw the X-Corp craft
+             basicEffect.DiffuseColor = new Vector3(0.0f, 0.0f, 1.0f);
+             foreach (Outpost outpost in Xenocide.GameState.GeoData.Outposts)
+             {
+-                foreach (Craft craft in outpost.Fleet)
++                foreach (Aircraft craft in outpost.Fleet)
+                 {
+                     if (!craft.InBase)
+                     {
+-                        geomarker.Draw(device, craft.Position.Polar, basicEffect);
++                       // geomarker.Draw(device, craft.Position.Polar, basicEffect);
++						geoHud.DrawAircraftIcon(device, craft, basicEffect, gameTime);
+                     }
+                 }
+             }
+@@ -224,7 +230,8 @@
+             {
+                 if (ufo.IsKnownToXCorp)
+                 {
+-                    geomarker.Draw(device, ufo.Position.Polar, basicEffect);
++                    //geomarker.Draw(device, ufo.Position.Polar, basicEffect);
++					geoHud.DrawUFOIcon(device, ufo, basicEffect, gameTime);
+                 }
+             }
+ 
+@@ -250,7 +257,7 @@
+                     geomarker.Draw(device, site.Position.Polar, basicEffect);
+                 }
+             }
+-
++			geoHud.End();
+             // Draw Nav Paths
+ 
+             // Draw Radar
+Index: Unreviewed_Patches_branch/Xenocide/Source/Utils/RoundLine.cs
+===================================================================
+--- Unreviewed_Patches_branch/Xenocide/Source/Utils/RoundLine.cs	(revision 0)
++++ Unreviewed_Patches_branch/Xenocide/Source/Utils/RoundLine.cs	(revision 0)
+@@ -0,0 +1,438 @@
++// RoundLine.cs
++// By Michael D. Anderson
++// Version 3.00, Mar 12 2009
++//
++// A class to efficiently draw thick lines with rounded ends.
++
++#region Using Statements
++using System;
++using System.Collections.Generic;
++using System.Diagnostics;
++using Microsoft.Xna.Framework;
++using Microsoft.Xna.Framework.Graphics;
++using Microsoft.Xna.Framework.Content;
++#endregion
++
++
++namespace ProjectXenocide.Utils
++{
++    /// <summary>
++    /// Represents a single line segment.  Drawing is handled by the RoundLineManager class.
++    /// </summary>
++    public partial class RoundLine
++    {
++        private Vector2 p0; // Begin point of the line
++        private Vector2 p1; // End point of the line
++        private float rho; // Length of the line
++        private float theta; // Angle of the line
++
++        public Vector2 P0 
++        { 
++            get 
++            { 
++                return p0; 
++            }
++            set
++            {
++                p0 = value;
++                RecalcRhoTheta();
++            }
++        }
++        public Vector2 P1 
++        {
++            get 
++            { 
++                return p1; 
++            }
++            set
++            {
++                p1 = value;
++                RecalcRhoTheta();
++            }
++        }
++        public float Rho { get { return rho; } }
++        public float Theta { get { return theta; } }
++
++
++        public RoundLine(Vector2 p0, Vector2 p1)
++        {
++            this.p0 = p0;
++            this.p1 = p1;
++            RecalcRhoTheta();
++        }
++
++
++        public RoundLine(float x0, float y0, float x1, float y1)
++        {
++            this.p0 = new Vector2(x0, y0);
++            this.p1 = new Vector2(x1, y1);
++            RecalcRhoTheta();
++        }
++
++
++        protected void RecalcRhoTheta()
++        {
++            Vector2 delta = P1 - P0;
++            rho = delta.Length();
++            theta = (float)Math.Atan2(delta.Y, delta.X);
++        }
++    };
++
++
++    // A "degenerate" RoundLine where both endpoints are equal
++    public class Disc : RoundLine
++    {
++        public Disc(Vector2 p) : base(p, p) { }
++        public Disc(float x, float y) : base(x, y, x, y) { }
++        public Vector2 Pos 
++        {
++            get 
++            {
++                return P0; 
++            }
++            set
++            {
++                P0 = value;
++                P1 = value;
++            }
++        }
++    };
++
++
++    // A vertex type for drawing RoundLines, including an instance index
++    struct RoundLineVertex
++    {
++        public Vector3 pos;
++        public Vector2 rhoTheta;
++        public Vector2 scaleTrans;
++        public float index;
++
++
++        public RoundLineVertex(Vector3 pos, Vector2 norm, Vector2 tex, float index)
++        {
++            this.pos = pos;
++            this.rhoTheta = norm;
++            this.scaleTrans = tex;
++            this.index = index;
++        }
++
++        public static int SizeInBytes = 8 * sizeof(float);
++
++        public static VertexElement[] VertexElements = new VertexElement[] 
++            {
++                new VertexElement(0, 0, VertexElementFormat.Vector3, VertexElementMethod.Default, VertexElementUsage.Position, 0),
++                new VertexElement(0, 12, VertexElementFormat.Vector2, VertexElementMethod.Default, VertexElementUsage.Normal, 0),
++                new VertexElement(0, 20, VertexElementFormat.Vector2, VertexElementMethod.Default, VertexElementUsage.TextureCoordinate, 0),
++                new VertexElement(0, 28, VertexElementFormat.Single, VertexElementMethod.Default, VertexElementUsage.TextureCoordinate, 1),
++            };
++    }
++
++
++
++    /// <summary>
++    /// Class to handle drawing a list of RoundLines.
++    /// </summary>
++    class RoundLineManager
++    {
++        private GraphicsDevice device;
++        private Effect effect;
++        private EffectParameter viewProjMatrixParameter;
++        private EffectParameter instanceDataParameter;
++        private EffectParameter timeParameter;
++        private EffectParameter lineRadiusParameter;
++        private EffectParameter lineColorParameter;
++        private EffectParameter blurThresholdParameter;
++        private VertexBuffer vb;
++        private IndexBuffer ib;
++        private VertexDeclaration vdecl;
++        private int numInstances;
++        private int numVertices;
++        private int numIndices;
++        private int numPrimitivesPerInstance;
++        private int numPrimitives;
++        private int bytesPerVertex;
++        float[] translationData;
++
++        public int NumLinesDrawn;
++        public float BlurThreshold = 0.97f;
++
++
++        public void Init(GraphicsDevice device, ContentManager content)
++        {
++            this.device = device;
++			effect = content.Load<Effect>(@"Content\Shaders\RoundLine");
++            viewProjMatrixParameter = effect.Parameters["viewProj"];
++            instanceDataParameter = effect.Parameters["instanceData"];
++            timeParameter = effect.Parameters["time"];
++            lineRadiusParameter = effect.Parameters["lineRadius"];
++            lineColorParameter = effect.Parameters["lineColor"];
++            blurThresholdParameter = effect.Parameters["blurThreshold"];
++
++            CreateRoundLineMesh();
++        }
++
++        public string[] TechniqueNames
++        {
++            get
++            {
++                string[] names = new string[effect.Techniques.Count];
++                int index = 0;
++                foreach (EffectTechnique technique in effect.Techniques)
++                    names[index++] = technique.Name;
++                return names;
++            }
++        }
++
++
++        /// <summary>
++        /// Create a mesh for a RoundLine.
++        /// </summary>
++        /// <remarks>
++        /// The RoundLine mesh has 3 sections:
++        /// 1.  Two quads, from 0 to 1 (left to right)
++        /// 2.  A half-disc, off the left side of the quad
++        /// 3.  A half-disc, off the right side of the quad
++        ///
++        /// The X and Y coordinates of the "normal" encode the rho and theta of each vertex
++        /// The "texture" encodes whether to scale and translate the vertex horizontally by length and radius
++        /// </remarks>
++        private void CreateRoundLineMesh()
++        {
++            const int primsPerCap = 12; // A higher primsPerCap produces rounder endcaps at the cost of more vertices
++            const int verticesPerCap = primsPerCap * 2 + 2;
++            const int primsPerCore = 4;
++            const int verticesPerCore = 8;
++
++            numInstances = 200;
++            numVertices = (verticesPerCore + verticesPerCap + verticesPerCap) * numInstances;
++            numPrimitivesPerInstance = primsPerCore + primsPerCap + primsPerCap;
++            numPrimitives = numPrimitivesPerInstance * numInstances;
++            numIndices = 3 * numPrimitives;
++            short[] indices = new short[numIndices];
++            bytesPerVertex = RoundLineVertex.SizeInBytes;
++            RoundLineVertex[] tri = new RoundLineVertex[numVertices];
++            translationData = new float[numInstances * 4]; // Used in Draw()
++
++            int iv = 0;
++            int ii = 0;
++            int iVertex;
++            int iIndex;
++            for (int instance = 0; instance < numInstances; instance++)
++            {
++                // core vertices
++                const float pi2 = MathHelper.PiOver2;
++                const float threePi2 = 3 * pi2;
++                iVertex = iv;
++                tri[iv++] = new RoundLineVertex(new Vector3(0.0f, -1.0f, 0), new Vector2(1, threePi2), new Vector2(0, 0), instance);
++                tri[iv++] = new RoundLineVertex(new Vector3(0.0f, -1.0f, 0), new Vector2(1, threePi2), new Vector2(0, 1), instance);
++                tri[iv++] = new RoundLineVertex(new Vector3(0.0f, 0.0f, 0), new Vector2(0, threePi2), new Vector2(0, 1), instance);
++                tri[iv++] = new RoundLineVertex(new Vector3(0.0f, 0.0f, 0), new Vector2(0, threePi2), new Vector2(0, 0), instance);
++                tri[iv++] = new RoundLineVertex(new Vector3(0.0f, 0.0f, 0), new Vector2(0, pi2), new Vector2(0, 1), instance);
++                tri[iv++] = new RoundLineVertex(new Vector3(0.0f, 0.0f, 0), new Vector2(0, pi2), new Vector2(0, 0), instance);
++                tri[iv++] = new RoundLineVertex(new Vector3(0.0f, 1.0f, 0), new Vector2(1, pi2), new Vector2(0, 1), instance);
++                tri[iv++] = new RoundLineVertex(new Vector3(0.0f, 1.0f, 0), new Vector2(1, pi2), new Vector2(0, 0), instance);
++
++                // core indices
++                indices[ii++] = (short)(iVertex + 0);
++                indices[ii++] = (short)(iVertex + 1);
++                indices[ii++] = (short)(iVertex + 2);
++                indices[ii++] = (short)(iVertex + 2);
++                indices[ii++] = (short)(iVertex + 3);
++                indices[ii++] = (short)(iVertex + 0);
++
++                indices[ii++] = (short)(iVertex + 4);
++                indices[ii++] = (short)(iVertex + 6);
++                indices[ii++] = (short)(iVertex + 5);
++                indices[ii++] = (short)(iVertex + 6);
++                indices[ii++] = (short)(iVertex + 7);
++                indices[ii++] = (short)(iVertex + 5);
++
++                // left halfdisc
++                iVertex = iv;
++                iIndex = ii;
++                for (int i = 0; i < primsPerCap + 1; i++)
++                {
++                    float deltaTheta = MathHelper.Pi / primsPerCap;
++                    float theta0 = MathHelper.PiOver2 + i * deltaTheta;
++                    float theta1 = theta0 + deltaTheta / 2;
++                    // even-numbered indices are at the center of the halfdisc
++                    tri[iVertex + 0] = new RoundLineVertex(new Vector3(0, 0, 0), new Vector2(0, theta1), new Vector2(0, 0), instance);
++
++                    // odd-numbered indices are at the perimeter of the halfdisc
++                    float x = (float)Math.Cos(theta0);
++                    float y = (float)Math.Sin(theta0);
++                    tri[iVertex + 1] = new RoundLineVertex(new Vector3(x, y, 0), new Vector2(1, theta0), new Vector2(1, 0), instance);
++
++                    if (i < primsPerCap)
++                    {
++                        // indices follow this pattern: (0, 1, 3), (2, 3, 5), (4, 5, 7), ...
++                        indices[iIndex + 0] = (short)(iVertex + 0);
++                        indices[iIndex + 1] = (short)(iVertex + 1);
++                        indices[iIndex + 2] = (short)(iVertex + 3);
++                        iIndex += 3;
++                        ii += 3;
++                    }
++                    iVertex += 2;
++                    iv += 2;
++                }
++
++                // right halfdisc
++                for (int i = 0; i < primsPerCap + 1; i++)
++                {
++                    float deltaTheta = MathHelper.Pi / primsPerCap;
++                    float theta0 = 3 * MathHelper.PiOver2 + i * deltaTheta;
++                    float theta1 = theta0 + deltaTheta / 2;
++                    float theta2 = theta0 + deltaTheta;
++                    // even-numbered indices are at the center of the halfdisc
++                    tri[iVertex + 0] = new RoundLineVertex(new Vector3(0, 0, 0), new Vector2(0, theta1), new Vector2(0, 1), instance);
++
++                    // odd-numbered indices are at the perimeter of the halfdisc
++                    float x = (float)Math.Cos(theta0);
++                    float y = (float)Math.Sin(theta0);
++                    tri[iVertex + 1] = new RoundLineVertex(new Vector3(x, y, 0), new Vector2(1, theta0), new Vector2(1, 1), instance);
++
++                    if (i < primsPerCap)
++                    {
++                        // indices follow this pattern: (0, 1, 3), (2, 3, 5), (4, 5, 7), ...
++                        indices[iIndex + 0] = (short)(iVertex + 0);
++                        indices[iIndex + 1] = (short)(iVertex + 1);
++                        indices[iIndex + 2] = (short)(iVertex + 3);
++                        iIndex += 3;
++                        ii += 3;
++                    }
++                    iVertex += 2;
++                    iv += 2;
++                }
++            }
++
++            vb = new VertexBuffer(device, numVertices * bytesPerVertex, BufferUsage.None);
++            vb.SetData<RoundLineVertex>(tri);
++            vdecl = new VertexDeclaration(device, RoundLineVertex.VertexElements);
++
++            ib = new IndexBuffer(device, numIndices * 2, BufferUsage.None, IndexElementSize.SixteenBits);
++            ib.SetData<short>(indices);
++        }
++
++
++
++        /// <summary>
++        /// Compute a reasonable "BlurThreshold" value to use when drawing RoundLines.
++        /// See how wide lines of the specified radius will be (in pixels) when drawn
++        /// to the back buffer.  Then apply an empirically-determined mapping to get
++        /// a good BlurThreshold for such lines.
++        /// </summary>
++        public float ComputeBlurThreshold(float lineRadius, Matrix viewProjMatrix, float viewportWidth)
++        {
++            Vector4 lineRadiusTestBase = new Vector4(0, 0, 0, 1);
++            Vector4 lineRadiusTest = new Vector4(lineRadius, 0, 0, 1);
++            Vector4 delta = lineRadiusTest - lineRadiusTestBase;
++            Vector4 output = Vector4.Transform(delta, viewProjMatrix);
++            output.X *= viewportWidth;
++
++            double newBlur = 0.125 * Math.Log(output.X) + 0.4;
++
++            return MathHelper.Clamp((float)newBlur, 0.5f, 0.99f);
++        }
++
++
++        /// <summary>
++        /// Draw a single RoundLine.  Usually you want to draw a list of RoundLines
++        /// at a time instead for better performance.
++        /// </summary>
++        public void Draw(RoundLine roundLine, float lineRadius, Color lineColor, Matrix viewProjMatrix,
++            float time, string techniqueName)
++        {
++            device.VertexDeclaration = vdecl;
++            device.Vertices[0].SetSource(vb, 0, bytesPerVertex);
++            device.Indices = ib;
++
++            viewProjMatrixParameter.SetValue(viewProjMatrix);
++            timeParameter.SetValue(time);
++            lineColorParameter.SetValue(lineColor.ToVector4());
++            lineRadiusParameter.SetValue(lineRadius);
++            blurThresholdParameter.SetValue(BlurThreshold);
++
++            int iData = 0;
++            translationData[iData++] = roundLine.P0.X;
++            translationData[iData++] = roundLine.P0.Y;
++            translationData[iData++] = roundLine.Rho;
++            translationData[iData++] = roundLine.Theta;
++            instanceDataParameter.SetValue(translationData);
++
++            if (techniqueName == null)
++                effect.CurrentTechnique = effect.Techniques[0];
++            else
++                effect.CurrentTechnique = effect.Techniques[techniqueName];
++            effect.Begin();
++            EffectPass pass = effect.CurrentTechnique.Passes[0];
++
++            pass.Begin();
++
++            int numInstancesThisDraw = 1;
++            device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numPrimitivesPerInstance * numInstancesThisDraw);
++            NumLinesDrawn += numInstancesThisDraw;
++            
++            pass.End();
++
++            effect.End();
++        }
++
++
++        /// <summary>
++        /// Draw a list of Lines.
++        /// </summary>
++        public void Draw(List<RoundLine> roundLines, float lineRadius, Color lineColor, Matrix viewProjMatrix, 
++            float time, string techniqueName)
++        {
++            device.VertexDeclaration = vdecl;
++            device.Vertices[0].SetSource(vb, 0, bytesPerVertex);
++            device.Indices = ib;
++
++            viewProjMatrixParameter.SetValue(viewProjMatrix);
++            timeParameter.SetValue(time);
++            lineColorParameter.SetValue(lineColor.ToVector4());
++            lineRadiusParameter.SetValue(lineRadius);
++            blurThresholdParameter.SetValue(BlurThreshold);
++
++            if (techniqueName == null)
++                effect.CurrentTechnique = effect.Techniques[0];
++            else
++                effect.CurrentTechnique = effect.Techniques[techniqueName];
++            effect.Begin();
++            EffectPass pass = effect.CurrentTechnique.Passes[0];
++
++            pass.Begin();
++
++            int iData = 0;
++            int numInstancesThisDraw = 0;
++            foreach (RoundLine roundLine in roundLines)
++            {
++                translationData[iData++] = roundLine.P0.X;
++                translationData[iData++] = roundLine.P0.Y;
++                translationData[iData++] = roundLine.Rho;
++                translationData[iData++] = roundLine.Theta;
++                numInstancesThisDraw++;
++
++                if (numInstancesThisDraw == numInstances)
++                {
++                    instanceDataParameter.SetValue(translationData);
++                    effect.CommitChanges();
++                    device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numPrimitivesPerInstance * numInstancesThisDraw);
++                    NumLinesDrawn += numInstancesThisDraw;
++                    numInstancesThisDraw = 0;
++                    iData = 0;
++                }
++            }
++            if (numInstancesThisDraw > 0)
++            {
++                instanceDataParameter.SetValue(translationData);
++                effect.CommitChanges();
++                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, numVertices, 0, numPrimitivesPerInstance * numInstancesThisDraw);
++                NumLinesDrawn += numInstancesThisDraw;
++            }
++            pass.End();
++
++            effect.End();
++        }
++    }
++}
+Index: Unreviewed_Patches_branch/Xenocide/Xenocide.csproj
+===================================================================
+--- Unreviewed_Patches_branch/Xenocide/Xenocide.csproj	(revision 1854)
++++ Unreviewed_Patches_branch/Xenocide/Xenocide.csproj	(working copy)
+@@ -312,6 +312,7 @@
+     <Compile Include="Source\UI\Scenes\Facility\FacilityScene.cs" />
+     <Compile Include="Source\UI\Scenes\Facility\Grid.cs" />
+     <Compile Include="Source\UI\Scenes\Geoscape\EarthGlobe.cs" />
++    <Compile Include="Source\UI\Scenes\Geoscape\GeoHud.cs" />
+     <Compile Include="Source\UI\Scenes\Geoscape\GeoMarker.cs" />
+     <Compile Include="Source\UI\Scenes\Geoscape\GeoscapeScene.cs" />
+     <Compile Include="Source\UI\Scenes\Geoscape\SkyBox.cs" />
+@@ -362,6 +363,7 @@
+     <Compile Include="Source\UI\Screens\TransactionLineItem.cs" />
+     <Compile Include="Source\UI\Screens\XNetScreen.cs" />
+     <Compile Include="Source\Utils\Random.cs" />
++    <Compile Include="Source\Utils\RoundLine.cs" />
+     <Compile Include="Source\Utils\Util.cs" />
+     <Compile Include="Source\Xenocide.cs" />
+     <Compile Include="Source\XenoError.cs" />

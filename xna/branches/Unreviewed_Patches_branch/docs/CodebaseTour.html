@@ -1,0 +1,80 @@
+<title>A quick tour of the Xenocide.XNA codebase.</title>
+
+<head></head>
+<body>
+<h1>A quick tour of the Xenocide.XNA codebase.<h1>
+<h1>Assorted Prequel Notes:</h1>
+<li>This document is intended to give someone who is new to Project Xenocide a quick overview of where the pieces that make it up are, and how they interact.</li>
+<li>Also, this document is a work in progress, so if you have additional questions, corrections or comments, please let us know.</li>
+<li>This document was as accurate as I could make it at the time of writing (latest revision was 2007-02-05) but it’s probable that some of the information is now out of date.</li>
+<li>When paths to files are given below {PX} refers to the root directory you’ve copied the files to.</li>
+
+<h1>Architecture Overview:</h1>
+Xenocide.XNA is written in C#, using the Microsoft XNA framework.<br>
+
+Currently, the only other 3rd party library being used is CeGui#.  Which is used to provide UI widgets.  (Push buttons, scroll bars, Edit boxes, text, etc.)<br>
+
+As XNA framework is being used, the main “pump” of the program is a class derived from Microsoft.Framework.Xna.Game.  In Xenocide, this class is called Xenocide, and is in the file {PX}/Xenocide/Source/Xenocide.cs<br>
+
+As you probably know, the Xna framework is essentially a loop that looks like<br>
+while(true)<br>
+{<br>
+    Xenocide.Update(GameTime);<br>
+    Xenocide.Draw(GameTime);<br>
+}<br>
+<br>
+Where Update() is where we update the game’s state (e.g. Position of craft, progress of research, etc.)  And Draw() is where we render images to the display.<br>
+
+Now, as Xenocide has a great many screens, there is a separate class for each screen, and a ScreenManager class that keeps track of the screen that is currently being shown.  So, the logic flow is:
+Xenocide.Update() calls ScreenManger.Update(), which calls Update() for the screen currently being shown.
+Likewise, Xenocide.Draw() calls ScreenManger.Draw(), which calls Draw() for the screen currently being shown.<br>
+<br>
+The Screens (and ScreenManger) are found in {PX}/ Xenocide/Source/UI/Screens.<br>
+
+<h2>Anatomy of a Screen:</h2>
+<li>All screens derive from the base class Xenocide.UI.Screens.Screen.</li>
+<li>As well as Update() and Draw(), the other major function in each screen is CreateCeguiWidgets().  This is called just before the screen is about to be shown, and it’s function is to create the CeGui# widgets that will appear on the screen.</li>
+<li>Each Screen also has a number of event handlers, to respond to the user interacting with the CeGui# widgets.  E.g. Clicking on a mouse button.</li>
+
+<h2>How updating works</h2>
+<li>The Screens themselves don’t maintain the “global game state”.  This is kept in the GameState class (or one of its contained classes.).  Each screen only holds enough game state information to do its job. E.g. consider the “purchase items” screen.  The screen will track the number and type of items being requested as the player puts together the order.  Then, when the user finally OKs the order, a “shipping container” is created in the GameState and the user's funds are debited</li>
+<li>I’ve tried to separate the code into two trees, “Model” and “UI”.  
+“Model” represents the game state itself, and should have no idea of how it is presented, while “UI” handles the presentation of the game state, and interaction with the user.  (It’s essentially the Model/View pattern.)</li>
+<li>The GameState tree is rooted at {PX}/ Xenocide/Source/UI/Model.</li>
+<li>Screens can change the GameState in one of two ways.  Firstly, they can change it directly, in response to user activity.  E.g. the purchase items screen mentioned above.  Second, they can call GameState’s Update() function. Which tells GameState to update itself to reflect a given period of time passing.</li>
+
+<h3>How GameState Update()works</h3>
+Actually, the above isn’t going to be quite true.  The GameState isn’t going to have an Update() function, rather, its contained classes will.  To explain further:
+<li>“GameState” is the root node for the state.</li>
+<li>Note that GameState doesn’t contain just state (i.e. the information we need to save/load to file) it also needs to contain behaviour. (So possibly State in these names should be changed to Model.)</li>
+<li> “GameState” can (and probably should) be broken down into smaller sets: e.g. GeoState, Battlestate, Options.</li>
+<li>GeoState and Battlestate each need their own GameTime.</li>
+<li>So GeoState and Battlestate will have their own update() methods. It’s inside these methods that we do the tick slicing.</li>
+<li>The Update() functions of the Geoscape and Battlescape screens will call the Update() functions of the  GeoState and Battlestate, respectively.</li>
+<li>In many of the screens, game time doesn’t pass.  In fact, the only ones where it does are the battlescape, the geoscape (sometimes) and the aeroscape.  So in all other screens, Update() is a no-op.</li>
+
+<h3>How CeGui# activity (e.g. User clicking on a button) enters the loop</h3>
+Each screen can have a number of CeGui# components.  These derive from Framwork.Xna.GameComponent, so the Xna Framework calls their Update() function after it calls  Xenocide’s Update().  And likewise for Draw().  
+In the CeGui# Update() the controls 
+<li>Look for user input (mouse/keyboard activity),</li> 
+<li>Convert this into widget behaviour (e.g. button being pressed, slider being moved, text entered into edit box, etc.) </li>
+<li>Call any event handlers the screen has registered for the behaviour</li>
+
+<h2>Other notes</h2>
+As well as separating the View from the Model, I also plan to partition the screens themselves.  That is, I plan for screens to be implemented in 3 pieces<br>
+<li>Interfacting with CeGui# (and the main loop).</li>
+<li>Control logic for the Screen</li>
+<li>3D scene(s) on the screen</li>
+
+So, 
+<li>the screen derived class would provide the CeGui# interface, and the Update() and Draw() hooks.</li>
+<li>A second class would class would provide the logic.  (e.g. In the purchasing screen, it would keep track of items being ordered, check that the player had sufficient funds and storage space, etc.)</li> 
+<li>A third class would be provided to encapsulate any 3D scene.</li>
+The reason for this is to compartmentalize the things we’re doing, so that when we port to Linux, we change as little code as possible.  Currently we’re not sure when (or if) CeGui# or XNA will be available for Linux.  So, by putting them into their own parts we can hopefully just replace CeGui# and/or XNA when/if needed.
+<br>
+<br>
+<li>The GameState class is probably going to get Load() and Save() functions to load/save the game.  It will then delegate to the enclosed classes</li>
+<li>Need to document time slicing.</li>
+<li></li>
+<li></li>
+</body>
