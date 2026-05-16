@@ -1,0 +1,74 @@
+# Auto-detect text files and normalize to LF in the index
+* text=auto
+
+# Source code and text files — force LF line endings in working tree
+*.cs        text eol=lf
+*.csproj    text eol=lf
+*.sln       text eol=lf
+*.xml       text eol=lf
+*.xsd       text eol=lf
+*.xsx       text eol=lf
+*.resx      text eol=lf
+*.config    text eol=lf
+*.settings  text eol=lf
+*.txt       text eol=lf
+*.md        text eol=lf
+*.html      text eol=lf
+*.htm       text eol=lf
+*.css       text eol=lf
+*.php       text eol=lf
+*.js        text eol=lf
+*.nsi       text eol=lf
+*.nsh       text eol=lf
+*.iss       text eol=lf
+*.fx        text eol=lf
+*.spritefont text eol=lf
+*.layout    text eol=lf
+*.imageset  text eol=lf
+*.h         text eol=lf
+*.mel       text eol=lf
+*.py        text eol=lf
+*.patch     text eol=lf
+*.build     text eol=lf
+*.contentproj text eol=lf
+
+# Binaries — never touch or diff
+*.dll       binary
+*.exe       binary
+*.msi       binary
+*.zip       binary
+*.gz        binary
+*.tgz       binary
+*.ogg       binary
+*.mp3       binary
+*.wma       binary
+*.m3u       binary
+*.mid       binary
+*.avi       binary
+*.fsb       binary
+*.fev       binary
+*.fbx       binary
+*.max       binary
+*.blend     binary
+*.3ds       binary
+*.mb        binary
+*.cwp       binary
+*.fdp       binary
+*.psd       binary
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.tga       binary
+*.bmp       binary
+*.ico       binary
+*.eps       binary
+*.ttf       binary
+*.xls       binary
+*.doc       binary
+*.pdf       binary
+*.rtf       binary
+*.cachefile binary
+*.seq       binary
+*.dxf       binary
+*.ai        binary

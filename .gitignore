@@ -1,0 +1,46 @@
+# Build output
+bin/
+obj/
+[Bb]uild/
+
+# Visual Studio user-specific files
+*.user
+*.suo
+*.sln.docstates
+*.userprefs
+
+# Visual Studio cache files
+*.cache
+*.cachefile
+*.ncb
+*.aps
+*.opensdf
+*.sdf
+*.ipch
+*.tlog
+*.log
+*.ilk
+*.pdb
+*.idb
+
+# VS 2017+ (just in case)
+.vs/
+
+# ReSharper
+_ReSharper*/
+*.resharper
+
+# Windows thumbnail cache
+Thumbs.db
+ehthumbs.db
+
+# Installer build temp
+xna/Installers/Current Installer/Installers/
+xna/Installers/Old Inno Installer/Installers/
+
+# Python
+*.pyc
+__pycache__/
+
+# macOS
+.DS_Store
