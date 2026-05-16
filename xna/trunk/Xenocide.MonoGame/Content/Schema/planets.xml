@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<planets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="PlanetConfig planets.xsd" xmlns="PlanetConfig">
+<planet name="Earth" 
+    regionBitmap=".\Content\DataFiles\Geoscape\regions.png" 
+    countryBitmap=".\Content\DataFiles\Geoscape\countries.png"
+    terrainBitmap=".\Content\DataFiles\Geoscape\terrain.png">
+
+    <!-- Regions -->
+    <region name="North America" baseBuildCost="800000" alienAttackPriority="18">
+      <missionPriority 
+        research="14"
+        harvest="16"
+        abduction="20"
+        infiltration="20"
+        outpost="20"
+      />
+      <colorKey R="64" G="255" B="128" />
+    </region>
+
+    <region name="Arctic" baseBuildCost="950000" alienAttackPriority="4">
+      <missionPriority
+        research="26"
+        harvest="0"
+        abduction="0"
+        infiltration="0"
+        outpost="35"
+      />
+      <colorKey R="0" G="255" B="0" />
+    </region>
+
+    <region name="Antarctica" baseBuildCost="900000" alienAttackPriority="4">
+      <missionPriority
+        research="26"
+        harvest="0"
+        abduction="0"
+        infiltration="0"
+        outpost="35"
+      />
+      <colorKey R="128" G="255" B="0" />
+    </region>
+
+    <region name="South America" baseBuildCost="600000" alienAttackPriority="10">
+      <missionPriority
+        research="10"
+        harvest="24"
+        abduction="12"
+        infiltration="18"
+        outpost="20"
+      />
+      <colorKey R="255" G="255" B="128" />
+    </region>
+
+    <region name="Europe" baseBuildCost="1000000" alienAttackPriority="16">
+      <missionPriority
+        research="10"
+        harvest="10"
+        abduction="15"
+        infiltration="19"
+        outpost="6"
+      />
+      <colorKey R="255" G="255" B="64" />
+    </region>
+
+    <region name="North Africa" baseBuildCost="650000" alienAttackPriority="12">
+      <missionPriority
+        research="8"
+        harvest="8"
+        abduction="8"
+        infiltration="8"
+        outpost="19"
+      />
+      <colorKey R="192" G="255" B="0" />
+    </region>
+
+    <region name="Southern Africa" baseBuildCost="550000" alienAttackPriority="8">
+      <missionPriority
+        research="7"
+        harvest="8"
+        abduction="8"
+        infiltration="8"
+        outpost="9"
+      />
+      <colorKey R="0" G="255" B="192" />
+    </region>
+
+    <region name="Central Asia" baseBuildCost="500000" alienAttackPriority="12">
+      <missionPriority
+        research="5"
+        harvest="5"
+        abduction="6"
+        infiltration="10"
+        outpost="8"
+      />
+      <colorKey R="64" G="255" B="64" />
+    </region>
+
+    <region name="South East Asia" baseBuildCost="750000" alienAttackPriority="15">
+      <missionPriority
+        research="8"
+        harvest="13"
+        abduction="21"
+        infiltration="13"
+        outpost="8"
+      />
+      <colorKey R="64" G="255" B="192" />
+    </region>
+
+    <region name="Sibera" baseBuildCost="800000" alienAttackPriority="10">
+      <missionPriority
+        research="6"
+        harvest="0"
+        abduction="4"
+        infiltration="0"
+        outpost="9"
+      />
+      <colorKey R="192" G="255" B="192" />
+    </region>
+
+    <region name="Australasia" baseBuildCost="750000" alienAttackPriority="10">
+      <missionPriority
+        research="15"
+        harvest="11"
+        abduction="4"
+        infiltration="8"
+        outpost="22"
+      />
+      <colorKey R="192" G="255" B="64" />
+    </region>
+
+    <region name="Pacific" baseBuildCost="600000" alienAttackPriority="5">
+      <missionPriority
+        research="15"
+        harvest="0"
+        abduction="0"
+        infiltration="0"
+        outpost="28"
+      />
+      <colorKey R="0" G="0" B="255" />
+    </region>
+
+    <region name="North Atlantic" baseBuildCost="500000" alienAttackPriority="0">
+      <missionPriority
+        research="0"
+        harvest="0"
+        abduction="0"
+        infiltration="0"
+        outpost="0"
+      />
+      <colorKey R="0" G="255" B="255" />
+    </region>
+
+    <region name="South Atlantic" baseBuildCost="500000" alienAttackPriority="0">
+      <missionPriority
+        research="0"
+        harvest="0"
+        abduction="0"
+        infiltration="0"
+        outpost="0"
+      />
+      <colorKey R="0" G="128" B="255" />
+    </region>
+
+    <region name="Indian Ocean" baseBuildCost="500000" alienAttackPriority="0">
+      <missionPriority
+        research="0"
+        harvest="0"
+        abduction="0"
+        infiltration="0"
+        outpost="0"
+      />
+      <colorKey R="0" G="64" B="255" />
+    </region>
+
+    <!-- Countries -->
+    <country name="USA">
+      <colorKey R="32" G="192" B="0" />
+      <funds seed="600000" cap="10000000"/>
+    </country>
+    
+    <country name="Canada">
+      <colorKey R="0" G="255" B="192" />
+      <funds seed="110000" cap="4000000"/>
+    </country>
+    
+    <country name="Brazil">
+      <colorKey R="0" G="255" B="32" />
+      <funds seed="300000" cap="4000000"/>
+    </country>
+
+    <country name="UK">
+      <colorKey R="32" G="16" B="255" />
+      <funds seed="240000" cap="7000000"/>
+    </country>
+
+    <country name="France">
+      <colorKey R="128" G="0" B="192" />
+      <funds seed="320000" cap="8000000"/>
+    </country>
+
+    <country name="Germany">
+      <colorKey R="128" G="255" B="192" />
+      <funds seed="250000" cap="9000000"/>
+    </country>
+
+    <country name="Italy">
+      <colorKey R="32" G="64" B="128" />
+      <funds seed="160000" cap="6000000"/>
+    </country>
+
+    <country name="Spain">
+      <colorKey R="192" G="32" B="64" />
+      <funds seed="140000" cap="5000000"/>
+    </country>
+
+    <country name="Egypt">
+      <colorKey R="192" G="128" B="64" />
+      <funds seed="160000" cap="2000000"/>
+    </country>
+
+    <country name="South Africa">
+      <colorKey R="128" G="64" B="0" />
+      <funds seed="310000" cap="3000000"/>
+    </country>
+
+    <country name="Nigeria">
+      <colorKey R="128" G="255" B="64" />
+      <funds seed="180000" cap="2000000"/>
+    </country>
+
+    <country name="China">
+      <colorKey R="192" G="255" B="0" />
+      <funds seed="245000" cap="7000000"/>
+    </country>
+
+    <country name="Japan">
+      <colorKey R="32" G="64" B="192" />
+      <funds seed="400000" cap="10000000"/>
+    </country>
+
+    <country name="Russia">
+      <colorKey R="255" G="32" B="32" />
+      <funds seed="230000" cap="8000000"/>
+    </country>
+
+    <country name="Australia">
+      <colorKey R="200" G="192" B="128" />
+      <funds seed="280000" cap="5000000"/>
+    </country>
+
+    <country name="India">
+      <colorKey R="255" G="255" B="128" />
+      <funds seed="150000" cap="5000000"/>
+    </country>
+
+    <!-- Cities -->
+    <city name="Washington DC"><geoposition latitude="38.88" longitude="-77.03"/></city>
+    <city name="South Park, Colorado"><geoposition latitude="39.27" longitude="-105.62"/></city>
+    <city name="Ottawa"><geoposition latitude="45.37" longitude="-75.72"/></city>
+    <city name="Brasilia"><geoposition latitude="-15.87" longitude="-47.92"/></city>
+    <city name="London"><geoposition latitude="51.48" longitude="0.0"/></city>
+    <city name="Paris"><geoposition latitude="48.82" longitude="2.48"/></city>
+    <city name="Berlin"><geoposition latitude="52.45" longitude="13.3"/></city>
+    <city name="Rome"><geoposition latitude="41.8" longitude="13.6"/></city>
+    <city name="Madrid"><geoposition latitude="40.42" longitude="-3.68"/></city>
+    <city name="Cairo"><geoposition latitude="29.87" longitude="31.33"/></city>
+    <city name="Pretoria"><geoposition latitude="-25.75" longitude="28.23"/></city>
+    <city name="Abuja"><geoposition latitude="9.2" longitude="7.18"/></city>
+    <city name="Beijing"><geoposition latitude="39.92" longitude="116.42"/></city>
+    <city name="Tokyo"><geoposition latitude="35.68" longitude="139.77"/></city>
+    <city name="Moscow"><geoposition latitude="55.77" longitude="37.67"/></city>
+    <city name="Canberra"><geoposition latitude="-35.3" longitude="149.13"/></city>
+    <city name="New Delhi"><geoposition latitude="28.58" longitude="77.2"/></city>
+
+    <!-- Terrain types -->
+    <terrain name="water">
+      <colorKey R="0" G="0" B="255" />
+    </terrain>
+    <terrain name="land">
+      <colorKey R="32" G="192" B="0" />
+    </terrain>
+</planet>
+</planets>

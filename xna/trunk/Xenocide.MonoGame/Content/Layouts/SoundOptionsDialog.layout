@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+<GUILayout xmlns="http://ceguisharp.sourceforge.net/0.5/GUILayout"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://ceguisharp.sourceforge.net/0.5/GUILayout ..\..\..\..\Dependancies\CeGui\CeGui\GUILayout.xsd">
+	<Window Type="TaharezLook.TLFrameWindow" Name="dlgSoundOptions">
+		<Property Name="Width" Value="0.5"/>
+		<Property Name="Height" Value="0.3"/>
+		<Property Name="TitlebarEnabled" Value="true"/>
+		<Property Name="CloseButtonEnabled" Value="false"/>
+		<Property Name="FrameEnabled" Value="true"/>
+		<Property Name="RollUpState" Value="false"/>
+		<Property Name="Text" Value="Sound Options" />
+		<Window Type="TaharezLook.TLButton" Name="btnSave">
+			<Property Name="XPosition" Value="0.10"/>
+			<Property Name="YPosition" Value="0.85"/>
+			<Property Name="Width" Value="0.30"/>
+			<Property Name="Height" Value="0.10"/>
+			<Property Name="Text" Value="Save" />
+			<Event Name="Clicked" Function="OnSaveClicked"/>
+		</Window>
+		<Window Type="TaharezLook.TLButton" Name="btnCancel">
+			<Property Name="XPosition" Value="0.50"/>
+			<Property Name="YPosition" Value="0.85"/>
+			<Property Name="Width" Value="0.30"/>
+			<Property Name="Height" Value="0.10"/>
+			<Property Name="Text" Value="Cancel" />
+			<Event Name="Clicked" Function="OnCancelClicked"/>
+		</Window>
+		<Window Type="TaharezLook.TLSlider" Name="sldrMusic">
+			<Property Name="XPosition" Value="0.10"/>
+			<Property Name="YPosition" Value="0.30"/>
+			<Property Name="Width" Value="0.035"/>
+			<Property Name="Height" Value="0.40"/>
+			<Property Name="Text" Value="Music Slider" />
+			<Event Name="ValueChanged" Function="OnValueChanged"/>
+		</Window>
+		<Window Type="TaharezLook.TLSlider" Name="sldrSound">
+			<Property Name="XPosition" Value="0.40"/>
+			<Property Name="YPosition" Value="0.30"/>
+			<Property Name="Width" Value="0.035"/>
+			<Property Name="Height" Value="0.40"/>
+			<Property Name="Text" Value="Sound Slider" />
+			<Event Name="ValueChanged" Function="OnValueChanged"/>
+		</Window>
+		<Window Type="TaharezLook.TLCheckbox" Name="chkMusic">
+			<Property Name="XPosition" Value="0.60"/>
+			<Property Name="YPosition" Value="0.30"/>
+			<Property Name="Width" Value="0.25"/>
+			<Property Name="Height" Value="0.10"/>
+			<Property Name="Text" Value="Music On" />
+			<Event Name="CheckStateChanged" Function="OnCheckboxChecked"/>
+		</Window>
+		<Window Type="TaharezLook.TLCheckbox" Name="chkSound">
+			<Property Name="XPosition" Value="0.60"/>
+			<Property Name="YPosition" Value="0.43"/>
+			<Property Name="Width" Value="0.25"/>
+			<Property Name="Height" Value="0.10"/>
+			<Property Name="Text" Value="Sound On" />
+			<Event Name="CheckStateChanged" Function="OnCheckboxChecked"/>
+		</Window>
+		<Window Type="TaharezLook.TLStaticText" Name="txtMusicVolume">
+			<Property Name="XPosition" Value="0.02"/>
+			<Property Name="YPosition" Value="0.10"/>
+			<Property Name="Width" Value="0.25"/>
+			<Property Name="Height" Value="0.20"/>
+			<Property Name="Text" Value="Music Volume" />
+			<Property Name="FrameEnabled" Value="false" />
+		</Window>
+		<Window Type="TaharezLook.TLStaticText" Name="txtSoundVolume">
+			<Property Name="XPosition" Value="0.30"/>
+			<Property Name="YPosition" Value="0.10"/>
+			<Property Name="Width" Value="0.25"/>
+			<Property Name="Height" Value="0.20"/>
+			<Property Name="Text" Value="Sound Volume" />
+			<Property Name="FrameEnabled" Value="false" />
+
+		</Window>
+	</Window>
+</GUILayout>

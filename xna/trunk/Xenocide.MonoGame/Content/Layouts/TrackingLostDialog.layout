@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<GUILayout xmlns="http://ceguisharp.sourceforge.net/0.5/GUILayout"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://ceguisharp.sourceforge.net/0.5/GUILayout ..\..\..\..\Dependancies\CeGui\CeGui\GUILayout.xsd">
+	<Window Type="TaharezLook.TLFrameWindow" Name="dlgTrackingLost">
+		<Property Name="Width" Value="0.5"/>
+		<Property Name="Height" Value="0.3"/>
+		<Property Name="TitlebarEnabled" Value="true"/>
+		<Property Name="CloseButtonEnabled" Value="false"/>
+		<Property Name="FrameEnabled" Value="true"/>
+		<Property Name="RollUpState" Value="false"/>
+		<Property Name="Text" Value="Tracking Lost" />
+		
+		<Window Type="TaharezLook.TLStaticText" Name="txtDetails">
+			<Property Name="XPosition" Value="0.02"/>
+			<Property Name="YPosition" Value="0.073"/>
+			<Property Name="Width" Value="0.96"/>
+			<Property Name="Height" Value="0.45"/>
+			<Property Name="Text" Value="" />
+			<Property Name="HorzFormatting" Value="WordWrapLeftAligned"/>
+			<Property Name="Font" Value="XenoSmall"/>
+			<Property Name="FrameEnabled" Value="false" />
+		</Window>
+		<Window Type="TaharezLook.TLButton" Name="btnReturn">
+			<Property Name="XPosition" Value="0.10"/>
+			<Property Name="YPosition" Value="0.55"/>
+			<Property Name="Width" Value="0.80"/>
+			<Property Name="Height" Value="0.10"/>
+			<Property Name="Text" Value="Return to Base" />
+			<Event Name="Clicked" Function="OnReturnClicked"/>
+		</Window>
+		<Window Type="TaharezLook.TLButton" Name="btnPatrol">
+			<Property Name="XPosition" Value="0.10"/>
+			<Property Name="YPosition" Value="0.70"/>
+			<Property Name="Width" Value="0.80"/>
+			<Property Name="Height" Value="0.10"/>
+			<Property Name="Text" Value="Patrol Area" />
+			<Event Name="Clicked" Function="OnPatrolClicked"/>
+		</Window>
+		<Window Type="TaharezLook.TLButton" Name="btnLastKnown">
+			<Property Name="XPosition" Value="0.10"/>
+			<Property Name="YPosition" Value="0.85"/>
+			<Property Name="Width" Value="0.80"/>
+			<Property Name="Height" Value="0.10"/>
+			<Property Name="Text" Value="Last Known Position" />
+			<Event Name="Clicked" Function="OnLastKnownClicked"/>
+		</Window>
+	</Window>
+</GUILayout>

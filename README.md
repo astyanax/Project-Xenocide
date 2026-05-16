@@ -25,7 +25,7 @@
 | GUI | Gum / MGUI / Myra *(to be decided)* |
 | Audio | MonoGame SoundEffect/Song or FMOD *(to be decided)* |
 | Build | .NET SDK 9.0+, `dotnet` CLI, MGCB content pipeline |
-| Testing | NUnit (via NuGet) |
+| Testing | **xUnit.net** (migrating from NUnit) |
 | Content | MGCB Editor (compiles .fbx, .fx, .spritefont, textures) |
 | Data | XML-driven game content |
 
@@ -55,9 +55,9 @@
 ### Aeroscape (Air Combat)
 - Interceptor-vs-UFO air combat (partially implemented)
 
-## Building (Modern — MonoGame Target)
+## Building (Modern — MonoGame)
 
-The migration to MonoGame is in progress. Once complete, the game will build on Windows and Linux with these steps.
+The migration to MonoGame is in progress. See [MIGRATION.md](MIGRATION.md) for the full plan.
 
 ### Prerequisites
 
@@ -72,22 +72,17 @@ Invoke-WebRequest -Uri https://builds.dotnet.microsoft.com/dotnet/scripts/v1/dot
 ```
 
 ```bash
-# Linux / macOS
+# Linux
 curl -sSL https://builds.dotnet.microsoft.com/dotnet/scripts/v1/dotnet-install.sh | bash /dev/stdin --channel 9.0
 ```
 
 Alternatively, download the installer from:
 https://dotnet.microsoft.com/en-us/download/dotnet/9.0
 
-**2. Install MonoGame templates**
+**2. Install MonoGame templates and MGCB tools**
 
 ```powershell
 dotnet new install MonoGame.Templates.CSharp
-```
-
-**3. Install MGCB (content pipeline) tools**
-
-```powershell
 dotnet tool install -g dotnet-mgcb
 dotnet tool install -g dotnet-mgcb-editor
 ```
@@ -95,10 +90,7 @@ dotnet tool install -g dotnet-mgcb-editor
 ### Build & Run
 
 ```powershell
-# Restore dependencies
 dotnet restore
-
-# Build and run
 dotnet run --project xna/trunk/Xenocide.MonoGame
 ```
 
@@ -122,7 +114,7 @@ Open `xna/trunk/Xenocide.sln` in Visual Studio 2008, select Debug|x86 or Release
 ## Project Structure
 
 ```
-MIGRATION.md             — MonoGame migration plan and roadmap
+MIGRATION.md             — Migration plan and roadmap (MonoGame)
 assets/                  — Artwork, design documents, sound, and pre-built installers
   ProgressReleases/      — Historical release installers (see LEGACY.md)
 xna/                     — Main source code

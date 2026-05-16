@@ -1,0 +1,89 @@
+InventorySprites.png is a sprite sheet that holds the images of the items to show on the Equip Soldier Screen.
+
+The images are laid out in the sheet as:
+Where each "box" in the diagram is 64 pixels high and wide.
+e.g. Xenium is from pixels 0, 0 to 63, 63, and the Pistol is from 64, 0 to 127, 127
+
++-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+| Xen |     |     |   RC-H    |           |     |           |           |
++-----+ P   +     |-----+-----+           +     +           +           +
+| P-C |     |  R  |   RC-A    |    RC     | LR  |    HLR    |    A-CA   |
++-----+-----+     +-----+-----+           +     +           +           +
+| R-C |PP-C |     |   RC-I    |           |     |           |           |
++-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+|   HC-H    |           | PR-C| HP-C|           |     |     |           |
+|-----+-----+           +-----+-----+           +GD-C +     +           +
+|   HC-A    |    HC     |     |     |    GDL    |     | PR  |    A-PS   |
++-----+-----+           + LP  + PP  +           +-----+     +           +
+|   HC-I    |           |     |     |           |SB-C |     |           |
++-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+|           |     |     |     |           |     |           |           |
++           +     +     |     +           +     +    SBL    +           +
+|    HP     |SR-C |LR-C |IR-C |    RL     |  S  |           |    A-FS   |
++           +     +     +     +           +     +           +           +
+|           |     |     |     |           |     |           |           |
++-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+|  FP |  G  |     | GS  |           |           | MS  |     |           |
++-----+-----+     +-----+           +           +-----+ MK  +           +
+|           |Ps-A | GP  |   Body    |   Stun    |     |     |           |
++    Ps-P   +     +-----+           +           +-----+-----+           +
+|           |     | GA  |           |           |     SC    |           |
++-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+
+
+Where
+Xen  = Xenium
+P    = Pistol
+P-C  = Pistol Clip
+R-C  = Assult Rifle Clip
+R    = Assult Rifle
+RC-A = Repeater Cannon AP ammo clip
+RC-H = Repeater Cannon HE ammo clip
+RC-I = Repeater Cannon IN ammo clip
+RC   = Repeater Cannon
+HC-A = Heavy Cannon AP ammo clip
+HC-H = Heavy Cannon HE ammo clip
+HC-I = Heavy Cannon IN ammo clip
+HC   = Heavy Cannon
+
+GD-C = Gravity Distortion Drone
+GDL  = Gravity Distortion Drone Launcher
+LP   = Laser Pistol
+LR   = Laser Rifle
+HLR  = Heavy Laser Rifle
+
+PP-C = Plasma Pistol Clip
+PP   = Plasma Pistol
+PR-C = Plasma Rifle Clip
+PR   = Plasma Rifle
+HP-C = Heavy Plasma Rifle Clip
+HP   = Heavy Plasma
+
+SR-C = Small Rocket
+LR-C = Large Rocket
+IR-C = Incendary Rocket
+RL   = Rocket Launcher
+
+S    = Stun Batton
+SB-C = Stun Bomb
+SBL  = Stun Bomb Luncher
+
+MS = Motion Sensor
+MK = Med Kit
+FP = Flashpod
+
+G   = Grenade
+GS  = Smoke Grenade
+GP  = Proximity Grenade
+GA  = Alien Grenade
+SC  = Satchel Charge
+
+Ps-P = Psi Probe
+Ps-A = Psi Amp
+Body = Dead Body (cheating, initially use one sprite for all corpse types)
+Stun = Unconcious Body (cheat, initially use one sprite for all unconcious bodies)
+
+A-CS = Combat Armor
+A-PS = Combat Powersuit
+A-FS = Anti-grav Powersuit
+

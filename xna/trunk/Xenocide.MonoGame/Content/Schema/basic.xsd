@@ -1,0 +1,525 @@
+<?xml version="1.0"?>
+<!-- edited with XMLSPY v2004 rel. 2 U (http://www.xmlspy.com) by Guyver (endru.net) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:simpleType name="craftREF">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="CRAFT_[^\s]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="combatantREF">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="LIVE_[^\s]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="anyREF">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[^\s]+_[^\s]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="itemID">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ITEM_XENIUM-122"/>
+			<xsd:enumeration value="ITEM_ALIEN_COMPOSITES"/>
+			<xsd:enumeration value="ITEM_ALIEN_BREEDING_CHAMBER"/>
+			<xsd:enumeration value="ITEM_ALIEN_MEDICAL_ROOM"/>
+			<xsd:enumeration value="ITEM_BIOLOGICAL_RESEARCH_ROOM"/>
+			<xsd:enumeration value="ITEM_ALIEN_NAVIGATION_SYSTEMS"/>
+			<xsd:enumeration value="ITEM_ALIEN_NUTRIENTS"/>
+			<xsd:enumeration value="ITEM_ALIEN_RECREATION"/>
+			<xsd:enumeration value="ITEM_XENIUM_REACTOR"/>
+			<xsd:enumeration value="ITEM_UFO_CONSTRUCTION"/>
+			<xsd:enumeration value="ITEM_PISTOL_CLIP"/>
+			<xsd:enumeration value="ITEM_PISTOL"/>
+			<xsd:enumeration value="ITEM_ASSAULT_RIFLE_CLIP"/>
+			<xsd:enumeration value="ITEM_ASSAULT_RIFLE"/>
+			<xsd:enumeration value="ITEM_R_C_HE_CLIP"/>
+			<xsd:enumeration value="ITEM_R_C_AP_CLIP"/>
+			<xsd:enumeration value="ITEM_R_C_IN_CLIP"/>
+			<xsd:enumeration value="ITEM_REPEATER_CANNON"/>
+			<xsd:enumeration value="ITEM_H_C_HE_CLIP"/>
+			<xsd:enumeration value="ITEM_H_C_AP_CLIP"/>
+			<xsd:enumeration value="ITEM_H_C_IN_CLIP"/>
+			<xsd:enumeration value="ITEM_HEAVY_CANNON"/>
+			<xsd:enumeration value="ITEM_GRAVITY_DISTORTION_DRONE"/>
+			<xsd:enumeration value="ITEM_GRAVITY_DISTORTION_LAUNCHER"/>
+			<xsd:enumeration value="ITEM_LASER_PISTOL"/>
+			<xsd:enumeration value="ITEM_LASER_RIFLE"/>
+			<xsd:enumeration value="ITEM_HEAVY_LASER_RIFLE"/>
+			<xsd:enumeration value="ITEM_PLASMA_PISTOL_CLIP"/>
+			<xsd:enumeration value="ITEM_PLASMA_PISTOL"/>
+			<xsd:enumeration value="ITEM_PLASMA_RIFLE_CLIP"/>
+			<xsd:enumeration value="ITEM_PLASMA_RIFLE"/>
+			<xsd:enumeration value="ITEM_HEAVY_PLASMA_RIFLE_CLIP"/>
+			<xsd:enumeration value="ITEM_HEAVY_PLASMA_RIFLE"/>
+			<xsd:enumeration value="ITEM_R_L_SMALL_ROCKET"/>
+			<xsd:enumeration value="ITEM_R_L_LARGE_ROCKET"/>
+			<xsd:enumeration value="ITEM_R_L_IC_ROCKET"/>
+			<xsd:enumeration value="ITEM_ROCKET_LAUNCHER"/>
+			<xsd:enumeration value="ITEM_STUN_BATON"/>
+			<xsd:enumeration value="ITEM_STUN_BOMB"/>
+			<xsd:enumeration value="ITEM_STUN_LAUNCHER"/>
+			<xsd:enumeration value="ITEM_MOTION_SENSOR"/>
+			<xsd:enumeration value="ITEM_COMBAT_ARMOR"/>
+			<xsd:enumeration value="ITEM_COMBAT_POWERSUIT"/>
+			<xsd:enumeration value="ITEM_ANTI_GRAV_POWERSUIT"/>
+			<xsd:enumeration value="ITEM_FIELD_MEDICAL_KIT"/>
+			<xsd:enumeration value="ITEM_FLASHPOD"/>
+			<xsd:enumeration value="ITEM_GRENADE"/>
+			<xsd:enumeration value="ITEM_SMOKE_GRENADE"/>
+			<xsd:enumeration value="ITEM_PROXIMITY_GRENADE"/>
+			<xsd:enumeration value="ITEM_ALIEN_GRENADE"/>
+			<xsd:enumeration value="ITEM_SATCHEL_CHARGE"/>
+			<xsd:enumeration value="ITEM_PSIONIC_PROBE"/>
+			<xsd:enumeration value="ITEM_PSIONIC_AMPLIFIER"/>
+
+			<xsd:enumeration value="ITEM_TERRORDISC_WEAPON"/>
+			<xsd:enumeration value="ITEM_ARTOPOD_WEAPON"/>
+			<xsd:enumeration value="ITEM_SILABRATE_WEAPON"/>
+			<xsd:enumeration value="ITEM_VENTRICULANT_WEAPON"/>
+			<xsd:enumeration value="ITEM_SPAWN_WEAPON"/>
+			<xsd:enumeration value="ITEM_RAPTOR_WEAPON"/>
+			<xsd:enumeration value="ITEM_ZOMBIE_WEAPON"/>
+
+			<xsd:enumeration value="ITEM_GREY_CORPSE"/>
+			<xsd:enumeration value="ITEM_MORLOCK_CORPSE"/>
+			<xsd:enumeration value="ITEM_VIPER_CORPSE"/>
+			<xsd:enumeration value="ITEM_SILABRATE_CORPSE"/>
+			<xsd:enumeration value="ITEM_VENTRICULANT_CORPSE"/>
+			<xsd:enumeration value="ITEM_CLOAK_CORPSE"/>
+			<xsd:enumeration value="ITEM_ARTOPOD_CORPSE"/>
+			<xsd:enumeration value="ITEM_TERROR_DISC_CORPSE"/>
+			<xsd:enumeration value="ITEM_SATYRIAN_CORPSE"/>
+			<xsd:enumeration value="ITEM_SPAWN_CORPSE"/>
+			<xsd:enumeration value="ITEM_RAPTOR_CORPSE"/>
+
+			<xsd:enumeration value="ITEM_GREY_SOLDIER"/>
+			<xsd:enumeration value="ITEM_GREY_NAVIGATOR"/>
+			<xsd:enumeration value="ITEM_GREY_MEDIC"/>
+			<xsd:enumeration value="ITEM_GREY_ENGINEER"/>
+			<xsd:enumeration value="ITEM_GREY_LEADER"/>
+			<xsd:enumeration value="ITEM_GREY_COMMANDER"/>
+			
+			<xsd:enumeration value="ITEM_MORLOCK_SOLDIER"/>
+			<xsd:enumeration value="ITEM_MORLOCK_NAVIGATOR"/>
+			<xsd:enumeration value="ITEM_MORLOCK_ENGINEER"/>
+
+			<xsd:enumeration value="ITEM_VIPER_SOLDIER"/>
+			<xsd:enumeration value="ITEM_VIPER_NAVIGATOR"/>
+			<xsd:enumeration value="ITEM_VIPER_ENGINEER"/>
+			<xsd:enumeration value="ITEM_VIPER_LEADER"/>
+			<xsd:enumeration value="ITEM_VIPER_COMMANDER"/>
+			
+			<xsd:enumeration value="ITEM_SILABRATE_TERRORIST"/>
+			<xsd:enumeration value="ITEM_VENTRICULANT_TERRORIST"/>
+
+			<xsd:enumeration value="ITEM_CLOAK_SOLDIER"/>
+			<xsd:enumeration value="ITEM_CLOAK_LEADER"/>
+			<xsd:enumeration value="ITEM_CLOAK_COMMANDER"/>
+
+			<xsd:enumeration value="ITEM_ARTOPOD_TERRORIST"/>
+			<xsd:enumeration value="ITEM_TERROR_DISC_TERRORIST"/>
+
+			<xsd:enumeration value="ITEM_SATYRIAN_SOLDIER"/>
+			<xsd:enumeration value="ITEM_SATYRIAN_NAVIGATOR"/>
+			<xsd:enumeration value="ITEM_SATYRIAN_MEDIC"/>
+			<xsd:enumeration value="ITEM_SATYRIAN_ENGINEER"/>
+			<xsd:enumeration value="ITEM_SATYRIAN_LEADER"/>
+			<xsd:enumeration value="ITEM_SATYRIAN_COMMANDER"/>
+
+			<xsd:enumeration value="ITEM_SPAWN_TERRORIST"/>
+			<xsd:enumeration value="ITEM_RAPTOR_TERRORIST"/>
+			<xsd:enumeration value="ITEM_SIDEWINDER_LIGHT_MISSILE_CLIP"/>
+			<xsd:enumeration value="ITEM_SIDEWINDER_LIGHT_MISSILE_LAUNCHER"/>
+			<xsd:enumeration value="ITEM_TITAN_HEAVY_MISSILE_CLIP"/>
+			<xsd:enumeration value="ITEM_TITAN_HEAVY_MISSILE_LAUNCHER"/>
+			<xsd:enumeration value="ITEM_GAIA_MISSILE_CLIP"/>
+			<xsd:enumeration value="ITEM_GAIA_MISSILE_LAUNCHER"/>
+			<xsd:enumeration value="ITEM_PLASMA_CANNON"/>
+			<xsd:enumeration value="ITEM_LASER_CANNON"/>
+			<xsd:enumeration value="ITEM_CANNON_CLIP"/>
+			<xsd:enumeration value="ITEM_CANNON"/>
+			<xsd:enumeration value="ITEM_XC-1_GRYPHON"/>
+			<xsd:enumeration value="ITEM_XC-11_CONDOR"/>
+			<xsd:enumeration value="ITEM_XC-2_STARFIRE"/>
+			<xsd:enumeration value="ITEM_XC-22_ECLIPSE"/>
+			<xsd:enumeration value="ITEM_XC-33_VENGEANCE"/>
+			<xsd:enumeration value="ITEM_XCAP-AG_GAIA"/>
+			<xsd:enumeration value="ITEM_XCAP_CANNON_CLIP"/>
+			<xsd:enumeration value="ITEM_XCAP_CANNON"/>
+			<xsd:enumeration value="ITEM_XCAP_ROCKET"/>
+			<xsd:enumeration value="ITEM_XCAP-AG_PLASMA"/>
+			<xsd:enumeration value="ITEM_XCAP_LASER"/>
+			<xsd:enumeration value="ITEM_UFO_PROBE"/>
+			<xsd:enumeration value="ITEM_UFO_RECON"/>
+			<xsd:enumeration value="ITEM_UFO_ESCORT"/>
+			<xsd:enumeration value="ITEM_UFO_REAPER"/>
+			<xsd:enumeration value="ITEM_UFO_COLLECTOR"/>
+			<xsd:enumeration value="ITEM_UFO_INTIMIDATOR"/>
+			<xsd:enumeration value="ITEM_UFO_JUGGERNAUT"/>
+			<xsd:enumeration value="ITEM_UFO_ALIEN_FREIGHTER"/>
+
+      <!-- dummy UFOs, used to get aliens (and goodies) for special missions -->
+      <xsd:enumeration value="ITEM_UFO_DUMMY_ALIEN_OUTPOST"/>
+      <xsd:enumeration value="ITEM_UFO_DUMMY_CYDONA_PART_1"/>
+      <xsd:enumeration value="ITEM_UFO_DUMMY_CYDONA_PART_2"/>
+
+      <xsd:enumeration value="ITEM_UFO_RECON_WEAPON"/>
+      <xsd:enumeration value="ITEM_UFO_ESCORT_WEAPON"/>
+      <xsd:enumeration value="ITEM_UFO_REAPER_WEAPON"/>
+      <xsd:enumeration value="ITEM_UFO_COLLECTOR_WEAPON"/>
+      <xsd:enumeration value="ITEM_UFO_INTIMIDATOR_WEAPON"/>
+      <xsd:enumeration value="ITEM_UFO_JUGGERNAUT_WEAPON"/>
+      <xsd:enumeration value="ITEM_UFO_FREIGHTER_WEAPON"/>
+      <xsd:enumeration value="ITEM_PERSON_ENGINEER"/>
+      <xsd:enumeration value="ITEM_PERSON_SCIENTIST"/>
+      <xsd:enumeration value="ITEM_PERSON_SOLDIER"/>
+    </xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="researchID">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="RES_STARTING_TECHNOLOGY"/>
+			<xsd:enumeration value="RES_NAVIGATOR_INTERROGATION"/>
+			<xsd:enumeration value="RES_ENGINEER_INTERROGATION"/>
+			<xsd:enumeration value="RES_MEDIC_INTERROGATION"/>
+			<xsd:enumeration value="RES_SOLDIER_INTERROGATION"/>
+			<xsd:enumeration value="RES_LEADER_INTERROGATION"/>
+			<xsd:enumeration value="RES_COMMANDER_INTERROGATION"/>
+			<xsd:enumeration value="RES_ALIEN_ORIGINS"/>
+			<xsd:enumeration value="RES_PARADIGM_SHIFT_OFFENSIVE_OPERATIONS"/>
+			<xsd:enumeration value="RES_THANATOS_OPERATION_XENOCIDE"/>
+			<xsd:enumeration value="RES_ALIEN_GOAL"/>
+			<xsd:enumeration value="RES_UFO_CONSTRUCTION"/>
+			<xsd:enumeration value="RES_XC-2_STARFIRE"/>
+			<xsd:enumeration value="RES_XC-22_ECLIPSE"/>
+			<xsd:enumeration value="RES_XC-33_VENGEANCE"/>
+			<xsd:enumeration value="RES_GAIA_MISSILE"/>
+			<xsd:enumeration value="RES_LASER_CANNON"/>
+			<xsd:enumeration value="RES_PLASMA_CANNON"/>
+			<xsd:enumeration value="RES_PLASMA_PRINCIPLES"/>
+			<xsd:enumeration value="RES_ALIEN_GRENADE"/>
+			<xsd:enumeration value="RES_PLASMA_PISTOL"/>
+			<xsd:enumeration value="RES_PLASMA_PISTOL_CLIP"/>
+			<xsd:enumeration value="RES_PLASMA_RIFLE"/>
+			<xsd:enumeration value="RES_PLASMA_RIFLE_CLIP"/>
+			<xsd:enumeration value="RES_HEAVY_PLASMA_RIFLE"/>
+			<xsd:enumeration value="RES_HEAVY_PLASMA_RIFLE_CLIP"/>
+			<xsd:enumeration value="RES_LASER_PRINCIPLES"/>
+			<xsd:enumeration value="RES_LASER_PISTOL"/>
+			<xsd:enumeration value="RES_LASER_RIFLE"/>
+			<xsd:enumeration value="RES_HEAVY_LASER_RIFLE"/>
+			<xsd:enumeration value="RES_GRAVITY_DISTORTION_LAUNCHER"/>
+			<xsd:enumeration value="RES_GRAVITY_DISTORTION_DRONE"/>
+			<xsd:enumeration value="RES_STUN_LAUNCHER"/>
+			<xsd:enumeration value="RES_STUN_BOMB"/>
+			<xsd:enumeration value="RES_FIELD_MEDICAL_KIT"/>
+			<xsd:enumeration value="RES_MOTION_SENSOR"/>
+			<xsd:enumeration value="RES_COMBAT_ARMOR"/>
+			<xsd:enumeration value="RES_COMBAT_POWERSUIT"/>
+			<xsd:enumeration value="RES_ANTIGRAV_POWERSUIT"/>
+			<xsd:enumeration value="RES_PSIONIC_PROBE"/>
+			<xsd:enumeration value="RES_PSIONIC_AMPLIFIER"/>
+			<xsd:enumeration value="RES_GREY"/>
+			<xsd:enumeration value="RES_GREY_AUTOPSY"/>
+			<xsd:enumeration value="RES_SATYRIAN"/>
+			<xsd:enumeration value="RES_SATYRIAN_AUTOPSY"/>
+			<xsd:enumeration value="RES_MORLOCK"/>
+			<xsd:enumeration value="RES_MORLOCK_AUTOPSY"/>
+			<xsd:enumeration value="RES_VIPER"/>
+			<xsd:enumeration value="RES_VIPER_AUTOPSY"/>
+			<xsd:enumeration value="RES_CLOAK"/>
+			<xsd:enumeration value="RES_CLOAK_AUTOPSY"/>
+			<xsd:enumeration value="RES_VENTRICULANT"/>
+			<xsd:enumeration value="RES_VENTRICULANT_AUTOPSY"/>
+			<xsd:enumeration value="RES_SPAWN"/>
+			<xsd:enumeration value="RES_SPAWN_AUTOPSY"/>
+			<xsd:enumeration value="RES_RAPTOR"/>
+			<xsd:enumeration value="RES_RAPTOR_AUTOPSY"/>
+			<xsd:enumeration value="RES_SILABRATE"/>
+			<xsd:enumeration value="RES_SILABRATE_AUTOPSY"/>
+			<xsd:enumeration value="RES_ARTOPOD"/>
+			<xsd:enumeration value="RES_ARTOPOD_AUTOPSY"/>
+			<xsd:enumeration value="RES_TERROR-DISC"/>
+			<xsd:enumeration value="RES_TERROR-DISC_AUTOPSY"/>
+			<xsd:enumeration value="RES_XENIUM-122"/>
+			<xsd:enumeration value="RES_XENIUM_REACTOR"/>
+			<xsd:enumeration value="RES_ALIEN_COMPOSITES"/>
+			<xsd:enumeration value="RES_ALIEN_NAVIGATION_SYSTEMS"/>
+			<xsd:enumeration value="RES_ALIEN_NUTRIENTS"/>
+			<xsd:enumeration value="RES_ALIEN_RECREATION"/>
+			<xsd:enumeration value="RES_ALIEN_MEDICAL_ROOM"/>
+			<xsd:enumeration value="RES_ALIEN_BREEDING"/>
+			<xsd:enumeration value="RES_BIOLOGICAL_RESEARCH_ROOM"/>
+			<xsd:enumeration value="RES_PSIONIC_TRAINING_FACILITY"/>
+			<xsd:enumeration value="RES_PLASMA_DEFENSE_ARRAY"/>
+			<xsd:enumeration value="RES_LASER_DEFENSE_ARRAY"/>
+			<xsd:enumeration value="RES_GAIA_DEFENSE_ARRAY"/>
+			<xsd:enumeration value="RES_NEURAL_SHIELDING_FACILITY"/>
+			<xsd:enumeration value="RES_TACHYON_EMISSIONS_DETECTOR"/>
+			<xsd:enumeration value="RES_GRAVITY_SHIELD_FACILITY"/>
+			<xsd:enumeration value="RES_XCAP-AG_GAIA"/>
+			<xsd:enumeration value="RES_XCAP-AG_PLASMA"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="xnetID">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="XNET_XC-1_GRYPHON"/>
+			<xsd:enumeration value="XNET_XC-2_STARFIRE"/>
+			<xsd:enumeration value="XNET_XC-11_CONDOR"/>
+			<xsd:enumeration value="XNET_XC-22_ECLIPSE"/>
+			<xsd:enumeration value="XNET_XC-33_VENGEANCE"/>
+			<xsd:enumeration value="XNET_CANNON"/>
+			<xsd:enumeration value="XNET_LASER_CANNON"/>
+			<xsd:enumeration value="XNET_PLASMA_CANNON"/>
+			<xsd:enumeration value="XNET_GAIA_MISSILE"/>
+			<xsd:enumeration value="XNET_SIDEWINDER_LIGHT_MISSILE"/>
+			<xsd:enumeration value="XNET_TITAN_HEAVY_MISSILE"/>
+			<xsd:enumeration value="XNET_XCAP_CHASSIS"/>
+			<xsd:enumeration value="XNET_XCAP,_CANNON"/>
+			<xsd:enumeration value="XNET_XCAP,_ROCKET"/>
+			<xsd:enumeration value="XNET_XCAP,_LASER"/>
+			<xsd:enumeration value="XNET_XCAP-AG,_GDL"/>
+			<xsd:enumeration value="XNET_XCAP-AG,_PLASMA"/>
+			<xsd:enumeration value="XNET_XCAP-AG_CHASSIS"/>
+			<xsd:enumeration value="XNET_ALIEN_GRENADE"/>
+			<xsd:enumeration value="XNET_PLASMA_PRINCIPLES"/>
+			<xsd:enumeration value="XNET_PLASMA_PISTOL"/>
+			<xsd:enumeration value="XNET_PLASMA_PISTOL_CLIP"/>
+			<xsd:enumeration value="XNET_PLASMA_RIFLE"/>
+			<xsd:enumeration value="XNET_PLASMA_RIFLE_CLIP"/>
+			<xsd:enumeration value="XNET_HEAVY_PLASMA_RIFLE"/>
+			<xsd:enumeration value="XNET_HEAVY_PLASMA_RIFLE_CLIP"/>
+			<xsd:enumeration value="XNET_GRAVITY_DISTORTION_LAUNCHER"/>
+			<xsd:enumeration value="XNET_GRAVITY_DISTORTION_DRONE"/>
+			<xsd:enumeration value="XNET_LASER_PRINCIPLES"/>
+			<xsd:enumeration value="XNET_LASER_PISTOL"/>
+			<xsd:enumeration value="XNET_LASER_RIFLE"/>
+			<xsd:enumeration value="XNET_HEAVY_LASER_RIFLE"/>
+			<xsd:enumeration value="XNET_PISTOL"/>
+			<xsd:enumeration value="XNET_ASSAULT_RIFLE"/>
+			<xsd:enumeration value="XNET_HEAVY_CANNON"/>
+			<xsd:enumeration value="XNET_REPEATER_CANNON"/>
+			<xsd:enumeration value="XNET_STUN_BATON"/>
+			<xsd:enumeration value="XNET_STUN_LAUNCHER"/>
+			<xsd:enumeration value="XNET_STUN_BOMB"/>
+			<xsd:enumeration value="XNET_ROCKET_LAUNCHER"/>
+			<xsd:enumeration value="XNET_MOTION_SENSOR"/>
+			<xsd:enumeration value="XNET_SATCHEL_CHARGE"/>
+			<xsd:enumeration value="XNET_GRENADE"/>
+			<xsd:enumeration value="XNET_PROXIMITY_GRENADE"/>
+			<xsd:enumeration value="XNET_SMOKE_GRENADE"/>
+			<xsd:enumeration value="XNET_FLASHPOD"/>
+			<xsd:enumeration value="XNET_FIELD_MEDICAL_KIT"/>
+			<xsd:enumeration value="XNET_PSIONIC_PROBE"/>
+			<xsd:enumeration value="XNET_PSIONIC_AMPLIFIER"/>
+			<xsd:enumeration value="XNET_STANDARD-ISSUE_BATTLEDRESS_UNIFORM"/>
+			<xsd:enumeration value="XNET_COMBAT_ARMOR"/>
+			<xsd:enumeration value="XNET_COMBAT_POWERSUIT"/>
+			<xsd:enumeration value="XNET_ANTIGRAV_POWERSUIT"/>
+			<xsd:enumeration value="XNET_BASE_ACCESS_FACILITY"/>
+			<xsd:enumeration value="XNET_BARRACKS_FACILITY"/>
+			<xsd:enumeration value="XNET_RESEARCH_FACILITY"/>
+			<xsd:enumeration value="XNET_ENGINEERING_FACILITY"/>
+			<xsd:enumeration value="XNET_LANDING_PAD"/>
+			<xsd:enumeration value="XNET_PSIONIC_TRAINING_FACILITY"/>
+			<xsd:enumeration value="XNET_LASER_DEFENSE_ARRAY"/>
+			<xsd:enumeration value="XNET_MISSILE_DEFENSE_ARRAY"/>
+			<xsd:enumeration value="XNET_PLASMA_DEFENSE_ARRAY"/>
+			<xsd:enumeration value="XNET_STORAGE_FACILITY"/>
+			<xsd:enumeration value="XNET_XENOMORPH_HOLDING_FACILITY"/>
+			<xsd:enumeration value="XNET_GAIA_DEFENSE_ARRAY"/>
+			<xsd:enumeration value="XNET_NEURAL_SHIELDING_FACILITY"/>
+			<xsd:enumeration value="XNET_SHORT_RANGE_NEUDAR"/>
+			<xsd:enumeration value="XNET_LONG_RANGE_NEUDAR"/>
+			<xsd:enumeration value="XNET_TACHYON_EMISSIONS_DETECTOR"/>
+			<xsd:enumeration value="XNET_GREY"/>
+			<xsd:enumeration value="XNET_GREY_AUTOPSY"/>
+			<xsd:enumeration value="XNET_MORLOCK"/>
+			<xsd:enumeration value="XNET_MORLOCK_AUTOPSY"/>
+			<xsd:enumeration value="XNET_SATYRIAN"/>
+			<xsd:enumeration value="XNET_SATYRIAN_AUTOPSY"/>
+			<xsd:enumeration value="XNET_VIPER"/>
+			<xsd:enumeration value="XNET_VIPER_AUTOPSY"/>
+			<xsd:enumeration value="XNET_CLOAK"/>
+			<xsd:enumeration value="XNET_CLOAK_AUTOPSY"/>
+			<xsd:enumeration value="XNET_VENTRICULANT"/>
+			<xsd:enumeration value="XNET_VENTRICULANT_AUTOPSY"/>
+			<xsd:enumeration value="XNET_SPAWN"/>
+			<xsd:enumeration value="XNET_SPAWN_AUTOPSY"/>
+			<xsd:enumeration value="XNET_RAPTOR"/>
+			<xsd:enumeration value="XNET_RAPTOR_AUTOPSY"/>
+			<xsd:enumeration value="XNET_SILABRATE"/>
+			<xsd:enumeration value="XNET_SILABRATE_AUTOPSY"/>
+			<xsd:enumeration value="XNET_ARTOPOD"/>
+			<xsd:enumeration value="XNET_ARTOPOD_AUTOPSY"/>
+			<xsd:enumeration value="XNET_TERROR-DISC"/>
+			<xsd:enumeration value="XNET_TERROR-DISC_AUTOPSY"/>
+			<xsd:enumeration value="XNET_ALIEN_ORIGINS"/>
+			<xsd:enumeration value="XNET_PARADIGM_SHIFT:_OFFENSIVE_OPERATIONS"/>
+			<xsd:enumeration value="XNET_THANATOS:_OPERATION_XENOCIDE"/>
+			<xsd:enumeration value="XNET_ALIEN_RESEARCH"/>
+			<xsd:enumeration value="XNET_ALIEN_TERROR"/>
+			<xsd:enumeration value="XNET_ALIEN_HARVEST"/>
+			<xsd:enumeration value="XNET_ALIEN_ABDUCTIONS"/>
+			<xsd:enumeration value="XNET_ALIEN_RETALIATION"/>
+			<xsd:enumeration value="XNET_ALIEN_BASE"/>
+			<xsd:enumeration value="XNET_ALIEN_SUPPLY"/>
+			<xsd:enumeration value="XNET_ALIEN_INFILTRATIONS"/>
+			<xsd:enumeration value="XNET_THE_ALIEN_GOAL"/>
+			<xsd:enumeration value="XNET_XENIUM_REACTOR"/>
+			<xsd:enumeration value="XNET_UFO_CONSTRUCTION"/>
+			<xsd:enumeration value="XNET_ALIEN_NAVIGATION_SYSTEMS"/>
+			<xsd:enumeration value="XNET_ALIEN_NUTRIENTS"/>
+			<xsd:enumeration value="XNET_ALIEN_BREEDING"/>
+			<xsd:enumeration value="XNET_ALIEN_RECREATION"/>
+			<xsd:enumeration value="XNET_ALIEN_COMPOSITES"/>
+			<xsd:enumeration value="XNET_BIOLOGICAL_RESEARCH_ROOM"/>
+			<xsd:enumeration value="XNET_ALIEN_MEDICAL_ROOM"/>
+			<xsd:enumeration value="XNET_XENIUM-122"/>
+			<xsd:enumeration value="XNET_PROBE"/>
+			<xsd:enumeration value="XNET_RECON"/>
+			<xsd:enumeration value="XNET_ESCORT"/>
+			<xsd:enumeration value="XNET_REAPER"/>
+			<xsd:enumeration value="XNET_COLLECTOR"/>
+			<xsd:enumeration value="XNET_INTIMIDATOR"/>
+			<xsd:enumeration value="XNET_JUGGERNAUT"/>
+			<xsd:enumeration value="XNET_ALIEN_FREIGHTER"/>
+			<xsd:enumeration value="XNET_GRAVITY_SHIELD_FACILITY"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="facilityID">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="FAC_STORAGE_FACILITY"/>
+			<xsd:enumeration value="FAC_XENOMORPH_HOLDING_FACILITY"/>
+			<xsd:enumeration value="FAC_SHORT_RANGE_NEUDAR"/>
+			<xsd:enumeration value="FAC_LONG_RANGE_NEUDAR"/>
+			<xsd:enumeration value="FAC_TACHYON_EMISSIONS_DETECTOR"/>
+			<xsd:enumeration value="FAC_BASE_ACCESS_FACILITY"/>
+			<xsd:enumeration value="FAC_LANDING_PAD"/>
+			<xsd:enumeration value="FAC_RESEARCH_FACILITY"/>
+			<xsd:enumeration value="FAC_ENGINEERING_FACILITY"/>
+			<xsd:enumeration value="FAC_BARRACKS_FACILITY"/>
+			<xsd:enumeration value="FAC_PSIONIC_TRAINING_FACILITY"/>
+			<xsd:enumeration value="FAC_MISSILE_DEFENSE_ARRAY"/>
+			<xsd:enumeration value="FAC_LASER_DEFENSE_ARRAY"/>
+			<xsd:enumeration value="FAC_PLASMA_DEFENSE_ARRAY"/>
+			<xsd:enumeration value="FAC_GAIA_DEFENSE_ARRAY"/>
+			<xsd:enumeration value="FAC_GRAVITY_SHIELD_FACILITY"/>
+			<xsd:enumeration value="FAC_NEURAL_SHIELDING_FACILITY"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="craftID">
+		<xsd:restriction base="xsd:ID">
+			<xsd:pattern value="CRAFT_[^\s]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="anyID">
+		<xsd:restriction base="xsd:ID">
+			<xsd:pattern value="[^\s]+_[^\s]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="combatantID">
+		<xsd:restriction base="xsd:ID">
+			<xsd:pattern value="LIVE_[^\s]*"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- Global stuff -->
+	<xsd:simpleType name="environmentType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="air"/>
+			<xsd:enumeration value="water"/>
+			<xsd:enumeration value="vacuum"/>
+			<xsd:enumeration value="martian"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="damageTypeEnum">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Piercing"/>
+			<xsd:enumeration value="Fire"/>
+			<xsd:enumeration value="Explosive"/>
+			<xsd:enumeration value="Laser"/>
+			<xsd:enumeration value="Plasma"/>
+			<xsd:enumeration value="Stun"/>
+			<xsd:enumeration value="Melee"/>
+			<xsd:enumeration value="Acid"/>
+			<xsd:enumeration value="Smoke"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="storageTypeEnum">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="STORAGE_GEAR"/>
+			<xsd:enumeration value="STORAGE_ALIENS"/>
+			<xsd:enumeration value="STORAGE_CRAFT"/>
+			<xsd:enumeration value="STORAGE_PERSONNEL"/>
+			<xsd:enumeration value="STORAGE_SCIENTIST"/>
+			<xsd:enumeration value="STORAGE_ENGINEER"/>
+			<xsd:enumeration value="STORAGE_PSI_TRAINING"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="rankTypeEnum">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Commander"/>
+			<xsd:enumeration value="Leader"/>
+			<xsd:enumeration value="Engineer"/>
+			<xsd:enumeration value="Medic"/>
+			<xsd:enumeration value="Navigator"/>
+			<xsd:enumeration value="Soldier"/>
+			<xsd:enumeration value="Terrorist"/>
+			<xsd:enumeration value="Civilian"/>
+			<!-- this one actually means "any rank" -->
+			<xsd:enumeration value="Alive"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+  <xsd:simpleType name="raceTypeEnum">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Human"/>
+      <xsd:enumeration value="Grey"/>
+      <xsd:enumeration value="Satyrian"/>
+      <xsd:enumeration value="Morlock"/>
+      <xsd:enumeration value="Viper"/>
+      <xsd:enumeration value="Cloak"/>
+      <xsd:enumeration value="Ventriculant"/>
+      <xsd:enumeration value="Spawn"/>
+      <xsd:enumeration value="Raptor"/>
+      <xsd:enumeration value="Silabrate"/>
+      <xsd:enumeration value="Artopod"/>
+      <xsd:enumeration value="TerrorDisc"/>
+      <xsd:enumeration value="Zombie"/>
+      <xsd:enumeration value="Tank"/>
+      <xsd:enumeration value="HoverTank"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="armorTypeEnum">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="None"/>
+      <xsd:enumeration value="ITEM_COMBAT_ARMOR"/>
+      <xsd:enumeration value="ITEM_COMBAT_POWERSUIT"/>
+      <xsd:enumeration value="ITEM_ANTI_GRAV_POWERSUIT"/>
+      <xsd:enumeration value="Grey"/>
+      <xsd:enumeration value="Satyrian"/>
+      <xsd:enumeration value="SatyrianLeader"/>
+      <xsd:enumeration value="SatyrianCommander"/>
+      <xsd:enumeration value="Morlock"/>
+      <xsd:enumeration value="MorlockNavigator"/>
+      <xsd:enumeration value="Viper"/>
+      <xsd:enumeration value="ViperLeader"/>
+      <xsd:enumeration value="ViperCommander"/>
+      <xsd:enumeration value="Cloak"/>
+      <xsd:enumeration value="CloakLeader"/>
+      <xsd:enumeration value="CloakCommander"/>
+      <xsd:enumeration value="Ventriculant"/>
+      <xsd:enumeration value="Spawn"/>
+      <xsd:enumeration value="Raptor"/>
+      <xsd:enumeration value="Silabrate"/>
+      <xsd:enumeration value="Artopod"/>
+      <xsd:enumeration value="TerrorDisc"/>
+      <xsd:enumeration value="Zombie"/>
+      <xsd:enumeration value="Tank"/>
+      <xsd:enumeration value="HoverTank"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="money_const">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="money"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

@@ -1,0 +1,487 @@
+﻿#----------------------------- Global Properties ----------------------------#
+/outputDir:bin/$(Platform)
+/intermediateDir:obj/$(Platform)
+/platform:DesktopGL
+/config:
+/profile:Reach
+/compress:False
+
+#-------------------------------- References --------------------------------#
+
+#---------------------------------- Content ---------------------------------#
+
+#begin Shaders/GeoscapeShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/build:Shaders/GeoscapeShader.fx
+
+#begin Models/Characters/Alien/Morlock.X
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Characters/Alien/Morlock.X
+
+#begin Models/Characters/Alien/Silibrate.X
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Characters/Alien/Silibrate.X
+
+#begin Models/Characters/Alien/Viper.FBX
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Models/Characters/Alien/Viper.FBX
+
+#begin Models/Characters/XCorp/FemaleShirt.FBX
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Models/Characters/XCorp/FemaleShirt.FBX
+
+#begin Models/Craft/Weapons/Avalanche.X
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Craft/Weapons/Avalanche.X
+
+#begin Models/Craft/Weapons/Stingray.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Craft/Weapons/Stingray.x
+
+#begin Models/Craft/Xcorps/xc1.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Craft/Xcorps/xc1.x
+
+#begin Models/Craft/Xcorps/xc33.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Craft/Xcorps/xc33.x
+
+#begin Models/Facility/alien_containment.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/alien_containment.x
+
+#begin Models/Facility/barracks.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/barracks.x
+
+#begin Models/Facility/base_access.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/base_access.x
+
+#begin Models/Facility/gaia_defense.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/gaia_defense.x
+
+#begin Models/Facility/generalstorage.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/generalstorage.x
+
+#begin Models/Facility/grav_shield.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/grav_shield.x
+
+#begin Models/Facility/laser_defense.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/laser_defense.x
+
+#begin Models/Facility/launch_pad.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/launch_pad.x
+
+#begin Models/Facility/long_range_neudar.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/long_range_neudar.x
+
+#begin Models/Facility/missile_defense.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/missile_defense.x
+
+#begin Models/Facility/neural_shield.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/neural_shield.x
+
+#begin Models/Facility/plasma_defense.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/plasma_defense.x
+
+#begin Models/Facility/psi_training.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/psi_training.x
+
+#begin Models/Facility/research_facility.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/research_facility.x
+
+#begin Models/Facility/short_range_neudar.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/short_range_neudar.x
+
+#begin Models/Facility/tachyon_detector.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/tachyon_detector.x
+
+#begin Models/Facility/workshop.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Facility/workshop.x
+
+#begin Models/Facility/Xnet/alien_containment.FBX
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Models/Facility/Xnet/alien_containment.FBX
+
+#begin Models/Facility/Xnet/Barracks.FBX
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Models/Facility/Xnet/Barracks.FBX
+
+#begin Models/Facility/Xnet/Research_Facility.FBX
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Models/Facility/Xnet/Research_Facility.FBX
+
+#begin Models/Weapons/Alien/stun launcher.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Weapons/Alien/stun launcher.x
+
+#begin Models/Weapons/Xcorps/assault rifle.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Weapons/Xcorps/assault rifle.x
+
+#begin Models/Weapons/Xcorps/grenade.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Weapons/Xcorps/grenade.x
+
+#begin Models/Weapons/Xcorps/Laser Rifle.FBX
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Models/Weapons/Xcorps/Laser Rifle.FBX
+
+#begin Models/Weapons/Xcorps/pistol.X
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Weapons/Xcorps/pistol.X
+
+#begin Models/Weapons/Xcorps/smoke-grenade.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Weapons/Xcorps/smoke-grenade.x
+
+#begin Models/Xcaps/xcap-cannon.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Xcaps/xcap-cannon.x
+
+#begin Models/Xcaps/xcap-laser.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Xcaps/xcap-laser.x
+
+#begin Models/Xcaps/xcap-missile.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Xcaps/xcap-missile.x
+
+#begin Models/Xcaps/Xcaps-hover-GAIA.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Xcaps/Xcaps-hover-GAIA.x
+
+#begin Models/Xcaps/Xcaps-hover-plasma.x
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/Xcaps/Xcaps-hover-plasma.x
+
+#begin Models/XCorps.X
+/importer:XImporter
+/processor:ModelProcessor
+/build:Models/XCorps.X
+
+#begin Shaders/skybox.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/build:Shaders/skybox.fx
+
+#begin SpriteFont1.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:SpriteFont1.spritefont
+
+#begin Textures/OutpostLayout/BuildTimes.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Textures/OutpostLayout/BuildTimes.png
+
+#begin Audio/Music/Baseview/7. XerO - Baseview.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Music/Baseview/7. XerO - Baseview.ogg
+
+#begin Audio/Music/main_theme.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Music/main_theme.ogg
+
+#begin Audio/Music/Planetview/10. Thomas Torfs - Planetview.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Music/Planetview/10. Thomas Torfs - Planetview.ogg
+
+#begin Audio/Music/Planetview/planetview.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Music/Planetview/planetview.ogg
+
+#begin Audio/Music/Planetview/Tiskaite_-_Xenocide_Geoscape.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Music/Planetview/Tiskaite_-_Xenocide_Geoscape.ogg
+
+#begin Audio/Music/XNet/xnet.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/Music/XNet/xnet.ogg
+
+#begin Audio/Sounds/Menu/buttonclick1_ok.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/Menu/buttonclick1_ok.ogg
+
+#begin Audio/Sounds/Menu/buttonclick2_changesetting.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/Menu/buttonclick2_changesetting.ogg
+
+#begin Audio/Sounds/Menu/buttonover.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/Menu/buttonover.ogg
+
+#begin Audio/Sounds/Menu/exitgame.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/Menu/exitgame.ogg
+
+#begin Audio/Sounds/PlanetView/clickobjectonplanet.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/PlanetView/clickobjectonplanet.ogg
+
+#begin Audio/Sounds/PlanetView/speedfast.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/PlanetView/speedfast.ogg
+
+#begin Audio/Sounds/PlanetView/speedslow.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/PlanetView/speedslow.ogg
+
+#begin Audio/Sounds/PlanetView/speedveryfast.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/PlanetView/speedveryfast.ogg
+
+#begin Audio/Sounds/PlanetView/zoomin.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/PlanetView/zoomin.ogg
+
+#begin Audio/Sounds/PlanetView/zoomout.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Sounds/PlanetView/zoomout.ogg
+
+#begin DataFiles/credits.txt
+/copy:DataFiles/credits.txt
+
+#begin DataFiles/Geoscape/countries.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:DataFiles/Geoscape/countries.png
+
+#begin DataFiles/Geoscape/regions.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:DataFiles/Geoscape/regions.png
+
+#begin DataFiles/Geoscape/terrain.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:DataFiles/Geoscape/terrain.png
+
+#begin Layouts/AircraftOrdersDialog.layout
+/copy:Layouts/AircraftOrdersDialog.layout
+
+#begin Layouts/BuildFacilityDialog.layout
+/copy:Layouts/BuildFacilityDialog.layout
+
+#begin Layouts/LaunchInterceptDialog.layout
+/copy:Layouts/LaunchInterceptDialog.layout
+
+#begin Layouts/NameNewBaseDialog.layout
+/copy:Layouts/NameNewBaseDialog.layout
+
+#begin Layouts/OptionsDialog.layout
+/copy:Layouts/OptionsDialog.layout
+
+#begin Layouts/PickActionDialog.layout
+/copy:Layouts/PickActionDialog.layout
+
+#begin Layouts/SoundOptionsDialog.layout
+/copy:Layouts/SoundOptionsDialog.layout
+
+#begin Layouts/StartBattlescapeDialog.layout
+/copy:Layouts/StartBattlescapeDialog.layout
+
+#begin Layouts/TrackingLostDialog.layout
+/copy:Layouts/TrackingLostDialog.layout
+
+#begin Layouts/UfoInfoDialog.layout
+/copy:Layouts/UfoInfoDialog.layout
+
+#begin Schema/basic.xsd
+/copy:Schema/basic.xsd
+
+#begin Schema/combatant.xml
+/copy:Schema/combatant.xml
+
+#begin Schema/combatant.xsd
+/copy:Schema/combatant.xsd
+
+#begin Schema/facility.xml
+/copy:Schema/facility.xml
+
+#begin Schema/facility.xsd
+/copy:Schema/facility.xsd
+
+#begin Schema/item.xml
+/copy:Schema/item.xml
+
+#begin Schema/item.xsd
+/copy:Schema/item.xsd
+
+#begin Schema/peopleNames.xml
+/copy:Schema/peopleNames.xml
+
+#begin Schema/planets.xml
+/copy:Schema/planets.xml
+
+#begin Schema/planets.xsd
+/copy:Schema/planets.xsd
+
+#begin Schema/research.xml
+/copy:Schema/research.xml
+
+#begin Schema/research.xsd
+/copy:Schema/research.xsd
+
+#begin Schema/startsettings.xml
+/copy:Schema/startsettings.xml
+
+#begin Schema/startsettings.xsd
+/copy:Schema/startsettings.xsd
+
+#begin Schema/xnet.xml
+/copy:Schema/xnet.xml
+
+#begin Schema/xnet.xsd
+/copy:Schema/xnet.xsd
+
+#begin Textures/Battlescape/textureAtlas.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Textures/Battlescape/textureAtlas.png
+
+#begin Textures/EquipSoldier/EquipScreenBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Textures/EquipSoldier/EquipScreenBackground.png
+
+#begin Textures/EquipSoldier/InventorySprites.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Textures/EquipSoldier/InventorySprites.png
+
+#begin Textures/EquipSoldier/InventorySprites.txt
+/copy:Textures/EquipSoldier/InventorySprites.txt
+
+#begin Textures/Geoscape/EarthDiffuseMap.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Textures/Geoscape/EarthDiffuseMap.jpg
+
+#begin Textures/Geoscape/EarthNightMap.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Textures/Geoscape/EarthNightMap.png
+
+#begin Textures/Geoscape/EarthNormalMap.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Textures/Geoscape/EarthNormalMap.png
+
+#begin Textures/Geoscape/skybox.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Textures/Geoscape/skybox.png
+
+#begin Textures/UI/BasesScreenBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Textures/UI/BasesScreenBackground.png
+
+#begin Textures/UI/GeoscapeScreenBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Textures/UI/GeoscapeScreenBackground.png
+
+#begin Textures/UI/StartScreenBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Textures/UI/StartScreenBackground.png
+
+#begin Textures/UI/XnetScreenBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Textures/UI/XnetScreenBackground.png
+
+#begin Textures/Geoscape/IconSpriteMap.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Textures/Geoscape/IconSpriteMap.png
+

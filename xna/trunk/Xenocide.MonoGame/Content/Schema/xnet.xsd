@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="XNet" targetNamespace="XNet" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="basic.xsd"/>
+	<xs:complexType name="paragraphType">
+		<xs:choice maxOccurs="unbounded">
+			<xs:element name="paragraph"/>
+			<xs:element name="bullet"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="statisticsLinkType">
+		<xs:annotation>
+			<xs:documentation>Where to go to get the game statistics for the object, e.g. cost, size etc.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="objectType" use="required">
+			<xs:annotation>
+				<xs:documentation>Get the statistics from item.xml or facility.xml?</xs:documentation>
+			</xs:annotation>
+            <xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="ITEM"/>
+			        <xs:enumeration value="FACILITY"/>
+                </xs:restriction>
+            </xs:simpleType>
+		</xs:attribute>
+        <xs:attribute name="object">
+            <xs:annotation>
+                <xs:documentation>name of item or facility holding the statistics</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:union memberTypes="facilityID itemID" />
+             </xs:simpleType>
+         </xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="graphicsType">
+		<xs:annotation>
+			<xs:documentation>The image/model to put in the view window.
+				x, y and z are the rotations in degress about the x, y and z axis to do to the
+				model to put it into it's desired orientation when showing in X-Net
+			</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="model" type="xs:string" use="required" />
+		<xs:attribute name="x" type="xs:float" use="required" />
+		<xs:attribute name="y" type="xs:float" use="required" />
+		<xs:attribute name="z" type="xs:float" use="required" />
+		<xs:attribute name="scale" type="xs:float" use="optional" default="0.0"/>
+	</xs:complexType>
+	<xs:complexType name="entryType">
+		<xs:sequence>
+			<xs:element name="statisticsLink" type="statisticsLinkType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="shortentry" type="paragraphType"/>
+			<xs:element name="body" type="paragraphType"/>
+			<xs:sequence minOccurs="0" maxOccurs="1">
+				<xs:element name="fluff" type="paragraphType"/>
+			</xs:sequence>
+			<xs:element name="graphics" type="graphicsType" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required" />
+		<xs:attribute name="id" type="xnetID" use="required" />
+	</xs:complexType>
+	<xs:element name="xnet">
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+        <xs:element name="category">
+          <xs:complexType>
+            <xs:sequence maxOccurs="unbounded">
+              <xs:element name="entry" type="entryType"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

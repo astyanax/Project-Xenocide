@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<startSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="StartSettingConfig startsettings.xsd" xmlns="StartSettingConfig">
+  <outpostLayout>
+    <facility type="FAC_BASE_ACCESS_FACILITY" left="2" top="2"/>
+    <facility type="FAC_LANDING_PAD"          left="2" top="0"/>
+    <facility type="FAC_BARRACKS_FACILITY"    left="3" top="2"/>
+    <facility type="FAC_STORAGE_FACILITY"     left="2" top="3"/>
+    <facility type="FAC_SHORT_RANGE_NEUDAR"   left="1" top="3"/>
+    <facility type="FAC_RESEARCH_FACILITY"    left="3" top="3"/>
+    <facility type="FAC_ENGINEERING_FACILITY" left="4" top="3"/>
+    <facility type="FAC_LANDING_PAD"          left="0" top="4"/>
+    <facility type="FAC_LANDING_PAD"          left="4" top="4"/>
+
+<!--  Makes testing a lot easier
+    <facility type="FAC_PSIONIC_TRAINING_FACILITY"    left="4" top="2"/>
+    <facility type="FAC_TACHYON_EMISSIONS_DETECTOR"   left="1" top="0"/>
+-->
+  </outpostLayout>
+  <inventory>
+    <stock type="ITEM_XENIUM-122"                         quantity="0"/>
+    <!-- items that only exist in a base -->
+    <stock type="ITEM_ALIEN_COMPOSITES"                   quantity="0"/>
+    <stock type="ITEM_ALIEN_BREEDING_CHAMBER"             quantity="0"/>
+    <stock type="ITEM_ALIEN_MEDICAL_ROOM"                 quantity="0"/>
+    <stock type="ITEM_BIOLOGICAL_RESEARCH_ROOM"           quantity="0"/>
+    <stock type="ITEM_ALIEN_NAVIGATION_SYSTEMS"           quantity="0"/>
+    <stock type="ITEM_ALIEN_NUTRIENTS"                    quantity="0"/>
+    <stock type="ITEM_ALIEN_RECREATION"                   quantity="0"/>
+    <stock type="ITEM_XENIUM_REACTOR"                     quantity="0"/>
+    <stock type="ITEM_UFO_CONSTRUCTION"                   quantity="0"/>
+
+    <!-- staff -->
+    <stock type="ITEM_PERSON_ENGINEER"                    quantity="10"/>
+    <stock type="ITEM_PERSON_SCIENTIST"                   quantity="10"/>
+    <stock type="ITEM_PERSON_SOLDIER"                     quantity="8"/>
+
+    <!-- *** WEAPONS *** -->
+    <stock type="ITEM_PISTOL_CLIP"                        quantity="13"/>
+    <stock type="ITEM_PISTOL"                             quantity="5"/>
+    <stock type="ITEM_ASSAULT_RIFLE_CLIP"                 quantity="20"/>
+    <stock type="ITEM_ASSAULT_RIFLE"                      quantity="8"/>
+    <stock type="ITEM_R_C_HE_CLIP"                        quantity="0"/>
+    <stock type="ITEM_R_C_AP_CLIP"                        quantity="6"/>
+    <stock type="ITEM_R_C_IN_CLIP"                        quantity="0"/>
+    <stock type="ITEM_REPEATER_CANNON"                    quantity="1"/>
+    <stock type="ITEM_H_C_HE_CLIP"                        quantity="1"/>
+    <stock type="ITEM_H_C_AP_CLIP"                        quantity="8"/>
+    <stock type="ITEM_H_C_IN_CLIP"                        quantity="0"/>
+    <stock type="ITEM_HEAVY_CANNON"                       quantity="2"/>
+    <stock type="ITEM_GRAVITY_DISTORTION_DRONE"           quantity="0"/>
+    <stock type="ITEM_GRAVITY_DISTORTION_LAUNCHER"        quantity="0"/>
+    <stock type="ITEM_LASER_PISTOL"                       quantity="0"/>
+    <stock type="ITEM_LASER_RIFLE"                        quantity="0"/>
+    <stock type="ITEM_HEAVY_LASER_RIFLE"                  quantity="0"/>
+    <stock type="ITEM_PLASMA_PISTOL_CLIP"                 quantity="0"/>
+    <stock type="ITEM_PLASMA_PISTOL"                      quantity="0"/>
+    <stock type="ITEM_PLASMA_RIFLE_CLIP"                  quantity="0"/>
+    <stock type="ITEM_PLASMA_RIFLE"                       quantity="0"/>
+    <stock type="ITEM_R_L_SMALL_ROCKET"                   quantity="4"/>
+    <stock type="ITEM_R_L_LARGE_ROCKET"                   quantity="0"/>
+    <stock type="ITEM_R_L_IC_ROCKET"                      quantity="0"/>
+    <stock type="ITEM_ROCKET_LAUNCHER"                    quantity="1"/>
+    <stock type="ITEM_STUN_BATON"                         quantity="0"/>
+    <stock type="ITEM_STUN_BOMB"                          quantity="0"/>
+    <stock type="ITEM_STUN_LAUNCHER"                      quantity="0"/>
+    <!-- *** EQUIPMENT *** -->
+    <stock type="ITEM_MOTION_SENSOR"                      quantity="0"/>
+    <stock type="ITEM_COMBAT_ARMOR"                       quantity="0"/>
+    <stock type="ITEM_COMBAT_POWERSUIT"                   quantity="0"/>
+    <stock type="ITEM_ANTI_GRAV_POWERSUIT"                quantity="0"/>
+    <stock type="ITEM_FIELD_MEDICAL_KIT"                  quantity="0"/>
+    <stock type="ITEM_FLASHPOD"                           quantity="0"/>
+    <stock type="ITEM_GRENADE"                            quantity="13"/>
+    <stock type="ITEM_SMOKE_GRENADE"                      quantity="5"/>
+    <stock type="ITEM_PROXIMITY_GRENADE"                  quantity="0"/>
+    <stock type="ITEM_SATCHEL_CHARGE"                     quantity="0"/>
+    <stock type="ITEM_ALIEN_GRENADE"                      quantity="0"/>
+    <stock type="ITEM_PSIONIC_PROBE"                      quantity="0"/>
+    <stock type="ITEM_PSIONIC_AMPLIFIER"                  quantity="0"/>
+    <!-- *** ALIENS *** -->
+    <stock type="ITEM_GREY_COMMANDER"                     quantity="0"/>
+    <stock type="ITEM_GREY_SOLDIER"                       quantity="0"/>
+    <stock type="ITEM_GREY_CORPSE"                        quantity="0"/>
+    <stock type="ITEM_MORLOCK_CORPSE"                     quantity="0"/>
+    <stock type="ITEM_VIPER_CORPSE"                       quantity="0"/>
+    <stock type="ITEM_SILABRATE_CORPSE"                   quantity="0"/>
+    <stock type="ITEM_VENTRICULANT_CORPSE"                quantity="0"/>
+    <stock type="ITEM_CLOAK_CORPSE"                       quantity="0"/>
+    <stock type="ITEM_ARTOPOD_CORPSE"                     quantity="0"/>
+    <stock type="ITEM_TERROR_DISC_CORPSE"                 quantity="0"/>
+    <stock type="ITEM_SATYRIAN_CORPSE"                    quantity="0"/>
+    <stock type="ITEM_SPAWN_CORPSE"                       quantity="0"/>
+    <stock type="ITEM_RAPTOR_CORPSE"                      quantity="0"/>
+    <!-- *** CRAFT ARMAMENTS *** -->
+    <stock type="ITEM_SIDEWINDER_LIGHT_MISSILE_CLIP"      quantity="37"/>
+    <stock type="ITEM_SIDEWINDER_LIGHT_MISSILE_LAUNCHER"  quantity="3"/>
+    <stock type="ITEM_TITAN_HEAVY_MISSILE_CLIP"           quantity="10"/>
+    <stock type="ITEM_TITAN_HEAVY_MISSILE_LAUNCHER"       quantity="1"/>
+    <stock type="ITEM_GAIA_MISSILE_CLIP"                  quantity="0"/>
+    <stock type="ITEM_GAIA_MISSILE_LAUNCHER"              quantity="0"/>
+    <stock type="ITEM_PLASMA_CANNON"                      quantity="0"/>
+    <stock type="ITEM_LASER_CANNON"                       quantity="0"/>
+    <stock type="ITEM_CANNON_CLIP"                        quantity="0"/>
+    <stock type="ITEM_CANNON"                             quantity="0"/>
+    <stock type="ITEM_UFO_RECON_WEAPON"                   quantity="0"/>
+    <stock type="ITEM_UFO_ESCORT_WEAPON"                  quantity="0"/>
+    <stock type="ITEM_UFO_REAPER_WEAPON"                  quantity="0"/>
+    <stock type="ITEM_UFO_COLLECTOR_WEAPON"               quantity="0"/>
+    <stock type="ITEM_UFO_INTIMIDATOR_WEAPON"             quantity="0"/>
+    <stock type="ITEM_UFO_JUGGERNAUT_WEAPON"              quantity="0"/>
+    <stock type="ITEM_UFO_FREIGHTER_WEAPON"               quantity="0"/>
+    <!-- *** CRAFT *** -->
+    <stock type="ITEM_XC-1_GRYPHON"                       quantity="2"/>
+    <stock type="ITEM_XC-11_CONDOR"                       quantity="1"/>
+    <stock type="ITEM_XC-2_STARFIRE"                      quantity="0"/>
+    <stock type="ITEM_XC-22_ECLIPSE"                      quantity="0"/>
+    <stock type="ITEM_XC-33_VENGEANCE"                    quantity="0"/>
+    <!-- *** XCAPS *** -->
+    <stock type="ITEM_XCAP-AG_GAIA"                       quantity="0"/>
+    <stock type="ITEM_XCAP_CANNON_CLIP"                   quantity="0"/>
+    <stock type="ITEM_XCAP_CANNON"                        quantity="0"/>
+    <stock type="ITEM_XCAP_ROCKET"                        quantity="0"/>
+    <stock type="ITEM_XCAP-AG_PLASMA"                     quantity="0"/>
+    <stock type="ITEM_XCAP_LASER"                         quantity="0"/>
+    <!-- *** UFOs *** -->
+    <stock type="ITEM_UFO_PROBE"                          quantity="0"/>
+    <stock type="ITEM_UFO_RECON"                          quantity="0"/>
+    <stock type="ITEM_UFO_ESCORT"                         quantity="0"/>
+    <stock type="ITEM_UFO_REAPER"                         quantity="0"/>
+    <stock type="ITEM_UFO_COLLECTOR"                      quantity="0"/>
+    <stock type="ITEM_UFO_INTIMIDATOR"                    quantity="0"/>
+    <stock type="ITEM_UFO_JUGGERNAUT"                     quantity="0"/>
+    <stock type="ITEM_UFO_ALIEN_FREIGHTER"                quantity="0"/>
+  </inventory>
+  <cheats
+    showAllXNetEntries="false"
+    showUndetectedUfos="false"
+    controlAlienMissions="false"
+    xcorpCantLooseAtStartOfMonth="false"
+    showAllAliens="false"
+    playerControlsAliens="false"
+    allowAutoWinBattlescape="true"
+  />
+</startSettings>

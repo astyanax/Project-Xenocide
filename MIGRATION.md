@@ -1,5 +1,11 @@
 # Migration Plan: XNA 3.0 → MonoGame
 
+The legacy XNA 3.0 codebase will be migrated to **MonoGame** for modern cross-platform support (Windows + Linux).
+
+The XNA 3.0→4.0 API conversion (Phase 1) targets MonoGame's XNA 4.0-like API directly — no intermediate framework or test step is needed. MonoGame's API surface is close enough that the conversion and the port happen together.
+
+See [README.md](README.md) for build prerequisites and quick-start instructions.
+
 ## 1. Current Dependencies (Legacy XNA 3.0 Stack)
 
 ### .NET Framework
@@ -24,7 +30,7 @@
 | `Microsoft.Xna.Framework` | 3.0.0.0 | Vector2/3/4, Matrix, Color, GameTime, etc. | ~147 |
 | `Microsoft.Xna.Framework.Game` | 3.0.0.0 | Game class, GameComponent | ~90 |
 | `Microsoft.Xna.Framework.Graphics` | 3.0.0.0 | GraphicsDevice, SpriteBatch, Model, Texture2D, Effect | ~57 |
-| `Microsoft.Xna.Framework.Content` | 3.0.0.0 | ContentManager.Load<T>() | ~45 |
+| `Microsoft.Xna.Framework.Content` | 3.0.0.0 | ContentManager.Load&lt;T&gt;() | ~45 |
 | `Microsoft.Xna.Framework.Storage` | 3.0.0.0 | StorageDevice, StorageContainer | ~40 (indirect via FileUtil) |
 | `Microsoft.Xna.Framework.Input` | 3.0.0.0 | KeyboardState, MouseState | ~15 |
 | `Microsoft.Xna.Framework.GamerServices` | 3.0.0.0 | Guide, SignedInGamer | 2 |
@@ -37,7 +43,7 @@
 | **CeGui.Renderers.Xna** | Custom fork | XNA GraphicsDevice rendering backend | ~6 |
 | **CeGui.WidgetSets.Taharez** | Custom fork | TaharezLook widget theme | ~3 |
 | **FMOD Ex** (via custom C# wrapper) | Legacy (pre-FMOD Studio) | Audio playback | ~15 + 7 dependency files |
-| **NUnit** | 2.2.9.0 | Unit testing (test project only) | Tests only |
+| **NUnit** | 2.2.9.0 | Unit testing (test project only) | Tests only — to be migrated to **xUnit.net** |
 
 ### Content Pipeline (XNA Game Studio 3.0)
 | Type | Assets | Format | Pipeline Importer |
@@ -56,8 +62,9 @@
 ### .NET
 | Dependency | Version | Purpose |
 |-----------|---------|---------|
-| .NET SDK | 8.0+ (target .NET 8.0 LTS) | Runtime target |
+| .NET SDK | 9.0+ | Runtime target |
 | `System.Text.Json` | Built-in | Replace BinaryFormatter for save/load |
+| **xUnit.net** | 2.9+ | Replace NUnit 2.2.9 for unit testing |
 
 ### MonoGame Framework (NuGet)
 | Package | Version | Purpose | Notes |
@@ -73,7 +80,7 @@
 | **Gum** (MonoGameGum) | ~500 | Active (2026) | WYSIWYG layout editor, retained-mode UI |
 | **MGUI** | ~400 | Active | WPF-style XAML layouts, rich widgets |
 | **GeonBit.UI** | ~350 | Active | Pre-styled, rapid setup |
-| **Myra** | ~855 | Active (2026) | XML-based layouts (FNA-native, works with MG) |
+| **Myra** | ~855 | Active (2026) | XML-based layouts, also works with MonoGame |
 | **ImGui.NET** | ~1k | Active | Immediate-mode (less ideal for complex game menus) |
 
 ### Audio (FMOD Ex Replacement — To Be Decided)
@@ -89,11 +96,14 @@
 
 ### Phase 0: Tooling & Setup
 - [ ] **Install .NET SDK 9.0** (or 10.0) — currently **NOT installed** (runtimes only)
+  - Windows: `Invoke-WebRequest -Uri https://builds.dotnet.microsoft.com/dotnet/scripts/v1/dotnet-install.ps1 -OutFile dotnet-install.ps1; .\dotnet-install.ps1 -Channel 9.0`
+  - Linux: `curl -sSL https://builds.dotnet.microsoft.com/dotnet/scripts/v1/dotnet-install.sh | bash /dev/stdin --channel 9.0`
 - [ ] Install MonoGame templates: `dotnet new install MonoGame.Templates.CSharp`
 - [ ] Install MGCB tools: `dotnet tool install -g dotnet-mgcb dotnet-mgcb-editor`
-- [ ] Create new MonoGame DesktopGL project
+- [ ] Create new MonoGame DesktopGL project: `dotnet new mgdesktopgl -o xna/trunk/Xenocide.MonoGame`
+- [ ] Add NuGet packages: `MonoGame.Framework.DesktopGL`, `MonoGame.Content.Builder.Task`
 - [ ] Set up MGCB content project (`.mgcb`) with all asset references
-- [ ] Restore source file structure into new project
+- [ ] Replace NUnit with xUnit.net in test project
 
 ### Phase 1: XNA 3.0 → 4.0 API Conversion
 - [ ] Replace `effect.Begin()/End()` → `Pass.Apply()` only
@@ -156,7 +166,8 @@
 - [ ] Remove old XNA 3.0 project files from active tree (archive if needed)
 - [ ] Remove Dependancies/ directory (CeGui, FMOD source no longer needed)
 - [ ] Remove old Lib/ directory (NUnit goes into NuGet)
-- [ ] Update README.md with new build instructions
+- [ ] Remove old Installers/ directory (NSIS + Inno Setup scripts)
+- [ ] Update README.md with final build instructions
 - [ ] Update CI/CD if applicable
 
 ---
@@ -165,11 +176,11 @@
 
 ### Required (not yet installed)
 
-| Software | Why | Download |
-|----------|-----|----------|
-| **.NET SDK 9.0** (or 10.0) | Core build tool — only runtimes are present currently | https://dotnet.microsoft.com/en-us/download/dotnet/9.0 |
-| **MonoGame templates** | `dotnet new mgdesktopgl` project template | `dotnet new install MonoGame.Templates.CSharp` |
-| **MGCB tools** | Content pipeline (model/spritefont/shader compilation) | `dotnet tool install -g dotnet-mgcb` |
+| Software | Why | Download / Command |
+|----------|-----|-------------------|
+| **.NET SDK 9.0** (or 10.0) | Core build tool — only runtimes are present currently | [dotnet.microsoft.com](https://dotnet.microsoft.com/en-us/download/dotnet/9.0) or install script |
+| **MonoGame templates** | `dotnet new mgdesktopgl` | `dotnet new install MonoGame.Templates.CSharp` |
+| **MGCB tools** | Content pipeline (models, shaders, fonts) | `dotnet tool install -g dotnet-mgcb dotnet-mgcb-editor` |
 
 ### Already Available
 
@@ -181,6 +192,6 @@
 
 ### Notes
 
-- **No Visual Studio required** — the MonoGame DesktopGL template works entirely from the `dotnet` CLI and VS Code. The old XNA 3.0 solution (`Xenocide.sln`) required Visual Studio 2008 and XNA Game Studio, but those are only needed for the original codebase, not the migrated one.
-- **XNA 3.0→4.0 API conversion will be done in code alone** — you don't need the old XNA toolchain installed unless you want to build the original project for reference. The conversion is a source-level mechanical change based on the well-documented API differences.
-- **For content (.fx shaders, .fbx models):** MGCB handles these natively. If you need to reference the original compiled output, the `xna/trunk/Xenocide/Content/` folder has the source assets. The MGCB tool re-imports from source, not from old `.xnb` files.
+- **No Visual Studio required** — MonoGame works from the `dotnet` CLI and VS Code. The old XNA 3.0 solution required Visual Studio 2008 and XNA Game Studio, but those are only needed for the original codebase.
+- **XNA 3.0→4.0 API conversion targets MonoGame directly** — we don't need an intermediate XNA 4.0 test step. The conversion is a source-level mechanical change applied while porting to the new MonoGame project.
+- **MonoGame content pipeline** (MGCB) handles .fbx, .fx, .spritefont, and textures natively into .xnb format via the `MonoGame.Content.Builder.Task` NuGet package.

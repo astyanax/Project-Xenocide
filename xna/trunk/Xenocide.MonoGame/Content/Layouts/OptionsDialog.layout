@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<GUILayout xmlns="http://ceguisharp.sourceforge.net/0.5/GUILayout"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://ceguisharp.sourceforge.net/0.5/GUILayout ..\..\..\..\Dependancies\CeGui\CeGui\GUILayout.xsd">
+	<Window Type="TaharezLook.TLFrameWindow" Name="dlgOptions">
+		<Property Name="Width" Value="0.8"/>
+		<Property Name="Height" Value="0.8"/>
+		<Property Name="TitlebarEnabled" Value="true"/>
+		<Property Name="CloseButtonEnabled" Value="false"/>
+		<Property Name="FrameEnabled" Value="true"/>
+		<Property Name="RollUpState" Value="false"/>
+		<Property Name="Text" Value="Options Menu" />
+
+		<Window Type="TaharezLook.TLButton" Name="btnLoad">
+			<Property Name="XPosition" Value="0.10"/>
+			<Property Name="YPosition" Value="0.25"/>
+			<Property Name="Width" Value="0.80"/>
+			<Property Name="Height" Value="0.10"/>
+			<Property Name="Text" Value="Load Game" />
+			<Event Name="Clicked" Function="OnLoadClicked"/>
+		</Window>
+		<Window Type="TaharezLook.TLButton" Name="btnSave">
+			<Property Name="XPosition" Value="0.10"/>
+			<Property Name="YPosition" Value="0.40"/>
+			<Property Name="Width" Value="0.80"/>
+			<Property Name="Height" Value="0.10"/>
+			<Property Name="Text" Value="Save Game" />
+			<Event Name="Clicked" Function="OnSaveClicked"/>
+		</Window>
+		<Window Type="TaharezLook.TLButton" Name="btnSound">
+			<Property Name="XPosition" Value="0.10"/>
+			<Property Name="YPosition" Value="0.55"/>
+			<Property Name="Width" Value="0.80"/>
+			<Property Name="Height" Value="0.10"/>
+			<Property Name="Text" Value="Sound Options" />
+			<Event Name="Clicked" Function="OnSoundClicked"/>
+		</Window>
+		<Window Type="TaharezLook.TLButton" Name="btnAbandon">
+			<Property Name="XPosition" Value="0.10"/>
+			<Property Name="YPosition" Value="0.70"/>
+			<Property Name="Width" Value="0.80"/>
+			<Property Name="Height" Value="0.10"/>
+			<Property Name="Text" Value="Abandon Game" />
+			<Event Name="Clicked" Function="OnAbandonClicked"/>
+			<Event Name="Clicked" Function="OnPlayButtonSound"/>
+		</Window>
+		<Window Type="TaharezLook.TLButton" Name="btnCancel">
+			<Property Name="XPosition" Value="0.10"/>
+			<Property Name="YPosition" Value="0.85"/>
+			<Property Name="Width" Value="0.80"/>
+			<Property Name="Height" Value="0.10"/>
+			<Property Name="Text" Value="Cancel" />
+			<Event Name="Clicked" Function="OnCancelClicked"/>
+		</Window>		
+	</Window>
+</GUILayout>

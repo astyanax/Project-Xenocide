@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<GUILayout xmlns="http://ceguisharp.sourceforge.net/0.5/GUILayout"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://ceguisharp.sourceforge.net/0.5/GUILayout ..\..\..\..\Dependancies\CeGui\CeGui\GUILayout.xsd">
+	<Window Type="TaharezLook.TLFrameWindow" Name="dlgLaunchIntercept">
+		<Property Name="Width" Value="0.8"/>
+		<Property Name="Height" Value="0.8"/>
+		<Property Name="TitlebarEnabled" Value="true"/>
+		<Property Name="CloseButtonEnabled" Value="false"/>
+		<Property Name="FrameEnabled" Value="true"/>
+		<Property Name="RollUpState" Value="false"/>
+		<Property Name="Text" Value="Launch Intercept" />
+		<Window Type="TaharezLook.TLMultiColumnList" Name="gridAircraft">
+			<Property Name="XPosition" Value="0.01"/>
+			<Property Name="YPosition" Value="0.08"/>
+			<Property Name="Width" Value="0.98"/>
+			<Property Name="Height" Value="0.60"/>
+			<Event Name="MouseDoubleClicked" Function="OnGridMouseDoubleClicked"/>
+		</Window>
+		<Window Type="TaharezLook.TLButton" Name="btnOk">
+			<Property Name="XPosition" Value="0.10"/>
+			<Property Name="YPosition" Value="0.92"/>
+			<Property Name="Width" Value="0.25"/>
+			<Property Name="Height" Value="0.07"/>
+			<Property Name="Text" Value="Ok" />
+			<Event Name="Clicked" Function="OnOkClicked"/>
+		</Window>
+		<Window Type="TaharezLook.TLButton" Name="btnCancel">
+			<Property Name="XPosition" Value="0.36"/>
+			<Property Name="YPosition" Value="0.92"/>
+			<Property Name="Width" Value="0.25"/>
+			<Property Name="Height" Value="0.07"/>
+			<Property Name="Text" Value="Cancel" />
+			<Event Name="Clicked" Function="OnCancelClicked"/>
+		</Window>
+	</Window>
+</GUILayout>

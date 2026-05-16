@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="FacilityConfig" xmlns="FacilityConfig" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="basic.xsd"/>
+	<xs:complexType name="facilityType">
+		<xs:sequence>
+			<xs:element name="size">
+				<xs:complexType>
+					<xs:attribute name="xSize" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:positiveInteger">
+								<xs:minInclusive value="1"/>
+								<xs:maxInclusive value="4"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="ySize" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:positiveInteger">
+								<xs:minInclusive value="1"/>
+								<xs:maxInclusive value="4"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="build">
+				<xs:complexType>
+					<xs:attribute name="time" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="cost" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="maintenance" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="scrapRevenue" type="xs:nonNegativeInteger" use="required"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="graphics">
+				<xs:complexType>
+					<xs:annotation>
+						<xs:documentation>The model to put in the view window.</xs:documentation>
+					</xs:annotation>
+					<xs:attribute name="model" type="xs:string" use="required" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="damage" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="facilityID" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="defenseFacilityType">
+		<xs:complexContent>
+			<xs:extension base="facilityType">
+				<xs:sequence>
+					<xs:element name="defense">
+						<xs:complexType>
+							<xs:attribute name="range" type="xs:positiveInteger" use="required"/>
+							<xs:attribute name="accuracy" use="required">
+								<xs:simpleType>
+									<xs:restriction base="xs:float">
+										<xs:maxInclusive value="1"/>
+										<xs:minExclusive value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:attribute>
+							<xs:attribute name="damage" type="xs:nonNegativeInteger" use="required"/>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="scanningFacilityType">
+		<xs:complexContent>
+			<xs:extension base="facilityType">
+				<xs:sequence>
+					<xs:element name="scanning">
+						<xs:complexType>
+							<!-- range is in kilometers -->
+							<xs:attribute name="range" type="xs:positiveInteger" use="required"/>
+							<!-- probability of detecting a UFO, if it stays within range for 30 minutes -->
+							<xs:attribute name="accuracy" use="required">
+								<xs:simpleType>
+									<xs:restriction base="xs:float">
+										<xs:maxInclusive value="1"/>
+										<xs:minExclusive value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:attribute>
+						    <!-- 
+						        dteviot: It might be the hyperwave decoder ability to decode 
+						        the destination etc. of the detected craft.
+						    -->
+							<xs:attribute name="decode" type="xs:boolean" use="required"/>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="projectFacilityType">
+		<xs:complexContent>
+			<xs:extension base="storageFacilityType">
+				<xs:sequence>
+					<xs:element name="project">
+						<xs:complexType>
+						    <!-- 
+						        dteviot: I _think_ projectmaxsize is the biggest project that can be built 
+						        in this facility. (From Apoc, where some projects needed the BIG lab/workshop) 
+						        It’s a post v1.0 feature.
+						    -->
+							<xs:attribute name="projectmaxsize" type="xs:positiveInteger" use="required"/>
+						    <!-- 
+						        dteviot: I _think_ productivityboost is another post v1.0 idea, 
+						        enhanced labs with higher productivity
+						    -->
+							<xs:attribute name="productivityboost" type="xs:float" default="1"/>
+							<xs:attribute name="outputType" use="required">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="research"/>
+										<xs:enumeration value="production"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:attribute>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="storageFacilityType">
+		<xs:complexContent>
+			<xs:extension base="facilityType">
+				<xs:sequence>
+					<xs:element name="storage">
+						<xs:complexType>
+							<xs:attribute name="type" type="storageTypeEnum" use="required"/>
+							<xs:attribute name="capacity" type="xs:nonNegativeInteger" use="required"/>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="shieldFacilityType">
+		<xs:complexContent>
+			<xs:extension base="facilityType">
+				<xs:sequence>
+					<xs:element name="shield">
+						<xs:complexType>
+							<xs:attribute name="shieldType" use="required">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="gravity"/>
+										<xs:enumeration value="mind"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:attribute>
+							<xs:attribute name="efficiency" use="required">
+								<xs:simpleType>
+									<xs:restriction base="xs:float">
+										<xs:maxInclusive value="1"/>
+										<xs:minInclusive value="0"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:attribute>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="facilities">
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element name="facility" type="facilityType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

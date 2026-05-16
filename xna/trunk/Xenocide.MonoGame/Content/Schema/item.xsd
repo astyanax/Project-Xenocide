@@ -1,0 +1,634 @@
+<?xml version="1.0"?>
+<xs:schema targetNamespace="ItemConfig" xmlns="ItemConfig" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="basic.xsd"/>
+
+	<!--****** "HELPER" TYPES ******-->
+	<xs:simpleType name="constInfiniteType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="infinite"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="extendedPositiveInteger">
+		<xs:union memberTypes="xs:positiveInteger constInfiniteType"/>
+	</xs:simpleType>
+	<xs:simpleType name="accuracyType">
+		<xs:restriction base="xs:float">
+			<xs:minExclusive value="0"/>
+			<xs:maxInclusive value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="actionType" abstract="true">
+		<xs:annotation>
+			<xs:documentation source="guyver">Abstract action type. If you want to define custom action, you have to specify it's type.</xs:documentation>
+			<xs:documentation source="centurion">Cost in either TUs or proportion of all TUs.</xs:documentation>
+			<xs:documentation source="centurion">startSound is sound to play when action starts.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="time" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="percentage" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:float">
+					<xs:minInclusive value="0"/>
+					<xs:maxInclusive value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="startSound" type="xs:string" use="optional" default=""/>
+	</xs:complexType>
+	<xs:complexType name="throwActionType">
+		<xs:complexContent>
+			<xs:extension base="actionType">
+				<xs:attribute name="name" type="xs:string" use="optional" default="ACTION_THROW"/>
+				<xs:attribute name="range" use="optional" default="10.0">
+					<xs:simpleType>
+						<xs:restriction base="xs:float">
+							<xs:minExclusive value="0"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="shootActionType">
+		<xs:complexContent>
+			<xs:extension base="actionType">
+				<xs:attribute name="name" type="xs:string" use="optional" default="ACTION_SNAP_SHOT"/>
+				<xs:attribute name="accuracy" type="accuracyType" use="required"/>
+				<xs:attribute name="range" use="required">
+					<!-- attack range, in meters-->
+					<xs:simpleType>
+						<xs:restriction base="xs:float">
+							<xs:minExclusive value="0"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="shots" type="xs:positiveInteger" use="optional" default="1">
+					<xs:annotation>
+						<xs:documentation>Number of times weapon will be fired</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="primeActionType">
+		<xs:complexContent>
+			<xs:extension base="actionType">
+				<xs:attribute name="name" type="xs:string" use="optional" default="ACTION_PRIME"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="guideActionType">
+		<xs:complexContent>
+			<xs:extension base="actionType">
+				<xs:attribute name="name" type="xs:string" use="optional" default="ACTION_GUIDE"/>
+				<xs:attribute name="accuracy" type="accuracyType" use="required"/>
+				<xs:attribute name="waypoints" type="xs:positiveInteger" use="optional" default="10">
+					<xs:annotation>
+						<xs:documentation source="guyver">Number of waypoints that can be defined</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="hitActionType">
+		<xs:complexContent>
+			<xs:extension base="actionType">
+				<xs:attribute name="name" type="xs:string" use="optional" default="ACTION_HIT"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="customActionType">
+		<xs:annotation>
+			<xs:documentation>Use this if you want your own action</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="actionType">
+				<xs:attribute name="name" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="damageModeEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="touch">
+				<xs:annotation>
+					<xs:documentation source="centurion">HTH attack</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ranged">
+				<xs:annotation>
+					<xs:documentation source="centurion">LOS required/asked</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="direct">
+				<xs:annotation>
+					<xs:documentation source="centurion">No LOS required</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="damageType">
+		<xs:attribute name="mode" type="damageModeEnum" use="optional" default="ranged"/>
+		<xs:attribute name="type" type="damageTypeEnum" use="required"/>
+		<xs:attribute name="amount" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+
+	<!--****** construct element ******-->
+	<xs:complexType name="constructType">
+		<xs:annotation>
+			<xs:documentation source="dteviot">Holds details for a project that constructs the item</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="facility" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>What facility is needed to build the item?</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="type" type="facilityID" use="required" />
+					<xs:attribute name="space" type="xs:nonNegativeInteger" use="required" />
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="cost" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>What materials, money and time are used up building the item?</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence minOccurs="0" maxOccurs="unbounded">
+						<xs:element name="material">
+							<xs:complexType>
+								<xs:attribute name="type" type="itemID" use="required" />
+								<xs:attribute name="quantity" type="xs:positiveInteger" use="required" />
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="hours" type="xs:nonNegativeInteger" use="required" />
+					<xs:attribute name="money" type="xs:nonNegativeInteger" use="required" />
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+  <!-- Item is a suit of armor -->
+  <xs:complexType name="armorInfoType">
+    <xs:annotation>
+      <xs:documentation source="dteviot">
+        This item is armor that can be worn by X-Corp soldiers
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="armorType" type="armorTypeEnum" use="required"/>
+  </xs:complexType>
+
+  <!-- Item is an X-Cap -->
+  <xs:complexType name="xcapInfoType">
+    <xs:annotation>
+      <xs:documentation source="dteviot">
+        This item is an X-Cap
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="chassis" type="raceTypeEnum" use="required"/>
+  </xs:complexType>
+
+  <!-- Attributes related to item being carried by soldiers -->
+  <xs:complexType name="carryInfoType">
+    <xs:attribute name="xSize" use="required">
+      <xs:annotation>
+        <xs:documentation source="dteviot">Size of item in soldier's backpack</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+        <xs:restriction base="xs:positiveInteger">
+          <xs:minInclusive value="1"/>
+          <xs:maxInclusive value="8"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="ySize" use="required">
+      <xs:annotation>
+        <xs:documentation source="dteviot">Size of item in soldier's backpack</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+        <xs:restriction base="xs:positiveInteger">
+          <xs:minInclusive value="1"/>
+          <xs:maxInclusive value="8"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="mass" use="required">
+      <xs:annotation>
+        <xs:documentation source="dteviot">Item's weight, for soldier's encumberance</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+        <xs:restriction base="xs:positiveInteger">
+          <xs:minInclusive value="1"/>
+          <xs:maxInclusive value="100000"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="equipable" type="xs:boolean" use="required">
+      <xs:annotation>
+        <xs:documentation source="dteviot">
+          false for items that soldiers can't be equiped with when in base e.g. corpse,
+          xenium.  Note, these items CAN be picked up on a Battlescape
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="bothHands" type="xs:boolean" use="required">
+      <xs:annotation>
+        <xs:documentation source="Loshult">
+          Indicates if the item requires both hands to be used without performance degradation.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="spriteTop" type="xs:nonNegativeInteger" use="required">
+      <xs:annotation>
+        <xs:documentation source="dteviot">
+          Row of cell in sprite sheet holding top left corner of sprite used for this item on soldier inventory
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="spriteLeft" type="xs:nonNegativeInteger" use="required">
+      <xs:annotation>
+        <xs:documentation source="dteviot">
+          Column of cell in sprite sheet holding top left corner of sprite used for this item on soldier inventory
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+
+  <!-- Attributes related to items on a battlescape -->
+  <xs:complexType name="battlescapeInfoType">
+    <xs:annotation>
+      <xs:documentation source="dteviot">
+        Information used by item on battlescape
+      </xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="carryInfo"  type="carryInfoType"   minOccurs="0" maxOccurs="1" />
+
+      <!-- 3D model -->
+      <xs:element name="graphics"                          minOccurs="1" maxOccurs="1" >
+        <xs:annotation>
+          <xs:documentation source="dteviot">
+            file holding the 3D model of this item for drawing on battlescape.
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:attribute name="model" type="xs:string" use="required"/>
+          <xs:attribute name="x"     type="xs:float"  use="required" />
+          <xs:attribute name="y"     type="xs:float"  use="required" />
+          <xs:attribute name="z"     type="xs:float"  use="required" />
+          <xs:attribute name="scale" type="xs:float"  use="optional" default="0.0"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+
+    <!-- Item's ability to tolerate damage -->
+    <xs:attribute name="armor"  type="xs:nonNegativeInteger" use="required">
+      <xs:annotation>
+        <xs:documentation source="dteviot">
+          Attacks less than or equal to this won't effect the item, over this level will destory it
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+
+    <!-- Is Item a terrorist's intergral weapon? (i.e. a "virtual" item)-->
+    <xs:attribute name="virtual"  type="xs:boolean" use="optional" default="false">
+    </xs:attribute>
+  </xs:complexType>
+
+  <!-- Ammo that an item may contain-->
+  <xs:complexType name="ammoType">
+    <xs:annotation>
+      <xs:documentation source="dteviot">Describes ammo that this item can contain</xs:documentation>
+    </xs:annotation>
+    <xs:sequence minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="ammoName"  minOccurs="1" maxOccurs="1">
+        <xs:complexType>
+          <xs:attribute name="name" type="itemID" use="required" />
+        </xs:complexType>
+      </xs:element>
+      </xs:sequence>
+    <xs:attribute name="capacity" type="xs:positiveInteger"  use="required"/>
+  </xs:complexType>
+
+  <!-- List of actions an item can do on the battlescape -->
+  <xs:complexType name="actionsListType">
+    <xs:sequence minOccurs="1" maxOccurs="1">
+      <xs:choice  minOccurs="1" maxOccurs="unbounded">
+        <xs:element name="throw"  type="throwActionType" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="prime"  type="primeActionType" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="shoot"  type="shootActionType" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="guide"  type="guideActionType" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="hit"    type="hitActionType"   minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="action" type="actionType"      minOccurs="0" maxOccurs="unbounded"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!--****** Info specific to craft ******-->
+  <xs:complexType name="hullType">
+    <xs:annotation>
+      <xs:documentation source="dteviot">Description of how much punishment a craft (human or UFO) can take.</xs:documentation>
+    </xs:annotation>
+      <xs:attribute name="hardness" use="required">
+        <xs:annotation>
+          <xs:documentation source="guyver">This is some sort of attribute, that will be used in calculating damage caused to a ship. Use of this attribute can be connected with craft weapons, which can have attribute telling how armor pircering particular weapon is, and depending on that how much damage is done to attacked ship.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:float">
+            <xs:minInclusive value="0" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="maxDamage" type="xs:positiveInteger" use="required">
+        <xs:annotation>
+          <xs:documentation source="guyver">How much damage points a craft can take before going down.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+  </xs:complexType>
+	<xs:complexType name="craftInfoType">
+		<xs:sequence>
+			<xs:element name="specs">
+				<xs:complexType>
+					<xs:sequence>
+						<!--****** engine ******-->
+						<xs:element name="engine" minOccurs="1">
+							<xs:complexType>
+								<xs:annotation>
+									<xs:documentation>Engine types</xs:documentation>
+								</xs:annotation>
+								<xs:attribute name="acceleration" use="required">
+									<xs:simpleType>
+										<xs:restriction base="xs:float">
+											<xs:minExclusive value="0" />
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="maxSpeed" use="required">
+									<!--****** maxSpeed is meters/second ******-->
+									<xs:simpleType>
+										<xs:restriction base="xs:float">
+											<xs:minExclusive value="0" />
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<!-- consumptionRate is units/hour -->
+								<xs:attribute name="consumptionRate" type="xs:float" use="required" />
+								<xs:attribute name="maxFuel" type="xs:nonNegativeInteger" use="required" />
+								<xs:attribute name="fuelType" use="required">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="hydrogen" />
+											<xs:enumeration value="xenium" />
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+						<!--****** hull ******-->
+						<xs:element name="hull" type="hullType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="mantainance" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation source="guyver">Only relevant for human craft.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="montlyCost" type="xs:nonNegativeInteger" use="required" />
+					<xs:attribute name="repairCost" type="xs:nonNegativeInteger" use="required">
+						<xs:annotation>
+							<xs:documentation>Repair cost per one damage point.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="capacity" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation source="dteviot">what the craft can carry.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="numHardpoints" type="xs:nonNegativeInteger" use="required" />
+					<xs:attribute name="maxHumans" type="xs:nonNegativeInteger" use="required" />
+					<xs:attribute name="maxXcaps" type="xs:nonNegativeInteger" use="required" />
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="environments" use="optional" default="air">
+			<xs:annotation>
+				<xs:documentation source="centurion">Air, water, deep water, Mars; should come handy for v1+</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:list itemType="environmentType" />
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+
+  <!--****** UFO TYPE ******-->
+  <xs:simpleType name="ufoSize">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="VERY_SMALL"/>
+      <xs:enumeration value="SMALL"/>
+      <xs:enumeration value="MEDIUM"/>
+      <xs:enumeration value="LARGE"/>
+      <xs:enumeration value="VERY_LARGE"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ufoInfoType">
+    <xs:sequence>
+      <xs:element name="hull" type="hullType" minOccurs="1" maxOccurs="1" />
+      <xs:element name="weapon" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:attribute name="name" type="itemID" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="salvage" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>What materials can be obtained from salvaging the ufo</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence minOccurs="1" maxOccurs="unbounded">
+            <xs:element name="material">
+              <xs:complexType>
+                <xs:attribute name="type" type="itemID" use="required" />
+                <xs:attribute name="quantity" type="xs:positiveInteger" use="required" />
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="crew" minOccurs="1" maxOccurs="7">
+        <xs:annotation>
+          <xs:documentation>
+            What aliens of each rank are carried by the UFO?
+            minEasy = minimum number of this rank, on easiest difficulty level
+            minHard = minimum number of this rank, on hardest difficulty level
+            extra   = can have up to this many extra aliens
+          </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:attribute name="rank"    type="rankTypeEnum"          use="required" />
+          <xs:attribute name="minEasy" type="xs:nonNegativeInteger" use="required" />
+          <xs:attribute name="minHard" type="xs:nonNegativeInteger" use="required" />
+          <xs:attribute name="extra"   type="xs:nonNegativeInteger" use="required" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="maxSpeed" use="required">
+      <!--****** maxSpeed is meters/second ******-->
+      <xs:simpleType>
+        <xs:restriction base="xs:float">
+          <xs:minExclusive value="0" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="size" type="ufoSize" use="required" />
+  </xs:complexType>
+	<!--****** BASE ITEM TYPES ******-->
+	<xs:complexType name="itemType">
+		<xs:sequence>
+			<xs:element name="storage">
+				<xs:complexType>
+					<xs:attribute name="type" type="storageTypeEnum" use="required"/>
+					<xs:attribute name="units" type="xs:nonNegativeInteger" use="required"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="price">
+				<xs:complexType>
+					<xs:attribute name="buy" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="sell" type="xs:nonNegativeInteger" use="required"/>
+				</xs:complexType>
+			</xs:element>
+      <xs:element name="construct"       type="constructType"       minOccurs="0" maxOccurs="1" />
+      <xs:element name="battlescapeInfo" type="battlescapeInfoType" minOccurs="0" maxOccurs="1" />
+      <xs:element name="armorInfo"       type="armorInfoType"       minOccurs="0" maxOccurs="1" />
+      <xs:element name="xcapInfo"        type="xcapInfoType"        minOccurs="0" maxOccurs="1" />
+      <xs:element name="ammo"            type="ammoType"            minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="actions"         type="actionsListType"     minOccurs="0" maxOccurs="1" />
+      </xs:sequence>
+		<xs:attribute name="id" type="itemID" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		
+		<!-- Exact meaning of score depends on type of item -->
+		<!-- If UFO, number of points gained for destroying UFO -->
+		<!-- If craft, number of points lost if craft is shot down -->
+		<!-- Otherwise, it's  gain from recovering item from a battlescape -->
+		<xs:attribute name="score" type="xs:float" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="troopItemType">
+		<xs:complexContent>
+			<xs:extension base="itemType">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="weaponItemType" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="troopItemType">
+				<xs:sequence>
+					<xs:element name="damage" type="damageType" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+<!-- An X-Corp employee (Soldier, Engineer, Scientist) -->
+  <xs:complexType name="personItemType" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="itemType">
+        <xs:sequence>
+          <xs:element name="statistics" minOccurs="1" maxOccurs="1">
+            <xs:complexType>
+              <xs:attribute name="monthlySalary" type="xs:nonNegativeInteger"/>
+              <xs:attribute name="worksIn"       type="storageTypeEnum"/>
+              <xs:attribute name="skillLevel"    type="xs:nonNegativeInteger"/>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- A weapon carried by an Aircraft or UFO -->
+  <xs:complexType name="craftItemType">
+		<xs:complexContent>
+			<xs:extension base="itemType">
+				<xs:sequence>
+					<xs:element name="craftInfo" type="craftInfoType" minOccurs="1" maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+  <xs:complexType name="ufoItemType">
+    <xs:complexContent>
+      <xs:extension base="itemType">
+        <xs:sequence>
+          <xs:element name="ufoInfo" type="ufoInfoType" minOccurs="1" maxOccurs="1" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+	<!--****** DERIVED TYPES ******-->
+	<xs:element name="action" type="actionType"/>
+	<xs:element name="shoot" type="shootActionType"/>
+	<xs:element name="guide" type="guideActionType"/>
+
+  <!-- A magazine (container of ammo) should change name from clip to mag-->
+	<xs:complexType name="clipItemType">
+		<xs:annotation>
+			<xs:documentation source="dteviot">Represents a magazine (a "container" of ammo), as well as the damage inflicted by the ammo.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="itemType">
+				<xs:sequence>
+					<xs:element name="damage" type="damageType"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="equipmentItemType">
+		<xs:complexContent>
+			<xs:extension base="itemType" />
+		</xs:complexContent>
+	</xs:complexType>
+
+	<!--****** WEAPONS ITEM TYPES ******-->
+	<xs:complexType name="rangedWeaponItemType">
+		<xs:complexContent>
+			<xs:extension base="weaponItemType" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="craftWeaponItemType">
+		<xs:complexContent>
+			<xs:extension base="itemType">
+				<xs:sequence>
+					<xs:element name="damage" type="damageType" minOccurs="0" maxOccurs="1"/>
+					<xs:choice maxOccurs="unbounded">
+						<xs:element ref="shoot"/>
+						<xs:element ref="guide"/>
+					</xs:choice>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="guidedWeaponItemType">
+		<xs:complexContent>
+			<xs:extension base="weaponItemType" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="grenadeWeaponItemType">
+		<xs:complexContent>
+			<xs:extension base="weaponItemType" />
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="meleeWeaponItemType">
+		<xs:complexContent>
+			<xs:extension base="weaponItemType" />
+		</xs:complexContent>
+	</xs:complexType>
+	<!--****** MASTER ITEM LIST ******-->
+	<xs:element name="itemList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="item" type="itemType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+		<!-- Item ID should be the primary key -->
+	</xs:element>
+</xs:schema>
