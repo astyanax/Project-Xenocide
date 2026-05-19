@@ -95,35 +95,42 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 ## 3. Migration Phases & Roadmap
 
 ### Phase 0: Tooling & Setup
-- [ ] **Install .NET SDK 9.0** (or 10.0) — currently **NOT installed** (runtimes only)
-  - Windows: `Invoke-WebRequest -Uri https://builds.dotnet.microsoft.com/dotnet/scripts/v1/dotnet-install.ps1 -OutFile dotnet-install.ps1; .\dotnet-install.ps1 -Channel 9.0`
-  - Linux: `curl -sSL https://builds.dotnet.microsoft.com/dotnet/scripts/v1/dotnet-install.sh | bash /dev/stdin --channel 9.0`
-- [ ] Install MonoGame templates: `dotnet new install MonoGame.Templates.CSharp`
-- [ ] Install MGCB tools: `dotnet tool install -g dotnet-mgcb dotnet-mgcb-editor`
-- [ ] Create new MonoGame DesktopGL project: `dotnet new mgdesktopgl -o xna/trunk/Xenocide.MonoGame`
-- [ ] Add NuGet packages: `MonoGame.Framework.DesktopGL`, `MonoGame.Content.Builder.Task`
+- [x] **Install .NET SDK 9.0** — ✅ Done (detected on system)
+- [x] Install MonoGame templates: `dotnet new install MonoGame.Templates.CSharp` — ✅ Done
+- [x] Install MGCB tools: `dotnet tool install -g dotnet-mgcb dotnet-mgcb-editor` — ✅ Done
+- [x] Create new MonoGame DesktopGL project: `dotnet new mgdesktopgl -o xna/trunk/Xenocide.MonoGame` — ✅ Done
+- [x] Add NuGet packages: `MonoGame.Framework.DesktopGL`, `MonoGame.Content.Builder.Task` — ✅ Done
 - [ ] Set up MGCB content project (`.mgcb`) with all asset references
 - [ ] Replace NUnit with xUnit.net in test project
 
 ### Phase 1: XNA 3.0 → 4.0 API Conversion
-- [ ] Replace `effect.Begin()/End()` → `Pass.Apply()` only
-- [ ] Replace `GraphicsDevice.RenderState.*` → state objects (BlendState, DepthStencilState, RasterizerState)
-- [ ] Replace `GraphicsDevice.VertexDeclaration` assignments → remove
-- [ ] Replace `GraphicsDevice.Vertices[0].SetSource()` → `SetVertexBuffer()`
-- [ ] Replace `SpriteBatch.Begin(blend, sort, save)` → `Begin(sort, blend)`
-- [ ] Replace `ResolveTexture2D` → `RenderTarget2D`
-- [ ] Replace point sprites → triangle-based rendering
-- [ ] Move `Color` from `Microsoft.Xna.Framework.Graphics` → `Microsoft.Xna.Framework`
-- [ ] Replace `StorageDevice`/`StorageContainer` → `System.IO` file operations
-- [ ] Remove `GamerServices` references
-- [ ] Update `VertexElement` constructors
+- [x] Replace `effect.Begin()/End()` → `Pass.Apply()` only — ✅ Done
+- [x] Replace `GraphicsDevice.RenderState.*` → state objects — ✅ Done
+- [x] Replace `GraphicsDevice.VertexDeclaration` assignments → remove — ✅ Done
+- [x] Replace `GraphicsDevice.Vertices[0].SetSource()` → `SetVertexBuffer()` — ✅ Done
+- [x] Replace `SpriteBatch.Begin(blend, sort, save)` → `Begin(sort, blend)` — ✅ Done
+- [x] Replace `ResolveTexture2D` → `RenderTarget2D` — ✅ Done
+- [x] Replace point sprites → triangle-based rendering — ✅ Done
+- [x] Move `Color` from `Graphics` → `Framework` namespace — ✅ Done
+- [x] Replace `StorageDevice`/`StorageContainer` → `System.IO` — ✅ Done
+- [x] Remove `GamerServices` references — ✅ Done
+- [x] Update `VertexElement` constructors — ✅ Done
+
+### Phase 1.5: Stub Dependencies & Compilation Fix
+- [x] Add CeGui# stubs (70+ source files' worth of types, events, widgets) — ✅ Done
+- [x] Add FMOD Ex audio stubs (`IAudioSystem` interface) — ✅ Done
+- [x] Add `System.Windows.Forms.MouseButtons` stub — ✅ Done
+- [x] Add `CeGui.WidgetSets.Taharez` namespace stub — ✅ Done
+- [x] Fix all type mismatches between stubs and consuming code — ✅ Done
+- [x] MonoGame project compiles from `dotnet build` with **0 errors** — ✅ Done
 
 ### Phase 2: Platform-Specific Code Cleanup
-- [ ] Replace `System.Windows.Forms.MessageBox` → in-game message dialog
-- [ ] Replace `System.Windows.Forms.MouseButtons` → MonoGame Input helpers
-- [ ] Replace `System.Drawing.SizeF`/`PointF` → custom structs or Vector2
-- [ ] Replace `System.Drawing.Rectangle` → `Microsoft.Xna.Framework.Rectangle`
-- [ ] Replace `ErrorDialogue` WinForms Form → in-game or console error display
+- [x] Replace `System.Windows.Forms.MouseButtons` → stub provided (WinFormsStubs.cs) — ✅ Done
+- [x] Replace `System.Windows.Forms.MessageBox` → already using custom in-game `MessageBoxDialog` — ✅ Not needed
+- [x] Replace `System.Drawing.SizeF` → `CeGui.Size` (struct with float Width/Height) — ✅ Done
+- [x] Replace `System.Drawing.PointF` → `CeGui.Point` (struct with float X/Y) — ✅ Done
+- [x] Replace `System.Drawing.Rectangle` → not used in codebase — ✅ Not needed
+- [x] Replace `ErrorDialogue` WinForms Form → not present in codebase — ✅ Not needed
 
 ### Phase 3: Save/Load System
 - [ ] Remove `BinaryFormatter` (deprecated, Windows-only)
@@ -195,3 +202,23 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - **No Visual Studio required** — MonoGame works from the `dotnet` CLI and VS Code. The old XNA 3.0 solution required Visual Studio 2008 and XNA Game Studio, but those are only needed for the original codebase.
 - **XNA 3.0→4.0 API conversion targets MonoGame directly** — we don't need an intermediate XNA 4.0 test step. The conversion is a source-level mechanical change applied while porting to the new MonoGame project.
 - **MonoGame content pipeline** (MGCB) handles .fbx, .fx, .spritefont, and textures natively into .xnb format via the `MonoGame.Content.Builder.Task` NuGet package.
+
+---
+
+## 5. Next Steps (Recommended Order)
+
+### Immediate (get the game running)
+1. **Content Pipeline Setup** — Create `.mgcb` project, import all .fbx/.fx/.spritefont/.jpg/.png assets, verify `Content.Load<T>()` works at runtime
+2. **Replace CeGui# stubs with real implementation** — Evaluate Gum/MGUI/Myra for the GUI replacement, or flesh out stubs enough to render basic screens
+3. **Replace audio stubs** — Implement the MonoGame `SoundEffect`/`Song` backend for `IAudioSystem`
+4. **Runtime test** — Launch the game, fix any `NullReferenceException` / `MissingMethodException` from stub methods
+
+### Short-term (functionality)
+5. **Save/Load System** — Replace `BinaryFormatter` with `System.Text.Json`
+6. **Remove remaining `System.Windows.Forms` references** — Replace message boxes with in-game dialogs
+7. **Add xUnit.net test project** — Port critical tests from NUnit 2.2.9
+
+### Medium-term (stability)
+8. **Cross-platform validation** — Build and run on Linux; fix path casing, separator issues
+9. **Performance profiling** — OpenGL backend optimization
+10. **Cleanup** — Remove old XNA 3.0 project files, `Dependencies/`, `Lib/`, `Installers/` directories
