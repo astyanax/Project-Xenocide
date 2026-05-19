@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -32,7 +32,6 @@ using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Diagnostics;
-using System.Drawing;
 using System.Xml;
 using System.Xml.XPath;
 

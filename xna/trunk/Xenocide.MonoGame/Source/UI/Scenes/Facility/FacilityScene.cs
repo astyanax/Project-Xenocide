@@ -29,8 +29,6 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Diagnostics;
-using System.Drawing;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -163,7 +161,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
         /// </summary>
         /// <param name="coords">The position in the viewport (in relative co-ords)</param>
         /// <returns>The cell in the base's layout or -1, -1 if point isn't inside base</returns>
-        public Vector2 WindowToCell(PointF coords)
+        public Vector2 WindowToCell(CeGui.Point coords)
         {
             // basic trig, compute viewing fustrum dimension at distance base floorplan is
             double opositeSideLength = Math.Tan(ViewAngle / 2.0) * cameraPosition.Y * 2.0f;

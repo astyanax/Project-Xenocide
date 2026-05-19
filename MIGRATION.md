@@ -131,6 +131,16 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] Replace `System.Drawing.PointF` → `CeGui.Point` (struct with float X/Y) — ✅ Done
 - [x] Replace `System.Drawing.Rectangle` → not used in codebase — ✅ Not needed
 - [x] Replace `ErrorDialogue` WinForms Form → not present in codebase — ✅ Not needed
+- [x] Remove dead `using System.Drawing;` from all 36 game code files — ✅ Done
+- [x] Add missing `using System.Diagnostics;` (was masked by transitive System.Drawing dependency) — ✅ Done
+
+**System.Drawing removal complete.** Only remaining reference is in `Source/Stubs/CeGuiStubs.cs` where it provides implicit conversion operators (`Point↔PointF`, `Size↔SizeF`) for backward compatibility during the transitional period. 
+
+**Plan to remove System.Drawing from CeGuiStubs:**
+1. Replace all `PointF`/`SizeF` implicit operators in CeGuiStubs with direct `CeGui.Point`/`CeGui.Size` usage in callers — already done
+2. Remove `using System.Drawing;` and the two implicit operator pairs from CeGuiStubs
+3. This happens naturally when the real GUI library replaces the stub OR can be done earlier as a standalone cleanup
+4. After removal, the entire codebase will have zero `System.Drawing` dependency, improving cross-platform compatibility and reducing assembly load
 
 ### Phase 3: Save/Load System
 - [ ] Remove `BinaryFormatter` (deprecated, Windows-only)

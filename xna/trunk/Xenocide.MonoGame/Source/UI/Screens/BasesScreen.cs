@@ -30,7 +30,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
-using System.Drawing;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -411,7 +410,7 @@ namespace ProjectXenocide.UI.Screens
         private Microsoft.Xna.Framework.Vector2 MouseToCell(CeGui.MouseEventArgs e)
         {
             //convert co-ords from absolute to relative into the scene window
-            PointF coords2 = sceneWindow.AbsoluteToRelative(new PointF(
+            CeGui.Point coords2 = sceneWindow.AbsoluteToRelative(new CeGui.Point(
                 e.Position.X - sceneWindow.AbsoluteX,
                 e.Position.Y - sceneWindow.AbsoluteY));
 

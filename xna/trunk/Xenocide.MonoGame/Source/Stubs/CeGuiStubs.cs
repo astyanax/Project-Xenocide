@@ -1,3 +1,8 @@
+// NOTE(System.Drawing): The `using System.Drawing;` below exists solely to provide
+// implicit conversion operators (Point↔PointF, Size↔SizeF) for backward compatibility.
+// Once the real GUI library replaces this stub AND all callers use CeGui.Point/CeGui.Size
+// directly, remove `using System.Drawing;` and the two operator pairs on lines 8-9.
+// At that point this file will have zero System.Drawing dependency.
 using System;
 using System.Collections.Generic;
 using System.Drawing;

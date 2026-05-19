@@ -30,8 +30,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
-using System.Drawing;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
@@ -283,7 +281,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// <param name="coords">The position in the viewport (in relative co-ords)</param>
         /// <returns>The geoposition or null if point isn't on globe</returns>
         /// <remarks>Uses equation from http://wikipedia.org/Ray-sphere_intersection.htm</remarks>
-        public GeoPosition WindowToGeoPosition(PointF coords)
+        public GeoPosition WindowToGeoPosition(CeGui.Point coords)
         {
             double lx = Math.Tan(ViewAngle / 2.0) * (coords.X - 0.5) * 2.0 * AspectRatio;
             double ly = Math.Tan(ViewAngle / 2.0) * (coords.Y - 0.5) * -2.0;

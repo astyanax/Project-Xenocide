@@ -29,9 +29,8 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
+using System.Diagnostics;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -535,7 +534,7 @@ namespace ProjectXenocide.UI.Screens
         /// <returns>corresponding Geoposition, or null if not on Geoscape</returns>
         private GeoPosition WindowPixelToGeoPosition(float X, float Y)
         {
-            PointF coords2 = SceneWindow.AbsoluteToRelative(new PointF(
+            CeGui.Point coords2 = SceneWindow.AbsoluteToRelative(new CeGui.Point(
                 X - SceneWindow.AbsoluteX,
                 Y - SceneWindow.AbsoluteY));
             return geoscapeScene.WindowToGeoPosition(coords2);
