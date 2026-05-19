@@ -74,14 +74,19 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 | `dotnet-mgcb` (CLI tool) | 3.8.4+ | Content pipeline CLI | `dotnet tool install -g dotnet-mgcb` |
 | `dotnet-mgcb-editor` (CLI tool) | 3.8.4+ | GUI content project editor | `dotnet tool install -g dotnet-mgcb-editor` |
 
-### GUI (CeGui# Replacement — To Be Decided)
-| Option | Stars | Status | Approach |
-|--------|-------|--------|----------|
-| **Gum** (MonoGameGum) | ~500 | Active (2026) | WYSIWYG layout editor, retained-mode UI |
-| **MGUI** | ~400 | Active | WPF-style XAML layouts, rich widgets |
-| **GeonBit.UI** | ~350 | Active | Pre-styled, rapid setup |
-| **Myra** | ~855 | Active (2026) | XML-based layouts, also works with MonoGame |
-| **ImGui.NET** | ~1k | Active | Immediate-mode (less ideal for complex game menus) |
+### GUI (CeGui# Replacement — DECIDED: Gum)
+| Option | Stars | Status | Approach | Analysis |
+|--------|-------|--------|----------|----------|
+| **Gum** ✅ SELECTED | ~450 | Active (Mar 2026) | WYSIWYG layout editor + retained-mode UI + MVVM binding | **Winner (9.40/10).** Visual designer (Gum UI Tool), cross-platform NuGet, WPF-style data binding, adopted by MonoGame.Extended, 40 contributors, monthly releases. Full docs + official MonoGame tutorial. |
+| **MGUI** | ~100 | Active (Mar 2026) | WPF-style XAML layouts, rich widgets | **Runner-up (4.05/10).** Richer controls (TabControl, Expander), WPF-parity binding engine, runtime XAML. **No NuGet** (source-clone only), **no visual designer**, cross-platform requires manual .csproj edit, very small community (2 contributors). |
+| **GeonBit.UI** | ~508 | Stale (Apr 2024) | Pre-styled, rapid setup | **Third (3.55/10).** Simple to use but too minimal for complex screens. No binding, no designer, limited layout. Author now recommends successor (Iguina). |
+| **Myra** | ~855 | Active (Mar 2026) | XML-based layouts | **Fourth (3.50/10).** Well-established but no data binding, no visual designer, basic controls only. Good for simple menus but lacks layout flexibility. |
+| **ImGui.NET** | ~2k | Active (Jan 2026) | Immediate-mode | **Architectural mismatch (4.40/10 weighted).** Excellent for debug/tools UI but immediate-mode is fundamentally wrong for retained-mode game screens. No data binding, no widget tree persistence, every frame rebuilds state. |
+
+### GUI (CeGui# Replacement — Decided)
+| Package | Version | Purpose | Notes |
+|---------|---------|---------|-------|
+| `Gum.MonoGame` | Latest | UI layout engine + Forms controls + MVVM binding | NuGet, cross-platform, WYSIWYG designer available |
 
 ### Audio (FMOD Ex Replacement — To Be Decided)
 | Option | Status | Notes |
@@ -177,14 +182,110 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - `BinaryFormatter` dependency completely removed from codebase
 - `SaveGameHeader` inner class removed (replaced by `GameStateSerializer` wrapper)
 
-### Phase 4: GUI Migration (CeGui# Replacement)
-- [ ] Evaluate and select replacement (propose: Gum or MGUI)
-- [ ] Build prototype of StartScreen in chosen framework
-- [ ] Port **core screens**: StartScreen, GeoscapeScreen, BattlescapeScreen, BasesScreen, ResearchScreen
-- [ ] Port **management screens**: PurchaseScreen, SellScreen, StoresScreen, EquipSoldierScreen, ManufactureScreen
-- [ ] Port **auxiliary screens**: CreditsScreen, MonthlyReportScreen, StatisticsScreen, XNetScreen, LoadSaveGameScreen
-- [ ] Port **dialog boxes**: MessageBoxDialog, YesNoDialog, OptionsDialog, etc.
-- [ ] Convert `.layout` XML files to new format
+### Phase 4: GUI Migration (CeGui# → Gum)
+
+**Decision:** Gum (MonoGameGum) selected — see Section 2 GUI table for full analysis.
+
+**Required NuGet:** `Gum.MonoGame` (NuGet package, one command install)
+
+#### Phase 4.0: Setup & Proof of Concept (Automated + Manual)
+- [x] Evaluate and select replacement (Gum selected over MGUI/Myra/GeonBit/ImGui — see docs/legacy/GUI.md) — ✅ Done
+- [ ] Add `Gum.MonoGame` NuGet package to project (`dotnet add package Gum.MonoGame`)
+- [ ] Initialize `GumService.Default` in `Xenocide.cs` (Initialize, Update, Draw — 3 lines)
+- [ ] Create proof-of-concept: render a Gum `StackPanel` with `Button` + `Label` alongside the existing CeGUI# stubs
+- [ ] Verify Gum renders on top of existing screen manager output
+- [ ] **Manual: You** — verify the Gum tooltip/overlay appears correctly on the 3D scene
+
+#### Phase 4.1: Convert StartScreen (Template / Reference Implementation)
+- [ ] Create `StartScreenViewModel` with: version text, debug button visibility flag
+- [ ] Replace `CreateCeguiWidgets()` with Gum `StackPanel` + `Button` controls + data binding
+- [ ] Attach event handlers to Gum buttons (New Game, Load, Credits, Quit, Debug tests)
+- [ ] **Manual: You** — verify all 5 StartScreen buttons work end-to-end (schedule different screens, quit)
+- [ ] **Manual: You** — verify version text renders in bottom-right corner
+- [ ] **Manual: You** — verify debug-only buttons (Run Tests, Battlescape) only appear in DEBUG builds
+
+#### Phase 4.2: Convert Dialog Base + Simple Dialogs
+- [ ] Create Gum-based `Dialog` base class (replacing CeGUI# dialog pattern)
+- [ ] Convert `MessageBoxDialog` — Label + Button with Ok
+- [ ] Convert `YesNoDialog` — Label + two Buttons
+- [ ] Convert `OptionsDialog` — Sliders (volume), Checkboxes (options), ComboBoxes (selections)
+- [ ] **Manual: You** — verify dialogs open, close, return correct results
+- [ ] **Manual: You** — verify dialog queue and modal behavior (topmost dialog blocks input to screen below)
+
+#### Phase 4.3: Convert Management Screens (Simple → Medium)
+- [ ] Convert `CreditsScreen` — static formatted text (Labels + StackPanel)
+- [ ] Convert `MonthlyReportScreen` — formatted text + navigation buttons
+- [ ] Convert `LoadSaveGameScreen` — ListBox (save slots) + TextBox (rename) + Buttons
+- [ ] Convert `StatisticsScreen` — formatted data display
+- [ ] Convert `PurchaseScreen` / `SellScreen` — ListBox items + quantity controls + confirm
+- [ ] Convert `StoresScreen` — ListBox + filters (ComboBox)
+- [ ] Convert `ManufactureScreen` — project list + progress display
+- [ ] **Manual: You** — verify each screen displays data correctly and navigation works
+
+#### Phase 4.4: Convert Core Screens (Complex)
+- [ ] Convert `ResearchScreen` — ResearchTree (custom ItemsControl + Grid) + description panel + buttons
+- [ ] Convert `BasesScreen` — base list (ListBox) + base view (details) + facility grid
+- [ ] Convert `EquipSoldierScreen` — soldier list + inventory grid + drag-drop between soldiers and stores
+- [ ] **Manual: You** — verify research tree renders hierarchy correctly
+- [ ] **Manual: You** — verify drag-and-drop soldier equipment works
+- [ ] **Manual: You** — verify base facility grid layout
+
+#### Phase 4.5: Convert 3D-Integrated Screens
+- [ ] Convert `GeoscapeScreen` — add Gum overlay (date/time, funds, buttons) on top of 3D globe view
+- [ ] Convert `BattlescapeScreen` — add Gum overlay (soldier stats, action buttons, turn info) on top of 3D battlefield
+- [ ] Convert `AeroscapeScreen` / `BattlescapeReportScreen` — post-mission summary with Gum
+- [ ] **Manual: You** — verify Gum overlay renders correctly on top of 3D (depth/stencil issues)
+- [ ] **Manual: You** — verify no input conflicts between Gum and 3D scene (click-through, focus)
+
+#### Phase 4.6: Cleanup
+- [ ] Remove `CeGuiStubs.cs` — no longer needed
+- [ ] Remove `using CeGui;` and `using CeGui.Renderers.Xna;` from all game files
+- [ ] Remove `InitializeCegui()` from `Xenocide.cs`
+- [ ] Remove `System.Drawing` using from CeGuiStubs.cs (file will be deleted)
+- [ ] **Manual: You** — verify full build with 0 errors
+- [ ] **Manual: You** — run game and verify all screens render and function
+
+#### Key Design Decisions for Gum Screen Pattern
+
+```csharp
+// New screen pattern:
+public class GumStartScreen : Screen
+{
+    private MainMenuViewModel viewModel;
+    private GumService GumUI => GumService.Default;
+
+    public override void Show()
+    {
+        viewModel = new MainMenuViewModel();
+        viewModel.VersionText = Xenocide.CurrentVersion;
+
+        var panel = new StackPanel();
+        panel.AddToRoot();
+        panel.BindingContext = viewModel;
+
+        // ... add controls ...
+    }
+}
+```
+
+- Screens can share a single `GumService.Default` instance, or each screen can manage its own subtree via `AddToRoot()` / `Root.Children.Clear()`
+- Data binding via `SetBinding` replaces manual text/state updates
+- Event handlers use Gum's `Click` events (same pattern as CeGUI# `Clicked +=`)
+
+#### What You Need to Do Manually
+
+| Task | Reason |
+|------|--------|
+| **Verify proof-of-concept renders** | Need visual confirmation that Gum overlay renders correctly on 3D scene |
+| **End-to-end button testing** | Each screen's buttons schedule other screens/dialogs — need to verify navigation chain |
+| **Verify dialog modality** | Modal dialogs must block input to underlying screen — requires manual testing |
+| **Drag-and-drop testing** | EquipSoldierScreen drag-drop is complex interaction — needs human validation |
+| **Research tree visual check** | Tree hierarchy rendering correctness |
+| **3D overlay testing** | Ensure Gum renders on top of 3D without depth conflicts |
+| **Input conflict testing** | Ensure clicks don't pass through Gum to 3D scene (or vice versa) |
+| **Final build verification** | Confirm 0 errors, game launches, all screens display correctly |
+
+Everything else (NuGet addition, code changes, control wiring, data binding, event handlers) can be done by automation/tooling.
 
 ### Phase 5: Audio Migration
 - [ ] Audit FMOD Ex usage in AudioSystem (categorize: simple playback vs advanced features)
@@ -248,6 +349,8 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 
 ### Immediate (get the game running)
 1. **Content Pipeline Setup** — Create `.mgcb` project, import all .fbx/.fx/.spritefont/.jpg/.png assets, verify `Content.Load<T>()` works at runtime
-2. **Replace CeGui# stubs with real implementation** — Evaluate Gum/MGUI/Myra for the GUI replacement, or flesh out stubs enough to render basic screens
+2. **Replace CeGui# stubs with Gum** — Phase 4.0 (NuGet + proof-of-concept) then Phase 4.1 (StartScreen). See Phase 4 plan above.
 3. **Replace audio stubs** — Implement the MonoGame `SoundEffect`/`Song` backend for `IAudioSystem`
 4. **Runtime test** — Launch the game, fix any `NullReferenceException` / `MissingMethodException` from stub methods
+
+**GUI decision made:** Gum (MonoGameGum) selected. Full analysis in `docs/legacy/GUI.md` and `docs/GUI.md`.
