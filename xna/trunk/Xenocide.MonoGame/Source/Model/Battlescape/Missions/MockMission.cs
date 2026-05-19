@@ -28,6 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.Model.StaticData.Battlescape;
@@ -92,7 +93,7 @@ namespace ProjectXenocide.Model.Battlescape
         #region fields
 
         /// <summary>Build the cells that represent a terrain</summary>
-        [NonSerialized]
+        [JsonIgnore]
         private Terrain.TerrainBuilder builder;
 
         #endregion fields

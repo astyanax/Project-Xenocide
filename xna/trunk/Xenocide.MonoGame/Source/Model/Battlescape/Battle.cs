@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 using Microsoft.Xna.Framework;
 
@@ -190,7 +191,7 @@ namespace ProjectXenocide.Model.Battlescape
 
         /// <summary>The trajectory of projectile in transit on the battlescape</summary>
         /// <remarks>Can't save a game while projectile is moving</remarks>
-        [NonSerialized]
+        [JsonIgnore]
         private Trajectory trajectory;
 
         /// <summary>The items on the ground</summary>

@@ -29,6 +29,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
@@ -363,19 +364,13 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         /// <summary>
         /// Width and Height of the texture
         /// </summary>
-        [NonSerialized]
+        [JsonIgnore]
         private int width, height;
 
-        /// <summary>
-        /// List of tuples which represents the RLE encoded date of the original bitmap
-        /// </summary>
-        [NonSerialized]
+        [JsonIgnore]
         private List<Tuple> tuples;
 
-        /// <summary>
-        /// Index to tuple that is first tuple of a given row
-        /// </summary>
-        [NonSerialized]
+        [JsonIgnore]
         private int[] rowIndexes;
 
         /// <summary>

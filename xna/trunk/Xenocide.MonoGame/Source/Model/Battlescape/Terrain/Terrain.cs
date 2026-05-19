@@ -29,6 +29,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text.Json.Serialization;
 
 using Microsoft.Xna.Framework;
 
@@ -795,7 +796,7 @@ namespace ProjectXenocide.Model.Battlescape
         private List<WallFace> wallFaces = new List<WallFace>();
 
         /// <summary>Pathfinder to use for this terrain</summary>
-        [NonSerialized]
+        [JsonIgnore]
         private Pathfinder pathfinder;
 
         #endregion Fields

@@ -28,6 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 using Microsoft.Xna.Framework;
 
@@ -468,7 +469,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         private Stats stats = new Stats();
 
         /// <summary>Order combatant is currently performing</summary>
-        [NonSerialized]
+        [JsonIgnore]
         private Order order;
 
         /// <summary>Can this combatant fly?</summary>

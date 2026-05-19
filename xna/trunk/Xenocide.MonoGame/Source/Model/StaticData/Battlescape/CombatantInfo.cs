@@ -32,6 +32,7 @@ using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 using System.Xml;
 using System.Xml.XPath;
 
@@ -186,7 +187,7 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
         private Graphic graphic;
 
         /// <summary>Generators for the Statistic values</summary>
-        [NonSerialized]
+        [JsonIgnore]
         private Dictionary<Statistic, Distribution> statistics = new Dictionary<Statistic, Distribution>();
 
         /// <summary>Can unit fly?</summary>

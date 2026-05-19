@@ -30,8 +30,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using System.Xml.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Diagnostics;
 using System.Threading;
 
@@ -48,6 +46,7 @@ using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Utils;
 using Xenocide.Resources;
+using Xenocide.Utils;
 
 
 #endregion
@@ -283,12 +282,16 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="filename">Name of the file</param>
         private void AddSaveGameToGrid(FileStream stream, String filename)
         {
-            SaveGameHeader header = new SaveGameHeader(stream);
-            AddRowToGrid(
-                filename,
-                header.realTime,
-                header.gameTime,
-                0);
+            stream.Position = 0;
+            GameStateSerializer.SaveFileHeader header = GameStateSerializer.ReadHeader(stream);
+            if (header != null)
+            {
+                AddRowToGrid(
+                    filename,
+                    header.RealTime,
+                    header.GameTime,
+                    0);
+            }
         }
 
         /// <summary>
@@ -319,8 +322,7 @@ namespace ProjectXenocide.UI.Screens
                 string filename = Path.Combine(saveDir, saveName);
                 using (FileStream stream = File.Create(filename))
                 {
-                    SaveGameHeader.WriteHeader(stream);
-                    WriteGameState(stream);
+                    GameStateSerializer.Save(stream, Xenocide.GameState, Xenocide.CurrentVersion);
                 }
                 return true;
             }
@@ -341,13 +343,11 @@ namespace ProjectXenocide.UI.Screens
             string saveDir = GetSaveDirectory();
             using (FileStream stream = File.Open(Path.Combine(saveDir, filename), FileMode.Open))
             {
-                // check version from header
-                SaveGameHeader saveGameHeader = new SaveGameHeader(stream);
-                if (saveGameHeader.IsSameVersion(Xenocide.CurrentVersion))
+                string error;
+                GameState gameState = GameStateSerializer.Load(stream, Xenocide.CurrentVersion, out error);
+                if (gameState != null)
                 {
-                    // get the game state
-                    BinaryFormatter formatter = new BinaryFormatter();
-                    return (GameState)formatter.Deserialize(stream);
+                    return gameState;
                 }
                 else
                 {
@@ -355,16 +355,6 @@ namespace ProjectXenocide.UI.Screens
                     return null;
                 }
             }
-        }
-
-        /// <summary>
-        /// Write the game state to a stream
-        /// </summary>
-        /// <param name="stream">Stream to write the game state to</param>
-        private static void WriteGameState(FileStream stream)
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, Xenocide.GameState);
         }
 
         /// <summary>
@@ -451,88 +441,5 @@ namespace ProjectXenocide.UI.Screens
         private CancelScreen cancelScreen;
 
         private string savesDirectory = ".\\XeNAcide\\saves";
-
-        /// <summary>
-        /// The "header" information in a save game file
-        /// </summary>
-        [Serializable]
-        private class SaveGameHeader
-        {
-            // data members
-            public string realTime;
-            public string gameTime;
-            public string assemblyVersion;
-
-            /// <summary>
-            /// Read a save game header from a stream
-            /// </summary>
-            /// <param name="stream">Stream to read the header from</param>
-            public SaveGameHeader(FileStream stream)
-            {
-                realTime = SaveGameHeader.ReadString(stream);
-                gameTime = SaveGameHeader.ReadString(stream);
-                assemblyVersion = SaveGameHeader.ReadString(stream);
-            }
-
-            /// <summary>
-            /// Write a save game header to a stream
-            /// </summary>
-            /// <param name="stream">Stream to write the header to</param>
-            public static void WriteHeader(FileStream stream)
-            {
-                WriteString(stream, FormatTime(DateTime.Now));
-                WriteString(stream, FormatTime(Xenocide.GameState.GeoData.GeoTime.Time));
-                WriteString(stream, Xenocide.CurrentVersion);
-            }
-
-            /// <summary>
-            /// Compares a version with version recorded in header
-            /// </summary>
-            /// <param name="version">String representation of version</param>
-            /// <returns>True if versions are the same, false if not</returns>
-            public bool IsSameVersion(string version)
-            {
-                return assemblyVersion == version;
-            }
-
-            // format a time for display in the load/save dialog
-            /// <param name="time">time to format</param>
-            /// <returns>the formatted time</returns>
-            public static string FormatTime(DateTime time)
-            {
-                return time.ToString("yyyy-MM-dd HH:mm:ss", Thread.CurrentThread.CurrentCulture);
-            }
-
-            /// <summary>
-            /// Write the specified string to a file
-            /// </summary>
-            /// <param name="fs">stream to write to</param>
-            /// <param name="value">string to write to the file</param>
-            /// <remarks>Used to write header to file</remarks>
-            /// <remarks>Had to write this myself because StreamWriter closes stream when it's done</remarks>
-            public static void WriteString(Stream fs, String value)
-            {
-                byte[] info = new UTF8Encoding(true).GetBytes(value);
-                Debug.Assert(info.Length < 256);
-                fs.WriteByte((byte)info.Length);
-                fs.Write(info, 0, info.Length);
-            }
-
-            /// <summary>
-            /// Read a string from a file at the current position
-            /// </summary>
-            /// <param name="fs">file to read from</param>
-            /// <returns>string read</returns>
-            /// <remarks>Used to read header from file</remarks>
-            /// <remarks>Had to write this myself because StreamReader closes stream when it's done</remarks>
-            public static String ReadString(Stream fs)
-            {
-                int count = fs.ReadByte();
-                byte[] b = new byte[count];
-                fs.Read(b, 0, count);
-                UTF8Encoding temp = new UTF8Encoding(true);
-                return temp.GetString(b);
-            }
-        }
     }
 }

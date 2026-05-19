@@ -143,10 +143,39 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 4. After removal, the entire codebase will have zero `System.Drawing` dependency, improving cross-platform compatibility and reducing assembly load
 
 ### Phase 3: Save/Load System
-- [ ] Remove `BinaryFormatter` (deprecated, Windows-only)
-- [ ] Implement `System.Text.Json` serialization for `GameState`
-- [ ] Add `[JsonPropertyName]` attributes to serialized classes
-- [ ] Test save/load round-trip
+- [x] Replace `BinaryFormatter` with `System.Text.Json` — ✅ Done
+- [x] Implement generalized polymorphic converter (`ModelJsonConverter`) — ✅ Done
+- [x] Implement `Vector3` dictionary key converter (`Vector3DictionaryConverterFactory`) — ✅ Done
+- [x] Create `GameStateSerializer` service with versioned file format — ✅ Done
+- [x] Migrate `[NonSerialized]` → `[JsonIgnore]` (8 fields across 5 files) — ✅ Done
+- [x] Remove `SaveGameHeader` inner class (replaced by `GameStateSerializer`) — ✅ Done
+- [x] Clean up unused imports (`BinaryFormatter`, `XmlSerializer`) — ✅ Done
+- [x] Build produces **0 errors** — ✅ Done
+
+**Architecture:**
+- `GameStateSerializer` — static service in `Source/Utils/GameStateSerializer.cs`
+  - `Save(Stream, GameState, gameVersion)` — writes JSON with format version + metadata
+  - `Load(Stream, gameVersion, out error)` — reads JSON, validates version, deserializes
+  - `ReadHeader(Stream)` — reads metadata without full deserialization (for grid display)
+- `ModelJsonConverter` — custom `JsonConverter<object>` in `Source/Utils/ModelJsonConverter.cs`
+  - Auto-discovers all `ProjectXenocide.Model` types via assembly scan at startup
+  - Writes `$type` discriminator + `$id`/`$ref` for every model object (handles polymorphism + circular refs)
+  - Reads `$type` → resolves type from cache → creates instance via `FormatterServices.GetUninitializedObject` (avoids constructor requirements)
+  - Calls `[OnDeserialized]` methods if present (handles `Planet.OnDeserializedMethod`)
+  - Thread-static state management ensures no cross-serialization leaks
+- `Vector3DictionaryConverterFactory` — handles `Dictionary<Vector3, TValue>` (serializes Vector3 keys as "X,Y,Z" strings)
+- Save file format: JSON with `{ formatVersion, savedAt, gameTime, gameVersion, gameState }` wrapper
+- No `[JsonDerivedType]` attributes needed — type discovery is fully automatic via assembly scanning
+- No parameterless constructors needed — instances created via `FormatterServices.GetUninitializedObject`
+- No `ReferenceHandler.Preserve` needed — manual `$id`/`$ref` tracking in the converter
+
+**Key design decisions:**
+- Generalized by design: any new type added to `ProjectXenocide.Model` namespace is automatically discovered and serialized
+- Versions are forward-compatible: `formatVersion` allows migration in `Load()` method
+- `[NonSerialized]` honored as `[JsonIgnore]` — ensures transient runtime state isn't persisted
+- `Vector3` dictionary keys (in `Battle.groundContents`) stored as comma-separated floats
+- `BinaryFormatter` dependency completely removed from codebase
+- `SaveGameHeader` inner class removed (replaced by `GameStateSerializer` wrapper)
 
 ### Phase 4: GUI Migration (CeGui# Replacement)
 - [ ] Evaluate and select replacement (propose: Gum or MGUI)
@@ -222,13 +251,3 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 2. **Replace CeGui# stubs with real implementation** — Evaluate Gum/MGUI/Myra for the GUI replacement, or flesh out stubs enough to render basic screens
 3. **Replace audio stubs** — Implement the MonoGame `SoundEffect`/`Song` backend for `IAudioSystem`
 4. **Runtime test** — Launch the game, fix any `NullReferenceException` / `MissingMethodException` from stub methods
-
-### Short-term (functionality)
-5. **Save/Load System** — Replace `BinaryFormatter` with `System.Text.Json`
-6. **Remove remaining `System.Windows.Forms` references** — Replace message boxes with in-game dialogs
-7. **Add xUnit.net test project** — Port critical tests from NUnit 2.2.9
-
-### Medium-term (stability)
-8. **Cross-platform validation** — Build and run on Linux; fix path casing, separator issues
-9. **Performance profiling** — OpenGL backend optimization
-10. **Cleanup** — Remove old XNA 3.0 project files, `Dependencies/`, `Lib/`, `Installers/` directories

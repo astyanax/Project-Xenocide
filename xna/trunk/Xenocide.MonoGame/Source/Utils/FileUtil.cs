@@ -26,8 +26,6 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Xml.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using Microsoft.Xna.Framework;
 #endregion
