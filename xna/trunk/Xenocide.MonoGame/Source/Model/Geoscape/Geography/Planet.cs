@@ -190,7 +190,11 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         public float AddScore(Participant side, float points, GeoPosition location)
         {
             // Assign score to region
-            GetRegionAtLocation(location).ScoreLog.AddScore(side, points);
+            PlanetRegion region = GetRegionAtLocation(location);
+            if (null != region)
+            {
+                region.ScoreLog.AddScore(side, points);
+            }
 
             // see if location also belongs to a country (doubles the score)
             Country country = GetCountryAtLocation(location);
@@ -329,7 +333,8 @@ namespace ProjectXenocide.Model.Geoscape.Geography
             Justification="will throw if pos == null")]
         public PlanetRegion GetRegionAtLocation(GeoPosition pos)
         {
-            return regions[regionBitmap.GetPropertyIndexOfLocation(pos)];
+            int index = regionBitmap.GetPropertyIndexOfLocation(pos);
+            return (GeoBitmap.NoProperty == index) ? null : regions[index];
         }
 
         /// <summary>

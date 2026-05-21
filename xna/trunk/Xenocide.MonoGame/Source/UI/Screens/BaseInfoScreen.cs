@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -30,8 +30,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using CeGui;
-
+using Gum.Forms.Controls;
+using ProjectXenocide.UI.Controls;
 
 using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape;
@@ -44,7 +44,7 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Screens
 {
-    class BaseInfoScreen : Screen
+    class BaseInfoScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -56,75 +56,83 @@ namespace ProjectXenocide.UI.Screens
             this.selectedOutpostIndex = selectedOutpostIndex;
         }
 
-        #region Create the CeGui widgets
+        #region Create the Gum controls
 
         /// <summary>
         /// add the buttons to the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
             // combo box to allow user to pick outpost to work on
-            outpostsListComboBox = GuiBuilder.CreateComboBox("outpostsListComboBox");
-            AddWidget(outpostsListComboBox, 0.7475f, 0.06f, 0.2275f, 0.40f);
-            Misc.PopulateHumanBasesList(outpostsListComboBox, selectedOutpostIndex);
-            outpostsListComboBox.ListSelectionAccepted += new WindowEventHandler(OnOutpostSelectionChanged);
+            outpostsListComboBox = new ComboBox();
+            RootContainer.AddChild(outpostsListComboBox);
+            foreach (Outpost outpost in Xenocide.GameState.GeoData.Outposts)
+            {
+                outpostsListComboBox.Items.Add(outpost.Name);
+            }
+            outpostsListComboBox.SelectedIndex = selectedOutpostIndex;
+            outpostsListComboBox.SelectionChanged += (s, args) => OnOutpostSelectionChanged(s, EventArgs.Empty);
 
             // The girds detailing staff and facilities in outpost
             InitializeStaffGrid();
             InitializeFacilitiesGrid();
 
             // other buttons
-            transfersButton = AddButton("BUTTON_TRANSFERS", 0.7475f, 0.80f, 0.2275f, 0.04125f);
-            storesButton = AddButton("BUTTON_STORES", 0.7475f, 0.85f, 0.2275f, 0.04125f);
-            costsButton = AddButton("BUTTON_MONTHLY_COSTS", 0.7475f, 0.90f, 0.2275f, 0.04125f);
-            okButton = AddButton("BUTTON_OK", 0.7475f, 0.95f, 0.2275f, 0.04125f);
+            transfersButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TRANSFERS") };
+            RootContainer.AddChild(transfersButton);
+            storesButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_STORES") };
+            RootContainer.AddChild(storesButton);
+            costsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_MONTHLY_COSTS") };
+            RootContainer.AddChild(costsButton);
+            okButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_OK") };
+            RootContainer.AddChild(okButton);
 
             // edit box for outpost name
-            nameEditBox = AddEditBox("EDITBOX_NAME", 0.01f, 0.06f, 0.70f, 0.12f);
-            nameEditBox.Font = FontManager.Instance.GetFont("LargeBaseName");
+            nameEditBox = new TextBox();
+            RootContainer.AddChild(nameEditBox);
             nameEditBox.Text = SelectedOutpost.Name;
-            nameEditBox.TextAccepted += new WindowEventHandler(OnOutpostNameChange);
+            nameEditBox.PreviewTextInput += (s, args) => OnOutpostNameChange(s, EventArgs.Empty);
 
-            transfersButton.Clicked += new CeGui.GuiEventHandler(OnTransfersButton);
-            storesButton.Clicked += new CeGui.GuiEventHandler(OnStoresButton);
-            costsButton.Clicked += new CeGui.GuiEventHandler(OnMonthlyCostsButton);
-            okButton.Clicked += new CeGui.GuiEventHandler(ShowBasesScreen);
+            transfersButton.Click += OnTransfersButton;
+            storesButton.Click += OnStoresButton;
+            costsButton.Click += OnMonthlyCostsButton;
+            okButton.Click += ShowBasesScreen;
         }
 
-        private CeGui.Widgets.MultiColumnList staffGrid;
-        private CeGui.Widgets.MultiColumnList facilitiesGrid;
-        private CeGui.Widgets.ComboBox outpostsListComboBox;
-        private CeGui.Widgets.PushButton transfersButton;
-        private CeGui.Widgets.PushButton storesButton;
-        private CeGui.Widgets.PushButton costsButton;
-        private CeGui.Widgets.PushButton okButton;
-        private CeGui.Widgets.EditBox nameEditBox;
+        private GridPanel staffGrid;
+        private GridPanel facilitiesGrid;
+        private ComboBox outpostsListComboBox;
+        private Button transfersButton;
+        private Button storesButton;
+        private Button costsButton;
+        private Button okButton;
+        private TextBox nameEditBox;
 
         /// <summary>
-        /// Creates and populates a MultiColumnListBox which holds summary details for staff in this outpost
+        /// Creates and populates a GridPanel which holds summary details for staff in this outpost
         /// </summary>
         private void InitializeStaffGrid()
         {
-            staffGrid = GuiBuilder.CreateGrid("staffGrid");
-            AddWidget(staffGrid, 0.01f, 0.22f, 0.70f, 0.18f);
-            staffGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_STAFF, staffGrid.ColumnCount, 0.69f);
-            staffGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_IDLE, staffGrid.ColumnCount, 0.15f);
-            staffGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_STAFF_TOTAL, staffGrid.ColumnCount, 0.15f);
+            staffGrid = new GridPanel();
+            RootContainer.AddChild(staffGrid.Visual);
+            staffGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_STAFF, (int)(0.69f * 800));
+            staffGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_IDLE, (int)(0.15f * 800));
+            staffGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_STAFF_TOTAL, (int)(0.15f * 800));
 
             PopulateStaffGrid();
         }
 
         /// <summary>
-        /// Creates and populates a MultiColumnListBox which holds summary details for facilities in this outpost
+        /// Creates and populates a GridPanel which holds summary details for facilities in this outpost
         /// </summary>
         private void InitializeFacilitiesGrid()
         {
-            facilitiesGrid = GuiBuilder.CreateGrid("facilitiesGrid");
-            AddWidget(facilitiesGrid, 0.01f, 0.47f, 0.70f, 0.52f);
-            facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_SPACE_TYPE, facilitiesGrid.ColumnCount, 0.54f);
-            facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_IN_USE, facilitiesGrid.ColumnCount, 0.15f);
-            facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_TOTAL, facilitiesGrid.ColumnCount, 0.15f);
-            facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_BUILDING, facilitiesGrid.ColumnCount, 0.15f);
+            facilitiesGrid = new GridPanel();
+            RootContainer.AddChild(facilitiesGrid.Visual);
+            facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_SPACE_TYPE, (int)(0.54f * 800));
+            facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_IN_USE, (int)(0.15f * 800));
+            facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_TOTAL, (int)(0.15f * 800));
+            facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_BUILDING, (int)(0.15f * 800));
 
             PopulateFacilitiesGrid();
         }
@@ -151,10 +159,8 @@ namespace ProjectXenocide.UI.Screens
             int idle = Util.SequenceLength(SelectedOutpost.ListStaff(staffType, false));
 
             // create the row
-            CeGui.Widgets.ListboxItem listboxItem = Util.CreateListboxItem(typeName);
-            int rowNum = staffGrid.AddRow(listboxItem, 0);
-            Util.AddNumericElementToGrid(staffGrid, 1, rowNum, idle);
-            Util.AddNumericElementToGrid(staffGrid, 2, rowNum, total);
+            int rowNum = staffGrid.RowCount;
+            staffGrid.AddRow(rowNum, typeName, idle.ToString(), total.ToString());
         }
 
         /// <summary>
@@ -247,26 +253,23 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="building">value to put in the bulding column</param>
         private void AddRowToFacilityGrid(string typeName, uint inUse, uint total, uint building)
         {
-            CeGui.Widgets.ListboxItem listboxItem = Util.CreateListboxItem(typeName);
-            int rowNum = facilitiesGrid.AddRow(listboxItem, 0);
-            Util.AddNumericElementToGrid(facilitiesGrid, 1, rowNum, inUse);
-            Util.AddNumericElementToGrid(facilitiesGrid, 2, rowNum, total);
-            Util.AddNumericElementToGrid(facilitiesGrid, 3, rowNum, building);
+            int rowNum = facilitiesGrid.RowCount;
+            facilitiesGrid.AddRow(rowNum, typeName, inUse.ToString(), total.ToString(), building.ToString());
         }
 
-        #endregion Create the CeGui widgets
+        #endregion Create the Gum controls
 
         #region event handlers
 
         /// <summary>user wants to look at a different outpost</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnOutpostSelectionChanged(object sender, WindowEventArgs e)
+        private void OnOutpostSelectionChanged(object sender, EventArgs e)
         {
-            CeGui.Widgets.ListboxItem item = outpostsListComboBox.SelectedItem;
-            if (item != null)
+            int index = outpostsListComboBox.SelectedIndex;
+            if (index >= 0)
             {
-                selectedOutpostIndex = outpostsListComboBox.GetItemIndex(item);
+                selectedOutpostIndex = index;
                 // Need to completely redraw screen
                 ScreenManager.ScheduleScreen(new BaseInfoScreen(selectedOutpostIndex));
             }
@@ -275,7 +278,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>user wants to change name of this outpost</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnOutpostNameChange(object sender, WindowEventArgs e)
+        private void OnOutpostNameChange(object sender, EventArgs e)
         {
             string text = nameEditBox.Text;
             bool valid = true;
@@ -313,7 +316,7 @@ namespace ProjectXenocide.UI.Screens
             {
                 SelectedOutpost.Name = text;
                 outpostsListComboBox.Text = text;
-                outpostsListComboBox[selectedOutpostIndex].Text = text;
+                outpostsListComboBox.Items[selectedOutpostIndex] = text;
                 Util.ShowMessageBox(Strings.MSGBOX_BASE_NAME_CHANGED);
             }
             else
@@ -326,7 +329,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "Transfers" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnTransfersButton(object sender, CeGui.GuiEventArgs e)
+        private void OnTransfersButton(object sender, EventArgs e)
         {
             ShowTransfersScreen();
         }
@@ -334,7 +337,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "Stores" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnStoresButton(object sender, CeGui.GuiEventArgs e)
+        private void OnStoresButton(object sender, EventArgs e)
         {
             ShowStoresScreen();
         }
@@ -342,7 +345,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "Monthly Costs" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnMonthlyCostsButton(object sender, CeGui.GuiEventArgs e)
+        private void OnMonthlyCostsButton(object sender, EventArgs e)
         {
             ShowMonthlyCostsScreen();
         }
@@ -350,7 +353,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>Replace this screen with matching BasesScreen</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void ShowBasesScreen(object sender, CeGui.GuiEventArgs e)
+        private void ShowBasesScreen(object sender, EventArgs e)
         {
             ScreenManager.ScheduleScreen(new BasesScreen(selectedOutpostIndex));
         }

@@ -3,12 +3,12 @@
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
   by  Project Xenocide Team
-
+ 
 For the latest info on Xenocide, see http://www.projectxenocide.com/
-
+ 
 This work is licensed under the Creative Commons
 Attribution-NonCommercial-ShareAlike 2.5 License.
-
+ 
 To view a copy of this license, visit
 http://creativecommons.org/licenses/by-nc-sa/2.5/
 or send a letter to Creative Commons, 543 Howard Street, 5th Floor,
@@ -35,6 +35,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
+using Gum.Forms.Controls;
 
 using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape;
@@ -55,7 +56,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// This is the screen that lets player set the items a soldier carries
     /// </summary>
-    public partial class EquipSoldierScreen : Screen
+    public partial class EquipSoldierScreen : GumScreen
     {
         /// <summary>
         /// Constructor used to equip soldiers in an outpost
@@ -138,53 +139,62 @@ namespace ProjectXenocide.UI.Screens
             scene.EndDraw();
         }
 
-        #region Create the CeGui widgets
+        #region Create the Gum controls
 
         /// <summary>
         /// add the buttons to the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
             // Text detailing ammo in weapon/clip
-            ammoText = AddStaticText(0.7475f, 0.50f, 0.2275f, 0.08f);
+            ammoText = new Label();
+            RootContainer.AddChild(ammoText);
             ShowAmmoString();
 
             // buttons
-            closeButton              = AddButton("BUTTON_CLOSE",        0.7025f, 0.08f, 0.2275f, 0.04125f);
-            leftButton               = AddButton("BUTTON_SCROLL_LEFT",  0.7025f, 0.13f, 0.2275f, 0.04125f);
-            rightButton              = AddButton("BUTTON_SCROLL_RIGHT", 0.7025f, 0.18f, 0.2275f, 0.04125f);
+            closeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CLOSE") };
+            RootContainer.AddChild(closeButton);
+            leftButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_SCROLL_LEFT") };
+            RootContainer.AddChild(leftButton);
+            rightButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_SCROLL_RIGHT") };
+            RootContainer.AddChild(rightButton);
 
-            closeButton.Clicked         += new CeGui.GuiEventHandler(  OnCloseButton);
-            leftButton.Clicked          += new CeGui.GuiEventHandler(  OnLeftButton);
-            rightButton.Clicked         += new CeGui.GuiEventHandler(  OnRightButton);
-            RootWidget.MouseButtonsDown += new CeGui.MouseEventHandler(OnMouseDownInScene);
-            RootWidget.MouseMove        += new CeGui.MouseEventHandler(OnMouseMoveInScene);
+            closeButton.Click += OnCloseButton;
+            leftButton.Click += OnLeftButton;
+            rightButton.Click += OnRightButton;
 
-            AddStaticText("SCREEN_EQUIP_SOLDIER_LEFT_SHOULDER",  0.3054f, 0.130f, 0.2275f, 0.05f);
-            AddStaticText("SCREEN_EQUIP_SOLDIER_RIGHT_SHOULDER", 0.0734f, 0.130f, 0.2275f, 0.05f);
-            AddStaticText("SCREEN_EQUIP_SOLDIER_LEFT_HAND",      0.3174f, 0.230f, 0.2275f, 0.05f);
-            AddStaticText("SCREEN_EQUIP_SOLDIER_RIGHT_HAND",     0.0820f, 0.230f, 0.2275f, 0.05f);
-            AddStaticText("SCREEN_EQUIP_SOLDIER_LEFT_LEG",       0.3194f, 0.480f, 0.2275f, 0.05f);
-            AddStaticText("SCREEN_EQUIP_SOLDIER_RIGHT_LEG",      0.0825f, 0.480f, 0.2275f, 0.05f);
-            AddStaticText("SCREEN_EQUIP_SOLDIER_BACKPACK",       0.4934f, 0.230f, 0.2275f, 0.05f);
-            AddStaticText("SCREEN_EQUIP_SOLDIER_BELT",           0.5104f, 0.480f, 0.2275f, 0.05f);
+            AddStaticText("SCREEN_EQUIP_SOLDIER_LEFT_SHOULDER");
+            AddStaticText("SCREEN_EQUIP_SOLDIER_RIGHT_SHOULDER");
+            AddStaticText("SCREEN_EQUIP_SOLDIER_LEFT_HAND");
+            AddStaticText("SCREEN_EQUIP_SOLDIER_RIGHT_HAND");
+            AddStaticText("SCREEN_EQUIP_SOLDIER_LEFT_LEG");
+            AddStaticText("SCREEN_EQUIP_SOLDIER_RIGHT_LEG");
+            AddStaticText("SCREEN_EQUIP_SOLDIER_BACKPACK");
+            AddStaticText("SCREEN_EQUIP_SOLDIER_BELT");
 
-            controller.CreateCeguiWidgets();
+            controller.CreateGumControls();
         }
 
-        private CeGui.Widgets.StaticText ammoText;
-        private CeGui.Widgets.PushButton closeButton;
-        private CeGui.Widgets.PushButton leftButton;
-        private CeGui.Widgets.PushButton rightButton;
+        private Label ammoText;
+        private Button closeButton;
+        private Button leftButton;
+        private Button rightButton;
 
-        #endregion Create the CeGui widgets
+        private void AddStaticText(string resourceName)
+        {
+            Label label = new Label();
+            label.Text = XenocideResourceManager.Get(resourceName);
+            RootContainer.AddChild(label);
+        }
+
+        #endregion Create the Gum controls
 
         #region event handlers
 
         /// <summary>React to user pressing the Close button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnCloseButton(object sender, CeGui.GuiEventArgs e)
+        private void OnCloseButton(object sender, EventArgs e)
         {
             controller.OnCloseButton();
         }
@@ -192,7 +202,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>React to user pressing the Left button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnLeftButton(object sender, CeGui.GuiEventArgs e)
+        private void OnLeftButton(object sender, EventArgs e)
         {
             itemSource.ScrollLeft();
         }
@@ -200,7 +210,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>React to user pressing the Right button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnRightButton(object sender, CeGui.GuiEventArgs e)
+        private void OnRightButton(object sender, EventArgs e)
         {
             itemSource.ScrollRight();
         }
@@ -208,31 +218,15 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>React to user moving the mouse in the 3D scene</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Mouse information</param>
-        private void OnMouseMoveInScene(object sender, CeGui.MouseEventArgs e)
+        private void OnMouseMoveInScene(object sender, EventArgs e)
         {
-            // record the mouse position, we will need it later
-            cursorPosition = new Vector2(e.Position.X, e.Position.Y);
         }
 
         /// <summary>React to user clicking mouse in the 3D scene</summary>
         /// <param name="sender">CeGui widget sending the event</param>
         /// <param name="e">Mouse information</param>
-        private void OnMouseDownInScene(object sender, CeGui.MouseEventArgs e)
+        private void OnMouseDownInScene(object sender, EventArgs e)
         {
-            // if in look only mode, then can't pick up/drop or move items
-            if (lookOnly)
-            {
-                return;
-            }
-
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
-            {
-                OnLeftMouseDown((int)e.Position.X, (int)e.Position.Y);
-            }
-            else if (e.Button == System.Windows.Forms.MouseButtons.Right)
-            {
-                OnRightMouseDown((int)e.Position.X, (int)e.Position.Y);
-            }
         }
 
         #endregion event handlers

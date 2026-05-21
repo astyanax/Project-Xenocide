@@ -46,7 +46,7 @@ namespace ProjectXenocide.UI.Screens
     /// in polar co-ordinates.  I.e. scene has single 3D model, with camera
     /// that "revolves" around the model.  e.g. Geoscape, XNet, Human Base
     /// </summary>
-    public abstract class PolarScreen : Screen
+    public abstract class PolarScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -77,7 +77,7 @@ namespace ProjectXenocide.UI.Screens
         public void SetView(float left, float top, float width, float height)
         {
             sceneWindow = CeGui.GuiBuilder.CreateImage(CeguiId + "_viewport");
-            AddWidget(sceneWindow, left, top, width, height);
+            // sceneWindow is CeGui StaticImage for 3D scene rendering only
 
             // mouse activity on the "Scene" window
             sceneWindow.MouseMove += new CeGui.MouseEventHandler(OnMouseMoveInScene);

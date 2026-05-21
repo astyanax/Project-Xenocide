@@ -62,10 +62,18 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
                 foreach (Combatant combatant in team.Combatants)
                 {
                     string modelName = combatant.Graphic.Model;
-                    if (!models.ContainsKey(modelName))
+                    if (!models.ContainsKey(modelName) && !failedModels.Contains(modelName))
                     {
-                        XnaModel model = content.Load<XnaModel>("Content\\Models\\" + modelName);
-                        models.Add(modelName, new ModelInfo(model, combatant.Graphic));
+                        try
+                        {
+                            XnaModel model = content.Load<XnaModel>("Models\\" + modelName);
+                            models.Add(modelName, new ModelInfo(model, combatant.Graphic));
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("WARNING: Could not load model '{0}': {1}", modelName, ex.Message);
+                            failedModels.Add(modelName);
+                        }
                     }
                 }
             }
@@ -80,7 +88,9 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         public void Draw(Combatant combatant, BasicEffect basicEffect, bool visible)
         {
             // fetch model
-            ModelInfo modelInfo = models[combatant.Graphic.Model];
+            string modelName = combatant.Graphic.Model;
+            if (!models.ContainsKey(modelName)) return;
+            ModelInfo modelInfo = models[modelName];
 
             // set up world matrix to position object in world
             Matrix world = modelInfo.scalingMatrix;
@@ -156,6 +166,8 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
 
         /// <summary>The models</summary>
         private Dictionary<string, ModelInfo> models = new Dictionary<string, ModelInfo>();
+        /// <summary>Models that failed to load</summary>
+        private HashSet<string> failedModels = new HashSet<string>();
 
         #endregion Fields
     }

@@ -39,6 +39,7 @@ using ProjectXenocide.Model;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.UI.Scenes.Common;
+using ProjectXenocide.UI;
 using ProjectXenocide.UI.Scenes.Battlescape;
 
 #endregion
@@ -145,7 +146,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
             Justification="will throw if device is null")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow",
             MessageId = "topLevel*8", Justification="value won't overflow")]
-        public void Draw(GraphicsDevice device, CeGui.Rect sceneWindow, int topLevel, Vector3 cursorPosition)
+        public void Draw(GraphicsDevice device, UiRect sceneWindow, int topLevel, Vector3 cursorPosition)
         {
             // we're only interested in cell it's over
             cursorPosition = RoundToCell(cursorPosition);
@@ -193,7 +194,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         /// <param name="coords">The position in the viewport (in relative co-ords)</param>
         /// <param name="level">level of the battlescape to find intersection at</param>
         /// <returns>corresponding position, or undefined if not on Battlescape</returns>
-        public Vector3 WindowToBattlescapeCell(CeGui.Point coords, int level)
+        public Vector3 WindowToBattlescapeCell(UiPoint coords, int level)
         {
             // convert screen position to point on near clipping plane in view space
             float x = TanViewAngle * (coords.X - 0.5f) * aspectRatio;
@@ -259,7 +260,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         /// <param name="windowCoords">Window co-ords to translate</param>
         /// <param name="viewport">The current viewport</param>
         /// <returns>Viewport co-ordinates</returns>
-        private Viewport CalcViewportForSceneWindow(CeGui.Rect windowCoords, Viewport viewport)
+        private Viewport CalcViewportForSceneWindow(UiRect windowCoords, Viewport viewport)
         {
             int fullHeight = viewport.Height;
             int fullWidth = viewport.Width;
@@ -409,7 +410,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         private CombatantMeshes combatantMeshes = new CombatantMeshes();
 
         /// <summary>Will want to unload the content when we close this screen</summary>
-        private ContentManager content = new ContentManager(Xenocide.Instance.Services);
+         private ContentManager content = new ContentManager(Xenocide.Instance.Services, "Content");
 
         /// <summary>Color we want to draw the CellCursor with</summary>
         private Color wantedCellCursorColor = Color.Blue;

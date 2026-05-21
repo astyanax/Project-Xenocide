@@ -37,9 +37,8 @@ using System.Threading;
 using Microsoft.Xna.Framework;
 
 
-
-using CeGui;
-
+using Gum.Forms.Controls;
+using ProjectXenocide.UI.Controls;
 
 using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.Model;
@@ -56,7 +55,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// Screen for Saving game to file, and loading game from a file
     /// </summary>
-    public class LoadSaveGameScreen : Screen
+    public class LoadSaveGameScreen : GumScreen
     {
         /// <summary>
         /// Constructor
@@ -70,87 +69,79 @@ namespace ProjectXenocide.UI.Screens
             this.cancelScreen = cancelScreen;
         }
 
-        #region Create the CeGui widgets
+        #region Create the Gum controls
 
         /// <summary>
         /// create the widgets we're going to show on the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
             // initializeEditBox
-            filenameEditBox = GuiBuilder.CreateEditBox("editBox");
-            AddWidget(filenameEditBox, 0.05f, 0.84f, 0.9f, 0.07f);
+            filenameEditBox = new TextBox();
+            RootContainer.AddChild(filenameEditBox);
 
             // The list of saved games
             InitializeGrid();
 
             // and the buttons
-            deleteButton = AddButton("BUTTON_DELETE", 0.36f, 0.92f, 0.25f, 0.07f);
-            cancelButton = AddButton("BUTTON_CANCEL", 0.66f, 0.92f, 0.25f, 0.07f);
+            deleteButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_DELETE") };
+            RootContainer.AddChild(deleteButton);
+            cancelButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CANCEL") };
+            RootContainer.AddChild(cancelButton);
 
-            deleteButton.Clicked += new GuiEventHandler(OnDeleteGame);
-            cancelButton.Clicked += new GuiEventHandler(OnCloseScreen);
+            deleteButton.Click += OnDeleteGame;
+            cancelButton.Click += OnCloseScreen;
 
             // save/load button depends on mode
             if (mode == Mode.Save)
             {
-                saveButton = AddButton("BUTTON_SAVE", 0.07f, 0.92f, 0.25f, 0.07f);
-                saveButton.Clicked += new GuiEventHandler(OnSaveGame);
+                saveButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_SAVE") };
+                RootContainer.AddChild(saveButton);
+                saveButton.Click += OnSaveGame;
             }
             else
             {
-                saveButton = AddButton("BUTTON_LOAD", 0.07f, 0.92f, 0.25f, 0.07f);
-                saveButton.Clicked += new GuiEventHandler(OnLoadGame);
+                saveButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_LOAD") };
+                RootContainer.AddChild(saveButton);
+                saveButton.Click += OnLoadGame;
             }
         }
 
         /// <summary>
-        /// Creates a MultiColumnListBox (will hold the name of the saved games)
+        /// Creates a GridPanel (will hold the name of the saved games)
         /// </summary>
         private void InitializeGrid()
         {
-            savesgrid = GuiBuilder.CreateGrid("savesgrid");
-            AddWidget(savesgrid, 0.01f, 0.08f, 0.98f, 0.75f);
-            AddColumnHeader("Name", 0.4f);
-            AddColumnHeader("Real Time", 0.295f);
-            AddColumnHeader("Game Time", 0.295f);
+            savesgrid = new GridPanel();
+            RootContainer.AddChild(savesgrid.Visual);
+            savesgrid.AddColumn("Name", (int)(0.4f * 800));
+            savesgrid.AddColumn("Real Time", (int)(0.295f * 800));
+            savesgrid.AddColumn("Game Time", (int)(0.295f * 800));
 
             AddSaveGamesToGrid();
 
-            savesgrid.SelectionChanged += new WindowEventHandler(OnGridSelectionChanged);
+            savesgrid.SelectionChanged += OnGridSelectionChanged;
         }
 
-        /// <summary>
-        /// Add a column to the supplied grid of saved games
-        /// </summary>
-        /// <param name="title">Name to give the column</param>
-        /// <param name="width">Width to make the column (relative to grid's width)</param>
-        private void AddColumnHeader(String title, float width)
+        private void AddRowToGrid(String NameCol, String RealTimeCol, String GameTimeCol)
         {
-            savesgrid.AddColumn(title, savesgrid.ColumnCount, width);
+            savesgrid.AddRow(NameCol, NameCol, RealTimeCol, GameTimeCol);
         }
 
-        private void AddRowToGrid(String NameCol, String RealTimeCol, String GameTimeCol, int rowNum)
-        {
-            savesgrid.InsertRow(Util.CreateListboxItem(NameCol), 0, rowNum);
-            Util.AddStringElementToGrid(savesgrid, 1, rowNum, RealTimeCol);
-            Util.AddStringElementToGrid(savesgrid, 2, rowNum, GameTimeCol);
-        }
+        private GridPanel savesgrid;
+        private TextBox filenameEditBox;
+        private Button saveButton;
+        private Button deleteButton;
+        private Button cancelButton;
 
-        private CeGui.Widgets.MultiColumnList savesgrid;
-        private CeGui.Widgets.EditBox filenameEditBox;
-        private CeGui.Widgets.PushButton saveButton;
-        private CeGui.Widgets.PushButton deleteButton;
-        private CeGui.Widgets.PushButton cancelButton;
-
-        #endregion Create the CeGui widgets
+        #endregion Create the Gum controls
 
         #region event handlers
 
         /// <summary>Write the game state to named file</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnSaveGame(object sender, GuiEventArgs e)
+        private void OnSaveGame(object sender, EventArgs e)
         {
             String saveName = filenameEditBox.Text;
             if (SaveGameExists(saveName))
@@ -172,13 +163,14 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="e">Not used</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope",
            Justification = "FxCop False Positive")]
-        private void OnLoadGame(object sender, GuiEventArgs e)
+        private void OnLoadGame(object sender, EventArgs e)
         {
-            CeGui.Widgets.ListboxItem item = savesgrid.GetFirstSelectedItem();
-            if (item != null)
+            if (savesgrid.SelectedRow != null)
             {
+                string filename = savesgrid.GetSelectedCellText();
+
                 // load the file
-                GameState game = ReadFromFile(item.Text);
+                GameState game = ReadFromFile(filename);
                 if (null != game)
                 {
                     Xenocide.GameState = game;
@@ -195,7 +187,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>Restore screen that was present before Save/Load game screen</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnCloseScreen(object sender, GuiEventArgs e)
+        private void OnCloseScreen(object sender, EventArgs e)
         {
             Screen nextScreen = null;
             switch (cancelScreen)
@@ -223,18 +215,19 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>delete the currently selected save file</summary>
         /// <param name="sender">Button that has been clicked</param>
         /// <param name="e">Not used</param>
-        private void OnDeleteGame(object sender, GuiEventArgs e)
+        private void OnDeleteGame(object sender, EventArgs e)
         {
             // delete the currently selected save game
-            CeGui.Widgets.ListboxItem item = savesgrid.GetFirstSelectedItem();
-            if (item != null)
+            if (savesgrid.SelectedRow != null)
             {
+                string filename = savesgrid.GetSelectedCellText();
+
                 //ToDo: we should pop up a messagebox to confirm user really does want to delete the savegame
 
-                DeleteSaveGameFile(item.Text);
+                DeleteSaveGameFile(filename);
 
                 // Now remove the savegame from the screen's grid (and edit box)
-                savesgrid.RemoveRow(savesgrid.GetRowIndexOfItem(item));
+                savesgrid.RemoveRow(savesgrid.GetRowIndexByTag(filename));
                 filenameEditBox.Text = String.Empty;
             }
         }
@@ -242,13 +235,12 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>Handles user clicking on an item in the grid</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnGridSelectionChanged(object sender, WindowEventArgs e)
+        private void OnGridSelectionChanged(object sender, EventArgs e)
         {
-            CeGui.Widgets.ListboxItem item = savesgrid.GetFirstSelectedItem();
-            if (item != null)
+            if (savesgrid.SelectedRow != null)
             {
                 Xenocide.AudioSystem.PlaySound("Menu\\buttonclick2_changesetting.ogg");
-                filenameEditBox.Text = item.Text;
+                filenameEditBox.Text = savesgrid.GetSelectedCellText();
             }
         }
 
@@ -289,8 +281,7 @@ namespace ProjectXenocide.UI.Screens
                 AddRowToGrid(
                     filename,
                     header.RealTime,
-                    header.GameTime,
-                    0);
+                    header.GameTime);
             }
         }
 

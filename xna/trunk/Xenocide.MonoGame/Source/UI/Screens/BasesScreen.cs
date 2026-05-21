@@ -36,8 +36,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-using CeGui;
-
+using Gum.Forms.Controls;
 
 using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape.Outposts;
@@ -54,7 +53,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// Screen that shows the layout of facilities in a X-Corp Outpost (Base)
     /// </summary>
-    public class BasesScreen : Screen
+    public class BasesScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -67,7 +66,8 @@ namespace ProjectXenocide.UI.Screens
 
             // Before showing, bring floorplan up to date 
             scene = new FacilityScene(SelectedBaseFloorplan);
-            Xenocide.AudioSystem.PlayRandomMusic("BaseView");
+            if (Xenocide.AudioSystem != null)
+                Xenocide.AudioSystem.PlayRandomMusic("BaseView");
         }
 
         /// <summary>
@@ -103,7 +103,6 @@ namespace ProjectXenocide.UI.Screens
         {
             // update funds shown on screen
             // Note, if display hasn't changed, don't write new value to text window
-            // as this will make CeGui recompute all render quads.
             String funds = Util.StringFormat(Strings.SCREEN_BASES_FUNDS,
                 Xenocide.GameState.GeoData.XCorp.Bank.CurrentBalance);
             if (fundsText.Text != funds)
@@ -111,7 +110,7 @@ namespace ProjectXenocide.UI.Screens
                 fundsText.Text = funds;
             }
 
-            scene.Draw(device, sceneWindow.Rect);
+            scene.Draw(device, sceneWindowRect);
         }
 
         /// <summary>
@@ -127,94 +126,94 @@ namespace ProjectXenocide.UI.Screens
             buildFacButton.Text = Strings.BUTTON_CANCEL_FACILITY;
         }
 
-        #region Create the CeGui widgets
+        #region Create the Gum controls
 
         /// <summary>
         /// add the buttons to the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
             // Window indicating where the 3D scene is
-            sceneWindow = GuiBuilder.CreateImage(CeguiId + "_viewport");
             //... dimensions chosen to make 3D scene 512 x 512 at 600 x 800 resolution.
-            AddWidget(sceneWindow, 0.02f, 0.073f, 0.641f, 0.8534f);
+            sceneWindowRect = new UiRect(0.02f, 0.073f, 0.661f, 0.9264f);
 
             // combo box to allow user to pick base to work on
-            basesListComboBox = GuiBuilder.CreateComboBox("basesListComboBox");
-            AddWidget(basesListComboBox, 0.7475f, 0.06f, 0.2275f, 0.40f);
+            basesListComboBox = new ComboBox();
+            RootContainer.AddChild(basesListComboBox);
             Misc.PopulateHumanBasesList(basesListComboBox, selectedBase);
-            basesListComboBox.ListSelectionAccepted += new WindowEventHandler(OnBaseSelectionChanged);
+            basesListComboBox.SelectionChanged += (s, a) => OnBaseSelectionChanged(s, EventArgs.Empty);
 
             // add text giving available funds
-            fundsText = GuiBuilder.CreateText(CeguiId + "_fundsText");
-            AddWidget(fundsText, 0.7475f, 0.40f, 0.2275f, 0.04125f);
+            fundsText = new Label();
+            RootContainer.AddChild(fundsText);
 
             // other buttons
-            newBaseButton = AddButton("BUTTON_BUILD_NEW_BASE", 0.7475f, 0.50f, 0.2275f, 0.04125f);
-            baseInfoButton = AddButton("BUTTON_BASE_INFORMATION", 0.7475f, 0.55f, 0.2275f, 0.04125f);
-            soldiersButton = AddButton("BUTTON_SOLDIERS", 0.7475f, 0.60f, 0.2275f, 0.04125f);
-            equipCraftButton = AddButton("BUTTON_EQUIP_CRAFT", 0.7475f, 0.65f, 0.2275f, 0.04125f);
-            buildFacButton = AddButton("BUTTON_BUILD_FACILITIES", 0.7475f, 0.70f, 0.2275f, 0.04125f);
-            produceButton = AddButton("BUTTON_MANUFACTURE", 0.7475f, 0.75f, 0.2275f, 0.04125f);
-            transferButton = AddButton("BUTTON_TRANSFER", 0.7475f, 0.80f, 0.2275f, 0.04125f);
-            buyButton = AddButton("BUTTON_BUY", 0.7475f, 0.85f, 0.2275f, 0.04125f);
-            sellButton = AddButton("BUTTON_SELL", 0.7475f, 0.90f, 0.2275f, 0.04125f);
-            geoscapeButton = AddButton("BUTTON_GEOSCAPE", 0.7475f, 0.95f, 0.2275f, 0.04125f);
-
-            // mouse activity on the "Scene" window
-            sceneWindow.MouseMove += new CeGui.MouseEventHandler(OnMouseMoveInScene);
-            sceneWindow.MouseButtonsDown += new CeGui.MouseEventHandler(OnMouseDownInScene);
+            newBaseButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BUILD_NEW_BASE") };
+            RootContainer.AddChild(newBaseButton);
+            baseInfoButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BASE_INFORMATION") };
+            RootContainer.AddChild(baseInfoButton);
+            soldiersButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_SOLDIERS") };
+            RootContainer.AddChild(soldiersButton);
+            equipCraftButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_EQUIP_CRAFT") };
+            RootContainer.AddChild(equipCraftButton);
+            buildFacButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BUILD_FACILITIES") };
+            RootContainer.AddChild(buildFacButton);
+            produceButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_MANUFACTURE") };
+            RootContainer.AddChild(produceButton);
+            transferButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TRANSFER") };
+            RootContainer.AddChild(transferButton);
+            buyButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BUY") };
+            RootContainer.AddChild(buyButton);
+            sellButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_SELL") };
+            RootContainer.AddChild(sellButton);
+            geoscapeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_GEOSCAPE") };
+            RootContainer.AddChild(geoscapeButton);
 
             // other buttons being pressed
-            newBaseButton.Clicked += new CeGui.GuiEventHandler(OnNewBase);
-            baseInfoButton.Clicked += new CeGui.GuiEventHandler(ShowBaseInfoScreen);
-            soldiersButton.Clicked += new CeGui.GuiEventHandler(OnSoldiersButton);
-            equipCraftButton.Clicked += new CeGui.GuiEventHandler(OnEquipCraftButton);
-            buildFacButton.Clicked += new CeGui.GuiEventHandler(OnBuildFacilitiesButton);
-            produceButton.Clicked += new CeGui.GuiEventHandler(OnManufactureButton);
-            transferButton.Clicked += new CeGui.GuiEventHandler(OnTransferButton);
-            buyButton.Clicked += new CeGui.GuiEventHandler(OnBuyButton);
-            sellButton.Clicked += new CeGui.GuiEventHandler(OnSellButton);
-            geoscapeButton.Clicked += new CeGui.GuiEventHandler(OnGeoscapeButton);
+            newBaseButton.Click += OnNewBase;
+            baseInfoButton.Click += ShowBaseInfoScreen;
+            soldiersButton.Click += OnSoldiersButton;
+            equipCraftButton.Click += OnEquipCraftButton;
+            buildFacButton.Click += OnBuildFacilitiesButton;
+            produceButton.Click += OnManufactureButton;
+            transferButton.Click += OnTransferButton;
+            buyButton.Click += OnBuyButton;
+            sellButton.Click += OnSellButton;
+            geoscapeButton.Click += OnGeoscapeButton;
         }
 
-        /// <summary>
-        /// CeGui widget that indicates where to draw the 3D scene
-        /// </summary>
-        private CeGui.Widgets.StaticImage sceneWindow;
+        private UiRect sceneWindowRect;
+        private ComboBox basesListComboBox;
+        private Label fundsText;
+        private Button newBaseButton;
+        private Button baseInfoButton;
+        private Button soldiersButton;
+        private Button equipCraftButton;
+        private Button buildFacButton;
+        private Button produceButton;
+        private Button transferButton;
+        private Button buyButton;
+        private Button sellButton;
+        private Button geoscapeButton;
 
-        private CeGui.Widgets.ComboBox basesListComboBox;
-        private CeGui.Widgets.StaticText fundsText;
-        private CeGui.Widgets.PushButton newBaseButton;
-        private CeGui.Widgets.PushButton baseInfoButton;
-        private CeGui.Widgets.PushButton soldiersButton;
-        private CeGui.Widgets.PushButton equipCraftButton;
-        private CeGui.Widgets.PushButton buildFacButton;
-        private CeGui.Widgets.PushButton produceButton;
-        private CeGui.Widgets.PushButton transferButton;
-        private CeGui.Widgets.PushButton buyButton;
-        private CeGui.Widgets.PushButton sellButton;
-        private CeGui.Widgets.PushButton geoscapeButton;
-
-        #endregion Create the CeGui widgets
+        #endregion Create the Gum controls
 
         #region event handlers
 
         /// <summary>React to user moving the mouse in the 3D scene</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Mouse information</param>
-        private void OnMouseMoveInScene(object sender, CeGui.MouseEventArgs e)
+        private void OnMouseMoveInScene(object sender, EventArgs e)
         {
+            var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             switch (state)
             {
                 case BasesScreenState.NotAdding:
-                    // nothing to do
                     break;
 
                 case BasesScreenState.AddAccessLift:
                 case BasesScreenState.AddFacility:
-                    // Update position of facility we're adding
-                    UpdateNewFacilityPosition(MouseToCell(e));
+                    UpdateNewFacilityPosition(MouseToCell(mouseState.X, mouseState.Y));
                     break;
 
                 default:
@@ -224,21 +223,21 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>React to user clicking mouse in the 3D scene</summary>
-        /// <param name="sender">CeGui widget sending the event</param>
+        /// <param name="sender">Not used</param>
         /// <param name="e">Mouse information</param>
-        private void OnMouseDownInScene(object sender, CeGui.MouseEventArgs e)
+        private void OnMouseDownInScene(object sender, EventArgs e)
         {
             Xenocide.AudioSystem.PlaySound("Menu\\buttonclick2_changesetting.ogg");
+            var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             switch (state)
             {
                 case BasesScreenState.NotAdding:
-                    RemoveFacility(MouseToCell(e));
+                    RemoveFacility(MouseToCell(mouseState.X, mouseState.Y));
                     break;
 
                 case BasesScreenState.AddAccessLift:
                 case BasesScreenState.AddFacility:
-                    // Start building facility at this position
-                    AddFacility(MouseToCell(e));
+                    AddFacility(MouseToCell(mouseState.X, mouseState.Y));
                     break;
 
                 default:
@@ -250,15 +249,14 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>user wants to look at a different base</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnBaseSelectionChanged(object sender, WindowEventArgs e)
+        private void OnBaseSelectionChanged(object sender, EventArgs e)
         {
             if (BasesScreenState.NotAdding == state)
             {
-                CeGui.Widgets.ListboxItem item = basesListComboBox.SelectedItem;
-                if (item != null)
+                int index = basesListComboBox.SelectedIndex;
+                if (index >= 0)
                 {
-                    selectedBase = basesListComboBox.GetItemIndex(item);
-                    // Need to completely redraw scene.
+                    selectedBase = index;
                     ScreenManager.ScheduleScreen(new BasesScreen(selectedBase));
                 }
             }
@@ -267,7 +265,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>Replace this screen with matching BaseInfoScreen</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void ShowBaseInfoScreen(object sender, CeGui.GuiEventArgs e)
+        private void ShowBaseInfoScreen(object sender, EventArgs e)
         {
             if (BasesScreenState.NotAdding == state)
             {
@@ -278,7 +276,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>Replace this screen with soldier list screen.</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnSoldiersButton(object sender, CeGui.GuiEventArgs e)
+        private void OnSoldiersButton(object sender, EventArgs e)
         {
             if (BasesScreenState.NotAdding == state)
             {
@@ -289,7 +287,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>user wants to add a new base</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnNewBase(object sender, CeGui.GuiEventArgs e)
+        private void OnNewBase(object sender, EventArgs e)
         {
             // can't create a new base if we're adding a facility to this one
             if (BasesScreenState.NotAdding == state)
@@ -314,7 +312,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>user wants to equip the craft assigned to this outpost</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnEquipCraftButton(object sender, CeGui.GuiEventArgs e)
+        private void OnEquipCraftButton(object sender, EventArgs e)
         {
             if (BasesScreenState.NotAdding == state)
             {
@@ -325,7 +323,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>user wants to add a facility to the current base</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnBuildFacilitiesButton(object sender, CeGui.GuiEventArgs e)
+        private void OnBuildFacilitiesButton(object sender, EventArgs e)
         {
             if (BasesScreenState.NotAdding == state)
             {
@@ -352,7 +350,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "Manufacture" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnManufactureButton(object sender, CeGui.GuiEventArgs e)
+        private void OnManufactureButton(object sender, EventArgs e)
         {
             ShowManufactureScreen();
         }
@@ -360,7 +358,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "Transfer" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnTransferButton(object sender, CeGui.GuiEventArgs e)
+        private void OnTransferButton(object sender, EventArgs e)
         {
             ShowMakeTransferScreen();
         }
@@ -368,7 +366,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "Buy" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnBuyButton(object sender, CeGui.GuiEventArgs e)
+        private void OnBuyButton(object sender, EventArgs e)
         {
             if (BasesScreenState.NotAdding == state)
             {
@@ -379,7 +377,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "Sell" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnSellButton(object sender, CeGui.GuiEventArgs e)
+        private void OnSellButton(object sender, EventArgs e)
         {
             if (BasesScreenState.NotAdding == state)
             {
@@ -390,7 +388,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "go to geoscape" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnGeoscapeButton(object sender, CeGui.GuiEventArgs e)
+        private void OnGeoscapeButton(object sender, EventArgs e)
         {
             if (BasesScreenState.NotAdding == state)
             {
@@ -405,17 +403,16 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// Convert the mouse's position to the cell co-ordinates on the Base's floorplan
         /// </summary>
-        /// <param name="e">Mouse information (specifically, location of mouse)</param>
+        /// <param name="mouseX">Mouse X pixel position</param>
+        /// <param name="mouseY">Mouse Y pixel position</param>
         /// <returns>Cell in base cursor is over</returns>
-        private Microsoft.Xna.Framework.Vector2 MouseToCell(CeGui.MouseEventArgs e)
+        private Microsoft.Xna.Framework.Vector2 MouseToCell(int mouseX, int mouseY)
         {
-            //convert co-ords from absolute to relative into the scene window
-            CeGui.Point coords2 = sceneWindow.AbsoluteToRelative(new CeGui.Point(
-                e.Position.X - sceneWindow.AbsoluteX,
-                e.Position.Y - sceneWindow.AbsoluteY));
+            var viewport = Xenocide.Instance.GraphicsDevice.Viewport;
+            float relX = (mouseX - viewport.Width * sceneWindowRect.Left) / (viewport.Width * sceneWindowRect.Width);
+            float relY = (mouseY - viewport.Height * sceneWindowRect.Top) / (viewport.Height * sceneWindowRect.Height);
 
-            // convert to cell position
-            return scene.WindowToCell(coords2);
+            return scene.WindowToCell(new UiPoint(relX, relY));
         }
 
         /// <summary>
@@ -475,7 +472,7 @@ namespace ProjectXenocide.UI.Screens
                 XenoError error = SelectedBaseFloorplan.CanRemoveFacility(facility);
                 if (XenoError.None == error)
                 {
-                    YesNoDialog dlg = new YesNoDialog(
+                    GumYesNoDialog dlg = new GumYesNoDialog(
                         Util.StringFormat(Strings.YESNOMSG_DISMANTLE_FACILITY, facility.FacilityInfo.Name)
                     );
 

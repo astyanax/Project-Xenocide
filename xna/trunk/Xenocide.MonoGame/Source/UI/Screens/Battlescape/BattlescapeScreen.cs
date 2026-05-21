@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -39,6 +39,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Vector3 = Microsoft.Xna.Framework.Vector3;
 
 using CeGui;
+using Gum.Forms.Controls;
 
 
 using ProjectXenocide.Utils;
@@ -56,7 +57,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// Screen that shows the battlescape
     /// </summary>
-    public partial class BattlescapeScreen : Screen
+    public partial class BattlescapeScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -105,29 +106,29 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// add the buttons to the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
             // Window indicating where the 3D scene is
             sceneWindow = GuiBuilder.CreateImage(CeguiId + "_viewport");
             AddWidget(sceneWindow, 0.00f, 0.00f, 0.745f, 1.00f);
 
             // text giving stats for selected combatant
-            combatantStatsTextWindow = AddStaticText(0.0f, 0.0f, 0.745f, 0.065f);
-            combatantStatsTextWindow.Hide();
+            combatantStatsTextWindow = new Label(); RootContainer.AddChild(combatantStatsTextWindow);
+            combatantStatsTextWindow.Visual.Visible = false;
 
             // other buttons
-            equipmentButton = AddButton("BUTTON_EQUIPMENT", 0.7475f, 0.75f, 0.2275f, 0.04125f);
-            rightHandButton = AddButton("BUTTON_RIGHT_HAND", 0.7475f, 0.80f, 0.2275f, 0.04125f);
-            finishTurnButton = AddButton("BUTTON_FINISH_TURN", 0.7475f, 0.85f, 0.2275f, 0.04125f);
-            topLevelButton = AddButton("BUTTON_TOP_LEVEL", 0.7475f, 0.90f, 0.2275f, 0.04125f);
-            abortButton = AddButton("BUTTON_ABORT_MISSION", 0.7475f, 0.95f, 0.2275f, 0.04125f);
+            equipmentButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_EQUIPMENT") }; RootContainer.AddChild(equipmentButton);
+            rightHandButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_RIGHT_HAND") }; RootContainer.AddChild(rightHandButton);
+            finishTurnButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_FINISH_TURN") }; RootContainer.AddChild(finishTurnButton);
+            topLevelButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TOP_LEVEL") }; RootContainer.AddChild(topLevelButton);
+            abortButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_ABORT_MISSION") }; RootContainer.AddChild(abortButton);
 
             // other buttons being pressed
-            equipmentButton.Clicked += new CeGui.GuiEventHandler(OnEquipmentButton);
-            rightHandButton.Clicked += new CeGui.GuiEventHandler(OnRightHandButton);
-            finishTurnButton.Clicked += new CeGui.GuiEventHandler(OnFinishTurnButton);
-            topLevelButton.Clicked += new CeGui.GuiEventHandler(OnTopLevelButton);
-            abortButton.Clicked += new CeGui.GuiEventHandler(OnAbortButton);
+            equipmentButton.Click += OnEquipmentButton;
+            rightHandButton.Click += OnRightHandButton;
+            finishTurnButton.Click += OnFinishTurnButton;
+            topLevelButton.Click += OnTopLevelButton;
+            abortButton.Click += OnAbortButton;
 
             // mouse activity on screen
             sceneWindow.MouseMove += new CeGui.MouseEventHandler(OnMouseMoveInScene);
@@ -139,13 +140,13 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private CeGui.Widgets.StaticImage sceneWindow;
 
-        private CeGui.Widgets.StaticText combatantStatsTextWindow;
+        private Label combatantStatsTextWindow;
 
-        private CeGui.Widgets.PushButton equipmentButton;
-        private CeGui.Widgets.PushButton rightHandButton;
-        private CeGui.Widgets.PushButton finishTurnButton;
-        private CeGui.Widgets.PushButton topLevelButton;
-        private CeGui.Widgets.PushButton abortButton;
+        private Button equipmentButton;
+        private Button rightHandButton;
+        private Button finishTurnButton;
+        private Button topLevelButton;
+        private Button abortButton;
 
         #endregion Create the CeGui widgets
 
@@ -154,7 +155,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "Equipment" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnEquipmentButton(object sender, CeGui.GuiEventArgs e)
+        private void OnEquipmentButton(object sender, EventArgs e)
         {
             state.OnEquipmentButton();
         }
@@ -162,7 +163,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "Right Hand" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnRightHandButton(object sender, CeGui.GuiEventArgs e)
+        private void OnRightHandButton(object sender, EventArgs e)
         {
             state.OnHandButton(true);
         }
@@ -170,7 +171,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "Finish Turn" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnFinishTurnButton(object sender, CeGui.GuiEventArgs e)
+        private void OnFinishTurnButton(object sender, EventArgs e)
         {
             state.OnFinishTurnButton();
         }
@@ -178,7 +179,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "Top Level" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnTopLevelButton(object sender, CeGui.GuiEventArgs e)
+        private void OnTopLevelButton(object sender, EventArgs e)
         {
             ToggleTopLevel();
         }
@@ -186,7 +187,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "Abort Mission" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnAbortButton(object sender, CeGui.GuiEventArgs e)
+        private void OnAbortButton(object sender, EventArgs e)
         {
             state.OnAbortButton();
         }
@@ -286,7 +287,7 @@ namespace ProjectXenocide.UI.Screens
         {
             if (null == combatant)
             {
-                combatantStatsTextWindow.Hide();
+                combatantStatsTextWindow.Visual.Visible = false;
             }
             else
             {
@@ -298,7 +299,7 @@ namespace ProjectXenocide.UI.Screens
                     combatant.Stats[Statistic.StunDamage],
                     combatant.Stats[Statistic.Health] - combatant.Stats[Statistic.InjuryDamage] - combatant.Stats[Statistic.StunDamage]
                 );
-                combatantStatsTextWindow.Show();
+                combatantStatsTextWindow.Visual.Visible = true;
             }
         }
 

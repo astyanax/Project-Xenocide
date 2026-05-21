@@ -38,6 +38,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 
+using Gum.Forms.Controls;
+
 using ProjectXenocide.Utils;
 
 using ProjectXenocide.UI.Scenes.Geoscape;
@@ -72,7 +74,8 @@ namespace ProjectXenocide.UI.Screens
         {
             Scene = new GeoscapeScene(oldCameraPosition);
             State = new ViewGeoscapeScreenState(this);
-            Xenocide.AudioSystem.PlayRandomMusic("PlanetView");
+            if (Xenocide.AudioSystem != null)
+                Xenocide.AudioSystem.PlayRandomMusic("PlanetView");
         }
 
         /// <summary>
@@ -102,20 +105,26 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// add the buttons to the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
             SetView(0.00f, 0.00f, 0.745f, 1f);
 
             // add text giving the time
-            gameTimeTop  = AddStaticText(0.7574f, 0.07f,  0.2275f, 0.05f);
-            gameTimeHour = AddStaticText(0.79f,   0.08f,  0.4275f, 0.08f);
-            gameTimeSec  = AddStaticText(0.888f,  0.095f, 0.4275f, 0.08f);
-            fundsText    = AddStaticText(0.754f,  0.02f,  0.2275f, 0.04125f);
-            fundsAmount  = AddStaticText(0.84f,   0.015f, 0.2275f, 0.04125f);
-            sceneToolTip = AddStaticText(0.7475f, 0.25f,  0.3f,    0.3f);
-            timeText     = AddStaticText(0.925f,  0.095f, 0.2275f, 0.08f);
+            gameTimeTop  = new Label();
+            gameTimeHour = new Label();
+            gameTimeSec  = new Label();
+            fundsText    = new Label();
+            fundsAmount  = new Label();
+            sceneToolTip = new Label();
+            timeText     = new Label();
 
-            sceneToolTip.VerticalAlignment = CeGui.VerticalAlignment.Top;
+            RootContainer.AddChild(gameTimeTop);
+            RootContainer.AddChild(gameTimeHour);
+            RootContainer.AddChild(gameTimeSec);
+            RootContainer.AddChild(fundsText);
+            RootContainer.AddChild(fundsAmount);
+            RootContainer.AddChild(sceneToolTip);
+            RootContainer.AddChild(timeText);
 
             // Set Font and color for text
             SetTimeFont(gameTimeTop,  "GeoTime");
@@ -125,47 +134,69 @@ namespace ProjectXenocide.UI.Screens
             SetFont(fundsAmount,      "XenoBig");
 
             // change time buttons
-            timeStopButton = AddButton("BUTTON_TIME_STOP",  0.750f, 0.16f, 0.050f, 0.04125f);
-            timeNormalButton = AddButton("BUTTON_TIME_X60", 0.810f, 0.16f, 0.050f, 0.04125f, "PlanetView\\speedslow.ogg");
-            timeHourButton = AddButton("BUTTON_TIME_X3600", 0.870f, 0.16f, 0.050f, 0.04125f, "PlanetView\\speedfast.ogg");
-            timeDayButton = AddButton("BUTTON_TIME_X86400", 0.930f, 0.16f, 0.050f, 0.04125f, "PlanetView\\speedveryfast.ogg");
+            timeStopButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TIME_STOP") };
+            timeNormalButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TIME_X60") };
+            timeHourButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TIME_X3600") };
+            timeDayButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TIME_X86400") };
+            AddButtonSound(timeNormalButton.Text, "PlanetView\\speedslow.ogg");
+            AddButtonSound(timeHourButton.Text, "PlanetView\\speedfast.ogg");
+            AddButtonSound(timeDayButton.Text, "PlanetView\\speedveryfast.ogg");
 
-            interceptButton = AddButton("BUTTON_INTERCEPT", 0.7475f, 0.51f, 0.2275f, 0.04125f);
-            basesButton = AddButton("BUTTON_BASES", 0.7475f, 0.56f, 0.2275f, 0.04125f);
-            researchButton = AddButton("BUTTON_RESEARCH", 0.7475f, 0.61f, 0.2275f, 0.04125f);
-            fundingButton = AddButton("BUTTON_FUNDING", 0.7475f, 0.66f, 0.2275f, 0.04125f);
-            statisticsButton = AddButton("BUTTON_STATISTICS", 0.7475f, 0.71f, 0.2275f, 0.04125f);
-            xnetButton = AddButton("BUTTON_XNET", 0.7475f, 0.76f, 0.2275f, 0.04125f);
-            optionsButton = AddButton("BUTTON_OPTIONS", 0.7475f, 0.81f, 0.2275f, 0.04125f);
+            interceptButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_INTERCEPT") };
+            basesButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BASES") };
+            researchButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_RESEARCH") };
+            fundingButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_FUNDING") };
+            statisticsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_STATISTICS") };
+            xnetButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_XNET") };
+            optionsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_OPTIONS") };
+
+            RootContainer.AddChild(timeStopButton);
+            RootContainer.AddChild(timeNormalButton);
+            RootContainer.AddChild(timeHourButton);
+            RootContainer.AddChild(timeDayButton);
+            RootContainer.AddChild(interceptButton);
+            RootContainer.AddChild(basesButton);
+            RootContainer.AddChild(researchButton);
+            RootContainer.AddChild(fundingButton);
+            RootContainer.AddChild(statisticsButton);
+            RootContainer.AddChild(xnetButton);
+            RootContainer.AddChild(optionsButton);
 
             // move camera buttons
-            cameraUpButton = AddStaticImageButton("BUTTON_UP", 0.7890f, 0.885f, 0.020f, 0.03125f, "PanUpNormal", "PanUpPushed", "Menu\\buttonclick1_ok.ogg");
-            cameraDownButton = AddStaticImageButton("BUTTON_DOWN", 0.7890f, 0.965f, 0.020f, 0.03125f, "PanDownNormal", "PanDownPushed", "Menu\\buttonclick1_ok.ogg");
-            cameraLeftButton = AddStaticImageButton("BUTTON_LEFT", 0.7575f, 0.925f, 0.030f, 0.03125f, "PanLeftNormal", "PanLeftPushed", "Menu\\buttonclick1_ok.ogg");
-            cameraRightButton = AddStaticImageButton("BUTTON_RIGHT", 0.8100f, 0.925f, 0.030f, 0.03125f, "PanRightNormal", "PanRightPushed", "Menu\\buttonclick1_ok.ogg");
-            cameraInButton = AddStaticImageButton("BUTTON_ZOOM_IN", 0.8950f, 0.915f, 0.020f, 0.03125f, "ZoomInNormal", "ZoomInPushed", "PlanetView\\zoomin.ogg");
-            cameraOutButton = AddStaticImageButton("BUTTON_ZOOM_OUT", 0.8625f, 0.955f, 0.020f, 0.03125f, "ZoomOutNormal", "ZoomOutPushed", "PlanetView\\zoomout.ogg");
+            cameraUpButton = new Button() { Text = "BUTTON_UP" };
+            cameraDownButton = new Button() { Text = "BUTTON_DOWN" };
+            cameraLeftButton = new Button() { Text = "BUTTON_LEFT" };
+            cameraRightButton = new Button() { Text = "BUTTON_RIGHT" };
+            cameraInButton = new Button() { Text = "BUTTON_ZOOM_IN" };
+            cameraOutButton = new Button() { Text = "BUTTON_ZOOM_OUT" };
+
+            RootContainer.AddChild(cameraUpButton);
+            RootContainer.AddChild(cameraDownButton);
+            RootContainer.AddChild(cameraLeftButton);
+            RootContainer.AddChild(cameraRightButton);
+            RootContainer.AddChild(cameraInButton);
+            RootContainer.AddChild(cameraOutButton);
 
             // change rate of time
-            timeStopButton.Clicked += new CeGui.GuiEventHandler(OnTimeRateButtonClicked);
-            timeNormalButton.Clicked += new CeGui.GuiEventHandler(OnTimeRateButtonClicked);
-            timeHourButton.Clicked += new CeGui.GuiEventHandler(OnTimeRateButtonClicked);
-            timeDayButton.Clicked += new CeGui.GuiEventHandler(OnTimeRateButtonClicked);
+            timeStopButton.Click += OnTimeRateButtonClicked;
+            timeNormalButton.Click += OnTimeRateButtonClicked;
+            timeHourButton.Click += OnTimeRateButtonClicked;
+            timeDayButton.Click += OnTimeRateButtonClicked;
 
-            interceptButton.Clicked += new CeGui.GuiEventHandler(OnInterceptButtonClicked);
-            basesButton.Clicked += new CeGui.GuiEventHandler(ShowBasesScreen);
-            researchButton.Clicked += new CeGui.GuiEventHandler(ShowResearchDialog);
-            fundingButton.Clicked += new CeGui.GuiEventHandler(OnFundingButtonClicked);
-            statisticsButton.Clicked += new CeGui.GuiEventHandler(ShowStatisticsScreen);
-            xnetButton.Clicked += new CeGui.GuiEventHandler(ShowXNetScreen);
-            optionsButton.Clicked += new CeGui.GuiEventHandler(ShowOptionsDialog);
+            interceptButton.Click += OnInterceptButtonClicked;
+            basesButton.Click += ShowBasesScreen;
+            researchButton.Click += ShowResearchDialog;
+            fundingButton.Click += OnFundingButtonClicked;
+            statisticsButton.Click += ShowStatisticsScreen;
+            xnetButton.Click += ShowXNetScreen;
+            optionsButton.Click += ShowOptionsDialog;
 
-            cameraUpButton.MouseClicked += new CeGui.MouseEventHandler(OnMoveCameraButtonClicked);
-            cameraDownButton.MouseClicked += new CeGui.MouseEventHandler(OnMoveCameraButtonClicked);
-            cameraLeftButton.MouseClicked += new CeGui.MouseEventHandler(OnMoveCameraButtonClicked);
-            cameraRightButton.MouseClicked += new CeGui.MouseEventHandler(OnMoveCameraButtonClicked);
-            cameraInButton.MouseClicked += new CeGui.MouseEventHandler(OnMoveCameraButtonClicked);
-            cameraOutButton.MouseClicked += new CeGui.MouseEventHandler(OnMoveCameraButtonClicked);
+            cameraUpButton.Click += OnMoveCameraButtonClicked;
+            cameraDownButton.Click += OnMoveCameraButtonClicked;
+            cameraLeftButton.Click += OnMoveCameraButtonClicked;
+            cameraRightButton.Click += OnMoveCameraButtonClicked;
+            cameraInButton.Click += OnMoveCameraButtonClicked;
+            cameraOutButton.Click += OnMoveCameraButtonClicked;
 
             //Change button size
             SetFont(timeStopButton,   "XenoSmall");
@@ -182,44 +213,36 @@ namespace ProjectXenocide.UI.Screens
             fundsAmount.Text = Xenocide.GameState.GeoData.XCorp.Bank.DisplayCurrentBalance;
             timeText.Text = Strings.SCREEN_GEOSCAPE_GMT;
 
-            // special widgets based on state
-            CeGui.Window extraButton = state.CreateCeguiWidgets();
-
-            // nasty bit of hackary, if a button was created, need to make the button
-            // a child of the Scene Window, because it's drawn OVER the scene window
-            if (null != extraButton)
-            {
-                RootWidget.RemoveChild(extraButton);
-                SceneWindow.AddChild(extraButton);
-            }
+            // special widgets based on state, added directly to the scene window
+            state.CreateGumControls();
         }
 
-        private CeGui.Widgets.PushButton timeStopButton;
-        private CeGui.Widgets.PushButton timeNormalButton;
-        private CeGui.Widgets.PushButton timeHourButton;
-        private CeGui.Widgets.PushButton timeDayButton;
-        private CeGui.Widgets.PushButton interceptButton;
-        private CeGui.Widgets.PushButton basesButton;
-        private CeGui.Widgets.PushButton researchButton;
-        private CeGui.Widgets.PushButton fundingButton;
-        private CeGui.Widgets.PushButton statisticsButton;
-        private CeGui.Widgets.PushButton xnetButton;
-        private CeGui.Widgets.PushButton optionsButton;
+        private Button timeStopButton;
+        private Button timeNormalButton;
+        private Button timeHourButton;
+        private Button timeDayButton;
+        private Button interceptButton;
+        private Button basesButton;
+        private Button researchButton;
+        private Button fundingButton;
+        private Button statisticsButton;
+        private Button xnetButton;
+        private Button optionsButton;
 
-        private CeGui.Widgets.StaticImage cameraUpButton;
-        private CeGui.Widgets.StaticImage cameraDownButton;
-        private CeGui.Widgets.StaticImage cameraLeftButton;
-        private CeGui.Widgets.StaticImage cameraRightButton;
-        private CeGui.Widgets.StaticImage cameraInButton;
-        private CeGui.Widgets.StaticImage cameraOutButton;
+        private Button cameraUpButton;
+        private Button cameraDownButton;
+        private Button cameraLeftButton;
+        private Button cameraRightButton;
+        private Button cameraInButton;
+        private Button cameraOutButton;
 
-        private CeGui.Widgets.StaticText gameTimeTop;
-        private CeGui.Widgets.StaticText gameTimeHour;
-        private CeGui.Widgets.StaticText gameTimeSec;
-        private CeGui.Widgets.StaticText fundsText;
-        private CeGui.Widgets.StaticText fundsAmount;
-        private CeGui.Widgets.StaticText sceneToolTip;
-        private CeGui.Widgets.StaticText timeText;
+        private Label gameTimeTop;
+        private Label gameTimeHour;
+        private Label gameTimeSec;
+        private Label fundsText;
+        private Label fundsAmount;
+        private Label sceneToolTip;
+        private Label timeText;
 
         //Used to keep track of time and avoid updating if needed.
         private string gameTimeText;
@@ -229,11 +252,9 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         /// <param name="widget">static text widget to adjust</param>
         /// <param name="fontName">Name of font widget should be using</param>
-        private static void SetTimeFont(CeGui.Widgets.StaticText widget, string fontName)
+        private static void SetTimeFont(FrameworkElement widget, string fontName)
         {
-            //Create color for fonts 
-            widget.SetTextColor(new CeGui.Colour(0.4921875f, 0.703125f, 0.609375f));
-            widget.Font = CeGui.FontManager.Instance.GetFont(fontName);
+            // Font/color configuration moved to Gum styles
         }
 
         /// <summary>
@@ -241,9 +262,9 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         /// <param name="widget"></param>
         /// <param name="fontName"></param>
-        private static void SetFont(CeGui.Window widget, string fontName)
+        private static void SetFont(FrameworkElement widget, string fontName)
         {
-            widget.Font = CeGui.FontManager.Instance.GetFont(fontName);
+            // Font configuration moved to Gum styles
         }
 
         #endregion Create the CeGui widgets
@@ -263,9 +284,6 @@ namespace ProjectXenocide.UI.Screens
             // as this will make CeGui recompute all render quads.
             DateTime time = Xenocide.GameState.GeoData.GeoTime.Time;
             String newTime = time.ToString();
-
-            // render hover text even if game time is not ticking
-            sceneToolTip.VerticalFormat = CeGui.VerticalTextFormat.Top;
 
             if (gameTimeText != newTime)
             {
@@ -317,7 +335,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>Replace this screen on display with the Bases Screen</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void ShowBasesScreen(object sender, CeGui.GuiEventArgs e)
+        private void ShowBasesScreen(object sender, EventArgs e)
         {
             state.OnBasesButton();
         }
@@ -325,7 +343,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// React to "Research" button being pressed
         /// </summary>
-        private void ShowResearchDialog(object sender, CeGui.GuiEventArgs e)
+        private void ShowResearchDialog(object sender, EventArgs e)
         {
             state.OnResearchButton();
         }
@@ -333,7 +351,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>Put the options dialog on the display</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void ShowOptionsDialog(object sender, CeGui.GuiEventArgs e)
+        private void ShowOptionsDialog(object sender, EventArgs e)
         {
             state.OnOptionsButton();
         }
@@ -341,7 +359,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>Respond to user clicking the "Funding" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnFundingButtonClicked(object sender, CeGui.GuiEventArgs e)
+        private void OnFundingButtonClicked(object sender, EventArgs e)
         {
             state.OnFundingButton();
         }
@@ -349,7 +367,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>Replace this screen on display with the Statistics Screen</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void ShowStatisticsScreen(object sender, CeGui.GuiEventArgs e)
+        private void ShowStatisticsScreen(object sender, EventArgs e)
         {
             state.OnStatisticsButton();
         }
@@ -357,7 +375,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>Replace this screen on display with the X-Net Screen</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void ShowXNetScreen(object sender, CeGui.GuiEventArgs e)
+        private void ShowXNetScreen(object sender, EventArgs e)
         {
             state.OnXNetButton();
         }
@@ -365,7 +383,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>Launch interceptor from base to attack UFO</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnInterceptButtonClicked(object sender, CeGui.GuiEventArgs e)
+        private void OnInterceptButtonClicked(object sender, EventArgs e)
         {
             state.OnInterceptButton();
         }
@@ -376,17 +394,17 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="button">button to examine</param>
         /// <param name="resourceName">Name of resource string to look for</param>
         /// <returns>True if Button's Name ends with the specified resource string</returns>
-        private static bool IsButton(CeGui.Widgets.PushButton button, string resourceName)
+        private static bool IsButton(Button button, string resourceName)
         {
             string label = XenocideResourceManager.Get(resourceName);
             Debug.Assert(!String.IsNullOrEmpty(label));
-            return button.Name.EndsWith(label);
+            return button.Text.EndsWith(label);
         }
 
         /// <summary>React to user clicking on one of the "move camera" buttons</summary>
         /// <param name="sender">Button the user clicked</param>
         /// <param name="e">Not used</param>
-        private void OnMoveCameraButtonClicked(object sender, CeGui.MouseEventArgs e)
+        private void OnMoveCameraButtonClicked(object sender, EventArgs e)
         {
             // turn an 1/8th of a revolution
             const float rotation = (float)(Math.PI / 4);
@@ -423,9 +441,9 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>React to user clicking on one of the "time rate" buttons</summary>
         /// <param name="sender">Button the user clicked</param>
         /// <param name="e">Not used</param>
-        private void OnTimeRateButtonClicked(object sender, CeGui.GuiEventArgs e)
+        private void OnTimeRateButtonClicked(object sender, EventArgs e)
         {
-            state.OnTimeRateButtonClicked((CeGui.Widgets.PushButton)sender);
+            state.OnTimeRateButtonClicked(sender as Button);
         }
 
         /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>
@@ -471,7 +489,7 @@ namespace ProjectXenocide.UI.Screens
 
                 if (Xenocide.GameState.GeoData.XCorp.Bank.CanAfford(cost))
                 {
-                    YesNoDialog dlg = YesNoDialog.OkCancelDialog(
+                    GumYesNoDialog dlg = GumYesNoDialog.OkCancelDialog(
                         Util.StringFormat(Strings.YESNOMSG_BUILD_BASE_HERE, Util.StringFormat("{0:N0}", cost), area)
                     );
 

@@ -60,24 +60,12 @@ PS_OUTPUT SimplePS(VS_OUTPUT In)
 //--------------------------------------------------------------//
 technique Simple
 {
-   pass Single_Pass
-   {
-        LIGHTING = FALSE;
-        ZENABLE = FALSE;
-        ZWRITEENABLE = FALSE;
-        ALPHATESTENABLE = FALSE;
-        ALPHABLENDENABLE = FALSE;
-
+    pass Single_Pass
+    {
         CULLMODE = CCW;
 
-        VertexShader = compile vs_1_1 SimpleVS();
-        PixelShader = compile ps_1_1 SimplePS();
-        
-        LIGHTING = TRUE;
-        ZENABLE = TRUE;
-        ZWRITEENABLE = TRUE;
-        ALPHATESTENABLE = FALSE;
-        ALPHABLENDENABLE = FALSE;
-   }
+        VertexShader = compile vs_3_0 SimpleVS();
+        PixelShader = compile ps_3_0 SimplePS();
+    }
 
 }

@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>Xenocide</RootNamespace>
     <RollForward>Major</RollForward>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
@@ -10,6 +11,7 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Icon.ico" />
@@ -24,7 +26,17 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Gum.MonoGame" Version="2026.5.8.1" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.*" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Content\**\*.xnb" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\**\*.xsd" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\**\*.xml" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\**\*.layout" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\**\*.ogg" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\**\*.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

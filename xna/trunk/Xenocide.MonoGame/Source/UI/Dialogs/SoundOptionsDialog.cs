@@ -1,36 +1,8 @@
-#region Copyright
-/*
---------------------------------------------------------------------------------
-This source file is part of Xenocide
-  by  Project Xenocide Team
-
-For the latest info on Xenocide, see http://www.projectxenocide.com/
-
-This work is licensed under the Creative Commons
-Attribution-NonCommercial-ShareAlike 2.5 License.
-
-To view a copy of this license, visit
-http://creativecommons.org/licenses/by-nc-sa/2.5/
-or send a letter to Creative Commons, 543 Howard Street, 5th Floor,
-San Francisco, California, 94105, USA.
---------------------------------------------------------------------------------
-*/
-
-/*
-* @file OptionsDialog.cs
-* @date Created: 2007/03/12
-* @author File creator: Jasin Windisch
-* @author Credits: none
-*/
-#endregion
-
-#region Using Statements
-
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-using CeGui;
+using Gum.Forms.Controls;
 
 using ProjectXenocide.UI.Screens;
 using ProjectXenocide.Utils;
@@ -38,180 +10,144 @@ using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Vehicles;
 
-#endregion
-
 namespace ProjectXenocide.UI.Dialogs
 {
-    /// <summary>
-    /// Dialog that lets user set the sound and music volume
-    /// </summary>
-    class SoundOptionsDialog : Dialog
+    class SoundOptionsDialog : GumDialog
     {
-        /// <summary>
-        /// Constructor
-        /// </summary>
         public SoundOptionsDialog()
-            : base("Content/Layouts/SoundOptionsDialog.layout")
         {
         }
 
-        #region Create the CeGui widgets
-
-        /// <summary>
-        /// add the buttons to the screen
-        /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumWidgets()
         {
-            musicSlider = (CeGui.Widgets.Slider)WindowManager.Instance.GetWindow(sldrMusicName);
-            musicCheckbox = (CeGui.Widgets.Checkbox)WindowManager.Instance.GetWindow(chkMusicName);
-            soundSlider = (CeGui.Widgets.Slider)WindowManager.Instance.GetWindow(sldrSoundName);
-            soundCheckbox = (CeGui.Widgets.Checkbox)WindowManager.Instance.GetWindow(chkSoundName);
+            musicToggleBtn = new Button();
+            UpdateMusicToggleText();
+            musicToggleBtn.Click += OnMusicToggleClicked;
+            RootContainer.AddChild(musicToggleBtn);
 
-            //Update checkbox to on/off
-            soundCheckbox.Checked = 0 < Xenocide.AudioSystem.SoundVolume;
-            musicCheckbox.Checked = 0 < Xenocide.AudioSystem.MusicVolume;
+            musicUpBtn = new Button();
+            musicUpBtn.Text = "Music +";
+            musicUpBtn.Click += (s, e) => { musicLevel = Math.Min(10, musicLevel + 1); UpdateMusicVolume(); };
+            RootContainer.AddChild(musicUpBtn);
 
-            //Disable sliders if off
-            if (!musicCheckbox.Checked)
-            {
-                musicSlider.Disable();
-            }
-            if (!soundCheckbox.Checked)
-            {
-                soundSlider.Disable();
-            }
+            musicDownBtn = new Button();
+            musicDownBtn.Text = "Music -";
+            musicDownBtn.Click += (s, e) => { musicLevel = Math.Max(0, musicLevel - 1); UpdateMusicVolume(); };
+            RootContainer.AddChild(musicDownBtn);
 
-            //Update slider to current volume
-            musicSlider.Value = Xenocide.AudioSystem.MusicVolume;
-            soundSlider.Value = Xenocide.AudioSystem.SoundVolume;
+            musicLevelLabel = new Label();
+            UpdateMusicLabel();
+            RootContainer.AddChild(musicLevelLabel);
+
+            soundToggleBtn = new Button();
+            UpdateSoundToggleText();
+            soundToggleBtn.Click += OnSoundToggleClicked;
+            RootContainer.AddChild(soundToggleBtn);
+
+            soundUpBtn = new Button();
+            soundUpBtn.Text = "Sound +";
+            soundUpBtn.Click += (s, e) => { soundLevel = Math.Min(10, soundLevel + 1); UpdateSoundVolume(); };
+            RootContainer.AddChild(soundUpBtn);
+
+            soundDownBtn = new Button();
+            soundDownBtn.Text = "Sound -";
+            soundDownBtn.Click += (s, e) => { soundLevel = Math.Max(0, soundLevel - 1); UpdateSoundVolume(); };
+            RootContainer.AddChild(soundDownBtn);
+
+            soundLevelLabel = new Label();
+            UpdateSoundLabel();
+            RootContainer.AddChild(soundLevelLabel);
+
+            var saveBtn = new Button();
+            saveBtn.Text = "Save";
+            saveBtn.Click += OnSaveClicked;
+            RootContainer.AddChild(saveBtn);
+
+            var cancelBtn = new Button();
+            cancelBtn.Text = "Cancel";
+            cancelBtn.Click += OnCancelClicked;
+            RootContainer.AddChild(cancelBtn);
         }
 
-        private CeGui.Widgets.Slider musicSlider;
-        private CeGui.Widgets.Slider soundSlider;
+        private Button musicToggleBtn;
+        private Button musicUpBtn;
+        private Button musicDownBtn;
+        private Label musicLevelLabel;
+        private int musicLevel = (int)(Xenocide.AudioSystem.MusicVolume * 10);
+        private bool musicEnabled = Xenocide.AudioSystem.MusicVolume > 0;
 
-        private CeGui.Widgets.Checkbox musicCheckbox;
-        private CeGui.Widgets.Checkbox soundCheckbox;
+        private Button soundToggleBtn;
+        private Button soundUpBtn;
+        private Button soundDownBtn;
+        private Label soundLevelLabel;
+        private int soundLevel = (int)(Xenocide.AudioSystem.SoundVolume * 10);
+        private bool soundEnabled = Xenocide.AudioSystem.SoundVolume > 0;
 
+        private float musicLast = Xenocide.AudioSystem.MusicVolume;
+        private float soundLast = Xenocide.AudioSystem.SoundVolume;
 
-        #endregion Create the CeGui widgets
-
-        #region event handlers
-
-        /// <summary>
-        /// Respond to user clicking the Sound or Music check box
-        /// </summary>
-        /// <param name="sender">checkbox user clicked</param>
-        /// <param name="e">unused</param>
-        [GuiEvent()]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public void OnCheckboxChecked(object sender, WindowEventArgs e)
+        private void UpdateMusicToggleText()
         {
-            CeGui.Widgets.Checkbox checkbox = sender as CeGui.Widgets.Checkbox;
-            if (checkbox == musicCheckbox)
-            {
-                EnableVolumeSlider(musicSlider, checkbox.Checked, Xenocide.AudioSystem.MusicVolume);
-            }
-            else
-            {
-                EnableVolumeSlider(soundSlider, checkbox.Checked, Xenocide.AudioSystem.SoundVolume);
-            }
+            musicToggleBtn.Text = musicEnabled ? "Music: ON" : "Music: OFF";
         }
 
-        /// <summary>
-        /// Disable/Enable sound/music slider and change volume to match
-        /// </summary>
-        /// <param name="slider">Music or Sound Volume slider</param>
-        /// <param name="enable">enable or diable the slider</param>
-        /// <param name="enableValue">Value to set slider to, if enabling</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode",
-            Justification = "FxCop false positive")]
-        private static void EnableVolumeSlider(CeGui.Widgets.Slider slider, bool enable, float enableValue)
+        private void UpdateSoundToggleText()
         {
-            if (enable)
-            {
-                slider.Enable();
-                slider.Value = (enableValue == 0.0f) ? 1.0f : enableValue;
-            }
-            else
-            {
-                slider.Disable();
-                slider.Value = 0.0f;
-            }
+            soundToggleBtn.Text = soundEnabled ? "Sound: ON" : "Sound: OFF";
         }
 
-        /// <summary>
-        /// Change volume on slider change
-        /// </summary>
-        /// <param name="sender">slider moved</param>
-        /// <param name="e">unused</param>
-        [GuiEvent()]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public void OnValueChanged(object sender, WindowEventArgs e)
+        private void UpdateMusicLabel()
         {
-            if (sender == musicSlider)
-            {
-                Xenocide.AudioSystem.MusicVolume = musicSlider.Value;
-            }
-            else
-            {
-                Xenocide.AudioSystem.SoundVolume = soundSlider.Value;
-            }
+            musicLevelLabel.Text = "Music: " + (musicEnabled ? musicLevel.ToString() : "OFF");
         }
 
-        /// <summary>Respond to user clicking the save button</summary>
-        /// <param name="sender">Button the user clicked</param>
-        /// <param name="e">Not used</param>
-        [GuiEvent()]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public void OnSaveClicked(object sender, CeGui.GuiEventArgs e)
+        private void UpdateSoundLabel()
+        {
+            soundLevelLabel.Text = "Sound: " + (soundEnabled ? soundLevel.ToString() : "OFF");
+        }
+
+        private void UpdateMusicVolume()
+        {
+            Xenocide.AudioSystem.MusicVolume = musicEnabled ? (musicLevel / 10.0f) : 0;
+            UpdateMusicLabel();
+        }
+
+        private void UpdateSoundVolume()
+        {
+            Xenocide.AudioSystem.SoundVolume = soundEnabled ? (soundLevel / 10.0f) : 0;
+            UpdateSoundLabel();
+        }
+
+        public void OnMusicToggleClicked(object sender, EventArgs e)
+        {
+            musicEnabled = !musicEnabled;
+            UpdateMusicToggleText();
+            UpdateMusicVolume();
+        }
+
+        public void OnSoundToggleClicked(object sender, EventArgs e)
+        {
+            soundEnabled = !soundEnabled;
+            UpdateSoundToggleText();
+            UpdateSoundVolume();
+        }
+
+        public void OnSaveClicked(object sender, EventArgs e)
         {
             var gameOptions = GameOptions.LoadFromFile();
-            gameOptions.MusicVolume = musicSlider.Value;
-            gameOptions.SoundVolume = soundSlider.Value;
+            gameOptions.MusicVolume = musicEnabled ? (musicLevel / 10.0f) : 0;
+            gameOptions.SoundVolume = soundEnabled ? (soundLevel / 10.0f) : 0;
             gameOptions.SaveToFile();
 
-            // close this dialog
             ScreenManager.CloseDialog(this);
         }
 
-        /// <summary>Respond to user clicking the cancel button</summary>
-        /// <param name="sender">Button the user clicked</param>
-        /// <param name="e">Not used</param>
-        [GuiEvent()]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public void OnCancelClicked(object sender, CeGui.GuiEventArgs e)
+        public void OnCancelClicked(object sender, EventArgs e)
         {
             Xenocide.AudioSystem.MusicVolume = musicLast;
             Xenocide.AudioSystem.SoundVolume = soundLast;
 
-            // close this dialog
             ScreenManager.CloseDialog(this);
         }
-
-        #endregion event handlers
-
-        #region Fields
-
-        /// <summary>
-        /// Save music volume, so can restore if user cancels
-        /// </summary>
-        private float musicLast = Xenocide.AudioSystem.MusicVolume;
-
-        /// <summary>
-        /// Save sound volume, so can restore if user cancels
-        /// </summary>
-        private float soundLast = Xenocide.AudioSystem.SoundVolume;
-
-        #endregion
-
-        #region Constants
-
-        private const string sldrMusicName = "sldrMusic";
-        private const string chkMusicName = "chkMusic";
-
-        private const string sldrSoundName = "sldrSound";
-        private const string chkSoundName = "chkSound";
-
-        #endregion
     }
 }

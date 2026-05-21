@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -33,7 +33,7 @@ using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-
+using Gum.Forms.Controls;
 
 using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape;
@@ -67,19 +67,19 @@ namespace ProjectXenocide.UI.Screens
                 this.soldierIndex       = this.soldiers.IndexOf(soldier);
             }
 
-            #region Create the CeGui widgets
+            #region Create the Gum controls
 
             /// <summary>add Widgets to the screen</summary>
-            public override void CreateCeguiWidgets()
+            public override void CreateGumControls()
             {
                 // combo box to allow player to select soldier to work on
-                soldiersComboBox = CeGui.GuiBuilder.CreateComboBox("soldiersComboBox");
-                EquipSoldierScreen.AddWidget(soldiersComboBox, 0.7025f, 0.23f, 0.2275f, 0.4125f);
+                soldiersComboBox = new ComboBox();
+                EquipSoldierScreen.RootContainer.AddChild(soldiersComboBox);
                 PopulateSoldiersComboBox();
-                soldiersComboBox.ListSelectionAccepted += new CeGui.WindowEventHandler(OnSoldierSelectionChanged);
+                soldiersComboBox.SelectionChanged += (s, a) => OnSoldierSelectionChanged(s, EventArgs.Empty);
             }
 
-            private CeGui.Widgets.ComboBox soldiersComboBox;
+            private ComboBox soldiersComboBox;
 
             /// <summary>
             /// Fill combo box with a list of soldiers
@@ -88,18 +88,14 @@ namespace ProjectXenocide.UI.Screens
             {
                 foreach (Person soldier in soldiers)
                 {
-                    soldiersComboBox.AddItem(soldier.Name);
+                    soldiersComboBox.Items.Add(soldier.Name);
                 }
 
                 //... set combo selection to soldier currently being viewed
-                soldiersComboBox.SetItemSelectState(soldierIndex, true);
-                soldiersComboBox.Text = soldiersComboBox.SelectedItem.Text;
-
-                //... tag the edit box of the combo for viewing only.
-                soldiersComboBox.ReadOnly = true;
+                soldiersComboBox.SelectedIndex = soldierIndex;
             }
 
-            #endregion Create the CeGui widgets
+            #endregion Create the Gum controls
 
             #region event handlers
 
@@ -112,7 +108,7 @@ namespace ProjectXenocide.UI.Screens
             /// <summary>Player wants to look at a different soldier</summary>
             /// <param name="sender">Not used</param>
             /// <param name="e">Not used</param>
-            private void OnSoldierSelectionChanged(object sender, CeGui.WindowEventArgs e)
+            private void OnSoldierSelectionChanged(object sender, EventArgs e)
             {
                 ChangeSoldier();
             }
@@ -124,12 +120,12 @@ namespace ProjectXenocide.UI.Screens
             /// <summary>Player wants to look at a different soldier</summary>
             private void ChangeSoldier()
             {
-                CeGui.Widgets.ListboxItem item = soldiersComboBox.SelectedItem;
-                if (item != null)
+                int index = soldiersComboBox.SelectedIndex;
+                if (index >= 0)
                 {
                     EquipSoldierScreen.ReleaseMovingItem();
                     RecordSoldierLoadout();
-                    soldierIndex = soldiersComboBox.GetItemIndex(item);
+                    soldierIndex = index;
                 }
             }
 

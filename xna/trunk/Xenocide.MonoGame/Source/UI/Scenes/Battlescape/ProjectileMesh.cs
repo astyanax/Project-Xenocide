@@ -52,10 +52,17 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         /// <param name="content">content manager that fetches the content</param>
         public void LoadContent(ContentManager content)
         {
-            // We're just going to use a missile mesh to start with
-            model = content.Load<XnaModel>(@"Content\Models\Craft\Weapons\Avalanche");
-            BoundingSphere sphere = Util.CalcBoundingSphere(model);
-            scalingMatrix = Matrix.CreateScale((float)(0.1f / sphere.Radius));
+            try
+            {
+                model = content.Load<XnaModel>(@"Models\Craft\Weapons\Avalanche");
+                BoundingSphere sphere = Util.CalcBoundingSphere(model);
+                scalingMatrix = Matrix.CreateScale((float)(0.1f / sphere.Radius));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("WARNING: Could not load Projectile model: {0}", ex.Message);
+                model = null;
+            }
         }
 
         /// <summary>
@@ -65,6 +72,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         /// <param name="basicEffect">effect to use to draw the combatant</param>
         public void Draw(Trajectory trajectory, BasicEffect basicEffect)
         {
+            if (model == null) return;
             // compute angles to rotate projectile onto trajectory.
             Vector3 unit = Vector3.Normalize(trajectory.Velocity);
             float yaw   = (float)Math.Atan2(-unit.Z, unit.X);

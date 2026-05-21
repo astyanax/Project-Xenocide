@@ -22,8 +22,24 @@ namespace AudioSystem
         void SetSoundVolume(float volume);
     }
 
-    public class FmodGameComponent : GameComponent
+    public class FmodGameComponent : GameComponent, IAudioSystem
     {
         public FmodGameComponent(Game game) : base(game) { }
+        public bool UseAudio { get; set; } = true;
+        public bool IsInitialized => true;
+        public float MusicVolume { get; set; } = 1f;
+        public float SoundVolume { get; set; } = 1f;
+        public void Initialize(Game game) { }
+        public void LoadSound(string soundName) { }
+        public void Play(string soundName) { }
+        public void PlayMusic(string musicName) { }
+        public void PlayRandomMusic() { }
+        public void PlayRandomMusic(int someArg) { }
+        public void PlayRandomMusic(string category) { }
+        public void PlaySound(string soundName) { }
+        public void StopMusic() { }
+        public void SetMasterVolume(float volume) { }
+        public void SetMusicVolume(float volume) { }
+        public void SetSoundVolume(float volume) { }
     }
 }

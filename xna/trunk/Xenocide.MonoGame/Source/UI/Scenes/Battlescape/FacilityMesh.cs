@@ -54,8 +54,16 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         /// <param name="content">content manager that fetches the content</param>
         public void LoadContent(ContentManager content)
         {
-            model = content.Load<XnaModel>(@"Content\Models\Facility\Xnet\Barracks");
-            BuildScalingMatrix();
+            try
+            {
+                model = content.Load<XnaModel>(@"Models\Facility\Xnet\Barracks");
+                BuildScalingMatrix();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("WARNING: Could not load Facility model: {0}", ex.Message);
+                model = null;
+            }
         }
 
         /// <summary>
@@ -64,6 +72,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         /// <param name="basicEffect">effect to use to draw the facility</param>
         public void Draw(BasicEffect basicEffect)
         {
+            if (model == null) return;
             // set up world matrix to position object in world
             Matrix world = scalingMatrix;
 

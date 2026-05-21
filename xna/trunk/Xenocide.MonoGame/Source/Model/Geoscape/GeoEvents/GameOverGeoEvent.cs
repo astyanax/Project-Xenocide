@@ -60,7 +60,7 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
         public override void Process()
         {
             Xenocide.GameState.GeoData.GeoTime.StopTime();
-            MessageBoxDialog dialog = new MessageBoxDialog(message);
+            GumMessageBoxDialog dialog = new GumMessageBoxDialog(message);
             dialog.OkAction += delegate()
             {
                 Xenocide.ScreenManager.ScheduleScreen(new StartScreen());

@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -30,15 +30,16 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using CeGui;
-using ProjectXenocide.Model.Geoscape;
+
+using Gum.Forms.Controls;
 
 using ProjectXenocide.Utils;
-using CeGui.Widgets;
+using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Model.StaticData.Items;
 using System.Globalization;
+using ProjectXenocide.UI.Controls;
 using Xenocide.Resources;
 
 
@@ -49,7 +50,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// In this screen soldiers and xcaps get assigned to aircraft.
     /// </summary>
-    public class AssignToCraftScreen : Screen
+    public class AssignToCraftScreen : GumScreen
     {
         /// <summary>
         /// Constructs a screen listing the soldiers stationed at the given base.
@@ -62,20 +63,16 @@ namespace ProjectXenocide.UI.Screens
             this.xcaps = new List<Item>(SelectedOutpost.ListXcaps());
         }
 
-        #region Create the CeGui widgets
+        #region Create the Gum controls
 
         /// <summary>
         /// add the buttons and grids to the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
-            // add text giving the name of the selected base
-            baseNameText = GuiBuilder.CreateText(CeguiId + "_baseNameText");
-            AddWidget(baseNameText, 0.01f, 0.06f, 0.2275f, 0.04f);
-            baseNameText.Text = Util.StringFormat(Strings.SCREEN_EQUIP_CRAFT_BASE_NAME,
-                SelectedOutpost.Name);
+            baseNameText = new Label() { Text = Util.StringFormat(Strings.SCREEN_EQUIP_CRAFT_BASE_NAME, SelectedOutpost.Name) };
+            RootContainer.AddChild(baseNameText);
 
-            // The craft, soldiers and xcaps grids
             InitializeCraftGrid();
             PopulateCraftGrid();
 
@@ -85,126 +82,104 @@ namespace ProjectXenocide.UI.Screens
             InitializeXcapGrid();
             PopulateXcapGrid();
 
-            addXcapButton = AddButton("BUTTON_ADD_XCAP", 0.7475f, 0.65f, 0.2275f, 0.04125f);
-            removeXcapButton = AddButton("BUTTON_REMOVE_XCAP", 0.7475f, 0.70f, 0.2275f, 0.04125f);
-            addSoldierButton = AddButton("BUTTON_ADD_SOLDIER", 0.7475f, 0.75f, 0.2275f, 0.04125f);
-            removeSoldierButton = AddButton("BUTTON_REMOVE_SOLDIER", 0.7475f, 0.80f, 0.2275f, 0.04125f);
-            soldierUpButton = AddButton("BUTTON_SOLDIER_UP", 0.7475f, 0.85f, 0.2275f, 0.04125f);
-            soldierDownButton = AddButton("BUTTON_SOLDIER_DOWN", 0.7475f, 0.90f, 0.2275f, 0.04125f);
-            closeButton = AddButton("BUTTON_CLOSE", 0.7475f, 0.95f, 0.2275f, 0.04125f);
+            addXcapButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_ADD_XCAP") };
+            RootContainer.AddChild(addXcapButton);
+            removeXcapButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_REMOVE_XCAP") };
+            RootContainer.AddChild(removeXcapButton);
+            addSoldierButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_ADD_SOLDIER") };
+            RootContainer.AddChild(addSoldierButton);
+            removeSoldierButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_REMOVE_SOLDIER") };
+            RootContainer.AddChild(removeSoldierButton);
+            soldierUpButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_SOLDIER_UP") };
+            RootContainer.AddChild(soldierUpButton);
+            soldierDownButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_SOLDIER_DOWN") };
+            RootContainer.AddChild(soldierDownButton);
+            closeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CLOSE") };
+            RootContainer.AddChild(closeButton);
 
-            addXcapButton.Clicked += new CeGui.GuiEventHandler(OnAddXcapButton);
-            removeXcapButton.Clicked += new CeGui.GuiEventHandler(OnRemoveXcapButton);
-            addSoldierButton.Clicked += new CeGui.GuiEventHandler(OnAddSoldierButton);
-            removeSoldierButton.Clicked += new CeGui.GuiEventHandler(OnRemoveSoldierButton);
-            soldierUpButton.Clicked += new CeGui.GuiEventHandler(OnSoldierUpButton);
-            soldierDownButton.Clicked += new CeGui.GuiEventHandler(OnSoldierDownButton);
-            closeButton.Clicked += new CeGui.GuiEventHandler(OnCloseButton);
-
-            soldierGrid.MouseDoubleClicked += new CeGui.MouseEventHandler(OnSoldierOrCraftGridMouseDoubleClicked);
-            craftGrid.MouseDoubleClicked += new CeGui.MouseEventHandler(OnSoldierOrCraftGridMouseDoubleClicked);
-            xcapGrid.MouseDoubleClicked += new CeGui.MouseEventHandler(OnXCapGridMouseDoubleClicked);
+            addXcapButton.Click += OnAddXcapButton;
+            removeXcapButton.Click += OnRemoveXcapButton;
+            addSoldierButton.Click += OnAddSoldierButton;
+            removeSoldierButton.Click += OnRemoveSoldierButton;
+            soldierUpButton.Click += OnSoldierUpButton;
+            soldierDownButton.Click += OnSoldierDownButton;
+            closeButton.Click += OnCloseButton;
         }
 
-        private CeGui.Widgets.StaticText baseNameText;
-        private CeGui.Widgets.MultiColumnList craftGrid;
-        private CeGui.Widgets.MultiColumnList soldierGrid;
-        private CeGui.Widgets.MultiColumnList xcapGrid;
-        private CeGui.Widgets.PushButton closeButton;
-        private CeGui.Widgets.PushButton addXcapButton;
-        private CeGui.Widgets.PushButton removeXcapButton;
-        private CeGui.Widgets.PushButton addSoldierButton;
-        private CeGui.Widgets.PushButton removeSoldierButton;
+        private Label baseNameText;
+        private GridPanel craftGrid;
+        private GridPanel soldierGrid;
+        private GridPanel xcapGrid;
+        private Button closeButton;
+        private Button addXcapButton;
+        private Button removeXcapButton;
+        private Button addSoldierButton;
+        private Button removeSoldierButton;
+        private Button soldierUpButton;
+        private Button soldierDownButton;
 
-        //Todo Replace Up/Down buttons with some other mechanism to reassign craft positions
-        private CeGui.Widgets.PushButton soldierUpButton;
-        private CeGui.Widgets.PushButton soldierDownButton;
-
-        /// <summary>
-        /// Create the grid that shows the craft
-        /// </summary>
         private void InitializeCraftGrid()
         {
-            craftGrid = AddGrid(0.01f, 0.13f, 0.70f, 0.22f,
-                Strings.SCREEN_EQUIP_CRAFT_COLUMN_CRAFT_NAME, 0.20f,
-                Strings.SCREEN_EQUIP_CRAFT_COLUMN_FUEL, 0.13f,
-                Strings.SCREEN_EQUIP_CRAFT_COLUMN_HULL, 0.13f,
-                Strings.SCREEN_EQUIP_CRAFT_COLUMN_PODS, 0.13f,
-                Strings.SCREEN_EQUIP_CRAFT_COLUMN_AMMO, 0.13f,
-                Strings.SCREEN_EQUIP_CRAFT_COLUMN_CREW, 0.13f,
-                Strings.SCREEN_EQUIP_CRAFT_COLUMN_HWP, 0.13f
-            );
+            craftGrid = new GridPanel();
+            craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_CRAFT_NAME, 140);
+            craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_FUEL, 90);
+            craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_HULL, 90);
+            craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_PODS, 90);
+            craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_AMMO, 90);
+            craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_CREW, 90);
+            craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_HWP, 90);
+            RootContainer.AddChild(craftGrid.Visual);
 
-            craftGrid.SelectionChanged += new WindowEventHandler(OnCraftGridSelectionChanged);
+            craftGrid.SelectionChanged += OnCraftGridSelectionChanged;
         }
 
-        /// <summary>
-        /// Create the grid that shows the soldiers
-        /// </summary>
         private void InitializeSoldierGrid()
         {
-            soldierGrid = AddGrid(0.01f, 0.36f, 0.70f, 0.32f,
-                Strings.SCREEN_ASSIGN_CRAFT_COLUMN_SOLDIER_NAME, 0.40f,
-                Strings.SCREEN_ASSIGN_CRAFT_COLUMN_ASSIGNED_CRAFT, 0.33f,
-                Strings.SCREEN_ASSIGN_CRAFT_COLUMN_POSITION_CRAFT, 0.23f
-            );
+            soldierGrid = new GridPanel();
+            soldierGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_SOLDIER_NAME, 280);
+            soldierGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_ASSIGNED_CRAFT, 230);
+            soldierGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_POSITION_CRAFT, 160);
+            RootContainer.AddChild(soldierGrid.Visual);
         }
 
-        /// <summary>
-        /// Create the grid that shows the soldiers
-        /// </summary>
         private void InitializeXcapGrid()
         {
-            xcapGrid = AddGrid(0.01f, 0.69f, 0.70f, 0.25f,
-                Strings.SCREEN_ASSIGN_CRAFT_COLUMN_XCAP_TYPE, 0.50f,
-                Strings.SCREEN_ASSIGN_CRAFT_COLUMN_AVAILABLE, 0.25f,
-                Strings.SCREEN_ASSIGN_CRAFT_COLUMN_ASSIGNED_COUNT, 0.24f
-            );
+            xcapGrid = new GridPanel();
+            xcapGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_XCAP_TYPE, 350);
+            xcapGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_AVAILABLE, 175);
+            xcapGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_ASSIGNED_COUNT, 170);
+            RootContainer.AddChild(xcapGrid.Visual);
         }
 
 
-        /// <summary>
-        /// Put the list of craft into the grid
-        /// </summary>
         private void PopulateCraftGrid()
         {
             foreach (Craft craft in SelectedOutpost.Fleet)
             {
-                // add craft to grid
                 Aircraft aircraft = (Aircraft)craft;
 
                 if (aircraft.CanCarrySoldiers && aircraft.InBase)
                 {
-                    CeGui.ListboxTextItem listboxItem = Util.CreateListboxItem(aircraft.Name);
-                    int rowNum = craftGrid.AddRow(listboxItem, 0);
-                    listboxItem.ID = rowNum;
+                    craftGrid.AddRow(aircraft,
+                        aircraft.Name,
+                        aircraft.FuelPercent.ToString(),
+                        aircraft.HullPercent.ToString(),
+                        aircraft.PodCountStatus.ToString(),
+                        aircraft.AmmoStatus.ToString(),
+                        aircraft.SoldierCountStatus.ToString(),
+                        aircraft.XcapCountStatus.ToString());
 
-                    Util.AddNumericElementToGrid(craftGrid, 1, rowNum, aircraft.FuelPercent);
-                    Util.AddNumericElementToGrid(craftGrid, 2, rowNum, aircraft.HullPercent);
-                    Util.AddNumericElementToGrid(craftGrid, 3, rowNum, aircraft.PodCountStatus);
-                    Util.AddNumericElementToGrid(craftGrid, 4, rowNum, aircraft.AmmoStatus);
-                    Util.AddNumericElementToGrid(craftGrid, 5, rowNum, aircraft.SoldierCountStatus);
-                    Util.AddNumericElementToGrid(craftGrid, 6, rowNum, aircraft.XcapCountStatus);
-
-                    // record craft associated with this line
                     rowToCraft.Add(aircraft);
                 }
             }
         }
 
-        /// <summary>
-        /// Put the list of soldiers into the grid
-        /// </summary>
         private void PopulateSoldierGrid()
         {
             foreach (Person soldier in this.soldiers)
             {
-                CeGui.ListboxTextItem listboxItem = Util.CreateListboxItem(soldier.Name);
-                int rowNum = soldierGrid.AddRow(listboxItem, 0);
-                listboxItem.ID = rowNum;
-                rowToSoldier.Add(soldier);
-
-                bool soldierFound = false;
+                string craftName = Strings.UNASSIGNED;
+                string position = Strings.NON_APPLICABLE;
 
                 foreach (Craft craft in SelectedOutpost.Fleet)
                 {
@@ -212,213 +187,153 @@ namespace ProjectXenocide.UI.Screens
 
                     if (aircraft.CanCarrySoldiers && aircraft.Soldiers.ContainsKey(soldier))
                     {
-                        Util.AddStringElementToGrid(soldierGrid, 1, rowNum, aircraft.Name);
-                        Util.AddNumericElementToGrid(soldierGrid, 2, rowNum, aircraft.Soldiers[soldier]);
-                        soldierFound = true;
+                        craftName = aircraft.Name;
+                        position = Util.ToString(aircraft.Soldiers[soldier]);
+                        break;
                     }
                 }
 
-                if (!soldierFound)
-                {
-                    Util.AddStringElementToGrid(soldierGrid, 1, rowNum, Strings.UNASSIGNED);
-                    Util.AddStringElementToGrid(soldierGrid, 2, rowNum, Strings.NON_APPLICABLE);
-                }
+                soldierGrid.AddRow(soldier, soldier.Name, craftName, position);
+                rowToSoldier.Add(soldier);
             }
         }
 
-        /// <summary>
-        /// Put the list of soldiers into the grid
-        /// </summary>
         private void PopulateXcapGrid()
         {
             foreach (Item invXcap in this.xcaps)
             {
-                CeGui.ListboxTextItem listboxItem = Util.CreateListboxItem(invXcap.Name);
-                int rowNum = xcapGrid.AddRow(listboxItem, 0);
-                listboxItem.ID = rowNum;
+                xcapGrid.AddRow(invXcap,
+                    invXcap.Name,
+                    Util.ToString(SelectedOutpost.Inventory.NumberInArmory(invXcap.ItemInfo.Id)),
+                    Strings.NON_APPLICABLE);
                 rowToXcap.Add(invXcap);
-
-                Util.AddNumericElementToGrid(xcapGrid, 1, rowNum, SelectedOutpost.Inventory.NumberInArmory(invXcap.ItemInfo.Id));
-                Util.AddStringElementToGrid(xcapGrid, 2, rowNum, Strings.NON_APPLICABLE);
             }
         }
 
-        /// <summary>
-        /// Update xcap grid display to correspond to currently selected aircraft
-        /// </summary>
-        private void UpdateXcapGrid(CeGui.Widgets.ListboxItem selectedRow)
+        private void UpdateXcapGrid()
         {
-            Aircraft aircraft = rowToCraft[selectedRow.ID];
+            Aircraft aircraft = GetSelectedCraft();
 
-            xcapGrid.ResetList();
+            xcapGrid.Clear();
             rowToXcap.Clear();
 
             PopulateXcapGrid();
 
-            //Add xcaps that are on craft but not in inventory
-            foreach (Item xcap in aircraft.XCaps)
+            if (aircraft != null)
             {
-                if (!this.xcaps.Contains(xcap))
+                foreach (Item xcap in aircraft.XCaps)
                 {
-                    CeGui.ListboxTextItem listboxItem = Util.CreateListboxItem(xcap.Name);
-                    int rowNum = xcapGrid.AddRow(listboxItem, 0);
-                    listboxItem.ID = rowNum;
-                    rowToXcap.Add(xcap);
-
-                    int xcapsFound = CountItemsOnCraft(xcap.ItemInfo.Id, aircraft);
-
-                    Util.AddNumericElementToGrid(xcapGrid, 1, rowNum, 0);
-                    Util.AddNumericElementToGrid(xcapGrid, 2, rowNum, xcapsFound);
+                    if (!this.xcaps.Contains(xcap))
+                    {
+                        int xcapsFound = CountItemsOnCraft(xcap.ItemInfo.Id, aircraft);
+                        xcapGrid.AddRow(xcap,
+                            xcap.Name,
+                            Util.ToString(0),
+                            Util.ToString(xcapsFound));
+                        rowToXcap.Add(xcap);
+                    }
                 }
             }
-
         }
 
-        /// <summary>
-        /// Updates selected craft and selected soldier
-        /// </summary>
         private void UpdateSoldierAndCraft()
         {
+            Aircraft craft = GetSelectedCraft();
 
-            //Update craft
-            CeGui.Widgets.ListboxItem craftItem = craftGrid.GetFirstSelectedItem();
-
-            if (null != craftItem)
+            if (craft != null)
             {
-                Aircraft aircraft = rowToCraft[craftItem.ID];
-                int row = craftGrid.GetRowIndexOfItem(craftItem);
-                CeGui.Widgets.GridReference position = new CeGui.Widgets.GridReference(row, 5);
-                craftGrid.GetItemAtGridReference(position).Text = aircraft.SoldierCountStatus;
+                int craftRow = craftGrid.GetRowIndexByTag(craft);
+                if (craftRow >= 0)
+                    craftGrid.SetCell(craftRow, 5, craft.SoldierCountStatus);
             }
             else
             {
-                //No craft selected
-                craftGrid.ResetList();
+                craftGrid.Clear();
                 rowToCraft.Clear();
                 PopulateCraftGrid();
             }
 
-            //Update soldier
-            CeGui.Widgets.ListboxItem soldierItem = soldierGrid.GetFirstSelectedItem();
+            Person soldier = GetSelectedSoldier();
 
-            if (null != soldierItem)
+            if (soldier != null)
             {
-                Person soldier = rowToSoldier[soldierItem.ID];
+                int soldierRow = soldierGrid.GetRowIndexByTag(soldier);
+                if (soldierRow < 0) return;
 
-                int row = soldierGrid.GetRowIndexOfItem(soldierItem);
-                CeGui.Widgets.GridReference position = new CeGui.Widgets.GridReference(row, 1);
-
-                if (null != craftItem)
+                if (craft != null)
                 {
-                    Aircraft aircraft = rowToCraft[craftItem.ID];
-                    if (aircraft.Soldiers.ContainsKey(soldier))
+                    if (craft.Soldiers.ContainsKey(soldier))
                     {
-                        soldierGrid.GetItemAtGridReference(position).Text = aircraft.Name;
-                        UpdateSoldierPosition(soldier, aircraft.Soldiers[soldier]);
+                        soldierGrid.SetCell(soldierRow, 1, craft.Name);
+                        UpdateSoldierPosition(soldier, craft.Soldiers[soldier]);
                     }
                     else
                     {
-                        soldierGrid.GetItemAtGridReference(position).Text = Strings.UNASSIGNED;
-                        position.Column = 2;
-                        soldierGrid.GetItemAtGridReference(position).Text = Strings.NON_APPLICABLE;
+                        soldierGrid.SetCell(soldierRow, 1, Strings.UNASSIGNED);
+                        soldierGrid.SetCell(soldierRow, 2, Strings.NON_APPLICABLE);
                     }
                 }
                 else
                 {
-                    soldierGrid.GetItemAtGridReference(position).Text = Strings.UNASSIGNED;
-                    position.Column = 2;
-                    soldierGrid.GetItemAtGridReference(position).Text = Strings.NON_APPLICABLE;
+                    soldierGrid.SetCell(soldierRow, 1, Strings.UNASSIGNED);
+                    soldierGrid.SetCell(soldierRow, 2, Strings.NON_APPLICABLE);
                 }
             }
         }
 
-
-        /// <summary>
-        /// Updates soldier row with position
-        /// </summary>
-        /// <param name="soldier">Soldier row to be updated</param>
-        /// <param name="position">position to be updated to</param>
         private void UpdateSoldierPosition(Person soldier, int position)
         {
-            int row = rowToSoldier.IndexOf(soldier);
-            CeGui.Widgets.GridReference gridPosition = new CeGui.Widgets.GridReference(row, 2);
-
-            soldierGrid.GetItemAtGridReference(gridPosition).Text = position.ToString(CultureInfo.InvariantCulture.NumberFormat);
+            int row = soldierGrid.GetRowIndexByTag(soldier);
+            if (row < 0) return;
+            soldierGrid.SetCell(row, 2, position.ToString(CultureInfo.InvariantCulture.NumberFormat));
         }
 
-        /// <summary>
-        /// Updates selected craft and selected xcap
-        /// </summary>
         private void UpdateXcapAndCraft()
         {
-            CeGui.Widgets.ListboxItem craftItem = craftGrid.GetFirstSelectedItem();
-
-            if (null != craftItem)
+            Aircraft craft = GetSelectedCraft();
+            if (craft != null)
             {
-                Aircraft aircraft = rowToCraft[craftItem.ID];
-                int row = craftGrid.GetRowIndexOfItem(craftItem);
-                CeGui.Widgets.GridReference position = new CeGui.Widgets.GridReference(row, 6);
-                craftGrid.GetItemAtGridReference(position).Text = aircraft.XcapCountStatus;
+                int craftRow = craftGrid.GetRowIndexByTag(craft);
+                if (craftRow >= 0)
+                    craftGrid.SetCell(craftRow, 6, craft.XcapCountStatus);
             }
 
-            //Update xcap
-            CeGui.Widgets.ListboxItem xcapItem = xcapGrid.GetFirstSelectedItem();
-
-            if (null != xcapItem)
+            Item xcap = GetSelectedXcap();
+            if (xcap != null && craft != null)
             {
-                Aircraft aircraft = rowToCraft[craftItem.ID];
-                Item xcap = rowToXcap[xcapItem.ID];
+                int xcapRow = xcapGrid.GetRowIndexByTag(xcap);
+                if (xcapRow < 0) return;
 
-                int row = xcapGrid.GetRowIndexOfItem(xcapItem);
-                CeGui.Widgets.GridReference position = new CeGui.Widgets.GridReference(row, 1);
-                xcapGrid.GetItemAtGridReference(position).Text = SelectedOutpost.Inventory.NumberInArmory(xcap.ItemInfo.Id).ToString(CultureInfo.InvariantCulture.NumberFormat);
-                position.Column = 2;
-                xcapGrid.GetItemAtGridReference(position).Text = CountItemsOnCraft(xcap.ItemInfo.Id, aircraft).ToString(CultureInfo.InvariantCulture.NumberFormat);
-
+                xcapGrid.SetCell(xcapRow, 1, Util.ToString(SelectedOutpost.Inventory.NumberInArmory(xcap.ItemInfo.Id)));
+                xcapGrid.SetCell(xcapRow, 2, Util.ToString(CountItemsOnCraft(xcap.ItemInfo.Id, craft)));
             }
         }
 
-        #endregion Create the CeGui widgets
+        #endregion Create the Gum controls
 
         #region event handlers
 
-        /// <summary>React to user pressing the Close button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void OnCloseButton(object sender, CeGui.GuiEventArgs e)
+        private void OnCloseButton(object sender, EventArgs e)
         {
             ScreenManager.ScheduleScreen(new SoldiersListScreen(selectedOutpostIndex));
         }
 
-
-        /// <summary>React to user pressing the soldier up button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void OnSoldierUpButton(object sender, CeGui.GuiEventArgs e)
+        private void OnSoldierUpButton(object sender, EventArgs e)
         {
             RepositionSoldier(1);
         }
 
-        /// <summary>React to user pressing the soldier down button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void OnSoldierDownButton(object sender, CeGui.GuiEventArgs e)
+        private void OnSoldierDownButton(object sender, EventArgs e)
         {
             RepositionSoldier(-1);
         }
 
-        /// <summary>React to user pressing the Assign Soldier button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void OnAddSoldierButton(object sender, CeGui.GuiEventArgs e)
+        private void OnAddSoldierButton(object sender, EventArgs e)
         {
             TryAssignSoldierToCraft();
         }
 
-        /// <summary>React to user pressing the Remove Soldier button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void OnRemoveSoldierButton(object sender, CeGui.GuiEventArgs e)
+        private void OnRemoveSoldierButton(object sender, EventArgs e)
         {
             if (TryUnassignSoldierFromCraft())
             {
@@ -426,18 +341,12 @@ namespace ProjectXenocide.UI.Screens
             }
         }
 
-        /// <summary>React to user pressing the Assign Xcap button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void OnAddXcapButton(object sender, CeGui.GuiEventArgs e)
+        private void OnAddXcapButton(object sender, EventArgs e)
         {
             TryAssignXcapToCraft();
         }
 
-        /// <summary>React to user pressing the Remove Xcap button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void OnRemoveXcapButton(object sender, CeGui.GuiEventArgs e)
+        private void OnRemoveXcapButton(object sender, EventArgs e)
         {
             if (TryUnassignXcapFromCraft())
             {
@@ -445,82 +354,41 @@ namespace ProjectXenocide.UI.Screens
             }
         }
 
-        /// <summary>Handles user clicking on a craft in the grid</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void OnCraftGridSelectionChanged(object sender, WindowEventArgs e)
+        private void OnCraftGridSelectionChanged(object sender, EventArgs e)
         {
-            CeGui.Widgets.ListboxItem item = craftGrid.GetFirstSelectedItem();
-            if (item != null)
-            {
-                //Update the xcaps grid
-                UpdateXcapGrid(item);
-            }
-        }
-
-        /// <summary>
-        /// User has double clicked on the soldier grid.  Try to assign soldier to current aircraft
-        /// </summary>
-        /// <param name="sender">unused</param>
-        /// <param name="e">unused</param>
-        private void OnSoldierOrCraftGridMouseDoubleClicked(object sender, MouseEventArgs e)
-        {
-            TryAssignSoldierToCraft();
-        }
-
-        /// <summary>
-        /// User has double clicked on the X-Cap grid.  Try to assign xcap to current aircraft
-        /// </summary>
-        /// <param name="sender">unused</param>
-        /// <param name="e">unused</param>
-        private void OnXCapGridMouseDoubleClicked(object sender, MouseEventArgs e)
-        {
-            TryAssignXcapToCraft();
+            UpdateXcapGrid();
         }
 
         #endregion event handlers
 
         #region Private functions
-        /// <summary>
-        /// Try to assign the selected soldier to the selected craft
-        /// </summary>
-        /// <returns>true if suceeded, false if not</returns>
+
         private bool TryAssignSoldierToCraft()
         {
-            //Get selected craft
-            Aircraft selectedAircraft = GetSelectedCraft(true);
+            Aircraft selectedAircraft = GetSelectedCraft();
 
             if (null != selectedAircraft)
             {
-                Person selectedSoldier = GetSelectedSoldier(true);
+                Person selectedSoldier = GetSelectedSoldier();
 
                 if (null != selectedSoldier)
                 {
                     Aircraft craftWithSoldier = selectedSoldier.Aircraft;
 
-                    //Assign/unassign soldier according to:
-                    // - If unassigned, assign to this craft
-                    // - If assigned to this craft, show error
-                    // - If assigned to another craft, show error
-
-                    //Check that max has not been exceeded (before assigning)
                     if (selectedAircraft.Soldiers.Count < selectedAircraft.MaxHumans)
                     {
                         if (null == craftWithSoldier)
                         {
-                            //Add soldier to next available position
                             selectedAircraft.Soldiers.Add(selectedSoldier, GetNextAvailablePosition(selectedAircraft));
                             UpdateSoldierAndCraft();
                             return true;
                         }
                         else if (selectedAircraft == craftWithSoldier)
                         {
-                            //Todo possibly unassign from craft
                             Util.ShowMessageBox(Strings.MSGBOX_SOLDIER_ALREADY_ASSIGNED_THIS_CRAFT);
                         }
                         else
                         {
-                            //Todo Possibly unassign from craftWithSoldier and reassign to this selectedAircraft.
                             Util.ShowMessageBox(Strings.MSGBOX_SOLDIER_ALREADY_ASSIGNED_OTHER_CRAFT);
                         }
                     }
@@ -534,13 +402,9 @@ namespace ProjectXenocide.UI.Screens
             return false;
         }
 
-        /// <summary>
-        /// Try to unassign the selected soldier from the selected craft
-        /// </summary>
-        /// <returns>true if suceeded, false if not</returns>
         private bool TryUnassignSoldierFromCraft()
         {
-            Person selectedSoldier = GetSelectedSoldier(true);
+            Person selectedSoldier = GetSelectedSoldier();
 
             if (null != selectedSoldier)
             {
@@ -555,35 +419,27 @@ namespace ProjectXenocide.UI.Screens
                     craftWithSoldier.Remove(selectedSoldier);
                     return true;
                 }
-
             }
 
             return false;
         }
 
-        /// <summary>
-        /// Try to assign the selected xcap to the selected craft
-        /// </summary>
-        /// <returns>true if suceeded, false if not</returns>
         private bool TryAssignXcapToCraft()
         {
-            //Get selected craft
-            Aircraft selectedAircraft = GetSelectedCraft(true);
+            Aircraft selectedAircraft = GetSelectedCraft();
 
             if (null != selectedAircraft)
             {
-                CeGui.Widgets.ListboxItem selectedXcap = xcapGrid.GetFirstSelectedItem();
+                Item xcap = GetSelectedXcap();
 
-                if (null != selectedXcap)
+                if (xcap != null)
                 {
-                    Item xcap = rowToXcap[selectedXcap.ID];
                     if (SelectedOutpost.Inventory.NumberInArmory(xcap.ItemInfo.Id) == 0)
                     {
                         Util.ShowMessageBox(Strings.MSGBOX_NO_MORE_XCAPS_OUTPOST);
                     }
                     else
                     {
-                        //Check that max has not been exceeded (before assigning)
                         if (selectedAircraft.XCaps.Count < selectedAircraft.MaxXcaps)
                         {
                             SelectedOutpost.Inventory.Remove(xcap);
@@ -606,22 +462,16 @@ namespace ProjectXenocide.UI.Screens
             return false;
         }
 
-        /// <summary>
-        /// Try to unassign the selected xcap from the selected craft
-        /// </summary>
-        /// <returns>true if suceeded, false if not</returns>
         private bool TryUnassignXcapFromCraft()
         {
-            //Get selected craft
-            Aircraft selectedAircraft = GetSelectedCraft(true);
+            Aircraft selectedAircraft = GetSelectedCraft();
 
             if (null != selectedAircraft)
             {
-                CeGui.Widgets.ListboxItem selectedXcap = xcapGrid.GetFirstSelectedItem();
+                Item xcap = GetSelectedXcap();
 
-                if (null != selectedXcap)
+                if (xcap != null)
                 {
-                    Item xcap = rowToXcap[selectedXcap.ID];
                     if (selectedAircraft.XCaps.Count == 0)
                     {
                         Util.ShowMessageBox(Strings.MSGBOX_NO_MORE_XCAPS_CRAFT);
@@ -642,12 +492,6 @@ namespace ProjectXenocide.UI.Screens
             return false;
         }
 
-        /// <summary>
-        /// Counts items of a type that are in the aircraft
-        /// </summary>
-        /// <param name="type">type of items</param>
-        /// <param name="aircraft">aircraft to search</param>
-        /// <returns>number of items</returns>
         private static int CountItemsOnCraft(string type, Aircraft aircraft)
         {
             int itemsFound = 0;
@@ -663,11 +507,6 @@ namespace ProjectXenocide.UI.Screens
             return itemsFound;
         }
 
-        /// <summary>
-        /// Finds the next available position on aircraft
-        /// </summary>
-        /// <param name="aircraft">Aircraft that is searched on</param>
-        /// <returns>Index of available position</returns>
         private static int GetNextAvailablePosition(Aircraft aircraft)
         {
             for (int i = 1; i <= aircraft.MaxHumans; i++)
@@ -681,93 +520,64 @@ namespace ProjectXenocide.UI.Screens
             return 0;
         }
 
-        /// <summary>
-        /// Get currently selected Craft from Craft Grid.  Give error message if nothing selected
-        /// </summary>
-        /// <returns>aircraft corresponding to selected row of craftGrid</returns>
-        private Aircraft GetSelectedCraft(bool warn)
+        private Aircraft GetSelectedCraft()
         {
-            CeGui.Widgets.ListboxItem selectedItem = craftGrid.GetFirstSelectedItem();
-            if (null == selectedItem)
+            Aircraft aircraft = craftGrid.GetSelectedTag() as Aircraft;
+            if (null == aircraft)
             {
-                if (warn)
-                {
-                    Util.ShowMessageBox(Strings.MSGBOX_NO_CRAFT_SELECTED);
-                }
-                return null;
+                Util.ShowMessageBox(Strings.MSGBOX_NO_CRAFT_SELECTED);
             }
-            else
-            {
-                Aircraft aircraft = rowToCraft[selectedItem.ID];
-                Debug.Assert(aircraft.InBase);
-                return aircraft;
-            }
+            return aircraft;
         }
 
-        /// <summary>
-        /// Get currently selected Soldier from Soldier Grid.  Give error message if nothing selected
-        /// </summary>
-        /// <param name="warn">Give warning if no soldier selected?</param>
-        /// <returns>soldier corresponding to selected row of craftGrid</returns>
-        private Person GetSelectedSoldier(bool warn)
+        private Person GetSelectedSoldier()
         {
-            CeGui.Widgets.ListboxItem selectedItem = soldierGrid.GetFirstSelectedItem();
-            if (null == selectedItem)
+            Person soldier = soldierGrid.GetSelectedTag() as Person;
+            if (null == soldier)
             {
-                if (warn)
-                {
-                    Util.ShowMessageBox(Strings.MSGBOX_NO_SOLDIER_SELECTED);
-                }
-                return null;
+                Util.ShowMessageBox(Strings.MSGBOX_NO_SOLDIER_SELECTED);
             }
-            else
-            {
-                return rowToSoldier[selectedItem.ID];
-            }
+            return soldier;
         }
 
-        /// <summary>
-        /// Repositions soldier within craft
-        /// </summary>
-        /// <param name="distance">distance to new position</param>
+        private Item GetSelectedXcap()
+        {
+            return xcapGrid.GetSelectedTag() as Item;
+        }
+
         private void RepositionSoldier(int distance)
         {
-            Person soldier = GetSelectedSoldier(false);
-            if (null != soldier)
+            Person soldier = GetSelectedSoldier();
+            if (null == soldier)
+                return;
+
+            Aircraft craft = soldier.Aircraft;
+            if (null == craft)
             {
-                Aircraft craft = soldier.Aircraft;
-                if (null != craft)
+                Util.ShowMessageBox(Strings.MSGBOX_SOLDIER_NOT_ASSIGNED);
+                return;
+            }
+
+            int newPosition = craft.Soldiers[soldier] + distance;
+
+            if (newPosition < 1 || newPosition > craft.MaxHumans)
+            {
+                Util.ShowMessageBox(Strings.MSGBOX_NO_POSITION);
+            }
+            else
+            {
+                foreach (KeyValuePair<Person, int> pair in craft.Soldiers)
                 {
-                    //int currentPosition = craft.Soldiers[soldier];
-                    int newPosition = craft.Soldiers[soldier] + distance;
-
-                    //Is movement possible?
-                    if (newPosition < 1 || newPosition > craft.MaxHumans)
+                    if (pair.Value == newPosition)
                     {
-                        Util.ShowMessageBox(Strings.MSGBOX_NO_POSITION);
-                    }
-                    else
-                    {
-                        // If there's a soldier already at newPosition, move soldier
-                        foreach (KeyValuePair<Person, int> pair in craft.Soldiers)
-                        {
-                            if (pair.Value == newPosition)
-                            {
-                                craft.Soldiers[pair.Key] = craft.Soldiers[soldier];
-                                UpdateSoldierPosition(pair.Key, craft.Soldiers[soldier]);
-                                break;
-                            }
-                        }
-
-                        // put soldier into new position
-                        craft.Soldiers[soldier] = newPosition;
-                        UpdateSoldierPosition(soldier, newPosition);
+                        craft.Soldiers[pair.Key] = craft.Soldiers[soldier];
+                        UpdateSoldierPosition(pair.Key, craft.Soldiers[soldier]);
+                        break;
                     }
                 }
-                else
-                {
-                    Util.ShowMessageBox(Strings.MSGBOX_SOLDIER_NOT_ASSIGNED);
-                }
+
+                craft.Soldiers[soldier] = newPosition;
+                UpdateSoldierPosition(soldier, newPosition);
             }
         }
 
@@ -775,37 +585,18 @@ namespace ProjectXenocide.UI.Screens
 
         #region Fields
 
-        /// <summary>
-        /// The outpost where craft and soldiers are stationed
-        /// </summary>
         private Outpost SelectedOutpost { get { return Xenocide.GameState.GeoData.Outposts[selectedOutpostIndex]; } }
 
-        // index specifying the outpost where craft and soldiers are stationed
         private int selectedOutpostIndex;
 
-        /// <summary>
-        /// The soldiers listed on this screen.
-        /// </summary>
         private readonly List<Person> soldiers;
 
-        /// <summary>
-        /// The xcaps listed on this screen.
-        /// </summary>
         private readonly List<Item> xcaps;
 
-        /// <summary>
-        /// Map row in craftGrid to actual craft
-        /// </summary>
         private List<Aircraft> rowToCraft = new List<Aircraft>();
 
-        /// <summary>
-        /// Map row in soldierGrid to actual soldier
-        /// </summary>
         private List<Person> rowToSoldier = new List<Person>();
 
-        /// <summary>
-        /// Map row in xcapGrid to actual xcap
-        /// </summary>
         private List<Item> rowToXcap = new List<Item>();
 
         #endregion Fields

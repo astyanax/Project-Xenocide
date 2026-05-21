@@ -37,6 +37,7 @@ using Microsoft.Xna.Framework.Content;
 
 using ProjectXenocide.Utils;
 using ProjectXenocide.UI.Scenes.Common;
+using ProjectXenocide.UI;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
 
@@ -79,7 +80,7 @@ namespace ProjectXenocide.UI.Scenes.XNet
         /// <param name="gameTime">time increment to use for updating scene</param>
         /// <param name="device">Device to use for render</param>
         /// <param name="sceneWindow">Where to draw the scene on the display</param>
-        public override void Draw(GameTime gameTime, GraphicsDevice device, CeGui.Rect sceneWindow)
+        public override void Draw(GameTime gameTime, GraphicsDevice device, UiRect sceneWindow)
         {
             // only draw in area we've been told to
             Viewport oldview = device.Viewport;

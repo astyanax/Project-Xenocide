@@ -87,7 +87,7 @@ namespace ProjectXenocide.UI.Scenes
             spriteBatch = new SpriteBatch(Xenocide.Instance.GraphicsDevice);
             background  = Texture2D.FromFile(Xenocide.Instance.GraphicsDevice, @"Content\Textures\EquipSoldier\EquipScreenBackground.png");
             spriteSheet = Texture2D.FromFile(Xenocide.Instance.GraphicsDevice, @"Content\Textures\EquipSoldier\InventorySprites.png");
-            font        = content.Load<SpriteFont>(@"Content\SpriteFont1");
+             font        = content.Load<SpriteFont>(@"SpriteFont1");
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace ProjectXenocide.UI.Scenes
         /// <summary>
         /// Needed so that we can load the sprite font
         /// </summary>
-        private ContentManager content = new ContentManager(Xenocide.Instance.Services);
+         private ContentManager content = new ContentManager(Xenocide.Instance.Services, "Content");
 
         #endregion Fields
     }

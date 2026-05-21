@@ -36,6 +36,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
 using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.UI;
 
 #endregion
 
@@ -81,7 +82,7 @@ namespace ProjectXenocide.UI.Scenes.Common
         /// <param name="gameTime">time increment to use for updating scene</param>
         /// <param name="device">Device to use for render</param>
         /// <param name="sceneWindow">Where to draw the scene on the display</param>
-        public abstract void Draw(GameTime gameTime, GraphicsDevice device, CeGui.Rect sceneWindow);
+        public abstract void Draw(GameTime gameTime, GraphicsDevice device, UiRect sceneWindow);
 
         /// <summary>
         /// Rotate the camera around the model
@@ -155,7 +156,7 @@ namespace ProjectXenocide.UI.Scenes.Common
         /// <param name="windowCoords">Window co-ords to translate</param>
         /// <param name="viewport">The current viewport</param>
         /// <returns>Viewport co-ordinates</returns>
-        protected Viewport CalcViewportForSceneWindow(CeGui.Rect windowCoords, Viewport viewport)
+        protected Viewport CalcViewportForSceneWindow(UiRect windowCoords, Viewport viewport)
         {
             int fullHeight = viewport.Height;
             int fullWidth = viewport.Width;

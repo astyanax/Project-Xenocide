@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -30,8 +30,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using CeGui;
-
+using Gum.Forms.Controls;
+using ProjectXenocide.UI.Controls;
 
 using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape;
@@ -45,7 +45,7 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Screens
 {
-    class MonthlyCostsScreen : Screen
+    class MonthlyCostsScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -57,36 +57,37 @@ namespace ProjectXenocide.UI.Screens
             this.selectedOutpostIndex = selectedOutpostIndex;
         }
 
-        #region Create the CeGui widgets
+        #region Create the Gum controls
 
         /// <summary>
         /// add the buttons to the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
             // The grid of montly costs
             InitializeGrid();
             PopulateGrid();
 
             // buttons
-            closeButton = AddButton("BUTTON_CLOSE", 0.7475f, 0.95f, 0.2275f, 0.04125f);
-            closeButton.Clicked += new CeGui.GuiEventHandler(OnCloseButton);
+            closeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CLOSE") };
+            RootContainer.AddChild(closeButton);
+            closeButton.Click += OnCloseButton;
         }
 
-        private CeGui.Widgets.MultiColumnList grid;
-        private CeGui.Widgets.PushButton closeButton;
+        private GridPanel grid;
+        private Button closeButton;
 
         /// <summary>
-        /// Create MultiColumnListBox which holds items being shiped
+        /// Create GridPanel which holds items being shiped
         /// </summary>
         private void InitializeGrid()
         {
-            grid = AddGrid(0.01f, 0.01f, 0.73f, 0.98f,
-                "", 0.40f,
-                Strings.SCREEN_MONTHLY_COSTS_COLUMN_PER_UNIT, 0.22f,
-                Strings.SCREEN_MONTHLY_COSTS_COLUMN_QUANTITY, 0.15f,
-                Strings.SCREEN_MONTHLY_COSTS_COLUMN_TOTAL, 0.22f
-            );
+            grid = new GridPanel();
+            RootContainer.AddChild(grid.Visual);
+            grid.AddColumn("", (int)(0.40f * 800));
+            grid.AddColumn(Strings.SCREEN_MONTHLY_COSTS_COLUMN_PER_UNIT, (int)(0.22f * 800));
+            grid.AddColumn(Strings.SCREEN_MONTHLY_COSTS_COLUMN_QUANTITY, (int)(0.15f * 800));
+            grid.AddColumn(Strings.SCREEN_MONTHLY_COSTS_COLUMN_TOTAL, (int)(0.22f * 800));
         }
 
         /// <summary>
@@ -107,16 +108,16 @@ namespace ProjectXenocide.UI.Screens
             AddItemRowToGrid("ITEM_PERSON_SCIENTIST");
 
             //Facilities (this includes facilities being constructed)
-            CeGui.Widgets.ListboxItem listboxItem = Util.CreateListboxItem(Strings.SCREEN_MONTHLY_COSTS_ROW_BASE_MAINTENANCE);
-            int rowNum = grid.AddRow(listboxItem, 0);
-            Util.AddStringElementToGrid(grid, 3, rowNum, Util.FormatCurrency(SelectedOutpost.CalcFacilityMaintenance()));
+            int rowNum = grid.RowCount;
+            grid.AddRow(rowNum, Strings.SCREEN_MONTHLY_COSTS_ROW_BASE_MAINTENANCE, "", "",
+                Util.FormatCurrency(SelectedOutpost.CalcFacilityMaintenance()));
 
             totalCost += SelectedOutpost.CalcFacilityMaintenance();
 
             //Total cost
-            CeGui.Widgets.ListboxItem totalItem = Util.CreateListboxItem(Strings.SCREEN_MONTHLY_COSTS_ROW_TOTAL);
-            rowNum = grid.AddRow(totalItem, 2);
-            Util.AddStringElementToGrid(grid, 3, rowNum, Util.FormatCurrency(totalCost));
+            rowNum = grid.RowCount;
+            grid.AddRow(rowNum, "", "", Strings.SCREEN_MONTHLY_COSTS_ROW_TOTAL,
+                Util.FormatCurrency(totalCost));
         }
 
         /// <summary>
@@ -142,22 +143,20 @@ namespace ProjectXenocide.UI.Screens
             {
                 totalCost += (count * itemCost);
 
-                CeGui.Widgets.ListboxItem listboxItem = Util.CreateListboxItem(typeName);
-                int rowNum = grid.AddRow(listboxItem, 0);
-                Util.AddStringElementToGrid(grid, 1, rowNum, Util.FormatCurrency(itemCost));
-                Util.AddNumericElementToGrid(grid, 2, rowNum, count);
-                Util.AddStringElementToGrid(grid, 3, rowNum, Util.FormatCurrency(count * itemCost));
+                int rowNum = grid.RowCount;
+                grid.AddRow(rowNum, typeName, Util.FormatCurrency(itemCost), count.ToString(),
+                    Util.FormatCurrency(count * itemCost));
             }
         }
 
-        #endregion Create the CeGui widgets
+        #endregion Create the Gum controls
 
         #region event handlers
 
         /// <summary>React to user pressing the Close button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnCloseButton(object sender, CeGui.GuiEventArgs e)
+        private void OnCloseButton(object sender, EventArgs e)
         {
             GoToBaseInfoScreen();
         }

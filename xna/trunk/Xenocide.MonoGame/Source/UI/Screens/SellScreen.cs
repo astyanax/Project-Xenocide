@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -30,8 +30,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using CeGui;
-
+using Gum.Forms.Controls;
+using ProjectXenocide.UI.Controls;
 
 using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape;
@@ -47,7 +47,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// This is the screen that allows user to sell items stored in an outpost
     /// </summary>
-    public class SellScreen : Screen
+    public class SellScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -59,22 +59,22 @@ namespace ProjectXenocide.UI.Screens
             this.selectedOutpostIndex = selectedOutpostIndex;
         }
 
-        #region Create the CeGui widgets
+        #region Create the Gum controls
 
         /// <summary>
         /// add the buttons to the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
             // add text giving the available funds
-            fundsText = GuiBuilder.CreateText(CeguiId + "_fundsText");
-            AddWidget(fundsText, 0.01f, 0.06f, 0.2275f, 0.04125f);
+            fundsText = new Label();
+            RootContainer.AddChild(fundsText);
             fundsText.Text = Util.StringFormat(Strings.SCREEN_SELL_FUNDS,
                 Xenocide.GameState.GeoData.XCorp.Bank.CurrentBalance);
 
             // add text giving the running total of the items selected to sell
-            totalValueText = GuiBuilder.CreateText(CeguiId + "_totalCostText");
-            AddWidget(totalValueText, 0.35f, 0.06f, 0.2275f, 0.04125f);
+            totalValueText = new Label();
+            RootContainer.AddChild(totalValueText);
             UpdateTotalValue();
 
             // The grid of items available for purchase
@@ -82,36 +82,40 @@ namespace ProjectXenocide.UI.Screens
             PopulateGrid();
 
             // other buttons
-            sellMoreButton = AddButton("BUTTON_SELL_MORE", 0.7475f, 0.80f, 0.2275f, 0.04125f, "PlanetView\\zoomin.ogg");
-            sellLessButton = AddButton("BUTTON_SELL_LESS", 0.7475f, 0.85f, 0.2275f, 0.04125f, "PlanetView\\zoomout.ogg");
-            confirmButton = AddButton("BUTTON_CONFIRM", 0.7475f, 0.90f, 0.2275f, 0.04125f);
-            cancelButton = AddButton("BUTTON_CANCEL", 0.7475f, 0.95f, 0.2275f, 0.04125f);
+            sellMoreButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_SELL_MORE") };
+            RootContainer.AddChild(sellMoreButton);
+            sellLessButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_SELL_LESS") };
+            RootContainer.AddChild(sellLessButton);
+            confirmButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CONFIRM") };
+            RootContainer.AddChild(confirmButton);
+            cancelButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CANCEL") };
+            RootContainer.AddChild(cancelButton);
 
-            sellMoreButton.Clicked += new CeGui.GuiEventHandler(OnSellMoreButton);
-            sellLessButton.Clicked += new CeGui.GuiEventHandler(OnSellLessButton);
-            confirmButton.Clicked += new CeGui.GuiEventHandler(OnConfirmButton);
-            cancelButton.Clicked += new CeGui.GuiEventHandler(OnCancelButton);
+            sellMoreButton.Click += OnSellMoreButton;
+            sellLessButton.Click += OnSellLessButton;
+            confirmButton.Click += OnConfirmButton;
+            cancelButton.Click += OnCancelButton;
         }
 
-        private CeGui.Widgets.StaticText fundsText;
-        private CeGui.Widgets.StaticText totalValueText;
-        private CeGui.Widgets.MultiColumnList grid;
-        private CeGui.Widgets.PushButton sellMoreButton;
-        private CeGui.Widgets.PushButton sellLessButton;
-        private CeGui.Widgets.PushButton confirmButton;
-        private CeGui.Widgets.PushButton cancelButton;
+        private Label fundsText;
+        private Label totalValueText;
+        private GridPanel grid;
+        private Button sellMoreButton;
+        private Button sellLessButton;
+        private Button confirmButton;
+        private Button cancelButton;
 
         /// <summary>
-        /// Create MultiColumnListBox which holds items available to sell
+        /// Create GridPanel which holds items available to sell
         /// </summary>
         private void InitializeGrid()
         {
-            grid = GuiBuilder.CreateGrid("sellGrid");
-            AddWidget(grid, 0.01f, 0.13f, 0.70f, 0.86f);
-            grid.AddColumn(Strings.SCREEN_SELL_COLUMN_ITEM, grid.ColumnCount, 0.58f);
-            grid.AddColumn(Strings.SCREEN_SELL_COLUMN_QUANTITY_IN_BASE, grid.ColumnCount, 0.12f);
-            grid.AddColumn(Strings.SCREEN_SELL_COLUMN_VALUE_PER_UNIT, grid.ColumnCount, 0.13f);
-            grid.AddColumn(Strings.SCREEN_SELL_COLUMN_QUANTITY, grid.ColumnCount, 0.12f);
+            grid = new GridPanel();
+            RootContainer.AddChild(grid.Visual);
+            grid.AddColumn(Strings.SCREEN_SELL_COLUMN_ITEM, (int)(0.58f * 800));
+            grid.AddColumn(Strings.SCREEN_SELL_COLUMN_QUANTITY_IN_BASE, (int)(0.12f * 800));
+            grid.AddColumn(Strings.SCREEN_SELL_COLUMN_VALUE_PER_UNIT, (int)(0.13f * 800));
+            grid.AddColumn(Strings.SCREEN_SELL_COLUMN_QUANTITY, (int)(0.12f * 800));
         }
 
         /// <summary>
@@ -135,38 +139,37 @@ namespace ProjectXenocide.UI.Screens
         private void AddRowToGrid(TransactionLineItem lineItem)
         {
             // add item to grid
-            CeGui.ListboxTextItem listboxItem = Util.CreateListboxItem(lineItem.Name);
-            int rowNum = grid.AddRow(listboxItem, 0);
-            listboxItem.ID = rowNum;
-
-            Util.AddNumericElementToGrid(grid, 1, rowNum, lineItem.SourceCount);
-            Util.AddNumericElementToGrid(grid, 2, rowNum, lineItem.SellPrice);
-            Util.AddNumericElementToGrid(grid, 3, rowNum, lineItem.NumMoving);
+            int rowNum = grid.RowCount;
+            grid.AddRow(rowNum, lineItem.Name,
+                Util.ToString(lineItem.SourceCount),
+                Util.ToString(lineItem.SellPrice),
+                Util.ToString(lineItem.NumMoving));
 
             // and record number of items of this type user is selling
             SalesList[rowNum] = lineItem;
         }
 
-        #endregion Create the CeGui widgets
+        #endregion Create the Gum controls
 
         #region event handlers
 
         /// <summary>Handle user clicking on the "Sell More" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnSellMoreButton(object sender, GuiEventArgs e)
+        private void OnSellMoreButton(object sender, EventArgs e)
         {
-            CeGui.Widgets.ListboxItem selectedItem = GetSelectedItem();
-            if (null != selectedItem)
+            int? tag = GetSelectedTag();
+            if (tag.HasValue)
             {
                 // update count of items
-                TransactionLineItem lineItem = SalesList[selectedItem.ID];
+                int rowNum = tag.Value;
+                TransactionLineItem lineItem = SalesList[rowNum];
                 if (lineItem.NumMoving < lineItem.MaxMovable)
                 {
                     ++lineItem.NumMoving;
 
                     // update display on screen
-                    UpdateDetails(selectedItem, lineItem);
+                    UpdateDetails(rowNum, lineItem);
                 }
             }
         }
@@ -174,18 +177,19 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>Handle user clicking on the "Sell Less" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnSellLessButton(object sender, GuiEventArgs e)
+        private void OnSellLessButton(object sender, EventArgs e)
         {
-            CeGui.Widgets.ListboxItem selectedItem = GetSelectedItem();
-            if (null != selectedItem)
+            int? tag = GetSelectedTag();
+            if (tag.HasValue)
             {
-                TransactionLineItem lineItem = SalesList[selectedItem.ID];
+                int rowNum = tag.Value;
+                TransactionLineItem lineItem = SalesList[rowNum];
                 if (0 < lineItem.NumMoving)
                 {
                     --lineItem.NumMoving;
 
                     // update display on screen
-                    UpdateDetails(selectedItem, lineItem);
+                    UpdateDetails(rowNum, lineItem);
                 }
             }
         }
@@ -194,7 +198,7 @@ namespace ProjectXenocide.UI.Screens
         /// <remarks>That is, buy all the items the user has selected</remarks>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnConfirmButton(object sender, GuiEventArgs e)
+        private void OnConfirmButton(object sender, EventArgs e)
         {
             // Get the money from selling the items
             Xenocide.GameState.GeoData.XCorp.Bank.Credit(CalculateTotalValue());
@@ -211,7 +215,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>React to user pressing the Cancel button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnCancelButton(object sender, CeGui.GuiEventArgs e)
+        private void OnCancelButton(object sender, EventArgs e)
         {
             GoToBasesScreen();
         }
@@ -219,14 +223,14 @@ namespace ProjectXenocide.UI.Screens
         #endregion event handlers
 
         // Get currently selected item from Grid.  Give error message if nothing selected
-        private CeGui.Widgets.ListboxItem GetSelectedItem()
+        private int? GetSelectedTag()
         {
-            CeGui.Widgets.ListboxItem selectedItem = grid.GetFirstSelectedItem();
-            if (null == selectedItem)
+            if (grid.SelectedRow == null)
             {
                 Util.ShowMessageBox(Strings.MSGBOX_NO_SALE_SELECTED);
+                return null;
             }
-            return selectedItem;
+            return (int)grid.GetSelectedTag();
         }
 
         /// <summary>
@@ -240,16 +244,15 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// Update the screen to reflect the latest changes
         /// </summary>
-        /// <param name="selectedItem">row in gird that is selected</param>
+        /// <param name="rowNum">row in grid that is selected</param>
         /// <param name="lineItem">LineItem with number of items of this type being sold</param>
-        private void UpdateDetails(CeGui.Widgets.ListboxItem selectedItem, TransactionLineItem lineItem)
+        private void UpdateDetails(int rowNum, TransactionLineItem lineItem)
         {
             UpdateTotalValue();
 
             // update quantity column of row in grid
-            int row = grid.GetRowIndexOfItem(selectedItem);
-            CeGui.Widgets.GridReference position = new CeGui.Widgets.GridReference(row, 3);
-            grid.GetItemAtGridReference(position).Text = Util.ToString(lineItem.NumMoving);
+            int row = grid.GetRowIndexByTag(rowNum);
+            grid.SetCell(row, 3, Util.ToString(lineItem.NumMoving));
         }
 
         /// <summary>

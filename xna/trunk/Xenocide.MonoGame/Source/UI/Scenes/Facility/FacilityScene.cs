@@ -36,6 +36,7 @@ using Microsoft.Xna.Framework.Content;
 
 using ProjectXenocide.Model.StaticData.Facilities;
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.UI;
 
 #endregion
 
@@ -113,7 +114,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
         /// <param name="sceneWindow">Where to draw the scene on the display</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
             Justification="Will throw exception if device is null")]
-        public void Draw(GraphicsDevice device, CeGui.Rect sceneWindow)
+        public void Draw(GraphicsDevice device, UiRect sceneWindow)
         {
             // only draw in area we've been told to
             Viewport oldview = device.Viewport;
@@ -161,7 +162,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
         /// </summary>
         /// <param name="coords">The position in the viewport (in relative co-ords)</param>
         /// <returns>The cell in the base's layout or -1, -1 if point isn't inside base</returns>
-        public Vector2 WindowToCell(CeGui.Point coords)
+        public Vector2 WindowToCell(UiPoint coords)
         {
             // basic trig, compute viewing fustrum dimension at distance base floorplan is
             double opositeSideLength = Math.Tan(ViewAngle / 2.0) * cameraPosition.Y * 2.0f;
@@ -256,7 +257,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
         /// <param name="windowCoords">Window co-ords to translate</param>
         /// <param name="viewport">The current viewport</param>
         /// <returns>Viewport co-ordinates</returns>
-        private Viewport CalcViewportForSceneWindow(CeGui.Rect windowCoords, Viewport viewport)
+        private Viewport CalcViewportForSceneWindow(UiRect windowCoords, Viewport viewport)
         {
             int fullHeight = viewport.Height;
             int fullWidth = viewport.Width;

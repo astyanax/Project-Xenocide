@@ -200,8 +200,8 @@ technique RenderGlobeStandard
 {
     pass P0
     {
-        VertexShader = compile vs_1_1 TransformGlobe();
-        PixelShader = compile ps_1_1 RenderGlobe();
+         VertexShader = compile vs_3_0 TransformGlobe();
+         PixelShader = compile ps_3_0 RenderGlobe();
     }
 }
 

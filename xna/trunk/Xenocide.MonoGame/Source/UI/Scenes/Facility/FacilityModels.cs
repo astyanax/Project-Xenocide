@@ -58,7 +58,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
             {
                 models.Add(
                     facility.Id,
-                    content.Load<Microsoft.Xna.Framework.Graphics.Model>("Content\\Models\\" + facility.ModelName)
+                     content.Load<Microsoft.Xna.Framework.Graphics.Model>("Models\\" + facility.ModelName)
                );
             }
         }

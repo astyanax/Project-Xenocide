@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -31,8 +31,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-using CeGui;
-
+using Gum.Forms.Controls;
+using ProjectXenocide.UI.Controls;
 
 using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape;
@@ -50,7 +50,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// This is the screen that shows Topics being researched and available for research
     /// </summary>
-    public class ResearchScreen : Screen
+    public class ResearchScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -60,12 +60,12 @@ namespace ProjectXenocide.UI.Screens
         {
         }
 
-        #region Create the CeGui widgets
+        #region Create the Gum controls
 
         /// <summary>
         /// add the buttons to the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
             // Get projects to bring their progress up to date
             ProjectMgr.Update();
@@ -73,46 +73,51 @@ namespace ProjectXenocide.UI.Screens
             FindIdleScientists();
 
             // Text giving number of idle scientists
-            availableText = AddStaticText(0.01f, 0.01f, 0.7f, 0.08f);
+            availableText = new Label();
+            RootContainer.AddChild(availableText);
             availableText.Text = MakeIdleScientistsString();
-            availableText.HorizontalFormat = HorizontalTextFormat.WordWrapLeft;
 
             // The gird of research projects
             InitializeGrid();
             PopulateGrid();
 
             // buttons
-            addIdleScientistsButton = AddButton("BUTTON_ADD_IDLE_SCIENTISTS", 0.7475f, 0.75f, 0.2275f, 0.04125f, "PlanetView\\zoomin.ogg");
-            moreScientistsButton = AddButton("BUTTON_MORE_SCIENTISTS", 0.7475f, 0.80f, 0.2275f, 0.04125f, "PlanetView\\zoomin.ogg");
-            lessScientistsButton = AddButton("BUTTON_LESS_SCIENTISTS", 0.7475f, 0.85f, 0.2275f, 0.04125f, "PlanetView\\zoomout.ogg");
-            removeAllScientistsButton = AddButton("BUTTON_REMOVE_ALL_SCIENTISTS", 0.7475f, 0.90f, 0.2275f, 0.04125f, "PlanetView\\zoomout.ogg");
-            closeButton = AddButton("BUTTON_CLOSE", 0.7475f, 0.95f, 0.2275f, 0.04125f);
+            addIdleScientistsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_ADD_IDLE_SCIENTISTS") };
+            RootContainer.AddChild(addIdleScientistsButton);
+            moreScientistsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_MORE_SCIENTISTS") };
+            RootContainer.AddChild(moreScientistsButton);
+            lessScientistsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_LESS_SCIENTISTS") };
+            RootContainer.AddChild(lessScientistsButton);
+            removeAllScientistsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_REMOVE_ALL_SCIENTISTS") };
+            RootContainer.AddChild(removeAllScientistsButton);
+            closeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CLOSE") };
+            RootContainer.AddChild(closeButton);
 
-            moreScientistsButton.Clicked += new CeGui.GuiEventHandler(OnMoreButton);
-            lessScientistsButton.Clicked += new CeGui.GuiEventHandler(OnLessButton);
-            addIdleScientistsButton.Clicked += new CeGui.GuiEventHandler(OnAddIdleButton);
-            removeAllScientistsButton.Clicked += new CeGui.GuiEventHandler(OnRemoveAllButton);
-            closeButton.Clicked += new CeGui.GuiEventHandler(OnCloseButton);
+            moreScientistsButton.Click += OnMoreButton;
+            lessScientistsButton.Click += OnLessButton;
+            addIdleScientistsButton.Click += OnAddIdleButton;
+            removeAllScientistsButton.Click += OnRemoveAllButton;
+            closeButton.Click += OnCloseButton;
         }
 
-        private CeGui.Widgets.StaticText availableText;
-        private CeGui.Widgets.MultiColumnList grid;
-        private CeGui.Widgets.PushButton moreScientistsButton;
-        private CeGui.Widgets.PushButton lessScientistsButton;
-        private CeGui.Widgets.PushButton removeAllScientistsButton;
-        private CeGui.Widgets.PushButton addIdleScientistsButton;
-        private CeGui.Widgets.PushButton closeButton;
+        private Label availableText;
+        private GridPanel grid;
+        private Button moreScientistsButton;
+        private Button lessScientistsButton;
+        private Button removeAllScientistsButton;
+        private Button addIdleScientistsButton;
+        private Button closeButton;
 
         /// <summary>
-        /// Create MultiColumnListBox which holds items being shiped
+        /// Create GridPanel which holds items being shiped
         /// </summary>
         private void InitializeGrid()
         {
-            grid = GuiBuilder.CreateGrid("researchGrid");
-            AddWidget(grid, 0.01f, 0.13f, 0.70f, 0.86f);
-            grid.AddColumn(Strings.SCREEN_RESEARCH_COLUMN_PROJECT, grid.ColumnCount, 0.50f);
-            grid.AddColumn(Strings.SCREEN_RESEARCH_COLUMN_SCIENTISTS, grid.ColumnCount, 0.25f);
-            grid.AddColumn(Strings.SCREEN_RESEARCH_COLUMN_ETA, grid.ColumnCount, 0.22f);
+            grid = new GridPanel();
+            RootContainer.AddChild(grid.Visual);
+            grid.AddColumn(Strings.SCREEN_RESEARCH_COLUMN_PROJECT, (int)(0.50f * 800));
+            grid.AddColumn(Strings.SCREEN_RESEARCH_COLUMN_SCIENTISTS, (int)(0.25f * 800));
+            grid.AddColumn(Strings.SCREEN_RESEARCH_COLUMN_ETA, (int)(0.22f * 800));
         }
 
         /// <summary>
@@ -143,24 +148,21 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="lineItem">data to put on line</param>
         private void AddRowToGrid(LineItem lineItem)
         {
-            CeGui.ListboxTextItem listboxItem = Util.CreateListboxItem(lineItem.Name);
-            int rowNum = grid.AddRow(listboxItem, 0);
-            listboxItem.ID = rowNum;
-            Util.AddStringElementToGrid(grid, 1, rowNum, lineItem.DisplayNumWorkers);
-            Util.AddStringElementToGrid(grid, 2, rowNum, lineItem.Eta);
+            int rowNum = grid.RowCount;
+            grid.AddRow(rowNum, lineItem.Name, lineItem.DisplayNumWorkers, lineItem.Eta);
 
             // and record details of this item
             lineItems[rowNum] = lineItem;
         }
 
-        #endregion Create the CeGui widgets
+        #endregion Create the Gum controls
 
         #region event handlers
 
         /// <summary>React to user pressing the More Scientists</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnMoreButton(object sender, CeGui.GuiEventArgs e)
+        private void OnMoreButton(object sender, EventArgs e)
         {
             AddIdleScientists(1);
         }
@@ -168,7 +170,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>React to user pressing the Add Idle Scientists Button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnAddIdleButton(object sender, CeGui.GuiEventArgs e)
+        private void OnAddIdleButton(object sender, EventArgs e)
         {
             AddIdleScientists(idleScientists.Count);
         }
@@ -176,7 +178,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>React to user pressing the Remove All Scientists Button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnRemoveAllButton(object sender, CeGui.GuiEventArgs e)
+        private void OnRemoveAllButton(object sender, EventArgs e)
         {
             RemoveAllScientists();
         }
@@ -184,7 +186,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>React to user pressing the Less Scientists button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnLessButton(object sender, CeGui.GuiEventArgs e)
+        private void OnLessButton(object sender, EventArgs e)
         {
             RemoveScientist();
         }
@@ -192,7 +194,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>React to user pressing the Close button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnCloseButton(object sender, CeGui.GuiEventArgs e)
+        private void OnCloseButton(object sender, EventArgs e)
         {
             GoToGeoscapeScreen();
         }
@@ -205,24 +207,25 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="count">number of scientists to add</param>
         private void AddIdleScientists(int count)
         {
-            CeGui.Widgets.ListboxItem selectedItem = GetSelectedItem();
-            if (null != selectedItem)
+            int? tag = GetSelectedTag();
+            if (tag.HasValue)
             {
                 // can only add scientist if we have one that's idle
                 if (0 < idleScientists.Count)
                 {
                     Debug.Assert((0 < count) && (count <= idleScientists.Count));
-                    ProjectLineItem project = lineItems[selectedItem.ID].GetProject();
+                    int rowNum = tag.Value;
+                    ProjectLineItem project = lineItems[rowNum].GetProject();
 
                     // update lineItems in case we've promoted from TopicLine to ProjectLine
-                    lineItems[selectedItem.ID] = project;
+                    lineItems[rowNum] = project;
 
                     // add specified number of idle scientists to the project
                     for (int i = 0; i < count; ++i)
                     {
                         project.AddWorker(idleScientists);
                     }
-                    UpdateDetails(selectedItem, project);
+                    UpdateDetails(rowNum, project);
 
                     // we may have started a new project and consumed an artifact needed to
                     // start other research topics
@@ -240,12 +243,13 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void RemoveScientist()
         {
-            CeGui.Widgets.ListboxItem selectedItem = GetSelectedItem();
-            if (null != selectedItem)
+            int? tag = GetSelectedTag();
+            if (tag.HasValue)
             {
-                LineItem lineItem = lineItems[selectedItem.ID];
+                int rowNum = tag.Value;
+                LineItem lineItem = lineItems[rowNum];
                 lineItem.RemoveWorker(idleScientists);
-                UpdateDetails(selectedItem, lineItem);
+                UpdateDetails(rowNum, lineItem);
             }
         }
 
@@ -254,33 +258,32 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void RemoveAllScientists()
         {
-            CeGui.Widgets.ListboxItem selectedItem = GetSelectedItem();
-            if (null != selectedItem)
+            int? tag = GetSelectedTag();
+            if (tag.HasValue)
             {
-                LineItem lineItem = lineItems[selectedItem.ID];
+                int rowNum = tag.Value;
+                LineItem lineItem = lineItems[rowNum];
                 while (0 < lineItem.NumWorkers)
                 {
                     lineItem.RemoveWorker(idleScientists);
                 }
-                UpdateDetails(selectedItem, lineItem);
+                UpdateDetails(rowNum, lineItem);
             }
         }
 
         /// <summary>
         /// Update the screen to reflect the latest changes
         /// </summary>
-        /// <param name="selectedItem">row in gird that is selected</param>
+        /// <param name="rowNum">row in grid that is selected</param>
         /// <param name="lineItem">LineItem associated with this row</param>
-        private void UpdateDetails(CeGui.Widgets.ListboxItem selectedItem, LineItem lineItem)
+        private void UpdateDetails(int rowNum, LineItem lineItem)
         {
             availableText.Text = MakeIdleScientistsString();
 
             // update row in grid
-            int row = grid.GetRowIndexOfItem(selectedItem);
-            CeGui.Widgets.GridReference position = new CeGui.Widgets.GridReference(row, 1);
-            grid.GetItemAtGridReference(position).Text = lineItem.DisplayNumWorkers;
-            position.Column = 2;
-            grid.GetItemAtGridReference(position).Text = lineItem.Eta;
+            int row = grid.GetRowIndexByTag(rowNum);
+            grid.SetCell(row, 1, lineItem.DisplayNumWorkers);
+            grid.SetCell(row, 2, lineItem.Eta);
         }
 
         /// <summary>
@@ -288,14 +291,22 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void RemoveUnavailableTopics()
         {
-            CeGui.Widgets.GridReference position = new CeGui.Widgets.GridReference(0, 0);
-            for (int i = 0; i < grid.RowCount; ++i)
+            List<int> tagsToRemove = new List<int>();
+            foreach (var kvp in lineItems)
             {
-                position.Row = i;
-                if (!lineItems[grid.GetItemAtGridReference(position).ID].CanResearch)
+                if (!kvp.Value.CanResearch)
                 {
-                    grid.RemoveRow(i);
+                    tagsToRemove.Add(kvp.Key);
                 }
+            }
+            foreach (int tag in tagsToRemove)
+            {
+                int rowIndex = grid.GetRowIndexByTag(tag);
+                if (rowIndex >= 0)
+                {
+                    grid.RemoveRow(rowIndex);
+                }
+                lineItems.Remove(tag);
             }
         }
 
@@ -310,14 +321,14 @@ namespace ProjectXenocide.UI.Screens
         }
 
         // Get currently selected item from Grid.  Give error message if nothing selected
-        private CeGui.Widgets.ListboxItem GetSelectedItem()
+        private int? GetSelectedTag()
         {
-            CeGui.Widgets.ListboxItem selectedItem = grid.GetFirstSelectedItem();
-            if (null == selectedItem)
+            if (grid.SelectedRow == null)
             {
                 Util.ShowMessageBox(Strings.MSGBOX_NO_PROJECT_SELECTED);
+                return null;
             }
-            return selectedItem;
+            return (int)grid.GetSelectedTag();
         }
 
         /// <summary>

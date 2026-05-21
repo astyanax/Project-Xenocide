@@ -71,7 +71,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// Creates and starts a scrolling credits screen
     /// </summary>
-    public class CreditsScreen : ProjectXenocide.UI.Screens.Screen
+    public class CreditsScreen : GumScreen
     {
         /// <summary>
         /// CreditsScreen constructor
@@ -126,7 +126,7 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>add the buttons to the screen</summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
         }
 

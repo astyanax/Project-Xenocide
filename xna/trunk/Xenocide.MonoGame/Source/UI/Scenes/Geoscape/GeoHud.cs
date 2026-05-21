@@ -91,8 +91,8 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         public void LoadContent(ContentManager content, GraphicsDevice device)
         {
             hudSprites = new SpriteBatch(device);
-            iconTex = content.Load<Texture2D>(@"Content\Textures\Geoscape\IconSpriteMap");
-            hudFont = content.Load<SpriteFont>(@"Content\SpriteFont1");
+             iconTex = content.Load<Texture2D>(@"Textures\Geoscape\IconSpriteMap");
+             hudFont = content.Load<SpriteFont>(@"SpriteFont1");
             iconSprites = new SpriteMap(iconTex,4,5);
         }
 

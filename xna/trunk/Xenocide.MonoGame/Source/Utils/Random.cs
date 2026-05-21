@@ -46,7 +46,6 @@ using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.UI.Screens;
 using ProjectXenocide.UI.Dialogs;
 
-using CeGui;
 
 using Vector3 = Microsoft.Xna.Framework.Vector3;
 

@@ -83,7 +83,8 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
             XPathNavigator attributesNode = node.SelectSingleNode("c:attributes", manager);
             flyer = Util.GetBoolAttribute(attributesNode, "flyer");
             string carrier = Util.GetStringAttribute(attributesNode, "carrier");
-            config = Util.ParseEnum<InventoryLayout.Config>(carrier);
+            if (carrier.Length > 0)
+                config = Util.ParseEnum<InventoryLayout.Config>(carrier);
 
             // parse statistics (called attributes)
             foreach (XPathNavigator attributeNode in attributesNode.SelectChildren(XPathNodeType.Element))

@@ -32,12 +32,12 @@ using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using System.Text;
 
-using CeGui;
-
+using Gum.Forms.Controls;
 using ProjectXenocide.UI.Scenes.XNet;
 
 using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.Utils;
+using Xenocide.Resources;
 
 #endregion
 
@@ -56,15 +56,16 @@ namespace ProjectXenocide.UI.Screens
             : base("XNetScreen", @"Content\Textures\UI\XnetScreenBackground.png")
         {
             Scene = new XNetScene();
-            Xenocide.AudioSystem.PlayRandomMusic();
+            if (Xenocide.AudioSystem != null)
+                Xenocide.AudioSystem.PlayRandomMusic();
         }
 
-        #region Create the CeGui widgets
+        #region Create the Gum controls
 
         /// <summary>
         /// add the buttons to the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
             SetView(0.005f, 0.0733f, 0.5038f, 0.4417f);
 
@@ -72,12 +73,13 @@ namespace ProjectXenocide.UI.Screens
             InitEntriesTree();
 
             // CeGui# doesn't allow scrolling static text, so fake with list box
-            textWindow = GuiBuilder.CreateListBox(CeguiId + "_text");
-            AddWidget(textWindow, 0.002f, 0.52f, 0.541f, 0.475f);
+            textWindow = new ListBox();
+            RootContainer.AddChild(textWindow);
 
             // and provide a close button
-            closeButton = AddButton("BUTTON_CLOSE", 0.7475f, 0.9400f, 0.2275f, 0.04125f);
-            closeButton.Clicked += new CeGui.GuiEventHandler(OnCloseButton);
+            closeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CLOSE") };
+            RootContainer.AddChild(closeButton);
+            closeButton.Click += OnCloseButton;
         }
 
         /// <summary>
@@ -87,8 +89,8 @@ namespace ProjectXenocide.UI.Screens
         private void InitEntriesTree()
         {
             // create the list box
-            entriesTree = GuiBuilder.CreateListBox("entriesTree");
-            AddWidget(entriesTree, 0.606f, 0.073f, 0.366f, 0.8600f);
+            entriesTree = new ListBox();
+            RootContainer.AddChild(entriesTree);
 
             Dictionary<string, int> catNames = new Dictionary<string, int>();
             foreach (XNetEntry e in Xenocide.StaticTables.XNetEntryList)
@@ -96,18 +98,20 @@ namespace ProjectXenocide.UI.Screens
                 if (!catNames.ContainsKey(e.Category) && EntryAvailableToPlayer(e))
                 {
                     catNames.Add(e.Category, 0);
-                    categories.Add(new Category(e.Category, categories, entriesTree));
+                    categories.Add(new Category(e.Category, categories, entriesTree, entryItemIds));
                 }
             }
 
-            entriesTree.SelectionChanged += new WindowEventHandler(OnEntrySelected);
+            entriesTree.SelectionChanged += (s, a) => OnEntrySelected(s, EventArgs.Empty);
         }
 
-        private CeGui.Widgets.Listbox    entriesTree;
-        private CeGui.Widgets.PushButton closeButton;
-        private CeGui.Widgets.Listbox    textWindow;
+        private ListBox    entriesTree;
+        private Button closeButton;
+        private ListBox    textWindow;
 
-        #endregion Create the CeGui widgets
+        private List<int> entryItemIds = new List<int>();
+
+        #endregion Create the Gum controls
 
         #region event handlers
 
@@ -116,7 +120,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="e">Not used</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope",
            Justification = "FxCop False Positive")]
-        private void OnCloseButton(object sender, CeGui.GuiEventArgs e)
+        private void OnCloseButton(object sender, EventArgs e)
         {
             ScreenManager.ScheduleScreen(new GeoscapeScreen());
         }
@@ -124,24 +128,25 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has selected an X-Net entry to display</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnEntrySelected(object sender, WindowEventArgs e)
+        private void OnEntrySelected(object sender, EventArgs e)
         {
-            CeGui.Widgets.ListboxItem item = entriesTree.GetFirstSelectedItem();
-            if (item != null)
+            int index = entriesTree.SelectedIndex;
+            if (index >= 0 && index < entryItemIds.Count)
             {
+                int id = entryItemIds[index];
                 Xenocide.AudioSystem.PlaySound("Menu\\buttonclick2_changesetting.ogg");
-                if (Category.categoryIndexOffset <= item.ID)
+                if (Category.categoryIndexOffset <= id)
                 {
                     // user clicked on a category (so expand or collapse it)
-                    categories[item.ID - Category.categoryIndexOffset].Toggle();
+                    categories[id - Category.categoryIndexOffset].Toggle();
 
                     //unselect header, to avoid having to double click to close topic
-                    item.Selected = false;
+                    entriesTree.SelectedIndex = -1;
                 }
                 else
                 {
                     // user clicked an entry, so show its text and model
-                    XNetEntry entry = Xenocide.StaticTables.XNetEntryList[item.ID];
+                    XNetEntry entry = Xenocide.StaticTables.XNetEntryList[id];
                     PopulateEntryText(entry);
 
                     // and set the 3D model to show
@@ -172,7 +177,7 @@ namespace ProjectXenocide.UI.Screens
         private void PopulateEntryText(XNetEntry entry)
         {
             // clear the current text
-            textWindow.ResetList();
+            textWindow.Items.Clear();
             AddToEntryText(entry.ShortEntry);
             if (0 < entry.Stats.Count)
             {
@@ -208,9 +213,7 @@ namespace ProjectXenocide.UI.Screens
             do
             {
                 line = ExtractLine(ref textLeft);
-                CeGui.ListboxTextItem item = new CeGui.ListboxTextItem(line);
-                item.SetSelectionBrushImage("TaharezLook", "MultiListSelectionBrush");
-                textWindow.AddItem(item);
+                textWindow.Items.Add(line);
             }
             while (0 < textLeft.Length);
         }
@@ -328,14 +331,17 @@ namespace ProjectXenocide.UI.Screens
             /// <param name="name">Name of the category</param>
             /// <param name="categories">List of all the categories so far</param>
             /// <param name="entriesTree">List box (tree) to put the category into</param>
-            public Category(string name, List<Category> categories, CeGui.Widgets.Listbox entriesTree)
+            /// <param name="itemIds">Parallel list tracking IDs for each item in the list box</param>
+            public Category(string name, List<Category> categories, ListBox entriesTree, List<int> itemIds)
             {
                 this.name        = name;
                 this.categories  = categories;
                 this.entriesTree = entriesTree;
+                this.itemIds     = itemIds;
                 index            = categories.Count;
-                categoryItem     = CreateCategoryMenuItem(name, index + categoryIndexOffset);
-                entriesTree.AddItem(categoryItem);
+
+                entriesTree.Items.Add(name);
+                itemIds.Add(index + categoryIndexOffset);
             }
 
             /// <summary>
@@ -380,17 +386,34 @@ namespace ProjectXenocide.UI.Screens
             /// <param name="id">id to assign entry (it's the index to entries list)</param>
             private void ShowEntry(XNetEntry entry, int id)
             {
-                CeGui.ListboxTextItem item = CreateEntryMenuItem(entry.Name, id);
+                string itemText = "  " + entry.Name;
                 // if this is last category, must add the entries to bottom of list
                 if (index == (categories.Count - 1))
                 {
-                    entriesTree.AddItem(item);
+                    entriesTree.Items.Add(itemText);
+                    itemIds.Add(id);
                 }
                 else
                 {
-                    entriesTree.InsertItem(item, categories[index + 1].categoryItem);
+                    int insertPos = FindNextCategoryPosition();
+                    entriesTree.Items.Insert(insertPos, itemText);
+                    itemIds.Insert(insertPos, id);
                 }
-                childItems.Add(item);
+                childItems.Add(itemText);
+            }
+
+            /// <summary>
+            /// Find the position of the next category in the list box
+            /// </summary>
+            private int FindNextCategoryPosition()
+            {
+                Category nextCat = categories[index + 1];
+                for (int i = 0; i < entriesTree.Items.Count; i++)
+                {
+                    if ((string)entriesTree.Items[i] == nextCat.name)
+                        return i;
+                }
+                return entriesTree.Items.Count;
             }
 
             /// <summary>
@@ -399,46 +422,24 @@ namespace ProjectXenocide.UI.Screens
             private void Collapse()
             {
                 isExpanded = false;
-                foreach (CeGui.ListboxTextItem item in childItems)
+                foreach (string itemText in childItems)
                 {
-                    entriesTree.RemoveItem(item);
+                    int pos = -1;
+                    for (int i = 0; i < entriesTree.Items.Count; i++)
+                    {
+                        if ((string)entriesTree.Items[i] == itemText)
+                        {
+                            pos = i;
+                            break;
+                        }
+                    }
+                    if (pos >= 0)
+                    {
+                        entriesTree.Items.RemoveAt(pos);
+                        itemIds.RemoveAt(pos);
+                    }
                 }
                 childItems.Clear();
-            }
-
-            /// <summary>
-            /// Create an item that will be a type (topic) heading in the menu
-            /// </summary>
-            /// <param name="categoryName">Text to show in menu</param>
-            /// <param name="id">index to categories</param>
-            /// <returns></returns>
-            private static CeGui.ListboxTextItem CreateCategoryMenuItem(string categoryName, int id)
-            {
-                return CreateListboxItem("", categoryName, id);
-            }
-
-            /// <summary>
-            /// Create an item that will be a XNet entry in the menu
-            /// </summary>
-            /// <param name="entryName">Text to show in the menu</param>
-            /// <param name="id">index to X-Net Entries</param>
-            /// <returns></returns>
-            private static CeGui.ListboxTextItem CreateEntryMenuItem(string entryName, int id)
-            {
-                return CreateListboxItem("  ", entryName, id);
-            }
-
-            /// <summary>
-            /// Create an item to go into the menu of available X-Net entries
-            /// </summary>
-            /// <param name="padding">indetaion of item, to mimic a tree</param>
-            /// <param name="itemText">Text to show in menu</param>
-            /// <param name="id">index to XNetEntries</param>
-            private static CeGui.ListboxTextItem CreateListboxItem(string padding, string itemText, int id)
-            {
-                CeGui.ListboxTextItem item = Util.CreateListboxItem(padding + itemText);
-                item.ID = id;
-                return item;
             }
 
             /// <summary>
@@ -457,11 +458,6 @@ namespace ProjectXenocide.UI.Screens
             private string name;
 
             /// <summary>
-            /// The item in the list box representing this category
-            /// </summary>
-            private CeGui.ListboxTextItem categoryItem;
-
-            /// <summary>
             /// List of all the categories
             /// </summary>
             private List<Category> categories;
@@ -469,14 +465,19 @@ namespace ProjectXenocide.UI.Screens
             /// <summary>
             /// The list box (pretending to be a tree) that shows the available X-Net entries
             /// </summary>
-            private CeGui.Widgets.Listbox entriesTree;
+            private ListBox entriesTree;
+
+            /// <summary>
+            /// Parallel list tracking the ID for each item in the entriesTree
+            /// </summary>
+            private List<int> itemIds;
 
             /// <summary>
             /// Has this category been expanded to show all it's child entries?
             /// </summary>
             private bool isExpanded;
 
-            private List<CeGui.ListboxTextItem> childItems = new List<CeGui.ListboxTextItem>();
+            private List<string> childItems = new List<string>();
         }
 
         private List<Category> categories = new List<Category>();

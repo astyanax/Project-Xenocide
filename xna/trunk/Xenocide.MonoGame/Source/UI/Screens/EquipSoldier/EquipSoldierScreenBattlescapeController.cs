@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -74,7 +74,7 @@ namespace ProjectXenocide.UI.Screens
             #region Create the CeGui widgets
 
             /// <summary>add Widgets to the screen</summary>
-            public override void CreateCeguiWidgets()
+            public override void CreateGumControls()
             {
             }
 

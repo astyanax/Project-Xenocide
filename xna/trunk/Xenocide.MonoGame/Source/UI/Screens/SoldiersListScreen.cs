@@ -3,12 +3,12 @@
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
   by  Project Xenocide Team
-
+ 
 For the latest info on Xenocide, see http://www.projectxenocide.com/
-
+ 
 This work is licensed under the Creative Commons
 Attribution-NonCommercial-ShareAlike 2.5 License.
-
+ 
 To view a copy of this license, visit
 http://creativecommons.org/licenses/by-nc-sa/2.5/
 or send a letter to Creative Commons, 543 Howard Street, 5th Floor,
@@ -30,15 +30,16 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using CeGui;
-using ProjectXenocide.Model.Geoscape;
 
+using Gum.Forms.Controls;
+
+using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Utils;
-using CeGui.Widgets;
 using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.UI.Controls;
 using Xenocide.Resources;
 using ProjectXenocide.UI.Dialogs;
 
@@ -50,7 +51,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// Lists soldiers currently at the base.
     /// </summary>
-    public class SoldiersListScreen : Screen
+    public class SoldiersListScreen : GumScreen
     {
         /// <summary>
         /// Constructs a screen listing the soldiers stationed at the given base.
@@ -60,7 +61,6 @@ namespace ProjectXenocide.UI.Screens
         {
             this.selectedOutpostIndex = selectedOutpostIndex;
 
-            // can only equip the soldiers currently at the outpost
             soldiers = new List<Person>();
             foreach (Person soldier in SelectedOutpost.ListStaff("ITEM_PERSON_SOLDIER"))
             {
@@ -72,13 +72,13 @@ namespace ProjectXenocide.UI.Screens
             }
         }
 
-        #region Create the CeGui widgets
+        #region Create the Gum controls
 
         /// <summary>
         /// Add all the widgets to the screen. We'll delegate to a different method for each
         /// part of the screen.
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
             InitializeSoldiersGrid();
             InitializeSoldierDetailPanel();
@@ -90,16 +90,14 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void InitializeSoldierDetailPanel()
         {
-            // edit box for soldier name
-            nameEditBox = AddEditBox("EDITBOX_NAME", 0.01f, 0.06f, 0.70f, 0.12f);
-            nameEditBox.Font = FontManager.Instance.GetFont("LargeBaseName");
-            nameEditBox.TextAccepted += new WindowEventHandler(OnSoldierNameChanged);
+            nameEditBox = new Label() { Text = XenocideResourceManager.Get("EDITBOX_NAME") };
+            RootContainer.AddChild(nameEditBox);
 
-            // attributes
-            attributesGrid = AddGrid(0.01f, 0.20f, 0.70f, 0.75f,
-                Strings.SCREEN_SOLDIERS_LIST_COLUMN_ATTRIBUTE, 0.49f,
-                Strings.SCREEN_SOLDIERS_LIST_COLUMN_VALUE, 0.50f
-            );
+            attributesGrid = new GridPanel();
+            attributesGrid.AddColumn("Attribute", 250);
+            attributesGrid.AddColumn("Value", 250);
+            RootContainer.AddChild(attributesGrid.Visual);
+
             PopulateSoldierDetailPanel();
         }
 
@@ -108,9 +106,10 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void InitializeSoldiersGrid()
         {
-            soldiersListGrid = GuiBuilder.CreateListBox("soldiersListGrid");
-            AddWidget(soldiersListGrid, 0.7475f, 0.06f, 0.24f, 0.70f);
-            soldiersListGrid.SelectionChanged += new WindowEventHandler(OnSelectedSoldierChanged);
+            soldiersListGrid = new GridPanel();
+            soldiersListGrid.AddColumn(XenocideResourceManager.Get("soldiersListGrid"), 300);
+            RootContainer.AddChild(soldiersListGrid.Visual);
+            soldiersListGrid.SelectionChanged += OnSelectedSoldierChanged;
 
             RefreshSoldiersGrid();
         }
@@ -121,19 +120,11 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void RefreshSoldiersGrid()
         {
-            // if no soldier selected, select first one in list
-            int selectedSoldierIndex = 0;
-            if (null != SelectedSoldier)
-            {
-                selectedSoldierIndex = soldiers.IndexOf(SelectedSoldier);
-            }
+            soldiersListGrid.Clear();
 
-            soldiersListGrid.ResetList();
-            for (int i = 0; i < soldiers.Count; i++)
+            foreach (Person soldier in soldiers)
             {
-                ListboxItem item = soldiersListGrid.AddItem(soldiers[i].Name);
-                item.ID = i;
-                item.Selected = (i == selectedSoldierIndex);
+                soldiersListGrid.AddRow(soldier, soldier.Name);
             }
         }
 
@@ -158,12 +149,11 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void PopulateAttributes()
         {
-            Person person = SelectedSoldier;
-            if ((null != person) && (null != attributesGrid))
-            {
-                attributesGrid.ResetList();
+            attributesGrid.Clear();
 
-                // Psi Training
+            Person person = SelectedSoldier;
+            if ((null != person))
+            {
                 if (Xenocide.GameState.GeoData.XCorp.TechManager.IsAvailable("FAC_PSIONIC_TRAINING_FACILITY"))
                 {
                     String training = Strings.SCREEN_SOLDIERS_LIST_NOT_PSI_TRAINING;
@@ -174,26 +164,20 @@ namespace ProjectXenocide.UI.Screens
                     AddAttributeRow(Strings.SCREEN_SOLDIERS_LIST_ROW_PSI_TRAINING, training);
                 }
 
-                // Craft
                 Aircraft aircraft = person.Aircraft;
                 string aircraftName = (null != aircraft) ? aircraft.Name : String.Empty;
                 AddAttributeRow(Strings.SCREEN_SOLDIERS_LIST_ROW_AIRCRAFT, aircraftName);
 
-                // Armor
-                // nasty way of doing this, but I think it's the only place where we need it.
                 Item armor = person.Combatant.Inventory.ItemAt(4, 3);
                 string armorName = (null != armor) ? armor.Name : Strings.ARMOR_TYPE_NONE;
                 AddAttributeRow(Strings.SCREEN_SOLDIERS_LIST_ROW_ARMOR, armorName);
 
-                // Stats
                 for (Statistic s = Statistic.TimeUnits; s <= Statistic.DaysHired; ++s)
                 {
                     AddStatistic(person.Combatant, s);
                 }
 
                 AddAttributeRow("In Psi Training", person.PsiTraining.ToString());
-
-                // Others ToDo
                 AddAttributeRow("ToDo", "ToDo");
             }
         }
@@ -209,7 +193,6 @@ namespace ProjectXenocide.UI.Screens
             string rowValue;
             switch (s)
             {
-                // these are not shown
                 case Statistic.EnergyRecharge:
                 case Statistic.VictoryPoints:
                 case Statistic.Aggression:
@@ -221,9 +204,6 @@ namespace ProjectXenocide.UI.Screens
                 case Statistic.MotionScannerBlipSize:
                 case Statistic.TimeUnitsLeft:
                 case Statistic.StunDamage:
-
-                // ToDo: not shown at moment, should be moved out of stats into a FatalWounds class
-                // Note, they're only relevant on the battlescape
                 case Statistic.FatalWoundsHead:
                 case Statistic.FatalWoundsBody:
                 case Statistic.FatalWoundsLeftArm:
@@ -233,7 +213,6 @@ namespace ProjectXenocide.UI.Screens
                 case Statistic.StaminaLeft:
                     return;
 
-                // these have simple hanlding (just show the number)
                 case Statistic.InjuryDamage:
                 case Statistic.Kills:
                 case Statistic.Missions:
@@ -241,7 +220,6 @@ namespace ProjectXenocide.UI.Screens
                     rowValue = Util.ToString(combatant.Stats[s]);
                     break;
 
-                // ToDo: these will show starting and current value
                 case Statistic.TimeUnits:
                 case Statistic.Stamina:
                 case Statistic.Health:
@@ -256,14 +234,12 @@ namespace ProjectXenocide.UI.Screens
                     rowValue = Util.ToString(combatant.Stats[s]);
                     break;
 
-                // special cases
                 case Statistic.DaysHired:
                     rowName = StaticticNames.DisplayString(s);
                     rowValue = Util.ToString(combatant.Stats.DaysHired());
                     break;
 
                 default:
-                    // should never get here
                     Debug.Assert(false);
                     return;
             }
@@ -278,10 +254,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="value">text to put in the value column</param>
         private void AddAttributeRow(string attribute, string value)
         {
-            ListboxItem listboxItem = Util.CreateListboxItem(attribute);
-            int row = attributesGrid.AddRow(listboxItem, 0);
-            listboxItem.ID = row;
-            Util.AddStringElementToGrid(attributesGrid, 1, row, value);
+            attributesGrid.AddRow(null, attribute, value);
         }
 
         /// <summary>
@@ -289,39 +262,37 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void CreateRightHandButtons()
         {
-            // Psi Training is only available if base has working facility
             if (SelectedOutpost.Floorplan.HasWorkingFacility("FAC_PSIONIC_TRAINING_FACILITY"))
             {
-                psiTrainButton = AddButton("BUTTON_PSI_TRAIN", 0.7475f, 0.80f, 0.2275f, 0.04125f);
-                psiTrainButton.Clicked += new CeGui.GuiEventHandler(OnPsiTraining);
+                psiTrainButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_PSI_TRAIN") };
+                RootContainer.AddChild(psiTrainButton);
+                psiTrainButton.Click += OnPsiTraining;
             }
-            craftButton = AddButton("BUTTON_ASSIGN_TO_CRAFT", 0.7475f, 0.85f, 0.2275f, 0.04125f);
-            equipButton = AddButton("BUTTON_EQUIP_SOLDIER", 0.7475f, 0.90f, 0.2275f, 0.04125f);
-            closeButton = AddButton("BUTTON_CLOSE", 0.7475f, 0.95f, 0.2275f, 0.04125f);
+            craftButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_ASSIGN_TO_CRAFT") };
+            RootContainer.AddChild(craftButton);
+            equipButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_EQUIP_SOLDIER") };
+            RootContainer.AddChild(equipButton);
+            closeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CLOSE") };
+            RootContainer.AddChild(closeButton);
 
-            craftButton.Clicked += new CeGui.GuiEventHandler(ShowAssignScreen);
-            equipButton.Clicked += new CeGui.GuiEventHandler(OnEquipButton);
-            closeButton.Clicked += new CeGui.GuiEventHandler(ShowBasesScreen);
+            craftButton.Click += ShowAssignScreen;
+            equipButton.Click += OnEquipButton;
+            closeButton.Click += ShowBasesScreen;
         }
 
-        private CeGui.Widgets.EditBox nameEditBox;
-        private CeGui.Widgets.Listbox soldiersListGrid;
-        private CeGui.Widgets.MultiColumnList attributesGrid;
-        private CeGui.Widgets.PushButton craftButton;
-        private CeGui.Widgets.PushButton equipButton;
-        private CeGui.Widgets.PushButton psiTrainButton;
-        private CeGui.Widgets.PushButton closeButton;
+        private Label nameEditBox;
+        private GridPanel soldiersListGrid;
+        private GridPanel attributesGrid;
+        private Button craftButton;
+        private Button equipButton;
+        private Button psiTrainButton;
+        private Button closeButton;
 
         #endregion
 
         #region Event Handlers
 
-        /// <summary>
-        /// Event handler called when the name edit box value is changed.
-        /// </summary>
-        /// <param name="sender">not used</param>
-        /// <param name="e">not used</param>
-        private void OnSoldierNameChanged(object sender, CeGui.GuiEventArgs e)
+        private void OnSoldierNameChanged(object sender, EventArgs e)
         {
             if (null != SelectedSoldier)
             {
@@ -330,48 +301,27 @@ namespace ProjectXenocide.UI.Screens
             }
         }
 
-        /// <summary>
-        /// Called when a soldier is clicked in the list. Displays appropriate values in the
-        /// soldier detail section.
-        /// 
-        /// If the listbox is clicked on a row that doesn't contain a soldier, then SelectedSoldier
-        /// will be null.
-        /// </summary>
-        /// <param name="sender">not used</param>
-        /// <param name="e">not used</param>
-        private void OnSelectedSoldierChanged(object sender, CeGui.GuiEventArgs e)
+        private void OnSelectedSoldierChanged(object sender, EventArgs e)
         {
             PopulateSoldierDetailPanel();
         }
 
-        /// <summary>React to user pressing the Equip button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void OnEquipButton(object sender, CeGui.GuiEventArgs e)
+        private void OnEquipButton(object sender, EventArgs e)
         {
             ShowEquipSoldiersScreen();
         }
 
-        /// <summary>Replace this screen with matching BasesScreen</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void ShowBasesScreen(object sender, CeGui.GuiEventArgs e)
+        private void ShowBasesScreen(object sender, EventArgs e)
         {
             ScreenManager.ScheduleScreen(new BasesScreen(selectedOutpostIndex));
         }
 
-        /// <summary>Replace this screen with matching Assign to craft screen</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void ShowAssignScreen(object sender, CeGui.GuiEventArgs e)
+        private void ShowAssignScreen(object sender, EventArgs e)
         {
             ScreenManager.ScheduleScreen(new AssignToCraftScreen(selectedOutpostIndex));
         }
 
-        /// <summary>User has clicked on "Psi Training" button</summary>
-        /// <param name="sender">not used</param>
-        /// <param name="e">not used</param>
-        private void OnPsiTraining(object sender, CeGui.GuiEventArgs e)
+        private void OnPsiTraining(object sender, EventArgs e)
         {
             TogglePsiTraining();
         }
@@ -380,14 +330,11 @@ namespace ProjectXenocide.UI.Screens
 
         private void TogglePsiTraining()
         {
-            // if no soldier seleted, nothing to do
             Person person = SelectedSoldier;
             if (null != person)
             {
                 if (!person.PsiTraining)
                 {
-                    // Can only start training if it's the first of the month
-                    // and base has free psi training pods
                     if (Xenocide.GameState.GeoData.GeoTime.Time.Day != 1)
                     {
                         Util.ShowMessageBox(Strings.MSGBOX_TOO_LATE_FOR_PSI_TRAINING);
@@ -403,14 +350,12 @@ namespace ProjectXenocide.UI.Screens
                 }
                 else
                 {
-                    // ToDo: ask user to confirm cancel training
-                    YesNoDialog dlg = YesNoDialog.OkCancelDialog(
+                    GumYesNoDialog dlg = GumYesNoDialog.OkCancelDialog(
                         Util.StringFormat(Strings.YESNOMSG_CANCEL_PSI_TRAINING, person.Name)
                     );
                     dlg.YesAction += delegate()
                     {
                         person.PsiTraining = false;
-                        // ToDo: Remove after showing "In Psi Training" in list hack is removed
                         PopulateAttributes();
                     };
                     Xenocide.ScreenManager.ShowDialog(dlg);
@@ -419,9 +364,6 @@ namespace ProjectXenocide.UI.Screens
             }
         }
 
-        /// <summary>
-        /// Show screen that allows player to equip the selected soldier
-        /// </summary>
         private void ShowEquipSoldiersScreen()
         {
             if (null != SelectedSoldier)
@@ -432,31 +374,19 @@ namespace ProjectXenocide.UI.Screens
 
         #region Fields
 
-        /// <summary>
-        /// Returns the domain object for the soldier currently selected in the list.
-        /// </summary>
         private Person SelectedSoldier
         {
             get
             {
-                ListboxItem selection = soldiersListGrid.GetFirstSelectedItem();
-                return (null == selection) ? null : soldiers[selection.ID];
+                object tag = soldiersListGrid.GetSelectedTag();
+                return tag as Person;
             }
         }
 
-        /// <summary>
-        /// The soldiers listed on this screen.
-        /// </summary>
         private readonly List<Person> soldiers;
 
-        /// <summary>
-        /// The outpost this screen deals with.
-        /// </summary>
         private readonly int selectedOutpostIndex;
 
-        /// <summary>
-        /// The outpost we're showing the details for
-        /// </summary>
         private Outpost SelectedOutpost { get { return Xenocide.GameState.GeoData.Outposts[selectedOutpostIndex]; } }
 
         #endregion

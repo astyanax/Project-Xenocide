@@ -26,10 +26,12 @@ San Francisco, California, 94105, USA.
 
 #region Using Statements
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 using Microsoft.Xna.Framework;
+
+using MonoGameGum;
+using Gum.Forms;
+using Gum.Forms.Controls;
 
 using ProjectXenocide.Model;
 using ProjectXenocide.Utils;
@@ -45,65 +47,65 @@ using ProjectXenocide.Model.StaticData.Items;
 
 namespace ProjectXenocide.UI.Screens
 {
-    /// <summary>
-    /// This is the first screen shown when Xenocide starts
-    /// </summary>
-    public class StartScreen : Screen
+    public class StartScreen : GumScreen
     {
-        /// <summary>
-        /// Default constructor (obviously)
-        /// </summary>
         public StartScreen()
             : base("StartScreen", @"Content\Textures\UI\StartScreenBackground.png")
         {
-            Xenocide.AudioSystem.PlayRandomMusic();
+            if (Xenocide.AudioSystem != null)
+                Xenocide.AudioSystem.PlayRandomMusic();
         }
 
-        #region Create the CeGui widgets
-
-        /// <summary>
-        /// add the buttons to the screen
-        /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
-            // put Xenocide version in bottom right corner
-            AddStaticText(0.90f, 0.940f, 0.10f, 0.04f).Text = Xenocide.CurrentVersion;
+            RootContainer.Width = 250;
 
-            // Only put up these buttons if debug build
-            #if DEBUG
-                testsButton                = AddButton("BUTTON_RUN_TESTS",         0.3500f, 0.75f, 0.3000f, 0.04f);
-                battlescapeButton          = AddButton("BUTTON_DEBUG_BATTLESCAPE", 0.0000f, 0.75f, 0.3000f, 0.04f);
-                testsButton.Clicked       += new CeGui.GuiEventHandler(OnRunTestsClicked);
-                battlescapeButton.Clicked += new CeGui.GuiEventHandler(OnBattlescapeClicked);
-            #endif
+#if DEBUG
+            var testsButton = new Button();
+            testsButton.Text = "Run Tests";
+            testsButton.Click += OnRunTestsClicked;
+            RootContainer.AddChild(testsButton);
 
-            startButton   = AddButton("BUTTON_NEW_GAME",        0.3500f, 0.80f, 0.3000f, 0.04f);
-            loadButton    = AddButton("BUTTON_LOAD_SAVED_GAME", 0.3500f, 0.85f, 0.3000f, 0.04f);
-            quitButton    = AddButton("BUTTON_QUIT",            0.3500f, 0.90f, 0.3000f, 0.04f, "Menu\\exitgame.ogg");
-            creditsButton = AddButton("BUTTON_CREDITS",         0.3500f, 0.95f, 0.3000f, 0.04f);
+            var battlescapeButton = new Button();
+            battlescapeButton.Text = "Debug Battlescape";
+            battlescapeButton.Click += OnBattlescapeClicked;
+            RootContainer.AddChild(battlescapeButton);
+#endif
 
-            startButton.Clicked   += new CeGui.GuiEventHandler(OnNewGameClicked); 
-            loadButton.Clicked    += new CeGui.GuiEventHandler(OnShowLoadGameScreen);
-            quitButton.Clicked    += new CeGui.GuiEventHandler(OnQuitGameClicked);
-            creditsButton.Clicked += new CeGui.GuiEventHandler(OnCreditsClicked);
+            var startButton = new Button();
+            startButton.Text = "New Game";
+            startButton.Click += OnNewGameClicked;
+            RootContainer.AddChild(startButton);
+
+            var loadButton = new Button();
+            loadButton.Text = "Load Saved Game";
+            loadButton.Click += OnShowLoadGameScreen;
+            RootContainer.AddChild(loadButton);
+
+            var quitButton = new Button();
+            quitButton.Text = "Quit";
+            quitButton.Click += OnQuitGameClicked;
+            RootContainer.AddChild(quitButton);
+
+            var creditsButton = new Button();
+            creditsButton.Text = "Credits";
+            creditsButton.Click += OnCreditsClicked;
+            RootContainer.AddChild(creditsButton);
+
+            var spacer = new Label();
+            spacer.Height = 20;
+            RootContainer.AddChild(spacer);
+
+            var versionLabel = new Label();
+            versionLabel.Text = Xenocide.CurrentVersion;
+            RootContainer.AddChild(versionLabel);
         }
-
-        private CeGui.Widgets.PushButton testsButton;
-        private CeGui.Widgets.PushButton battlescapeButton;
-        private CeGui.Widgets.PushButton startButton;
-        private CeGui.Widgets.PushButton loadButton;
-        private CeGui.Widgets.PushButton quitButton;
-        private CeGui.Widgets.PushButton creditsButton;
-
-        #endregion Create the CeGui widgets
 
         #region event handlers
 
-        /// <summary>Run the unit Tests</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void OnRunTestsClicked(object sender, CeGui.GuiEventArgs e)
+        private void OnRunTestsClicked(object sender, EventArgs e)
         {
+            Console.WriteLine("StartScreen: Run Tests clicked");
             Xenocide.GameState.SetToStartGameCondition();
             Xenocide.StaticTables.StartSettings.Cheats.XcorpCantLooseAtStartOfMonth = true;
             ProjectXenocide.Model.Geoscape.Geography.Planet.RunTests();
@@ -140,30 +142,24 @@ namespace ProjectXenocide.UI.Screens
             Util.ShowMessageBox("All unit tests passed");
         }
 
-        /// <summary>Go straight to a Battlescape</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void OnBattlescapeClicked(object sender, CeGui.GuiEventArgs e)
+        private void OnBattlescapeClicked(object sender, EventArgs e)
         {
+            Console.WriteLine("StartScreen: Battlescape clicked");
             StartDebugBattlescape();
         }
 
-        /// <summary>Start a new game</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void OnNewGameClicked(object sender, CeGui.GuiEventArgs e)
+        private void OnNewGameClicked(object sender, EventArgs e)
         {
+            Console.WriteLine("StartScreen: New Game clicked");
             Xenocide.GameState.SetToStartGameCondition();
             GeoscapeScreen geoscapeScreen = new GeoscapeScreen();
             geoscapeScreen.State = new GeoscapeScreen.AddingFirstBaseScreenState(geoscapeScreen);
             ScreenManager.ScheduleScreen(geoscapeScreen);
         }
 
-        /// <summary>Replace screen on display with the Load Game Screen</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void OnShowLoadGameScreen(object sender, CeGui.GuiEventArgs e)
+        private void OnShowLoadGameScreen(object sender, EventArgs e)
         {
+            Console.WriteLine("StartScreen: Load Game clicked");
             ScreenManager.ScheduleScreen(
                 new LoadSaveGameScreen(
                     LoadSaveGameScreen.Mode.Load,
@@ -172,44 +168,36 @@ namespace ProjectXenocide.UI.Screens
             );
         }
 
-        /// <summary>Quit the game</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void OnQuitGameClicked(object sender, CeGui.GuiEventArgs e)
+        private void OnQuitGameClicked(object sender, EventArgs e)
         {
+            Console.WriteLine("StartScreen: Quit clicked");
             ScreenManager.QuitGame = true;
         }
 
-        /// <summary>Respond to user pressing the "Credits" button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void OnCreditsClicked(object sender, CeGui.GuiEventArgs e)
+        private void OnCreditsClicked(object sender, EventArgs e)
         {
+            Console.WriteLine("StartScreen: Credits clicked");
             ShowCreditsScreen();
         }
 
         #endregion event handlers
 
-        /// <summary>Show the credits screen</summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope",
-            Justification="FxCop false positive")]
         private void ShowCreditsScreen()
         {
+            Console.WriteLine("StartScreen: Scheduling CreditsScreen");
             ScreenManager.ScheduleScreen(new CreditsScreen());
         }
 
-        /// <summary>Setup a battlescape and go to it</summary>
         private void StartDebugBattlescape()
         {
+            Console.WriteLine("StartScreen: Starting debug battlescape");
             Xenocide.GameState.SetToStartGameCondition();
 
-            // set up outpost for mission
             GeoPosition pos = new GeoPosition();
             Outpost outpost = new Outpost(pos, "Dummy");
             outpost.SetupPlayersFirstBase();
             Xenocide.GameState.GeoData.Outposts.Add(outpost);
 
-            // Launch a UFO
             Overmind overmind = Xenocide.GameState.GeoData.Overmind;
             overmind.DiableStartOfMonth();
             overmind.DebugCreateMission(AlienMission.Retaliation, pos);
@@ -217,24 +205,11 @@ namespace ProjectXenocide.UI.Screens
             InvasionTask.TestReleaseUfo(task);
             Ufo ufo = overmind.Ufos[0];
 
-            // change UFO into a bigger one (so we've got a couple of aliens)
             ufo.DebugTransmute(Xenocide.StaticTables.ItemList["ITEM_UFO_RECON"]);
 
             ProjectXenocide.Model.Battlescape.Mission battlescapeMission = new UfoSiteMission(ufo, outpost.Fleet[2]);
             Xenocide.GameState.Battlescape = new Battle(battlescapeMission);
             ScreenManager.ScheduleScreen(new BattlescapeScreen());
-
-            // Kill or stun the aliens
-            //Battle battlescape = Xenocide.GameState.Battlescape;
-            //ProjectXenocide.Model.Battlescape.Mission.DebugKillAndStunTeam(battlescape.Teams[Team.Aliens].Combatants);
-
-            // simple 3 level terrain for testing
-            /*
-            Terrain.TerrainBuilder builder = new Terrain.TestTerrainBuilder(TestTerrain.Barracks);
-            ProjectXenocide.Model.Battlescape.Mission battlescapeMission = new MockMission(builder);
-            Xenocide.GameState.Battlescape = new Battle(battlescapeMission);
-            ScreenManager.ScheduleScreen(new BattlescapeScreen());
-            */
         }
     }
 }

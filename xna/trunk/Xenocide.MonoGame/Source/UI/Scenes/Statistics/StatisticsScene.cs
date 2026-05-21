@@ -39,6 +39,7 @@ using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
 using ProjectXenocide.UI.Scenes.Facility;
+using ProjectXenocide.UI;
 
 #endregion
 
@@ -119,7 +120,7 @@ namespace ProjectXenocide.UI.Scenes.Statistics
                 basicEffect = new BasicEffect(device);
                 grid.LoadContent(device, new Grid(gridCellsWidth, gridCellsHeight));
                 spriteBatch = new SpriteBatch(Xenocide.Instance.GraphicsDevice);
-                font = content.Load<SpriteFont>(@"Content\SpriteFont1");
+                 font = content.Load<SpriteFont>(@"SpriteFont1");
             }
         }
 
@@ -130,7 +131,7 @@ namespace ProjectXenocide.UI.Scenes.Statistics
         /// <param name="sceneWindow">Where to draw the scene on the display</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
             Justification = "Will throw exception if device is null")]
-        public void Draw(GraphicsDevice device, CeGui.Rect sceneWindow)
+        public void Draw(GraphicsDevice device, UiRect sceneWindow)
         {
             if ((null == graph) && (0 < GetMaxVisibleValue(dataset)))
             {
@@ -206,7 +207,7 @@ namespace ProjectXenocide.UI.Scenes.Statistics
         /// <param name="windowCoords">Window co-ords to translate</param>
         /// <param name="viewport">The current viewport</param>
         /// <returns>Viewport co-ordinates</returns>
-        private Viewport CalcViewportForSceneWindow(CeGui.Rect windowCoords, Viewport viewport)
+        private Viewport CalcViewportForSceneWindow(UiRect windowCoords, Viewport viewport)
         {
             int fullHeight = viewport.Height;
             int fullWidth = viewport.Width;
@@ -331,7 +332,7 @@ namespace ProjectXenocide.UI.Scenes.Statistics
         /// <summary>
         /// Needed so that we can load the sprite font
         /// </summary>
-        private ContentManager content = new ContentManager(Xenocide.Instance.Services);
+         private ContentManager content = new ContentManager(Xenocide.Instance.Services, "Content");
 
         /// <summary>
         /// The names of the months (used as graph identifiers)

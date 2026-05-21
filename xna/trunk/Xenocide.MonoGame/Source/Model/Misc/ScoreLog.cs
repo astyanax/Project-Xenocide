@@ -35,7 +35,6 @@ using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Geography;
 
-using CeGui;
 
 #endregion
 

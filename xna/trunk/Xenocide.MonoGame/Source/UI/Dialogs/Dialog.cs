@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -54,7 +54,7 @@ namespace ProjectXenocide.UI.Dialogs
         /// Constructor (obviously)
         /// </summary>
         /// <param name="size">Size of dialog (relative to screen)</param>
-        protected Dialog(CeGui.Size size)
+        protected Dialog(UiSize size)
             :
             base(MakeDialogId(), size)
         {
@@ -65,7 +65,7 @@ namespace ProjectXenocide.UI.Dialogs
         /// </summary>
         /// <param name="size">Size of dialog (relative to screen)</param>
         /// <param name="title">The title displayed on the dialog</param>
-        protected Dialog(CeGui.Size size, string title)
+        protected Dialog(UiSize size, string title)
             :
             this(size)
         {

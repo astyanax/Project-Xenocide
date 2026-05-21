@@ -1,36 +1,8 @@
-#region Copyright
-/*
---------------------------------------------------------------------------------
-This source file is part of Xenocide
-  by  Project Xenocide Team
-
-For the latest info on Xenocide, see http://www.projectxenocide.com/
-
-This work is licensed under the Creative Commons
-Attribution-NonCommercial-ShareAlike 2.5 License.
-
-To view a copy of this license, visit
-http://creativecommons.org/licenses/by-nc-sa/2.5/
-or send a letter to Creative Commons, 543 Howard Street, 5th Floor,
-San Francisco, California, 94105, USA.
---------------------------------------------------------------------------------
-*/
-
-/*
-* @file UfoInfoDialog.cs
-* @date Created: 2007/08/19
-* @author File creator: David Teviotdale
-* @author Credits: none
-*/
-#endregion
-
-#region Using Statements
-
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-using CeGui;
+using Gum.Forms.Controls;
 
 using ProjectXenocide.UI.Screens;
 
@@ -42,56 +14,32 @@ using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Geography;
 using Xenocide.Resources;
 
-
-#endregion
-
 namespace ProjectXenocide.UI.Dialogs
 {
-    /// <summary>
-    /// Dialog that shows information on UFO on the Geoscape
-    /// </summary>
-    class UfoInfoDialog : Dialog
+    class UfoInfoDialog : GumDialog
     {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="ufo">UFO to show information on</param>
         public UfoInfoDialog(Ufo ufo)
-            : base("Content/Layouts/UfoInfoDialog.layout")
         {
             this.ufo = ufo;
         }
 
-        #region Create the CeGui widgets
-
-        /// <summary>
-        /// add the buttons to the screen
-        /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumWidgets()
         {
-            WindowManager.Instance.GetWindow(txtDetailsName).Text = MakeDialogText();
+            var details = new Label();
+            details.Text = MakeDialogText();
+            RootContainer.AddChild(details);
+
+            var cancelBtn = new Button();
+            cancelBtn.Text = Strings.BUTTON_CLOSE;
+            cancelBtn.Click += OnCancelClicked;
+            RootContainer.AddChild(cancelBtn);
         }
 
-        #endregion Create the CeGui widgets
-
-        #region event handlers
-
-        /// <summary>close the dialog</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        [GuiEvent()]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public void OnCancelClicked(object sender, CeGui.GuiEventArgs e)
+        public void OnCancelClicked(object sender, EventArgs e)
         {
             ScreenManager.CloseDialog(this);
         }
 
-        #endregion event handlers
-
-        /// <summary>
-        /// Create text to show on dialog
-        /// </summary>
-        /// <returns>text to show</returns>
         private String MakeDialogText()
         {
             StringBuilder sb = new StringBuilder(ufo.Name);
@@ -100,7 +48,6 @@ namespace ProjectXenocide.UI.Dialogs
             sb.Append(Util.Linefeed);
             sb.Append(Util.StringFormat(Strings.MSGBOX_UFOINFO_SPEED, ufo.MetersPerSecond));
 
-            // if we can decode the transmissions, add extra information
             if (UfoWithinDecodeTransmissionsRange())
             {
                 sb.Append(Util.Linefeed);
@@ -111,18 +58,16 @@ namespace ProjectXenocide.UI.Dialogs
                 sb.Append(Util.StringFormat(Strings.MSGBOX_UFOINFO_MISSION, ufo.Task.Name));
                 sb.Append(Util.Linefeed);
 
-                // zone
                 GeoPosition target = ufo.Task.Centroid;
                 PlanetRegion region = Xenocide.GameState.GeoData.Planet.GetRegionAtLocation(target);
-                sb.Append(Util.StringFormat(Strings.MSGBOX_UFOINFO_ZONE, region.Name));
+                if (region != null)
+                {
+                    sb.Append(Util.StringFormat(Strings.MSGBOX_UFOINFO_ZONE, region.Name));
+                }
             }
             return sb.ToString();
         }
 
-        /// <summary>
-        /// Is the UFO in range of an X-Corp outpost that can decode the UFO's transmissions?
-        /// </summary>
-        /// <returns>true if in range</returns>
         private bool UfoWithinDecodeTransmissionsRange()
         {
             bool decoding = false;
@@ -133,19 +78,6 @@ namespace ProjectXenocide.UI.Dialogs
             return decoding;
         }
 
-        #region Fields
-
-        /// <summary>
-        /// UFO to show information on
-        /// </summary>
         private Ufo ufo;
-
-        #endregion
-
-        #region Constants
-
-        private const string txtDetailsName = "txtDetails";
-
-        #endregion
     }
 }

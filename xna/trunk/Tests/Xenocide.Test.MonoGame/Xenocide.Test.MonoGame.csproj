@@ -22,4 +22,8 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\..\Xenocide.MonoGame\Content\**\*.xnb" CopyToOutputDirectory="PreserveNewest" Link="Content\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
 </Project>

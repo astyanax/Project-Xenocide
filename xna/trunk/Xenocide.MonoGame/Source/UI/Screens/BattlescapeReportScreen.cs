@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -30,8 +30,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using CeGui;
-
+using Gum.Forms.Controls;
+using ProjectXenocide.UI.Controls;
 
 using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
@@ -55,7 +55,7 @@ namespace ProjectXenocide.UI.Screens
     /// At moment, as we don't have battlescape, use salvage from UFO
     /// ToDo: results of real battlescape
     /// </summary>
-    public class BattlescapeReportScreen : Screen
+    public class BattlescapeReportScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -67,56 +67,58 @@ namespace ProjectXenocide.UI.Screens
             this.mission = mission;
         }
 
-        #region Create the CeGui widgets
+        #region Create the Gum controls
 
         /// <summary>
         /// add the buttons to the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
             // label the recovered items grid
-            recoveredLabelText = AddStaticText(0.01f, 0.42f, 0.2275f, 0.04125f);
+            recoveredLabelText = new Label();
+            RootContainer.AddChild(recoveredLabelText);
             recoveredLabelText.Text = Strings.SCREEN_BATTLESCAPE_REPORT_RECOVERED_ITEMS_LABEL;
 
-            // The gird detailing items recovered
+            // The girds detailing items recovered
             InitializeScoreGrid();
             InitializeRecoveredGrid();
             PopulateScoreGrid();
             PopulateRecoveredGrid();
 
             // other buttons
-            okButton = AddButton("BUTTON_OK", 0.7475f, 0.95f, 0.2275f, 0.04125f);
+            okButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_OK") };
+            RootContainer.AddChild(okButton);
 
-            okButton.Clicked += new CeGui.GuiEventHandler(OnOkButton);
+            okButton.Click += OnOkButton;
         }
 
-        private CeGui.Widgets.StaticText recoveredLabelText;
-        private CeGui.Widgets.MultiColumnList scoreGrid;
-        private CeGui.Widgets.MultiColumnList recoveredGrid;
-        private CeGui.Widgets.PushButton okButton;
+        private Label recoveredLabelText;
+        private GridPanel scoreGrid;
+        private GridPanel recoveredGrid;
+        private Button okButton;
 
         /// <summary>
-        /// Creates a MultiColumnListBox which holds score information about
+        /// Creates a GridPanel which holds score information about
         /// events on the battlescape
         /// </summary>
         private void InitializeScoreGrid()
         {
-            scoreGrid = AddGrid(
-                0.01f, 0.15f, 0.70f, 0.25f,
-                Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_ACTION, 0.70f,
-                Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_SCORE, 0.25f);
+            scoreGrid = new GridPanel();
+            RootContainer.AddChild(scoreGrid.Visual);
+            scoreGrid.AddColumn(Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_ACTION, (int)(0.70f * 800));
+            scoreGrid.AddColumn(Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_SCORE, (int)(0.25f * 800));
         }
 
         /// <summary>
-        /// Creates a MultiColumnListBox which holds items recovered from battlescape
+        /// Creates a GridPanel which holds items recovered from battlescape
         /// </summary>
         private void InitializeRecoveredGrid()
         {
-            recoveredGrid = AddGrid(
-                0.01f, 0.49f, 0.70f, 0.50f,
-                Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_ITEM, 0.45f,
-                Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_QUANTITY, 0.25f,
-                Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_SCORE, 0.25f);
+            recoveredGrid = new GridPanel();
+            RootContainer.AddChild(recoveredGrid.Visual);
+            recoveredGrid.AddColumn(Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_ITEM, (int)(0.45f * 800));
+            recoveredGrid.AddColumn(Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_QUANTITY, (int)(0.25f * 800));
+            recoveredGrid.AddColumn(Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_SCORE, (int)(0.25f * 800));
         }
 
         /// <summary>
@@ -126,8 +128,8 @@ namespace ProjectXenocide.UI.Screens
         {
             foreach (ScoreEntry entry in mission.Scores)
             {
-                int rowNum = scoreGrid.AddRow(Util.CreateListboxItem(entry.First), 0);
-                Util.AddNumericElementToGrid(scoreGrid, 1, rowNum, entry.Second);
+                int rowNum = scoreGrid.RowCount;
+                scoreGrid.AddRow(rowNum, entry.First, entry.Second.ToString());
                 totalScore += entry.Second;
             }
         }
@@ -161,12 +163,11 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="score">Score for recovering</param>
         private void AddRowToRecoveredGrid(String item, String quantity, int score)
         {
-            int rowNum = recoveredGrid.AddRow(Util.CreateListboxItem(item), 0);
-            Util.AddStringElementToGrid(recoveredGrid, 1, rowNum, quantity);
-            Util.AddNumericElementToGrid(recoveredGrid, 2, rowNum, score);
+            int rowNum = recoveredGrid.RowCount;
+            recoveredGrid.AddRow(rowNum, item, quantity, score.ToString());
         }
 
-        #endregion Create the CeGui widgets
+        #endregion Create the Gum controls
 
         #region event handlers
 
@@ -175,7 +176,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="e">Not used</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope",
            Justification = "FxCop False Positive")]
-        private void OnOkButton(object sender, CeGui.GuiEventArgs e)
+        private void OnOkButton(object sender, EventArgs e)
         {
             Shipment shipment = new Shipment(mission.Outpost, Shipment.CalcEta(0));
             shipment.Add(mission.Salvage);

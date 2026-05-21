@@ -31,7 +31,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-using CeGui;
 
 #endregion
 
@@ -127,10 +126,11 @@ namespace ProjectXenocide.Model
         public static void TestAddRemove()
         {
             Scheduler       s   = new Scheduler();
-            TestAppointment a1  = new TestAppointment(new DateTime(2020,1,1));
-            TestAppointment a2  = new TestAppointment(new DateTime(2019,1,1));
-            TestAppointment a3  = new TestAppointment(new DateTime(2021,1,1));
-            DateTime        now = DateTime.Now;
+            // Use far-future dates so DateTime.Now never triggers them
+            TestAppointment a1  = new TestAppointment(new DateTime(2099,1,1));
+            TestAppointment a2  = new TestAppointment(new DateTime(2098,1,1));
+            TestAppointment a3  = new TestAppointment(new DateTime(2100,1,1));
+            DateTime        now = new DateTime(2097,1,1);
 
             s.Add(a1);
             s.Add(a2);
@@ -156,13 +156,13 @@ namespace ProjectXenocide.Model
             Debug.Assert(s.appointments.Last.Value == a3);
 
             // Update, fire just the first
-            s.Update(new DateTime(2019, 1, 2));
+            s.Update(new DateTime(2098, 1, 2));
             Debug.Assert(2 == s.appointments.Count);
             Debug.Assert(s.appointments.First.Value == a1);
             Debug.Assert(s.appointments.Last.Value == a3);
 
             // Update, fire all
-            s.Update(new DateTime(2021, 1, 2));
+            s.Update(new DateTime(2100, 1, 2));
             Debug.Assert(0 == s.appointments.Count);
         }
 

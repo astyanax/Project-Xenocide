@@ -37,10 +37,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 
-using CeGui.Renderers.Xna;
-using CeGui;
 
 using AudioSystem;
+using CeGui;
+using CeGui.Renderers.Xna;
+using MonoGameGum;
 
 using ProjectXenocide.Utils;
 using ProjectXenocide.UI.Screens;
@@ -115,13 +116,17 @@ namespace ProjectXenocide
             }
 
             // Register FMOD sound system
-            Components.Add(new AudioSystem.FmodGameComponent(this));
+            var audioComponent = new AudioSystem.FmodGameComponent(this);
+            Components.Add(audioComponent);
+            Services.AddService(typeof(AudioSystem.IAudioSystem), audioComponent);
 
             base.Initialize();
 
             InitializeCegui();
             InitializeAudioSystem();
             InitializeGameOptions();
+
+            GumService.Default.Initialize(this);
         }
 
         /// <summary>
@@ -241,6 +246,7 @@ namespace ProjectXenocide
                 this.Exit();
 
             screenManager.Update(gameTime);
+            GumService.Default.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -256,6 +262,7 @@ namespace ProjectXenocide
             // TODO: Add your drawing code here
 
             screenManager.Draw(gameTime, graphics.GraphicsDevice);
+            GumService.Default.Draw();
             base.Draw(gameTime);
         }
 

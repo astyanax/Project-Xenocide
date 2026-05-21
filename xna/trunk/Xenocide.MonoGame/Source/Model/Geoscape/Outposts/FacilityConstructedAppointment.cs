@@ -31,7 +31,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-using CeGui;
 using ProjectXenocide.Model.Geoscape.Outposts;
 
 #endregion

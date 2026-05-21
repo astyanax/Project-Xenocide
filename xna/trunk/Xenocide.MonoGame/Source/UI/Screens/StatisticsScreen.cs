@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -30,8 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using CeGui;
-
+using Gum.Forms.Controls;
 
 using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
@@ -52,7 +51,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// Screen that shows historical statistics
     /// </summary>
-    class StatisticsScreen : Screen
+    class StatisticsScreen : GumScreen
     {
         /// <summary>
         /// Default constructor (obviously)
@@ -106,75 +105,73 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="device">Device to render the globe to</param>
         public override void Draw(GameTime gameTime, GraphicsDevice device)
         {
-            scene.Draw(device, sceneWindow.Rect);
+            scene.Draw(device, sceneWindowRect);
         }
 
-        #region Create the CeGui widgets
+        #region Create the Gum controls
 
         /// <summary>
         /// add the buttons to the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
-            // Window indicating where the 3D scene is
-            sceneWindow = GuiBuilder.CreateImage(CeguiId + "_viewport");
-            //... dimensions chosen to make 3D scene 512 x 512 at 600 x 800 resolution.
-            AddWidget(sceneWindow, 0.08f, 0.073f, 0.681f, 0.8534f);
+            sceneWindowRect = new UiRect(0.08f, 0.073f, 0.681f, 0.8534f);
 
             // ListBox provides list of series that can be shown on graph
-            seriesList = GuiBuilder.CreateListBox("seriesList");
-            AddWidget(seriesList, 0.7475f, 0.0600f, 0.2275f, 0.6000f);
+            seriesList = new ListBox();
+            RootContainer.AddChild(seriesList);
 
-            ufoByRegionButton = AddButton("BUTTON_UFO_BY_REGION", 0.7475f, 0.70f, 0.2275f, 0.04125f, "Menu\\buttonclick2_changesetting.ogg");
-            ufoByCountryButton = AddButton("BUTTON_UFO_BY_COUNTRY", 0.7475f, 0.75f, 0.2275f, 0.04125f, "Menu\\buttonclick2_changesetting.ogg");
-            xcomByRegionButton = AddButton("BUTTON_XCORP_BY_REGION", 0.7475f, 0.80f, 0.2275f, 0.04125f, "Menu\\buttonclick2_changesetting.ogg");
-            xcomByCountryButton = AddButton("BUTTON_XCORP_BY_COUNTRY", 0.7475f, 0.85f, 0.2275f, 0.04125f, "Menu\\buttonclick2_changesetting.ogg");
-            fundsButton = AddButton("BUTTON_FUNDS", 0.7475f, 0.90f, 0.2275f, 0.04125f, "Menu\\buttonclick2_changesetting.ogg");
-            geoscapeButton = AddButton("BUTTON_GEOSCAPE", 0.7475f, 0.95f, 0.2275f, 0.04125f);
+            ufoByRegionButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_UFO_BY_REGION") };
+            RootContainer.AddChild(ufoByRegionButton);
+            ufoByCountryButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_UFO_BY_COUNTRY") };
+            RootContainer.AddChild(ufoByCountryButton);
+            xcomByRegionButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_XCORP_BY_REGION") };
+            RootContainer.AddChild(xcomByRegionButton);
+            xcomByCountryButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_XCORP_BY_COUNTRY") };
+            RootContainer.AddChild(xcomByCountryButton);
+            fundsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_FUNDS") };
+            RootContainer.AddChild(fundsButton);
+            geoscapeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_GEOSCAPE") };
+            RootContainer.AddChild(geoscapeButton);
 
-            seriesList.SelectionChanged += new WindowEventHandler(OnSeriesSelected);
-            ufoByRegionButton.Clicked += new CeGui.GuiEventHandler(OnUfoByRegion);
-            ufoByCountryButton.Clicked += new CeGui.GuiEventHandler(OnUfoByCountry);
-            xcomByRegionButton.Clicked += new CeGui.GuiEventHandler(OnXCorpByRegion);
-            xcomByCountryButton.Clicked += new CeGui.GuiEventHandler(OnXCorpByCountry);
-            fundsButton.Clicked += new CeGui.GuiEventHandler(OnFundsGraph);
-            geoscapeButton.Clicked += new CeGui.GuiEventHandler(OnGeoscapeButton);
+            seriesList.SelectionChanged += (s, a) => OnSeriesSelected(s, EventArgs.Empty);
+            ufoByRegionButton.Click += OnUfoByRegion;
+            ufoByCountryButton.Click += OnUfoByCountry;
+            xcomByRegionButton.Click += OnXCorpByRegion;
+            xcomByCountryButton.Click += OnXCorpByCountry;
+            fundsButton.Click += OnFundsGraph;
+            geoscapeButton.Click += OnGeoscapeButton;
 
             SetupGraph(GraphId.Funding);
         }
 
-        /// <summary>
-        /// CeGui widget that indicates where to draw the 3D scene
-        /// </summary>
-        private CeGui.Widgets.StaticImage sceneWindow;
+        private UiRect sceneWindowRect;
 
-        private CeGui.Widgets.Listbox seriesList;
-        private CeGui.Widgets.PushButton ufoByRegionButton;
-        private CeGui.Widgets.PushButton ufoByCountryButton;
-        private CeGui.Widgets.PushButton xcomByRegionButton;
-        private CeGui.Widgets.PushButton xcomByCountryButton;
-        private CeGui.Widgets.PushButton fundsButton;
-        private CeGui.Widgets.PushButton geoscapeButton;
+        private ListBox seriesList;
+        private Button ufoByRegionButton;
+        private Button ufoByCountryButton;
+        private Button xcomByRegionButton;
+        private Button xcomByCountryButton;
+        private Button fundsButton;
+        private Button geoscapeButton;
 
-        #endregion Create the CeGui widgets
+        #endregion Create the Gum controls
 
         #region event handlers
 
         /// <summary>User has selected a series to display/not display on the graph</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnSeriesSelected(object sender, WindowEventArgs e)
+        private void OnSeriesSelected(object sender, EventArgs e)
         {
-            CeGui.Widgets.ListboxItem item = seriesList.GetFirstSelectedItem();
-            if (item != null)
+            int index = seriesList.SelectedIndex;
+            if (index >= 0)
             {
                 Xenocide.AudioSystem.PlaySound("Menu\\buttonclick2_changesetting.ogg");
-                // toggle series between shown and not shown state
-                Series series = DataSet[item.ID];
+                Series series = DataSet[index];
                 series.ToggleShow();
 
-                // update list of shown series
-                item.Text = series.DecoratedLabel;
+                seriesList.Items[index] = series.DecoratedLabel;
                 scene.DataSet = DataSet;
             }
         }
@@ -182,7 +179,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "UFO by Region" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnUfoByRegion(object sender, CeGui.GuiEventArgs e)
+        private void OnUfoByRegion(object sender, EventArgs e)
         {
             SetupGraph(GraphId.UfoByRegion);
         }
@@ -190,7 +187,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "UFO by Country" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnUfoByCountry(object sender, CeGui.GuiEventArgs e)
+        private void OnUfoByCountry(object sender, EventArgs e)
         {
             SetupGraph(GraphId.UfoByCountry);
         }
@@ -198,7 +195,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "X-Corp by Region" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnXCorpByRegion(object sender, CeGui.GuiEventArgs e)
+        private void OnXCorpByRegion(object sender, EventArgs e)
         {
             SetupGraph(GraphId.XCorpByRegion);
         }
@@ -206,7 +203,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "X-Corp by Country" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnXCorpByCountry(object sender, CeGui.GuiEventArgs e)
+        private void OnXCorpByCountry(object sender, EventArgs e)
         {
             SetupGraph(GraphId.XCorpByCountry);
         }
@@ -214,7 +211,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>User has clicked the "Funding" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnFundsGraph(object sender, CeGui.GuiEventArgs e)
+        private void OnFundsGraph(object sender, EventArgs e)
         {
             SetupGraph(GraphId.Funding);
         }
@@ -224,7 +221,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="e">Not used</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope",
            Justification = "FxCop False Positive")]
-        private void OnGeoscapeButton(object sender, CeGui.GuiEventArgs e)
+        private void OnGeoscapeButton(object sender, EventArgs e)
         {
             ScreenManager.ScheduleScreen(new GeoscapeScreen());
         }
@@ -247,14 +244,10 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void PopulateSeriesList()
         {
-            seriesList.ResetList();
+            seriesList.Items.Clear();
             for (int i = 0; i < DataSet.Count; ++i)
             {
-                CeGui.ListboxTextItem item = Util.CreateListboxItem(DataSet[i].DecoratedLabel);
-                Colour colour = new Colour(dataColors[i].R / 255.0f, dataColors[i].G / 255.0f, dataColors[i].B / 255.0f, dataColors[i].A / 255.0f);
-                item.SetTextColors(colour);
-                item.ID = i;
-                seriesList.AddItem(item);
+                seriesList.Items.Add(DataSet[i].DecoratedLabel);
             }
         }
 

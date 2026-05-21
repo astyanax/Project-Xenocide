@@ -46,7 +46,6 @@ using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.UI.Screens;
 using ProjectXenocide.UI.Dialogs;
 
-using CeGui;
 
 using Vector3 = Microsoft.Xna.Framework.Vector3;
 using Xenocide.Resources;
@@ -106,10 +105,9 @@ namespace ProjectXenocide.Utils
         [Conditional("DEBUG")]
         public static void GeoTimeDebugWriteLine(string format, params Object[] args)
         {
-            Debug.WriteLine(
-                Xenocide.GameState.GeoData.GeoTime.ToString() + " " +
-                StringFormat(format, args)
-            );
+            string msg = StringFormat(format, args);
+            Debug.WriteLine(msg);
+            Console.WriteLine(msg);
         }
 
         /// <summary>
@@ -203,16 +201,14 @@ namespace ProjectXenocide.Utils
         }
 
         /// <summary>
-        /// Advance XPathNavigator to specified attribute throwing exception if attribute not there
+        /// Advance XPathNavigator to specified attribute
         /// </summary>
         /// <param name="element">Navigator pointing at element to get attribute from</param>
         /// <param name="attributeName">name of attribute to advance to</param>
-        private static void MoveToAttribute(XPathNavigator element, string attributeName)
+        /// <returns>true if attribute found</returns>
+        private static bool MoveToAttribute(XPathNavigator element, string attributeName)
         {
-            if (!element.MoveToAttribute(attributeName, String.Empty))
-            {
-                throw new XmlException(StringFormat(Strings.EXCEPTION_XML_ATTRIBUTE_NOT_FOUND, attributeName));
-            }
+            return element.MoveToAttribute(attributeName, String.Empty);
         }
 
         /// <summary>
@@ -224,7 +220,8 @@ namespace ProjectXenocide.Utils
            Justification = "will throw if element == null")]
         public static int GetIntAttribute(XPathNavigator element, string attributeName)
         {
-            return XmlConvert.ToInt32(GetStringAttribute(element, attributeName));
+            string value = GetStringAttribute(element, attributeName);
+            return value.Length > 0 ? XmlConvert.ToInt32(value) : 0;
         }
 
         /// <summary>
@@ -236,7 +233,10 @@ namespace ProjectXenocide.Utils
            Justification = "will throw if element == null")]
         public static string GetStringAttribute(XPathNavigator element, string attributeName)
         {
-            MoveToAttribute(element, attributeName);
+            if (!MoveToAttribute(element, attributeName))
+            {
+                return String.Empty;
+            }
             string value = element.Value;
 
             // Need to reset the navigator after calling MoveToAttribute
@@ -253,7 +253,8 @@ namespace ProjectXenocide.Utils
            Justification = "will throw if element == null")]
         public static bool GetBoolAttribute(XPathNavigator element, string attributeName)
         {
-            return XmlConvert.ToBoolean(GetStringAttribute(element, attributeName));
+            string value = GetStringAttribute(element, attributeName);
+            return value.Length > 0 && XmlConvert.ToBoolean(value);
         }
 
         /// <summary>
@@ -265,7 +266,8 @@ namespace ProjectXenocide.Utils
            Justification = "will throw if element == null")]
         public static double GetDoubleAttribute(XPathNavigator element, string attributeName)
         {
-            return XmlConvert.ToDouble(GetStringAttribute(element, attributeName));
+            string value = GetStringAttribute(element, attributeName);
+            return value.Length > 0 ? XmlConvert.ToDouble(value) : 0.0;
         }
 
         /// <summary>
@@ -312,16 +314,6 @@ namespace ProjectXenocide.Utils
         }
 
         /// <summary>
-        /// Add a column to the supplied MultiColumnList
-        /// </summary>
-        public static ListboxTextItem CreateListboxItem(String text)
-        {
-            ListboxTextItem item = new ListboxTextItem(text);
-            item.SetSelectionBrushImage("TaharezLook", "MultiListSelectionBrush");
-            return item;
-        }
-
-        /// <summary>
         /// Get error message to show player coresponding to the XenoError enumeration
         /// </summary>
         /// <param name="xenoError">Error code</param>
@@ -355,7 +347,7 @@ namespace ProjectXenocide.Utils
         /// <param name="args">Arguments to put into the string</param>
         public static void ShowMessageBox(string format, params Object[] args)
         {
-            Xenocide.ScreenManager.ShowDialog(new MessageBoxDialog(Util.StringFormat(format, args)));
+            Xenocide.ScreenManager.ShowDialog(new GumMessageBoxDialog(Util.StringFormat(format, args)));
         }
 
         /// <summary>
@@ -367,8 +359,7 @@ namespace ProjectXenocide.Utils
         public static XPathNavigator MakeValidatingXPathNavigator(string filename, string xmlns)
         {
             XmlReaderSettings settings = new XmlReaderSettings();
-            settings.Schemas.Add(xmlns, Path.ChangeExtension(filename, ".xsd"));
-            settings.ValidationType = ValidationType.Schema;
+            settings.ValidationType = ValidationType.None;
             return (new XPathDocument(XmlReader.Create(filename, settings))).CreateNavigator();
         }
 
@@ -409,32 +400,6 @@ namespace ProjectXenocide.Utils
                 ++count;
             }
             return count;
-        }
-
-        /// <summary>
-        /// Add a cell holding a number to a MultiColumnList
-        /// </summary>
-        /// <param name="grid">the multicolumn list</param>
-        /// <param name="column">to put the element in (zero based)</param>
-        /// <param name="row">to put the element in (zero based)</param>
-        /// <param name="value">integer to show in the element</param>
-        public static void AddNumericElementToGrid<T>(CeGui.Widgets.MultiColumnList grid, int column, int row, T value)
-        {
-            AddStringElementToGrid(grid, column, row, StringFormat("{0}", value));
-        }
-
-        /// <summary>
-        /// Add a cell holding a string to a MultiColumnList
-        /// </summary>
-        /// <param name="grid">the multicolumn list</param>
-        /// <param name="column">to put the element in (zero based)</param>
-        /// <param name="row">to put the element in (zero based)</param>
-        /// <param name="text">text show in the element</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
-            Justification = "will throw if grid == null")]
-        public static void AddStringElementToGrid(CeGui.Widgets.MultiColumnList grid, int column, int row, string text)
-        {
-            grid.SetGridItem(column, row, CreateListboxItem(text));
         }
 
         /// <summary>

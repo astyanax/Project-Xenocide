@@ -40,7 +40,6 @@ using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
 
-using CeGui;
 
 #endregion
 

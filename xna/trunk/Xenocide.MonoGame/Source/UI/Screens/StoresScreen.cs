@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -30,8 +30,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using CeGui;
-
+using Gum.Forms.Controls;
+using ProjectXenocide.UI.Controls;
 
 using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape;
@@ -47,7 +47,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// This is the screen that displays items stored in an outpost
     /// </summary>
-    public class StoresScreen : Screen
+    public class StoresScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -59,35 +59,36 @@ namespace ProjectXenocide.UI.Screens
             this.selectedOutpostIndex = selectedOutpostIndex;
         }
 
-        #region Create the CeGui widgets
+        #region Create the Gum controls
 
         /// <summary>
         /// add the buttons to the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
             // The grid of items in inventory
             InitializeGrid();
             PopulateGrid();
 
             // buttons
-            okButton = AddButton("BUTTON_OK", 0.7475f, 0.95f, 0.2275f, 0.04125f);
-            okButton.Clicked += new CeGui.GuiEventHandler(OnOKButton);
+            okButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_OK") };
+            RootContainer.AddChild(okButton);
+            okButton.Click += OnOKButton;
         }
 
-        private CeGui.Widgets.MultiColumnList grid;
-        private CeGui.Widgets.PushButton okButton;
+        private GridPanel grid;
+        private Button okButton;
 
         /// <summary>
-        /// Create MultiColumnListBox which holds items in inventory
+        /// Create GridPanel which holds items in inventory
         /// </summary>
         private void InitializeGrid()
         {
-            grid = AddGrid(0.01f, 0.01f, 0.73f, 0.98f,
-                Strings.SCREEN_STORES_COLUMN_ITEM, 0.58f,
-                Strings.SCREEN_STORES_COLUMN_QUANTITY, 0.18f,
-                Strings.SCREEN_STORES_COLUMN_SPACE_USED, 0.19f
-            );
+            grid = new GridPanel();
+            RootContainer.AddChild(grid.Visual);
+            grid.AddColumn(Strings.SCREEN_STORES_COLUMN_ITEM, (int)(0.58f * 800));
+            grid.AddColumn(Strings.SCREEN_STORES_COLUMN_QUANTITY, (int)(0.18f * 800));
+            grid.AddColumn(Strings.SCREEN_STORES_COLUMN_SPACE_USED, (int)(0.19f * 800));
         }
 
         /// <summary>
@@ -107,25 +108,19 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="item">details to put on grid</param>
         private void AddRowToGrid(Item item)
         {
-            // add item to grid
-            CeGui.ListboxTextItem listboxItem = Util.CreateListboxItem(item.Name);
-            int rowNum = grid.AddRow(listboxItem, 0);
-            listboxItem.ID = rowNum;
-
             int itemCount = SelectedOutpost.Inventory.NumberInInventory(item.ItemInfo);
-
-            Util.AddNumericElementToGrid(grid, 1, rowNum, itemCount);
-            Util.AddNumericElementToGrid(grid, 2, rowNum, item.ItemInfo.StorageUnits * itemCount);
+            int rowNum = grid.RowCount;
+            grid.AddRow(rowNum, item.Name, itemCount.ToString(), (item.ItemInfo.StorageUnits * itemCount).ToString());
         }
 
-        #endregion Create the CeGui widgets
+        #endregion Create the Gum controls
 
         #region event handlers
 
         /// <summary>React to user pressing the OK button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnOKButton(object sender, CeGui.GuiEventArgs e)
+        private void OnOKButton(object sender, EventArgs e)
         {
             GoToBaseInfoScreen();
         }

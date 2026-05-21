@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -30,8 +30,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using CeGui;
-
+using Gum.Forms.Controls;
+using ProjectXenocide.UI.Controls;
 
 using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape;
@@ -47,7 +47,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// This is the screen that allows user to buy items for a base
     /// </summary>
-    public class PurchaseScreen : Screen
+    public class PurchaseScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -59,22 +59,22 @@ namespace ProjectXenocide.UI.Screens
             this.selectedBaseIndex = selectedBaseIndex;
         }
 
-        #region Create the CeGui widgets
+        #region Create the Gum controls
 
         /// <summary>
         /// add the buttons to the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
             // add text giving the available funds
-            fundsText = GuiBuilder.CreateText(CeguiId + "_fundsText");
-            AddWidget(fundsText, 0.01f, 0.06f, 0.2275f, 0.04125f);
+            fundsText = new Label();
+            RootContainer.AddChild(fundsText);
             fundsText.Text = Util.StringFormat(Strings.SCREEN_PURCHASE_FUNDS,
                 Xenocide.GameState.GeoData.XCorp.Bank.CurrentBalance);
 
             // add text giving the running total of the items selected for purchase
-            totalCostText = GuiBuilder.CreateText(CeguiId + "_totalCostText");
-            AddWidget(totalCostText, 0.35f, 0.06f, 0.2275f, 0.04125f);
+            totalCostText = new Label();
+            RootContainer.AddChild(totalCostText);
             UpdateTotalCost();
 
             // The gird of items available for purchase
@@ -82,36 +82,40 @@ namespace ProjectXenocide.UI.Screens
             PopulateGrid();
 
             // other buttons
-            buyMoreButton = AddButton("BUTTON_BUY_MORE", 0.7475f, 0.80f, 0.2275f, 0.04125f, "PlanetView\\zoomin.ogg");
-            buyLessButton = AddButton("BUTTON_BUY_LESS", 0.7475f, 0.85f, 0.2275f, 0.04125f, "PlanetView\\zoomout.ogg");
-            confirmButton = AddButton("BUTTON_CONFIRM", 0.7475f, 0.90f, 0.2275f, 0.04125f);
-            cancelButton = AddButton("BUTTON_CANCEL", 0.7475f, 0.95f, 0.2275f, 0.04125f);
+            buyMoreButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BUY_MORE") };
+            RootContainer.AddChild(buyMoreButton);
+            buyLessButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BUY_LESS") };
+            RootContainer.AddChild(buyLessButton);
+            confirmButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CONFIRM") };
+            RootContainer.AddChild(confirmButton);
+            cancelButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CANCEL") };
+            RootContainer.AddChild(cancelButton);
 
-            buyMoreButton.Clicked += new CeGui.GuiEventHandler(OnBuyMoreButton);
-            buyLessButton.Clicked += new CeGui.GuiEventHandler(OnBuyLessButton);
-            confirmButton.Clicked += new CeGui.GuiEventHandler(OnConfirmButton);
-            cancelButton.Clicked += new CeGui.GuiEventHandler(OnCancelButton);
+            buyMoreButton.Click += OnBuyMoreButton;
+            buyLessButton.Click += OnBuyLessButton;
+            confirmButton.Click += OnConfirmButton;
+            cancelButton.Click += OnCancelButton;
         }
 
-        private CeGui.Widgets.StaticText fundsText;
-        private CeGui.Widgets.StaticText totalCostText;
-        private CeGui.Widgets.MultiColumnList grid;
-        private CeGui.Widgets.PushButton buyMoreButton;
-        private CeGui.Widgets.PushButton buyLessButton;
-        private CeGui.Widgets.PushButton confirmButton;
-        private CeGui.Widgets.PushButton cancelButton;
+        private Label fundsText;
+        private Label totalCostText;
+        private GridPanel grid;
+        private Button buyMoreButton;
+        private Button buyLessButton;
+        private Button confirmButton;
+        private Button cancelButton;
 
         /// <summary>
-        /// Create MultiColumnListBox which holds items available for purchase
+        /// Create GridPanel which holds items available for purchase
         /// </summary>
         private void InitializeGrid()
         {
-            grid = GuiBuilder.CreateGrid("purchaseGrid");
-            AddWidget(grid, 0.01f, 0.13f, 0.70f, 0.86f);
-            grid.AddColumn(Strings.SCREEN_PURCHASE_COLUMN_ITEM, grid.ColumnCount, 0.58f);
-            grid.AddColumn(Strings.SCREEN_PURCHASE_COLUMN_QUANTITY_IN_BASE, grid.ColumnCount, 0.12f);
-            grid.AddColumn(Strings.SCREEN_PURCHASE_COLUMN_COST_PER_UNIT, grid.ColumnCount, 0.13f);
-            grid.AddColumn(Strings.SCREEN_PURCHASE_COLUMN_QUANTITY, grid.ColumnCount, 0.12f);
+            grid = new GridPanel();
+            RootContainer.AddChild(grid.Visual);
+            grid.AddColumn(Strings.SCREEN_PURCHASE_COLUMN_ITEM, (int)(0.58f * 800));
+            grid.AddColumn(Strings.SCREEN_PURCHASE_COLUMN_QUANTITY_IN_BASE, (int)(0.12f * 800));
+            grid.AddColumn(Strings.SCREEN_PURCHASE_COLUMN_COST_PER_UNIT, (int)(0.13f * 800));
+            grid.AddColumn(Strings.SCREEN_PURCHASE_COLUMN_QUANTITY, (int)(0.12f * 800));
         }
 
         /// <summary>
@@ -135,8 +139,6 @@ namespace ProjectXenocide.UI.Screens
         /// <returns>true if items can be purchased</returns>
         private static bool AvailableForPurchase(ItemInfo item)
         {
-            // Note, with initial tree, all buyable items don't need researching.
-            // however this might not be true with later research trees
             return item.CanPurchase && Xenocide.GameState.GeoData.XCorp.TechManager.IsAvailable(item.Id);
         }
 
@@ -146,35 +148,30 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="item">item to put on grid</param>
         private void AddRowToGrid(ItemInfo item)
         {
-            // add item to grid
-            CeGui.ListboxTextItem listboxItem = Util.CreateListboxItem(item.Name);
-            listboxItem.ID = Xenocide.StaticTables.ItemList.IndexOf(item.Id);
-            int rowNum = grid.AddRow(listboxItem, 0);
-            Util.AddNumericElementToGrid(grid, 1, rowNum, SelectedBase.Inventory.NumberInInventory(item));
-            Util.AddNumericElementToGrid(grid, 2, rowNum, item.BuyPrice);
-            Util.AddNumericElementToGrid(grid, 3, rowNum, 0);
+            int itemIndex = Xenocide.StaticTables.ItemList.IndexOf(item.Id);
+            grid.AddRow(itemIndex, item.Name,
+                Util.ToString(SelectedBase.Inventory.NumberInInventory(item)),
+                Util.ToString(item.BuyPrice),
+                "0");
 
-            // and record number of items of this type user is purchasing
-            ShoppingList[listboxItem.ID] = 0;
+            ShoppingList[itemIndex] = 0;
         }
 
-        #endregion Create the CeGui widgets
+        #endregion Create the Gum controls
 
         #region event handlers
 
         /// <summary>Handle user clicking on the "Buy More" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnBuyMoreButton(object sender, GuiEventArgs e)
+        private void OnBuyMoreButton(object sender, EventArgs e)
         {
-            CeGui.Widgets.ListboxItem selectedItem = GetSelectedItem();
-            if (null != selectedItem)
+            int? tag = GetSelectedTag();
+            if (tag.HasValue)
             {
-                // update count of items
-                int itemListIndex = selectedItem.ID;
+                int itemListIndex = tag.Value;
                 ++ShoppingList[itemListIndex];
 
-                // if shopping list is no longer valid, revert
                 if (!CanFit() ||
                     !Xenocide.GameState.GeoData.XCorp.Bank.CanAfford(CalculateTotalCost())
                 )
@@ -182,27 +179,24 @@ namespace ProjectXenocide.UI.Screens
                     --ShoppingList[itemListIndex];
                 }
 
-                // update display on screen
-                UpdateDetails(selectedItem, itemListIndex);
+                UpdateDetails(itemListIndex);
             }
         }
 
         /// <summary>Handle user clicking on the "Buy Less" button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnBuyLessButton(object sender, GuiEventArgs e)
+        private void OnBuyLessButton(object sender, EventArgs e)
         {
-            CeGui.Widgets.ListboxItem selectedItem = GetSelectedItem();
-            if (null != selectedItem)
+            int? tag = GetSelectedTag();
+            if (tag.HasValue)
             {
-                // update count of items
-                int itemListIndex = selectedItem.ID;
+                int itemListIndex = tag.Value;
                 if (0 < ShoppingList[itemListIndex])
                 {
                     --ShoppingList[itemListIndex];
 
-                    // update display on screen
-                    UpdateDetails(selectedItem, itemListIndex);
+                    UpdateDetails(itemListIndex);
                 }
             }
         }
@@ -211,9 +205,8 @@ namespace ProjectXenocide.UI.Screens
         /// <remarks>That is, buy all the items the user has selected</remarks>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnConfirmButton(object sender, GuiEventArgs e)
+        private void OnConfirmButton(object sender, EventArgs e)
         {
-            // Pay for the items
             Xenocide.GameState.GeoData.XCorp.Bank.Debit(CalculateTotalCost());
 
             Shipment shipment = new Shipment(SelectedBase, Shipment.CalcEta());
@@ -233,22 +226,21 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>React to user pressing the Cancel button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnCancelButton(object sender, CeGui.GuiEventArgs e)
+        private void OnCancelButton(object sender, EventArgs e)
         {
             GoToBasesScreen();
         }
 
         #endregion event handlers
 
-        // Get currently selected item from Grid.  Give error message if nothing selected
-        private CeGui.Widgets.ListboxItem GetSelectedItem()
+        private int? GetSelectedTag()
         {
-            CeGui.Widgets.ListboxItem selectedItem = grid.GetFirstSelectedItem();
-            if (null == selectedItem)
+            if (grid.SelectedRow == null)
             {
                 Util.ShowMessageBox(Strings.MSGBOX_NO_PURCHASE_SELECTED);
+                return null;
             }
-            return selectedItem;
+            return (int)grid.GetSelectedTag();
         }
 
         /// <summary>
@@ -262,16 +254,13 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// Update the screen to reflect the latest changes
         /// </summary>
-        /// <param name="selectedItem">row in gird that is selected</param>
         /// <param name="itemListIndex">Index into StaticData.ItemList for data on item</param>
-        private void UpdateDetails(CeGui.Widgets.ListboxItem selectedItem, int itemListIndex)
+        private void UpdateDetails(int itemListIndex)
         {
             UpdateTotalCost();
 
-            // update quantity column of row in grid
-            int row = grid.GetRowIndexOfItem(selectedItem);
-            CeGui.Widgets.GridReference position = new CeGui.Widgets.GridReference(row, 3);
-            grid.GetItemAtGridReference(position).Text = Util.StringFormat("{0}", ShoppingList[itemListIndex]);
+            int row = grid.GetRowIndexByTag(itemListIndex);
+            grid.SetCell(row, 3, Util.StringFormat("{0}", ShoppingList[itemListIndex]));
         }
 
         /// <summary>
@@ -300,7 +289,6 @@ namespace ProjectXenocide.UI.Screens
         {
             bool canFit = true;
 
-            // first put everything into the base
             foreach (KeyValuePair<int, int> kvp in ShoppingList)
             {
                 ItemInfo item = Xenocide.StaticTables.ItemList[kvp.Key];
@@ -314,7 +302,6 @@ namespace ProjectXenocide.UI.Screens
                 }
             }
 
-            // now take them all out again
             foreach (KeyValuePair<int, int> kvp in ShoppingList)
             {
                 ItemInfo item = Xenocide.StaticTables.ItemList[kvp.Key];
@@ -346,11 +333,8 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private Outpost SelectedBase { get { return Xenocide.GameState.GeoData.Outposts[selectedBaseIndex]; } }
 
-        // index specifying the outpost that purchases will be sent to
         private int selectedBaseIndex;
 
-        // The list of items we're buying
-        // Format is ItemList index, count
         private Dictionary<int, int> ShoppingList = new Dictionary<int, int>();
 
         #endregion Fields

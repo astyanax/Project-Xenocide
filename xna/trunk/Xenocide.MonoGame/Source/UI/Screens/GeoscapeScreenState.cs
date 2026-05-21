@@ -31,6 +31,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
+using Gum.Forms.Controls;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -80,11 +82,7 @@ namespace ProjectXenocide.UI.Screens
             /// <summary>
             /// Create the widgets shown when in this state
             /// </summary>
-            /// <returns>a button that needs to go over the SceneWindow</returns>
-            public virtual CeGui.Window CreateCeguiWidgets()
-            {
-                return null;
-            }
+            public virtual void CreateGumControls() { }
 
             /// <summary>
             /// Update any model data
@@ -153,7 +151,7 @@ namespace ProjectXenocide.UI.Screens
 
             /// <summary>React to user clicking on one of the "time rate" buttons</summary>
             /// <param name="button">Button the user clicked</param>
-            public virtual void OnTimeRateButtonClicked(CeGui.Widgets.PushButton button)
+            public virtual void OnTimeRateButtonClicked(Button button)
             {
                 // default behaviour is do nothing
             }
@@ -194,18 +192,15 @@ namespace ProjectXenocide.UI.Screens
             /// <summary>
             /// Create extra debug button for view state
             /// </summary>
-            /// <returns>a button that needs to go over the SceneWindow</returns>
-            public override CeGui.Window CreateCeguiWidgets()
+            public override void CreateGumControls()
             {
-                // debug buttons
                 if (Xenocide.StaticTables.StartSettings.Cheats.ControlAlienMissions)
                 {
-                    alienMissionButton = GeoscapeScreen.AddButton("BUTTON_ALIEN_MISSION", 0.76f, 0.95f, 0.23f, 0.04125f);
+                    alienMissionButton = CeGui.GuiBuilder.CreateButton(GeoscapeScreen.CeguiId + "_ALIEN_MISSION");
+                    alienMissionButton.Text = XenocideResourceManager.Get("BUTTON_ALIEN_MISSION");
                     alienMissionButton.Clicked += new CeGui.GuiEventHandler(OnAlienMissionsClicked);
-                    return alienMissionButton;
+                    GeoscapeScreen.SceneWindow.AddChild(alienMissionButton);
                 }
-
-                return null;
             }
 
             /// <summary>
@@ -241,7 +236,7 @@ namespace ProjectXenocide.UI.Screens
             public override void OnOptionsButton()
             {
                 // bring up the options screen
-                GeoscapeScreen.ScreenManager.ShowDialog(new OptionsDialog());
+                GeoscapeScreen.ScreenManager.ShowDialog(new GumOptionsDialog());
             }
 
             /// <summary>
@@ -284,7 +279,7 @@ namespace ProjectXenocide.UI.Screens
 
             /// <summary>React to user clicking on one of the "time rate" buttons</summary>
             /// <param name="button">Button the user clicked</param>
-            public override void OnTimeRateButtonClicked(CeGui.Widgets.PushButton button)
+            public override void OnTimeRateButtonClicked(Button button)
             {
                 float ratio = 0.0f;
                 if (GeoscapeScreen.IsButton(button, "BUTTON_TIME_STOP"))
@@ -356,16 +351,14 @@ namespace ProjectXenocide.UI.Screens
             /// <summary>
             /// Create the widgets shown when in this state
             /// </summary>
-            /// <returns>a button that needs to go over the SceneWindow</returns>
-            public override CeGui.Window CreateCeguiWidgets()
+            public override void CreateGumControls()
             {
-                // buttons are disabled, so turn off sound
                 GeoscapeScreen.EnableButtonSounds = false;
 
-                // The "cancel adding base" button
-                cancelNewBaseButton = GeoscapeScreen.AddButton("BUTTON_CANCEL_NEW_BASE", 0.02f, 0.06f, 0.915f, 0.04125f);
+                cancelNewBaseButton = CeGui.GuiBuilder.CreateButton(GeoscapeScreen.CeguiId + "_CANCEL_NEW_BASE");
+                cancelNewBaseButton.Text = XenocideResourceManager.Get("BUTTON_CANCEL_NEW_BASE");
                 cancelNewBaseButton.Clicked += new CeGui.GuiEventHandler(GeoscapeScreen.OnCancelNewBase);
-                return cancelNewBaseButton;
+                GeoscapeScreen.SceneWindow.AddChild(cancelNewBaseButton);
             }
 
             /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>
@@ -395,17 +388,13 @@ namespace ProjectXenocide.UI.Screens
             /// <summary>
             /// Create the widgets shown when in this state
             /// </summary>
-            /// <returns>a button that needs to go over the SceneWindow</returns>
-            public override CeGui.Window CreateCeguiWidgets()
+            public override void CreateGumControls()
             {
-                // buttons are disabled, so turn off sound
                 GeoscapeScreen.EnableButtonSounds = false;
 
-                // static text to show the string "set position of first base" message
                 setFirstBaseTextWindow = CeGui.GuiBuilder.CreateText(GeoscapeScreen.CeguiId + "_setFirstBase");
-                GeoscapeScreen.AddWidget(setFirstBaseTextWindow, 0.02f, 0.06f, 0.641f, 0.04125f);
+                GeoscapeScreen.SceneWindow.AddChild(setFirstBaseTextWindow);
                 setFirstBaseTextWindow.Text = Strings.SCREEN_GEOSCAPE_FIRST_BASE;
-                return null;
             }
 
             /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>
@@ -441,16 +430,14 @@ namespace ProjectXenocide.UI.Screens
             /// <summary>
             /// Create the widgets shown when in this state
             /// </summary>
-            /// <returns>a button that needs to go over the SceneWindow</returns>
-            public override CeGui.Window CreateCeguiWidgets()
+            public override void CreateGumControls()
             {
-                // buttons are disabled, so turn off sound
                 GeoscapeScreen.EnableButtonSounds = false;
 
-                // The "Cancel target selection" button
-                cancelTargetingButton = GeoscapeScreen.AddButton("BUTTON_CANCEL_TARGETING", 0.02f, 0.06f, 0.915f, 0.04125f);
+                cancelTargetingButton = CeGui.GuiBuilder.CreateButton(GeoscapeScreen.CeguiId + "_CANCEL_TARGETING");
+                cancelTargetingButton.Text = XenocideResourceManager.Get("BUTTON_CANCEL_TARGETING");
                 cancelTargetingButton.Clicked += new CeGui.GuiEventHandler(OnCancelTargeting);
-                return cancelTargetingButton;
+                GeoscapeScreen.SceneWindow.AddChild(cancelTargetingButton);
             }
 
             /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>
@@ -508,7 +495,7 @@ namespace ProjectXenocide.UI.Screens
             /// <param name="ufo">Ufo to set as target</param>
             private void Target(Craft ufo)
             {
-                YesNoDialog dlg = new YesNoDialog(
+                GumYesNoDialog dlg = new GumYesNoDialog(
                     Util.StringFormat(Strings.YESNOMSG_TARGET_UFO, ufo.Name)
                 );
 
@@ -532,7 +519,7 @@ namespace ProjectXenocide.UI.Screens
                 // can only target ground sites if craft is carrying soldiers
                 if (craft.IsCarryingSoldiers)
                 {
-                    YesNoDialog dlg = new YesNoDialog(
+                    GumYesNoDialog dlg = new GumYesNoDialog(
                         Util.StringFormat(Strings.YESNOMSG_TARGET_ALIEN_SITE, site.Name)
                     );
 
@@ -558,7 +545,7 @@ namespace ProjectXenocide.UI.Screens
             /// <param name="pos">GeoPosition to set as target</param>
             private void TargetGeoposition(GeoPosition pos)
             {
-                YesNoDialog dlg = new YesNoDialog(Strings.YESNOMSG_TARGET_GEOPOSITION);
+                GumYesNoDialog dlg = new GumYesNoDialog(Strings.YESNOMSG_TARGET_GEOPOSITION);
 
                 // if yes is pressed, send aircraft to the location and exit target mode
                 dlg.YesAction += delegate()
@@ -623,16 +610,14 @@ namespace ProjectXenocide.UI.Screens
             /// <summary>
             /// Create the widgets shown when in this state
             /// </summary>
-            /// <returns>a button that needs to go over the SceneWindow</returns>
-            public override CeGui.Window CreateCeguiWidgets()
+            public override void CreateGumControls()
             {
-                // buttons are disabled, so turn off sound
                 GeoscapeScreen.EnableButtonSounds = false;
 
-                // The "cancel adding base" button
-                cancelTargetButton = GeoscapeScreen.AddButton("BUTTON_CANCEL_ALIEN_MISSION", 0.02f, 0.06f, 0.915f, 0.04125f);
+                cancelTargetButton = CeGui.GuiBuilder.CreateButton(GeoscapeScreen.CeguiId + "_CANCEL_ALIEN_MISSION");
+                cancelTargetButton.Text = XenocideResourceManager.Get("BUTTON_CANCEL_ALIEN_MISSION");
                 cancelTargetButton.Clicked += new CeGui.GuiEventHandler(OnCancelAlienMission);
-                return cancelTargetButton;
+                GeoscapeScreen.SceneWindow.AddChild(cancelTargetButton);
             }
 
             /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>

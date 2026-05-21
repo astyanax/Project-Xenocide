@@ -62,7 +62,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
         /// <param name="device">the display</param>
         public void LoadContent(ContentManager content, GraphicsDevice device)
         {
-            texture = content.Load<Texture2D>(@"Content\Textures\OutpostLayout\BuildTimes");
+             texture = content.Load<Texture2D>(@"Textures\OutpostLayout\BuildTimes");
             InitializeMesh();
             if (0 < meshVertices.Length)
             {

@@ -1,0 +1,121 @@
+#----------------------------- Global Properties ----------------------------#
+/outputDir:bin/DesktopGL
+/intermediateDir:obj/DesktopGL
+/platform:DesktopGL
+/config:
+/profile:Reach
+/compress:False
+
+#----------------------------- Resources ------------------------------------#
+
+#begin Content/Shaders/GeoscapeShader.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Content/Shaders/GeoscapeShader.fx
+
+#begin Content/Shaders/skybox.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Content/Shaders/skybox.fx
+
+#begin Content/SpriteFont1.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Content/SpriteFont1.spritefont
+
+#begin Content/Textures/Geoscape/IconSpriteMap.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Content/Textures/Geoscape/IconSpriteMap.png
+
+#begin Content/Textures/Geoscape/skybox.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Content/Textures/Geoscape/skybox.png
+
+#begin Content/Textures/OutpostLayout/BuildTimes.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Content/Textures/OutpostLayout/BuildTimes.png
+
+#begin Content/Models/Characters/Alien/Morlock.X
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Characters/Alien/Morlock.X
+
+#begin Content/Models/Characters/Alien/Silibrate.X
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Characters/Alien/Silibrate.X
+
+#begin Content/Models/Craft/Xcorps/xc1.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Craft/Xcorps/xc1.x
+
+#begin Content/Models/Craft/Xcorps/xc33.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Craft/Xcorps/xc33.x
+
+#begin Content/Models/Craft/Weapons/Stingray.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Craft/Weapons/Stingray.x
+
+#begin Content/Models/Craft/Weapons/Avalanche.X
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Craft/Weapons/Avalanche.X
+
+#begin Content/Models/Xcaps/xcap-cannon.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Xcaps/xcap-cannon.x
+
+#begin Content/Models/Xcaps/xcap-missile.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Xcaps/xcap-missile.x
+
+#begin Content/Models/Xcaps/xcap-laser.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Xcaps/xcap-laser.x
+
+#begin Content/Models/Xcaps/Xcaps-hover-GAIA.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Xcaps/Xcaps-hover-GAIA.x
+
+#begin Content/Models/Xcaps/Xcaps-hover-plasma.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Xcaps/Xcaps-hover-plasma.x
+
+#begin Content/Models/Weapons/Xcorps/pistol.X
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Weapons/Xcorps/pistol.X
+
+#begin Content/Models/Weapons/Xcorps/assault rifle.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Weapons/Xcorps/assault rifle.x
+
+#begin Content/Models/Weapons/Alien/stun launcher.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Weapons/Alien/stun launcher.x
+
+#begin Content/Models/Weapons/Xcorps/grenade.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Weapons/Xcorps/grenade.x
+
+#begin Content/Models/Weapons/Xcorps/smoke-grenade.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Weapons/Xcorps/smoke-grenade.x

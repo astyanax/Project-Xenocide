@@ -122,7 +122,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         {
             using (var fs = File.OpenRead(@"Content\Textures\Geoscape\skybox.png"))
                 texture = Texture2D.FromStream(device, fs);
-            effect = content.Load<Effect>(@"Content\Shaders\skybox");
+             effect = content.Load<Effect>(@"Shaders\skybox");
 
             vertices = new VertexBuffer(device,
                                 typeof(VertexPositionTexture),

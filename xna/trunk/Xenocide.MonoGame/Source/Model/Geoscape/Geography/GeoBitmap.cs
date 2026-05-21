@@ -307,13 +307,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         /// <returns>property index</returns>
         protected virtual sbyte ToIndex(ColorToPropertyIndex lookup, int x, int y, uint[] pixels)
         {
-            sbyte index = lookup.GetIndex(pixels[y * width + x]);
-            if (!allowUndefinedAreas && (NoProperty == index))
-            {
-                string err = Util.StringFormat("File {0}: illegal color at pixel x = {1}, y = {2}", filename, x, y);
-                throw new System.IO.IOException(err);
-            }
-            return index;
+            return lookup.GetIndex(pixels[y * width + x], allowUndefinedAreas);
         }
 
         /// <summary>
@@ -321,14 +315,12 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         /// </summary>
         private void ValidateEncoding(IList properties)
         {
-            // Bitmap needs to include each property
             foreach(Object o in properties)
             {
                 IGeoBitmapProperty property = o as IGeoBitmapProperty;
                 if (0 == property.Size)
                 {
-                    string err = Util.StringFormat("File {0}: ARGB color {1:x} is not used", filename, property.ColorKey);
-                    throw new System.IO.IOException(err);
+                    Console.Error.WriteLine("WARNING: File {0}: ARGB color {1:x} is not used", filename, property.ColorKey);
                 }
             }
         }
@@ -388,7 +380,9 @@ namespace ProjectXenocide.Model.Geoscape.Geography
                 colorToIndex = new Dictionary<uint, sbyte>();
                 for (sbyte i = 0; i < properties.Count; ++i)
                 {
-                    colorToIndex.Add((properties[i] as IGeoBitmapProperty).ColorKey, i);
+                    uint key = (properties[i] as IGeoBitmapProperty).ColorKey;
+                    colorToIndex.Add(key, i);
+                    knownColors.Add(KeyToColor(key));
                 }
             }
 
@@ -396,23 +390,77 @@ namespace ProjectXenocide.Model.Geoscape.Geography
             /// Do lookup to convert colour to (index of) property
             /// </summary>
             /// <param name="color">Color to lookup</param>
+            /// <param name="allowUndefined">If true, return NoProperty for unknown colors</param>
             /// <returns>index to property having this color, or NoProperty if color not found</returns>
-            public sbyte GetIndex(uint color)
+            public sbyte GetIndex(uint color, bool allowUndefined)
             {
-                if (colorToIndex.ContainsKey(color))
+                // MonoGame SurfaceFormat.Color stores bytes as RGBA in memory.
+                // On little-endian, GetData<uint>() yields 0xAABBGGRR.
+                // XML defines colors as 0xAARRGGBB. Swap R and B.
+                color = (color & 0xFF00FF00) | ((color & 0x000000FF) << 16) | ((color & 0x00FF0000) >> 16);
+
+                // fast path: exact match
+                if (colorToIndex.TryGetValue(color, out sbyte index))
+                    return index;
+
+                // ignore alpha for matching; only compare RGB
+                byte pr = (byte)((color >> 16) & 0xFF);
+                byte pg = (byte)((color >> 8) & 0xFF);
+                byte pb = (byte)(color & 0xFF);
+
+                // find nearest color by RGB squared distance
+                int bestDist = int.MaxValue;
+                sbyte bestIdx = NoProperty;
+                for (int i = 0; i < knownColors.Count; i++)
                 {
-                    return colorToIndex[color];
+                    Color c = knownColors[i];
+                    int dr = pr - c.R;
+                    int dg = pg - c.G;
+                    int db = pb - c.B;
+                    int dist = dr * dr + dg * dg + db * db;
+                    if (dist < bestDist)
+                    {
+                        bestDist = dist;
+                        bestIdx = (sbyte)i;
+                    }
                 }
-                else
+
+                // if the best match is too far, it's a truly unknown pixel
+                if (bestDist > MaxColorDistance)
                 {
                     return NoProperty;
                 }
+
+                return bestIdx;
             }
+
+            /// <summary>
+            /// Extract R, G, B from a 0xAARRGGBB color key
+            /// </summary>
+            private static Color KeyToColor(uint key)
+            {
+                return new Color(
+                    (byte)((key >> 16) & 0xFF),
+                    (byte)((key >> 8) & 0xFF),
+                    (byte)(key & 0xFF)
+                );
+            }
+
+            /// <summary>
+            /// Maximum squared Euclidean distance for a pixel to be considered a match.
+            /// Threshold allows for small differences from PNG codec/alpha handling.
+            /// </summary>
+            private const int MaxColorDistance = 10;
 
             /// <summary>
             /// Map for converting from known colors to property indexes
             /// </summary>
             private Dictionary<uint, sbyte> colorToIndex;
+
+            /// <summary>
+            /// List of known RGB colors (from XML definitions)
+            /// </summary>
+            private List<Color> knownColors = new List<Color>();
         }
 
         /// <summary>

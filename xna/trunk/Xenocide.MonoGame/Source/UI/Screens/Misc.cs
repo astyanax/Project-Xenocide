@@ -28,6 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Gum.Forms.Controls;
 using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape.Outposts;
 
@@ -43,21 +44,15 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         /// <param name="basesList">the combo box to fill</param>
         /// <param name="baseIndex">Outpost to initially select</param>
-        public static void PopulateHumanBasesList(CeGui.Widgets.ComboBox basesList, int baseIndex)
+        public static void PopulateHumanBasesList(ComboBox basesList, int baseIndex)
         {
-            // TODO: Not the proper place for this functionality
-
             foreach (Outpost outpost in Xenocide.GameState.GeoData.Outposts)
             {
-                basesList.AddItem(outpost.Name);
+                basesList.Items.Add(outpost.Name);
             }
 
-            //... set base combo selection to base currently being viewed
-            basesList.SetItemSelectState(baseIndex, true);
-            basesList.Text = basesList.SelectedItem.Text;
-
-            //... tag the edit box of the combo for viewing only.
-            basesList.ReadOnly = true;
+            basesList.SelectedIndex = baseIndex;
+            basesList.Text = (string)basesList.SelectedObject;
         }
     }
 }

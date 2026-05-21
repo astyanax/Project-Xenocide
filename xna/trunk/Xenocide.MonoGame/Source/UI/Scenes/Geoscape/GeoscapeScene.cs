@@ -37,6 +37,7 @@ using Microsoft.Xna.Framework.Content;
 using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.UI;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Model.Geoscape.AI;
@@ -110,7 +111,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
                 earth.LoadContent(device);
                 skybox.LoadContent(content, device);
                 geoHud.LoadContent(content, device);
-                effect = content.Load<Effect>(@"Content\Shaders\GeoscapeShader");
+                 effect = content.Load<Effect>(@"Shaders\GeoscapeShader");
 
                 // figure out which shader we call to render the geoscape
                 geoTechnique = (Util.GetShaderVersion(device) < 2) ? "RenderGlobeStandard" : "RenderGlobeWithBump";
@@ -140,7 +141,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// <param name="gameTime">Time since last render</param>
         /// <param name="device">device to render to</param>
         /// <param name="sceneWindow">child window to render scene to</param>
-        public override void Draw(GameTime gameTime, GraphicsDevice device, CeGui.Rect sceneWindow)
+        public override void Draw(GameTime gameTime, GraphicsDevice device, UiRect sceneWindow)
         {
             // only draw in area we've been told to
             Viewport oldview = device.Viewport;
@@ -281,7 +282,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// <param name="coords">The position in the viewport (in relative co-ords)</param>
         /// <returns>The geoposition or null if point isn't on globe</returns>
         /// <remarks>Uses equation from http://wikipedia.org/Ray-sphere_intersection.htm</remarks>
-        public GeoPosition WindowToGeoPosition(CeGui.Point coords)
+        public GeoPosition WindowToGeoPosition(UiPoint coords)
         {
             double lx = Math.Tan(ViewAngle / 2.0) * (coords.X - 0.5) * 2.0 * AspectRatio;
             double ly = Math.Tan(ViewAngle / 2.0) * (coords.Y - 0.5) * -2.0;

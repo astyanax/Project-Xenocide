@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -30,8 +30,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using CeGui;
-
+using Gum.Forms.Controls;
+using ProjectXenocide.UI.Controls;
 
 using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
@@ -48,7 +48,7 @@ namespace ProjectXenocide.UI.Screens
     /// This is the screen that shows a breakdown of funding by country
     /// (Will probably also be used for "end of month" progress report)
     /// </summary>
-    public class MonthlyReportScreen : Screen
+    public class MonthlyReportScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -60,22 +60,22 @@ namespace ProjectXenocide.UI.Screens
             this.isEndOfMonth = isEndOfMonth;
         }
 
-        #region Create the CeGui widgets
+        #region Create the Gum controls
 
         /// <summary>
         /// add the buttons to the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
             // add text giving the month
-            monthText = GuiBuilder.CreateText(CeguiId + "_monthText");
-            AddWidget(monthText, 0.01f, 0.15f, 0.2275f, 0.04125f);
+            monthText = new Label();
+            RootContainer.AddChild(monthText);
             monthText.Text = Util.StringFormat(Strings.SCREEN_MONTHLYREPORT_MONTH,
                 Xenocide.GameState.GeoData.GeoTime.ToString().Substring(0, 7));
 
             // add text giving the score
-            scoreText = GuiBuilder.CreateText(CeguiId + "_scoreText");
-            AddWidget(scoreText, 0.35f, 0.15f, 0.2275f, 0.04125f);
+            scoreText = new Label();
+            RootContainer.AddChild(scoreText);
             scoreText.Text = MakeScoreString();
 
             // The gird detailing per country details
@@ -83,27 +83,28 @@ namespace ProjectXenocide.UI.Screens
             PopulateGrid();
 
             // other buttons
-            okButton = AddButton("BUTTON_OK", 0.7475f, 0.95f, 0.2275f, 0.04125f);
+            okButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_OK") };
+            RootContainer.AddChild(okButton);
 
-            okButton.Clicked += new CeGui.GuiEventHandler(OnOkButton);
+            okButton.Click += OnOkButton;
         }
 
-        private CeGui.Widgets.StaticText monthText;
-        private CeGui.Widgets.StaticText scoreText;
-        private CeGui.Widgets.MultiColumnList grid;
-        private CeGui.Widgets.PushButton okButton;
+        private Label monthText;
+        private Label scoreText;
+        private GridPanel grid;
+        private Button okButton;
 
         /// <summary>
-        /// Creates and populates a MultiColumnListBox which holds funding details for each country
+        /// Creates and populates a GridPanel which holds funding details for each country
         /// </summary>
         private void InitializeGrid()
         {
-            grid = GuiBuilder.CreateGrid("countriesGrid");
-            AddWidget(grid, 0.01f, 0.22f, 0.70f, 0.75f);
-            grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_COUNTRY, grid.ColumnCount, 0.39f);
-            grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_ATTITUDE, grid.ColumnCount, 0.20f);
-            grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_FUNDS, grid.ColumnCount, 0.20f);
-            grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_CHANGE, grid.ColumnCount, 0.20f);
+            grid = new GridPanel();
+            RootContainer.AddChild(grid.Visual);
+            grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_COUNTRY, (int)(0.39f * 800));
+            grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_ATTITUDE, (int)(0.20f * 800));
+            grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_FUNDS, (int)(0.20f * 800));
+            grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_CHANGE, (int)(0.20f * 800));
         }
 
         /// <summary>
@@ -141,13 +142,11 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="change">Difference from previous month</param>
         private void AddRowToGrid(String country, String attitude, int funding, int change)
         {
-            int rowNum = grid.AddRow(Util.CreateListboxItem(country), 0);
-            Util.AddStringElementToGrid(grid, 1, rowNum, attitude);
-            Util.AddNumericElementToGrid(grid, 2, rowNum, funding);
-            Util.AddNumericElementToGrid(grid, 3, rowNum, change);
+            int rowNum = grid.RowCount;
+            grid.AddRow(rowNum, country, attitude, funding.ToString(), change.ToString());
         }
 
-        #endregion Create the CeGui widgets
+        #endregion Create the Gum controls
 
         #region event handlers
 
@@ -156,7 +155,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="e">Not used</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope",
            Justification = "FxCop False Positive")]
-        private void OnOkButton(object sender, CeGui.GuiEventArgs e)
+        private void OnOkButton(object sender, EventArgs e)
         {
             ScreenManager.ScheduleScreen(new GeoscapeScreen());
         }

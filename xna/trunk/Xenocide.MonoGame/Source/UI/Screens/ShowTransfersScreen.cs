@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -30,8 +30,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using CeGui;
-
+using Gum.Forms.Controls;
+using ProjectXenocide.UI.Controls;
 
 using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape;
@@ -47,7 +47,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// This is the screen that shows the shipments currently on their way to an outpost
     /// </summary>
-    public class ShowTransfersScreen : Screen
+    public class ShowTransfersScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -59,35 +59,36 @@ namespace ProjectXenocide.UI.Screens
             this.selectedOutpostIndex = selectedOutpostIndex;
         }
 
-        #region Create the CeGui widgets
+        #region Create the Gum controls
 
         /// <summary>
         /// add the buttons to the screen
         /// </summary>
-        protected override void CreateCeguiWidgets()
+        protected override void CreateGumControls()
         {
             // The grid of items being shiped to this outpost
             InitializeGrid();
             PopulateGrid();
 
             // buttons
-            closeButton = AddButton("BUTTON_CLOSE", 0.7475f, 0.95f, 0.2275f, 0.04125f);
-            closeButton.Clicked += new CeGui.GuiEventHandler(OnCloseButton);
+            closeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CLOSE") };
+            RootContainer.AddChild(closeButton);
+            closeButton.Click += OnCloseButton;
         }
 
-        private CeGui.Widgets.MultiColumnList grid;
-        private CeGui.Widgets.PushButton closeButton;
+        private GridPanel grid;
+        private Button closeButton;
 
         /// <summary>
-        /// Create MultiColumnListBox which holds items being shiped
+        /// Create GridPanel which holds items being shiped
         /// </summary>
         private void InitializeGrid()
         {
-            grid = AddGrid(0.01f, 0.01f, 0.73f, 0.98f,
-                Strings.SCREEN_SHOW_TRANSFERS_COLUMN_ITEM, 0.69f,
-                Strings.SCREEN_SHOW_TRANSFERS_COLUMN_QUANTITY, 0.15f,
-                Strings.SCREEN_SHOW_TRANSFERS_COLUMN_ETA, 0.15f
-            );
+            grid = new GridPanel();
+            RootContainer.AddChild(grid.Visual);
+            grid.AddColumn(Strings.SCREEN_SHOW_TRANSFERS_COLUMN_ITEM, (int)(0.69f * 800));
+            grid.AddColumn(Strings.SCREEN_SHOW_TRANSFERS_COLUMN_QUANTITY, (int)(0.15f * 800));
+            grid.AddColumn(Strings.SCREEN_SHOW_TRANSFERS_COLUMN_ETA, (int)(0.15f * 800));
         }
 
         /// <summary>
@@ -111,20 +112,18 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="hours">hours before shipment arrives</param>
         private void AddRowToGrid(Shipment.ManifestLine line, int hours)
         {
-            // add item to grid
-            int rowNum = grid.AddRow(Util.CreateListboxItem(line.Label), 0);
-            Util.AddNumericElementToGrid(grid, 1, rowNum, line.Quantity);
-            Util.AddNumericElementToGrid(grid, 2, rowNum, hours);
+            int rowNum = grid.RowCount;
+            grid.AddRow(rowNum, line.Label, line.Quantity.ToString(), hours.ToString());
         }
 
-        #endregion Create the CeGui widgets
+        #endregion Create the Gum controls
 
         #region event handlers
 
         /// <summary>React to user pressing the Close button</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        private void OnCloseButton(object sender, CeGui.GuiEventArgs e)
+        private void OnCloseButton(object sender, EventArgs e)
         {
             GoToBaseInfoScreen();
         }

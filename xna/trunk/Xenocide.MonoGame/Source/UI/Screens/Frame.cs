@@ -1,4 +1,4 @@
-#region Copyright
+﻿#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -36,7 +36,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using CeGui;
-using CeGui.Renderers.Xna;
 
 using ProjectXenocide.Utils;
 using Xenocide.Resources;
@@ -150,20 +149,16 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="enableFrame">true to enable</param>
         public void Enable(bool enableFrame)
         {
-            if (enableFrame)
+            if (rootWidget != null)
             {
-                rootWidget.Enable();
-            }
-            else
-            {
-                rootWidget.Disable();
+                if (enableFrame) rootWidget.Enable(); else rootWidget.Disable();
             }
         }
 
         /// <summary>
         /// populate the fame with the Cegui Widgets
         /// </summary>
-        protected abstract void CreateCeguiWidgets();
+        protected virtual void CreateCeguiWidgets() { }
 
         /// <summary>
         /// Load the graphic content of objects in the frame
@@ -194,7 +189,7 @@ namespace ProjectXenocide.UI.Screens
         /// Construct the widget that holds all widgets on this window
         /// </summary>
         /// <returns>the widget</returns>
-        protected abstract CeGui.Window ConstructRootWidget();
+        protected virtual CeGui.Window ConstructRootWidget() { return null; }
 
         /// <summary>
         /// Put a wigdet at the specified co-ordinates (and size) on this frame
@@ -208,10 +203,9 @@ namespace ProjectXenocide.UI.Screens
             Justification = "will throw if widget == null")]
         protected void AddWidget(CeGui.Window widget, float left, float top, float width, float height)
         {
-            rootWidget.AddChild(widget);
+            if (rootWidget != null)
+                rootWidget.AddChild(widget);
 
-            // ToDo: we're using Position and Size because Top, Left, Width and Height
-            // properties are currently broken in CeGui
             widget.MetricsMode = CeGui.MetricsMode.Relative;
             widget.Position = new CeGui.Point(left, top);
             widget.Size = new CeGui.Size(width, height);

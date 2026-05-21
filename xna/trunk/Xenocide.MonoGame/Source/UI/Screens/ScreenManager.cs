@@ -66,6 +66,7 @@ namespace ProjectXenocide.UI.Screens
         {
             // we can only have one screen state change planed
             Debug.Assert((null == nextScreen) && (null == pushScreen) && !popScreen);
+            Console.WriteLine("ScreenManager: ScheduleScreen {0}", newScreen?.GetType().Name ?? "null");
             nextScreen = newScreen;
         }
 
@@ -82,6 +83,7 @@ namespace ProjectXenocide.UI.Screens
             // we can only have one screen state change planed
             Debug.Assert((null == nextScreen) && (null == pushScreen) && !popScreen);
             Debug.Assert(0 < screenStack.Count);
+            Console.WriteLine("ScreenManager: PushScreen {0}", newScreen?.GetType().Name ?? "null");
             pushScreen = newScreen;
         }
 
@@ -169,7 +171,7 @@ namespace ProjectXenocide.UI.Screens
             // construct the content manager, if it doesn't already exist
             if (content == null)
             {
-                content = new ContentManager(Xenocide.Instance.Services);
+                 content = new ContentManager(Xenocide.Instance.Services, "Content");
             }
 
             foreach(Screen screen in screenStack)
