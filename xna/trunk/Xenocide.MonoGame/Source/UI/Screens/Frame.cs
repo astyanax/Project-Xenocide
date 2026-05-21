@@ -66,36 +66,15 @@ namespace ProjectXenocide.UI.Screens
             this.screenManager = Xenocide.ScreenManager;
             this.size = size;
         }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="ceguiId">ID that CeGui will use to refer to this frame</param>
-        /// <param name="layoutFilename">The .layout filename used to describe this frame</param>
-        protected Frame(string ceguiId, string layoutFilename)
-        {
-            this.ceguiId = ceguiId;
-            this.screenManager = Xenocide.ScreenManager;
-            this.layoutFilename = layoutFilename;
-        }
         
         /// <summary>
         /// Puts the frame onto the display
         /// </summary>
         public virtual void Show()
         {
-            if (layoutFilename == null)
-            {
-                rootWidget = ConstructRootWidget();
-                rootWidget.Size = size;
-                rootWidget.MinimumSize = size;
-            }
-            else
-            {
-                rootWidget = WindowManager.Instance.LoadWindowLayout(layoutFilename, this);
-                rootWidget.MinimumSize = rootWidget.Size;
-                size = rootWidget.Size;
-            }
+            rootWidget = ConstructRootWidget();
+            rootWidget.Size = size;
+            rootWidget.MinimumSize = size;
 
             //ToDo: Need to set window to have correct parent
             GuiSheet.AddChild(rootWidget);
@@ -567,11 +546,6 @@ namespace ProjectXenocide.UI.Screens
         /// Generate a unique (to this form) component to use in widget names
         /// </summary>
         private int nextId;
-
-        /// <summary>
-        /// Filename of the .layout for this frame
-        /// </summary>
-        private string layoutFilename;
 
         /// <summary>
         /// Default button click sound to play

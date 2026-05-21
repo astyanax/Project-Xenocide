@@ -73,15 +73,6 @@ namespace ProjectXenocide.UI.Dialogs
         }
 
         /// <summary>
-        /// Constructor (obviously)
-        /// </summary>
-        /// <param name="layoutFilename">The .layout filename that decribes this dialog</param>
-        protected Dialog(string layoutFilename)
-            : base(MakeDialogId(), layoutFilename)
-        {
-        }
-
-        /// <summary>
         /// Each dialog needs a unique identifier.
         /// </summary>
         /// <returns>A unique string</returns>

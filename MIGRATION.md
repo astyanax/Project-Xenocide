@@ -223,25 +223,32 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [ ] **Manual: You** — verify each screen displays data correctly and navigation works
 
 #### Phase 4.4: Convert Core Screens (Complex)
-- [ ] Convert `ResearchScreen` — ResearchTree (custom ItemsControl + Grid) + description panel + buttons
-- [ ] Convert `BasesScreen` — base list (ListBox) + base view (details) + facility grid
-- [ ] Convert `EquipSoldierScreen` — soldier list + inventory grid + drag-drop between soldiers and stores
+- [x] Convert `ResearchScreen` — ResearchTree (custom ItemsControl + Grid) + description panel + buttons — ✅ Done (GumScreen)
+- [x] Convert `BasesScreen` — base list (ListBox) + base view (details) + facility grid — ✅ Done (GumScreen)
+- [x] Convert `EquipSoldierScreen` — soldier list + inventory grid + drag-drop between soldiers and stores — ✅ Done (GumScreen)
 - [ ] **Manual: You** — verify research tree renders hierarchy correctly
 - [ ] **Manual: You** — verify drag-and-drop soldier equipment works
 - [ ] **Manual: You** — verify base facility grid layout
 
+### All 25 screens + 13 dialogs converted to Gum. Remaining: manual verification, CeGui stubs removal, and NUnit→xUnit migration.
+
 #### Phase 4.5: Convert 3D-Integrated Screens
-- [ ] Convert `GeoscapeScreen` — add Gum overlay (date/time, funds, buttons) on top of 3D globe view
-- [ ] Convert `BattlescapeScreen` — add Gum overlay (soldier stats, action buttons, turn info) on top of 3D battlefield
-- [ ] Convert `AeroscapeScreen` / `BattlescapeReportScreen` — post-mission summary with Gum
+- [x] Convert `GeoscapeScreen` — Gum overlay (date/time, funds, buttons) on top of 3D globe view — ✅ Done
+- [x] Convert `BattlescapeScreen` — Gum overlay (soldier stats, action buttons, turn info) on top of 3D battlefield — ✅ Done
+- [x] Convert `AeroscapeScreen` / `BattlescapeReportScreen` — post-mission summary with Gum — ✅ Done
 - [ ] **Manual: You** — verify Gum overlay renders correctly on top of 3D (depth/stencil issues)
 - [ ] **Manual: You** — verify no input conflicts between Gum and 3D scene (click-through, focus)
 
 #### Phase 4.6: Cleanup
-- [ ] Remove `CeGuiStubs.cs` — no longer needed
+- [x] Remove 10 unused `.layout` files from `Content/Layouts/` — ✅ Deleted
+- [x] Remove `Content\**\*.layout` glob from `.csproj` — ✅ Removed
+- [x] Remove `Frame(string, string)` layout constructor — ✅ Removed
+- [x] Remove `Dialog(string)` layout constructor — ✅ Removed
+- [x] Remove `layoutFilename` field from `Frame.cs` — ✅ Removed
+- [ ] Remove `CeGuiStubs.cs` — not yet; still needed by `PolarScreen` (3D viewport), `GeoscapeScreenState` (CeGui buttons), and `Frame` base class
 - [ ] Remove `using CeGui;` and `using CeGui.Renderers.Xna;` from all game files
 - [ ] Remove `InitializeCegui()` from `Xenocide.cs`
-- [ ] Remove `System.Drawing` using from CeGuiStubs.cs (file will be deleted)
+- [ ] Remove `System.Drawing` using from CeGuiStubs.cs
 - [ ] **Manual: You** — verify full build with 0 errors
 - [ ] **Manual: You** — run game and verify all screens render and function
 

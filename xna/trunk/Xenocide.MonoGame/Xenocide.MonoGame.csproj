@@ -35,7 +35,6 @@
     <Content Include="Content\**\*.xnb" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Content\**\*.xsd" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Content\**\*.xml" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="Content\**\*.layout" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Content\**\*.ogg" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Content\**\*.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
