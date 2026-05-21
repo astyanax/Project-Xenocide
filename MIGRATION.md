@@ -328,7 +328,7 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 - [x] Add missing facility models (17 .x files) — ✅ generalstorage through neural_shield
 - [x] Add missing XCorps.X default model — ✅ Used by XNet screen
 - [x] Fix `Content\` double-prefix path bugs — ✅ XNetScene.cs + CreditsScreen.cs
-- [ ] 3 FBX models too old for AssImp (pre-2011): `FemaleShirt.FBX`, `Viper.FBX`, `Laser Rifle.FBX` — runtime try-catch handles gracefully
+- [x] 3 FBX models converted + textures placed — ✅ FemaleShirt, Viper, Barracks compile with 0 errors
 - [ ] Content pipeline: additional missing textures pending (EarthDiffuseMap, screen backgrounds, etc.)
 
 **Key findings:**
