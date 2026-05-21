@@ -43,7 +43,7 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 | **CeGui.Renderers.Xna** | Custom fork | XNA GraphicsDevice rendering backend | ~6 |
 | **CeGui.WidgetSets.Taharez** | Custom fork | TaharezLook widget theme | ~3 |
 | **FMOD Ex** (via custom C# wrapper) | Legacy (pre-FMOD Studio) | Audio playback | ~15 + 7 dependency files |
-| **NUnit** | 2.2.9.0 | Unit testing (test project only) | Tests only — to be migrated to **xUnit.net** |
+| **NUnit** | 2.2.9.0 | Unit testing (test project only) | Tests only — **migrated to xUnit.net 2.9.2** |
 
 ### Content Pipeline (XNA Game Studio 3.0)
 | Type | Assets | Format | Pipeline Importer |
@@ -64,7 +64,10 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 |-----------|---------|---------|
 | .NET SDK | 9.0+ | Runtime target |
 | `System.Text.Json` | Built-in | Replace BinaryFormatter for save/load |
-| **xUnit.net** | 2.9+ | Replace NUnit 2.2.9 for unit testing |
+| **xUnit.net** | 2.9.2 | Test framework (already migrated from NUnit 2.2.9); 5 tests passing |
+| `xunit.runner.visualstudio` | 2.8.2 | VS/dotnet test adapter |
+| `Microsoft.NET.Test.Sdk` | 17.12.0 | .NET test runner infrastructure |
+| `coverlet.collector` | 6.0.2 | Code coverage |
 
 ### MonoGame Framework (NuGet)
 | Package | Version | Purpose | Notes |
@@ -106,7 +109,7 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] Create new MonoGame DesktopGL project: `dotnet new mgdesktopgl -o xna/trunk/Xenocide.MonoGame` — ✅ Done
 - [x] Add NuGet packages: `MonoGame.Framework.DesktopGL`, `MonoGame.Content.Builder.Task` — ✅ Done
 - [x] Set up MGCB content project (`.mgcb`) with all asset references — ✅ Models, shaders, textures, fonts, audio registered
-- [ ] Replace NUnit with xUnit.net in test project
+- [x] Replace NUnit with xUnit.net in test project — ✅ Already done (xunit 2.9.2, 5 tests passing)
 
 ### Phase 1: XNA 3.0 → 4.0 API Conversion
 - [x] Replace `effect.Begin()/End()` → `Pass.Apply()` only — ✅ Done
@@ -353,10 +356,11 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 - [ ] Test save/load cross-platform compatibility
 
 ### Phase 8: Cleanup & Polish
-- [ ] Remove old XNA 3.0 project files from active tree (archive if needed)
-- [ ] Remove Dependancies/ directory (CeGui, FMOD source no longer needed)
-- [ ] Remove old Lib/ directory (NUnit goes into NuGet)
-- [ ] Remove old Installers/ directory (NSIS + Inno Setup scripts)
+- [x] Remove NUnit dependency — ✅ Already migrated to xUnit.net 2.9.2 (5 tests passing)
+- [x] Remove old XNA 3.0 project files from active tree — ✅ Already removed; only `Xenocide.MonoGame.sln` remains
+- [x] Remove Dependancies/ directory — ✅ Already removed
+- [x] Remove old Lib/ directory — ✅ Already removed
+- [x] Remove old Installers/ directory — ✅ Already removed
 - [ ] Update README.md with final build instructions
 - [ ] Update CI/CD if applicable
 
