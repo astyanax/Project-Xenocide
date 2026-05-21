@@ -88,12 +88,12 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 |---------|---------|---------|-------|
 | `Gum.MonoGame` | Latest | UI layout engine + Forms controls + MVVM binding | NuGet, cross-platform, WYSIWYG designer available |
 
-### Audio (FMOD Ex Replacement — To Be Decided)
+### Audio (FMOD Ex Replacement — DECIDED: Built-in SoundEffect)
 | Option | Status | Notes |
 |--------|--------|-------|
-| **Built-in SoundEffect/Song** | Part of MonoGame | OGG/WAV for SFX, OGG/MP3 for music. Simplest path. |
-| **FmodForFoxes** (NuGet) | Active | FMOD Studio wrapper for .NET, works with MonoGame |
-| **Keep FMOD Ex via P/Invoke** | Legacy | FMOD Ex is old; will need updated bindings |
+| **Built-in SoundEffect** ✅ SELECTED | MonoGame 3.8+ | `OggImporter` + `SoundEffectProcessor` via MGCB. `SongProcessor` is broken on DesktopGL (produces 128-byte stubs). All audio (SFX + music) uses `Content.Load<SoundEffect>()` with MGCB-compiled `.xnb`. Music uses `SoundEffectInstance` with `IsLooped` + auto-advance via `Update()` polling. Button click sounds auto-wired in `GumScreen.Show()`. |
+| **FmodForFoxes** (NuGet) | Active | FMOD Studio wrapper for .NET, works with MonoGame. Not needed — simple playback only. |
+| **Keep FMOD Ex via P/Invoke** | Legacy | FMOD Ex is old; will need updated bindings. Not needed. |
 
 ---
 
@@ -105,7 +105,7 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] Install MGCB tools: `dotnet tool install -g dotnet-mgcb dotnet-mgcb-editor` — ✅ Done
 - [x] Create new MonoGame DesktopGL project: `dotnet new mgdesktopgl -o xna/trunk/Xenocide.MonoGame` — ✅ Done
 - [x] Add NuGet packages: `MonoGame.Framework.DesktopGL`, `MonoGame.Content.Builder.Task` — ✅ Done
-- [ ] Set up MGCB content project (`.mgcb`) with all asset references
+- [x] Set up MGCB content project (`.mgcb`) with all asset references — ✅ Models, shaders, textures, fonts, audio registered
 - [ ] Replace NUnit with xUnit.net in test project
 
 ### Phase 1: XNA 3.0 → 4.0 API Conversion
@@ -288,18 +288,54 @@ public class GumStartScreen : Screen
 Everything else (NuGet addition, code changes, control wiring, data binding, event handlers) can be done by automation/tooling.
 
 ### Phase 5: Audio Migration
-- [ ] Audit FMOD Ex usage in AudioSystem (categorize: simple playback vs advanced features)
-- [ ] Implement `IAudioSystem` interface
-- [ ] If simple playback: implement MonoGame `SoundEffect`/`Song` backend
-- [ ] If advanced features needed: implement FmodForFoxes backend
-- [ ] Wire audio into game loop
+- [x] Audit FMOD Ex usage in AudioSystem (categorize: simple playback vs advanced features) — ✅ Simple playback only; no DSP/3D audio used
+- [x] Implement `IAudioSystem` interface — ✅ `GameAudioComponent` in `Source/Audio/GameAudioComponent.cs`
+- [x] Implement MonoGame `SoundEffect` backend (replacing `FmodGameComponent` stub) — ✅ All audio via `OggImporter` + `SoundEffectProcessor` in MGCB
+- [x] Wire audio into game loop (music per-screen, button click sounds, SFX) — ✅ Done
+- [x] Register all 16 `.ogg` audio files in `Content.mgcb` (10 SFX + 6 music) — ✅ Done
+- [x] Add `Content.RootDirectory = "Content"` in `Xenocide.cs` constructor — ✅ Required for ContentManager resolution
+- [x] Set resolution to 1280×1024 with Alt+Enter fullscreen toggle — ✅ Done
+- [x] Fix `Frame.Visible` null-ref crash (`rootWidget` null guard) — ✅ Done
+- [x] Auto-wire button click sounds via `GumScreen.WireClickSounds()` — ✅ All ~108 Gum buttons across 25 screens
+- [x] Wire CeGui button click sounds in `GeoscapeScreenState.cs` (4 buttons) — ✅ Done
+- [x] Stop previous music before playing new (fix overlap when switching screens) — ✅ `StopMusicInternal()` before every `PlayRandomMusic()`
+
+**Architecture:**
+- `GameAudioComponent` — `GameComponent` implementing `IAudioSystem` in `Source/Audio/GameAudioComponent.cs`
+  - SFX: preloaded via `LoadSound()` into `Dictionary<string, SoundEffect>`; playback via `SoundEffectInstance.Play()`
+  - Music: loaded on-demand via `Content.Load<SoundEffect>()`; one active `SoundEffectInstance` at a time
+  - Auto-advance: polls `_currentMusic.State == SoundState.Stopped` in `Update()` to play next random track
+  - Categories: music tracks tagged by screen (`MainMenu`, `PlanetView`, `BaseView`, `XNet`); `PlayRandomMusic(category)` filters by tag
+  - Volume: `MusicVolume`/`SoundVolume` per-instance; `SetMasterVolume()` → `SoundEffect.MasterVolume`
+  - Log: writes to `%LOCALAPPDATA%\Xenocide\audio_debug.log`
+- `GumScreen.WireClickSounds()` — recursively walks Gum `StackPanel.Children`, finds all `Button` controls, wires `Click +=` to play `Menu\buttonclick1_ok.ogg`
+- `GeoscapeScreenState.cs` — 4 CeGui buttons manually wired with click sound lambdas
+
+**Key findings:**
+- `SoundEffect.FromStream()` only supports WAV, not OGG — NVorbis is only used by MGCB pipeline
+- `SongProcessor` produces broken 128-byte `.xnb` stubs on DesktopGL — must use `SoundEffectProcessor` for everything
+- Music `.xnb` files are large (decompressed PCM: 7–52 MB each) but functional
+- `ContentManager` requires explicit `Content.RootDirectory = "Content"` — otherwise Gum or CeGui stubs may modify it
+- `IAudioSystem` interface kept in `Source/Stubs/AudioSystemStubs.cs`; `GameAudioComponent` lives in `Source/Audio/`
+- FMOD Ex wrapper files (`fmod.cs`, `fmod_dsp.cs`, `fmodex.dll`) remain in legacy branches only — not carried forward
 
 ### Phase 6: Content Pipeline Rebuild
-- [ ] Import 3D models (.fbx, .x) into MGCB
-- [ ] Update shaders (.fx) for D3D11 profile → compile via MGFXC
-- [ ] Set up spritefont in MGCB (verify font availability)
-- [ ] Import all textures → verify correct processing
-- [ ] Test all `Content.Load<T>()` calls
+- [x] Import 3D models (.fbx, .x) into MGCB — ✅ 37 model entries registered (all .X files + most .FBX)
+- [x] Update shaders (.fx) for D3D11 profile — ✅ Already in .mgcb (GeoscapeShader, skybox)
+- [x] Set up spritefont in MGCB — ✅ SpriteFont1 registered
+- [x] Import all textures — ✅ 3 textures in .mgcb; others loaded via direct file (Texture2D.FromFile)
+- [x] Register all 16 audio .ogg files — ✅ Done in Phase 5
+- [x] Add missing facility models (17 .x files) — ✅ generalstorage through neural_shield
+- [x] Add missing XCorps.X default model — ✅ Used by XNet screen
+- [x] Fix `Content\` double-prefix path bugs — ✅ XNetScene.cs + CreditsScreen.cs
+- [ ] 3 FBX models too old for AssImp (pre-2011): `FemaleShirt.FBX`, `Viper.FBX`, `Laser Rifle.FBX` — runtime try-catch handles gracefully
+- [ ] Content pipeline: additional missing textures pending (EarthDiffuseMap, screen backgrounds, etc.)
+
+**Key findings:**
+- MGCB's `FbxImporter` only supports FBX 2011–2013; legacy FBX files (pre-2011) fail with `FBX-DOM unsupported`
+- 17 facility models + XCorps.X + Barracks.FBX were never registered — caused `ContentLoadException` at runtime
+- `Content.Load<T>()` paths must NOT include the `Content\` prefix — ContentManager prepends it automatically
+- `Texture2D.FromFile()` and `TextureAtlas.LoadContent()` load textures directly — do not need MGCB
 
 ### Phase 7: Cross-Platform Validation
 - [ ] Build and run on **Windows**
@@ -348,9 +384,12 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 ## 5. Next Steps (Recommended Order)
 
 ### Immediate (get the game running)
-1. **Content Pipeline Setup** — Create `.mgcb` project, import all .fbx/.fx/.spritefont/.jpg/.png assets, verify `Content.Load<T>()` works at runtime
-2. **Replace CeGui# stubs with Gum** — Phase 4.0 (NuGet + proof-of-concept) then Phase 4.1 (StartScreen). See Phase 4 plan above.
-3. **Replace audio stubs** — Implement the MonoGame `SoundEffect`/`Song` backend for `IAudioSystem`
-4. **Runtime test** — Launch the game, fix any `NullReferenceException` / `MissingMethodException` from stub methods
+1. ~~**Content Pipeline Setup**~~ ✅ Done — 37 models, 2 shaders, 1 font, 3 textures, 16 audio files registered in MGCB
+2. ~~**Replace audio stubs**~~ ✅ Done — Phase 5 complete
+3. **Remaining Content Gaps** — Register missing textures (EarthDiffuseMap, screen backgrounds) in MGCB; evaluate converting old-format FBX files
+4. **Replace CeGui# stubs with Gum** — Phase 4.2–4.6 pending (dialogs, management screens, core screens, 3D overlays)
+5. **Replace NUnit with xUnit.net** — Phase 0 remaining item
+6. **Cross-platform validation** — Phase 7 (build on Linux, fix path case issues)
+7. **Cleanup** — Phase 8 (remove old projects, dependencies, installers)
 
 **GUI decision made:** Gum (MonoGameGum) selected. Full analysis in `docs/legacy/GUI.md` and `docs/GUI.md`.

@@ -152,7 +152,7 @@ namespace ProjectXenocide.UI.Scenes.XNet
             // "Light" version of Xenocide has most models removed
             try
             {
-                model = contentManger.Load<Microsoft.Xna.Framework.Graphics.Model>("Content\\Models\\" + modelName);
+                model = contentManger.Load<Microsoft.Xna.Framework.Graphics.Model>("Models\\" + modelName);
             }
             catch (ContentLoadException)
             {

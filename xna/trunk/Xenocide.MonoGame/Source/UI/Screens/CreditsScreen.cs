@@ -120,7 +120,7 @@ namespace ProjectXenocide.UI.Screens
             
             {
                 spriteBatch = new SpriteBatch(Xenocide.Instance.GraphicsDevice);
-                outputFont = contentManager.Load<SpriteFont>(@"Content\SpriteFont1");
+                outputFont = contentManager.Load<SpriteFont>(@"SpriteFont1");
                 BuildDisplayStrings(device);
             }
         }

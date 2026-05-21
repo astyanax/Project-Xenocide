@@ -120,6 +120,115 @@
 /processor:ModelProcessor
 /build:Content/Models/Weapons/Xcorps/smoke-grenade.x
 
+#----------------------------- Models: XCorps ---------------------------------#
+
+#begin Content/Models/XCorps.X
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/XCorps.X
+
+#begin Content/Models/Characters/XCorp/FemaleShirt.FBX
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Characters/XCorp/FemaleShirt.FBX
+
+#begin Content/Models/Characters/Alien/Viper.FBX
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Characters/Alien/Viper.FBX
+
+#begin Content/Models/Facility/Xnet/Barracks.FBX
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/Xnet/Barracks.FBX
+
+#----------------------------- Models: Facilities ------------------------------#
+
+#begin Content/Models/Facility/generalstorage.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/generalstorage.x
+
+#begin Content/Models/Facility/alien_containment.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/alien_containment.x
+
+#begin Content/Models/Facility/short_range_neudar.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/short_range_neudar.x
+
+#begin Content/Models/Facility/long_range_neudar.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/long_range_neudar.x
+
+#begin Content/Models/Facility/tachyon_detector.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/tachyon_detector.x
+
+#begin Content/Models/Facility/base_access.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/base_access.x
+
+#begin Content/Models/Facility/launch_pad.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/launch_pad.x
+
+#begin Content/Models/Facility/research_facility.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/research_facility.x
+
+#begin Content/Models/Facility/workshop.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/workshop.x
+
+#begin Content/Models/Facility/barracks.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/barracks.x
+
+#begin Content/Models/Facility/psi_training.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/psi_training.x
+
+#begin Content/Models/Facility/missile_defense.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/missile_defense.x
+
+#begin Content/Models/Facility/laser_defense.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/laser_defense.x
+
+#begin Content/Models/Facility/plasma_defense.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/plasma_defense.x
+
+#begin Content/Models/Facility/gaia_defense.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/gaia_defense.x
+
+#begin Content/Models/Facility/grav_shield.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/grav_shield.x
+
+#begin Content/Models/Facility/neural_shield.x
+/importer:FbxImporter
+/processor:ModelProcessor
+/build:Content/Models/Facility/neural_shield.x
+
 #----------------------------- Audio -----------------------------------------#
 # All audio uses SoundEffectProcessor: OggImporter decodes OGG to PCM XNB.
 # SongProcessor is unreliable on DesktopGL (produces 128-byte stubs).
