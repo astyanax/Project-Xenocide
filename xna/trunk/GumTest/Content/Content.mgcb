@@ -13,3 +13,8 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Audio/Music/main_theme.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Audio/Music/main_theme.ogg
+

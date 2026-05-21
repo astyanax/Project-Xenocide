@@ -119,3 +119,87 @@
 /importer:FbxImporter
 /processor:ModelProcessor
 /build:Content/Models/Weapons/Xcorps/smoke-grenade.x
+
+#----------------------------- Audio -----------------------------------------#
+# All audio uses SoundEffectProcessor: OggImporter decodes OGG to PCM XNB.
+# SongProcessor is unreliable on DesktopGL (produces 128-byte stubs).
+
+#begin Content/Audio/Sounds/Menu/buttonclick1_ok.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Sounds/Menu/buttonclick1_ok.ogg
+
+#begin Content/Audio/Sounds/Menu/buttonclick2_changesetting.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Sounds/Menu/buttonclick2_changesetting.ogg
+
+#begin Content/Audio/Sounds/Menu/buttonover.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Sounds/Menu/buttonover.ogg
+
+#begin Content/Audio/Sounds/Menu/exitgame.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Sounds/Menu/exitgame.ogg
+
+#begin Content/Audio/Sounds/PlanetView/clickobjectonplanet.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Sounds/PlanetView/clickobjectonplanet.ogg
+
+#begin Content/Audio/Sounds/PlanetView/speedfast.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Sounds/PlanetView/speedfast.ogg
+
+#begin Content/Audio/Sounds/PlanetView/speedslow.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Sounds/PlanetView/speedslow.ogg
+
+#begin Content/Audio/Sounds/PlanetView/speedveryfast.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Sounds/PlanetView/speedveryfast.ogg
+
+#begin Content/Audio/Sounds/PlanetView/zoomin.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Sounds/PlanetView/zoomin.ogg
+
+#begin Content/Audio/Sounds/PlanetView/zoomout.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Sounds/PlanetView/zoomout.ogg
+
+#begin Content/Audio/Music/main_theme.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Music/main_theme.ogg
+
+#begin Content/Audio/Music/XNet/xnet.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Music/XNet/xnet.ogg
+
+#begin Content/Audio/Music/Planetview/planetview.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Music/Planetview/planetview.ogg
+
+#begin Content/Audio/Music/Planetview/Tiskaite_-_Xenocide_Geoscape.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Music/Planetview/Tiskaite_-_Xenocide_Geoscape.ogg
+
+#begin Content/Audio/Music/Planetview/10. Thomas Torfs - Planetview.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Music/Planetview/10. Thomas Torfs - Planetview.ogg
+
+#begin Content/Audio/Music/Baseview/7. XerO - Baseview.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Music/Baseview/7. XerO - Baseview.ogg

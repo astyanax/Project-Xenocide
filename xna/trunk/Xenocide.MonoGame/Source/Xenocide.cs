@@ -62,6 +62,7 @@ namespace ProjectXenocide
         private GuiManager gui;
         private static ScreenManager screenManager;
         private static Xenocide      instance;
+        private KeyboardState _prevKeyState;
 
         /// <summary>
         /// The random number generator everyone should use
@@ -88,6 +89,9 @@ namespace ProjectXenocide
         {
             instance      = this; 
             graphics      = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 1024;
+            Content.RootDirectory = "Content";
             gui           = new GuiManager(this);
             screenManager = new ScreenManager();
             staticTables  = new StaticTables();
@@ -115,16 +119,16 @@ namespace ProjectXenocide
                 Console.Error.WriteLine(Strings.EXCEPTION_USING_V1_1_SHADER);
             }
 
-            // Register FMOD sound system
-            var audioComponent = new AudioSystem.FmodGameComponent(this);
+            // Register audio system
+            var audioComponent = new AudioSystem.GameAudioComponent(this);
             Components.Add(audioComponent);
             Services.AddService(typeof(AudioSystem.IAudioSystem), audioComponent);
 
             base.Initialize();
 
+            InitializeGameOptions();
             InitializeCegui();
             InitializeAudioSystem();
-            InitializeGameOptions();
 
             GumService.Default.Initialize(this);
         }
@@ -244,6 +248,14 @@ namespace ProjectXenocide
 
             if (screenManager.QuitGame)
                 this.Exit();
+
+            var keyState = Keyboard.GetState();
+            if (keyState.IsKeyDown(Keys.LeftAlt) && keyState.IsKeyDown(Keys.Enter) &&
+                (_prevKeyState.IsKeyUp(Keys.Enter) || _prevKeyState.IsKeyUp(Keys.LeftAlt)))
+            {
+                graphics.ToggleFullScreen();
+            }
+            _prevKeyState = keyState;
 
             screenManager.Update(gameTime);
             GumService.Default.Update(gameTime);

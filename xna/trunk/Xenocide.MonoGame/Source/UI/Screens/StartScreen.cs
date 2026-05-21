@@ -53,7 +53,7 @@ namespace ProjectXenocide.UI.Screens
             : base("StartScreen", @"Content\Textures\UI\StartScreenBackground.png")
         {
             if (Xenocide.AudioSystem != null)
-                Xenocide.AudioSystem.PlayRandomMusic();
+                Xenocide.AudioSystem.PlayRandomMusic("MainMenu");
         }
 
         protected override void CreateGumControls()

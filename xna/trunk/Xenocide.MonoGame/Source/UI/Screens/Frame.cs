@@ -501,7 +501,7 @@ namespace ProjectXenocide.UI.Screens
         public bool EnableButtonSounds { get { return enableButtonSounds; } set { enableButtonSounds = value; } }
 
         /// <summary>Make window visible/invisible</summary>
-        public bool Visible { get { return rootWidget.Visible; } set { rootWidget.Visible = value; } }
+        public bool Visible { get { return rootWidget != null && rootWidget.Visible; } set { if (rootWidget != null) rootWidget.Visible = value; } }
 
         /// <summary>CeGui widget that holds all other widgets in the window</summary>
         protected CeGui.Window  RootWidget { get { return rootWidget; } }

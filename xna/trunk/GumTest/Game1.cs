@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.IO;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGameGum;
@@ -12,9 +15,12 @@ public class Game1 : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
     private GumService GumUI => GumService.Default;
-    private Label clickCountLabel;
 
-    private int clickCount = 0;
+    private SoundEffectInstance _musicInstance;
+    private SoundEffect _loadedMusic;
+    private Label _volumeLabel;
+    private Label _statusLabel;
+    private Slider _volumeSlider;
 
     public Game1()
     {
@@ -29,53 +35,36 @@ public class Game1 : Game
 
         var panel = new StackPanel();
         panel.AddToRoot();
-        panel.Width = 400;
+        panel.Width = 450;
 
         var title = new Label();
-        title.Text = "Gum Test - Project Xenocide";
+        title.Text = "Gum Test - Audio Diagnostics (MGCB)";
         panel.AddChild(title);
 
-        var description = new Label();
-        description.Text = "If you can see this, Gum is working!";
-        panel.AddChild(description);
+        _statusLabel = new Label();
+        _statusLabel.Text = "Ready. Press Play to load via MGCB.";
+        panel.AddChild(_statusLabel);
 
-        var clickButton = new Button();
-        clickButton.Text = "Click me";
-        clickButton.Click += (s, e) =>
-        {
-            clickCount++;
-            clickCountLabel.Text = $"Clicked {clickCount} times";
-        };
-        panel.AddChild(clickButton);
+        var playButton = new Button();
+        playButton.Text = "Play Main Theme";
+        playButton.Click += OnPlayClicked;
+        panel.AddChild(playButton);
 
-        clickCountLabel = new Label();
-        clickCountLabel.Text = "Clicked 0 times";
-        panel.AddChild(clickCountLabel);
+        var stopButton = new Button();
+        stopButton.Text = "Stop Music";
+        stopButton.Click += OnStopClicked;
+        panel.AddChild(stopButton);
 
-        var slider = new Slider();
-        slider.Minimum = 0;
-        slider.Maximum = 100;
-        slider.Value = 50;
-        panel.AddChild(slider);
+        _volumeLabel = new Label();
+        _volumeLabel.Text = "Volume: 100";
+        panel.AddChild(_volumeLabel);
 
-        var sliderValueLabel = new Label();
-        slider.ValueChanged += (s, e) =>
-        {
-            sliderValueLabel.Text = $"Slider: {slider.Value:F0}";
-        };
-        sliderValueLabel.Text = $"Slider: {slider.Value:F0}";
-        panel.AddChild(sliderValueLabel);
-
-        var textBox = new TextBox();
-        textBox.Text = "Type here...";
-        panel.AddChild(textBox);
-
-        var textBoxMirror = new Label();
-        textBox.TextChanged += (s, e) =>
-        {
-            textBoxMirror.Text = $"You typed: {textBox.Text}";
-        };
-        panel.AddChild(textBoxMirror);
+        _volumeSlider = new Slider();
+        _volumeSlider.Minimum = 0;
+        _volumeSlider.Maximum = 100;
+        _volumeSlider.Value = 100;
+        _volumeSlider.ValueChanged += OnVolumeChanged;
+        panel.AddChild(_volumeSlider);
 
         var quitButton = new Button();
         quitButton.Text = "Quit";
@@ -88,6 +77,74 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+    }
+
+    private void OnPlayClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            StopMusic();
+
+            _statusLabel.Text = "Loading via ContentManager...";
+            _loadedMusic = Content.Load<SoundEffect>("Audio/Music/main_theme");
+
+            if (_loadedMusic == null)
+            {
+                _statusLabel.Text = "FAILED: Content.Load returned null";
+                return;
+            }
+
+            if (_loadedMusic.Duration.TotalMilliseconds <= 0)
+            {
+                _statusLabel.Text = "FAILED: zero-duration SoundEffect (corrupt .xnb?)";
+                return;
+            }
+
+            _musicInstance = _loadedMusic.CreateInstance();
+            _musicInstance.IsLooped = true;
+            _musicInstance.Volume = (float)(_volumeSlider.Value / 100.0);
+            _musicInstance.Play();
+
+            var state = _musicInstance.State;
+            var logPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "Xenocide", "audio_debug.log");
+
+            _statusLabel.Text = $"PLAYING via MGCB .xnb\n"
+                + $"Duration={_loadedMusic.Duration.TotalSeconds:F1}s\n"
+                + $"State={state}\n"
+                + $"MasterVolume={SoundEffect.MasterVolume:F2}\n"
+                + $"InstanceVolume={_musicInstance.Volume:F2}\n"
+                + $"Log: {logPath}";
+        }
+        catch (Exception ex)
+        {
+            _statusLabel.Text = $"EXCEPTION: {ex.GetType().Name}\n{ex.Message}";
+        }
+    }
+
+    private void OnStopClicked(object sender, EventArgs e)
+    {
+        StopMusic();
+        _statusLabel.Text = "Stopped.";
+    }
+
+    private void OnVolumeChanged(object sender, EventArgs e)
+    {
+        var vol = (float)(_volumeSlider.Value / 100.0);
+        _volumeLabel.Text = $"Volume: {_volumeSlider.Value:F0}";
+        if (_musicInstance != null)
+            _musicInstance.Volume = vol;
+    }
+
+    private void StopMusic()
+    {
+        if (_musicInstance != null)
+        {
+            _musicInstance.Stop();
+            _musicInstance.Dispose();
+            _musicInstance = null;
+        }
     }
 
     protected override void Update(GameTime gameTime)

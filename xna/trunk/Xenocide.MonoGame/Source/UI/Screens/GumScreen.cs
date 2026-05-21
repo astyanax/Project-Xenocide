@@ -1,3 +1,4 @@
+using System;
 using MonoGameGum;
 using Gum.Forms.Controls;
 
@@ -19,11 +20,27 @@ namespace ProjectXenocide.UI.Screens
             RootContainer = new StackPanel();
             RootContainer.AddToRoot();
             CreateGumControls();
+            WireClickSounds(RootContainer);
         }
 
         protected abstract void CreateGumControls();
 
         protected override void CreateCeguiWidgets() { }
+
+        private static void WireClickSounds(FrameworkElement element)
+        {
+            if (element is Button button)
+                button.Click += OnAnyButtonClicked;
+
+            if (element is StackPanel panel)
+                foreach (var child in panel.Children)
+                    WireClickSounds(child);
+        }
+
+        private static void OnAnyButtonClicked(object sender, EventArgs e)
+        {
+            Xenocide.AudioSystem?.PlaySound("Menu\\buttonclick1_ok.ogg");
+        }
 
         protected override void Dispose(bool disposing)
         {

@@ -199,6 +199,7 @@ namespace ProjectXenocide.UI.Screens
                     alienMissionButton = CeGui.GuiBuilder.CreateButton(GeoscapeScreen.CeguiId + "_ALIEN_MISSION");
                     alienMissionButton.Text = XenocideResourceManager.Get("BUTTON_ALIEN_MISSION");
                     alienMissionButton.Clicked += new CeGui.GuiEventHandler(OnAlienMissionsClicked);
+                    alienMissionButton.Clicked += (s, args) => Xenocide.AudioSystem.PlaySound("Menu\\buttonclick1_ok.ogg");
                     GeoscapeScreen.SceneWindow.AddChild(alienMissionButton);
                 }
             }
@@ -358,6 +359,7 @@ namespace ProjectXenocide.UI.Screens
                 cancelNewBaseButton = CeGui.GuiBuilder.CreateButton(GeoscapeScreen.CeguiId + "_CANCEL_NEW_BASE");
                 cancelNewBaseButton.Text = XenocideResourceManager.Get("BUTTON_CANCEL_NEW_BASE");
                 cancelNewBaseButton.Clicked += new CeGui.GuiEventHandler(GeoscapeScreen.OnCancelNewBase);
+                cancelNewBaseButton.Clicked += (s, args) => Xenocide.AudioSystem.PlaySound("Menu\\buttonclick1_ok.ogg");
                 GeoscapeScreen.SceneWindow.AddChild(cancelNewBaseButton);
             }
 
@@ -437,6 +439,7 @@ namespace ProjectXenocide.UI.Screens
                 cancelTargetingButton = CeGui.GuiBuilder.CreateButton(GeoscapeScreen.CeguiId + "_CANCEL_TARGETING");
                 cancelTargetingButton.Text = XenocideResourceManager.Get("BUTTON_CANCEL_TARGETING");
                 cancelTargetingButton.Clicked += new CeGui.GuiEventHandler(OnCancelTargeting);
+                cancelTargetingButton.Clicked += (s, args) => Xenocide.AudioSystem.PlaySound("Menu\\buttonclick1_ok.ogg");
                 GeoscapeScreen.SceneWindow.AddChild(cancelTargetingButton);
             }
 
@@ -617,6 +620,7 @@ namespace ProjectXenocide.UI.Screens
                 cancelTargetButton = CeGui.GuiBuilder.CreateButton(GeoscapeScreen.CeguiId + "_CANCEL_ALIEN_MISSION");
                 cancelTargetButton.Text = XenocideResourceManager.Get("BUTTON_CANCEL_ALIEN_MISSION");
                 cancelTargetButton.Clicked += new CeGui.GuiEventHandler(OnCancelAlienMission);
+                cancelTargetButton.Clicked += (s, args) => Xenocide.AudioSystem.PlaySound("Menu\\buttonclick1_ok.ogg");
                 GeoscapeScreen.SceneWindow.AddChild(cancelTargetButton);
             }
 
