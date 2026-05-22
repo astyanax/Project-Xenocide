@@ -4,11 +4,13 @@ using System.Text;
 
 using Gum.Forms.Controls;
 
+using ProjectXenocide.Assets;
+using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.UI.Screens;
 using ProjectXenocide.Utils;
-using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.Model.Geoscape.Vehicles;
-using ProjectXenocide.Model.Geoscape.Outposts;
+
 using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
@@ -62,7 +64,7 @@ namespace ProjectXenocide.UI.Dialogs
 
         private void BringUpGeoscapeInTargetingMode(Aircraft aircraft)
         {
-            Xenocide.AudioSystem.PlaySound("Menu\\buttonclick2_changesetting.ogg");
+            Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick2);
             GeoscapeScreen geoscapeScreen = new GeoscapeScreen();
             geoscapeScreen.State = new GeoscapeScreen.TargetingScreenState(geoscapeScreen, aircraft);
             ScreenManager.ScheduleScreen(geoscapeScreen);

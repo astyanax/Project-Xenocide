@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -27,22 +27,21 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-
-using ProjectXenocide.Utils;
+using ProjectXenocide.Model.Battlescape;
+using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData.Items;
-using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.UI.Scenes;
-using ProjectXenocide.Model.Battlescape;
+using ProjectXenocide.Utils;
 #endregion
 
 namespace ProjectXenocide.UI.Screens
@@ -67,7 +66,7 @@ namespace ProjectXenocide.UI.Screens
             public BattlescapeController(EquipSoldierScreen equipSoldierScreen, Battle battlescape, Combatant combatant)
                 : base(equipSoldierScreen)
             {
-                this.combatant   = combatant;
+                this.combatant = combatant;
                 this.battlescape = battlescape;
             }
 
@@ -114,7 +113,7 @@ namespace ProjectXenocide.UI.Screens
 
             /// <summary>The battlescape the combatant is on</summary>
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields",
-                Justification="ToDo: will use later, when finish implementing")]
+                Justification = "ToDo: will use later, when finish implementing")]
             private Battle battlescape;
 
             #endregion

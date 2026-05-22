@@ -1,18 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
-
-using Microsoft.Xna.Framework;
+using System.Text;
 
 using Gum.Forms.Controls;
 
-using ProjectXenocide.Utils;
+using Microsoft.Xna.Framework;
+
+using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Model.StaticData.Items;
-using ProjectXenocide.Model.Battlescape;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Screens

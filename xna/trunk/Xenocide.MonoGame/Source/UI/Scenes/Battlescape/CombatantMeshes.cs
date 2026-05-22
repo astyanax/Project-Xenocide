@@ -30,13 +30,13 @@ using System;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.StaticData;
+using ProjectXenocide.Utils;
 
 using XnaModel = Microsoft.Xna.Framework.Graphics.Model;
 
@@ -66,7 +66,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
                     {
                         try
                         {
-                            XnaModel model = content.Load<XnaModel>("Models\\" + modelName);
+                            XnaModel model = content.Load<XnaModel>("Models/" + modelName);
                             models.Add(modelName, new ModelInfo(model, combatant.Graphic));
                         }
                         catch (Exception ex)
@@ -119,9 +119,9 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
                 {
                     effect.LightingEnabled = false;
                     effect.World = transforms[mesh.ParentBone.Index] * world;
-                    effect.View       = basicEffect.View;
+                    effect.View = basicEffect.View;
                     effect.Projection = basicEffect.Projection;
-                    effect.Alpha      = visible ? 1.0f : 0.5f ;
+                    effect.Alpha = visible ? 1.0f : 0.5f;
                 }
                 //Draw the mesh, will use the effects set above.
                 mesh.Draw();
@@ -142,7 +142,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
             /// <param name="graphic">Scaling and orientation information for model</param>
             public ModelInfo(XnaModel model, Graphic graphic)
             {
-                this.model         = model;
+                this.model = model;
 
                 // compute matrix to put model to scale and default orientation
                 BoundingSphere sphere = Util.CalcBoundingSphere(model);
@@ -161,7 +161,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
             }
 
             public XnaModel model;
-            public Matrix   scalingMatrix;
+            public Matrix scalingMatrix;
         }
 
         /// <summary>The models</summary>

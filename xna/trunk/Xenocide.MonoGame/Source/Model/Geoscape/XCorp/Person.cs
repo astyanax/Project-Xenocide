@@ -28,14 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
-
-using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
-using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.Model.StaticData.Items;
 
 #endregion
 
@@ -294,7 +293,7 @@ namespace ProjectXenocide.Model.Geoscape
         /// </summary>
         private Combatant combatant;
 
-    #endregion Fields
+        #endregion Fields
 
     }
 }

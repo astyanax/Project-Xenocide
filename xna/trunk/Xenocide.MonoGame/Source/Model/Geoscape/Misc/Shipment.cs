@@ -29,14 +29,14 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
-
+using ProjectXenocide.Model.Geoscape.GeoEvents;
+using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.Model.StaticData.Items;
-using ProjectXenocide.Model.Geoscape.Outposts;
-using ProjectXenocide.Model.Geoscape.GeoEvents;
+
 using Xenocide.Resources;
 
 
@@ -59,7 +59,7 @@ namespace ProjectXenocide.Model.Geoscape
         public Shipment(Outpost destination, TimeSpan eta)
         {
             this.destination = destination;
-            this.eta         = Xenocide.GameState.GeoData.GeoTime.Time + eta;
+            this.eta = Xenocide.GameState.GeoData.GeoTime.Time + eta;
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace ProjectXenocide.Model.Geoscape
         public void OnShipmentArrive()
         {
             // put items into outpost
-            foreach(Item item in items)
+            foreach (Item item in items)
             {
                 destination.Inventory.ClearReservation(item.ItemInfo);
                 destination.Inventory.Add(item, false);
@@ -181,7 +181,7 @@ namespace ProjectXenocide.Model.Geoscape
         /// <returns>manifest line, or null</returns>
         private ManifestLine Find(string label)
         {
-            return manifest.Find(delegate(ManifestLine line) { return line.Label == label; });
+            return manifest.Find(delegate (ManifestLine line) { return line.Label == label; });
         }
 
         #region Fields
@@ -234,7 +234,7 @@ namespace ProjectXenocide.Model.Geoscape
         /// </summary>
         [Serializable]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible",
-            Justification="We can handle nested classes")]
+            Justification = "We can handle nested classes")]
         public class ManifestLine
         {
             /// <summary>
@@ -243,7 +243,7 @@ namespace ProjectXenocide.Model.Geoscape
             /// <param name="label">Name of item</param>
             public ManifestLine(string label)
             {
-                this.label    = label;
+                this.label = label;
                 this.quantity = 1;
             }
 

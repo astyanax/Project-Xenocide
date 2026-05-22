@@ -29,8 +29,9 @@ using System.Collections.Generic;
 using System.Text;
 
 using Gum.Forms.Controls;
-using ProjectXenocide.Utils;
+
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Utils;
 
 namespace ProjectXenocide.UI.Screens
 {

@@ -28,21 +28,19 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-
-
-using ProjectXenocide.Utils;
-using ProjectXenocide.Model.StaticData.Items;
 //using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.UI.Scenes;
+using ProjectXenocide.Utils;
 #endregion
 
 namespace ProjectXenocide.UI.Screens
@@ -66,7 +64,7 @@ namespace ProjectXenocide.UI.Screens
             public BattlescapeItemSource(Battle battlescape, Vector3 position)
             {
                 this.battlescape = battlescape;
-                this.position    = position;
+                this.position = position;
                 BuildItemList();
             }
 

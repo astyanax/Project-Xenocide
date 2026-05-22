@@ -26,9 +26,9 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
@@ -88,8 +88,8 @@ namespace ProjectXenocide.Model.Battlescape
             }
 
             // setup for run
-            MoveData start  = new MoveData(sx, sy, sz, sentinalCost);
-            MoveData end    = new MoveData(dx, dy, dz, 0);
+            MoveData start = new MoveData(sx, sy, sz, sentinalCost);
+            MoveData end = new MoveData(dx, dy, dz, 0);
             bool found = false;
             ClearClosedList();
             openList.Clear();
@@ -200,12 +200,12 @@ namespace ProjectXenocide.Model.Battlescape
                 list.Add(new OpenListElement(cost, node));
 
                 // bubblesort
-                for(int i = list.Count - 1; 0 < i; --i)
+                for (int i = list.Count - 1; 0 < i; --i)
                 {
                     if (list[i].cost < list[i - 1].cost)
                     {
                         OpenListElement temp = list[i];
-                        list[i] = list[i-1];
+                        list[i] = list[i - 1];
                         list[i - 1] = temp;
                     }
                     else
@@ -256,7 +256,7 @@ namespace ProjectXenocide.Model.Battlescape
             {
                 public OpenListElement(float cost, MoveData node)
                 {
-                    this.cost  = cost;
+                    this.cost = cost;
                     this.node = node;
                 }
 

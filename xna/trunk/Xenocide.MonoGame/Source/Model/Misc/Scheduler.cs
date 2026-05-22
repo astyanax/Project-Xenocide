@@ -28,8 +28,8 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 
 #endregion
@@ -107,7 +107,7 @@ namespace ProjectXenocide.Model
             /// <summary>
             /// 
             /// </summary>
-            public override void Process() {}
+            public override void Process() { }
         }
 
         /// <summary>
@@ -125,23 +125,23 @@ namespace ProjectXenocide.Model
         [Conditional("DEBUG")]
         public static void TestAddRemove()
         {
-            Scheduler       s   = new Scheduler();
+            Scheduler s = new Scheduler();
             // Use far-future dates so DateTime.Now never triggers them
-            TestAppointment a1  = new TestAppointment(new DateTime(2099,1,1));
-            TestAppointment a2  = new TestAppointment(new DateTime(2098,1,1));
-            TestAppointment a3  = new TestAppointment(new DateTime(2100,1,1));
-            DateTime        now = new DateTime(2097,1,1);
+            TestAppointment a1 = new TestAppointment(new DateTime(2099, 1, 1));
+            TestAppointment a2 = new TestAppointment(new DateTime(2098, 1, 1));
+            TestAppointment a3 = new TestAppointment(new DateTime(2100, 1, 1));
+            DateTime now = new DateTime(2097, 1, 1);
 
             s.Add(a1);
             s.Add(a2);
             s.Add(a3);
             Debug.Assert(3 == s.appointments.Count);
             Debug.Assert(s.appointments.First.Value == a2);
-            Debug.Assert(s.appointments.Last.Value  == a3);
+            Debug.Assert(s.appointments.Last.Value == a3);
 
             s.Remove(a3);
             Debug.Assert(2 == s.appointments.Count);
-            Debug.Assert(s.appointments.Last.Value  == a1);
+            Debug.Assert(s.appointments.Last.Value == a1);
 
             // replace a3
             s.Add(a3);

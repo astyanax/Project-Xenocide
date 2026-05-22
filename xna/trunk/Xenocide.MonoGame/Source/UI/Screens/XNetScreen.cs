@@ -28,15 +28,17 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Text;
 
 using Gum.Forms.Controls;
-using ProjectXenocide.UI.Scenes.XNet;
 
+using ProjectXenocide.Assets;
 using ProjectXenocide.Model.StaticData;
+using ProjectXenocide.UI.Scenes.XNet;
 using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 #endregion
@@ -53,7 +55,7 @@ namespace ProjectXenocide.UI.Screens
         /// constructor (obviously)
         /// </summary>
         public XNetScreen()
-            : base("XNetScreen", @"Content\Textures\UI\XnetScreenBackground.png")
+            : base("XNetScreen", @"Content/Textures/UI/XnetScreenBackground.png")
         {
             Scene = new XNetScene();
             if (Xenocide.AudioSystem != null)
@@ -105,9 +107,9 @@ namespace ProjectXenocide.UI.Screens
             entriesTree.SelectionChanged += (s, a) => OnEntrySelected(s, EventArgs.Empty);
         }
 
-        private ListBox    entriesTree;
+        private ListBox entriesTree;
         private Button closeButton;
-        private ListBox    textWindow;
+        private ListBox textWindow;
 
         private List<int> entryItemIds = new List<int>();
 
@@ -134,7 +136,7 @@ namespace ProjectXenocide.UI.Screens
             if (index >= 0 && index < entryItemIds.Count)
             {
                 int id = entryItemIds[index];
-                Xenocide.AudioSystem.PlaySound("Menu\\buttonclick2_changesetting.ogg");
+                Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick2);
                 if (Category.categoryIndexOffset <= id)
                 {
                     // user clicked on a category (so expand or collapse it)
@@ -162,7 +164,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         /// <param name="e">entry to examine</param>
         /// <returns>true if player is allowed to view entry</returns>
-        private static bool EntryAvailableToPlayer(XNetEntry e) 
+        private static bool EntryAvailableToPlayer(XNetEntry e)
         {
             return Xenocide.StaticTables.StartSettings.Cheats.ShowAllXNetEntries ||
                 Xenocide.GameState.GeoData.XCorp.TechManager.IsAvailable(e.Id);
@@ -291,25 +293,25 @@ namespace ProjectXenocide.UI.Screens
 
             // Calculate roll amount caused by horizontal movement.
             // The closer the pointer is to an edge the more roll.
-             float rollCausedByHorizontalMove = -e.MoveDeltaX * factorFromCenterY;
-             float rollCausedByVerticalMove = e.MoveDeltaY * factorFromCenterX;
+            float rollCausedByHorizontalMove = -e.MoveDeltaX * factorFromCenterY;
+            float rollCausedByVerticalMove = e.MoveDeltaY * factorFromCenterX;
 
-             // Correct roll direction
-             if (y > halfHeight)
-                 rollCausedByHorizontalMove = -rollCausedByHorizontalMove;
-             if (x > halfWidth)
-                 rollCausedByVerticalMove = -rollCausedByVerticalMove;
+            // Correct roll direction
+            if (y > halfHeight)
+                rollCausedByHorizontalMove = -rollCausedByHorizontalMove;
+            if (x > halfWidth)
+                rollCausedByVerticalMove = -rollCausedByVerticalMove;
 
-             // Apply roll
-             float roll = rollCausedByHorizontalMove + rollCausedByVerticalMove;
-             if (roll != 0)
-             {
-                 float rollAmount = roll * 0.1f;
-                 // Update orientation
-                 // ...
-             }
+            // Apply roll
+            float roll = rollCausedByHorizontalMove + rollCausedByVerticalMove;
+            if (roll != 0)
+            {
+                float rollAmount = roll * 0.1f;
+                // Update orientation
+                // ...
+            }
 
-            
+
             // Apply rotations
             float rotationSpeed = -0.0045f * (Scene.CameraHeight + 1.0f);
 
@@ -334,11 +336,11 @@ namespace ProjectXenocide.UI.Screens
             /// <param name="itemIds">Parallel list tracking IDs for each item in the list box</param>
             public Category(string name, List<Category> categories, ListBox entriesTree, List<int> itemIds)
             {
-                this.name        = name;
-                this.categories  = categories;
+                this.name = name;
+                this.categories = categories;
                 this.entriesTree = entriesTree;
-                this.itemIds     = itemIds;
-                index            = categories.Count;
+                this.itemIds = itemIds;
+                index = categories.Count;
 
                 entriesTree.Items.Add(name);
                 itemIds.Add(index + categoryIndexOffset);
@@ -368,7 +370,7 @@ namespace ProjectXenocide.UI.Screens
                 {
                     isExpanded = true;
                     int i = 0;
-                    foreach(XNetEntry e in Xenocide.StaticTables.XNetEntryList)
+                    foreach (XNetEntry e in Xenocide.StaticTables.XNetEntryList)
                     {
                         if (e.Category == name && XNetScreen.EntryAvailableToPlayer(e))
                         {

@@ -25,9 +25,9 @@ San Francisco, California, 94105, USA.
 #endregion
 
 using System;
-using System.Text;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
@@ -48,9 +48,9 @@ namespace ProjectXenocide.Model.Battlescape
         public MoveData(int x, int y, int z, int cost)
         {
             data = 0;
-            this.X    = x;
-            this.Y    = y;
-            this.Z    = z;
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
             this.Cost = cost;
         }
 

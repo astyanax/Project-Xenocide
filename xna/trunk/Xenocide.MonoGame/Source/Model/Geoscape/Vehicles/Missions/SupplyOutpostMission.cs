@@ -58,7 +58,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             Justification = "will throw if target is null")]
         public SupplyOutpostMission(Craft craft, GeoPosition target)
             :
-            base(craft, target.RandomLocationDistantBykm(20), 1,0)
+            base(craft, target.RandomLocationDistantBykm(20), 1, 0)
         {
         }
 

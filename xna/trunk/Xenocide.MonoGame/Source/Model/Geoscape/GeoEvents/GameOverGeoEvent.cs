@@ -30,9 +30,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.UI.Screens;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -53,7 +53,7 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
         {
             this.message = Util.StringFormat(format, args);
         }
-        
+
         /// <summary>
         /// Called to get the event to do whatever processing is necessary
         /// </summary>
@@ -61,7 +61,7 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
         {
             Xenocide.GameState.GeoData.GeoTime.StopTime();
             GumMessageBoxDialog dialog = new GumMessageBoxDialog(message);
-            dialog.OkAction += delegate()
+            dialog.OkAction += delegate ()
             {
                 Xenocide.ScreenManager.ScheduleScreen(new StartScreen());
                 // ToDo, may need to purge the Geoevent queue
@@ -69,13 +69,13 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
             Xenocide.ScreenManager.ShowDialog(dialog);
         }
 
-#region Fields
+        #region Fields
 
         /// <summary>
         /// Message to show
         /// </summary>
         private String message;
 
-#endregion
+        #endregion
     }
 }

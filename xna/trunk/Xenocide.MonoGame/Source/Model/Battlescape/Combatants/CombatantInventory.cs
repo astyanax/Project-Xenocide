@@ -26,11 +26,11 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
-using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.StaticData.Items;
 
 namespace ProjectXenocide.Model.Battlescape.Combatants
 {
@@ -99,13 +99,13 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             foreach (Slot slot in contents)
             {
                 CarryInfo carryInfo = slot.Item.ItemInfo.CarryInfo;
-                int width  = carryInfo.X;
+                int width = carryInfo.X;
                 int height = carryInfo.Y;
 
                 // hands are special case, item only takes up one unit in "cells"
                 if (InventoryLayout.IsHand(slot.X, slot.Y))
                 {
-                    width  = 1;
+                    width = 1;
                     height = 1;
                 }
 
@@ -142,7 +142,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// <param name="x">column for top left corner of item</param>
         /// <param name="y">row for top left corner of item</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
-            Justification="Will throw if item is null")]
+            Justification = "Will throw if item is null")]
         public bool CanFit(Item item, int x, int y)
         {
             // armor slot is special case, can only take armor type items
@@ -316,7 +316,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// </summary>
         [Serializable]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible",
-            Justification="We can handle nested classes")]
+            Justification = "We can handle nested classes")]
         public class Slot
         {
             /// <summary>
@@ -328,8 +328,8 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             public Slot(Item item, int x, int y)
             {
                 this.item = item;
-                this.x    = x;
-                this.y    = y;
+                this.x = x;
+                this.y = y;
             }
 
             /// <summary>

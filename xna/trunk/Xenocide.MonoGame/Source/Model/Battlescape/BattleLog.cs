@@ -28,13 +28,12 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
-
-using ProjectXenocide.Utils;
+using System.Text;
 
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -68,7 +67,7 @@ namespace ProjectXenocide.Model.Battlescape
         /// an event in the log
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible",
-            Justification="we can handle nested classes")]
+            Justification = "we can handle nested classes")]
         public class LogEntry
         {
             /// <summary>

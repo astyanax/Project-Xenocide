@@ -28,11 +28,10 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
-
 
 using ProjectXenocide.Utils;
 
@@ -63,9 +62,9 @@ namespace ProjectXenocide.Model.Battlescape
         /// <param name="speed">Projectile's speed, in cells/second</param>
         public Trajectory(Vector3 start, Vector3 end, float speed)
         {
-            this.end      = end;
-            this.current  = start;
-            this.speed    = speed;
+            this.end = end;
+            this.current = start;
+            this.speed = speed;
             this.velocity = Vector3.Normalize(end - start) * speed;
         }
 
@@ -74,7 +73,7 @@ namespace ProjectXenocide.Model.Battlescape
         /// <returns>true if projectile still travelling, false if has reached destination</returns>
         public bool Update(float seconds)
         {
-            float toGo  = Vector3.DistanceSquared(current, end);
+            float toGo = Vector3.DistanceSquared(current, end);
             float delta = seconds * speed;
             current += (velocity * seconds);
             return ((delta * delta) < toGo);

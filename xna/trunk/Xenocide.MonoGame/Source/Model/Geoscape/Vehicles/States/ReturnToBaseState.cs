@@ -48,7 +48,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             Justification = "Is validated in base class")]
         public ReturnToBaseState(Mission mission)
             :
-            base(mission, mission.Craft.HomeBase.Position,MoveToPositionStateType.LandingDestination,mission.Craft.MaxSpeed)
+            base(mission, mission.Craft.HomeBase.Position, MoveToPositionStateType.LandingDestination, mission.Craft.MaxSpeed)
         {
         }
     }

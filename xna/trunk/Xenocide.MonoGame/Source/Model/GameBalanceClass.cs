@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 namespace ProjectXenocide.Model

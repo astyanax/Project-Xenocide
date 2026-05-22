@@ -30,14 +30,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-
-using ProjectXenocide.Utils;
-using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.Model.Geoscape.Vehicles;
-using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Battlescape;
-using ProjectXenocide.UI.Screens;
+using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.UI.Dialogs;
+using ProjectXenocide.UI.Screens;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 

@@ -27,12 +27,13 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 using System.Text.Json.Serialization;
 
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
 using ProjectXenocide.Utils;
 
 namespace ProjectXenocide.Model.Geoscape.Geography
@@ -53,7 +54,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         /// <param name="allowUndefinedAreas">Is the bitmap allowed to have areas that have no properties?</param>
         public GeoBitmap(String filename, bool allowUndefinedAreas)
         {
-            this.filename            = filename;
+            this.filename = filename;
             this.allowUndefinedAreas = allowUndefinedAreas;
         }
 
@@ -84,7 +85,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
             Debug.Assert((0 <= x) && (x < width));
             Debug.Assert((0 <= y) && (y < height));
             float longitude = (float)(Math.PI * ((1.0 + (2.0 * x)) / width - 1.0));
-            float latitude  = (float)(Math.PI * (0.5 - (y + 0.5) / height));
+            float latitude = (float)(Math.PI * (0.5 - (y + 0.5) / height));
             return new GeoPosition(longitude, latitude);
         }
 
@@ -119,9 +120,9 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         public int GetPropertyIndexOfLocation(GeoPosition location)
         {
             Vector2 pixelCoords = ToXY(location);
-            long    x           = (int)pixelCoords.X;
-            int     index       = rowIndexes[(int)pixelCoords.Y];
-            long    position    = 0;
+            long x = (int)pixelCoords.X;
+            int index = rowIndexes[(int)pixelCoords.Y];
+            long position = 0;
 
             while (true)
             {
@@ -315,7 +316,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         /// </summary>
         private void ValidateEncoding(IList properties)
         {
-            foreach(Object o in properties)
+            foreach (Object o in properties)
             {
                 IGeoBitmapProperty property = o as IGeoBitmapProperty;
                 if (0 == property.Size)
@@ -342,7 +343,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
                 (properties[tuple.Index] as IGeoBitmapProperty).Size += tuple.Count;
             }
         }
-        
+
         /// <summary>
         /// Name of file holding the bitmap
         /// </summary>
@@ -597,7 +598,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
                     Debug.Assert(Xenocide.GameState.GeoData.Planet.GetCountryAtLocation(pos) == c);
                 }
             }
-        }        
+        }
 
         /// <summary>
         /// Test the Lat/Long "corners", and a couple of cities
@@ -605,7 +606,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         [Conditional("DEBUG")]
         public static void TestLatLongBoundaries()
         {
-            GeoPosition[] locations = { 
+            GeoPosition[] locations = {
                 new GeoPosition(GeoPosition.MinLongitude, 0),
                 new GeoPosition(GeoPosition.MaxLongitude, 0),
                 new GeoPosition(0,                        GeoPosition.MinLatitude),

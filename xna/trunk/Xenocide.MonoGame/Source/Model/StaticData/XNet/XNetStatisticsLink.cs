@@ -29,8 +29,8 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
@@ -55,14 +55,14 @@ namespace ProjectXenocide.Model.StaticData
         {
             objectName = (null == node) ? null : node.GetAttribute("object", String.Empty);
         }
-        
+
         /// <summary>
         /// Get the statistics to show on X-Net
         /// </summary>
         /// <returns>The stats to show, as a string</returns>
         /// <remarks>Default is empty there are no stats to return</remarks>
-        public virtual StringCollection getStatistics() 
-        { 
+        public virtual StringCollection getStatistics()
+        {
             StringCollection collection = new StringCollection();
             return collection;
         }
@@ -114,7 +114,7 @@ namespace ProjectXenocide.Model.StaticData
         /// Get the statistics to show on X-Net
         /// </summary>
         /// <returns>The stats to show</returns>
-        public override StringCollection getStatistics() 
+        public override StringCollection getStatistics()
         {
             return Xenocide.StaticTables.FacilityList[ObjectName].XNetStatistics;
         }
@@ -139,7 +139,7 @@ namespace ProjectXenocide.Model.StaticData
         /// </summary>
         /// <returns>The stats to show</returns>
         public override StringCollection getStatistics()
-        { 
+        {
             return Xenocide.StaticTables.ItemList[ObjectName].XNetStatistics;
         }
     }

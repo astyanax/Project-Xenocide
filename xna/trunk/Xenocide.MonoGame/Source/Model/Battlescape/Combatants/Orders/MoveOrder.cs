@@ -28,8 +28,8 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
@@ -96,8 +96,8 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         public int MaximumPathCells()
         {
             double heading = Combatant.Heading;
-            int    tu      = Combatant.Stats[Statistic.TimeUnitsLeft];
-            int    index   = 0;
+            int tu = Combatant.Stats[Statistic.TimeUnitsLeft];
+            int index = 0;
             while (index < (path.Count - 1))
             {
                 tu -= CalcTurnCost(heading, index);
@@ -118,7 +118,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
 
         /// <summary>See if movement has caused a reaction</summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic",
-            Justification="ToDo: function still to be implemented")]
+            Justification = "ToDo: function still to be implemented")]
         private void CheckForReactions()
         {
             Battlescape.UpdateVisibility(Combatant);

@@ -26,9 +26,9 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
@@ -69,16 +69,16 @@ namespace ProjectXenocide.Model.Battlescape
             {
                 // minimal set of ground tiles
                 Terrain.groundFaces.Clear();
-                Terrain.groundFaces.Add(new GroundFace(GroundFlag.None,          (int)CellFaceTexture.None));
-                Terrain.groundFaces.Add(new GroundFace(GroundFlag.FloorHeight0,  (int)CellFaceTexture.GroundGreyTile));
+                Terrain.groundFaces.Add(new GroundFace(GroundFlag.None, (int)CellFaceTexture.None));
+                Terrain.groundFaces.Add(new GroundFace(GroundFlag.FloorHeight0, (int)CellFaceTexture.GroundGreyTile));
                 Terrain.groundFaces.Add(new GroundFace(GroundFlag.FloorHeight30, (int)CellFaceTexture.GroundGreyTile));
                 Terrain.groundFaces.Add(new GroundFace(GroundFlag.FloorHeight70, (int)CellFaceTexture.GroundGreyTile));
-                Terrain.groundFaces.Add(new GroundFace(GroundFlag.Blocked,       (int)CellFaceTexture.Water));
+                Terrain.groundFaces.Add(new GroundFace(GroundFlag.Blocked, (int)CellFaceTexture.Water));
 
-                Terrain.groundFaces.Add(new GroundFace(GroundFlag.FloorHeight0 | GroundFlag.UpGravLift,   (int)CellFaceTexture.GravLift));
+                Terrain.groundFaces.Add(new GroundFace(GroundFlag.FloorHeight0 | GroundFlag.UpGravLift, (int)CellFaceTexture.GravLift));
                 Terrain.groundFaces.Add(new GroundFace(GroundFlag.FloorHeight0 | GroundFlag.DownGravLift, (int)CellFaceTexture.GravLift));
-                Terrain.groundFaces.Add(new GroundFace(GroundFlag.FloorHeight0 | GroundFlag.XCorpStart,   (int)CellFaceTexture.XCorpStart));
-                Terrain.groundFaces.Add(new GroundFace(GroundFlag.FloorHeight0 | GroundFlag.AlienStart,   (int)CellFaceTexture.XCorpStart));
+                Terrain.groundFaces.Add(new GroundFace(GroundFlag.FloorHeight0 | GroundFlag.XCorpStart, (int)CellFaceTexture.XCorpStart));
+                Terrain.groundFaces.Add(new GroundFace(GroundFlag.FloorHeight0 | GroundFlag.AlienStart, (int)CellFaceTexture.XCorpStart));
 
                 // additional ground tiles
                 Terrain.groundFaces.Add(new GroundFace(GroundFlag.FloorHeight0, (int)CellFaceTexture.GroundBrickPath));
@@ -87,10 +87,10 @@ namespace ProjectXenocide.Model.Battlescape
 
                 // minimal set of wall tiles
                 Terrain.wallFaces.Clear();
-                Terrain.wallFaces.Add(new WallFace(WallFlag.None,                    (int)CellFaceTexture.None));
+                Terrain.wallFaces.Add(new WallFace(WallFlag.None, (int)CellFaceTexture.None));
                 Terrain.wallFaces.Add(new WallFace(WallFlag.Solid | WallFlag.Opaque, (int)CellFaceTexture.WallWallpapered));
-                Terrain.wallFaces.Add(new WallFace(WallFlag.Opaque,                  (int)CellFaceTexture.Door));
-                Terrain.wallFaces.Add(new WallFace(WallFlag.Solid,                   (int)CellFaceTexture.Window));
+                Terrain.wallFaces.Add(new WallFace(WallFlag.Opaque, (int)CellFaceTexture.Door));
+                Terrain.wallFaces.Add(new WallFace(WallFlag.Solid, (int)CellFaceTexture.Window));
 
                 // additional wall tiles
                 Terrain.wallFaces.Add(new WallFace(WallFlag.Solid | WallFlag.Opaque, (int)CellFaceTexture.WallWhiteMetal));

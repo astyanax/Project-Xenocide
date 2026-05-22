@@ -30,9 +30,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using ProjectXenocide.Model.Geoscape.Geography;
-using ProjectXenocide.Model.Geoscape.GeoEvents;
 using ProjectXenocide.Model.Geoscape.AI;
+using ProjectXenocide.Model.Geoscape.GeoEvents;
+using ProjectXenocide.Model.Geoscape.Geography;
 using ProjectXenocide.Model.Geoscape.Outposts;
 
 #endregion
@@ -85,7 +85,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
 
             // leave earth
             GeoPosition exit = outpost.Position.RandomLocation((float)Math.PI / 2.0f);
-            SetState(new MoveToPositionState(this, exit,MissionState.MoveToPositionStateType.LandingDestination,Craft.MaxSpeed));
+            SetState(new MoveToPositionState(this, exit, MissionState.MoveToPositionStateType.LandingDestination, Craft.MaxSpeed));
         }
 
         /// <summary>

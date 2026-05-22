@@ -28,20 +28,17 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-
 using Microsoft.Xna.Framework;
 
-
-using ProjectXenocide.Utils;
-
 using ProjectXenocide.Model.Battlescape;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -59,7 +56,7 @@ namespace ProjectXenocide.Model.StaticData.Items
            Justification = "will throw if damageNode == null")]
         public DamageInfo(XPathNavigator damageNode)
         {
-            points     = Util.GetIntAttribute(damageNode, "amount");
+            points = Util.GetIntAttribute(damageNode, "amount");
             damageType = Util.ParseEnum<DamageType>(Util.GetStringAttribute(damageNode, "type"));
         }
 
@@ -68,7 +65,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// <param name="damageType">Type of damage done</param>
         public DamageInfo(int points, DamageType damageType)
         {
-            this.points     = points;
+            this.points = points;
             this.damageType = damageType;
         }
 

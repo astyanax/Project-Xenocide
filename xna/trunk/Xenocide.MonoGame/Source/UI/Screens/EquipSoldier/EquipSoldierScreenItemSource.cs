@@ -79,7 +79,7 @@ namespace ProjectXenocide.UI.Screens
                     if ((offset <= x) && (x < offset + entry.CarryInfo.X) && (y < entry.CarryInfo.Y))
                     {
                         // item found, return it, and update list of items on ground
-                        Item item =  Remove(entry.Item);
+                        Item item = Remove(entry.Item);
                         if (0 == --entry.Count)
                         {
                             // no more items of this type at this position, so remove entry from list
@@ -211,8 +211,8 @@ namespace ProjectXenocide.UI.Screens
                 /// <param name="count">number of items of this type available (when in outpost)</param>
                 public ItemEntry(Item item, int count)
                 {
-                    this.item   = item;
-                    this.count  = count;
+                    this.item = item;
+                    this.count = count;
                 }
 
                 /// <summary>a representative instance of the item</summary>

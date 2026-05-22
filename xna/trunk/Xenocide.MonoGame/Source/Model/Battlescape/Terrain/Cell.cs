@@ -25,8 +25,8 @@ San Francisco, California, 94105, USA.
 #endregion
 
 using System;
-using System.Text;
 using System.Globalization;
+using System.Text;
 
 namespace ProjectXenocide.Model.Battlescape
 {
@@ -238,7 +238,7 @@ namespace ProjectXenocide.Model.Battlescape
     /// </summary>
     [Serializable]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes",
-        Justification="Will never test for equality")]
+        Justification = "Will never test for equality")]
     public struct Cell
     {
         /// <summary>Ctor</summary>
@@ -247,13 +247,13 @@ namespace ProjectXenocide.Model.Battlescape
         /// <param name="west">Index to cell's west face</param>
         public Cell(byte ground, byte north, byte west)
         {
-            this.ground      = ground;
-            this.north       = north;
-            this.west        = west;
+            this.ground = ground;
+            this.north = north;
+            this.west = west;
             this.combatantId = 0;
 
             // ToDo: when implement visibility, default flags are 'None'.
-            this.properties  = CellProperties.Seen;
+            this.properties = CellProperties.Seen;
         }
 
         /// <summary>

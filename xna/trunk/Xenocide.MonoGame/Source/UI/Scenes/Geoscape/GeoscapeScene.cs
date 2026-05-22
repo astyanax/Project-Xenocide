@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -28,20 +28,21 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
+using System.Text;
 
-using ProjectXenocide.Utils;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.UI;
+using ProjectXenocide.Model.Geoscape.AI;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
-using ProjectXenocide.Model.Geoscape.AI;
+using ProjectXenocide.UI;
 using ProjectXenocide.UI.Scenes.Common;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -53,17 +54,17 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
     public class GeoscapeScene : PolarScene, IDisposable
     {
         BasicEffect basicEffect;
-        EarthGlobe  earth     = new EarthGlobe();
-        SkyBox      skybox    = new SkyBox();
-        GeoHud      geoHud    = new GeoHud();
-        Effect      effect;
-        String      geoTechnique = String.Empty;
+        EarthGlobe earth = new EarthGlobe();
+        SkyBox skybox = new SkyBox();
+        GeoHud geoHud = new GeoHud();
+        Effect effect;
+        String geoTechnique = String.Empty;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="cameraPosition">Initial position of camera in scene</param>
-        public GeoscapeScene(Vector3 cameraPosition) 
+        public GeoscapeScene(Vector3 cameraPosition)
             :
             base(cameraPosition)
         {
@@ -104,17 +105,17 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// </summary>
         /// <param name="content">content manager that fetches the content</param>
         /// <param name="device">the display</param>
-        
+
         public override void LoadContent(ContentManager content, GraphicsDevice device)
         {
-                InitializeEffect(device);
-                earth.LoadContent(device);
-                skybox.LoadContent(content, device);
-                geoHud.LoadContent(content, device);
-                 effect = content.Load<Effect>(@"Shaders\GeoscapeShader");
+            InitializeEffect(device);
+            earth.LoadContent(device);
+            skybox.LoadContent(content, device);
+            geoHud.LoadContent(content, device);
+            effect = content.Load<Effect>(@"Shaders/GeoscapeShader");
 
-                // figure out which shader we call to render the geoscape
-                geoTechnique = (Util.GetShaderVersion(device) < 2) ? "RenderGlobeStandard" : "RenderGlobeWithBump";
+            // figure out which shader we call to render the geoscape
+            geoTechnique = (Util.GetShaderVersion(device) < 2) ? "RenderGlobeStandard" : "RenderGlobeWithBump";
         }
 
         private void InitializeEffect(GraphicsDevice device)
@@ -148,7 +149,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             device.Viewport = CalcViewportForSceneWindow(sceneWindow, device.Viewport);
 
             // set up camera's position
-            Vector3 cartesianCamera = GeoPosition.PolarToCartesian(CameraPosition);      
+            Vector3 cartesianCamera = GeoPosition.PolarToCartesian(CameraPosition);
             Matrix worldMatrix = Matrix.CreateTranslation(cartesianCamera);
 
             Matrix viewMatrix = Matrix.CreateLookAt(
@@ -193,7 +194,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             earth.Draw(device, effect);
 
             // Draw the X-Corp outposts
-            GeoPosition cameraGeoPos = new GeoPosition(CameraPosition.X , CameraPosition.Y );
+            GeoPosition cameraGeoPos = new GeoPosition(CameraPosition.X, CameraPosition.Y);
 
             geoHud.Begin();
             foreach (Outpost outpost in Xenocide.GameState.GeoData.Outposts)
@@ -314,7 +315,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
 
             // add in camera's displacement
             float distance = origin.Distance(offset);
-            float azimuth  = origin.GetAzimuth(offset);
+            float azimuth = origin.GetAzimuth(offset);
             GeoPosition camera = new GeoPosition(CameraPosition.X, CameraPosition.Y);
             return camera.GetEndpoint(azimuth, distance);
         }

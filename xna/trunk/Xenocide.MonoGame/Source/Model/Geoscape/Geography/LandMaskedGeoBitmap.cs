@@ -27,11 +27,12 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
 using ProjectXenocide.Utils;
 
 namespace ProjectXenocide.Model.Geoscape.Geography
@@ -64,7 +65,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         public void Load(IList properties, GeoBitmap terrain, int water)
         {
             this.terrainBitmap = terrain;
-            this.waterIndex    = water;
+            this.waterIndex = water;
             Load(properties);
         }
 

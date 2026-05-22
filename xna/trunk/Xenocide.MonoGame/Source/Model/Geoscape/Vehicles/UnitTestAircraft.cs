@@ -28,17 +28,15 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Runtime.Serialization;
+using System.Text;
 
-
-
-using ProjectXenocide.Utils;
+using ProjectXenocide.Model.Geoscape.AI;
+using ProjectXenocide.Model.Geoscape.GeoEvents;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData.Items;
-using ProjectXenocide.Model.Geoscape.GeoEvents;
-using ProjectXenocide.Model.Geoscape.AI;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -104,7 +102,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         private static void TestXeniumRefuel()
         {
             Outpost outpost = OutpostInventory.ConstructTestOutpost();
-             
+
             // Add craft (with empty fuel tank)
             Aircraft aircraft = (Aircraft)Xenocide.StaticTables.ItemList["ITEM_XC-22_ECLIPSE"].Manufacture();
             outpost.Inventory.Add(aircraft, false);
@@ -116,7 +114,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             // Progress time
             // step size should be 90% of time required for a unit of fuel
             // number of steps should be just enough to fuel craft
-            double stepSize = 0.9 / aircraft.RefuelRate; 
+            double stepSize = 0.9 / aircraft.RefuelRate;
             int steps = (int)(aircraft.MaxFuel / 0.9);
             for (int i = 0; i < steps; ++i)
             {
@@ -158,10 +156,10 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             {
                 aircraft.Update(stepSize);
             }
-            
+
             // check craft is only part full
             Debug.Assert(aircraft.fuel == ((int)(aircraft.MaxFuel / 3)));
-            
+
             // refuel again
             outpost.Inventory.AddTestItem("ITEM_XENIUM-122", (int)(aircraft.MaxFuel / 3));
             aircraft.Update(stepSize * steps);
@@ -188,9 +186,9 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             // Test case of pod that does use ammo
             WeaponPod pod = new WeaponPod("ITEM_CANNON");
             aircraft.WeaponPods[0] = pod;
-            
+
             // add insufficient ammo
-            Item clip     = Xenocide.StaticTables.ItemList["ITEM_CANNON_CLIP"].Manufacture();
+            Item clip = Xenocide.StaticTables.ItemList["ITEM_CANNON_CLIP"].Manufacture();
             clip.ShotsLeft = pod.ClipSize / 3;
             outpost.Inventory.Add(clip, false);
 

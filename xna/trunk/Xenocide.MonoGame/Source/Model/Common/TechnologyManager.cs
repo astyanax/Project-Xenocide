@@ -29,10 +29,11 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
+
 using ProjectXenocide.Model.StaticData.Research;
 
 #endregion

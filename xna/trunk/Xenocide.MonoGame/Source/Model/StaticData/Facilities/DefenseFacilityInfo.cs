@@ -28,21 +28,19 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-
 using Microsoft.Xna.Framework;
 
-
-
-using ProjectXenocide.Utils;
-using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Model.Battlescape;
+using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 
@@ -68,9 +66,9 @@ namespace ProjectXenocide.Model.StaticData.Facilities
         {
             // defense element
             XPathNavigator defense = facilityNode.SelectSingleNode("f:defense", manager);
-            range    = Util.GetIntAttribute(defense,    "range");
+            range = Util.GetIntAttribute(defense, "range");
             accuracy = Util.GetDoubleAttribute(defense, "accuracy");
-            damage   = Util.GetIntAttribute(defense,    "damage");
+            damage = Util.GetIntAttribute(defense, "damage");
         }
 
         #region Methods
@@ -81,9 +79,9 @@ namespace ProjectXenocide.Model.StaticData.Facilities
         /// <param name="stats">string collection to append strings to</param>
         protected override void XNetStatisticsCore(StringCollection stats)
         {
-            stats.Add(Util.StringFormat(Strings.FACILITY_INFO_DEFENSE_RANGE,    range));
+            stats.Add(Util.StringFormat(Strings.FACILITY_INFO_DEFENSE_RANGE, range));
             stats.Add(Util.StringFormat(Strings.FACILITY_INFO_DEFENSE_ACCURACY, accuracy));
-            stats.Add(Util.StringFormat(Strings.FACILITY_INFO_DEFENSE_DAMAGE,   damage));
+            stats.Add(Util.StringFormat(Strings.FACILITY_INFO_DEFENSE_DAMAGE, damage));
         }
 
         /// <summary>

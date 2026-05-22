@@ -29,19 +29,18 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
 using Microsoft.Xna.Framework;
 
-
-using ProjectXenocide.Utils;
-using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -63,7 +62,7 @@ namespace ProjectXenocide.Model.StaticData
         /// <param name="quantity">How many units there are of the item</param>
         public ItemLine(String itemId, int quantity)
         {
-            this.itemId   = itemId;
+            this.itemId = itemId;
             this.quantity = quantity;
         }
 
@@ -75,8 +74,8 @@ namespace ProjectXenocide.Model.StaticData
             Justification = "will throw if itemNode == null")]
         public ItemLine(XPathNavigator node)
             : this(
-                Util.GetStringAttribute(node, "type"), 
-                Util.GetIntAttribute(node,    "quantity")
+                Util.GetStringAttribute(node, "type"),
+                Util.GetIntAttribute(node, "quantity")
             )
         {
         }

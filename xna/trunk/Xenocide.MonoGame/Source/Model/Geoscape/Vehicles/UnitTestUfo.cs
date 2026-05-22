@@ -28,19 +28,17 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Runtime.Serialization;
 using System.Diagnostics;
+using System.Runtime.Serialization;
+using System.Text;
 
-
-using ProjectXenocide.Utils;
-
-using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.Model.Geoscape.AI;
-using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.GeoEvents;
-using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.Model.StaticData.Facilities;
+using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -78,10 +76,10 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
 
             // do base flyby
             GeoPosition origin = new GeoPosition();
-            GeoPosition start  = new GeoPosition((float)Math.PI * 0.4f,  0);
-            GeoPosition end    = new GeoPosition((float)Math.PI * -0.4f, 0);
+            GeoPosition start = new GeoPosition((float)Math.PI * 0.4f, 0);
+            GeoPosition end = new GeoPosition((float)Math.PI * -0.4f, 0);
             Ufo ufo = new Ufo("ITEM_UFO_RECON", start, null);
-            ufo.Mission = new ResearchMission(ufo, end, 1,2);
+            ufo.Mission = new ResearchMission(ufo, end, 1, 2);
 
             float radarRange = (float)GeoPosition.KilometersToRadians((radar.FacilityInfo as ScanFacilityInfo).Range);
             while (!end.IsWithin(ufo.Position, (float)GeoPosition.KilometersToRadians(20)))
@@ -106,7 +104,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             end = new GeoPosition((float)Math.PI * -0.6f, 0);
             ufo.Position = new GeoPosition((float)Math.PI * 0.6f, 0);
             ufo.Mission.Abort();
-            ufo.Mission = new ResearchMission(ufo, end, 1,2);
+            ufo.Mission = new ResearchMission(ufo, end, 1, 2);
             radarRange = (float)GeoPosition.KnotsToRadians(700);
             while (!end.IsWithin(ufo.Position, (float)GeoPosition.KilometersToRadians(20)))
             {
@@ -132,7 +130,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             GeoPosition start = new GeoPosition();
             GeoPosition end = new GeoPosition((float)Math.PI * -0.4f, 0);
             Ufo ufo = new Ufo("ITEM_UFO_RECON", start, null);
-            ufo.Mission = new ResearchMission(ufo, end, 3,3);
+            ufo.Mission = new ResearchMission(ufo, end, 3, 3);
 
             double twelvehours = 12 * 3600 * 1000.0;
 
@@ -142,12 +140,12 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             ufo.Update(twelvehours);
             ufo.Update(twelvehours);
             ufo.Update(twelvehours);
-            Debug.Assert(ufo.Position.Equals(end) && 
+            Debug.Assert(ufo.Position.Equals(end) &&
                 (ufo.Mission.State.GetType().Name == "WaitState"));
 
             // ufo should take off
             ufo.Update(twelvehours);
-            Debug.Assert(ufo.Position.Equals(end) && 
+            Debug.Assert(ufo.Position.Equals(end) &&
                 (ufo.Mission.State.GetType().Name == "MoveToPositionState"));
 
             // should move to second landing site

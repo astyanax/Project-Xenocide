@@ -28,14 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.Utils;
 
 using Xenocide.Resources;
 
@@ -84,21 +83,21 @@ namespace ProjectXenocide.Model.Geoscape
         /// Record that player sold something at this GeoTime
         /// </summary>
         /// <param name="price">quantity earned</param>
-        public void Credit(int price) 
+        public void Credit(int price)
         {
             Debug.Assert(0 <= price);
             balances[MonthlyLog.ThisMonth] += price;
-            sales[MonthlyLog.ThisMonth]    += price;
+            sales[MonthlyLog.ThisMonth] += price;
         }
 
         /// <summary>
         /// Record that player spent money buying something at this GeoTime
         /// </summary>
         /// <param name="price">quantity spent</param>
-        public void Debit(int price) 
+        public void Debit(int price)
         {
             Debug.Assert(0 <= price);
-            balances[MonthlyLog.ThisMonth]  -= price;
+            balances[MonthlyLog.ThisMonth] -= price;
             purchases[MonthlyLog.ThisMonth] += price;
         }
 
@@ -114,12 +113,12 @@ namespace ProjectXenocide.Model.Geoscape
 
             // update balance
             balances[MonthlyLog.LastMonth] -= lastMonthsMaintenance;
-            balances[MonthlyLog.ThisMonth] =  balances[MonthlyLog.LastMonth] + funding;
+            balances[MonthlyLog.ThisMonth] = balances[MonthlyLog.LastMonth] + funding;
 
             // set history
-            funds[MonthlyLog.ThisMonth]       = funding;
-            purchases[MonthlyLog.ThisMonth]   = 0;
-            sales[MonthlyLog.ThisMonth]       = 0;
+            funds[MonthlyLog.ThisMonth] = funding;
+            purchases[MonthlyLog.ThisMonth] = 0;
+            sales[MonthlyLog.ThisMonth] = 0;
             maintenance[MonthlyLog.LastMonth] = lastMonthsMaintenance;
         }
 
@@ -138,7 +137,7 @@ namespace ProjectXenocide.Model.Geoscape
         /// <summary>
         /// History of income from countries for past 11 months (and this month)
         /// </summary>
-        public MonthlyLog Funds { get { return funds; } } 
+        public MonthlyLog Funds { get { return funds; } }
 
         /// <summary>
         /// History of maintenance payements for past 11 months (and this month)
@@ -148,7 +147,7 @@ namespace ProjectXenocide.Model.Geoscape
         /// <summary>
         /// History of purchases for past 11 months (and this month)
         /// </summary>
-        public MonthlyLog Purchases { get { return purchases; } } 
+        public MonthlyLog Purchases { get { return purchases; } }
 
         /// <summary>
         /// History of balances for past 11 months (and this month)

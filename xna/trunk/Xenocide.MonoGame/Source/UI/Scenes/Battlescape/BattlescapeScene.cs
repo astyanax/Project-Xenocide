@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -28,19 +28,19 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
-using ProjectXenocide.UI.Scenes.Common;
 using ProjectXenocide.UI;
 using ProjectXenocide.UI.Scenes.Battlescape;
+using ProjectXenocide.UI.Scenes.Common;
 
 #endregion
 
@@ -107,13 +107,13 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         /// Load the graphic content of the scene
         /// </summary>
         /// <param name="device">device to render to</param>
-        
+
         /// <param name="scape">the battlescape</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
-            Justification="Will throw if scape is null")]
+            Justification = "Will throw if scape is null")]
         public void LoadContent(GraphicsDevice device, Battle scape)
         {
-            
+
             {
                 battlescape = scape;
                 basicEffect = new BasicEffect(device);
@@ -143,9 +143,9 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         /// <param name="topLevel">topmost level of terrain to draw</param>
         /// <param name="cursorPosition">cell of terrian the cursor is over</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
-            Justification="will throw if device is null")]
+            Justification = "will throw if device is null")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow",
-            MessageId = "topLevel*8", Justification="value won't overflow")]
+            MessageId = "topLevel*8", Justification = "value won't overflow")]
         public void Draw(GraphicsDevice device, UiRect sceneWindow, int topLevel, Vector3 cursorPosition)
         {
             // we're only interested in cell it's over
@@ -245,10 +245,10 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         /// <param name="device">device to render to</param>
         private void SetupBasicEffect(GraphicsDevice device)
         {
-            basicEffect.View  = camera.View;
+            basicEffect.View = camera.View;
             basicEffect.World = Matrix.Identity;
             basicEffect.DiffuseColor = new Vector3(1.0f, 1.0f, 1.0f);
-            basicEffect.Projection   = Matrix.CreatePerspectiveFieldOfView(viewAngle, aspectRatio, 1.0f, 100.0f);
+            basicEffect.Projection = Matrix.CreatePerspectiveFieldOfView(viewAngle, aspectRatio, 1.0f, 100.0f);
             device.RasterizerState = RasterizerState.CullCounterClockwise;
             device.DepthStencilState = DepthStencilState.Default;
             ;
@@ -410,7 +410,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         private CombatantMeshes combatantMeshes = new CombatantMeshes();
 
         /// <summary>Will want to unload the content when we close this screen</summary>
-         private ContentManager content = new ContentManager(Xenocide.Instance.Services, "Content");
+        private ContentManager content = new ContentManager(Xenocide.Instance.Services, "Content");
 
         /// <summary>Color we want to draw the CellCursor with</summary>
         private Color wantedCellCursorColor = Color.Blue;

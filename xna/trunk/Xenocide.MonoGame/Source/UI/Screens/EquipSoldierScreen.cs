@@ -48,6 +48,7 @@ using ProjectXenocide.UI.Scenes;
 
 // alias Vector2
 using Vector2 = Microsoft.Xna.Framework.Vector2;
+
 using Xenocide.Resources;
 
 
@@ -118,7 +119,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         /// <param name="content">content manager that fetches the content</param>
         /// <param name="device">the display</param>
-        
+
         public override void LoadContent(ContentManager content, GraphicsDevice device)
         {
             scene.LoadContent();
@@ -239,8 +240,8 @@ namespace ProjectXenocide.UI.Screens
         private void OnLeftMouseDown(int x, int y)
         {
             // figure out what mouse is pointing at
-            Rectangle         sceneRect = GetSceneRectangle(Xenocide.Instance.GraphicsDevice);
-            InventoryLocation location  = InventoryLocation.FromMousePosition(x, y, sceneRect);
+            Rectangle sceneRect = GetSceneRectangle(Xenocide.Instance.GraphicsDevice);
+            InventoryLocation location = InventoryLocation.FromMousePosition(x, y, sceneRect);
             Dump(location);
 
             // user is either picking up or dropping an item (or we ignore the click)
@@ -269,8 +270,8 @@ namespace ProjectXenocide.UI.Screens
             if (null == movingItem)
             {
                 // figure out what mouse is pointing at
-                Rectangle         sceneRect = GetSceneRectangle(Xenocide.Instance.GraphicsDevice);
-                InventoryLocation location  = InventoryLocation.FromMousePosition(x, y, sceneRect);
+                Rectangle sceneRect = GetSceneRectangle(Xenocide.Instance.GraphicsDevice);
+                InventoryLocation location = InventoryLocation.FromMousePosition(x, y, sceneRect);
 
                 // if it's over an item, then user has asked us to unload it
                 if ((null != location) && (location.IsOnSoldier))

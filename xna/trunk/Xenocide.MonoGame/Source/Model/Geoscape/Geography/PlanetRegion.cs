@@ -28,18 +28,17 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
+using System.Threading;
 using System.Xml;
 using System.Xml.XPath;
-using System.Threading;
-using System.IO;
 
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.AI;
+using ProjectXenocide.Utils;
 
 
 #endregion
@@ -62,19 +61,19 @@ namespace ProjectXenocide.Model.Geoscape.Geography
            Justification = "will throw if regionNode is null")]
         public PlanetRegion(XPathNavigator regionNode, XmlNamespaceManager manager)
         {
-            this.name                = Util.GetStringAttribute(regionNode, "name");
-            this.outpostBuildCost    = Util.GetIntAttribute(regionNode,    "baseBuildCost");
-            this.alienAttackPriority = Util.GetIntAttribute(regionNode,    "alienAttackPriority");
-            this.colorKey            = Util.GetColorKey(regionNode, manager);
+            this.name = Util.GetStringAttribute(regionNode, "name");
+            this.outpostBuildCost = Util.GetIntAttribute(regionNode, "baseBuildCost");
+            this.alienAttackPriority = Util.GetIntAttribute(regionNode, "alienAttackPriority");
+            this.colorKey = Util.GetColorKey(regionNode, manager);
 
             // parse the missionPriorityNode
             XPathNavigator priority = regionNode.SelectSingleNode("p:missionPriority", manager);
             alienMissionPriority = new int[(int)AlienMission.Outpost + 1];
-            alienMissionPriority[(int)AlienMission.Research]     = Util.GetIntAttribute(priority, "research");
-            alienMissionPriority[(int)AlienMission.Harvest]      = Util.GetIntAttribute(priority, "harvest");
-            alienMissionPriority[(int)AlienMission.Abduction]    = Util.GetIntAttribute(priority, "abduction");
+            alienMissionPriority[(int)AlienMission.Research] = Util.GetIntAttribute(priority, "research");
+            alienMissionPriority[(int)AlienMission.Harvest] = Util.GetIntAttribute(priority, "harvest");
+            alienMissionPriority[(int)AlienMission.Abduction] = Util.GetIntAttribute(priority, "abduction");
             alienMissionPriority[(int)AlienMission.Infiltration] = Util.GetIntAttribute(priority, "infiltration");
-            alienMissionPriority[(int)AlienMission.Outpost]      = Util.GetIntAttribute(priority, "outpost");
+            alienMissionPriority[(int)AlienMission.Outpost] = Util.GetIntAttribute(priority, "outpost");
         }
 
         /// <summary>
@@ -154,7 +153,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         /// Relative priority aliens give to region for attack. A zone with 0 will only get terror attacks.
         /// This priority may be dynamic as the game progresses.
         /// </summary>
-        public int AlienAttackPriority 
+        public int AlienAttackPriority
         {
             get { return alienAttackPriority; }
             set { AlienAttackPriority = value; } //uints can't be null, so no need to check data.
@@ -183,7 +182,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         /// Alien and X-Corp scores for this region
         /// </summary>
         private ScoreLog scoreLog = new ScoreLog();
-        
+
         /// <summary>
         /// Cost to build an outpost in this region.
         /// </summary>

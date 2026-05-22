@@ -26,13 +26,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
-using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.StaticData.Items;
 
 namespace ProjectXenocide.Model.Battlescape.Combatants
 {
@@ -66,22 +66,22 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             Item pistol = Xenocide.StaticTables.ItemList["ITEM_PISTOL"].Manufacture();           // 1 x 2
             Item heClip = Xenocide.StaticTables.ItemList["ITEM_R_C_HE_CLIP"].Manufacture();      // 2 x 1
             Item cannon = Xenocide.StaticTables.ItemList["ITEM_REPEATER_CANNON"].Manufacture();  // 2 x 3
-            Item rifle  = Xenocide.StaticTables.ItemList["ITEM_ASSAULT_RIFLE"].Manufacture();    // 1 x 3
+            Item rifle = Xenocide.StaticTables.ItemList["ITEM_ASSAULT_RIFLE"].Manufacture();    // 1 x 3
 
             // off grid
-            Debug.Assert( ci.CanFit(cannon, 5, 0));
+            Debug.Assert(ci.CanFit(cannon, 5, 0));
             Debug.Assert(!ci.CanFit(cannon, 6, 0));
             Debug.Assert(!ci.CanFit(cannon, 5, 2));
-            Debug.Assert( ci.CanFit(rifle,  6, 0));
-            Debug.Assert(!ci.CanFit(rifle,  6, 2));
+            Debug.Assert(ci.CanFit(rifle, 6, 0));
+            Debug.Assert(!ci.CanFit(rifle, 6, 2));
 
             // too tall for zone
-            Debug.Assert(!ci.CanFit(rifle,  6, 1));
-            Debug.Assert( ci.CanFit(pistol, 0, 1));
+            Debug.Assert(!ci.CanFit(rifle, 6, 1));
+            Debug.Assert(ci.CanFit(pistol, 0, 1));
             Debug.Assert(!ci.CanFit(pistol, 1, 1));
 
             // too wide for zone
-            Debug.Assert( ci.CanFit(heClip, 1, 2));
+            Debug.Assert(ci.CanFit(heClip, 1, 2));
             Debug.Assert(!ci.CanFit(heClip, 2, 2));
 
             // fits in hand
@@ -226,8 +226,8 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             // can't put armor anywhere but armor slot
             Debug.Assert(!ci.CanFit(armor1, 0, 0));
             Debug.Assert(!ci.CanFit(armor1, 4, 0));
-            Debug.Assert( ci.CanFit(armor1, 4, 3));
-            Debug.Assert( ci.CanFit(armor2, 4, 3));
+            Debug.Assert(ci.CanFit(armor1, 4, 3));
+            Debug.Assert(ci.CanFit(armor2, 4, 3));
 
             // carrying armor sets combatant's armor property
             ci.Insert(armor1, 4, 3);

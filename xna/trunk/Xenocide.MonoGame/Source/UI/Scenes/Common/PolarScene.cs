@@ -28,12 +28,12 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.UI;
@@ -73,7 +73,7 @@ namespace ProjectXenocide.UI.Scenes.Common
         /// </summary>
         /// <param name="content">content manager that fetches the content</param>
         /// <param name="device">the display</param>
-        
+
         public abstract void LoadContent(ContentManager content, GraphicsDevice device);
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace ProjectXenocide.UI.Scenes.Common
         protected static Matrix GetProjectionMatrix(float aspectRatio)
         {
             return Matrix.CreatePerspectiveFieldOfView(
-                ViewAngle,  
+                ViewAngle,
                 aspectRatio,
                 nearClipPlane, farClipPlane);
         }
@@ -176,8 +176,8 @@ namespace ProjectXenocide.UI.Scenes.Common
         /// <summary>
         /// The position of the camera, in polar co-ordinates.
         /// </summary>
-        public Vector3 CameraPosition 
-        { 
+        public Vector3 CameraPosition
+        {
             get { return cameraPosition; }
             set
             {
@@ -201,7 +201,7 @@ namespace ProjectXenocide.UI.Scenes.Common
         /// The viewport's aspect ratio
         /// </summary>
         protected float AspectRatio { get { return aspectRatio; } }
-        
+
         /// <summary>
         /// The viewport's aspect ratio
         /// </summary>
@@ -224,7 +224,7 @@ namespace ProjectXenocide.UI.Scenes.Common
         /// <summary>
         /// Used in constructing viewing fustrum
         /// </summary>
-        private   const float nearClipPlane = 0.1f;
+        private const float nearClipPlane = 0.1f;
 
         /// <summary>
         /// Used in constructing viewing fustrum

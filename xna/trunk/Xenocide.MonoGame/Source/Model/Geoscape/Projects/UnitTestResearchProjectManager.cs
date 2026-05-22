@@ -29,13 +29,14 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
-using ProjectXenocide.Model.StaticData.Research;
+
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Model.StaticData.Research;
 
 #endregion
 
@@ -74,7 +75,7 @@ namespace ProjectXenocide.Model.Geoscape
             Debug.Assert(projectMgr.IsInProgress("RES_FIELD_MEDICAL_KIT"));
 
             // update with no scientist should have no effect
-            const double day = 24.0 * 3600.0 *1000.0;
+            const double day = 24.0 * 3600.0 * 1000.0;
             Debug.Assert(0 == medKitProject.HoursWorked);
             Xenocide.GameState.GeoData.GeoTime.AddMilliseconds(210 * day);
             projectMgr.Update();

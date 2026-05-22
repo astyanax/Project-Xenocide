@@ -104,7 +104,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// Respond to this craft reaching a destination
         /// </summary>
         /// <remarks>default behaviour is delegate to state</remarks>
-        public virtual void OnDestinationReached() 
+        public virtual void OnDestinationReached()
         {
             State.OnDestinationReached();
         }
@@ -272,7 +272,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <summary>
         /// Is the mission's craft on the ground?
         /// </summary>
-        public bool  IsLanded { get { return isLanded; } }
+        public bool IsLanded { get { return isLanded; } }
 
         /// <summary>
         /// Is the mission's craft on the ground?

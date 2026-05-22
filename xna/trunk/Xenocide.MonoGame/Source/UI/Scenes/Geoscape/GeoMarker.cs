@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -31,8 +31,8 @@ using System.Collections.Generic;
 using System.Text;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 using ProjectXenocide.Model.Geoscape;
 
@@ -46,9 +46,9 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
     class GeoMarker
     {
         private VertexPositionNormalTexture[] meshVertices;
-        private short[]                       meshIndices;
-        VertexBuffer                          vertexBuffer;
-        IndexBuffer                           indexBuffer;
+        private short[] meshIndices;
+        VertexBuffer vertexBuffer;
+        IndexBuffer indexBuffer;
 
         /// <summary>
         /// Load/create the graphic resources needed by the GeoMarker
@@ -68,12 +68,12 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// </summary>
         private void InitializeMesh()
         {
-            Vector3 top             = new Vector3( 0.00f,  0.00f, 0.0f);
-            Vector3 baseTopLeft     = new Vector3(-0.05f,  0.05f, 0.5f);
-            Vector3 baseTopRight    = new Vector3( 0.05f,  0.05f, 0.5f);
+            Vector3 top = new Vector3(0.00f, 0.00f, 0.0f);
+            Vector3 baseTopLeft = new Vector3(-0.05f, 0.05f, 0.5f);
+            Vector3 baseTopRight = new Vector3(0.05f, 0.05f, 0.5f);
 
-            Vector3 baseBottomLeft  = new Vector3(-0.05f, -0.05f, 0.5f);
-            Vector3 baseBottomRight = new Vector3( 0.05f, -0.05f, 0.5f);
+            Vector3 baseBottomLeft = new Vector3(-0.05f, -0.05f, 0.5f);
+            Vector3 baseBottomRight = new Vector3(0.05f, -0.05f, 0.5f);
 
             meshVertices = new VertexPositionNormalTexture[5];
             meshVertices[0] = makeVertex(top);

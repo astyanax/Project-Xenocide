@@ -28,22 +28,21 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
-using System.Xml;
-using System.Xml.XPath;
-using System.Threading;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Text;
+using System.Threading;
+using System.Xml;
+using System.Xml.XPath;
 
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.AI;
-
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -62,16 +61,16 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         /// <param name="manager">Namespace used in planet.xml</param>
         public Planet(XPathNavigator planetNode, XmlNamespaceManager manager)
         {
-            regions       = new List<PlanetRegion>();
-            countries     = new List<Country>();
-            cities        = new List<City>();
-            terrains      = new List<Terrain>();
+            regions = new List<PlanetRegion>();
+            countries = new List<Country>();
+            cities = new List<City>();
+            terrains = new List<Terrain>();
             landedRegions = new List<GeoBitmapProperty>();
 
-            this.name           = Util.GetStringAttribute(planetNode, "name");
-            this.countryBitmap  = new GeoBitmap(Util.GetStringAttribute(planetNode, "countryBitmap"), true);
-            this.regionBitmap   = new GeoBitmap(Util.GetStringAttribute(planetNode, "regionBitmap"),  false);
-            this.terrainBitmap  = new GeoBitmap(Util.GetStringAttribute(planetNode, "terrainBitmap"), false);
+            this.name = Util.GetStringAttribute(planetNode, "name");
+            this.countryBitmap = new GeoBitmap(Util.GetStringAttribute(planetNode, "countryBitmap"), true);
+            this.regionBitmap = new GeoBitmap(Util.GetStringAttribute(planetNode, "regionBitmap"), false);
+            this.terrainBitmap = new GeoBitmap(Util.GetStringAttribute(planetNode, "terrainBitmap"), false);
 
             this.landedRegionsBitmap = new LandMaskedGeoBitmap(Util.GetStringAttribute(planetNode, "regionBitmap"), false);
 
@@ -330,7 +329,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         /// <param name="pos">The position we want to try finding the region of</param>
         /// <returns>A region which exists under the given position, or null if no match exists</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
-            Justification="will throw if pos == null")]
+            Justification = "will throw if pos == null")]
         public PlanetRegion GetRegionAtLocation(GeoPosition pos)
         {
             int index = regionBitmap.GetPropertyIndexOfLocation(pos);
@@ -403,7 +402,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         /// </summary>
         /// <param name="context">unused</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "context",
-            Justification="StreamingContext required to match Serializable signature")] 
+            Justification = "StreamingContext required to match Serializable signature")]
         [OnDeserialized]
         private void OnDeserializedMethod(StreamingContext context)
         {
@@ -449,7 +448,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         /// List of all cities on this planet
         /// </summary>
         public IList<City> AllCities { get { return cities; } }
-        
+
         /// <summary>
         /// Name of the planet
         /// </summary>

@@ -28,13 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Model.Geoscape.Geography;
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.Geoscape.Vehicles;
 
 #endregion
 
@@ -62,10 +62,10 @@ namespace ProjectXenocide.Model.Geoscape.AI
         private static void RetaliationTaskTest()
         {
             Xenocide.GameState.SetToStartGameCondition();
-            GeoPosition     position = new GeoPosition();
-            Outpost         outpost  = null;
-            Overmind        overmind = Xenocide.GameState.GeoData.Overmind;
-            RetaliationTask task     = overmind.TaskFactory.CreateRetaliationTask(overmind, position);
+            GeoPosition position = new GeoPosition();
+            Outpost outpost = null;
+            Overmind overmind = Xenocide.GameState.GeoData.Overmind;
+            RetaliationTask task = overmind.TaskFactory.CreateRetaliationTask(overmind, position);
 
             // no outpost case
             task.SelectOutpost();
@@ -92,7 +92,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
                 }
 
                 TestReleaseUfo(task);
-                Ufo                ufo     = overmind.Ufos[0];
+                Ufo ufo = overmind.Ufos[0];
                 RetaliationMission mission = ufo.Mission as RetaliationMission;
 
                 // if first mission, should be research, because there's no outpost

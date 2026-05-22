@@ -28,24 +28,21 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
+using System.Threading;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
-
-using ProjectXenocide.UI.Dialogs;
-
-using System.Threading;
-using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.Battlescape;
+using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.UI.Scenes.Battlescape;
+using ProjectXenocide.Utils;
 
 #endregion
 

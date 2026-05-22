@@ -28,15 +28,14 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
-using ProjectXenocide.Utils;
-
 using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -53,7 +52,7 @@ namespace ProjectXenocide.Model.Battlescape
         /// <param name="combatant">Combatant controlled by this AI</param>
         public CombatantAI(TeamAI teamAI, Combatant combatant)
         {
-            this.teamAI    = teamAI;
+            this.teamAI = teamAI;
             this.combatant = combatant;
         }
 
@@ -134,8 +133,8 @@ namespace ProjectXenocide.Model.Battlescape
         {
             // Need to remove the target from the cell it's currently in
             // because we can't pathfind to a cell that's occupied.
-            int  cellIndex = teamAI.Battlescape.Terrain.CellIndex(target.Position);
-            Cell cellCopy  = teamAI.Battlescape.Terrain[cellIndex];
+            int cellIndex = teamAI.Battlescape.Terrain.CellIndex(target.Position);
+            Cell cellCopy = teamAI.Battlescape.Terrain[cellIndex];
             cellCopy.CombatantId = 0;
             teamAI.Battlescape.Terrain[cellIndex] = cellCopy;
 

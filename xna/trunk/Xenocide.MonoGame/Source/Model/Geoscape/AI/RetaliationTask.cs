@@ -28,13 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Model.Geoscape.Geography;
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.Geoscape.Vehicles;
 
 #endregion
 
@@ -109,7 +109,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
             if (locatedOutpost)
             {
                 // Outpost has been located, so just go for it.
-                ufo.Mission = new RetaliationMission(ufo, outpost.Position, outpost, numLandings,numLandings);
+                ufo.Mission = new RetaliationMission(ufo, outpost.Position, outpost, numLandings, numLandings);
             }
             else
             {
@@ -117,7 +117,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
                 if ((null != outpost) && Xenocide.Rng.RollDice(outpost.Detectability()))
                 {
                     // Given enough time, the UFO will find the outpost
-                    ufo.Mission = new RetaliationMission(ufo, Centroid, outpost, numLandings,numSubLandings);
+                    ufo.Mission = new RetaliationMission(ufo, Centroid, outpost, numLandings, numSubLandings);
                 }
                 else
                 {
@@ -134,7 +134,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
         private void SelectOutpost()
         {
             locatedOutpost = false;
-            outpost        = null;
+            outpost = null;
             float minDistance = searchRadius;
             foreach (Outpost o in Xenocide.GameState.GeoData.Outposts)
             {
@@ -142,7 +142,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
                 if (distance < minDistance)
                 {
                     minDistance = distance;
-                    outpost     = o;
+                    outpost = o;
                 }
             }
         }
@@ -163,7 +163,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
                     // ToDo: theoretically, UFO could have failed to destroy outpost, and player 
                     // disassembled outpost before UFO left Geoscape, so Overmind should think outpost
                     // still exists.  Someone might want to write logic to cover that case.
-                    outpost        = null;
+                    outpost = null;
                     locatedOutpost = false;
                 }
                 else if (mission.LocatedOutpost)

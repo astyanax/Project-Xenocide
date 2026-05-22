@@ -28,8 +28,8 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 using System.Threading;
 
 using Microsoft.Xna.Framework;
@@ -37,14 +37,13 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.UI.Scenes.Battlescape;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -94,7 +93,7 @@ namespace ProjectXenocide.UI.Screens
                 // draw path, showing how far combatant can move
                 if (Battlescape.Terrain.IsOnTerrain(pos))
                 {
-                    List<MoveData> path   = new List<MoveData>();
+                    List<MoveData> path = new List<MoveData>();
                     if (Combatant.FindPath(pos, path))
                     {
                         // there's a path to destination, see how far along it we can go
@@ -205,7 +204,7 @@ namespace ProjectXenocide.UI.Screens
             /// <summary>User has clicked the either Right or Left hand button</summary>
             /// <param name="right">true if it was the "right hand" button</param>
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)",
-                Justification="ToDo: String is temporary, to cover case while code under construction, will be removed when problem fixed.")]
+                Justification = "ToDo: String is temporary, to cover case while code under construction, will be removed when problem fixed.")]
             public override void OnHandButton(bool right)
             {
                 // if combatant is dead or stunned, nothing to do

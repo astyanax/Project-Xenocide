@@ -28,50 +28,49 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
+using System.Threading;
 using System.Xml;
 using System.Xml.XPath;
-using System.Threading;
-using System.IO;
 
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.Utils;
 
 
 #endregion
 
 namespace ProjectXenocide.Model.Geoscape.Geography
 {
-	/// <summary>
-	/// The attitiude of countries to X-Corp
-	/// </summary>
-	public enum CountryAttitude
-	{
-		/// <summary>
-		/// Country is neither happy or unhappy with X-Corp
-		/// </summary>
-		Neutral,
+    /// <summary>
+    /// The attitiude of countries to X-Corp
+    /// </summary>
+    public enum CountryAttitude
+    {
+        /// <summary>
+        /// Country is neither happy or unhappy with X-Corp
+        /// </summary>
+        Neutral,
 
-		/// <summary>
-		/// Country is pleased with X-Corp
-		/// </summary>
-		Happy,
+        /// <summary>
+        /// Country is pleased with X-Corp
+        /// </summary>
+        Happy,
 
-		/// <summary>
-		/// Country is not pleased with X-Corp
-		/// </summary>
-		Unhappy,
+        /// <summary>
+        /// Country is not pleased with X-Corp
+        /// </summary>
+        Unhappy,
 
-		/// <summary>
-		/// Country has signed an alliance with Aliens
-		/// </summary>
-		Hostile
-	}
-	
-	/// <summary>
+        /// <summary>
+        /// Country has signed an alliance with Aliens
+        /// </summary>
+        Hostile
+    }
+
+    /// <summary>
     /// The information for a country in the Geoscape
     /// </summary>
     [Serializable]
@@ -86,13 +85,13 @@ namespace ProjectXenocide.Model.Geoscape.Geography
             Justification = "will throw if countryNode == null")]
         public Country(XPathNavigator countryNode, XmlNamespaceManager manager)
         {
-            this.name        = Util.GetStringAttribute(countryNode, "name");
+            this.name = Util.GetStringAttribute(countryNode, "name");
 
             XPathNavigator funds = countryNode.SelectSingleNode("p:funds", manager);
             this.fundingSeed = Util.GetIntAttribute(funds, "seed");
-            this.fundingCap  = Util.GetIntAttribute(funds, "cap");
+            this.fundingCap = Util.GetIntAttribute(funds, "cap");
 
-            this.colorKey    = Util.GetColorKey(countryNode, manager);
+            this.colorKey = Util.GetColorKey(countryNode, manager);
         }
 
         /// <summary>
@@ -101,7 +100,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         public void StartOfMonth()
         {
             UpdateAttitude();
-			funds[MonthlyLog.ThisMonth] = CalcNewFunding();
+            funds[MonthlyLog.ThisMonth] = CalcNewFunding();
             ScoreLog.StartOfMonth();
         }
 
@@ -113,11 +112,11 @@ namespace ProjectXenocide.Model.Geoscape.Geography
             attitude = CountryAttitude.Hostile;
         }
 
-		/// <summary>
-		/// Set attitude for this month, based on X-Corp and UFO activity
-		/// </summary>
-		private void UpdateAttitude()
-		{
+        /// <summary>
+        /// Set attitude for this month, based on X-Corp and UFO activity
+        /// </summary>
+        private void UpdateAttitude()
+        {
             // if country is hostile, it's going to stay hostile
             if (CountryAttitude.Hostile != attitude)
             {
@@ -136,44 +135,44 @@ namespace ProjectXenocide.Model.Geoscape.Geography
                     attitude = CountryAttitude.Happy;
                 }
             }
-		}
-		
-		/// <summary>
+        }
+
+        /// <summary>
         /// Figure out how much $ this country will give to X-Corp this month
         /// </summary>
         /// <returns>the amount</returns>
         private int CalcNewFunding()
         {
             float scale = 1.0f;
-			switch (attitude)
-			{
-				case CountryAttitude.Neutral:
-					// nothing more to do
-					break;
+            switch (attitude)
+            {
+                case CountryAttitude.Neutral:
+                    // nothing more to do
+                    break;
 
-				case CountryAttitude.Happy:
+                case CountryAttitude.Happy:
                     scale += Xenocide.Rng.Next(21) / 100.0f;
-					break;
+                    break;
 
-				case CountryAttitude.Unhappy:
+                case CountryAttitude.Unhappy:
                     scale -= Xenocide.Rng.Next(21) / 100.0f;
-					break;
+                    break;
 
-				case CountryAttitude.Hostile:
-					scale = 0;
-					break;
+                case CountryAttitude.Hostile:
+                    scale = 0;
+                    break;
 
-				default:
-					Debug.Assert(false);
-					break;
-			}
+                default:
+                    Debug.Assert(false);
+                    break;
+            }
             int newFunds = Util.RoundTo1000(funds[MonthlyLog.LastMonth] * scale);
             if (fundingCap < newFunds)
-			{
+            {
                 newFunds = fundingCap;
-			}
+            }
             return newFunds;
-		}
+        }
 
         /// <summary>
         /// override ToString
@@ -191,15 +190,15 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         /// </summary>
         public String Name { get { return name; } }
 
-		/// <summary>
-		/// Seed used to calculate initial $ per month country gives X-Corp
-		/// </summary>
-		public int FundingSeed { get { return fundingSeed; } }
+        /// <summary>
+        /// Seed used to calculate initial $ per month country gives X-Corp
+        /// </summary>
+        public int FundingSeed { get { return fundingSeed; } }
 
-		/// <summary>
-		/// The funds the country gave to X-Corp this month
-		/// </summary>
-		public MonthlyLog Funds { get { return funds; } }
+        /// <summary>
+        /// The funds the country gave to X-Corp this month
+        /// </summary>
+        public MonthlyLog Funds { get { return funds; } }
 
         /// <summary>
         /// Alien and X-Corp scores for this country
@@ -236,15 +235,15 @@ namespace ProjectXenocide.Model.Geoscape.Geography
 		/// </summary>
 		private int fundingSeed;
 
-		/// <summary>
-		/// Maximum $ per month country can give X-Corp
-		/// </summary>
-		private int fundingCap;
+        /// <summary>
+        /// Maximum $ per month country can give X-Corp
+        /// </summary>
+        private int fundingCap;
 
-		/// <summary>
-		/// Country's attitude to X-Corp
-		/// </summary>
-		private CountryAttitude attitude;
+        /// <summary>
+        /// Country's attitude to X-Corp
+        /// </summary>
+        private CountryAttitude attitude;
 
         /// <summary>
         /// RGB color associated with this country

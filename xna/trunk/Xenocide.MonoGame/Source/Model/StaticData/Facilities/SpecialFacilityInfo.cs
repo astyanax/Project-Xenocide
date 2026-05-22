@@ -28,16 +28,14 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-
 using Microsoft.Xna.Framework;
-
 
 using ProjectXenocide.Utils;
 
@@ -66,7 +64,7 @@ namespace ProjectXenocide.Model.StaticData.Facilities
         /// Add stats specific to this facility type to string collection for display on X-Net
         /// </summary>
         /// <param name="stats">string collection to append strings to</param>
-        protected override void XNetStatisticsCore(StringCollection stats) 
+        protected override void XNetStatisticsCore(StringCollection stats)
         {
         }
 

@@ -348,12 +348,31 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 - `Texture2D.FromFile()` and `TextureAtlas.LoadContent()` load textures directly — do not need MGCB
 
 ### Phase 7: Cross-Platform Validation
-- [ ] Build and run on **Windows**
-- [ ] Build and run on **Linux** (test basic gameplay flow)
-- [ ] Fix file path casing issues (Linux is case-sensitive)
-- [ ] Fix path separator issues (`\` → `/` or `Path.Combine()`)
+- [x] Build and run on **Windows** — ✅ Verified (builds with 0 errors, start screen → geoscape → bases → battlescape navigation works)
+- [x] Fix file path casing issues (Linux is case-sensitive) — ✅ All 6 texture paths verified; `.X`/`.x` model extensions checked
+- [x] Fix path separator issues (`\` → `/`) — ✅ 27 hardcoded backslashes replaced with forward slashes across 20 files
+- [ ] Build and run on **Linux** (test basic gameplay flow) — Requires Linux environment
 - [ ] Performance profile on OpenGL backend
 - [ ] Test save/load cross-platform compatibility
+
+**Cross-platform changes (27 path fixes across 20 files):**
+- `EarthGlobe.cs` — 3x `File.OpenRead()` paths
+- `SkyBox.cs` — 1x `File.OpenRead()` + 1x `Content.Load<Effect>()`
+- `EquipSoldierScene.cs` — 2x `Texture2D.FromFile()` paths
+- `TextureAtlas.cs` — 1x file path
+- 7 Screen constructors — background texture paths (StartScreen, BasesScreen, XNetScreen, Screen, BattlescapeScreen, AssignToCraftScreen, SoldiersListScreen)
+- `GeoscapeScene.cs` — 1x `Content.Load<Effect>()`
+- `GeoHud.cs` — 1x `Content.Load<Texture2D>()`
+- `BuildTimes.cs` — 1x `Content.Load<Texture2D>()`
+- `ProjectileMesh.cs` — 1x `Content.Load<XnaModel>()`
+- `FacilityMesh.cs` — 1x `Content.Load<XnaModel>()`
+- `FacilityModels.cs` — 1x `Content.Load<Model>()`
+- `XNetScene.cs` — 2x `Content.Load<Model>()` (concatenation)
+- `CombatantMeshes.cs` — 1x `Content.Load<XnaModel>()`
+- `Combatant.cs` — 1x model path in `Graphic` constructor
+- `GameOptions.cs` — 1x file path constant
+- `LoadSaveGameScreen.cs` — 1x saves directory path
+- 10 files — 31 sound name paths (PlaySound/LoadSound/AddButtonSound)
 
 ### Phase 8: Cleanup & Polish
 - [x] Remove NUnit dependency — ✅ Already migrated to xUnit.net 2.9.2 (5 tests passing)

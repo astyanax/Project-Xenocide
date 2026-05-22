@@ -29,16 +29,14 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-
 using Microsoft.Xna.Framework;
-
 
 using ProjectXenocide.Utils;
 

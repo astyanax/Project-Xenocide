@@ -28,8 +28,8 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 #endregion
 
@@ -77,12 +77,12 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// <summary>Update Stats in response to a turn on the battlescape starting</summary>
         public void OnStartTurn()
         {
-            int fatalWoundsToLegs = currentValues[(int)Statistic.FatalWoundsLeftLeg] + 
+            int fatalWoundsToLegs = currentValues[(int)Statistic.FatalWoundsLeftLeg] +
                 currentValues[(int)Statistic.FatalWoundsRightLeg];
-            currentValues[(int)Statistic.TimeUnitsLeft] = (int)(currentValues[(int)Statistic.TimeUnits] * 
+            currentValues[(int)Statistic.TimeUnitsLeft] = (int)(currentValues[(int)Statistic.TimeUnits] *
                 Xenocide.GameBalance.TimeUnitDecreaseDueToFatalWounds(fatalWoundsToLegs));
 
-            currentValues[(int)Statistic.StaminaLeft] += (int)(currentValues[(int)Statistic.EnergyRecharge] * 
+            currentValues[(int)Statistic.StaminaLeft] += (int)(currentValues[(int)Statistic.EnergyRecharge] *
                 Xenocide.GameBalance.EnergyRechargeDecreaseDueToFatalWounds(currentValues[(int)Statistic.FatalWoundsBody]));
             if (currentValues[(int)Statistic.Stamina] < currentValues[(int)Statistic.StaminaLeft])
             {
@@ -117,7 +117,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             double injuryAccuracyDecrease = Xenocide.GameBalance.AccuracyDecreaseDueToInjury(
                 currentValues[(int)Statistic.InjuryDamage], currentValues[(int)Statistic.Health]);
 
-            return (double)currentValues[(int)Statistic.FiringAccuracy] * injuryAccuracyDecrease * 
+            return (double)currentValues[(int)Statistic.FiringAccuracy] * injuryAccuracyDecrease *
                 Xenocide.GameBalance.AccuracyDecreaseDueToFatalWounds(fatalWounds);
         }
 

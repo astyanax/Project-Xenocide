@@ -28,13 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -95,8 +95,8 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             Battle battlescape = null;
             TestSetup(ref battlescape);
             Combatant soldier = battlescape.Teams[1].Combatants[0];
-            Terrain   terrain = battlescape.Terrain;
-            Vector3   pos     = new Vector3();
+            Terrain terrain = battlescape.Terrain;
+            Vector3 pos = new Vector3();
 
             // line of sight, but not line of fire (blocked by alien)
             Debug.Assert(terrain.IsLineOfSight(soldier.Position, new Vector3(0, 2, 2)));

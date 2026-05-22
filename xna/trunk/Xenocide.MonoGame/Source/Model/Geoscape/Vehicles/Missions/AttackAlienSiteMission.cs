@@ -30,9 +30,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Geoscape.AI;
 using ProjectXenocide.Model.Geoscape.GeoEvents;
-using ProjectXenocide.Model.Battlescape;
 
 #endregion
 
@@ -60,7 +60,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             base(craft)
         {
             this.target = target;
-            SetState(new MoveToPositionState(this, target.Position,MissionState.MoveToPositionStateType.LandingDestination, craft.MaxSpeed));
+            SetState(new MoveToPositionState(this, target.Position, MissionState.MoveToPositionStateType.LandingDestination, craft.MaxSpeed));
             target.AddInbound(craft);
         }
 

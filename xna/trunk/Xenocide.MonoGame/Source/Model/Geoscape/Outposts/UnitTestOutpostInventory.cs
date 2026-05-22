@@ -28,13 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
-using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.Model.StaticData.Items;
 
 #endregion
 
@@ -71,7 +71,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         {
             Outpost outpost = ConstructTestOutpost();
             Item launcher = Xenocide.StaticTables.ItemList["ITEM_CANNON"].Manufacture();
-            launcher.ShotsLeft  = 20;
+            launcher.ShotsLeft = 20;
 
             Debug.Assert(500 == outpost.Statistics.Capacities[launcher.ItemInfo.StorageType].Available);
             outpost.Inventory.Add(launcher, false);
@@ -177,7 +177,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             Debug.Assert(463 == outpost.Statistics.Capacities[launcher.ItemInfo.StorageType].Available);
 
             // now try to fill base to just short of maximum
-            int size      = launcher.ItemInfo.StorageUnits + (clip.ItemInfo.StorageUnits * 4);
+            int size = launcher.ItemInfo.StorageUnits + (clip.ItemInfo.StorageUnits * 4);
             int spaceLeft = (int)outpost.Statistics.Capacities[launcher.ItemInfo.StorageType].Available;
             for (int i = 0; i < spaceLeft / size; ++i)
             {
@@ -241,7 +241,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             Debug.Assert(!inventory.CanFit(condor));
 
             // add 4 missile Launchers with clips
-            Item clip     = Xenocide.StaticTables.ItemList["ITEM_GAIA_MISSILE_CLIP"].Manufacture();
+            Item clip = Xenocide.StaticTables.ItemList["ITEM_GAIA_MISSILE_CLIP"].Manufacture();
             Item launcher = Xenocide.StaticTables.ItemList["ITEM_GAIA_MISSILE_LAUNCHER"].Manufacture();
             launcher.ShotsLeft = (clip.ItemInfo as ClipItemInfo).ClipSize;
             outpost.Inventory.Add(launcher, false);
@@ -249,7 +249,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             outpost.Inventory.Add(launcher, false);
             outpost.Inventory.Add(launcher, false);
             Debug.Assert(408 == outpost.Statistics.Capacities[launcher.ItemInfo.StorageType].Available);
-            
+
             // list the contents of the base
             foreach (Item item in inventory.ListContents())
             {
@@ -326,30 +326,30 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             }
             Debug.Assert(496 == outpost.Statistics.Capacities[clip.ItemInfo.StorageType].Available);
             Debug.Assert(200 == inventory.NumberInArmory(clip.ItemInfo.Id));
-            
+
             // Remove 2.5 clips.
             Debug.Assert(125 == inventory.DecreaseAmmoRoundsInArmory(clip.ItemInfo, 125));
-            Debug.Assert(75  == inventory.NumberInArmory(clip.ItemInfo.Id));
+            Debug.Assert(75 == inventory.NumberInArmory(clip.ItemInfo.Id));
             Debug.Assert(498 == outpost.Statistics.Capacities[clip.ItemInfo.StorageType].Available);
 
             // Remove all but one round from partial clip
-            Debug.Assert(24  == inventory.DecreaseAmmoRoundsInArmory(clip.ItemInfo, 24));
-            Debug.Assert(51  == inventory.NumberInArmory(clip.ItemInfo.Id));
+            Debug.Assert(24 == inventory.DecreaseAmmoRoundsInArmory(clip.ItemInfo, 24));
+            Debug.Assert(51 == inventory.NumberInArmory(clip.ItemInfo.Id));
             Debug.Assert(498 == outpost.Statistics.Capacities[clip.ItemInfo.StorageType].Available);
 
             // remove last round from partial clip
-            Debug.Assert(1   == inventory.DecreaseAmmoRoundsInArmory(clip.ItemInfo, 1));
-            Debug.Assert(50  == inventory.NumberInArmory(clip.ItemInfo.Id));
+            Debug.Assert(1 == inventory.DecreaseAmmoRoundsInArmory(clip.ItemInfo, 1));
+            Debug.Assert(50 == inventory.NumberInArmory(clip.ItemInfo.Id));
             Debug.Assert(499 == outpost.Statistics.Capacities[clip.ItemInfo.StorageType].Available);
 
             // try removing more than is in base
-            Debug.Assert(50  == inventory.DecreaseAmmoRoundsInArmory(clip.ItemInfo, 51));
-            Debug.Assert(0   == inventory.NumberInArmory(clip.ItemInfo.Id));
+            Debug.Assert(50 == inventory.DecreaseAmmoRoundsInArmory(clip.ItemInfo, 51));
+            Debug.Assert(0 == inventory.NumberInArmory(clip.ItemInfo.Id));
             Debug.Assert(500 == outpost.Statistics.Capacities[clip.ItemInfo.StorageType].Available);
 
             // try removing when base is empty
-            Debug.Assert(0   == inventory.DecreaseAmmoRoundsInArmory(clip.ItemInfo, 201));
-            Debug.Assert(0   == inventory.NumberInArmory(clip.ItemInfo.Id));
+            Debug.Assert(0 == inventory.DecreaseAmmoRoundsInArmory(clip.ItemInfo, 201));
+            Debug.Assert(0 == inventory.NumberInArmory(clip.ItemInfo.Id));
             Debug.Assert(500 == outpost.Statistics.Capacities[clip.ItemInfo.StorageType].Available);
         }
 
@@ -362,17 +362,17 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             OutpostInventory inventory = outpost.Inventory;
 
             Item greySoldier = Xenocide.StaticTables.ItemList["ITEM_GREY_SOLDIER"].Manufacture();
-            Item greyCorpse  = Xenocide.StaticTables.ItemList["ITEM_GREY_CORPSE"].Manufacture();
+            Item greyCorpse = Xenocide.StaticTables.ItemList["ITEM_GREY_CORPSE"].Manufacture();
             Debug.Assert(100 == outpost.Statistics.Capacities[greySoldier.ItemInfo.StorageType].Available);
             Debug.Assert(500 == outpost.Statistics.Capacities[greyCorpse.ItemInfo.StorageType].Available);
 
             // try adding
             inventory.Add(greySoldier, false);
-            Debug.Assert( 96 == outpost.Statistics.Capacities[greySoldier.ItemInfo.StorageType].Available);
+            Debug.Assert(96 == outpost.Statistics.Capacities[greySoldier.ItemInfo.StorageType].Available);
             Debug.Assert(500 == outpost.Statistics.Capacities[greyCorpse.ItemInfo.StorageType].Available);
 
             inventory.Add(greyCorpse, false);
-            Debug.Assert( 96 == outpost.Statistics.Capacities[greySoldier.ItemInfo.StorageType].Available);
+            Debug.Assert(96 == outpost.Statistics.Capacities[greySoldier.ItemInfo.StorageType].Available);
             Debug.Assert(496 == outpost.Statistics.Capacities[greyCorpse.ItemInfo.StorageType].Available);
 
             // try removing

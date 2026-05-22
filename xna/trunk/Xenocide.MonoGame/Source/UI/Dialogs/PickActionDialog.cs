@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 
 using Gum.Forms.Controls;
-using ProjectXenocide.UI.Screens;
-using ProjectXenocide.UI.Dialogs;
 
-using ProjectXenocide.Utils;
+using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.Model.StaticData.Items;
-using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.UI.Dialogs;
+using ProjectXenocide.UI.Screens;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Screens

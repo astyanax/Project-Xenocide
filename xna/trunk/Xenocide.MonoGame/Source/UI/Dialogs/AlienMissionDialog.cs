@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
 using Gum.Forms.Controls;
+
 using ProjectXenocide.Model.Geoscape.AI;
 using ProjectXenocide.UI.Screens;
 

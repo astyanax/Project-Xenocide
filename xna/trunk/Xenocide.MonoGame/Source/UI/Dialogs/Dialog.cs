@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -29,11 +29,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using CeGui.Renderers.Xna;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-using CeGui.Renderers.Xna;
 using ProjectXenocide.UI.Screens;
 using ProjectXenocide.Utils;
 

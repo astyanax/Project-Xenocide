@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -28,23 +28,21 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
 using Microsoft.Xna.Framework;
 
-
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
-using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -104,7 +102,7 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
             /// <param name="node">xml element</param>
             public NormalDistribution(XPathNavigator node)
             {
-                this.mean     = Util.GetIntAttribute(node, "mean");
+                this.mean = Util.GetIntAttribute(node, "mean");
                 this.variance = Util.GetIntAttribute(node, "variance");
             }
 

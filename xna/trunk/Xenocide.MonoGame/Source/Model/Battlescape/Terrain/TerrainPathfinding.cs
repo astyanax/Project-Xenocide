@@ -26,9 +26,9 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
@@ -200,7 +200,7 @@ namespace ProjectXenocide.Model.Battlescape
             }
 
             // if we're at top of a stair, then we try going up one level
-            int  dy      = sy;
+            int dy = sy;
             if ((GroundFlag.FloorHeight70 == (ground.Flags & GroundFlag.FloorHeight70)) &&
                 (GroundFlag.FloorHeight0 == (GetGroundFace(dx, dy + 1, dz).Flags & GroundFlag.FloorHeight70)))
             {
@@ -290,7 +290,7 @@ namespace ProjectXenocide.Model.Battlescape
         private bool NorthEastBlocked(Vector3 start, Vector3 end)
         {
             return (0 != ((GetWallFace(start, Side.North).Flags | GetWallFace(end, Side.West).Flags |
-                GetWallFace(start, Side.East).Flags  | GetWallFace(end, Side.South).Flags) & WallFlag.Solid));
+                GetWallFace(start, Side.East).Flags | GetWallFace(end, Side.South).Flags) & WallFlag.Solid));
         }
 
         /// <summary>Test if there are walls blocking movement from start to end cell</summary>
@@ -300,7 +300,7 @@ namespace ProjectXenocide.Model.Battlescape
         private bool NorthWestBlocked(Vector3 start, Vector3 end)
         {
             return (0 != ((GetWallFace(start, Side.North).Flags | GetWallFace(end, Side.East).Flags |
-                GetWallFace(start, Side.West).Flags  | GetWallFace(end, Side.South).Flags) & WallFlag.Solid));
+                GetWallFace(start, Side.West).Flags | GetWallFace(end, Side.South).Flags) & WallFlag.Solid));
         }
 
         /// <summary>Test if there are walls blocking movement from start to end cell</summary>

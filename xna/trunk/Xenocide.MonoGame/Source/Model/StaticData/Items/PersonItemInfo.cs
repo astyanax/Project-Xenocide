@@ -28,21 +28,18 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-
 using Microsoft.Xna.Framework;
-
-
-using ProjectXenocide.Utils;
 
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -66,9 +63,9 @@ namespace ProjectXenocide.Model.StaticData.Items
         {
             // statistics element
             XPathNavigator personNode = itemNode.SelectSingleNode("i:statistics", manager);
-            monthlySalary = Util.GetIntAttribute(personNode,    "monthlySalary");
-            worksIn       = Util.GetStringAttribute(personNode, "worksIn");
-            skillLevel    = Util.GetIntAttribute(personNode,    "skillLevel");
+            monthlySalary = Util.GetIntAttribute(personNode, "monthlySalary");
+            worksIn = Util.GetStringAttribute(personNode, "worksIn");
+            skillLevel = Util.GetIntAttribute(personNode, "skillLevel");
         }
 
         #region Methods

@@ -28,8 +28,8 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using ProjectXenocide.Model.Geoscape.Outposts;
 
@@ -68,7 +68,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <summary>
         /// Anything that needs to be done when mission enters this state
         /// </summary>
-        public override void OnEnterState() 
+        public override void OnEnterState()
         {
             base.OnEnterState();
             Mission.Craft.EnterOutpost();
@@ -77,7 +77,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <summary>
         /// Anything that needs to be done when mission leaves this state
         /// </summary>
-        public override void OnExitState() 
+        public override void OnExitState()
         {
             base.OnExitState();
             Mission.Craft.ExitOutpost();

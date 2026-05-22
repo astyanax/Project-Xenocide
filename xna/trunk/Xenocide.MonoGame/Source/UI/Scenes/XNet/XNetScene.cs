@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -28,18 +28,18 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
-using ProjectXenocide.Utils;
-using ProjectXenocide.UI.Scenes.Common;
-using ProjectXenocide.UI;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.UI;
+using ProjectXenocide.UI.Scenes.Common;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -64,11 +64,11 @@ namespace ProjectXenocide.UI.Scenes.XNet
         /// </summary>
         /// <param name="content">content manager that fetches the content</param>
         /// <param name="device">the display</param>
-        
+
         public override void LoadContent(ContentManager content, GraphicsDevice device)
         {
             contentManger = content;
-            
+
             {
                 LoadModel(Matrix.Identity);
             }
@@ -86,7 +86,7 @@ namespace ProjectXenocide.UI.Scenes.XNet
             Viewport oldview = device.Viewport;
             device.Viewport = CalcViewportForSceneWindow(sceneWindow, device.Viewport);
             Matrix projection = GetProjectionMatrix(AspectRatio);
-            
+
             // set up camera's position
             Matrix viewMatrix = rotationMatrix * Matrix.CreateTranslation(0.0f, 0.0f, -CameraPosition.Z);
 
@@ -142,7 +142,7 @@ namespace ProjectXenocide.UI.Scenes.XNet
             LoadModel(initialRotation);
             ResetCamera();
         }
-        
+
         /// <summary>
         /// Load the model from its resource file
         /// </summary>
@@ -152,12 +152,11 @@ namespace ProjectXenocide.UI.Scenes.XNet
             // "Light" version of Xenocide has most models removed
             try
             {
-                model = contentManger.Load<Microsoft.Xna.Framework.Graphics.Model>("Models\\" + modelName);
+                model = contentManger.Load<Microsoft.Xna.Framework.Graphics.Model>("Models/" + modelName);
             }
             catch (ContentLoadException)
             {
-                // probably model isn't present, so fallback to default model
-                model = contentManger.Load<Microsoft.Xna.Framework.Graphics.Model>("Content\\Models\\" + defaultModel);
+                model = contentManger.Load<Microsoft.Xna.Framework.Graphics.Model>("Models/" + defaultModel);
                 initialRotation = Matrix.Identity;
             }
             scalingMatrix = CalculateScalingMatrix() * initialRotation;

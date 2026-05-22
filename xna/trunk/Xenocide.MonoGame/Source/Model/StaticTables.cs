@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -31,13 +31,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-
-
 using ProjectXenocide.Model.StaticData;
+using ProjectXenocide.Model.StaticData.Battlescape;
 using ProjectXenocide.Model.StaticData.Facilities;
 using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.StaticData.Research;
-using ProjectXenocide.Model.StaticData.Battlescape;
 
 #endregion
 
@@ -55,9 +53,9 @@ namespace ProjectXenocide.Model
         public StaticTables()
         {
             xnetEntryList = new XNetEntryCollection(DataDirectory + "xnet.xml");
-            facilityList  = new FacilityInfoCollection(DataDirectory + "facility.xml", xnetEntryList);
-            peopleNames   = new PeopleNames(DataDirectory + "peopleNames.xml");
-            armorList     = new ArmorCollection(DataDirectory + "combatant.xml");
+            facilityList = new FacilityInfoCollection(DataDirectory + "facility.xml", xnetEntryList);
+            peopleNames = new PeopleNames(DataDirectory + "peopleNames.xml");
+            armorList = new ArmorCollection(DataDirectory + "combatant.xml");
         }
 
         /// <summary>
@@ -101,7 +99,7 @@ namespace ProjectXenocide.Model
         /// </summary>
         public StartSettings StartSettings { get { return startSettings; } }
 
-         /// <summary>
+        /// <summary>
         /// Object holding lists of given and family names for all personnel
         /// </summary>
         public PeopleNames PeopleNames { get { return peopleNames; } }

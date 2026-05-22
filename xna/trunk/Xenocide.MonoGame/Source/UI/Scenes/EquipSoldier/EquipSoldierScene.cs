@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -28,17 +28,17 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Battlescape.Combatants;
-using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -85,9 +85,9 @@ namespace ProjectXenocide.UI.Scenes
         public void LoadContent()
         {
             spriteBatch = new SpriteBatch(Xenocide.Instance.GraphicsDevice);
-            background  = Texture2D.FromFile(Xenocide.Instance.GraphicsDevice, @"Content\Textures\EquipSoldier\EquipScreenBackground.png");
-            spriteSheet = Texture2D.FromFile(Xenocide.Instance.GraphicsDevice, @"Content\Textures\EquipSoldier\InventorySprites.png");
-             font        = content.Load<SpriteFont>(@"SpriteFont1");
+            background = Texture2D.FromFile(Xenocide.Instance.GraphicsDevice, @"Content/Textures/EquipSoldier/EquipScreenBackground.png");
+            spriteSheet = Texture2D.FromFile(Xenocide.Instance.GraphicsDevice, @"Content/Textures/EquipSoldier/InventorySprites.png");
+            font = content.Load<SpriteFont>(@"SpriteFont1");
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace ProjectXenocide.UI.Scenes
             {
                 // where to draw sprite
                 CarryInfo carryInfo = movingItem.ItemInfo.CarryInfo;
-                float     cell      = sceneWindow.Width / 20.0f;
+                float cell = sceneWindow.Width / 20.0f;
                 spriteBatch.Draw(
                     spriteSheet,
                     new Rectangle((int)pos.X, (int)pos.Y, (int)(carryInfo.X * cell), (int)(carryInfo.Y * cell)),
@@ -221,7 +221,7 @@ namespace ProjectXenocide.UI.Scenes
         /// <summary>
         /// Needed so that we can load the sprite font
         /// </summary>
-         private ContentManager content = new ContentManager(Xenocide.Instance.Services, "Content");
+        private ContentManager content = new ContentManager(Xenocide.Instance.Services, "Content");
 
         #endregion Fields
     }

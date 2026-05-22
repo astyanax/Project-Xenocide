@@ -28,16 +28,14 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-
 using Microsoft.Xna.Framework;
-
 
 using ProjectXenocide.Utils;
 
@@ -60,13 +58,13 @@ namespace ProjectXenocide.Model.StaticData
            Justification = "will throw if entryNode == null")]
         public XNetEntry(XPathNavigator entryNode, XmlNamespaceManager manager, string category)
         {
-            id              = entryNode.GetAttribute("id", String.Empty);
-            name            = entryNode.GetAttribute("name", String.Empty);
-            this.category   = category;
-            link            = XNetStatisticsLink.Factory(entryNode.SelectSingleNode("x:statisticsLink", manager));
-            shortEntry      = ExtractXNetText(entryNode, manager, "x:shortentry");
-            body            = ExtractXNetText(entryNode, manager, "x:body");
-            fluff           = ExtractXNetText(entryNode, manager, "x:fluff");
+            id = entryNode.GetAttribute("id", String.Empty);
+            name = entryNode.GetAttribute("name", String.Empty);
+            this.category = category;
+            link = XNetStatisticsLink.Factory(entryNode.SelectSingleNode("x:statisticsLink", manager));
+            shortEntry = ExtractXNetText(entryNode, manager, "x:shortentry");
+            body = ExtractXNetText(entryNode, manager, "x:body");
+            fluff = ExtractXNetText(entryNode, manager, "x:fluff");
 
             XPathNavigator graphicNode = entryNode.SelectSingleNode("x:graphics", manager);
             if (null != graphicNode)
@@ -90,12 +88,12 @@ namespace ProjectXenocide.Model.StaticData
         /// <param name="elementName">name of sub element holding the section</param>
         /// <returns>the text</returns>
         private static StringCollection ExtractXNetText(
-            XPathNavigator      entryNode, 
-            XmlNamespaceManager manager, 
-            string              elementName )
+            XPathNavigator entryNode,
+            XmlNamespaceManager manager,
+            string elementName)
         {
-            XPathNavigator   element = entryNode.SelectSingleNode(elementName, manager); 
-            StringCollection text    = new StringCollection();
+            XPathNavigator element = entryNode.SelectSingleNode(elementName, manager);
+            StringCollection text = new StringCollection();
             foreach (XPathNavigator child in element.SelectChildren(XPathNodeType.Element))
             {
                 if (child.Name == "bullet")

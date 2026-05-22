@@ -27,18 +27,18 @@ San Francisco, California, 94105, USA.
 #region Using Statements
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
+
+using CeGui.Renderers.Xna;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-using CeGui.Renderers.Xna;
-
-using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.Utils;
 
 
@@ -159,7 +159,7 @@ namespace ProjectXenocide.UI.Screens
         public bool QuitGame
         {
             get { return quitGame; }
-            set { if (value) quitGame = true;  }
+            set { if (value) quitGame = true; }
         }
 
         /// <summary>
@@ -171,10 +171,10 @@ namespace ProjectXenocide.UI.Screens
             // construct the content manager, if it doesn't already exist
             if (content == null)
             {
-                 content = new ContentManager(Xenocide.Instance.Services, "Content");
+                content = new ContentManager(Xenocide.Instance.Services, "Content");
             }
 
-            foreach(Screen screen in screenStack)
+            foreach (Screen screen in screenStack)
             {
                 screen.LoadContent(content, device);
             }
@@ -211,7 +211,7 @@ namespace ProjectXenocide.UI.Screens
             }
 
             // only update the screen when there are no dialogs
-            if (0 == showingDialogs.Count) 
+            if (0 == showingDialogs.Count)
             {
                 // if we're scheduled to swap the screen, do so now
                 if ((null != nextScreen) || (null != pushScreen) || popScreen)
@@ -288,7 +288,7 @@ namespace ProjectXenocide.UI.Screens
             Util.GeoTimeDebugWriteLine("Closing dialog {0}", dialog.GetType().Name);
 
             Debug.Assert(dialog == showingDialogs.Peek());
-            
+
             // remove dialog
             showingDialogs.Pop().Dispose();
 
@@ -368,7 +368,7 @@ namespace ProjectXenocide.UI.Screens
         /// The CeGui gui builder used to create widgets (that we later attach to screens/dialogs)
         /// </summary>
         public CeGui.GuiBuilder GuiBuilder { get { return guiBuilder; } }
-        
+
         /// <summary>
         /// The CeGui gui builder used to create widgets (that we later attach to screens/dialogs)
         /// </summary>
@@ -421,7 +421,7 @@ namespace ProjectXenocide.UI.Screens
             double seconds = (rightNow - lastOutput).TotalMilliseconds / 1000.0;
             if (1.0 < seconds)
             {
-                Xenocide.Instance.Window.Title = 
+                Xenocide.Instance.Window.Title =
                     Util.StringFormat("Xenocide.exe  fps = {0}", (frameCount / seconds));
                 frameCount = 0;
                 lastOutput = rightNow;

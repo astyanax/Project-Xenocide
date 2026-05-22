@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 
 using Gum.Forms.Controls;
-using ProjectXenocide.UI.Screens;
 
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData.Facilities;
+using ProjectXenocide.UI.Screens;
 using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs

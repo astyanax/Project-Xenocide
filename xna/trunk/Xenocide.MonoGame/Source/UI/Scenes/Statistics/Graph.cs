@@ -31,11 +31,12 @@ using System.Collections.Generic;
 using System.Text;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
-using ProjectXenocide.Utils;
+using Microsoft.Xna.Framework.Graphics;
+
 using ProjectXenocide.Model;
 using ProjectXenocide.UI.Screens;
+using ProjectXenocide.Utils;
 
 #endregion
 

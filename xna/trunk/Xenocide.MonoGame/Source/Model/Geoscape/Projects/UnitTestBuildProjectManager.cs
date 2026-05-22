@@ -29,14 +29,15 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
-
+using System.Text;
 
 using Microsoft.Xna.Framework;
-using ProjectXenocide.Model.StaticData.Research;
+
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Model.StaticData.Research;
+
 using Xenocide.Resources;
 
 
@@ -58,12 +59,12 @@ namespace ProjectXenocide.Model.Geoscape
             // setup
             List<Outpost> outposts = new List<Outpost>();
             outposts.Add(OutpostInventory.ConstructTestOutpost());
-            ResearchGraph     graph     = Xenocide.StaticTables.ResearchGraph;
-            Person            engineer1 = Xenocide.StaticTables.ItemList["ITEM_PERSON_ENGINEER"].Manufacture() as Person;
-            Bank              bank      = Xenocide.GameState.GeoData.XCorp.Bank;
-            ItemInfo          item      = Xenocide.StaticTables.ItemList["ITEM_XC-2_STARFIRE"];
-            OutpostInventory  inventory = outposts[0].Inventory;
-            TechnologyManager techMgr   = new TechnologyManager(graph);
+            ResearchGraph graph = Xenocide.StaticTables.ResearchGraph;
+            Person engineer1 = Xenocide.StaticTables.ItemList["ITEM_PERSON_ENGINEER"].Manufacture() as Person;
+            Bank bank = Xenocide.GameState.GeoData.XCorp.Bank;
+            ItemInfo item = Xenocide.StaticTables.ItemList["ITEM_XC-2_STARFIRE"];
+            OutpostInventory inventory = outposts[0].Inventory;
+            TechnologyManager techMgr = new TechnologyManager(graph);
             graph.GiveStartingTech(techMgr);
             inventory.Add(engineer1, false);
 
@@ -109,11 +110,11 @@ namespace ProjectXenocide.Model.Geoscape
             // start build
             Debug.Assert(2 == outposts[0].Statistics.Capacities[item.StorageType].Available);
             BuildProjectManager projectMgr = outposts[0].BuildProjectManager;
-            BuildProject        project    = projectMgr.CreateProject(item.Id, techMgr, outposts[0], bank);
+            BuildProject project = projectMgr.CreateProject(item.Id, techMgr, outposts[0], bank);
 
             // check consumption of requirements
-            Debug.Assert(  2 == inventory.NumberInInventory(Xenocide.StaticTables.ItemList["ITEM_ALIEN_NAVIGATION_SYSTEMS"]));
-            Debug.Assert(  2 == inventory.NumberInInventory(Xenocide.StaticTables.ItemList["ITEM_XENIUM_REACTOR"]));
+            Debug.Assert(2 == inventory.NumberInInventory(Xenocide.StaticTables.ItemList["ITEM_ALIEN_NAVIGATION_SYSTEMS"]));
+            Debug.Assert(2 == inventory.NumberInInventory(Xenocide.StaticTables.ItemList["ITEM_XENIUM_REACTOR"]));
             Debug.Assert(129 == inventory.NumberInInventory(Xenocide.StaticTables.ItemList["ITEM_ALIEN_COMPOSITES"]));
             Debug.Assert(800000 == bank.CurrentBalance);
             Debug.Assert(1 == outposts[0].Statistics.Capacities[item.StorageType].Available);

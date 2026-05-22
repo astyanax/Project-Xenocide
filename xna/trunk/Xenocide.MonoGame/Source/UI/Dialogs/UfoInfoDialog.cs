@@ -4,14 +4,14 @@ using System.Text;
 
 using Gum.Forms.Controls;
 
-using ProjectXenocide.UI.Screens;
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.Model.Geoscape.Vehicles;
-using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Geography;
+using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.UI.Screens;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs

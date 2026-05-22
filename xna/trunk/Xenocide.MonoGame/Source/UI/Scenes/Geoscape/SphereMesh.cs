@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -25,12 +25,13 @@ San Francisco, California, 94105, USA.
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectXenocide.UI.Scenes.Geoscape
 {
@@ -65,9 +66,9 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// <summary>
         /// return a vertex buffer that can be used to draw the sphere
         /// </summary>
-        public VertexBuffer CreateVertexBuffer(GraphicsDevice device) 
+        public VertexBuffer CreateVertexBuffer(GraphicsDevice device)
         {
-            VertexBuffer vertexBuffer =  new VertexBuffer(
+            VertexBuffer vertexBuffer = new VertexBuffer(
                 device,
                 GlobeVertex.VertexDeclaration,
                 vertexes.Length,
@@ -81,7 +82,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// <summary>
         /// return indexed triangle list that can be used to draw the sphere.
         /// </summary>
-        public IndexBuffer CreateIndexBuffer(GraphicsDevice device) 
+        public IndexBuffer CreateIndexBuffer(GraphicsDevice device)
         {
             IndexBuffer indexBuffer = new IndexBuffer(
                 device,
@@ -199,7 +200,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         {
             // we're going to cheat a bit and go from 0 to 90 degrees
             double longitude = (Math.PI * 0.5 * strip) / numStrips;
-            float  y = (float)Math.Cos(longitude);
+            float y = (float)Math.Cos(longitude);
             double s = Math.Sin(longitude);
 
             Vector3 position;
@@ -211,14 +212,14 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             for (int v = 0; v < numVertexes; ++v)
             {
                 double latitudue = (Math.PI * 2.0 * v) / numVertexes;
-                float  x = (float)(- s * Math.Cos(latitudue));
-                float  z = (float)(s * Math.Sin(latitudue));
+                float x = (float)(-s * Math.Cos(latitudue));
+                float z = (float)(s * Math.Sin(latitudue));
 
                 position = new Vector3(x, y, z);
                 tangent = Vector3.Cross(position, Vector3.UnitX);
                 binormal = Vector3.Cross(position, tangent);
 
-                AddVertex ( position,
+                AddVertex(position,
                             tangent,
                             binormal,
                             new Vector2((float)(v) / numVertexes, (float)(strip) * 0.5f / numStrips),
@@ -237,7 +238,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
                        isOnEquator);
 
             return numVertexes;
-         }
+        }
 
         /// <summary>
         /// add the vectorIndexes making up a northern face (and it's southern complement) to the index
@@ -294,7 +295,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         private void AddVertex(Vector3 position, Vector3 tangent, Vector3 binormal, Vector2 texture, bool isOnEquator)
         {
             vertexes[nextVertex] = new GlobeVertex(position, position, tangent, binormal, texture);
-            
+
             nextVertex++;
             if (!isOnEquator)
             {

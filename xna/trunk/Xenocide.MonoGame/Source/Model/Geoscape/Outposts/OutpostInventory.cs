@@ -28,14 +28,14 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
-using ProjectXenocide.Utils;
-using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -55,7 +55,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         public OutpostInventory(OutpostCapacities capacities, Outpost outpost)
         {
             this.capacities = capacities;
-            this.outpost    = outpost;
+            this.outpost = outpost;
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         /// <param name="count">number of rounds</param>
         /// <returns>number of rounds removed</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
-           Justification="Want to throw if ammoType is null")]
+           Justification = "Want to throw if ammoType is null")]
         public int DecreaseAmmoRoundsInArmory(ItemInfo ammoType, int count)
         {
             int clipSize = (ammoType as ClipItemInfo).ClipSize;
@@ -362,7 +362,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             }
             return count;
         }
-        
+
         /// <summary>
         /// Return the types of items in the base, for display on sell/transfer screens
         /// </summary>
@@ -463,7 +463,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         public IEnumerable<Person> ListStaff(String type)
         {
             return Util.FilterColection(Staff,
-                delegate(Person person) { return (person.ItemInfo.Id == type); });
+                delegate (Person person) { return (person.ItemInfo.Id == type); });
         }
 
         /// <summary>
@@ -474,7 +474,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         public IEnumerable<Craft> ListCrafts(String type)
         {
             return Util.FilterColection(Fleet,
-                delegate(Craft craft) { return (craft.ItemInfo.Id == type); });
+                delegate (Craft craft) { return (craft.ItemInfo.Id == type); });
         }
 
         /// <summary>
@@ -486,7 +486,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         public IEnumerable<Person> ListStaff(String type, bool areWorking)
         {
             return Util.FilterColection(Staff,
-                delegate(Person person) { return (person.ItemInfo.Id == type) && (person.IsWorking == areWorking); });
+                delegate (Person person) { return (person.ItemInfo.Id == type) && (person.IsWorking == areWorking); });
         }
 
         /// <summary>

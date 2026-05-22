@@ -28,8 +28,8 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
@@ -115,7 +115,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         {
             Mission mission = new MockMission();
             Battle battlescape = new Battle(mission);
-            Combatant  combatant = battlescape.Teams[1].Combatants[0];
+            Combatant combatant = battlescape.Teams[1].Combatants[0];
             combatant.Stats[Statistic.TimeUnitsLeft] = 20;
 
             // should turn -90 degrees

@@ -28,21 +28,23 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
+using System.Text;
 
 using Gum.Forms.Controls;
 
-using ProjectXenocide.Utils;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+
+using ProjectXenocide.Assets;
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.StaticData.Facilities;
 using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.UI.Scenes.Facility;
-using ProjectXenocide.Model.StaticData.Facilities;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 
@@ -60,7 +62,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         /// <param name="selectedBase">Index to X-Corp outpost screen is to show</param>
         public BasesScreen(int selectedBase)
-            : base("BasesScreen", @"Content\Textures\UI\BasesScreenBackground.png")
+            : base("BasesScreen", @"Content/Textures/UI/BasesScreenBackground.png")
         {
             this.selectedBase = selectedBase;
 
@@ -75,7 +77,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         /// <param name="content">content manager that fetches the content</param>
         /// <param name="device">the display</param>
-        
+
         public override void LoadContent(ContentManager content, GraphicsDevice device)
         {
             scene.LoadContent(content, device);
@@ -227,7 +229,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="e">Mouse information</param>
         private void OnMouseDownInScene(object sender, EventArgs e)
         {
-            Xenocide.AudioSystem.PlaySound("Menu\\buttonclick2_changesetting.ogg");
+            Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick2);
             var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             switch (state)
             {
@@ -477,7 +479,7 @@ namespace ProjectXenocide.UI.Screens
                     );
 
                     // if yes is pressed, delete the facility and redraw scene with changes
-                    dlg.YesAction += delegate()
+                    dlg.YesAction += delegate ()
                     {
                         Xenocide.GameState.GeoData.XCorp.Bank.Credit(facility.FacilityInfo.ScrapRevenue);
                         SelectedBaseFloorplan.RemoveFacility(facility);

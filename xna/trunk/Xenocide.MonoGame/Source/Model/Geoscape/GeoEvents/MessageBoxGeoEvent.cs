@@ -53,7 +53,7 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
         {
             this.message = Util.StringFormat(format, args);
         }
-        
+
         /// <summary>
         /// Called to get the event to do whatever processing is necessary
         /// </summary>
@@ -73,13 +73,13 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
             Xenocide.GameState.GeoData.QueueEvent(new MessageBoxGeoEvent(format, args));
         }
 
-#region Fields
+        #region Fields
 
         /// <summary>
         /// Message to show
         /// </summary>
         private String message;
 
-#endregion
+        #endregion
     }
 }

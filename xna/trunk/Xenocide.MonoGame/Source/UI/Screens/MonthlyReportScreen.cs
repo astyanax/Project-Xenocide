@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -31,12 +31,13 @@ using System.Collections.Generic;
 using System.Text;
 
 using Gum.Forms.Controls;
-using ProjectXenocide.UI.Controls;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Geography;
+using ProjectXenocide.UI.Controls;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 

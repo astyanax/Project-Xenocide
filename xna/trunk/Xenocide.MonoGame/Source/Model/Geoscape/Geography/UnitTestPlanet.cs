@@ -28,22 +28,21 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
-using System.Xml;
-using System.Xml.XPath;
-using System.Threading;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Text;
+using System.Threading;
+using System.Xml;
+using System.Xml.XPath;
 
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.AI;
-
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
+using ProjectXenocide.Utils;
 
 #endregion
 

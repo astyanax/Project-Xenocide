@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -27,21 +27,22 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
+
+using Gum.Forms.Controls;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Gum.Forms.Controls;
 
-using ProjectXenocide.Utils;
+using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData.Items;
-using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.UI.Scenes;
+using ProjectXenocide.Utils;
 #endregion
 
 namespace ProjectXenocide.UI.Screens
@@ -63,8 +64,8 @@ namespace ProjectXenocide.UI.Screens
             public InOutpostController(EquipSoldierScreen equipSoldierScreen, IEnumerable<Person> soldiers, Person soldier)
                 : base(equipSoldierScreen)
             {
-                this.soldiers           = new List<Person>(soldiers);
-                this.soldierIndex       = this.soldiers.IndexOf(soldier);
+                this.soldiers = new List<Person>(soldiers);
+                this.soldierIndex = this.soldiers.IndexOf(soldier);
             }
 
             #region Create the Gum controls

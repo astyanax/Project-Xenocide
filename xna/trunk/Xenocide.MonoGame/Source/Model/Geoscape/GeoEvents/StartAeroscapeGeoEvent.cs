@@ -32,8 +32,8 @@ using System.Text;
 
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Vehicles;
-using ProjectXenocide.UI.Screens;
 using ProjectXenocide.UI.Dialogs;
+using ProjectXenocide.UI.Screens;
 
 #endregion
 
@@ -55,7 +55,7 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
             this.hunter = hunter;
             this.target = target;
         }
-        
+
         /// <summary>
         /// Called to get the event to do whatever processing is necessary
         /// </summary>
@@ -67,7 +67,7 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
             );
         }
 
-#region Fields
+        #region Fields
 
         /// <summary>
         /// UFO being attacked
@@ -79,6 +79,6 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
         /// </summary>
         private Craft hunter;
 
-#endregion
+        #endregion
     }
 }

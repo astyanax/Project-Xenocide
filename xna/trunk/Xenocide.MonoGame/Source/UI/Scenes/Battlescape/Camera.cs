@@ -107,7 +107,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
             }
             // allow for rotation in horizonal plane
             Vector3 xz = Vector3.Transform(lookVector, Matrix.CreateRotationY(yaw));
-            float   x  = (float)Math.Sqrt(xz.X * xz.X + xz.Z * xz.Z);
+            float x = (float)Math.Sqrt(xz.X * xz.X + xz.Z * xz.Z);
 
             // rotation in vertical plane
             Vector3 xy = Vector3.Transform(new Vector3(x, lookVector.Y, 0), Matrix.CreateRotationZ(pitch));

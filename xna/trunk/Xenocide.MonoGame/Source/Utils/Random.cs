@@ -28,24 +28,22 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Threading;
 using System.Xml;
 using System.Xml.XPath;
-using System.Threading;
-using System.IO;
-using System.Globalization;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
-
+using Microsoft.Xna.Framework.Input;
 
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.UI.Screens;
 using ProjectXenocide.UI.Dialogs;
-
+using ProjectXenocide.UI.Screens;
 
 using Vector3 = Microsoft.Xna.Framework.Vector3;
 
@@ -75,7 +73,7 @@ namespace ProjectXenocide.Utils
             }
             else
 #endif
-            return rng.Next(max);
+                return rng.Next(max);
         }
 
         /// <summary>

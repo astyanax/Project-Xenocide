@@ -26,13 +26,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
+using ProjectXenocide.Model.Geoscape.AI;
+using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Utils;
 
-using ProjectXenocide.Model.Geoscape.Vehicles;
-using ProjectXenocide.Model.Geoscape.AI;
 using Xenocide.Resources;
 
 
@@ -52,7 +52,7 @@ namespace ProjectXenocide.Model.Battlescape
         public AlienSiteMission(AlienSite site, Craft hunter)
             : base(hunter as Aircraft)
         {
-            this.site   = site;
+            this.site = site;
         }
 
         /// <summary>

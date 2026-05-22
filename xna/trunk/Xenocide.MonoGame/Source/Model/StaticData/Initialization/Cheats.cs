@@ -29,22 +29,19 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-
 using Microsoft.Xna.Framework;
 
-
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape.Outposts;
-using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -67,7 +64,7 @@ namespace ProjectXenocide.Model.StaticData
             showUndetectedUfos = Util.GetBoolAttribute(cheatsNode, "showUndetectedUfos");
             controlAlienMissions = Util.GetBoolAttribute(cheatsNode, "controlAlienMissions");
             xcorpCantLooseAtStartOfMonth = Util.GetBoolAttribute(cheatsNode, "xcorpCantLooseAtStartOfMonth");
-            showAllAliens        = Util.GetBoolAttribute(cheatsNode, "showAllAliens");
+            showAllAliens = Util.GetBoolAttribute(cheatsNode, "showAllAliens");
             playerControlsAliens = Util.GetBoolAttribute(cheatsNode, "playerControlsAliens");
             allowAutoWinBattlescape = Util.GetBoolAttribute(cheatsNode, "allowAutoWinBattlescape");
         }

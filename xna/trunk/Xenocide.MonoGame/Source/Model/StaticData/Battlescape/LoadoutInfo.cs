@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -28,28 +28,26 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
 using Microsoft.Xna.Framework;
 
-
-
-using ProjectXenocide.Utils;
-using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 #endregion
 
 namespace ProjectXenocide.Model.StaticData.Battlescape
 {
-        /// <summary>
+    /// <summary>
     /// List of items that a combatant may be equiped with
-        /// </summary>
+    /// </summary>
     [Serializable]
     public class LoadoutInfo
     {
@@ -64,8 +62,8 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
             {
                 ItemEntry entry = new ItemEntry();
                 entry.Name = Util.GetStringAttribute(itemNode, "name");
-                entry.X    = Util.GetIntAttribute(   itemNode, "x");
-                entry.Y    = Util.GetIntAttribute(   itemNode, "y");
+                entry.X = Util.GetIntAttribute(itemNode, "x");
+                entry.Y = Util.GetIntAttribute(itemNode, "y");
                 items.Add(entry);
             }
         }

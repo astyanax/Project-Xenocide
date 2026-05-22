@@ -28,17 +28,16 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Runtime.Serialization;
+using System.Text;
 
-
-
-using ProjectXenocide.Utils;
+using ProjectXenocide.Model.Geoscape.AI;
+using ProjectXenocide.Model.Geoscape.GeoEvents;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData.Items;
-using ProjectXenocide.Model.Geoscape.GeoEvents;
-using ProjectXenocide.Model.Geoscape.AI;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 

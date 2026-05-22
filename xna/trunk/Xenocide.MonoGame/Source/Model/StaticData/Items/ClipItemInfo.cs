@@ -28,20 +28,17 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-
 using Microsoft.Xna.Framework;
 
-
-using ProjectXenocide.Utils;
-
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -146,7 +143,7 @@ namespace ProjectXenocide.Model.StaticData.Items
                 inventory.Add(this, ClipSize, spaceAlreadyRecorded);
                 item.ShotsLeft -= ClipSize;
             }
-            
+
             // if this is a partly full clip, we may already have allocated space for it
             int looseRounds = base.NumberInInventory(inventory) % ClipSize;
             if ((0 < looseRounds) && ((looseRounds + item.ShotsLeft) <= ClipSize))
@@ -161,7 +158,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// Add stats specific to this Ammo to string collection for display on X-Net
         /// </summary>
         /// <param name="stats">string collection to append strings to</param>
-        protected override void XNetStatisticsCore(StringCollection stats) {}
+        protected override void XNetStatisticsCore(StringCollection stats) { }
 
         #endregion
 

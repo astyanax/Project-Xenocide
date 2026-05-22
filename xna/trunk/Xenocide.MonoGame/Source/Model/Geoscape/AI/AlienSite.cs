@@ -30,11 +30,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using ProjectXenocide.Model.StaticData;
-using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Vehicles;
-using ProjectXenocide.Model.Battlescape;
+using ProjectXenocide.Model.StaticData;
+using ProjectXenocide.Model.StaticData.Items;
 
 #endregion
 
@@ -54,9 +54,9 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// <param name="race">The race that is present at this site</param>
         protected AlienSite(String name, GeoPosition position, Race race)
         {
-            this.name      = name;
-            this.position  = position;
-            this.race      = race;
+            this.name = name;
+            this.position = position;
+            this.race = race;
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// <summary>
         /// Is the position known to X-Corp?
         /// </summary>
-        public abstract bool IsKnownToXCorp { get; set;}
+        public abstract bool IsKnownToXCorp { get; set; }
 
         /// <summary>
         /// Hostile (i.e. X-Corp) craft that are inbound to this AlienSite

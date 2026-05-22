@@ -28,9 +28,9 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
-using System.Diagnostics;
 
 using ProjectXenocide.Model.Geoscape.GeoEvents;
 
@@ -81,14 +81,14 @@ namespace ProjectXenocide.Model.Geoscape
         {
             return timespan.TotalMilliseconds * timeRatio;
         }
-        
+
         /// <summary>
         /// Get Geoscape's "now" in a format suitable for display
         /// </summary>
         /// <returns>Geoscape's "now" in a format suitable for display</returns>
-        public override string ToString() 
-        { 
-            return time.ToString("yyyy-MM-dd HH:mm:ss", Thread.CurrentThread.CurrentCulture); 
+        public override string ToString()
+        {
+            return time.ToString("yyyy-MM-dd HH:mm:ss", Thread.CurrentThread.CurrentCulture);
         }
 
         /// <summary>

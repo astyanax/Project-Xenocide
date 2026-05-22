@@ -64,7 +64,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// <param name="numSublandings">Number of points the UFO will investigate between landings</param>
         protected override void GiveMission(Ufo ufo, int numLandings, int numSubLandings)
         {
-            ufo.Mission = new ResearchMission(ufo, Centroid, numLandings,numSubLandings);
+            ufo.Mission = new ResearchMission(ufo, Centroid, numLandings, numSubLandings);
         }
     }
 }

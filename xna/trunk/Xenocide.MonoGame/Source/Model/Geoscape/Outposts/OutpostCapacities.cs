@@ -28,11 +28,10 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
-
 
 using ProjectXenocide.Utils;
 
@@ -79,7 +78,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
                     return Util.LoadString(displayStrings[i]);
                 }
             }
-            
+
             // if get here, typeName was invalid
             Debug.Assert(false);
             return "";
@@ -102,7 +101,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         /// The types of capacity storage
         /// </summary>
         public static IList<String> CapacityTypes { get { return capacityTypes; } }
-        
+
         /// <summary>
         /// The types of capacity storage
         /// </summary>

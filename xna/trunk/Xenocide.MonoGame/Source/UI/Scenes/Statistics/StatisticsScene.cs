@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -28,18 +28,18 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
-using ProjectXenocide.Model.Geoscape.Outposts;
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
-using ProjectXenocide.UI.Scenes.Facility;
+using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.UI;
+using ProjectXenocide.UI.Scenes.Facility;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -112,15 +112,15 @@ namespace ProjectXenocide.UI.Scenes.Statistics
         /// Load the graphic content of the scene
         /// </summary>
         /// <param name="device">the display</param>
-        
+
         public void LoadContent(GraphicsDevice device)
         {
-            
+
             {
                 basicEffect = new BasicEffect(device);
                 grid.LoadContent(device, new Grid(gridCellsWidth, gridCellsHeight));
                 spriteBatch = new SpriteBatch(Xenocide.Instance.GraphicsDevice);
-                 font = content.Load<SpriteFont>(@"SpriteFont1");
+                font = content.Load<SpriteFont>(@"SpriteFont1");
             }
         }
 
@@ -332,7 +332,7 @@ namespace ProjectXenocide.UI.Scenes.Statistics
         /// <summary>
         /// Needed so that we can load the sprite font
         /// </summary>
-         private ContentManager content = new ContentManager(Xenocide.Instance.Services, "Content");
+        private ContentManager content = new ContentManager(Xenocide.Instance.Services, "Content");
 
         /// <summary>
         /// The names of the months (used as graph identifiers)

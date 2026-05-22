@@ -28,8 +28,8 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 
 #endregion
@@ -71,7 +71,7 @@ namespace ProjectXenocide.Model
         /// <summary>
         /// When the event will occur
         /// </summary>
-        public DateTime Occurs { get { return occurs; } protected set { occurs = value; }}
+        public DateTime Occurs { get { return occurs; } protected set { occurs = value; } }
 
         /// <summary>
         /// When the event will occur

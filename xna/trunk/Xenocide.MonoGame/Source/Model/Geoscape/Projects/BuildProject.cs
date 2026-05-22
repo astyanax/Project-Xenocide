@@ -28,13 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
-using ProjectXenocide.Utils;
-using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Geoscape.GeoEvents;
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 using Xenocide.Resources;
 
@@ -61,10 +61,10 @@ namespace ProjectXenocide.Model.Geoscape
             :
             base("ITEM_PERSON_ENGINEER", (GetItem(itemId).BuildInfo.Hours), outpost.BuildProjectManager)
         {
-            this.itemId         = itemId;
-            this.outpost        = outpost;
-            this.techManager    = techManager;
-            this.bank           = bank;
+            this.itemId = itemId;
+            this.outpost = outpost;
+            this.techManager = techManager;
+            this.bank = bank;
             Item.StartBuild(techManager, outpost, bank);
         }
 

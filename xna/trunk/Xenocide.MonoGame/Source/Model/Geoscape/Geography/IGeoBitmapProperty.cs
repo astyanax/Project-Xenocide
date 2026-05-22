@@ -71,7 +71,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         /// <summary>
         /// The total number of pixels in the GeoBitmap that have this property
         /// </summary>
-        public uint Size { get {return size;} set {size = value;} }
+        public uint Size { get { return size; } set { size = value; } }
 
         /// <summary>
         /// All pixels on the bitmap with this colour have this property

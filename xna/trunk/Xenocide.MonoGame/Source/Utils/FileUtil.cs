@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -25,8 +25,9 @@ San Francisco, California, 94105, USA.
 #region Using Statements
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Text;
+
 using Microsoft.Xna.Framework;
 #endregion
 namespace Xenocide.Source.Utils

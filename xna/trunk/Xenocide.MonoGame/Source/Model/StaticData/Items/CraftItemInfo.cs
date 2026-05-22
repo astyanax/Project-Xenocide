@@ -28,21 +28,19 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-
 using Microsoft.Xna.Framework;
-
-
-using ProjectXenocide.Utils;
 
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 
@@ -97,7 +95,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         {
             maxSpeed = Util.GetIntAttribute(node, "maxSpeed");
         }
-        
+
         /// <summary>
         /// Extract the hull properties from the XML node
         /// </summary>
@@ -109,7 +107,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         {
             XPathNavigator hull = node.SelectSingleNode("i:hull", manager);
             hullHardness = Util.GetDoubleAttribute(hull, "hardness");
-            maxDamage    = Util.GetIntAttribute(hull,    "maxDamage");
+            maxDamage = Util.GetIntAttribute(hull, "maxDamage");
         }
 
         /// <summary>
@@ -129,7 +127,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// <summary>
         /// Maximum speed craft can travel at (in meters/second)
         /// </summary>
-        public    int MaxSpeed { get { return maxSpeed; } }
+        public int MaxSpeed { get { return maxSpeed; } }
 
         /// <summary>
         /// Hull's resistance to damage

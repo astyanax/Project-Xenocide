@@ -31,8 +31,9 @@ using System.Collections.Generic;
 using System.Text;
 
 using Microsoft.Xna.Framework;
-using ProjectXenocide.Model.Geoscape;
+
 using ProjectXenocide.Model.Battlescape;
+using ProjectXenocide.Model.Geoscape;
 
 #endregion
 

@@ -28,13 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -54,11 +54,11 @@ namespace ProjectXenocide.Model.StaticData.Research
             Justification = "will throw if node == null")]
         public ResearchTopic(XPathNavigator node, XmlNamespaceManager manager)
         {
-            id             = Util.GetStringAttribute(node, "id");
-            name           = Util.GetStringAttribute(node, "name");
-            days           = Util.GetIntAttribute(   node, "time");
-            prerequisite   = new MultiPrerequisite(node.SelectSingleNode("r:prerequisite", manager), true);
-            researchReward = new ResearchReward(   node.SelectSingleNode("r:grants",       manager));
+            id = Util.GetStringAttribute(node, "id");
+            name = Util.GetStringAttribute(node, "name");
+            days = Util.GetIntAttribute(node, "time");
+            prerequisite = new MultiPrerequisite(node.SelectSingleNode("r:prerequisite", manager), true);
+            researchReward = new ResearchReward(node.SelectSingleNode("r:grants", manager));
         }
 
         /// <summary>

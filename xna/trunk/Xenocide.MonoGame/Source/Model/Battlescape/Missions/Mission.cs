@@ -26,25 +26,23 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
-using ProjectXenocide.Utils;
-using ProjectXenocide.Model.StaticData;
-using ProjectXenocide.Model.StaticData.Battlescape;
+using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
-using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.Model.StaticData;
+using ProjectXenocide.Model.StaticData.Battlescape;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
-
-using ScoreEntry    = ProjectXenocide.Utils.Pair<string, int>;
-
+// tracks "number killed/captured", "total points" for each "alien type"
+using CasualtyList = System.Collections.Generic.Dictionary<string, ProjectXenocide.Utils.Pair<int, int>>;
 // tracks "number killed/captured" and "total points"
 using KillAndPoints = ProjectXenocide.Utils.Pair<int, int>;
-
-// tracks "number killed/captured", "total points" for each "alien type"
-using CasualtyList = System.Collections.Generic.Dictionary<string, ProjectXenocide.Utils.Pair<int, int> >;
+using ScoreEntry = ProjectXenocide.Utils.Pair<string, int>;
 
 namespace ProjectXenocide.Model.Battlescape
 {
@@ -261,8 +259,8 @@ namespace ProjectXenocide.Model.Battlescape
         private static void RecordAlien(CasualtyList dict, bool dead, CombatantInfo info)
         {
             // for reporting purposes, aggregate by type
-            string name  = Xenocide.StaticTables.ItemList[info.StunItemId].Name;
-            int    score = info.VictoryPoints * (dead ? 1 : 2);
+            string name = Xenocide.StaticTables.ItemList[info.StunItemId].Name;
+            int score = info.VictoryPoints * (dead ? 1 : 2);
             if (dict.ContainsKey(name))
             {
                 KillAndPoints pair = dict[name];
@@ -282,7 +280,7 @@ namespace ProjectXenocide.Model.Battlescape
         {
             // alien
             CombatantInfo info = combatant.CombatantInfo;
-            int           index = combatant.IsDead ? info.DeadItemId : info.StunItemId;
+            int index = combatant.IsDead ? info.DeadItemId : info.StunItemId;
             AddToSalvage(Xenocide.StaticTables.ItemList[index].Id, 1);
 
             // items being carried
@@ -433,7 +431,7 @@ namespace ProjectXenocide.Model.Battlescape
         /// <summary>Things that happend on battlescape that earned/cost X-Corp points</summary>
         /// <remarks>Format is "Description to show user", "points lost/gained"</remarks>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures",
-            Justification="We are not VB programmers")]
+            Justification = "We are not VB programmers")]
         public IList<ScoreEntry> Scores { get { return scores; } }
 
         /// <summary>

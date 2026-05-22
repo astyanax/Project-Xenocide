@@ -28,32 +28,29 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
+using System.Threading;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
-
-using ProjectXenocide.UI.Dialogs;
-
-using System.Threading;
-using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.Battlescape;
+using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.UI.Scenes.Battlescape;
+using ProjectXenocide.Utils;
 
 #endregion
 
 namespace ProjectXenocide.UI.Screens
 {
-/*
-  This file holds the Battlescape's nested ScreenState classes
-*/
+    /*
+      This file holds the Battlescape's nested ScreenState classes
+    */
 
     public partial class BattlescapeScreen
     {
@@ -73,7 +70,7 @@ namespace ProjectXenocide.UI.Screens
 
             /// <summary>Update any model data</summary>
             /// <param name="gameTime">Time since last update() call</param>
-            public virtual void Update(GameTime gameTime){ /* default behaviour is do nothing */ }
+            public virtual void Update(GameTime gameTime) { /* default behaviour is do nothing */ }
 
             /// <summary>React to user clicking left mouse button in the 3D battlescape scene</summary>
             /// <param name="pos">Cell in battlescape where mouse was clicked</param>

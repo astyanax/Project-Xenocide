@@ -30,13 +30,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-
-using ProjectXenocide.Utils;
+using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Geography;
 using ProjectXenocide.Model.StaticData;
-using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 

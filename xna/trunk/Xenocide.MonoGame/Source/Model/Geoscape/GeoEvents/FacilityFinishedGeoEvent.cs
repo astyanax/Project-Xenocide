@@ -30,11 +30,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Outposts;
-using ProjectXenocide.UI.Screens;
 using ProjectXenocide.UI.Dialogs;
+using ProjectXenocide.UI.Screens;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 

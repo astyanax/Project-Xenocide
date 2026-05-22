@@ -29,19 +29,17 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-
 using Microsoft.Xna.Framework;
 
-
-
 using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 
@@ -62,7 +60,7 @@ namespace ProjectXenocide.Model.StaticData.Facilities
         public FacilityInfoCollection(string filename, XNetEntryCollection xnetEntryList)
         {
             facilities = new SortedList<string, FacilityInfo>();
-            
+
             // Set up XPathNavigator
             const string xmlns = "FacilityConfig";
             XPathNavigator nav = Util.MakeValidatingXPathNavigator(filename, xmlns);
@@ -101,7 +99,7 @@ namespace ProjectXenocide.Model.StaticData.Facilities
         {
             return facilities.IndexOfKey(id);
         }
-        
+
         /// <summary>
         /// Implement generics IEnumerable&lt;T&gt; interface
         /// </summary>

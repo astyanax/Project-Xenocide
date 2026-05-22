@@ -6,6 +6,8 @@
     <RollForward>Major</RollForward>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
+    <AnalysisMode>Recommended</AnalysisMode>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
     <NoWarn>SYSLIB0011</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -29,6 +31,10 @@
     <PackageReference Include="Gum.MonoGame" Version="2026.5.8.1" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.*" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
+    <PackageReference Include="Roslynator.Analyzers" Version="4.13.*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

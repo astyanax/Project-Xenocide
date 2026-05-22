@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -29,17 +29,18 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 
 using Gum.Forms.Controls;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Model.StaticData.Items;
-using System.Globalization;
 using ProjectXenocide.UI.Controls;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 
@@ -56,7 +57,7 @@ namespace ProjectXenocide.UI.Screens
         /// Constructs a screen listing the soldiers stationed at the given base.
         /// </summary>
         public AssignToCraftScreen(int selectedOutpostIndex)
-            : base("AssignToCraftScreen", @"Content\Textures\UI\BasesScreenBackground.png")
+            : base("AssignToCraftScreen", @"Content/Textures/UI/BasesScreenBackground.png")
         {
             this.selectedOutpostIndex = selectedOutpostIndex;
             this.soldiers = new List<Person>(SelectedOutpost.ListStaff("ITEM_PERSON_SOLDIER"));

@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -28,23 +28,21 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
 using Microsoft.Xna.Framework;
 
-
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
-using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -89,7 +87,7 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
             Debug.Assert((Race.Spawn == info.Race) && (AlienRank.Terrorist == info.Rank));
 
             // this race has two terror unit types
-            bool silabrateFound    = false;
+            bool silabrateFound = false;
             bool ventriculantFound = false;
             for (int i = 0; i < 50; ++i)
             {

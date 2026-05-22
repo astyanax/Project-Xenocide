@@ -28,17 +28,16 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
+using System.Threading;
 using System.Xml;
 using System.Xml.XPath;
-using System.Threading;
-using System.IO;
 
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.Utils;
 
 
 #endregion
@@ -61,7 +60,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
            Justification = "will throw if entryNode == null")]
         public Terrain(XPathNavigator entryNode, XmlNamespaceManager manager)
         {
-            name     = entryNode.GetAttribute("name", String.Empty);
+            name = entryNode.GetAttribute("name", String.Empty);
             colorKey = Util.GetColorKey(entryNode, manager);
         }
 

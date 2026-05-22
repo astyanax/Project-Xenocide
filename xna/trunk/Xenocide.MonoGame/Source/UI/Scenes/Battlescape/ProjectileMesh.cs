@@ -30,13 +30,13 @@ using System;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 using ProjectXenocide.Model.Battlescape;
+using ProjectXenocide.Utils;
 
 using XnaModel = Microsoft.Xna.Framework.Graphics.Model;
-using ProjectXenocide.Utils;
 
 #endregion
 
@@ -54,7 +54,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         {
             try
             {
-                model = content.Load<XnaModel>(@"Models\Craft\Weapons\Avalanche");
+                model = content.Load<XnaModel>(@"Models/Craft/Weapons/Avalanche");
                 BoundingSphere sphere = Util.CalcBoundingSphere(model);
                 scalingMatrix = Matrix.CreateScale((float)(0.1f / sphere.Radius));
             }
@@ -75,7 +75,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
             if (model == null) return;
             // compute angles to rotate projectile onto trajectory.
             Vector3 unit = Vector3.Normalize(trajectory.Velocity);
-            float yaw   = (float)Math.Atan2(-unit.Z, unit.X);
+            float yaw = (float)Math.Atan2(-unit.Z, unit.X);
             float pitch = (float)Math.Asin(unit.Y);
 
             // set up world matrix to position object in world
@@ -97,7 +97,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
                 {
                     effect.LightingEnabled = false;
                     effect.World = transforms[mesh.ParentBone.Index] * world;
-                    effect.View       = basicEffect.View;
+                    effect.View = basicEffect.View;
                     effect.Projection = basicEffect.Projection;
                 }
                 //Draw the mesh, will use the effects set above.

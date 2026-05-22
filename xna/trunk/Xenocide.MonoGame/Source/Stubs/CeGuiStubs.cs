@@ -6,7 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+
 using Microsoft.Xna.Framework;
+
 using ProjectXenocide.UI;
 
 namespace CeGui
@@ -113,7 +115,7 @@ namespace CeGui
     public class Texture { public float Width { get; set; } public float Height { get; set; } public float TexXOffset { get; set; } public float TexYOffset { get; set; } public float TexXScale { get; set; } public float TexYScale { get; set; } public void LoadFromFile(string filename) { } }
     public class Colors { public ColourValue R { get; set; } public ColourValue G { get; set; } public ColourValue B { get; set; } public ColourValue A { get; set; } public Colors(float r, float g, float b, float a) { } }
     public class ColourValue { public float Value { get; set; } public ColourValue(float value) { Value = value; } public static implicit operator ColourValue(float value) { return new ColourValue(value); } }
-    public class Colour { public float R, G, B, A; public Colour() {} public Colour(float r, float g, float b) { R=r; G=g; B=b; A=1f; } public Colour(float r, float g, float b, float a) { R=r; G=g; B=b; A=a; } }
+    public class Colour { public float R, G, B, A; public Colour() { } public Colour(float r, float g, float b) { R = r; G = g; B = b; A = 1f; } public Colour(float r, float g, float b, float a) { R = r; G = g; B = b; A = a; } }
 
     public class Imageset { public string Name { get; set; } public Image GetImage(string name) { return null; } public static Imageset Load(string name, string filename) { return null; } public void DefineImage(string name, Rect rect, Point offset) { } public void DefineImage(string name, Rect rect, float offsetX, float offsetY) { } }
     public class FontManager { private static FontManager _fontManager; public static FontManager Instance => _fontManager ?? (_fontManager = new FontManager()); public BitmapFont GetFont(string name) { return null; } public BitmapFont CreateFont(string name, string fontName, int size, FontFlags flags) { return null; } }

@@ -28,12 +28,12 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.Model.StaticData.Facilities;
@@ -58,7 +58,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
             {
                 models.Add(
                     facility.Id,
-                     content.Load<Microsoft.Xna.Framework.Graphics.Model>("Models\\" + facility.ModelName)
+                     content.Load<Microsoft.Xna.Framework.Graphics.Model>("Models/" + facility.ModelName)
                );
             }
         }

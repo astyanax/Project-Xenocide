@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -31,11 +31,11 @@ using System.Collections.Generic;
 using System.Text;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
-using ProjectXenocide.Model.StaticData.Facilities;
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.StaticData.Facilities;
 using ProjectXenocide.UI;
 
 #endregion
@@ -55,11 +55,11 @@ namespace ProjectXenocide.UI.Scenes.Facility
            Justification = "Will throw exception if floorplan is null")]
         public FacilityScene(Floorplan floorplan)
         {
-            this.floorplan      = floorplan;
+            this.floorplan = floorplan;
             this.cameraPosition = ComputeCameraPosition();
-            this.buildTimes     = new BuildTimes(this.floorplan);
+            this.buildTimes = new BuildTimes(this.floorplan);
         }
-        
+
         /// <summary>
         /// Implement IDisposable
         /// </summary>
@@ -95,10 +95,10 @@ namespace ProjectXenocide.UI.Scenes.Facility
         /// </summary>
         /// <param name="content">content manager that fetches the content</param>
         /// <param name="device">the display</param>
-        
+
         public void LoadContent(ContentManager content, GraphicsDevice device)
         {
-            
+
             {
                 InitializeEffect(device);
                 grid.LoadContent(device, new Grid(floorplan.CellsWide, floorplan.CellsHigh));
@@ -113,14 +113,14 @@ namespace ProjectXenocide.UI.Scenes.Facility
         /// <param name="device">Device to use for render</param>
         /// <param name="sceneWindow">Where to draw the scene on the display</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
-            Justification="Will throw exception if device is null")]
+            Justification = "Will throw exception if device is null")]
         public void Draw(GraphicsDevice device, UiRect sceneWindow)
         {
             // only draw in area we've been told to
             Viewport oldview = device.Viewport;
             device.Viewport = CalcViewportForSceneWindow(sceneWindow, device.Viewport);
             basicEffect.Projection = GetProjectionMatrix(AspectRatio);
-            
+
             Matrix viewMatrix = Matrix.CreateLookAt(
                 cameraPosition,
                 Vector3.Zero,
@@ -131,7 +131,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
             device.RasterizerState = RasterizerState.CullCounterClockwise;
             device.DepthStencilState = DepthStencilState.Default;
             ;
-            
+
             // draw the grid
             grid.ConfigureEffect(basicEffect);
             grid.Draw(device, basicEffect);
@@ -175,7 +175,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
             z += (floorplan.CellsHigh / 2.0f);
 
             // check that result is within the base
-            if ( (x < 0.0f) || (floorplan.CellsWide < x) || (z < 0.0f) || (floorplan.CellsHigh < z))
+            if ((x < 0.0f) || (floorplan.CellsWide < x) || (z < 0.0f) || (floorplan.CellsHigh < z))
             {
                 x = -1.0f;
                 z = -1.0f;
@@ -232,7 +232,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
         private static Matrix GetProjectionMatrix(float aspectRatio)
         {
             return Matrix.CreatePerspectiveFieldOfView(
-                ViewAngle,  
+                ViewAngle,
                 aspectRatio,
                 nearClipPlane, farClipPlane);
         }
@@ -293,7 +293,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
         /// The viewport's aspect ratio
         /// </summary>
         protected float AspectRatio { get { return aspectRatio; } }
-        
+
         /// <summary>
         /// The viewport's aspect ratio
         /// </summary>
@@ -303,7 +303,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
         /// The basic effect used for rendering
         /// </summary>
         private BasicEffect basicEffect;
-        
+
         /// <summary>
         /// Grid that shows the cells holding facilities
         /// </summary>
@@ -336,7 +336,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
         /// <summary>
         /// Used in constructing viewing fustrum
         /// </summary>
-        private   const float nearClipPlane = 0.1f;
+        private const float nearClipPlane = 0.1f;
 
         /// <summary>
         /// Used in constructing viewing fustrum

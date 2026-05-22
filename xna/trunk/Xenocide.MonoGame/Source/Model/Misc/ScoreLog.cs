@@ -28,8 +28,8 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
@@ -114,7 +114,7 @@ namespace ProjectXenocide.Model
         }
 
         #region Fields
-        
+
         /// <summary>
         /// The actual scores
         /// </summary>
@@ -180,7 +180,7 @@ namespace ProjectXenocide.Model
             Debug.Assert(region.ScoreLog[Participant.XCorp][MonthlyLog.ThisMonth] == 5);
             Debug.Assert(Xenocide.GameState.GeoData.XCorp.TotalScores[Participant.Alien][MonthlyLog.ThisMonth] == 0);
             Debug.Assert(Xenocide.GameState.GeoData.XCorp.TotalScores[Participant.XCorp][MonthlyLog.ThisMonth] == 5);
-            
+
             // adding to existing score
             Xenocide.GameState.GeoData.AddScore(Participant.XCorp, 5, pos);
             Debug.Assert(region.ScoreLog[Participant.Alien][MonthlyLog.ThisMonth] == 0);

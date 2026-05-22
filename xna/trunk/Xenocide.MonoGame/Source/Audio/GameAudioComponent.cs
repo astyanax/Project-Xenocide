@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
+
+using ProjectXenocide.Assets;
 
 namespace AudioSystem
 {
@@ -67,15 +70,8 @@ namespace AudioSystem
             Log($"Expected path: {testPath}");
             Log($"File exists: {File.Exists(testPath)}");
 
-            _songDefs.AddRange(new[]
-            {
-                new SongDef("Audio/Music/main_theme", "MainMenu"),
-                new SongDef("Audio/Music/Planetview/planetview", "PlanetView"),
-                new SongDef("Audio/Music/Planetview/Tiskaite_-_Xenocide_Geoscape", "PlanetView"),
-                new SongDef("Audio/Music/Planetview/10. Thomas Torfs - Planetview", "PlanetView"),
-                new SongDef("Audio/Music/Baseview/7. XerO - Baseview", "BaseView"),
-                new SongDef("Audio/Music/XNet/xnet", "XNet"),
-            });
+            foreach (var kvp in AssetRegistry.MusicDefs)
+                _songDefs.Add(new SongDef(kvp.Value.AssetName, kvp.Value.Category));
 
             Log($"Registered {_songDefs.Count} music track definitions");
             IsInitialized = true;
@@ -84,6 +80,11 @@ namespace AudioSystem
 
         public void Initialize(Game game)
         {
+        }
+
+        public void LoadSound(SoundId id)
+        {
+            LoadSound(AssetRegistry.SoundPath(id));
         }
 
         public void LoadSound(string soundName)
@@ -104,6 +105,11 @@ namespace AudioSystem
             }
         }
 
+        public void PlaySound(SoundId id)
+        {
+            PlaySound(AssetRegistry.SoundPath(id));
+        }
+
         public void PlaySound(string soundName)
         {
             if (!UseAudio || !_sounds.TryGetValue(soundName, out var sfx)) return;
@@ -111,6 +117,11 @@ namespace AudioSystem
             var instance = sfx.CreateInstance();
             instance.Volume = _soundVolume;
             instance.Play();
+        }
+
+        public void Play(SoundId id)
+        {
+            PlaySound(id);
         }
 
         public void Play(string soundName)

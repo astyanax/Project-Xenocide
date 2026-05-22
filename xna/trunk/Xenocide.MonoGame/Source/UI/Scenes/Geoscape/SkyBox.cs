@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -28,12 +28,12 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Text;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 #endregion
 
@@ -93,7 +93,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// <param name="worldViewProjection">combined World View Projection </param>
         /// <param name="ambient">intensity to give the skybox</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
-            Justification="Will throw if device is null")]
+            Justification = "Will throw if device is null")]
         public void Draw(GraphicsDevice device, Matrix worldViewProjection, float ambient)
         {
             if (vertices == null)
@@ -120,9 +120,9 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// <param name="device">the graphics device</param>
         public void LoadContent(ContentManager content, GraphicsDevice device)
         {
-            using (var fs = File.OpenRead(@"Content\Textures\Geoscape\skybox.png"))
+            using (var fs = File.OpenRead(@"Content/Textures/Geoscape/skybox.png"))
                 texture = Texture2D.FromStream(device, fs);
-             effect = content.Load<Effect>(@"Shaders\skybox");
+            effect = content.Load<Effect>(@"Shaders/skybox");
 
             vertices = new VertexBuffer(device,
                                 typeof(VertexPositionTexture),

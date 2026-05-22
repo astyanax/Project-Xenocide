@@ -28,8 +28,8 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 #endregion
 
@@ -62,7 +62,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// <param name="battlescape">the combatant's environment</param>
         protected Order(Combatant combatant, Battle battlescape)
         {
-            this.combatant   = combatant;
+            this.combatant = combatant;
             this.battlescape = battlescape;
         }
 

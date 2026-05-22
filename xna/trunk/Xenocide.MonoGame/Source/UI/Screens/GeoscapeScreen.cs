@@ -28,30 +28,29 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Globalization;
 using System.Diagnostics;
+using System.Globalization;
+using System.Text;
+using System.Threading;
+
+using Gum.Forms.Controls;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-
-using Gum.Forms.Controls;
-
-using ProjectXenocide.Utils;
-
-using ProjectXenocide.UI.Scenes.Geoscape;
-using ProjectXenocide.UI.Dialogs;
-
+using ProjectXenocide.Assets;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.Model.Geoscape.Vehicles;
-using ProjectXenocide.Model.Geoscape.Outposts;
-using ProjectXenocide.Model.Geoscape.Geography;
 using ProjectXenocide.Model.Geoscape.AI;
-using System.Threading;
+using ProjectXenocide.Model.Geoscape.Geography;
+using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.UI.Dialogs;
+using ProjectXenocide.UI.Scenes.Geoscape;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 
@@ -110,13 +109,13 @@ namespace ProjectXenocide.UI.Screens
             SetView(0.00f, 0.00f, 0.745f, 1f);
 
             // add text giving the time
-            gameTimeTop  = new Label();
+            gameTimeTop = new Label();
             gameTimeHour = new Label();
-            gameTimeSec  = new Label();
-            fundsText    = new Label();
-            fundsAmount  = new Label();
+            gameTimeSec = new Label();
+            fundsText = new Label();
+            fundsAmount = new Label();
             sceneToolTip = new Label();
-            timeText     = new Label();
+            timeText = new Label();
 
             RootContainer.AddChild(gameTimeTop);
             RootContainer.AddChild(gameTimeHour);
@@ -127,20 +126,20 @@ namespace ProjectXenocide.UI.Screens
             RootContainer.AddChild(timeText);
 
             // Set Font and color for text
-            SetTimeFont(gameTimeTop,  "GeoTime");
+            SetTimeFont(gameTimeTop, "GeoTime");
             SetTimeFont(gameTimeHour, "GeoTimeBig");
-            SetTimeFont(gameTimeSec,  "GeoTime");
-            SetTimeFont(timeText,     "GeoTime");
-            SetFont(fundsAmount,      "XenoBig");
+            SetTimeFont(gameTimeSec, "GeoTime");
+            SetTimeFont(timeText, "GeoTime");
+            SetFont(fundsAmount, "XenoBig");
 
             // change time buttons
             timeStopButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TIME_STOP") };
             timeNormalButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TIME_X60") };
             timeHourButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TIME_X3600") };
             timeDayButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TIME_X86400") };
-            AddButtonSound(timeNormalButton.Text, "PlanetView\\speedslow.ogg");
-            AddButtonSound(timeHourButton.Text, "PlanetView\\speedfast.ogg");
-            AddButtonSound(timeDayButton.Text, "PlanetView\\speedveryfast.ogg");
+            AddButtonSound(timeNormalButton.Text, SoundId.PlanetViewSpeedSlow);
+            AddButtonSound(timeHourButton.Text, SoundId.PlanetViewSpeedFast);
+            AddButtonSound(timeDayButton.Text, SoundId.PlanetViewSpeedVeryFast);
 
             interceptButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_INTERCEPT") };
             basesButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BASES") };
@@ -199,14 +198,14 @@ namespace ProjectXenocide.UI.Screens
             cameraOutButton.Click += OnMoveCameraButtonClicked;
 
             //Change button size
-            SetFont(timeStopButton,   "XenoSmall");
-            SetFont(timeHourButton,   "XenoSmall");
-            SetFont(timeDayButton,    "XenoSmall");
+            SetFont(timeStopButton, "XenoSmall");
+            SetFont(timeHourButton, "XenoSmall");
+            SetFont(timeDayButton, "XenoSmall");
             SetFont(timeNormalButton, "XenoSmall");
-            SetFont(cameraUpButton,   "XenoSmall");
+            SetFont(cameraUpButton, "XenoSmall");
             SetFont(cameraDownButton, "XenoSmall");
             SetFont(cameraLeftButton, "XenoSmall");
-            SetFont(cameraRightButton,"XenoSmall");
+            SetFont(cameraRightButton, "XenoSmall");
 
             //Adds text to top of screen.
             fundsText.Text = Strings.SCREEN_GEOSCAPE_FUNDS;
@@ -494,7 +493,7 @@ namespace ProjectXenocide.UI.Screens
                     );
 
                     // if yes is pressed, do the "base name" dialog
-                    dlg.YesAction += delegate()
+                    dlg.YesAction += delegate ()
                     {
                         if (!isFirstBase)
                         {

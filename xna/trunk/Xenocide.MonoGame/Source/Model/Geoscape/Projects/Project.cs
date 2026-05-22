@@ -28,12 +28,12 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.StaticData.Research;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 
@@ -57,8 +57,8 @@ namespace ProjectXenocide.Model.Geoscape
         protected Project(string workerTypeId, int hoursNeeded, ProjectManager projectManager)
         {
             Debug.Assert(null != Xenocide.StaticTables.ItemList[workerTypeId]);
-            this.workerTypeId   = workerTypeId;
-            this.hoursNeeded    = hoursNeeded;
+            this.workerTypeId = workerTypeId;
+            this.hoursNeeded = hoursNeeded;
             this.projectManager = projectManager;
         }
 
@@ -143,7 +143,7 @@ namespace ProjectXenocide.Model.Geoscape
         public void Update()
         {
             TimeSpan span = Xenocide.GameState.GeoData.GeoTime.Time - lastUpdate;
-            lastUpdate    = Xenocide.GameState.GeoData.GeoTime.Time;
+            lastUpdate = Xenocide.GameState.GeoData.GeoTime.Time;
             if (0 != span.TotalMilliseconds)
             {
                 hoursWorked += (CalcTotalSkill() * span.TotalHours);
@@ -250,7 +250,7 @@ namespace ProjectXenocide.Model.Geoscape
         /// <summary>
         /// Internal code used inside Xenocide to refer to this Project
         /// </summary>
-        public abstract string Id { get;  }
+        public abstract string Id { get; }
 
         /// <summary>
         /// Number of person hours that have been spent working on this project

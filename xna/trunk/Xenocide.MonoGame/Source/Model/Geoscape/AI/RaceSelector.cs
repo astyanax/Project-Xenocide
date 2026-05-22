@@ -30,8 +30,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -49,11 +49,11 @@ namespace ProjectXenocide.Model.Geoscape.AI
         public RaceSelector()
         {
             choices = new List<Choice>();
-            choices.Add(new Choice(Race.Grey,     35));
+            choices.Add(new Choice(Race.Grey, 35));
             choices.Add(new Choice(Race.Satyrian, 35));
-            choices.Add(new Choice(Race.Viper,    20));
-            choices.Add(new Choice(Race.Cloak,     5));
-            choices.Add(new Choice(Race.Morlock,   5));
+            choices.Add(new Choice(Race.Viper, 20));
+            choices.Add(new Choice(Race.Cloak, 5));
+            choices.Add(new Choice(Race.Morlock, 5));
         }
 
         /// <summary>

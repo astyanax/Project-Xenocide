@@ -28,15 +28,18 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
-using System.Collections.Specialized;
-using System.Diagnostics;
+
 using Microsoft.Xna.Framework;
-using ProjectXenocide.Utils;
-using ProjectXenocide.Model.Battlescape.Combatants;
+
 using ProjectXenocide.Model.Battlescape;
+using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 #endregion
@@ -78,9 +81,9 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// <param name="needsLocation">Is a location on the battlefield is needed to perform action?</param>
         protected ActionInfo(XPathNavigator actionElement, bool needsLocation)
         {
-            string timeName    = Util.AttributePresent(actionElement, "percentage") ? "percentage" : "time";
-            this.duration      = Util.GetFloatAttribute(actionElement, timeName);
-            this.startSound    = Util.GetStringAttribute(actionElement, "startSound");
+            string timeName = Util.AttributePresent(actionElement, "percentage") ? "percentage" : "time";
+            this.duration = Util.GetFloatAttribute(actionElement, timeName);
+            this.startSound = Util.GetStringAttribute(actionElement, "startSound");
             this.needsLocation = needsLocation;
         }
 
@@ -158,7 +161,7 @@ namespace ProjectXenocide.Model.StaticData.Items
 
         /// <summary>Add stats specific to this item type to string collection for display on X-Net</summary>
         /// <param name="stats">string collection to append strings to</param>
-        public virtual void XNetStatistics(StringCollection stats) {}
+        public virtual void XNetStatistics(StringCollection stats) { }
 
         /// <summary>String to put in action selection menu</summary>
         /// <param name="combatant">combatant who will do the action</param>
@@ -179,7 +182,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// <param name="actionElement">XML element holding data to construct ActionInfo</param>
         /// <returns>The constructed ActionInfo, or null if unsuported type</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
-            Justification="Will throw if actionElement is null")]
+            Justification = "Will throw if actionElement is null")]
         public static ActionInfo Factory(XPathNavigator actionElement)
         {
             string type = actionElement.Name;
@@ -236,7 +239,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         }
 
         /// <summary>String used for each ActionError</summary>
-        private static readonly String[] displayStrings = 
+        private static readonly String[] displayStrings =
         {
             Strings.ACTION_ERROR_NONE,
             Strings.ACTION_ERROR_INSUFFICENT_TUS,

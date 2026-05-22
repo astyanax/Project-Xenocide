@@ -31,11 +31,12 @@ using System.Collections.Generic;
 using System.Text;
 
 using Microsoft.Xna.Framework;
-using ProjectXenocide.Model.StaticData;
-using ProjectXenocide.Model.StaticData.Items;
-using ProjectXenocide.Model.StaticData.Facilities;
-using ProjectXenocide.Model.Geoscape.Vehicles;
+
 using ProjectXenocide.Model.Battlescape;
+using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.Model.StaticData;
+using ProjectXenocide.Model.StaticData.Facilities;
+using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Utils;
 
 #endregion
@@ -51,14 +52,14 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         /// <summary>
         /// Constructor
         /// </summary>
-        public Outpost(GeoPosition position, String name) 
+        public Outpost(GeoPosition position, String name)
         {
             this.position = position;
-            this.name     = name;
+            this.name = name;
 
             statistics = new OutpostStatistics();
-            floorplan  = new Floorplan(statistics);
-            inventory  = new OutpostInventory(statistics.Capacities, this);
+            floorplan = new Floorplan(statistics);
+            inventory = new OutpostInventory(statistics.Capacities, this);
         }
 
         /// <summary>
@@ -224,7 +225,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             statistics.OnOutpostDestroyed();
             floorplan.OnOutpostDestroyed();
             statistics = null;
-            inventory  = null;
+            inventory = null;
 
             // eliminate outpost itself
             Xenocide.GameState.GeoData.Outposts.Remove(this);
@@ -340,7 +341,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         /// The aircraft owned by the outpost
         /// </summary>
         public IList<Craft> Fleet { get { return inventory.Fleet; } }
-        
+
         /// <summary>
         /// Where the outpost is on the globe
         /// </summary>

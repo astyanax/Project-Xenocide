@@ -28,15 +28,15 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Xml.XPath;
 
 using Microsoft.Xna.Framework;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape.Geography;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -57,7 +57,7 @@ namespace ProjectXenocide.Model.Geoscape
         /// <summary>
         /// Copy constructor
         /// </summary>
-        public GeoPosition(GeoPosition rhs) : this(rhs.longitude, rhs.latitude) {}
+        public GeoPosition(GeoPosition rhs) : this(rhs.longitude, rhs.latitude) { }
 
         /// <summary>
         /// Radian Longitude, Latitude constructor.
@@ -76,7 +76,7 @@ namespace ProjectXenocide.Model.Geoscape
         /// </summary>
         /// <param name="node">XML node holding data to construct geoposition</param>
         public GeoPosition(XPathNavigator node)
-            :this(
+            : this(
                 Util.GetDegreesAttribute(node, "longitude"),
                 Util.GetDegreesAttribute(node, "latitude")
             )
@@ -107,9 +107,9 @@ namespace ProjectXenocide.Model.Geoscape
         /// Get position in a format suitable for display
         /// </summary>
         /// <returns>GeoPosition in a format suitable for display</returns>
-        public override string ToString() 
-        { 
-            return Util.StringFormat("({0}, {1})", MathHelper.ToDegrees(longitude), MathHelper.ToDegrees(latitude)); 
+        public override string ToString()
+        {
+            return Util.StringFormat("({0}, {1})", MathHelper.ToDegrees(longitude), MathHelper.ToDegrees(latitude));
         }
         #endregion
 
@@ -159,12 +159,15 @@ namespace ProjectXenocide.Model.Geoscape
         public float GetAzimuth(GeoPosition position)
         {
             float result = 0.0f;
-        
-            if(Math.Cos(latitude) < EPSILON) //are we at one of the poles?
+
+            if (Math.Cos(latitude) < EPSILON) //are we at one of the poles?
             {
-                if(latitude > 0) {
+                if (latitude > 0)
+                {
                     result = (float)Math.PI; //at north pole, going south
-                } else {
+                }
+                else
+                {
                     result = (float)-Math.PI; //at south pole, going north
                 }
             }
@@ -194,7 +197,7 @@ namespace ProjectXenocide.Model.Geoscape
                     }
                 }
             }
-        
+
             return result;
         }
 
@@ -207,7 +210,7 @@ namespace ProjectXenocide.Model.Geoscape
         public GeoPosition GetEndpoint(double azimuth, double distance)
         {
             //convert everything to double, to minimize precision errors
-        
+
             //we need radial distances
             double latitudeD = latitude;
 
@@ -216,8 +219,9 @@ namespace ProjectXenocide.Model.Geoscape
             double lat = Math.Asin(Math.Sin(latitudeD) * Math.Cos(distance) + tmp * Math.Cos(azimuth));
 
             double lon = longitude - Math.Atan2(Math.Sin(azimuth) * tmp, Math.Cos(distance) - Math.Sin(latitudeD) * Math.Sin(lat));
-        
-            while(lon > Math.PI) {
+
+            while (lon > Math.PI)
+            {
                 lon -= 2.0 * Math.PI;
             }
             while (lon < -Math.PI)
@@ -289,13 +293,13 @@ namespace ProjectXenocide.Model.Geoscape
         public T FindClosest<T>(IEnumerable<T> list, double maxDistance) where T : class, IGeoPosition
         {
             double distance = maxDistance;
-            T      nearest  = null;
+            T nearest = null;
             foreach (T candidate in list)
             {
                 double newDistance = Distance(candidate.Position);
                 if ((newDistance < distance) && candidate.IsKnownToXCorp)
                 {
-                    nearest  = candidate;
+                    nearest = candidate;
                     distance = newDistance;
                 }
             }
@@ -303,7 +307,7 @@ namespace ProjectXenocide.Model.Geoscape
         }
 
         #endregion
-    
+
         #region Public Static Members
         /// <summary>
         /// Returns the 3D cartesian co-ordinates equivelent to a set of 3D polar co-ords
@@ -370,7 +374,7 @@ namespace ProjectXenocide.Model.Geoscape
         /// <returns>a random position on the globe</returns>
         public static GeoPosition RandomLocation()
         {
-            return  new GeoPosition(
+            return new GeoPosition(
                 ((Xenocide.Rng.Next(32760) - 16380) / 16380.0f) * (float)Math.PI,
                 ((Xenocide.Rng.Next(32760) - 16380) / 32760.0f) * (float)Math.PI
            );
@@ -526,8 +530,8 @@ namespace ProjectXenocide.Model.Geoscape
         private static void TestEquals()
         {
             GeoPosition start = new GeoPosition(0.1f, 0.1f);
-            GeoPosition same  = new GeoPosition(0.1f, 0.1f);;
-            GeoPosition far   = new GeoPosition(0.1f, 0.2f);;
+            GeoPosition same = new GeoPosition(0.1f, 0.1f); ;
+            GeoPosition far = new GeoPosition(0.1f, 0.2f); ;
             Debug.Assert(start.Equals(same));
             Debug.Assert(!start.Equals(far));
             Debug.Assert(!start.Equals(null));
@@ -536,7 +540,7 @@ namespace ProjectXenocide.Model.Geoscape
             GeoPosition abuse = new GeoPosition((float)Math.PI, (float)(Math.PI / 2.0f));
             Debug.Assert(0 != abuse.GetHashCode());
         }
-        
+
         /// <summary>
         /// Return Throws if the two parameters are not almost the same
         /// (used to compare doubles for equality.)

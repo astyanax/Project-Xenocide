@@ -26,16 +26,16 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
+using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.Model.StaticData.Battlescape;
 using ProjectXenocide.Model.StaticData.Items;
-using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.Model.Geoscape.Outposts;
 
 namespace ProjectXenocide.Model.Battlescape.Combatants
 {
@@ -59,15 +59,15 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         private static void TestHealing()
         {
             // get a soldier
-            GeoData   geoData   = Xenocide.GameState.GeoData;
-            Person soldier      = Xenocide.StaticTables.ItemList["ITEM_PERSON_SOLDIER"].Manufacture() as Person;
+            GeoData geoData = Xenocide.GameState.GeoData;
+            Person soldier = Xenocide.StaticTables.ItemList["ITEM_PERSON_SOLDIER"].Manufacture() as Person;
             geoData.Outposts.Add(OutpostInventory.ConstructTestOutpost());
             geoData.Outposts[0].Inventory.Add(soldier, false);
 
             // injure the solider
             Combatant combatant = soldier.Combatant;
             int injury = 5;
-            combatant.Stats[Statistic.Health]       = injury;
+            combatant.Stats[Statistic.Health] = injury;
             combatant.Stats[Statistic.InjuryDamage] = injury;
 
             // 0 HP isn't dead, -1 is

@@ -28,13 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
-using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Battlescape;
-using ProjectXenocide.UI.Screens;
+using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.UI.Dialogs;
+using ProjectXenocide.UI.Screens;
 
 #endregion
 
@@ -60,17 +60,17 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
         /// </summary>
         public override void Process()
         {
-            Xenocide.GameState.GeoData.GeoTime.StopTime(); 
+            Xenocide.GameState.GeoData.GeoTime.StopTime();
             Xenocide.ScreenManager.ShowDialog(new StartBattlescapeDialog(mission));
         }
 
-#region Fields
+        #region Fields
 
         /// <summary>
         /// Details for battlescape mission
         /// </summary>
         private Mission mission;
 
-#endregion
+        #endregion
     }
 }

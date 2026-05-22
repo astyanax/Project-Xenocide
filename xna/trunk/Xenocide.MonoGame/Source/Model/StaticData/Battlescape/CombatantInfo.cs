@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -28,32 +28,30 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Text.Json.Serialization;
 using System.Xml;
 using System.Xml.XPath;
 
 using Microsoft.Xna.Framework;
 
-
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
-using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 #endregion
 
 namespace ProjectXenocide.Model.StaticData.Battlescape
 {
-        /// <summary>
-        /// Information needed to build a specific type of combatant
-        /// </summary>
+    /// <summary>
+    /// Information needed to build a specific type of combatant
+    /// </summary>
     [Serializable]
     public partial class CombatantInfo
     {
@@ -64,8 +62,8 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
         /// <param name="manager">Namespace used in combatant.xml</param>
         public CombatantInfo(XPathNavigator node, XmlNamespaceManager manager)
         {
-            this.race       = Util.ParseEnum<Race>(Util.GetStringAttribute(node, "race"));
-            this.rank       = Util.ParseEnum<AlienRank>(Util.GetStringAttribute(node, "rank"));
+            this.race = Util.ParseEnum<Race>(Util.GetStringAttribute(node, "race"));
+            this.rank = Util.ParseEnum<AlienRank>(Util.GetStringAttribute(node, "rank"));
             this.armorIndex = Xenocide.StaticTables.ArmorList.IndexOf(Util.GetStringAttribute(node, "armor"));
             this.ownerRace = race;
             if (Util.AttributePresent(node, "ownerRace"))
@@ -117,7 +115,7 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
             // Possible loadouts this combatant could have
             foreach (XPathNavigator equipementNode in node.Select("c:equipment", manager))
             {
-                loadoutChoices.Add( new LoadoutChoice(equipementNode));
+                loadoutChoices.Add(new LoadoutChoice(equipementNode));
             }
         }
 

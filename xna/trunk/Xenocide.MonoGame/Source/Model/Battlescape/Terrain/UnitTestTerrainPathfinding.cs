@@ -26,9 +26,9 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
@@ -64,23 +64,23 @@ namespace ProjectXenocide.Model.Battlescape
         public static void TestIsLineOfSight()
         {
             TerrainBuilder builder = new TestTerrainBuilder(TestTerrain.LineOfSight);
-            Terrain        terrain = new Terrain(new MockMission(builder));
+            Terrain terrain = new Terrain(new MockMission(builder));
             builder.BuildCells(terrain);
-            Debug.Assert( terrain.IsLineOfSight(new Vector3(), new Vector3()));
-            Debug.Assert( terrain.IsLineOfSight(new Vector3(0, 1, 0), new Vector3(0, 0, 2)));
-            Debug.Assert( terrain.IsLineOfSight(new Vector3(), new Vector3(1, 0, 0)));
-            Debug.Assert( terrain.IsLineOfSight(new Vector3(), new Vector3(1, 0, 1)));
+            Debug.Assert(terrain.IsLineOfSight(new Vector3(), new Vector3()));
+            Debug.Assert(terrain.IsLineOfSight(new Vector3(0, 1, 0), new Vector3(0, 0, 2)));
+            Debug.Assert(terrain.IsLineOfSight(new Vector3(), new Vector3(1, 0, 0)));
+            Debug.Assert(terrain.IsLineOfSight(new Vector3(), new Vector3(1, 0, 1)));
             Debug.Assert(!terrain.IsLineOfSight(new Vector3(), new Vector3(1, 0, 2)));
-            Debug.Assert( terrain.IsLineOfSight(new Vector3(), new Vector3(1, 0, 3)));
+            Debug.Assert(terrain.IsLineOfSight(new Vector3(), new Vector3(1, 0, 3)));
 
-            Debug.Assert( terrain.IsLineOfSight(new Vector3(1, 0, 0), new Vector3(0, 0, 0)));
-            Debug.Assert( terrain.IsLineOfSight(new Vector3(1, 0, 0), new Vector3(0, 0, 1)));
+            Debug.Assert(terrain.IsLineOfSight(new Vector3(1, 0, 0), new Vector3(0, 0, 0)));
+            Debug.Assert(terrain.IsLineOfSight(new Vector3(1, 0, 0), new Vector3(0, 0, 1)));
             Debug.Assert(!terrain.IsLineOfSight(new Vector3(1, 0, 0), new Vector3(0, 0, 2)));
-            Debug.Assert( terrain.IsLineOfSight(new Vector3(1, 0, 0), new Vector3(0, 0, 3)));
+            Debug.Assert(terrain.IsLineOfSight(new Vector3(1, 0, 0), new Vector3(0, 0, 3)));
 
             // toy vertical tests
-            Debug.Assert( terrain.IsLineOfSight(new Vector3(0, 0, 0), new Vector3(0, 1, 0)));
-            Debug.Assert( terrain.IsLineOfSight(new Vector3(0, 1, 0), new Vector3(0, 0, 0)));
+            Debug.Assert(terrain.IsLineOfSight(new Vector3(0, 0, 0), new Vector3(0, 1, 0)));
+            Debug.Assert(terrain.IsLineOfSight(new Vector3(0, 1, 0), new Vector3(0, 0, 0)));
             Debug.Assert(!terrain.IsLineOfSight(new Vector3(0, 6, 0), new Vector3(0, 7, 0)));
             Debug.Assert(!terrain.IsLineOfSight(new Vector3(0, 7, 0), new Vector3(0, 6, 0)));
         }

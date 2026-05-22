@@ -28,13 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
-using ProjectXenocide.Utils;
-using ProjectXenocide.Model.StaticData.Research;
 using ProjectXenocide.Model.Geoscape.GeoEvents;
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.StaticData.Research;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -58,8 +58,8 @@ namespace ProjectXenocide.Model.Geoscape
             :
             base("ITEM_PERSON_SCIENTIST", (GetTopic(topicId).Days * 24), projectManager)
         {
-            this.topicId        = topicId;
-            this.techManager    = techManager;
+            this.topicId = topicId;
+            this.techManager = techManager;
             Debug.Assert(topic.CanResearch(techManager, outposts));
             topic.ConsumeStartingArtefacts(techManager, outposts);
         }

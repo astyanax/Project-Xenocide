@@ -26,9 +26,9 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text;
 using System.Text.Json.Serialization;
 
 using Microsoft.Xna.Framework;
@@ -139,7 +139,7 @@ namespace ProjectXenocide.Model.Battlescape
         /// <summary>Adjusts a position to be center of cell's floor</summary>
         /// <param name="pos">position, must be co-ords of cell's bottom north west corner</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#",
-            Justification="We're not idiots")]
+            Justification = "We're not idiots")]
         public void ToFloorCenter(ref Vector3 pos)
         {
             Debug.Assert(pos.X == (int)pos.X);
@@ -177,12 +177,12 @@ namespace ProjectXenocide.Model.Battlescape
         /// <param name="old">combatant's old position</param>
         /// <param name="newPos">combatant's new position</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
-            Justification="Will throw if combatant is null")]
+            Justification = "Will throw if combatant is null")]
         public void MoveCombatant(Combatant combatant, MoveData old, MoveData newPos)
         {
             Debug.Assert(combatant.CombatantId == cells[CellIndex(old)].CombatantId);
             Debug.Assert(!cells[CellIndex(newPos)].IsOccupied);
-            cells[CellIndex(old)].CombatantId    = 0;
+            cells[CellIndex(old)].CombatantId = 0;
             cells[CellIndex(newPos)].CombatantId = combatant.CombatantId;
             UpdateViewMatrix(combatant);
         }
@@ -191,7 +191,7 @@ namespace ProjectXenocide.Model.Battlescape
         /// <param name="combatant">combatant to remove</param>
         /// <remarks>Remove dead/unconscious from line of sight and pathfinding data</remarks>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
-            Justification="will throw if combatant is null")]
+            Justification = "will throw if combatant is null")]
         public void RemoveCombatant(Combatant combatant)
         {
             int index = CellIndex(combatant.Position);
@@ -269,16 +269,16 @@ namespace ProjectXenocide.Model.Battlescape
             int i = -1;
             foreach (Combatant enemy in enemies)
             {
-                bool      enemyVisible     = false;
-                bool      combatantVisible = false;
-                int       enemyFlag        = (1 << ++i);
+                bool enemyVisible = false;
+                bool combatantVisible = false;
+                int enemyFlag = (1 << ++i);
                 // to be visible, must be in range and have a line of sight
                 if ((Vector3.DistanceSquared(combatant.Position, enemy.Position) < Combatant.VisionRangeSquared) &&
                     IsLineOfSight(combatant.Position, enemy.Position))
                 {
                     // Ignore Vertical component of difference
-                    Vector3 diff     = enemy.Position - combatant.Position;
-                    bool    vertical = (Math.Abs(diff.X) + Math.Abs(diff.Z)) < 0.5f;
+                    Vector3 diff = enemy.Position - combatant.Position;
+                    bool vertical = (Math.Abs(diff.X) + Math.Abs(diff.Z)) < 0.5f;
                     diff.Y = 0;
                     diff.Normalize();
 
@@ -297,23 +297,23 @@ namespace ProjectXenocide.Model.Battlescape
 
                 if (enemyVisible)
                 {
-                    combatant.OpponentsInView  |= enemyFlag;
-                    enemy.OponentsViewing      |= combatantFlag;
+                    combatant.OpponentsInView |= enemyFlag;
+                    enemy.OponentsViewing |= combatantFlag;
                 }
                 else
                 {
                     combatant.OpponentsInView &= ~enemyFlag;
-                    enemy.OponentsViewing     &= ~combatantFlag;
+                    enemy.OponentsViewing &= ~combatantFlag;
                 }
 
                 if (combatantVisible && enemy.CanTakeOrders)
                 {
-                    enemy.OpponentsInView     |= combatantFlag;
+                    enemy.OpponentsInView |= combatantFlag;
                     combatant.OponentsViewing |= enemyFlag;
                 }
                 else
                 {
-                    enemy.OpponentsInView     &= ~combatantFlag;
+                    enemy.OpponentsInView &= ~combatantFlag;
                     combatant.OponentsViewing &= ~enemyFlag;
                 }
             }
@@ -336,20 +336,20 @@ namespace ProjectXenocide.Model.Battlescape
         /// <param name="lastPos">the last cell checked</param>
         /// <returns>true if path exists</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity",
-            Justification="Performance need outweights complexity")]
+            Justification = "Performance need outweights complexity")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#",
             Justification = "We're not idiots")]
         public bool IsLineOfSight(Vector3 start, Vector3 end, VisibilityChecks extraChecks, ref Vector3 lastPos)
         {
             // make sure start and end are in centre of cells
-            start          = new Vector3((int)start.X + 0.5f, (int)start.Y + 0.5f, (int)start.Z + 0.5f);
-            end            = new Vector3((int)end.X + 0.5f,   (int)end.Y + 0.5f,   (int)end.Z + 0.5f);
-            Vector3 delta  = end - start;
-            Vector3 abs    = new Vector3(Math.Abs(delta.X),  Math.Abs(delta.Y),  Math.Abs(delta.Z));
-            Vector3 sign   = new Vector3(0 <= delta.X ? 1 : -1, 0 <= delta.Y ? 1 : -1, 0 <= delta.Z ? 1 : -1);
-            int     max    = (int)Math.Max(Math.Max(abs.X, abs.Y), abs.Z);
+            start = new Vector3((int)start.X + 0.5f, (int)start.Y + 0.5f, (int)start.Z + 0.5f);
+            end = new Vector3((int)end.X + 0.5f, (int)end.Y + 0.5f, (int)end.Z + 0.5f);
+            Vector3 delta = end - start;
+            Vector3 abs = new Vector3(Math.Abs(delta.X), Math.Abs(delta.Y), Math.Abs(delta.Z));
+            Vector3 sign = new Vector3(0 <= delta.X ? 1 : -1, 0 <= delta.Y ? 1 : -1, 0 <= delta.Z ? 1 : -1);
+            int max = (int)Math.Max(Math.Max(abs.X, abs.Y), abs.Z);
             // add small increment to step to prevent underflow in float quantization
-            Vector3 step   = (delta / max) + (new Vector3(0.001f, 0.001f, 0.001f) * sign);
+            Vector3 step = (delta / max) + (new Vector3(0.001f, 0.001f, 0.001f) * sign);
             Vector3 oldPos = start;
             lastPos = start;
             if ((abs.X <= abs.Y) && (abs.Z <= abs.Y))
@@ -553,7 +553,7 @@ namespace ProjectXenocide.Model.Battlescape
             {
                 int index = Xenocide.Rng.Next(positions.Count);
                 combatant.PlaceInTeam = i;
-                combatant.Position    = positions[index] + new Vector3(0.5f, 0.0f, 0.5f);
+                combatant.Position = positions[index] + new Vector3(0.5f, 0.0f, 0.5f);
                 cells[CellIndex(positions[index])].CombatantId = combatant.CombatantId;
                 positions.RemoveAt(index);
                 ++i;
@@ -572,7 +572,7 @@ namespace ProjectXenocide.Model.Battlescape
         /// <param name="z">position of first cell in strip</param>
         /// <param name="facedata">data for cells, comma separated</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
-            Justification="Will throw if facedata is null")]
+            Justification = "Will throw if facedata is null")]
         public void SetCells(int x, int y, int z, string facedata)
         {
             int i = 0;

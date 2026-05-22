@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -28,13 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 
@@ -50,7 +50,7 @@ namespace ProjectXenocide.UI.Screens
             this.innerText = givenText;
             // center of text
             this.size = new Vector2(
-                ((int)(givenFont.MeasureString(this.innerText).X) + 1) / 2, 
+                ((int)(givenFont.MeasureString(this.innerText).X) + 1) / 2,
                 givenFont.LineSpacing / 2);
         }
 
@@ -77,7 +77,7 @@ namespace ProjectXenocide.UI.Screens
         /// CreditsScreen constructor
         /// </summary>
         public CreditsScreen()
-            :base("CreditsScreen")
+            : base("CreditsScreen")
         {
         }
 
@@ -114,10 +114,10 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         /// <param name="content">unused</param>
         /// <param name="device">the display</param>
-        
+
         public override void LoadContent(ContentManager content, GraphicsDevice device)
         {
-            
+
             {
                 spriteBatch = new SpriteBatch(Xenocide.Instance.GraphicsDevice);
                 outputFont = contentManager.Load<SpriteFont>(@"SpriteFont1");
@@ -153,14 +153,14 @@ namespace ProjectXenocide.UI.Screens
                         buildingLine.Append(currentWord);
                         currentWord = new StringBuilder();
                     }
-                    if (currentChar==' ')
+                    if (currentChar == ' ')
                     {
                         currentWord = new StringBuilder();
                     }
                 }
                 preContent.Add(new SpriteLine(buildingLine.ToString(), outputFont));
             }
-            preContent.Add(new SpriteLine(String.Empty,outputFont));
+            preContent.Add(new SpriteLine(String.Empty, outputFont));
             lines = preContent.ToArray();
             this.reset(device);
         }
@@ -171,11 +171,11 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="gameTime">Current time</param>
         /// <param name="device">Where to draw the screen</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
-            Justification="Will throw if gameTime is null")]
+            Justification = "Will throw if gameTime is null")]
         public override void Draw(GameTime gameTime, GraphicsDevice device)
         {
-            offset -= gameTime.ElapsedGameTime.Milliseconds*scrollSpeed*outputFont.LineSpacing/1000;
-            if (offset < - outputFont.LineSpacing)
+            offset -= gameTime.ElapsedGameTime.Milliseconds * scrollSpeed * outputFont.LineSpacing / 1000;
+            if (offset < -outputFont.LineSpacing)
             {
                 index++;
                 offset += outputFont.LineSpacing;
@@ -184,7 +184,7 @@ namespace ProjectXenocide.UI.Screens
 
             spriteBatch.Begin();
 
-            int i=index;
+            int i = index;
             Vector2 textPosition = new Vector2(GetDisplayAreaWidth(device) / 2, offset);
             while ((i < lines.Length) && (textPosition.Y < device.Viewport.Height))
             {
@@ -241,7 +241,7 @@ namespace ProjectXenocide.UI.Screens
 
 
         /// <summary>Lines of text per second</summary>
-        private const float scrollSpeed=2.0f;
+        private const float scrollSpeed = 2.0f;
 
         /// <summary>Needed so that we can load the sprite font</summary>
         private ContentManager contentManager = new ContentManager(Xenocide.Instance.Services);
@@ -252,7 +252,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>Used to draw the text</summary>
         private SpriteBatch spriteBatch;
 
-        private SpriteLine [] lines;
+        private SpriteLine[] lines;
         private float offset;
         private int index;
     }

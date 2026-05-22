@@ -1,5 +1,7 @@
 using System;
+
 using Gum.Forms.Controls;
+
 using ProjectXenocide.UI.Screens;
 
 namespace ProjectXenocide.UI.Dialogs

@@ -28,12 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+
 using Xenocide.Resources;
 
 
@@ -148,7 +149,7 @@ namespace ProjectXenocide.UI.Scenes
         public static TextureAtlas DefaultAtlas(GraphicsDevice device)
         {
             TextureAtlas atlas = new TextureAtlas(512, 512);
-            atlas.LoadContent(device, @"Content\Textures\Battlescape\textureAtlas.png");
+            atlas.LoadContent(device, @"Content/Textures/Battlescape/textureAtlas.png");
             atlas.DefineTexture(0, 0, 0, 0); // dummy entry, "there is no texture"
             atlas.DefineTexture(384, 0, 128, 128); // floor, 4 grey tiles
             atlas.DefineTexture(0, 0, 1, 1); // ToDo: water

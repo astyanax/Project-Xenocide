@@ -28,22 +28,20 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-
 using Microsoft.Xna.Framework;
 
-
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData.Battlescape;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 
@@ -68,18 +66,18 @@ namespace ProjectXenocide.Model.StaticData.Items
             Justification = "will throw if itemNode == null")]
         protected ItemInfo(XPathNavigator itemNode, XmlNamespaceManager manager)
         {
-            id    = Util.GetStringAttribute(itemNode, "id");
-            name  = Util.GetStringAttribute(itemNode, "name");
-            score = Util.GetFloatAttribute(itemNode,  "score");
+            id = Util.GetStringAttribute(itemNode, "id");
+            name = Util.GetStringAttribute(itemNode, "name");
+            score = Util.GetFloatAttribute(itemNode, "score");
 
             // storage element
             XPathNavigator storage = itemNode.SelectSingleNode("i:storage", manager);
-            storageType  = Util.GetStringAttribute(storage, "type");
-            storageUnits = Util.GetIntAttribute(storage,    "units");
+            storageType = Util.GetStringAttribute(storage, "type");
+            storageUnits = Util.GetIntAttribute(storage, "units");
 
             // price element
             XPathNavigator price = itemNode.SelectSingleNode("i:price", manager);
-            buyPrice  = Util.GetIntAttribute(price, "buy");
+            buyPrice = Util.GetIntAttribute(price, "buy");
             sellPrice = Util.GetIntAttribute(price, "sell");
 
             // construction details (optional)
@@ -181,7 +179,7 @@ namespace ProjectXenocide.Model.StaticData.Items
             // This function should NOT be called for unique items, because we don't 
             // know which of them is wanted.
             Debug.Assert(!IsUnique);
-            
+
             // default behaviour, item is same as newly created one.
             return Manufacture();
         }
@@ -210,7 +208,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         {
             // put the item
             inventory.Add(this, spaceAlreadyRecorded);
-            
+
             // if item holds ammo, and item isn't a clip, put the ammo in also
             if (item.HoldsAmmo && !item.IsClip)
             {

@@ -26,14 +26,14 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 namespace ProjectXenocide.UI.Scenes
 {
@@ -52,8 +52,8 @@ namespace ProjectXenocide.UI.Scenes
         public InventoryLocation(bool isOnSoldier, int x, int y)
         {
             this.isOnSoldier = isOnSoldier;
-            this.x           = x;
-            this.y           = y;
+            this.x = x;
+            this.y = y;
         }
 
         /// <summary>
@@ -69,8 +69,8 @@ namespace ProjectXenocide.UI.Scenes
             Rectangle groundArea = GroundArea(scene);
             if (groundArea.Contains(x, y))
             {
-                int column = (int)((x - groundArea.X) * GroundWidthInCells  / (float)groundArea.Width);
-                int row    = (int)((y - groundArea.Y) * GroundHeightInCells / (float)groundArea.Height);
+                int column = (int)((x - groundArea.X) * GroundWidthInCells / (float)groundArea.Width);
+                int row = (int)((y - groundArea.Y) * GroundHeightInCells / (float)groundArea.Height);
                 return new InventoryLocation(false, column, row);
             }
 
@@ -122,7 +122,7 @@ namespace ProjectXenocide.UI.Scenes
         public static Rectangle GroundArea(Rectangle sceneWindow)
         {
             return new Rectangle(
-                Util.Round( 10.0f / 800.0f * sceneWindow.Width),
+                Util.Round(10.0f / 800.0f * sceneWindow.Width),
                 Util.Round(469.0f / 600.0f * sceneWindow.Height),
                 Util.Round(779.0f / 800.0f * sceneWindow.Width),
                 Util.Round(120.0f / 600.0f * sceneWindow.Height)

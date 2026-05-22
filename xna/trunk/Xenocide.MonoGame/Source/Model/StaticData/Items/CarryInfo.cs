@@ -54,16 +54,16 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// <param name="element">XML element holding data to construct CarryInfo</param>
         public CarryInfo(XPathNavigator element)
         {
-            x         = Util.GetIntAttribute( element, "xSize");
-            y         = Util.GetIntAttribute( element, "ySize");
-            mass      = Util.GetIntAttribute( element, "mass");
+            x = Util.GetIntAttribute(element, "xSize");
+            y = Util.GetIntAttribute(element, "ySize");
+            mass = Util.GetIntAttribute(element, "mass");
             equipable = Util.GetBoolAttribute(element, "equipable");
             bothHands = Util.GetBoolAttribute(element, "bothHands");
 
             // spriteRect requires some construction
-            const int cellSize   = 64;
-            int       top        = Util.GetIntAttribute(element, "spriteTop")  * cellSize;
-            int       left       = Util.GetIntAttribute(element, "spriteLeft") * cellSize;
+            const int cellSize = 64;
+            int top = Util.GetIntAttribute(element, "spriteTop") * cellSize;
+            int left = Util.GetIntAttribute(element, "spriteLeft") * cellSize;
             spriteRect = new Rectangle(left, top, x * cellSize, y * cellSize);
         }
 

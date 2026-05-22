@@ -1,6 +1,10 @@
 using System;
-using MonoGameGum;
+
 using Gum.Forms.Controls;
+
+using MonoGameGum;
+
+using ProjectXenocide.Assets;
 
 namespace ProjectXenocide.UI.Screens
 {
@@ -39,7 +43,7 @@ namespace ProjectXenocide.UI.Screens
 
         private static void OnAnyButtonClicked(object sender, EventArgs e)
         {
-            Xenocide.AudioSystem?.PlaySound("Menu\\buttonclick1_ok.ogg");
+            Xenocide.AudioSystem?.PlaySound(SoundId.ButtonClick1);
         }
 
         protected override void Dispose(bool disposing)

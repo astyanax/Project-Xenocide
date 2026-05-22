@@ -26,9 +26,9 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
@@ -44,7 +44,7 @@ namespace ProjectXenocide.Model.Battlescape
     {
         /// <summary>Fills in the cells to define a "random city" terrain</summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible",
-            Justification="We can handle nesting")]
+            Justification = "We can handle nesting")]
         public class RandomCityTerrainBuilder : TerrainBuilder
         {
             /// <summary>

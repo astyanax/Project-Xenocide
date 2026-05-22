@@ -30,9 +30,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using ProjectXenocide.Model.Geoscape.Geography;
-using ProjectXenocide.Model.Geoscape.GeoEvents;
 using ProjectXenocide.Model.Geoscape.AI;
+using ProjectXenocide.Model.Geoscape.GeoEvents;
+using ProjectXenocide.Model.Geoscape.Geography;
+
 using Xenocide.Resources;
 
 
@@ -60,9 +61,9 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             :
             base(ufo, city.Position.RandomLocationDistantBykm(500), numLandings, numSubLandings)
         {
-            this.city       = city;
+            this.city = city;
             this.attackCity = attackCity;
-            this.race       = ufo.Race;
+            this.race = ufo.Race;
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
 
             // and leave earth
             GeoPosition exit = city.Position.RandomLocation((float)Math.PI / 2.0f);
-            SetState(new MoveToPositionState(this, exit,MissionState.MoveToPositionStateType.LandingDestination,Craft.MaxSpeed));
+            SetState(new MoveToPositionState(this, exit, MissionState.MoveToPositionStateType.LandingDestination, Craft.MaxSpeed));
         }
 
         /// <summary>

@@ -28,17 +28,17 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
-using ProjectXenocide.Model.Geoscape.Outposts;
-using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Model.Geoscape.AI;
 using ProjectXenocide.Model.Geoscape.GeoEvents;
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape.Geography;
+using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.Utils;
 
 
 #endregion
@@ -59,8 +59,8 @@ namespace ProjectXenocide.Model.Geoscape
         /// <param name="name">Name for the base</param>
         public void AddOutpost(float longitude, float latitude, String name)
         {
-            GeoPosition position  = new GeoPosition(longitude, latitude);
-            Outpost     outpost   = new Outpost(position, name);
+            GeoPosition position = new GeoPosition(longitude, latitude);
+            Outpost outpost = new Outpost(position, name);
             Outposts.Add(outpost);
         }
 
@@ -109,7 +109,7 @@ namespace ProjectXenocide.Model.Geoscape
                 PumpUpdate(gameTime);
             }
         }
-            
+
         /// <summary>
         /// Pump the update() call to all objects contained by the GeoData
         /// </summary>
@@ -144,7 +144,7 @@ namespace ProjectXenocide.Model.Geoscape
                 }
                 geoTime.AddMilliseconds(step);
                 Overmind.Update(step);
-                
+
                 // can't use foreach, because tasks may be removed from collection
                 for (int i = Outposts.Count - 1; 0 <= i; --i)
                 {
@@ -154,7 +154,7 @@ namespace ProjectXenocide.Model.Geoscape
                 //researchGraph.Update(gameMilliseconds);
                 gameMilliseconds -= step;
             }
-            while ((0.0 < gameMilliseconds) && (0 == eventQueue.Count) && 
+            while ((0.0 < gameMilliseconds) && (0 == eventQueue.Count) &&
                 ((DateTime.Now - start) < maxProcessing));
         }
 

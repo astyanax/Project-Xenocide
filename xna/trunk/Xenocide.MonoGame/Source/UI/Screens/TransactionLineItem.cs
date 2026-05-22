@@ -30,12 +30,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -44,7 +42,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// A line in a sale or transfer operation
     /// </summary>
-    public  class TransactionLineItem
+    public class TransactionLineItem
     {
         /// <summary>
         /// Constructor (used for transfering)
@@ -56,9 +54,9 @@ namespace ProjectXenocide.UI.Screens
             Justification = "will throw if item or source is null")]
         public TransactionLineItem(Item item, OutpostInventory source, OutpostInventory destination)
         {
-            this.item        = item;
+            this.item = item;
             this.sourceCount = source.NumberInInventory(item.ItemInfo);
-            this.maxMovable  = (item.ItemInfo.IsUnique) ? 1 : sourceCount;
+            this.maxMovable = (item.ItemInfo.IsUnique) ? 1 : sourceCount;
             if (null != destination)
             {
                 destinationCount = destination.NumberInInventory(item.ItemInfo);

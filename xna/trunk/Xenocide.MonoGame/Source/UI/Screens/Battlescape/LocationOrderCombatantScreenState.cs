@@ -28,25 +28,22 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
+using System.Threading;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model;
-
-using ProjectXenocide.UI.Dialogs;
-
-using System.Threading;
-using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.UI.Scenes.Battlescape;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -72,12 +69,12 @@ namespace ProjectXenocide.UI.Screens
             /// <param name="combatant">Combatant player is giving order to</param>
             /// <param name="actionInfo">action to get location for</param>
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode",
-                Justification="FxCop false positive")]
+                Justification = "FxCop false positive")]
             public LocationOrderCombatantScreenState(BattlescapeScreen battlescapeScreen, Item item, Combatant combatant,
                 ActionInfo actionInfo)
                 : base(battlescapeScreen, combatant)
             {
-                this.item       = item;
+                this.item = item;
                 this.actionInfo = actionInfo;
             }
 

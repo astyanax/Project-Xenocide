@@ -29,17 +29,17 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-
-using ProjectXenocide.Utils;
+using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.Model.StaticData.Facilities;
 using ProjectXenocide.Model.StaticData.Items;
-using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 
@@ -100,7 +100,7 @@ namespace ProjectXenocide.Model.StaticData.Research
         public IEnumerable<ResearchTopic> StartableTopics(TechnologyManager manager, ICollection<Outpost> outposts)
         {
             return Util.FilterColection(topics.Values,
-                delegate(ResearchTopic topic) { return topic.CanResearch(manager, outposts); }
+                delegate (ResearchTopic topic) { return topic.CanResearch(manager, outposts); }
             );
         }
 
@@ -155,7 +155,7 @@ namespace ProjectXenocide.Model.StaticData.Research
 
             // cycle through, adding techs until we can't add any more
             GiveStartingTech(mgr);
-            for (bool added = true; added; )
+            for (bool added = true; added;)
             {
                 added = false;
                 foreach (ResearchTopic topic in topics.Values)

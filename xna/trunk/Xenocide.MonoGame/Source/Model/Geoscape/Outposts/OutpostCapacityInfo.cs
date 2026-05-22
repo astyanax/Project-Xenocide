@@ -28,8 +28,8 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
@@ -59,8 +59,8 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         public void FinishedBuilding(uint quantity)
         {
             Debug.Assert(quantity <= building);
-            building  -= quantity;
-            total     += quantity;
+            building -= quantity;
+            total += quantity;
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         public void OnOutpostDestroyed()
         {
             // zero out in use, so we don't get assertions on destruction
-            inUse    = 0;
+            inUse = 0;
         }
 
         /// <summary>

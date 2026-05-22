@@ -28,14 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
-using ProjectXenocide.Utils;
-
 using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -54,8 +53,8 @@ namespace ProjectXenocide.Model.Battlescape
         public TeamAI(Battle battlescape, Team team, Team enemy)
         {
             this.battlescape = battlescape;
-            this.team        = team;
-            this.enemy       = enemy;
+            this.team = team;
+            this.enemy = enemy;
 
             // equip each combatant with its own AI
             foreach (Combatant c in team.Combatants)

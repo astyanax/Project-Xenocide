@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -28,26 +28,27 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-
-using Vector3 = Microsoft.Xna.Framework.Vector3;
+using System.Text;
 
 using CeGui;
+
 using Gum.Forms.Controls;
 
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
-using ProjectXenocide.Utils;
-using ProjectXenocide.UI.Dialogs;
-using ProjectXenocide.UI.Scenes.Battlescape;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.UI.Dialogs;
+using ProjectXenocide.UI.Scenes.Battlescape;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
+
+using Vector3 = Microsoft.Xna.Framework.Vector3;
 
 
 #endregion
@@ -63,7 +64,7 @@ namespace ProjectXenocide.UI.Screens
         /// Constructor (obviously)
         /// </summary>
         public BattlescapeScreen()
-            : base("BattlescapeScreen", @"Content\Textures\UI\BasesScreenBackground.png")
+            : base("BattlescapeScreen", @"Content/Textures/UI/BasesScreenBackground.png")
         {
             Xenocide.AudioSystem.PlayRandomMusic();
             ChangeState(new StartTurnScreenState(this));
@@ -74,7 +75,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         /// <param name="content">content manager that fetches the content</param>
         /// <param name="device">the display</param>
-        
+
         public override void LoadContent(ContentManager content, GraphicsDevice device)
         {
             scene.LoadContent(device, battlescape);

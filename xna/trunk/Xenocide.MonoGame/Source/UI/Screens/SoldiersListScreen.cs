@@ -33,15 +33,16 @@ using System.Text;
 
 using Gum.Forms.Controls;
 
+using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.Utils;
-using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
-using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.UI.Controls;
-using Xenocide.Resources;
 using ProjectXenocide.UI.Dialogs;
+using ProjectXenocide.Utils;
+
+using Xenocide.Resources;
 
 
 #endregion
@@ -57,7 +58,7 @@ namespace ProjectXenocide.UI.Screens
         /// Constructs a screen listing the soldiers stationed at the given base.
         /// </summary>
         public SoldiersListScreen(int selectedOutpostIndex)
-            : base("SoldiersListScreen", @"Content\Textures\UI\BasesScreenBackground.png")
+            : base("SoldiersListScreen", @"Content/Textures/UI/BasesScreenBackground.png")
         {
             this.selectedOutpostIndex = selectedOutpostIndex;
 
@@ -353,7 +354,7 @@ namespace ProjectXenocide.UI.Screens
                     GumYesNoDialog dlg = GumYesNoDialog.OkCancelDialog(
                         Util.StringFormat(Strings.YESNOMSG_CANCEL_PSI_TRAINING, person.Name)
                     );
-                    dlg.YesAction += delegate()
+                    dlg.YesAction += delegate ()
                     {
                         person.PsiTraining = false;
                         PopulateAttributes();

@@ -28,8 +28,8 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using ProjectXenocide.Model.Geoscape.Outposts;
 
@@ -48,9 +48,9 @@ namespace ProjectXenocide.Model
         /// </summary>
         /// <param name="occurs">When the facility will finish construction</param>
         /// <param name="facility">Facility that is being constructed</param>
-        public FacilityConstructedAppointment(DateTime occurs, FacilityHandle facility) 
-            : 
-            base(occurs) 
+        public FacilityConstructedAppointment(DateTime occurs, FacilityHandle facility)
+            :
+            base(occurs)
         {
             this.facility = facility;
         }

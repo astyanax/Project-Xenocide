@@ -28,27 +28,26 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Threading;
 using System.Xml;
 using System.Xml.XPath;
-using System.Threading;
-using System.IO;
-using System.Globalization;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
-
+using Microsoft.Xna.Framework.Input;
 
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.UI.Screens;
 using ProjectXenocide.UI.Dialogs;
+using ProjectXenocide.UI.Screens;
 
+using Xenocide.Resources;
 
 using Vector3 = Microsoft.Xna.Framework.Vector3;
-using Xenocide.Resources;
 
 
 #endregion
@@ -322,17 +321,17 @@ namespace ProjectXenocide.Utils
         {
             switch (xenoError)
             {
-                case XenoError.None: 
+                case XenoError.None:
                     return Strings.XENOERROR_NONE;
-                case XenoError.PositionNotInBase: 
+                case XenoError.PositionNotInBase:
                     return Strings.XENOERROR_POSITION_NOT_IN_BASE;
-                case XenoError.PositionAlreadyOccupied: 
+                case XenoError.PositionAlreadyOccupied:
                     return Strings.XENOERROR_POSITION_ALREADY_OCCUPIED;
-                case XenoError.CellHasNoNeighbours: 
+                case XenoError.CellHasNoNeighbours:
                     return Strings.XENOERROR_CELL_HAS_NO_NEIGHBOURS;
-                case XenoError.FacilityIsInUse: 
+                case XenoError.FacilityIsInUse:
                     return Strings.XENOERROR_FACILITY_IS_IN_USE;
-                case XenoError.DeleteWillSplitBase: 
+                case XenoError.DeleteWillSplitBase:
                     return Strings.XENOERROR_DELETE_WILL_SPLIT_BASE;
                 default:
                     Debug.Assert(false);

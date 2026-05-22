@@ -28,11 +28,12 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
-using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Model.Geoscape.Geography;
+using ProjectXenocide.Model.Geoscape.Vehicles;
+
 using Xenocide.Resources;
 
 #endregion
@@ -113,7 +114,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
 
         #endregion Fields
     }
-    
+
     /// <summary>
     /// The missions that make up a Task
     /// </summary>
@@ -128,8 +129,8 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// <param name="launches">The UFOs that will be used in the task</param>
         public TaskPlan(String name, float score, IList<LaunchPlan> launches)
         {
-            this.name     = name;
-            this.score    = score;
+            this.name = name;
+            this.score = score;
             this.launches = launches;
         }
 
@@ -191,7 +192,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// <returns>the task</returns>
         public InvasionTask Create(AlienMission type, Overmind overmind, PlanetRegion region)
         {
-            Planet      planet   = Xenocide.GameState.GeoData.Planet;
+            Planet planet = Xenocide.GameState.GeoData.Planet;
             GeoPosition centroid = planet.GetRandomLandPositionInRegion(region);
             InvasionTask task = null;
             switch (type)
@@ -240,8 +241,8 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// <returns>the task</returns>
         public InfiltrationTask CreateInfiltrationTask(Overmind overmind)
         {
-            Planet      planet   = Xenocide.GameState.GeoData.Planet;
-            Country     country  = planet.SelectCountryToInfiltrate();
+            Planet planet = Xenocide.GameState.GeoData.Planet;
+            Country country = planet.SelectCountryToInfiltrate();
             GeoPosition centroid = planet.GetRandomPositionInCountry(country);
             return new InfiltrationTask(overmind, centroid, plans[(int)AlienMission.Infiltration], country);
         }
@@ -314,73 +315,73 @@ namespace ProjectXenocide.Model.Geoscape.AI
 
             // Research
             List<LaunchPlan> launches = new List<LaunchPlan>();
-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",   20.0f,  30.0f, 1, 2));
-            launches.Add(new LaunchPlan("ITEM_UFO_RECON",  132.0f, 204.0f, 2, 2));
+            launches.Add(new LaunchPlan("ITEM_UFO_PROBE", 20.0f, 30.0f, 1, 2));
+            launches.Add(new LaunchPlan("ITEM_UFO_RECON", 132.0f, 204.0f, 2, 2));
             launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 132.0f, 204.0f, 2, 2));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f,  120.0f, 3, 1));
+            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f, 120.0f, 3, 1));
             plans.Add(new TaskPlan(Strings.UFO_MISSION_RESEARCH, 20.0f, launches));
 
             // Harvest
             launches = new List<LaunchPlan>();
-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",       48.0f, 120.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",       48.0f, 120.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",      132.0f, 204.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",      48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",      48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_REAPER",     132.0f, 204.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_REAPER",      48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT",  20.0f,  30.0f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_PROBE", 48.0f, 120.0f, 1, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_PROBE", 48.0f, 120.0f, 1, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_PROBE", 132.0f, 204.0f, 1, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f, 120.0f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f, 120.0f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_REAPER", 132.0f, 204.0f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_REAPER", 48.0f, 120.0f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 20.0f, 30.0f, 2, 3));
             plans.Add(new TaskPlan(Strings.UFO_MISSION_HARVEST, 30.0f, launches));
 
             // Abduction
             launches = new List<LaunchPlan>();
-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",    132.0f, 204.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_RECON",    132.0f, 204.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",   240.0f, 432.0f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_PROBE", 132.0f, 204.0f, 1, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_RECON", 132.0f, 204.0f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 240.0f, 432.0f, 2, 3));
             launches.Add(new LaunchPlan("ITEM_UFO_COLLECTOR", 48.0f, 120.0f, 2, 3));
             launches.Add(new LaunchPlan("ITEM_UFO_COLLECTOR", 48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 0.5f,   2.5f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 0.5f, 2.5f, 2, 3));
             plans.Add(new TaskPlan(Strings.UFO_MISSION_ABDUCTION, 50.0f, launches));
 
             // Infiltration
             launches = new List<LaunchPlan>();
-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",         240.0f, 432.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_RECON",         240.0f, 432.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_RECON",         240.0f, 432.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",        240.0f, 432.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",         48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR",     0.5f,   2.5f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR",     0.5f,   2.5f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 0.5f,   2.5f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT",      0.5f,   2.5f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_PROBE", 240.0f, 432.0f, 1, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_RECON", 240.0f, 432.0f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_RECON", 240.0f, 432.0f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 240.0f, 432.0f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f, 120.0f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR", 0.5f, 2.5f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR", 0.5f, 2.5f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 0.5f, 2.5f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 0.5f, 2.5f, 2, 3));
             plans.Add(new TaskPlan(Strings.UFO_MISSION_INFILTRATION, 150.0f, launches));
 
             // Outpost
             launches = new List<LaunchPlan>();
-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",           132.0f, 204.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_RECON",           132.0f, 204.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",          132.0f, 204.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 0.5f,     2.5f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 0.5f,     2.5f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT",      0.5f,     2.5f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_PROBE", 132.0f, 204.0f, 1, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_RECON", 132.0f, 204.0f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 132.0f, 204.0f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 0.5f, 2.5f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 0.5f, 2.5f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 0.5f, 2.5f, 2, 3));
             plans.Add(new TaskPlan(Strings.UFO_MISSION_OUTPOST, 50.0f, launches));
 
             // Terror (note, no score for the UFO, it's the terror site that earns the points)
             launches = new List<LaunchPlan>();
-            launches.Add(new LaunchPlan("ITEM_UFO_RECON",         2.5f,   2.5f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",      132.0f, 204.0f, 1, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_RECON", 2.5f, 2.5f, 1, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 132.0f, 204.0f, 1, 3));
             launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR", 132.0f, 204.0f, 1, 3));
             launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR", 132.0f, 204.0f, 1, 3));
             plans.Add(new TaskPlan(Strings.UFO_MISSION_TERROR, 0.0f, launches));
 
             // Retaliation
             launches = new List<LaunchPlan>();
-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE",      50.0f,  50.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_RECON",      32.0f,  72.0f, 2, 2));
-            launches.Add(new LaunchPlan("ITEM_UFO_RECON",      48.0f, 120.0f, 2, 2));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",     48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",     48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT",     48.0f, 120.0f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_PROBE", 50.0f, 50.0f, 1, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_RECON", 32.0f, 72.0f, 2, 2));
+            launches.Add(new LaunchPlan("ITEM_UFO_RECON", 48.0f, 120.0f, 2, 2));
+            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f, 120.0f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f, 120.0f, 2, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f, 120.0f, 2, 3));
             launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 48.0f, 120.0f, 2, 3));
             launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 48.0f, 120.0f, 2, 3));
             plans.Add(new TaskPlan(Strings.UFO_MISSION_RETALIATION, 0.0f, launches));
@@ -388,8 +389,8 @@ namespace ProjectXenocide.Model.Geoscape.AI
             // Supply
             launches = new List<LaunchPlan>();
             launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 240.0f, 432.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR",     240.0f, 432.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT",      240.0f, 432.0f, 1, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR", 240.0f, 432.0f, 1, 3));
+            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 240.0f, 432.0f, 1, 3));
             plans.Add(new TaskPlan(Strings.UFO_MISSION_SUPPLY, 3.0f, launches));
         }
 

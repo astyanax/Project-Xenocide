@@ -28,21 +28,18 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-
 using Microsoft.Xna.Framework;
 
-
+using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Utils;
 
-
-using ProjectXenocide.Model.Geoscape.Outposts;
 using Xenocide.Resources;
 
 
@@ -77,8 +74,8 @@ namespace ProjectXenocide.Model.StaticData.Items
         public Item(ItemInfo itemInfo, ItemInfo ammoInfo, int shotsLeft)
         {
             CheckItemHoldsThisAmmo(itemInfo, ammoInfo);
-            this.itemInfo  = itemInfo;
-            this.ammoInfo  = ammoInfo;
+            this.itemInfo = itemInfo;
+            this.ammoInfo = ammoInfo;
             this.shotsLeft = shotsLeft;
             CheckShotsLeft();
         }
@@ -296,7 +293,7 @@ namespace ProjectXenocide.Model.StaticData.Items
                 // for most items, the name is the same as the item type
                 return itemInfo.Name;
             }
-            protected set { /* we will need this later, when we deal with craft that have unique names */ } 
+            protected set { /* we will need this later, when we deal with craft that have unique names */ }
         }
 
         /// <summary>

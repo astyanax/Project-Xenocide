@@ -30,10 +30,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.StaticData.Research;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 
@@ -55,7 +55,7 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
         {
             this.topicId = topicId;
         }
-        
+
         /// <summary>
         /// Called to get the event to do whatever processing is necessary
         /// </summary>
@@ -65,7 +65,7 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
             Util.ShowMessageBox(Strings.MSGBOX_RESEARCH_FINISHED, topic.Name);
         }
 
-#region Fields
+        #region Fields
 
         /// <summary>
         /// The completed research topic
@@ -77,6 +77,6 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
         /// </summary>
         private string topicId;
 
-#endregion
+        #endregion
     }
 }

@@ -28,13 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Utils;
 
 #endregion
 

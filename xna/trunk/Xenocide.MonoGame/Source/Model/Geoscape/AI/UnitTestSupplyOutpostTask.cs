@@ -28,12 +28,12 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Model.Geoscape.Geography;
+using ProjectXenocide.Model.Geoscape.Vehicles;
 
 #endregion
 
@@ -60,12 +60,12 @@ namespace ProjectXenocide.Model.Geoscape.AI
         private static void SupplyOutpostTaskTest()
         {
             Xenocide.GameState.SetToStartGameCondition();
-            Overmind         overmind = Xenocide.GameState.GeoData.Overmind;
-            GeoPosition      position = new GeoPosition();
+            Overmind overmind = Xenocide.GameState.GeoData.Overmind;
+            GeoPosition position = new GeoPosition();
 
-            OutpostAlienSite  outpost     = new OutpostAlienSite(position, Race.Grey);
-            SupplyOutpostTask task        = overmind.Tasks[0] as SupplyOutpostTask;
-            double            twelvehours = 12 * 3600 * 1000.0;
+            OutpostAlienSite outpost = new OutpostAlienSite(position, Race.Grey);
+            SupplyOutpostTask task = overmind.Tasks[0] as SupplyOutpostTask;
+            double twelvehours = 12 * 3600 * 1000.0;
 
             overmind.DiableStartOfMonth();
             overmind.AddSite(outpost);

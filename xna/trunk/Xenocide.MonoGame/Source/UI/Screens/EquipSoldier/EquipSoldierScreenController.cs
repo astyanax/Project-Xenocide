@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -28,19 +28,18 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-
-using ProjectXenocide.Utils;
+using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.StaticData.Items;
-using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.UI.Scenes;
+using ProjectXenocide.Utils;
 #endregion
 
 namespace ProjectXenocide.UI.Screens

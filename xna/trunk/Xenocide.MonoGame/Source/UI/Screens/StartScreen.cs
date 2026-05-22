@@ -27,21 +27,22 @@ San Francisco, California, 94105, USA.
 #region Using Statements
 using System;
 
-using Microsoft.Xna.Framework;
-
-using MonoGameGum;
 using Gum.Forms;
 using Gum.Forms.Controls;
 
+using Microsoft.Xna.Framework;
+
+using MonoGameGum;
+
 using ProjectXenocide.Model;
-using ProjectXenocide.Utils;
-using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.Model.Geoscape.Vehicles;
-using ProjectXenocide.Model.Geoscape.Outposts;
-using ProjectXenocide.Model.Geoscape.AI;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.Model.Geoscape.AI;
+using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 #endregion Using Statements
 
@@ -50,7 +51,7 @@ namespace ProjectXenocide.UI.Screens
     public class StartScreen : GumScreen
     {
         public StartScreen()
-            : base("StartScreen", @"Content\Textures\UI\StartScreenBackground.png")
+            : base("StartScreen", @"Content/Textures/UI/StartScreenBackground.png")
         {
             if (Xenocide.AudioSystem != null)
                 Xenocide.AudioSystem.PlayRandomMusic("MainMenu");

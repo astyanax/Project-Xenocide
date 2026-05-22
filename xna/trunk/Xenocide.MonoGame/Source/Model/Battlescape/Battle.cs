@@ -28,16 +28,15 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 using System.Text.Json.Serialization;
 
 using Microsoft.Xna.Framework;
 
-using ProjectXenocide.Utils;
-
 using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 #endregion
 

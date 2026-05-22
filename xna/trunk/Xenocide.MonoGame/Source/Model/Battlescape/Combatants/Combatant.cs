@@ -26,16 +26,16 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 using System.Text.Json.Serialization;
 
 using Microsoft.Xna.Framework;
 
+using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.Model.StaticData.Battlescape;
 using ProjectXenocide.Model.StaticData.Items;
-using ProjectXenocide.Model.Geoscape.Outposts;
 
 namespace ProjectXenocide.Model.Battlescape.Combatants
 {
@@ -52,13 +52,13 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// <param name="teamId">Team (alien/X-Corp/Civilian) that owns this combatant</param>
         public Combatant(CombatantInfo info, int teamId)
         {
-            this.inventory     = new CombatantInventory(this);
+            this.inventory = new CombatantInventory(this);
             this.combatantInfo = info;
-            this.teamId        = teamId;
+            this.teamId = teamId;
             if (null != info)
             {
                 info.GenerateStats(this.stats);
-                this.flyer      = info.Flyer;
+                this.flyer = info.Flyer;
                 this.armorIndex = info.ArmorIndex;
                 if (null != info.Graphic)
                 {
@@ -87,7 +87,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             {
                 return true;
             }
-            
+
             // update order, and check if still running.
             order.Update(seconds);
             if (FinishCode.Executing != order.Finished)
@@ -129,7 +129,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
 
             // angle between attack direction and combatant's facing
             Armor.Side side = Armor.Side.Side;
-            float dot   = Vector3.Dot(HeadingVector, direction);
+            float dot = Vector3.Dot(HeadingVector, direction);
             float limit = (float)Math.Sqrt(0.5);
             if (limit < dot)
             {
@@ -146,8 +146,8 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             // Damage may result in fatal wounds
             // Randomize body part that gets the fatal wounds
             int bodyPart = Xenocide.Rng.Next(6);
-             stats[fatalWoundsStat[bodyPart]] += 
-                 Xenocide.GameBalance.GenerateFatalWounds((int)damage.X);
+            stats[fatalWoundsStat[bodyPart]] +=
+                Xenocide.GameBalance.GenerateFatalWounds((int)damage.X);
         }
 
         /// <summary>Update state to reflect injury</summary>
@@ -221,7 +221,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// <summary>Null out battlescape references, so garbage collector gets battlescape</summary>
         public void PostMissionCleanup()
         {
-            ai          = null;
+            ai = null;
             battlescape = null;
 
             // Fatal wounds are healed automatically after mission
@@ -256,16 +256,16 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// <summary>Set 3D Model to that of X-Corp soldier with no armor</summary>
         private void UseUnarmoredXCorpSolider()
         {
-            this.graphic = new Graphic(@"Characters\XCorp\FemaleShirt", 0, MathHelper.PiOver2, 0);
+            this.graphic = new Graphic(@"Characters/XCorp/FemaleShirt", 0, MathHelper.PiOver2, 0);
         }
 
         /// <summary>Tag combatant as seeing nothing</summary>
         /// <remarks>Used when unit is unconscious/dead</remarks>
         private void ClearOpponentsInView()
         {
-            int opposingTeam  = (Team.Aliens == teamId) ? Team.XCorp : Team.Aliens;
+            int opposingTeam = (Team.Aliens == teamId) ? Team.XCorp : Team.Aliens;
             int combatantFlag = ~(1 << PlaceInTeam);
-            foreach(Combatant combatant in battlescape.Teams[opposingTeam].Combatants)
+            foreach (Combatant combatant in battlescape.Teams[opposingTeam].Combatants)
             {
                 combatant.OponentsViewing &= combatantFlag;
             }
@@ -435,9 +435,14 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         public Battle Battlescape { get { return battlescape; } set { battlescape = value; } }
 
         /// <summary>The total number of fatal wounds.</summary>
-        public int TotalFatalWounds { get { return stats[Statistic.FatalWoundsHead] + stats[Statistic.FatalWoundsBody] +
+        public int TotalFatalWounds
+        {
+            get
+            {
+                return stats[Statistic.FatalWoundsHead] + stats[Statistic.FatalWoundsBody] +
             stats[Statistic.FatalWoundsLeftArm] + stats[Statistic.FatalWoundsRightArm] + stats[Statistic.FatalWoundsLeftLeg] +
-            stats[Statistic.FatalWoundsRightLeg]; }
+            stats[Statistic.FatalWoundsRightLeg];
+            }
         }
 
         /// <summary>Kneeling status of the combatant.</summary>
@@ -503,7 +508,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// Table that holds the Fatal Wounds stat for each body part
         /// </summary>
         /// <param name="bodyPart"></param>
-        static Statistic[] fatalWoundsStat = 
+        static Statistic[] fatalWoundsStat =
         {
             Statistic.FatalWoundsHead,
             Statistic.FatalWoundsBody,

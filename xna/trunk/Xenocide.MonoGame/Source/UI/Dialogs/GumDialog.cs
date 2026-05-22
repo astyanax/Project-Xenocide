@@ -1,6 +1,8 @@
 using System;
-using MonoGameGum;
+
 using Gum.Forms.Controls;
+
+using MonoGameGum;
 
 namespace ProjectXenocide.UI.Dialogs
 {

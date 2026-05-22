@@ -28,20 +28,19 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Runtime.Serialization;
 using System.Diagnostics;
+using System.Runtime.Serialization;
+using System.Text;
 
-
+using ProjectXenocide.Model.Battlescape;
+using ProjectXenocide.Model.Geoscape.AI;
+using ProjectXenocide.Model.Geoscape.GeoEvents;
+using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Model.StaticData;
+using ProjectXenocide.Model.StaticData.Facilities;
+using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Utils;
 
-using ProjectXenocide.Model.StaticData;
-using ProjectXenocide.Model.Geoscape.AI;
-using ProjectXenocide.Model.Geoscape.Outposts;
-using ProjectXenocide.Model.Geoscape.GeoEvents;
-using ProjectXenocide.Model.StaticData.Items;
-using ProjectXenocide.Model.StaticData.Facilities;
-using ProjectXenocide.Model.Battlescape;
 using Xenocide.Resources;
 
 
@@ -107,7 +106,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         public override void OnCrashed()
         {
             base.OnCrashed();
-            
+
             // adjust score
             Xenocide.GameState.GeoData.AddScore(Participant.XCorp, ItemInfo.Score / 2, Position);
         }
@@ -130,12 +129,12 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         public IList<ItemLine> RecoveredItems()
         {
             List<ItemLine> list = new List<ItemLine>();
-            
+
             // Odds of item surviving are proportional to damage done to UFO
             foreach (ItemLine line in UfoItemInfo.Salvage)
             {
-                String itemId   = line.ItemId;
-                int    quantity = 0;
+                String itemId = line.ItemId;
+                int quantity = 0;
                 for (int i = 0; i < line.Quantity; ++i)
                 {
                     if (Xenocide.Rng.RollDice(HullPercent))
@@ -238,17 +237,17 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         public InvasionTask Task { get { return task; } }
 
         /// <remarks>UFOs don't have a base (yet), so calling this for a UFO is a mistake</remarks>
-        public override Outpost HomeBase 
+        public override Outpost HomeBase
         {
             get { throw new NotImplementedException(Strings.EXCEPTION_UFOS_HAVE_NO_BASE); }
             set { throw new NotImplementedException(Strings.EXCEPTION_UFOS_HAVE_NO_BASE); }
         }
 
         /// <remarks>UFOs don't have a base (yet), so calling this for a UFO is a mistake</remarks>
-        public override bool InBase 
+        public override bool InBase
         {
             get { throw new NotImplementedException(Strings.EXCEPTION_UFOS_HAVE_NO_BASE); }
-            set { throw new NotImplementedException(Strings.EXCEPTION_UFOS_HAVE_NO_BASE); } 
+            set { throw new NotImplementedException(Strings.EXCEPTION_UFOS_HAVE_NO_BASE); }
         }
 
         /// <summary>

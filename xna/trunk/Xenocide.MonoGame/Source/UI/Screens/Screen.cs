@@ -29,12 +29,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using CeGui;
+using CeGui.Renderers.Xna;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-
-using CeGui;
-using CeGui.Renderers.Xna;
 
 #endregion
 
@@ -72,7 +72,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="ceguiId">CeGui's identifer for this screen</param>
         protected Screen(string ceguiId)
             :
-            this(ceguiId, @"Content\Textures\UI\GeoscapeScreenBackground.png")
+            this(ceguiId, @"Content/Textures/UI/GeoscapeScreenBackground.png")
         {
         }
 

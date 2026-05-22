@@ -26,13 +26,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 namespace ProjectXenocide.Model.Battlescape.Combatants
 {
@@ -68,7 +68,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// <returns>Zone</returns>
         public static Zone GetZone(int x, int y)
         {
-            return Zones[y,x];
+            return Zones[y, x];
         }
 
         /// <summary>
@@ -126,9 +126,9 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// <summary>
         /// The zone each position in the inventory belongs to
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", 
-            MessageId = "Member", Justification="There is no wasted space")]
-        private static  Zone[,] Zones =
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional",
+            MessageId = "Member", Justification = "There is no wasted space")]
+        private static Zone[,] Zones =
         {
             {Zone.RightHand, Zone.LeftHand,      Zone.LeftLeg,       Zone.LeftLeg,      Zone.BackPack, Zone.BackPack, Zone.BackPack},
             {Zone.Belt,      Zone.Belt,          Zone.Belt,          Zone.Belt,         Zone.BackPack, Zone.BackPack, Zone.BackPack},
@@ -146,7 +146,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// </remarks>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional",
             MessageId = "Member", Justification = "There is no wasted space")]
-        private static float[, ,] ScreenPosition =
+        private static float[,,] ScreenPosition =
         {
             // top row
             {
@@ -222,7 +222,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// <param name="item">item to check</param>
         /// <returns>true if it will fit</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
-            Justification="Will throw if item is null")]
+            Justification = "Will throw if item is null")]
         public static bool CanFitInHand(Item item)
         {
             CarryInfo carryInfo = item.ItemInfo.CarryInfo;

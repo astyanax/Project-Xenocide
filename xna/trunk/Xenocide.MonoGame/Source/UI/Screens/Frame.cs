@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -27,17 +27,19 @@ San Francisco, California, 94105, USA.
 #region Using Statements
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text;
+
+using CeGui;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-using CeGui;
-
+using ProjectXenocide.Assets;
 using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 #endregion
@@ -66,7 +68,7 @@ namespace ProjectXenocide.UI.Screens
             this.screenManager = Xenocide.ScreenManager;
             this.size = size;
         }
-        
+
         /// <summary>
         /// Puts the frame onto the display
         /// </summary>
@@ -212,7 +214,7 @@ namespace ProjectXenocide.UI.Screens
             AddWidget(slider, left, top, width, height);
             return slider;
         }
-        
+
         /// <summary>
         /// Create the specified checkbox (and text) and put it on this frame
         /// </summary>
@@ -310,7 +312,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         /// <param name="btnName">The name of the button</param>
         /// <param name="sound">The sound to play.</param>
-        public void AddButtonSound(string btnName, string sound)
+        public void AddButtonSound(string btnName, SoundId sound)
         {
             buttonSounds.Add(btnName, sound);
         }
@@ -330,7 +332,7 @@ namespace ProjectXenocide.UI.Screens
         AddButton(
             string resourceName,
             float left, float top, float width, float height,
-            string sound)
+            SoundId sound)
         {
             CeGui.Widgets.PushButton button = AddButton(resourceName, left, top, width, height);
             buttonSounds.Add(button.Name, sound);
@@ -364,12 +366,12 @@ namespace ProjectXenocide.UI.Screens
         CeGui.Widgets.StaticImage
         AddStaticImageButton(
             string resourceName,
-            float left, float top, float width, float height, string imagenormal, string imagepushed, string sound)
+            float left, float top, float width, float height, string imagenormal, string imagepushed, SoundId sound)
         {
             CeGui.Widgets.StaticImage staticImage = GuiBuilder.CreateImage(ceguiId + '_' + resourceName);
             staticImage.MouseClicked += new MouseEventHandler(OnPlayButtonSound);
-            staticImage.MouseEnters  += new MouseEventHandler(ImageHoverOver);
-            staticImage.MouseLeaves  += new MouseEventHandler(ImageHoverLeave);
+            staticImage.MouseEnters += new MouseEventHandler(ImageHoverOver);
+            staticImage.MouseLeaves += new MouseEventHandler(ImageHoverLeave);
 
             staticImage.SetImage(ImageSetName, imagenormal);
 
@@ -412,7 +414,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="e">unused</param>
         private void OnHoverPlaySound(object sender, MouseEventArgs e)
         {
-            Xenocide.AudioSystem.PlaySound("Menu\\buttonover.ogg");
+            Xenocide.AudioSystem.PlaySound(SoundId.ButtonOver);
         }
 
         /// <summary>
@@ -427,7 +429,7 @@ namespace ProjectXenocide.UI.Screens
             imageWidget.SetImage(ImageSetName, imageNamesP[label]);
 
             //play sound
-            Xenocide.AudioSystem.PlaySound("Menu\\buttonover.ogg");
+            Xenocide.AudioSystem.PlaySound(SoundId.ButtonOver);
         }
 
         /// <summary>
@@ -461,8 +463,7 @@ namespace ProjectXenocide.UI.Screens
         {
             if (enableButtonSounds)
             {
-                // figure out sound to play, if no sound registered, use default
-                string sound;
+                SoundId sound;
                 string label = (sender as CeGui.Window).Name;
                 if (!buttonSounds.TryGetValue(label, out sound))
                 {
@@ -483,7 +484,7 @@ namespace ProjectXenocide.UI.Screens
         public bool Visible { get { return rootWidget != null && rootWidget.Visible; } set { if (rootWidget != null) rootWidget.Visible = value; } }
 
         /// <summary>CeGui widget that holds all other widgets in the window</summary>
-        protected CeGui.Window  RootWidget { get { return rootWidget; } }
+        protected CeGui.Window RootWidget { get { return rootWidget; } }
 
         /// <summary>CeGui widget that holds all other widgets in the window</summary>
         private CeGui.Window rootWidget;
@@ -520,7 +521,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// Sound to play when a button is pressed. Format is button ID, sound ID
         /// </summary>
-        private Dictionary<String, String> buttonSounds = new Dictionary<string, string>();
+        private Dictionary<String, SoundId> buttonSounds = new();
 
         /// <summary>
         /// images when imagebutton is pushed
@@ -550,7 +551,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// Default button click sound to play
         /// </summary>
-        public const String DefaultButtonClickSound = "Menu\\buttonclick1_ok.ogg";
+        public const SoundId DefaultButtonClickSound = SoundId.ButtonClick1;
 
         private const String ImageSetName = "TaharezLook";
 

@@ -32,8 +32,8 @@ using System.Text;
 
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Vehicles;
-using ProjectXenocide.UI.Screens;
 using ProjectXenocide.UI.Dialogs;
+using ProjectXenocide.UI.Screens;
 
 #endregion
 
@@ -50,7 +50,7 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
         /// </summary>
         public override void Process()
         {
-            Xenocide.GameState.GeoData.GeoTime.StopTime(); 
+            Xenocide.GameState.GeoData.GeoTime.StopTime();
             Xenocide.ScreenManager.ScheduleScreen(new MonthlyReportScreen(true));
         }
 

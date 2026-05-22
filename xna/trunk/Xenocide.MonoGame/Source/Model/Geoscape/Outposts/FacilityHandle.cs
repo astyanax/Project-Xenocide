@@ -28,13 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
-using ProjectXenocide.Model.StaticData.Facilities;
 using ProjectXenocide.Model.Geoscape.GeoEvents;
+using ProjectXenocide.Model.StaticData.Facilities;
 
 #endregion
 
@@ -62,7 +62,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             this.y = (SByte)y;
             if (!prebuilt && (0 < info.BuildDays))
             {
-                DateTime finish  = Xenocide.GameState.GeoData.GeoTime.Time + new TimeSpan(info.BuildDays, 0, 0, 0);
+                DateTime finish = Xenocide.GameState.GeoData.GeoTime.Time + new TimeSpan(info.BuildDays, 0, 0, 0);
                 this.appointment = new FacilityConstructedAppointment(finish, this);
             }
         }
@@ -135,7 +135,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         public void Destroy(OutpostStatistics statistics)
         {
             FacilityInfo.Destroy(statistics, !IsUnderConstruction);
-            
+
             // if we've got an appointment for when base is finished, kill the appointment
             if (null != appointment)
             {
@@ -153,7 +153,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         /// <summary>
         /// X co-ordinate of top right cell of facility in base
         /// </summary>
-        public int X 
+        public int X
         {
             get { return x; }
             set { x = (SByte)value; }

@@ -26,14 +26,14 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
-using System.Xml.XPath;
+using System.Text;
 using System.Xml;
-
-using ProjectXenocide.Utils;
+using System.Xml.XPath;
 
 using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 
@@ -105,11 +105,11 @@ namespace ProjectXenocide.Model.Battlescape
         public static CrewBuilder StaffOutpost()
         {
             CrewBuilder builder = new CrewBuilder();
-            builder.crewList.Add(new CrewEntry(AlienRank.Soldier,   5, 7, 4));
+            builder.crewList.Add(new CrewEntry(AlienRank.Soldier, 5, 7, 4));
             builder.crewList.Add(new CrewEntry(AlienRank.Navigator, 1, 2, 0));
-            builder.crewList.Add(new CrewEntry(AlienRank.Medic,     1, 1, 0));
-            builder.crewList.Add(new CrewEntry(AlienRank.Engineer,  1, 2, 0));
-            builder.crewList.Add(new CrewEntry(AlienRank.Leader,    2, 4, 0));
+            builder.crewList.Add(new CrewEntry(AlienRank.Medic, 1, 1, 0));
+            builder.crewList.Add(new CrewEntry(AlienRank.Engineer, 1, 2, 0));
+            builder.crewList.Add(new CrewEntry(AlienRank.Leader, 2, 4, 0));
             builder.crewList.Add(new CrewEntry(AlienRank.Commander, 1, 1, 0));
             builder.crewList.Add(new CrewEntry(AlienRank.Terrorist, 1, 5, 2));
             return builder;
@@ -144,10 +144,10 @@ namespace ProjectXenocide.Model.Battlescape
             /// <param name="extra">Maximum additional at this rank</param>
             public CrewEntry(AlienRank rank, int minEasy, int minHard, int extra)
             {
-                this.Rank    = rank;
+                this.Rank = rank;
                 this.MinEasy = minEasy;
                 this.MinHard = minHard;
-                this.Extra   = extra;
+                this.Extra = extra;
             }
 
             /// <summary>Number of aliens of this rank to create</summary>

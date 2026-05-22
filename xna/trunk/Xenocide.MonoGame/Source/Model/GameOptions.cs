@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -27,12 +27,11 @@ San Francisco, California, 94105, USA.
 #region Using Statements
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Xml;
 
 using Xenocide.Source.Utils;
-
-using System.IO;
-using System.Xml;
 #endregion
 
 namespace ProjectXenocide.Model
@@ -74,7 +73,7 @@ namespace ProjectXenocide.Model
                 {
                     r.ReadStartElement("settings");
                     int oldVersion = 0;
-                    ReadIntElement(  r, "GameVersion", ref oldVersion);
+                    ReadIntElement(r, "GameVersion", ref oldVersion);
                     ReadFloatElement(r, "SoundVolume", ref gameOptions.soundVolume);
                     ReadFloatElement(r, "MusicVolume", ref gameOptions.musicVolume);
                 }
@@ -186,7 +185,7 @@ namespace ProjectXenocide.Model
         /// <summary>
         /// Where to save the options data
         /// </summary>
-        private const string gameOptionsPathName = @".\XeNAcide\Options\GameOptions.xml";
+        private const string gameOptionsPathName = @"./XeNAcide/Options/GameOptions.xml";
 
         /// <summary>
         /// Version number of this structure (to allow backwards compatibility)

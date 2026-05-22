@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -28,20 +28,19 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
 using Microsoft.Xna.Framework;
 
-
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 
@@ -63,11 +62,11 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
             Justification = "Will throw if armorNode is null")]
         public Armor(XPathNavigator armorNode, XmlNamespaceManager manager)
         {
-            id    = Util.GetStringAttribute(armorNode, "id");
-            flyer = Util.GetBoolAttribute(  armorNode, "flyer");
+            id = Util.GetStringAttribute(armorNode, "id");
+            flyer = Util.GetBoolAttribute(armorNode, "flyer");
             plates[(int)Side.Front] = Util.GetIntAttribute(armorNode, "front");
-            plates[(int)Side.Side]  = Util.GetIntAttribute(armorNode, "side");
-            plates[(int)Side.Rear]  = Util.GetIntAttribute(armorNode, "rear");
+            plates[(int)Side.Side] = Util.GetIntAttribute(armorNode, "side");
+            plates[(int)Side.Rear] = Util.GetIntAttribute(armorNode, "rear");
             plates[(int)Side.Under] = Util.GetIntAttribute(armorNode, "under");
 
             // parse susceptibilities
@@ -115,8 +114,8 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
         public void XNetStatistics(StringCollection stats)
         {
             stats.Add(Util.StringFormat(Strings.ITEM_STATS_ARMOR_FRONT, plates[(int)Side.Front]));
-            stats.Add(Util.StringFormat(Strings.ITEM_STATS_ARMOR_SIDE,  plates[(int)Side.Side]));
-            stats.Add(Util.StringFormat(Strings.ITEM_STATS_ARMOR_REAR,  plates[(int)Side.Rear]));
+            stats.Add(Util.StringFormat(Strings.ITEM_STATS_ARMOR_SIDE, plates[(int)Side.Side]));
+            stats.Add(Util.StringFormat(Strings.ITEM_STATS_ARMOR_REAR, plates[(int)Side.Rear]));
             stats.Add(Util.StringFormat(Strings.ITEM_STATS_ARMOR_UNDER, plates[(int)Side.Under]));
         }
 
@@ -154,7 +153,7 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
             public Susceptibility(XPathNavigator node)
             {
                 this.physical = Util.GetFloatAttribute(node, "physical");
-                this.stun     = Util.GetFloatAttribute(node, "stun");
+                this.stun = Util.GetFloatAttribute(node, "stun");
             }
 
             /// <summary>

@@ -28,8 +28,8 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 
 #endregion
@@ -48,9 +48,9 @@ namespace ProjectXenocide.Model
         /// </summary>
         /// <param name="index">Month to get stats for 0 = January, 11 = December</param>
         /// <returns>value at specified month</returns>
-        public int this[int index] 
-        { 
-            get { return history[index % 12]; } 
+        public int this[int index]
+        {
+            get { return history[index % 12]; }
             set { history[index % 12] = value; }
         }
 

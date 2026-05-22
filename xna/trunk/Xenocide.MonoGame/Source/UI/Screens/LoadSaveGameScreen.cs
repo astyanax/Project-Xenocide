@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -28,22 +28,22 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
 using System.Threading;
 
+using Gum.Forms.Controls;
 
 using Microsoft.Xna.Framework;
 
-
-using Gum.Forms.Controls;
-using ProjectXenocide.UI.Controls;
-
-using ProjectXenocide.UI.Dialogs;
+using ProjectXenocide.Assets;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.UI.Controls;
+using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 using Xenocide.Utils;
 
@@ -239,7 +239,7 @@ namespace ProjectXenocide.UI.Screens
         {
             if (savesgrid.SelectedRow != null)
             {
-                Xenocide.AudioSystem.PlaySound("Menu\\buttonclick2_changesetting.ogg");
+                Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick2);
                 filenameEditBox.Text = savesgrid.GetSelectedCellText();
             }
         }
@@ -431,6 +431,6 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private CancelScreen cancelScreen;
 
-        private string savesDirectory = ".\\XeNAcide\\saves";
+        private string savesDirectory = "./XeNAcide/saves";
     }
 }

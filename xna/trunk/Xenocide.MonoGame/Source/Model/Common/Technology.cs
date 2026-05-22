@@ -28,8 +28,8 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 using System.Xml.XPath;
 
 using Microsoft.Xna.Framework;
@@ -84,7 +84,7 @@ namespace ProjectXenocide.Model
         /// <param name="type">type of technology</param>
         public Technology(string id, TechnologyType type)
         {
-            this.id   = id;
+            this.id = id;
             this.type = type;
         }
 
@@ -97,7 +97,7 @@ namespace ProjectXenocide.Model
             Justification = "will throw if element is null")]
         public Technology(XPathNavigator element)
         {
-            this.id   = Util.GetStringAttribute(element, "name");
+            this.id = Util.GetStringAttribute(element, "name");
             this.type = XmlToType(element.Name);
         }
 

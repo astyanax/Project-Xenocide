@@ -28,12 +28,12 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 using System.Xml.XPath;
 
-
 using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 
@@ -110,7 +110,7 @@ namespace ProjectXenocide.Model
         /// <summary>
         /// String used for each rank
         /// </summary>
-        private static readonly String[] displayStrings = 
+        private static readonly String[] displayStrings =
         {
             Strings.RANK_CIVILIAN_DISPLAY,
             Strings.RANK_SOLDIER_DISPLAY,

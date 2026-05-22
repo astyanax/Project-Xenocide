@@ -1,4 +1,4 @@
-﻿
+
 #region Copyright
 /*
 --------------------------------------------------------------------------------
@@ -30,28 +30,28 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
+using AudioSystem;
+
+using CeGui;
+using CeGui.Renderers.Xna;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-
-
-using AudioSystem;
-using CeGui;
-using CeGui.Renderers.Xna;
 using MonoGameGum;
 
-using ProjectXenocide.Utils;
-using ProjectXenocide.UI.Screens;
 using ProjectXenocide.Model;
+using ProjectXenocide.UI.Screens;
+using ProjectXenocide.Utils;
 
 using Xenocide.Resources;
 
 #endregion
 
-namespace ProjectXenocide 
+namespace ProjectXenocide
 {
     /// <summary>
     /// This is the main type for your game
@@ -61,7 +61,7 @@ namespace ProjectXenocide
         private GraphicsDeviceManager graphics;
         private GuiManager gui;
         private static ScreenManager screenManager;
-        private static Xenocide      instance;
+        private static Xenocide instance;
         private KeyboardState _prevKeyState;
 
         /// <summary>
@@ -85,19 +85,19 @@ namespace ProjectXenocide
         /// <summary>
         /// Constructor
         /// </summary>
-        public Xenocide() 
+        public Xenocide()
         {
-            instance      = this; 
-            graphics      = new GraphicsDeviceManager(this);
+            instance = this;
+            graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 1024;
             Content.RootDirectory = "Content";
-            gui           = new GuiManager(this);
+            gui = new GuiManager(this);
             screenManager = new ScreenManager();
-            staticTables  = new StaticTables();
+            staticTables = new StaticTables();
             staticTables.Populate();
             gameBalance = new GameBalanceClass(Difficulty.Easy);
-            gameState     = new GameState();
+            gameState = new GameState();
             Components.Add(gui);
         }
 
@@ -108,10 +108,10 @@ namespace ProjectXenocide
         /// and initialize them as well.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions",
-            Justification="FxCop false positive")]
+            Justification = "FxCop false positive")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope",
-            Justification="FxCop false positive")]
-        protected override void Initialize() 
+            Justification = "FxCop false positive")]
+        protected override void Initialize()
         {
             // check shader version
             if (Util.GetShaderVersion(GraphicsDevice) == 1)
@@ -194,16 +194,16 @@ namespace ProjectXenocide
         public static void InitializeAudioSystem()
         {
             IAudioSystem audioSystem = Xenocide.AudioSystem;
-            audioSystem.LoadSound("PlanetView\\speedfast.ogg");
-            audioSystem.LoadSound("PlanetView\\speedslow.ogg");
-            audioSystem.LoadSound("PlanetView\\speedveryfast.ogg");
-            audioSystem.LoadSound("PlanetView\\zoomin.ogg");
-            audioSystem.LoadSound("PlanetView\\zoomout.ogg");
-            audioSystem.LoadSound("PlanetView\\clickobjectonplanet.ogg");
-            audioSystem.LoadSound("Menu\\buttonclick1_ok.ogg");
-            audioSystem.LoadSound("Menu\\buttonclick2_changesetting.ogg");
-            audioSystem.LoadSound("Menu\\buttonover.ogg");
-            audioSystem.LoadSound("Menu\\exitgame.ogg");
+            audioSystem.LoadSound(Assets.SoundId.PlanetViewSpeedFast);
+            audioSystem.LoadSound(Assets.SoundId.PlanetViewSpeedSlow);
+            audioSystem.LoadSound(Assets.SoundId.PlanetViewSpeedVeryFast);
+            audioSystem.LoadSound(Assets.SoundId.PlanetViewZoomIn);
+            audioSystem.LoadSound(Assets.SoundId.PlanetViewZoomOut);
+            audioSystem.LoadSound(Assets.SoundId.PlanetViewClickObject);
+            audioSystem.LoadSound(Assets.SoundId.ButtonClick1);
+            audioSystem.LoadSound(Assets.SoundId.ButtonClick2);
+            audioSystem.LoadSound(Assets.SoundId.ButtonOver);
+            audioSystem.LoadSound(Assets.SoundId.ExitGame);
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace ProjectXenocide
         /// checking for collisions, gathering input and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime) 
+        protected override void Update(GameTime gameTime)
         {
             // Allows the default game to exit on Xbox 360 and Windows
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
@@ -267,7 +267,7 @@ namespace ProjectXenocide
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime) 
+        protected override void Draw(GameTime gameTime)
         {
             graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 
@@ -306,9 +306,9 @@ namespace ProjectXenocide
         /// <summary>
         /// Get the sound playing system
         /// </summary>
-        public static IAudioSystem AudioSystem 
+        public static IAudioSystem AudioSystem
         {
-            get { return Instance.Services.GetService(typeof(IAudioSystem)) as IAudioSystem; } 
+            get { return Instance.Services.GetService(typeof(IAudioSystem)) as IAudioSystem; }
         }
 
         /// <summary>

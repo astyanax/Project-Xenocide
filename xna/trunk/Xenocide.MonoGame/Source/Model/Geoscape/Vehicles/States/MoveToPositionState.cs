@@ -28,8 +28,9 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
+
 using ProjectXenocide.Utils;
 
 
@@ -52,7 +53,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <param name="craftSpeed">How fast to go there</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
             Justification = "Is validated in base class")]
-        public MoveToPositionState(Mission mission, GeoPosition destination, MoveToPositionStateType stateType , double craftSpeed)
+        public MoveToPositionState(Mission mission, GeoPosition destination, MoveToPositionStateType stateType, double craftSpeed)
             :
             base(mission, craftSpeed)
         {

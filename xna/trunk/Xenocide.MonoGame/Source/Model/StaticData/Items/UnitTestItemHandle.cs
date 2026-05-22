@@ -28,21 +28,17 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-
 using Microsoft.Xna.Framework;
 
-
-using ProjectXenocide.Utils;
-
-
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -61,13 +57,13 @@ namespace ProjectXenocide.Model.StaticData.Items
         [Conditional("DEBUG")]
         public static void RunItemTests()
         {
-            Item pistol  = Xenocide.StaticTables.ItemList["ITEM_PISTOL_CLIP"].Manufacture();
+            Item pistol = Xenocide.StaticTables.ItemList["ITEM_PISTOL_CLIP"].Manufacture();
             Item heClip1 = Xenocide.StaticTables.ItemList["ITEM_R_C_HE_CLIP"].Manufacture();
             Item heClip2 = Xenocide.StaticTables.ItemList["ITEM_R_C_HE_CLIP"].Manufacture();
             Item heClip3 = Xenocide.StaticTables.ItemList["ITEM_R_C_HE_CLIP"].Manufacture();
             Item apClip = Xenocide.StaticTables.ItemList["ITEM_R_C_AP_CLIP"].Manufacture();
-            Item cannon  = Xenocide.StaticTables.ItemList["ITEM_REPEATER_CANNON"].Manufacture();
-            Item laser  = Xenocide.StaticTables.ItemList["ITEM_LASER_PISTOL"].Manufacture();
+            Item cannon = Xenocide.StaticTables.ItemList["ITEM_REPEATER_CANNON"].Manufacture();
+            Item laser = Xenocide.StaticTables.ItemList["ITEM_LASER_PISTOL"].Manufacture();
 
             // Test IsAmmoValid()
             Debug.Assert(pistol.IsAmmoValid(pistol));

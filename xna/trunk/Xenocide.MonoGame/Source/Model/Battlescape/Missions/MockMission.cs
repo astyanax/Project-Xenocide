@@ -26,16 +26,16 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 using System.Text.Json.Serialization;
 
-using ProjectXenocide.Model.StaticData;
-using ProjectXenocide.Model.StaticData.Battlescape;
+using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Outposts;
-using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.Model.StaticData;
+using ProjectXenocide.Model.StaticData.Battlescape;
 
 namespace ProjectXenocide.Model.Battlescape
 {
@@ -47,7 +47,7 @@ namespace ProjectXenocide.Model.Battlescape
     {
         /// <summary>Ctor</summary>
         public MockMission()
-            :this(new Terrain.TestTerrainBuilder(TestTerrain.Standard))
+            : this(new Terrain.TestTerrainBuilder(TestTerrain.Standard))
         {
         }
 

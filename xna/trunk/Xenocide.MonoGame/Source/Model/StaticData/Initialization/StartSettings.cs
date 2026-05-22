@@ -29,22 +29,19 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Text;
+using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-
 using Microsoft.Xna.Framework;
 
-
-
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape.Outposts;
-using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.Model.StaticData.Items;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -62,7 +59,7 @@ namespace ProjectXenocide.Model.StaticData
         public void Populate(string filename)
         {
             facilities = new List<StartingFacility>();
-            stocks     = new List<Stock>();
+            stocks = new List<Stock>();
 
             // Set up XPathNavigator
             const string xmlns = "StartSettingConfig";
@@ -102,8 +99,8 @@ namespace ProjectXenocide.Model.StaticData
             public StartingFacility(XPathNavigator node)
             {
                 facilityId = Util.GetStringAttribute(node, "type");
-                left       = Util.GetIntAttribute(node,    "left");
-                top        = Util.GetIntAttribute(node,    "top");
+                left = Util.GetIntAttribute(node, "left");
+                top = Util.GetIntAttribute(node, "top");
             }
 
             /// <summary>
@@ -160,9 +157,9 @@ namespace ProjectXenocide.Model.StaticData
             /// <returns>the handle</returns>
             public override Item Construct()
             {
-                Item handle   = base.Construct();
-                Aircraft   aircraft = handle as Aircraft;
-                if (aircraft != null) 
+                Item handle = base.Construct();
+                Aircraft aircraft = handle as Aircraft;
+                if (aircraft != null)
                 {
                     aircraft.ArmWithDefaultWeapons();
                 }

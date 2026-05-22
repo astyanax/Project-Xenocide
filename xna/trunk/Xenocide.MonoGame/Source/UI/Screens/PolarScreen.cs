@@ -34,8 +34,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.UI.Scenes.Common;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -90,7 +90,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         /// <param name="content">content manager that fetches the content</param>
         /// <param name="device">the display</param>
-        
+
         public override void LoadContent(ContentManager content, GraphicsDevice device)
         {
             scene.LoadContent(content, device);

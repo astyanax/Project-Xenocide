@@ -64,7 +64,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             :
             base(craft)
         {
-            this.target   = new GeoPosition(target);
+            this.target = new GeoPosition(target);
             this.landings = landings;
             this.subLandings = subLandings;
             this.baseSubLandings = subLandings;
@@ -77,7 +77,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         public override void OnTimerFinished()
         {
             var stateType = MissionState.MoveToPositionStateType.LandingDestination;
-            SetState(new MoveToPositionState(this, CalcNewDestination(stateType), stateType,Craft.MaxSpeed));
+            SetState(new MoveToPositionState(this, CalcNewDestination(stateType), stateType, Craft.MaxSpeed));
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         public double GetRandomSpeedModifier()
         {
             double minimumSpeed = 0.6;
-            minimumSpeed += (Xenocide.Rng.Next(400))/1000f;
+            minimumSpeed += (Xenocide.Rng.Next(400)) / 1000f;
             return minimumSpeed;
         }
 

@@ -27,22 +27,22 @@ San Francisco, California, 94105, USA.
 #region Using Statements
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
-
+using System.Text;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-using ProjectXenocide.Utils;
+using ProjectXenocide.Assets;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.Model.Geoscape.AI;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
-using ProjectXenocide.Model.Geoscape.AI;
 using ProjectXenocide.UI.Scenes.Common;
+using ProjectXenocide.Utils;
 #endregion
 
 namespace ProjectXenocide.UI.Scenes.Geoscape
@@ -91,9 +91,9 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         public void LoadContent(ContentManager content, GraphicsDevice device)
         {
             hudSprites = new SpriteBatch(device);
-             iconTex = content.Load<Texture2D>(@"Textures\Geoscape\IconSpriteMap");
-             hudFont = content.Load<SpriteFont>(@"SpriteFont1");
-            iconSprites = new SpriteMap(iconTex,4,5);
+            iconTex = content.Load<Texture2D>(@"Textures/Geoscape/IconSpriteMap");
+            hudFont = content.Load<SpriteFont>(@"SpriteFont1");
+            iconSprites = new SpriteMap(iconTex, 4, 5);
         }
 
         /// <summary>
@@ -146,9 +146,9 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// <param name="objectName"></param>
         /// <param name="iconType"></param>
         public void DrawIcon(GraphicsDevice device,
-                                IGeoPosition iconGeoPosition, 
-                                BasicEffect basicEffect, 
-                                GameTime gameTime, 
+                                IGeoPosition iconGeoPosition,
+                                BasicEffect basicEffect,
+                                GameTime gameTime,
                                 GeoPosition cameraGeoPosition,
                                 string objectName,
                                 HudIconTypes iconType)
@@ -169,11 +169,11 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
 
                 myIcon.Next(blnHovering, gameTime);
 
-                DrawHudIcon(iconType, screenPos, myIcon, objectName,device);
+                DrawHudIcon(iconType, screenPos, myIcon, objectName, device);
             }
             else
             {
-                CreateBlip(iconType,screenPos);
+                CreateBlip(iconType, screenPos);
             }
         }
         #endregion
@@ -247,7 +247,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// </summary>
         /// <param name="position"></param>
         /// <param name="color"></param>
-        private void CreateBlip(HudIconTypes iconType,Vector2 position)
+        private void CreateBlip(HudIconTypes iconType, Vector2 position)
         {
             Color oCol = Color.White;
             if (iconType <= HudIconTypes.UfoCrash)
@@ -267,7 +267,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         {
             float deltaX = mouseState.X - position.X;
             float deltaY = mouseState.Y - position.Y;
-            return (deltaX * deltaX + deltaY * deltaY < 256.0) && 
+            return (deltaX * deltaX + deltaY * deltaY < 256.0) &&
             TempSelectedItem == String.Empty;
         }
 
@@ -279,7 +279,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         {
             if (selectedItem != objectName)
             {
-                Xenocide.AudioSystem.PlaySound("Menu\\buttonover.ogg");
+                Xenocide.AudioSystem.PlaySound(SoundId.ButtonOver);
             }
         }
 
@@ -289,7 +289,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// <param name="objectName"></param>
         private void PlayTextChanged()
         {
-           Xenocide.AudioSystem.PlaySound("Menu\\buttonover.ogg");
+            Xenocide.AudioSystem.PlaySound(SoundId.ButtonOver);
         }
 
         /// <summary>
@@ -344,7 +344,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             /// <returns></returns>
             private double msSinceMouseOver(GameTime gameTime)
             {
-                return gameTime.TotalGameTime.TotalMilliseconds - timeCreated.TotalMilliseconds; 
+                return gameTime.TotalGameTime.TotalMilliseconds - timeCreated.TotalMilliseconds;
             }
 
             public string GetTextToDisplay(string name)
@@ -352,7 +352,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
                 string textToDraw = string.Empty;
 
                 // only do this if we have some text to draw.
-                if( ticks > 0)
+                if (ticks > 0)
                 {
                     // Get the text we will be drawing
                     textToDraw = name.Substring(0, Math.Min(name.Length, ticks)).ToUpper();
@@ -372,7 +372,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
                 else if (!blnHovered && previouslyHovered)
                 { // newly left
                     // no longer previously hovered
-                    previouslyHovered = false ;
+                    previouslyHovered = false;
                     // no ticks since hover
                     ticks = 0;
                 }
@@ -438,19 +438,19 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
                 if (flashCheckTime > flashCheckInterval)
                 {
                     flashCheckTime = 0;
-                    if(Xenocide.Rng.RollDice(flashAnimStartChance))
+                    if (Xenocide.Rng.RollDice(flashAnimStartChance))
                     {
                         inFlash = true;
                         flashAnimTime = 0;
                     }
                 }
 
-                if(inFlash)
+                if (inFlash)
                 {
                     flashAnimTime += (float)time.ElapsedGameTime.TotalMilliseconds;
-                    flashFrameToDraw = (int)((flashAnimTime/flashSpeed)*10) + 8;
+                    flashFrameToDraw = (int)((flashAnimTime / flashSpeed) * 10) + 8;
 
-                    if (flashFrameToDraw >= flashEndFrame )
+                    if (flashFrameToDraw >= flashEndFrame)
                     {
                         flashFrameToDraw = flashStartFrame;
                         inFlash = false;
@@ -531,7 +531,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
 
 
             #endregion
-        } 
+        }
         #endregion
     }
 }

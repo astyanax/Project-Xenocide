@@ -28,11 +28,11 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape.AI;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -104,7 +104,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <summary>
         /// Anything that needs to be done when mission enters this state
         /// </summary>
-        public virtual void OnEnterState() 
+        public virtual void OnEnterState()
         {
             Util.GeoTimeDebugWriteLine("{0} Entering State {1}", Mission.Craft.Name, this.GetType().Name);
         }
@@ -112,7 +112,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <summary>
         /// Anything that needs to be done when mission leaves this state
         /// </summary>
-        public virtual void OnExitState() 
+        public virtual void OnExitState()
         {
             Util.GeoTimeDebugWriteLine("{0} Exiting State {1}", Mission.Craft.Name, this.GetType().Name);
         }

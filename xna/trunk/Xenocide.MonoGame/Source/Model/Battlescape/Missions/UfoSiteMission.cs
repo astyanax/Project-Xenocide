@@ -26,11 +26,12 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
-using ProjectXenocide.Utils;
 using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 
@@ -50,7 +51,7 @@ namespace ProjectXenocide.Model.Battlescape
         public UfoSiteMission(Craft ufo, Craft hunter)
             : base(hunter as Aircraft)
         {
-            this.ufo    = ufo as Ufo;
+            this.ufo = ufo as Ufo;
         }
 
         /// <summary>
@@ -80,19 +81,19 @@ namespace ProjectXenocide.Model.Battlescape
             // Note results of mission
             Location = ufo.Position;
             Outpost = Aircraft.HomeBase;
-            switch(finishType)
+            switch (finishType)
             {
                 case BattleFinish.XCorpVictory:
-                {
-                    AddToSalvage(ufo.RecoveredItems());
+                    {
+                        AddToSalvage(ufo.RecoveredItems());
 
-                    // Tell UFO that it has been killed
-                    ufo.OnDestroyed();
+                        // Tell UFO that it has been killed
+                        ufo.OnDestroyed();
 
-                    // Tell aircraft fight's over (it won)
-                    Aircraft.OnDogfightFinished();
-                }
-                break;
+                        // Tell aircraft fight's over (it won)
+                        Aircraft.OnDogfightFinished();
+                    }
+                    break;
 
                 case BattleFinish.Aborted:
                     //ToDo: check this is all we need to do

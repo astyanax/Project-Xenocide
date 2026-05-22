@@ -26,11 +26,12 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text;
 
 using Microsoft.Xna.Framework;
+
 using ProjectXenocide.Model.Battlescape.Combatants;
 
 namespace ProjectXenocide.Model.Battlescape
@@ -68,7 +69,7 @@ namespace ProjectXenocide.Model.Battlescape
                 olist.Add(10, dummy);
                 olist.Add(3, dummy);
                 olist.Add(15, dummy);
-                Debug.Assert( 3.0f == olist.list[0].cost);
+                Debug.Assert(3.0f == olist.list[0].cost);
                 Debug.Assert(10.0f == olist.list[1].cost);
                 Debug.Assert(15.0f == olist.list[2].cost);
             }
@@ -80,12 +81,12 @@ namespace ProjectXenocide.Model.Battlescape
         [Conditional("DEBUG")]
         public static void TestFindPath()
         {
-            Mission mission  = new MockMission();
+            Mission mission = new MockMission();
             Battle battlescape = new Battle(mission);
-            Terrain terrain  = battlescape.Terrain;
-            Pathfinder finder  = new Pathfinder(terrain);
-            Combatant  soldier = battlescape.Teams[1].Combatants[0];
-            Combatant  alien   = battlescape.Teams[0].Combatants[0];
+            Terrain terrain = battlescape.Terrain;
+            Pathfinder finder = new Pathfinder(terrain);
+            Combatant soldier = battlescape.Teams[1].Combatants[0];
+            Combatant alien = battlescape.Teams[0].Combatants[0];
 
             List<MoveData> path = new List<MoveData>();
             Debug.Assert(finder.FindPath(0, 0, 0, false, 2, 0, 1, path));
@@ -98,8 +99,8 @@ namespace ProjectXenocide.Model.Battlescape
             // test FindCombatantAt
             Debug.Assert(null == battlescape.FindCombatantAt(new Vector3(2, 0, 0)));
             Debug.Assert(soldier == battlescape.FindCombatantAt(new Vector3(0, 0, 0)));
-            Debug.Assert(alien   == battlescape.FindCombatantAt(new Vector3(3, 1, 1)));
-            Debug.Assert(alien   == battlescape.FindCombatantAt(alien.Position));
+            Debug.Assert(alien == battlescape.FindCombatantAt(new Vector3(3, 1, 1)));
+            Debug.Assert(alien == battlescape.FindCombatantAt(alien.Position));
 
             // move alien to block path
             terrain.MoveCombatant(alien, new MoveData(3, 1, 1, 0), new MoveData(2, 0, 0, 0));

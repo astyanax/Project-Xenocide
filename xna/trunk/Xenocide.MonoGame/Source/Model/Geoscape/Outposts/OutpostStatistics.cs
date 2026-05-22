@@ -28,13 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
-using ProjectXenocide.Model.StaticData.Facilities;
 using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.Model.StaticData.Facilities;
 using ProjectXenocide.UI.Dialogs;
 
 
@@ -74,7 +74,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         /// <param name="facilityId">type of radar</param>
         public void RemoveRadar(String facilityId)
         {
-            radars.RemoveAll(delegate(RadarInfo r) { return r.FacilityId == facilityId; });
+            radars.RemoveAll(delegate (RadarInfo r) { return r.FacilityId == facilityId; });
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
                 {
                     return false;
                 }
-                
+
                 // otherwise, if radar is working we've seen ufo
                 if (radar.CanDetect || alreadySeen)
                 {
@@ -153,7 +153,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             public RadarInfo(String facilityId)
             {
                 this.facilityId = facilityId;
-                this.range      = (float)GeoPosition.KilometersToRadians(Radar.Range);
+                this.range = (float)GeoPosition.KilometersToRadians(Radar.Range);
             }
 
             /// <summary>
@@ -204,7 +204,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             /// </summary>
             public ScanFacilityInfo Radar
             {
-                get { return Xenocide.StaticTables.FacilityList[facilityId] as ScanFacilityInfo; } 
+                get { return Xenocide.StaticTables.FacilityList[facilityId] as ScanFacilityInfo; }
             }
 
             /// <summary>
@@ -279,22 +279,22 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             stats.AddRadar("FAC_LONG_RANGE_NEUDAR");
 
             // UFO outside range
-            GeoPosition outpost      = new GeoPosition(0, 0);
-            GeoPosition inRange      = new GeoPosition(0, (float)GeoPosition.KilometersToRadians(500));
+            GeoPosition outpost = new GeoPosition(0, 0);
+            GeoPosition inRange = new GeoPosition(0, (float)GeoPosition.KilometersToRadians(500));
             GeoPosition outsideRange = new GeoPosition(0, (float)GeoPosition.KilometersToRadians(5000));
 
             // test UFO inside and outside range
             Debug.Assert(!stats.IsOnRadar(outpost, outsideRange, true));
-            Debug.Assert( stats.IsOnRadar(outpost, inRange,      true));
+            Debug.Assert(stats.IsOnRadar(outpost, inRange, true));
 
             // Try case where first radar isn't working
             stats.radars[0].TestSetCanDetect(false);
             Debug.Assert(!stats.IsOnRadar(outpost, inRange, false));
-            Debug.Assert( stats.IsOnRadar(outpost, inRange, true));
+            Debug.Assert(stats.IsOnRadar(outpost, inRange, true));
 
             // Try case where first radar isn't working, but second one is
             stats.AddRadar("FAC_SHORT_RANGE_NEUDAR");
-            Debug.Assert( stats.IsOnRadar(outpost, inRange, false));
+            Debug.Assert(stats.IsOnRadar(outpost, inRange, false));
         }
 
         #endregion UnitTests

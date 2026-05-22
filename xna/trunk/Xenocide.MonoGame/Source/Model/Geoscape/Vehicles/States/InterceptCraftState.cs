@@ -28,16 +28,15 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
-
+using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Geoscape.GeoEvents;
 using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.Utils;
-using ProjectXenocide.Model.Battlescape;
 
 #endregion
 
@@ -66,7 +65,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <summary>
         /// Anything that needs to be done when mission enters this state
         /// </summary>
-        public override void OnEnterState() 
+        public override void OnEnterState()
         {
             // Tell target we're hunting it
             base.OnEnterState();
@@ -76,7 +75,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <summary>
         /// Anything that needs to be done when mission leaves this state
         /// </summary>
-        public override void OnExitState() 
+        public override void OnExitState()
         {
             // Tell target we're no longer hunting it
             base.OnExitState();
@@ -125,7 +124,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <summary>
         /// Respond to craft running low on fuel
         /// </summary>
-        public override void OnFuelLow() 
+        public override void OnFuelLow()
         {
             // if we're low on fuel, must "return to base"
             Xenocide.GameState.GeoData.QueueEvent(new FuelLowGeoEvent(Mission.Craft));
@@ -150,7 +149,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
                 }
                 else
                 {
-                    Mission.SetState(new PatrolState(Mission,Mission.Craft.Position));
+                    Mission.SetState(new PatrolState(Mission, Mission.Craft.Position));
                 }
             }
             else if (Mission.Craft.IsArmed)

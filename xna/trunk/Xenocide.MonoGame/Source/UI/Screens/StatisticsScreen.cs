@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -32,15 +32,18 @@ using System.Text;
 
 using Gum.Forms.Controls;
 
-using ProjectXenocide.Utils;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+
+using ProjectXenocide.Assets;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Geography;
 using ProjectXenocide.UI.Scenes.Facility;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using ProjectXenocide.UI.Scenes.Statistics;
+using ProjectXenocide.Utils;
+
 using Xenocide.Resources;
 
 
@@ -88,7 +91,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         /// <param name="content">content manager that fetches the content</param>
         /// <param name="device">the display</param>
-        
+
         public override void LoadContent(ContentManager content, GraphicsDevice device)
         {
             // and put up default display
@@ -167,7 +170,7 @@ namespace ProjectXenocide.UI.Screens
             int index = seriesList.SelectedIndex;
             if (index >= 0)
             {
-                Xenocide.AudioSystem.PlaySound("Menu\\buttonclick2_changesetting.ogg");
+                Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick2);
                 Series series = DataSet[index];
                 series.ToggleShow();
 

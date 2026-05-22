@@ -28,12 +28,12 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using ProjectXenocide.Model.Geoscape;
-using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Model.Geoscape.Geography;
+using ProjectXenocide.Model.Geoscape.Vehicles;
 
 #endregion
 
@@ -60,9 +60,9 @@ namespace ProjectXenocide.Model.Geoscape.AI
         private static void InfiltrationTaskTest()
         {
             Xenocide.GameState.SetToStartGameCondition();
-            Overmind         overmind = Xenocide.GameState.GeoData.Overmind;
-            PlanetRegion     region   = Xenocide.GameState.GeoData.Planet.AllRegions[0];
-            InfiltrationTask task     = overmind.TaskFactory.Create(AlienMission.Infiltration, overmind, region) as InfiltrationTask;
+            Overmind overmind = Xenocide.GameState.GeoData.Overmind;
+            PlanetRegion region = Xenocide.GameState.GeoData.Planet.AllRegions[0];
+            InfiltrationTask task = overmind.TaskFactory.Create(AlienMission.Infiltration, overmind, region) as InfiltrationTask;
 
             overmind.DiableStartOfMonth();
             overmind.AddTask(task);

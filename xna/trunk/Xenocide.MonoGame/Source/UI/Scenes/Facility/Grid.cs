@@ -47,7 +47,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
         /// </summary>
         /// <param name="cellsWide">Size of grid (in cells) along width of display</param>
         /// <param name="cellsHigh">Size of grid (in cells) along height of display</param>
-        public Grid(int cellsWide, int cellsHigh) 
+        public Grid(int cellsWide, int cellsHigh)
         {
             this.cellsWide = cellsWide;
             this.cellsHigh = cellsHigh;
@@ -71,7 +71,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
             for (float z = -maxZ; z <= maxZ; z += 1.0f)
             {
                 verts.Add(new VertexPositionColor(new Vector3(-maxX, 0.0f, z), gridColor));
-                verts.Add(new VertexPositionColor(new Vector3( maxX, 0.0f, z), gridColor));
+                verts.Add(new VertexPositionColor(new Vector3(maxX, 0.0f, z), gridColor));
                 indexes.Add(++line);
                 indexes.Add(++line);
             }
@@ -80,7 +80,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
             for (float x = -maxX; x <= maxX; x += 1.0f)
             {
                 verts.Add(new VertexPositionColor(new Vector3(x, 0.0f, -maxZ), gridColor));
-                verts.Add(new VertexPositionColor(new Vector3(x, 0.0f,  maxZ), gridColor));
+                verts.Add(new VertexPositionColor(new Vector3(x, 0.0f, maxZ), gridColor));
                 indexes.Add(++line);
                 indexes.Add(++line);
             }

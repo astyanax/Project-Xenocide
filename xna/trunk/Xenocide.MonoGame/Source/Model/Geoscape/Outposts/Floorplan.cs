@@ -28,16 +28,16 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
-using ProjectXenocide.Utils;
+using ProjectXenocide.Model.Geoscape.GeoEvents;
 using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.Model.StaticData.Facilities;
-using ProjectXenocide.Model.Geoscape.GeoEvents;
 using ProjectXenocide.UI.Dialogs;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -57,7 +57,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         {
             this.statistics = statistics;
         }
-        
+
         /// <summary>
         /// Return the Facility at the given position
         /// </summary>
@@ -87,7 +87,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         {
             Debug.Assert(!AreCellsOccupied(handle));
             Debug.Assert(IsInsideBase(handle));
-            
+
             facilities.Add(handle);
             handle.StartBuilding(statistics);
         }
@@ -155,7 +155,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             {
                 return XenoError.FacilityIsInUse;
             }
- 
+
             // check if removing facility will split base
             if (WillRemovalSpiltBase(facility))
             {
@@ -175,7 +175,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         {
             // Don't handle case of multiple facilities of same type in base
             Debug.Assert(Xenocide.StaticTables.FacilityList[id].LimitIsOnePerOutpost);
-            return facilities.Find(delegate(FacilityHandle f) { return f.FacilityInfo.Id == id; } );
+            return facilities.Find(delegate (FacilityHandle f) { return f.FacilityInfo.Id == id; });
         }
 
         /// <summary>
@@ -185,7 +185,8 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         /// <returns>true if base has facility, and it's fully built</returns>
         public bool HasWorkingFacility(String id)
         {
-            return (null != facilities.Find(delegate(FacilityHandle f) {
+            return (null != facilities.Find(delegate (FacilityHandle f)
+            {
                 return (f.FacilityInfo.Id == id) && !f.IsUnderConstruction;
             }));
         }
@@ -195,7 +196,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         /// </summary>
         public void SetupPlayersFirstBase()
         {
-            foreach(StartSettings.StartingFacility sf in Xenocide.StaticTables.StartSettings.Facilities)
+            foreach (StartSettings.StartingFacility sf in Xenocide.StaticTables.StartSettings.Facilities)
             {
                 AddFacility(sf.Construct());
             }
@@ -262,7 +263,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
                     }
                 }
             }
-            
+
             // if get here, no cell was in use
             return false;
         }
@@ -350,9 +351,9 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             // all the connected facilities.  When we're done, if the tree has
             // all the facilities, then removing the facility won't split the floorplan
             // Note that we can't have under construction facilities in the tree
-            List<FacilityHandle> tree       = new List<FacilityHandle>();
+            List<FacilityHandle> tree = new List<FacilityHandle>();
             List<FacilityHandle> incomplete = new List<FacilityHandle>();
-            
+
             //... first node is access lift (which should be 
             Debug.Assert("FAC_BASE_ACCESS_FACILITY" == facilities[0].FacilityInfo.Id);
             tree.Add(facilities[0]);
@@ -482,7 +483,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             Debug.Assert(XenoError.PositionNotInBase == floorplan.IsPositionLegal(pad));
             --pad.Y;
             Debug.Assert(XenoError.None == floorplan.IsPositionLegal(pad));
-            
+
             // Check can't build a facility if there's one already there
             ++pad.X;
             Debug.Assert(XenoError.PositionAlreadyOccupied == floorplan.IsPositionLegal(pad));

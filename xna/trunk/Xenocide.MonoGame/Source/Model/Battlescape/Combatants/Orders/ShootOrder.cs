@@ -28,10 +28,11 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 using Microsoft.Xna.Framework;
+
 using ProjectXenocide.Model.StaticData.Items;
 
 #endregion
@@ -52,16 +53,16 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// <param name="activeArm">The arm used for the order.</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
             Justification = "Will throw if actionInfo is null")]
-        public ShootOrder(Combatant combatant, Battle battlescape, Vector3 target, Item weapon, 
+        public ShootOrder(Combatant combatant, Battle battlescape, Vector3 target, Item weapon,
             ShootActionInfo actionInfo, Combatant.ActiveArm activeArm)
             :
             base(combatant, battlescape)
         {
-            this.target     = new Vector3((int)target.X, (int)target.Y, (int)target.Z);
-            this.weapon     = weapon;
+            this.target = new Vector3((int)target.X, (int)target.Y, (int)target.Z);
+            this.weapon = weapon;
             this.actionInfo = actionInfo;
-            this.shotCount  = actionInfo.Shots;
-            this.activeArm  = activeArm;
+            this.shotCount = actionInfo.Shots;
+            this.activeArm = activeArm;
         }
 
         /// <summary>Spend time performing the order</summary>

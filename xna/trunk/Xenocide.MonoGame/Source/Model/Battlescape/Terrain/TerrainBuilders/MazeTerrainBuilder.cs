@@ -26,9 +26,9 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
@@ -125,9 +125,9 @@ namespace ProjectXenocide.Model.Battlescape
                         {
                             int j = Terrain.CellIndex(x, y, z);
                             if ((CountExits(j) == 1) && (D100() < deadendToLoopPercentage))
-                                {
-                                    DeadEndToLoop(j);
-                                }
+                            {
+                                DeadEndToLoop(j);
+                            }
                         }
                     }
                 }
@@ -167,12 +167,12 @@ namespace ProjectXenocide.Model.Battlescape
             private void PlaceRandomRoom(int rows, int cols, int level)
             {
                 // room dimensions
-                int width  = 4 + (mazeRandom.Next(3) * 2);
+                int width = 4 + (mazeRandom.Next(3) * 2);
                 int length = 4 + (mazeRandom.Next(3) * 2);
 
                 // north west corner of room
-                int west  = mazeRandom.Next((cols - width)/ 2) * 2;
-                int north = mazeRandom.Next((rows - length)/ 2) * 2;
+                int west = mazeRandom.Next((cols - width) / 2) * 2;
+                int north = mazeRandom.Next((rows - length) / 2) * 2;
 
                 // make sure room doesn't overwrite the start areas
                 if ((north < startAreaRows) && (west < startAreaCols))
@@ -368,7 +368,7 @@ namespace ProjectXenocide.Model.Battlescape
                     //Step 4 - build corridor in direction and set the cell in direction to current cell
                     RemoveWall(currentCellIndex, direction);
 
-                    switch(direction)
+                    switch (direction)
                     {
                         case Side.North:
                             currentCellIndex -= (Terrain.width * 2);
@@ -571,7 +571,7 @@ namespace ProjectXenocide.Model.Battlescape
             private void VerifyCellIndexValid(int cellIndex)
             {
                 Debug.Assert(0 == (cellIndex % 2));
-                Debug.Assert(0 == ((cellIndex / Terrain.Width)% 2));
+                Debug.Assert(0 == ((cellIndex / Terrain.Width) % 2));
             }
 
             #region Properties

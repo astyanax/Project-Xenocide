@@ -30,14 +30,14 @@ using System;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.Utils;
 
 using XnaModel = Microsoft.Xna.Framework.Graphics.Model;
-using ProjectXenocide.Utils;
 
 #endregion
 
@@ -56,7 +56,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         {
             try
             {
-                model = content.Load<XnaModel>(@"Models\Facility\Xnet\Barracks");
+                model = content.Load<XnaModel>(@"Models/Facility/Xnet/Barracks");
                 BuildScalingMatrix();
             }
             catch (Exception ex)
@@ -89,7 +89,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
                 {
                     effect.LightingEnabled = false;
                     effect.World = transforms[mesh.ParentBone.Index] * world;
-                    effect.View       = basicEffect.View;
+                    effect.View = basicEffect.View;
                     effect.Projection = basicEffect.Projection;
                     //effect.Alpha      = 0.7f ;
                 }

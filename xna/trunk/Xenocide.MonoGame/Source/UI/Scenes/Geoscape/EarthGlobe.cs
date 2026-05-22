@@ -1,4 +1,4 @@
-﻿#region Copyright
+#region Copyright
 /*
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
@@ -28,13 +28,13 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Globalization;
 using System.IO;
+using System.Text;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 #endregion
 
@@ -43,7 +43,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
     /// <summary>
     /// This is a custom vertex to use with normal mapping on the Earth Normal Mapped Shader
     /// </summary>
-    [Serializable]    
+    [Serializable]
     public struct GlobeVertex
     {
         /// <summary>
@@ -72,7 +72,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]
         public static readonly VertexElement[] VertexElements =
-           new VertexElement[] { 
+           new VertexElement[] {
                 new VertexElement(0,VertexElementFormat.Vector3,
                                              VertexElementUsage.Position,0),
                 new VertexElement(sizeof(float)*3,VertexElementFormat.Vector2,
@@ -82,7 +82,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
                 new VertexElement(sizeof(float)*8,VertexElementFormat.Vector3,
                                             VertexElementUsage.Tangent,0),
                 new VertexElement(sizeof(float)*11,VertexElementFormat.Vector3,
-                                            VertexElementUsage.Binormal,0),                
+                                            VertexElementUsage.Binormal,0),
             };
 
         public static readonly VertexDeclaration VertexDeclaration = new VertexDeclaration(VertexElements);
@@ -140,9 +140,9 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// <summary>
         /// The size in bytes of this vertex
         /// </summary>
-        public static int SizeInBytes 
-        { 
-            get { return sizeof(float) * 14; } 
+        public static int SizeInBytes
+        {
+            get { return sizeof(float) * 14; }
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         Texture2D diffuseTexture;
         Texture2D nightTexture;
         Texture2D normapMapTexture;
-        
+
         SphereMesh sphereMesh;
         VertexBuffer vertexBuffer;
         IndexBuffer indexBuffer;
@@ -181,11 +181,11 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// <param name="device">the display</param>
         public void LoadContent(GraphicsDevice device)
         {
-            using (var fs = File.OpenRead(@"Content\Textures\Geoscape\EarthDiffuseMap.jpg"))
+            using (var fs = File.OpenRead(@"Content/Textures/Geoscape/EarthDiffuseMap.jpg"))
                 diffuseTexture = Texture2D.FromStream(Xenocide.Instance.GraphicsDevice, fs);
-            using (var fs = File.OpenRead(@"Content\Textures\Geoscape\EarthNightMap.png"))
+            using (var fs = File.OpenRead(@"Content/Textures/Geoscape/EarthNightMap.png"))
                 nightTexture = Texture2D.FromStream(Xenocide.Instance.GraphicsDevice, fs);
-            using (var fs = File.OpenRead(@"Content\Textures\Geoscape\EarthNormalMap.png"))
+            using (var fs = File.OpenRead(@"Content/Textures/Geoscape/EarthNormalMap.png"))
                 normapMapTexture = Texture2D.FromStream(Xenocide.Instance.GraphicsDevice, fs);
 
             sphereMesh = new SphereMesh(15);
