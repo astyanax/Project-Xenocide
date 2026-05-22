@@ -276,6 +276,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
             state.Update(gameTime);
 
             // update time shown on screen

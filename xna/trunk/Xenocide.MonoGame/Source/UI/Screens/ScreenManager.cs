@@ -35,6 +35,7 @@ using CeGui.Renderers.Xna;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
@@ -202,6 +203,8 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public void Update(GameTime gameTime)
         {
+            HandleEscapeKey();
+
             // if there is a dialog queued for display, and we're not showing any dialogs
             // show the dialog
             if ((0 == showingDialogs.Count) && (0 < queuedDialogs.Count))
@@ -230,6 +233,30 @@ namespace ProjectXenocide.UI.Screens
                     }
                 }
             }
+        }
+
+        private void HandleEscapeKey()
+        {
+            var keyState = Keyboard.GetState();
+            if (keyState.IsKeyDown(Keys.Escape) && _prevKeyState.IsKeyUp(Keys.Escape))
+            {
+                if (showingDialogs.Count > 0)
+                {
+                    CloseDialog(showingDialogs.Peek());
+                }
+                else if (screenStack.Count > 0)
+                {
+                    if (!screenStack.Peek().HandleEscape())
+                    {
+                        if (!(screenStack.Peek() is GeoscapeScreen))
+                        {
+                            screenStack.Peek().SaveState();
+                            ScheduleScreen(new GeoscapeScreen());
+                        }
+                    }
+                }
+            }
+            _prevKeyState = keyState;
         }
 
         /// <summary>
@@ -408,6 +435,9 @@ namespace ProjectXenocide.UI.Screens
 
         /// <summary>Stack of screens (topmost is one currently being shown)</summary>
         private Stack<Screen> screenStack = new Stack<Screen>();
+
+        /// <summary>Previous keyboard state for edge detection</summary>
+        private KeyboardState _prevKeyState;
 
         #endregion Fields
 

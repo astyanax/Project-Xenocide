@@ -454,6 +454,15 @@ namespace ProjectXenocide.UI.Screens
         {
         }
 
+        /// <summary>
+        /// Handle the Escape key. Override in derived classes for screen-specific behavior.
+        /// </summary>
+        /// <returns>true if the key was handled, false to let default behavior run</returns>
+        public virtual bool HandleEscape()
+        {
+            return false;
+        }
+
         /// <summary>React to user clicking on a button by playing it's sound</summary>
         /// <param name="sender">Button the user clicked</param>
         /// <param name="e">Not used</param>

@@ -89,11 +89,16 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="gameTime">snapshot of timing values</param>
         public override void Update(GameTime gameTime)
         {
-            // If ESC key pressed while adding a facility (other than lift) cancel the add
-            if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape) && (BasesScreenState.AddFacility == state))
+        }
+
+        public override bool HandleEscape()
+        {
+            if (state == BasesScreenState.AddFacility)
             {
                 CancelFacility();
+                return true;
             }
+            return false;
         }
 
         /// <summary>
