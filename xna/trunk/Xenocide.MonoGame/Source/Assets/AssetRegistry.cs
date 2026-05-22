@@ -67,6 +67,11 @@ namespace ProjectXenocide.Assets
         public static readonly Dictionary<FontId, string> FontPaths = new()
         {
             [FontId.SpriteFont1] = "SpriteFont1",
+            [FontId.Xeno] = "SpriteFonts/Xeno",
+            [FontId.XenoBig] = "SpriteFonts/XenoBig",
+            [FontId.LargeBaseName] = "SpriteFonts/LargeBaseName",
+            [FontId.GeoTime] = "SpriteFonts/GeoTime",
+            [FontId.GeoTimeBig] = "SpriteFonts/GeoTimeBig",
         };
 
         public static string SoundPath(SoundId id) => SoundPaths[id];

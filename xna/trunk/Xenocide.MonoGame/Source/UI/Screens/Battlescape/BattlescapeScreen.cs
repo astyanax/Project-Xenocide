@@ -31,8 +31,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-using CeGui;
-
 using Gum.Forms.Controls;
 
 using Microsoft.Xna.Framework;
@@ -55,14 +53,8 @@ using Vector3 = Microsoft.Xna.Framework.Vector3;
 
 namespace ProjectXenocide.UI.Screens
 {
-    /// <summary>
-    /// Screen that shows the battlescape
-    /// </summary>
     public partial class BattlescapeScreen : GumScreen
     {
-        /// <summary>
-        /// Constructor (obviously)
-        /// </summary>
         public BattlescapeScreen()
             : base("BattlescapeScreen", @"Content/Textures/UI/BasesScreenBackground.png")
         {
@@ -70,76 +62,92 @@ namespace ProjectXenocide.UI.Screens
             ChangeState(new StartTurnScreenState(this));
         }
 
-        /// <summary>
-        /// Load the Scene's graphic content
-        /// </summary>
-        /// <param name="content">content manager that fetches the content</param>
-        /// <param name="device">the display</param>
-
         public override void LoadContent(ContentManager content, GraphicsDevice device)
         {
             scene.LoadContent(device, battlescape);
             topLevel = battlescape.Terrain.Levels - 1;
         }
 
-        /// <summary>
-        /// Perform processing which updates the screen.
-        /// </summary>
-        /// <param name="gameTime">snapshot of timing values</param>
         public override void Update(GameTime gameTime)
         {
             state.Update(gameTime);
             scene.Update(gameTime);
+            HandleMouseInput();
         }
 
-        /// <summary>
-        /// Render the 3D scene
-        /// </summary>
-        /// <param name="gameTime">time interval since last render</param>
-        /// <param name="device">Device to render the globe to</param>
         public override void Draw(GameTime gameTime, GraphicsDevice device)
         {
-            scene.Draw(device, sceneWindow.Rect, topLevel, cursorPosition);
+            base.Draw(gameTime, device);
+            scene.Draw(device, _viewportRect, topLevel, cursorPosition);
         }
 
-        #region Create the CeGui widgets
+        private void HandleMouseInput()
+        {
+            var mouse = Mouse.GetState();
+            var device = Xenocide.Instance.GraphicsDevice;
 
-        /// <summary>
-        /// add the buttons to the screen
-        /// </summary>
+            int vpX = (int)(device.Viewport.Width * _viewportRect.Left);
+            int vpY = (int)(device.Viewport.Height * _viewportRect.Top);
+            int vpW = (int)(device.Viewport.Width * _viewportRect.Width);
+            int vpH = (int)(device.Viewport.Height * _viewportRect.Height);
+
+            bool inViewport = mouse.X >= vpX && mouse.X <= vpX + vpW
+                           && mouse.Y >= vpY && mouse.Y <= vpY + vpH;
+
+            if (!inViewport)
+                return;
+
+            float relX = (mouse.X - vpX) / (float)vpW;
+            float relY = (mouse.Y - vpY) / (float)vpH;
+
+            Vector3 newPosition = scene.WindowToBattlescapeCell(new UiPoint(relX, relY), topLevel);
+
+            if (cursorPosition != newPosition)
+            {
+                cursorPosition = newPosition;
+                state.OnMouseMoveInScene(cursorPosition);
+            }
+
+            if (_prevLeftPressed && mouse.LeftButton == ButtonState.Pressed)
+                return;
+
+            if (mouse.LeftButton == ButtonState.Pressed && !_prevLeftPressed)
+            {
+                if (battlescape.Terrain.IsOnTerrain(newPosition))
+                    state.OnLeftMouseDownInScene(newPosition);
+            }
+            else if (mouse.RightButton == ButtonState.Pressed && !_prevRightPressed)
+            {
+                if (battlescape.Terrain.IsOnTerrain(newPosition))
+                    state.OnRightMouseDownInScene(newPosition);
+            }
+
+            _prevLeftPressed = mouse.LeftButton == ButtonState.Pressed;
+            _prevRightPressed = mouse.RightButton == ButtonState.Pressed;
+        }
+
+        #region Create the Gum controls
+
         protected override void CreateGumControls()
         {
-            // Window indicating where the 3D scene is
-            sceneWindow = GuiBuilder.CreateImage(CeguiId + "_viewport");
-            AddWidget(sceneWindow, 0.00f, 0.00f, 0.745f, 1.00f);
+            // Viewport rect: left 0, top 0, width 74.5%, height 100% (relative to 1280x1024)
+            _viewportRect = new UiRect(0.00f, 0.00f, 0.745f, 1.00f);
 
-            // text giving stats for selected combatant
             combatantStatsTextWindow = new Label(); RootContainer.AddChild(combatantStatsTextWindow);
             combatantStatsTextWindow.Visual.Visible = false;
 
-            // other buttons
             equipmentButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_EQUIPMENT") }; RootContainer.AddChild(equipmentButton);
             rightHandButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_RIGHT_HAND") }; RootContainer.AddChild(rightHandButton);
             finishTurnButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_FINISH_TURN") }; RootContainer.AddChild(finishTurnButton);
             topLevelButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TOP_LEVEL") }; RootContainer.AddChild(topLevelButton);
             abortButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_ABORT_MISSION") }; RootContainer.AddChild(abortButton);
 
-            // other buttons being pressed
             equipmentButton.Click += OnEquipmentButton;
             rightHandButton.Click += OnRightHandButton;
             finishTurnButton.Click += OnFinishTurnButton;
             topLevelButton.Click += OnTopLevelButton;
             abortButton.Click += OnAbortButton;
-
-            // mouse activity on screen
-            sceneWindow.MouseMove += new CeGui.MouseEventHandler(OnMouseMoveInScene);
-            sceneWindow.MouseButtonsDown += new CeGui.MouseEventHandler(OnMouseDownInScene);
         }
-
-        /// <summary>
-        /// CeGui widget that indicates where to draw the 3D scene
-        /// </summary>
-        private CeGui.Widgets.StaticImage sceneWindow;
 
         private Label combatantStatsTextWindow;
 
@@ -149,87 +157,37 @@ namespace ProjectXenocide.UI.Screens
         private Button topLevelButton;
         private Button abortButton;
 
-        #endregion Create the CeGui widgets
+        #endregion Create the Gum controls
 
         #region event handlers
 
-        /// <summary>User has clicked the "Equipment" button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
         private void OnEquipmentButton(object sender, EventArgs e)
         {
             state.OnEquipmentButton();
         }
 
-        /// <summary>User has clicked the "Right Hand" button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
         private void OnRightHandButton(object sender, EventArgs e)
         {
             state.OnHandButton(true);
         }
 
-        /// <summary>User has clicked the "Finish Turn" button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
         private void OnFinishTurnButton(object sender, EventArgs e)
         {
             state.OnFinishTurnButton();
         }
 
-        /// <summary>User has clicked the "Top Level" button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
         private void OnTopLevelButton(object sender, EventArgs e)
         {
             ToggleTopLevel();
         }
 
-        /// <summary>User has clicked the "Abort Mission" button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
         private void OnAbortButton(object sender, EventArgs e)
         {
             state.OnAbortButton();
         }
 
-        /// <summary>React to user moving the mouse in the 3D scene</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Mouse information</param>
-        private void OnMouseMoveInScene(object sender, CeGui.MouseEventArgs e)
-        {
-            Vector3 newPosition = WindowPixelToBattlescapeCell(e.Position.X, e.Position.Y, topLevel);
-            if (cursorPosition != newPosition)
-            {
-                cursorPosition = newPosition;
-                state.OnMouseMoveInScene(cursorPosition);
-            }
-        }
-
-        /// <summary>React to user clicking mouse in the 3D scene</summary>
-        /// <param name="sender">CeGui widget sending the event</param>
-        /// <param name="e">Mouse information</param>
-        private void OnMouseDownInScene(object sender, CeGui.MouseEventArgs e)
-        {
-            // ignore clicks that are not on the terrain
-            Vector3 newPosition = WindowPixelToBattlescapeCell(e.Position.X, e.Position.Y, topLevel);
-            if (battlescape.Terrain.IsOnTerrain(newPosition))
-            {
-                if (e.Button == System.Windows.Forms.MouseButtons.Left)
-                {
-                    state.OnLeftMouseDownInScene(newPosition);
-                }
-                else
-                {
-                    state.OnRightMouseDownInScene(newPosition);
-                }
-            }
-        }
-
         #endregion event handlers
 
-        /// <summary>Change the State</summary>
-        /// <param name="newState">new state</param>
         private void ChangeState(ScreenState newState)
         {
             if (null != state)
@@ -244,7 +202,6 @@ namespace ProjectXenocide.UI.Screens
             }
         }
 
-        /// <summary>Change the number of levels of the battlescape being shown</summary>
         private void ToggleTopLevel()
         {
             ++topLevel;
@@ -254,8 +211,6 @@ namespace ProjectXenocide.UI.Screens
             }
         }
 
-        /// <summary>Battlescape is over</summary>
-        /// <param name="finishType">Who won the battle</param>
         private void FinishMission(BattleFinish finishType)
         {
             Mission mission = battlescape.Mission;
@@ -265,25 +220,6 @@ namespace ProjectXenocide.UI.Screens
             ScreenManager.ScheduleScreen(new BattlescapeReportScreen(mission));
         }
 
-        /// <summary>
-        /// Convert position of pixel on screen to cell location on battlescape
-        /// </summary>
-        /// <param name="X">pixel's column</param>
-        /// <param name="Y">pixel's row</param>
-        /// <param name="level">level of the battlescape to find intersection at</param>
-        /// <returns>corresponding position, or undefined if not on Battlescape</returns>
-        private Vector3 WindowPixelToBattlescapeCell(float X, float Y, int level)
-        {
-            CeGui.Point coords2 = sceneWindow.AbsoluteToRelative(new CeGui.Point(
-                X - sceneWindow.AbsoluteX,
-                Y - sceneWindow.AbsoluteY));
-            return scene.WindowToBattlescapeCell(coords2, level);
-        }
-
-        /// <summary>
-        /// Update the combatant stats window with the stats for the currently selected combatant
-        /// </summary>
-        /// <param name="combatant">the selected combatant (null if there isn't one)</param>
         private void ShowCombatantStats(Combatant combatant)
         {
             if (null == combatant)
@@ -306,20 +242,14 @@ namespace ProjectXenocide.UI.Screens
 
         #region Fields
 
-        /// <summary>The 3D view shown on the screen</summary>
         private BattlescapeScene scene = new BattlescapeScene();
-
-        /// <summary>Topmost level of terrain to draw</summary>
         private int topLevel;
-
-        /// <summary>The cell the mouse cursor is currently over</summary>
         private Vector3 cursorPosition = new Vector3();
-
-        /// <summary>The battlescape</summary>
         private Battle battlescape = Xenocide.GameState.Battlescape;
-
-        /// <summary>State the screen is in</summary>
         private ScreenState state;
+        private UiRect _viewportRect;
+        private bool _prevLeftPressed;
+        private bool _prevRightPressed;
 
         #endregion Fields
     }

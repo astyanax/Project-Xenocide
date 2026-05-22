@@ -108,6 +108,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="device">Device to render the globe to</param>
         public override void Draw(GameTime gameTime, GraphicsDevice device)
         {
+            base.Draw(gameTime, device);
             scene.Draw(device, sceneWindowRect);
         }
 

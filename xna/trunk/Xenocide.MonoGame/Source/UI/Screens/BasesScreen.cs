@@ -103,6 +103,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="device">Device to render the globe to</param>
         public override void Draw(GameTime gameTime, GraphicsDevice device)
         {
+            base.Draw(gameTime, device);
             // update funds shown on screen
             // Note, if display hasn't changed, don't write new value to text window
             String funds = Util.StringFormat(Strings.SCREEN_BASES_FUNDS,

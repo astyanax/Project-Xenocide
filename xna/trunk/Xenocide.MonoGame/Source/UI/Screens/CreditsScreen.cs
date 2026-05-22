@@ -174,6 +174,7 @@ namespace ProjectXenocide.UI.Screens
             Justification = "Will throw if gameTime is null")]
         public override void Draw(GameTime gameTime, GraphicsDevice device)
         {
+            base.Draw(gameTime, device);
             offset -= gameTime.ElapsedGameTime.Milliseconds * scrollSpeed * outputFont.LineSpacing / 1000;
             if (offset < -outputFont.LineSpacing)
             {
@@ -244,7 +245,7 @@ namespace ProjectXenocide.UI.Screens
         private const float scrollSpeed = 2.0f;
 
         /// <summary>Needed so that we can load the sprite font</summary>
-        private ContentManager contentManager = new ContentManager(Xenocide.Instance.Services);
+        private ContentManager contentManager = new ContentManager(Xenocide.Instance.Services, "Content");
 
         /// <summary>Font used</summary>
         private SpriteFont outputFont;

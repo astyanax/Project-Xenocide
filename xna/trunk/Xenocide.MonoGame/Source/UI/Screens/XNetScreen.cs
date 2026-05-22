@@ -273,56 +273,6 @@ namespace ProjectXenocide.UI.Screens
         #endregion Functions to put the entry's text into the "text box"
 
         /// <summary>
-        /// Move camera due to mouse move
-        /// </summary>
-        /// <param name="e">details of the mouse move</param>
-        protected override void RotateSceneUsingMouse(CeGui.MouseEventArgs e)
-        {
-            // Calculate pointer position (in pixels)
-            // relative to upper left corner of SceneWindow
-            float x = e.Position.X - SceneWindow.AbsoluteX;
-            float y = e.Position.Y - SceneWindow.AbsoluteY;
-
-            float halfWidth = SceneWindow.AbsoluteWidth / 2.0f;
-            float halfHeight = SceneWindow.AbsoluteHeight / 2.0f;
-
-            // Calculate how percentually close the pointer is to the edges of SceneWindow,
-            // 0.0f if pointer is in center, 1.0f if pointer is on the edge
-            float factorFromCenterX = Math.Abs((x - halfWidth) / halfWidth);
-            float factorFromCenterY = Math.Abs((y - halfHeight) / halfHeight);
-
-            // Calculate roll amount caused by horizontal movement.
-            // The closer the pointer is to an edge the more roll.
-            float rollCausedByHorizontalMove = -e.MoveDeltaX * factorFromCenterY;
-            float rollCausedByVerticalMove = e.MoveDeltaY * factorFromCenterX;
-
-            // Correct roll direction
-            if (y > halfHeight)
-                rollCausedByHorizontalMove = -rollCausedByHorizontalMove;
-            if (x > halfWidth)
-                rollCausedByVerticalMove = -rollCausedByVerticalMove;
-
-            // Apply roll
-            float roll = rollCausedByHorizontalMove + rollCausedByVerticalMove;
-            if (roll != 0)
-            {
-                float rollAmount = roll * 0.1f;
-                // Update orientation
-                // ...
-            }
-
-
-            // Apply rotations
-            float rotationSpeed = -0.0045f * (Scene.CameraHeight + 1.0f);
-
-            Scene.RotateCamera(rotationSpeed * e.MoveDelta.X * (1 - factorFromCenterY),
-                               rotationSpeed * e.MoveDelta.Y * (1 - factorFromCenterX));
-
-            float totalRoll = rollCausedByHorizontalMove + rollCausedByVerticalMove;
-            xnetScene.RollCamera(rotationSpeed * totalRoll);
-        }
-
-        /// <summary>
         /// Manage the categories in the tree
         /// </summary>
         private class Category

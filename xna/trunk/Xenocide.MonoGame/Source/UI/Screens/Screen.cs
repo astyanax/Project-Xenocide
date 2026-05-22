@@ -135,6 +135,8 @@ namespace ProjectXenocide.UI.Screens
 
         #region Fields
 
+        protected String BackgroundFilename { get { return backgroundFilename; } }
+
         // name of file holding the image that makes up the background of this window
         private String backgroundFilename;
 

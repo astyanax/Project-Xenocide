@@ -446,11 +446,11 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>
-        /// <param name="e">Mouse information</param>
-        protected override void OnLeftMouseDownInScene(CeGui.MouseEventArgs e)
+        /// <param name="relX">X co-ordinate relative to viewport (0-1)</param>
+        /// <param name="relY">Y co-ordinate relative to viewport (0-1)</param>
+        protected override void OnLeftMouseDownInScene(float relX, float relY)
         {
-            Debug.Assert(e.Button == System.Windows.Forms.MouseButtons.Left);
-            GeoPosition pos = WindowPixelToGeoPosition(e.Position.X, e.Position.Y);
+            GeoPosition pos = geoscapeScene.WindowToGeoPosition(new UiPoint(relX, relY));
             if (pos != null)
             {
                 state.OnLeftMouseDownInScene(pos);
@@ -462,7 +462,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="e">Not used</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope",
            Justification = "FxCop False Positive")]
-        private void OnCancelNewBase(object sender, CeGui.GuiEventArgs e)
+        private void OnCancelNewBase(object sender, EventArgs e)
         {
             ScreenManager.ScheduleScreen(new GeoscapeScreen());
         }
@@ -541,42 +541,6 @@ namespace ProjectXenocide.UI.Screens
                 }
             }
             return nearest;
-        }
-
-        /// <summary>
-        /// Convert position of pixel on screen to geoposition
-        /// </summary>
-        /// <param name="X">pixel's column</param>
-        /// <param name="Y">pixel's row</param>
-        /// <returns>corresponding Geoposition, or null if not on Geoscape</returns>
-        private GeoPosition WindowPixelToGeoPosition(float X, float Y)
-        {
-            CeGui.Point coords2 = SceneWindow.AbsoluteToRelative(new CeGui.Point(
-                X - SceneWindow.AbsoluteX,
-                Y - SceneWindow.AbsoluteY));
-            return geoscapeScene.WindowToGeoPosition(coords2);
-        }
-
-        /// <summary>
-        /// Move camera due to mouse move
-        /// </summary>
-        /// <param name="e">details of the mouse move</param>
-        protected override void RotateSceneUsingMouse(CeGui.MouseEventArgs e)
-        {
-            // try to track cursor on globe
-            GeoPosition final = WindowPixelToGeoPosition(e.Position.X, e.Position.Y);
-            GeoPosition start = WindowPixelToGeoPosition(e.Position.X - e.MoveDelta.X, e.Position.Y - e.MoveDelta.Y);
-            if ((null != start) && (null != final))
-            {
-                float latitude = final.Latitude - start.Latitude;
-                float longitude = final.Longitude - start.Longitude;
-                Scene.RotateCamera(longitude, latitude);
-            }
-            else
-            {
-                // can't track cursor on globe, fallback to default handling
-                base.RotateSceneUsingMouse(e);
-            }
         }
 
         #region fields

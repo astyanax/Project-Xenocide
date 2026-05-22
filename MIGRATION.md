@@ -193,36 +193,37 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 
 #### Phase 4.0: Setup & Proof of Concept (Automated + Manual)
 - [x] Evaluate and select replacement (Gum selected over MGUI/Myra/GeonBit/ImGui — see docs/legacy/GUI.md) — ✅ Done
-- [ ] Add `Gum.MonoGame` NuGet package to project (`dotnet add package Gum.MonoGame`)
-- [ ] Initialize `GumService.Default` in `Xenocide.cs` (Initialize, Update, Draw — 3 lines)
-- [ ] Create proof-of-concept: render a Gum `StackPanel` with `Button` + `Label` alongside the existing CeGUI# stubs
-- [ ] Verify Gum renders on top of existing screen manager output
+- [x] Add `Gum.MonoGame` NuGet package to project (`dotnet add package Gum.MonoGame`) — ✅ Done (v2026.5.8.1)
+- [x] Initialize `GumService.Default` in `Xenocide.cs` (Initialize, Update, Draw — 3 lines) — ✅ Done
+- [x] Create proof-of-concept: render a Gum `StackPanel` with `Button` + `Label` alongside the existing CeGUI# stubs — ✅ Done
+- [x] Verify Gum renders on top of existing screen manager output — ✅ Done
 - [ ] **Manual: You** — verify the Gum tooltip/overlay appears correctly on the 3D scene
 
 #### Phase 4.1: Convert StartScreen (Template / Reference Implementation)
-- [ ] Create `StartScreenViewModel` with: version text, debug button visibility flag
-- [ ] Replace `CreateCeguiWidgets()` with Gum `StackPanel` + `Button` controls + data binding
-- [ ] Attach event handlers to Gum buttons (New Game, Load, Credits, Quit, Debug tests)
+- [x] Create `StartScreenViewModel` with: version text, debug button visibility flag — ✅ Done
+- [x] Replace `CreateCeguiWidgets()` with Gum `StackPanel` + `Button` controls + data binding — ✅ Done
+- [x] Attach event handlers to Gum buttons (New Game, Load, Credits, Quit, Debug tests) — ✅ Done
 - [ ] **Manual: You** — verify all 5 StartScreen buttons work end-to-end (schedule different screens, quit)
 - [ ] **Manual: You** — verify version text renders in bottom-right corner
 - [ ] **Manual: You** — verify debug-only buttons (Run Tests, Battlescape) only appear in DEBUG builds
 
 #### Phase 4.2: Convert Dialog Base + Simple Dialogs
-- [ ] Create Gum-based `Dialog` base class (replacing CeGUI# dialog pattern)
-- [ ] Convert `MessageBoxDialog` — Label + Button with Ok
-- [ ] Convert `YesNoDialog` — Label + two Buttons
-- [ ] Convert `OptionsDialog` — Sliders (volume), Checkboxes (options), ComboBoxes (selections)
+- [x] Create Gum-based `Dialog` base class (replacing CeGUI# dialog pattern) — ✅ Done (`GumDialog` base class)
+- [x] Convert `MessageBoxDialog` — ✅ Done (`GumMessageBoxDialog`)
+- [x] Convert `YesNoDialog` — ✅ Done (`GumYesNoDialog`)
+- [x] Convert `OptionsDialog` — ✅ Done (`GumOptionsDialog`)
 - [ ] **Manual: You** — verify dialogs open, close, return correct results
 - [ ] **Manual: You** — verify dialog queue and modal behavior (topmost dialog blocks input to screen below)
 
 #### Phase 4.3: Convert Management Screens (Simple → Medium)
-- [ ] Convert `CreditsScreen` — static formatted text (Labels + StackPanel)
-- [ ] Convert `MonthlyReportScreen` — formatted text + navigation buttons
-- [ ] Convert `LoadSaveGameScreen` — ListBox (save slots) + TextBox (rename) + Buttons
-- [ ] Convert `StatisticsScreen` — formatted data display
-- [ ] Convert `PurchaseScreen` / `SellScreen` — ListBox items + quantity controls + confirm
-- [ ] Convert `StoresScreen` — ListBox + filters (ComboBox)
-- [ ] Convert `ManufactureScreen` — project list + progress display
+- [x] Convert `CreditsScreen` — ✅ Done (GumScreen)
+- [x] Convert `MonthlyReportScreen` — ✅ Done (GumScreen)
+- [x] Convert `MonthlyCostsScreen` — ✅ Done (GumScreen)
+- [x] Convert `LoadSaveGameScreen` — ✅ Done (GumScreen)
+- [x] Convert `StatisticsScreen` — ✅ Done (GumScreen)
+- [x] Convert `PurchaseScreen` / `SellScreen` — ✅ Done (GumScreen)
+- [x] Convert `StoresScreen` — ✅ Done (GumScreen)
+- [x] Convert `ManufactureScreen` — ✅ Done (GumScreen)
 - [ ] **Manual: You** — verify each screen displays data correctly and navigation works
 
 #### Phase 4.4: Convert Core Screens (Complex)
@@ -233,14 +234,15 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [ ] **Manual: You** — verify drag-and-drop soldier equipment works
 - [ ] **Manual: You** — verify base facility grid layout
 
-### All 25 screens + 13 dialogs converted to Gum. Remaining: manual verification, CeGui stubs removal, and NUnit→xUnit migration.
-
 #### Phase 4.5: Convert 3D-Integrated Screens
 - [x] Convert `GeoscapeScreen` — Gum overlay (date/time, funds, buttons) on top of 3D globe view — ✅ Done
 - [x] Convert `BattlescapeScreen` — Gum overlay (soldier stats, action buttons, turn info) on top of 3D battlefield — ✅ Done
 - [x] Convert `AeroscapeScreen` / `BattlescapeReportScreen` — post-mission summary with Gum — ✅ Done
+- [x] Convert `XNetScreen` — encyclopedia with 3D model viewer — ✅ Done
 - [ ] **Manual: You** — verify Gum overlay renders correctly on top of 3D (depth/stencil issues)
 - [ ] **Manual: You** — verify no input conflicts between Gum and 3D scene (click-through, focus)
+
+**All 27 screens + 13 dialogs converted to Gum.** Conversion is complete; remaining items are manual verification, CeGui stubs removal, and polish.
 
 #### Phase 4.6: Cleanup
 - [x] Remove 10 unused `.layout` files from `Content/Layouts/` — ✅ Deleted
@@ -248,12 +250,35 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] Remove `Frame(string, string)` layout constructor — ✅ Removed
 - [x] Remove `Dialog(string)` layout constructor — ✅ Removed
 - [x] Remove `layoutFilename` field from `Frame.cs` — ✅ Removed
-- [ ] Remove `CeGuiStubs.cs` — not yet; still needed by `PolarScreen` (3D viewport), `GeoscapeScreenState` (CeGui buttons), and `Frame` base class
+- [ ] Remove `CeGuiStubs.cs` — not yet; still needed by `Frame.cs` (CeGui.Window, CeGui.Size, CeGui.Point, CeGui.GuiSheet, CeGui.WindowManager), `Screen.cs` (CeGui.Widgets.StaticImage, ImagesetManager, GuiSystem), `BattlescapeScreen.cs` (CeGui.Widgets.StaticImage, CeGui.MouseEventHandler), `Xenocide.cs` (GuiManager, FontManager, GuiSystem, WindowManager)
 - [ ] Remove `using CeGui;` and `using CeGui.Renderers.Xna;` from all game files
 - [ ] Remove `InitializeCegui()` from `Xenocide.cs`
 - [ ] Remove `System.Drawing` using from CeGuiStubs.cs
 - [ ] **Manual: You** — verify full build with 0 errors
 - [ ] **Manual: You** — run game and verify all screens render and function
+
+#### Phase 4.7: UI Polish (Cursor, Backgrounds, Fonts)
+- [x] Enable hardware cursor: `IsMouseVisible = true` in `Xenocide()` — ✅ Done
+- [x] Implement software cursor from TaharezLook spritesheet (`Source/UI/SoftwareCursor.cs`) — ✅ Done
+  - Loads `Content/Textures/UI/XenoNew.png`, renders `MouseArrow` region (142,127, 24x24) at mouse position
+  - `DrawableGameComponent` with `DrawOrder = int.MaxValue` ensures cursor on top of all UI
+  - Disables HW cursor when active
+- [x] UI background rendering in `GumScreen.Show()` — ✅ Done
+  - Loads background texture from screen's `BackgroundFilename` via `Texture2D.FromFile()`
+  - Draws full-screen via `SpriteBatch` in `GumScreen.Draw()` before 3D/Gum rendering
+  - `base.Draw()` calls added to all 7 screens that override `Draw()` (PolarScreen, BasesScreen, BattlescapeScreen, StatisticsScreen, CreditsScreen, EquipSoldierScreen)
+  - Backgrounds rendered: StartScreen, BasesScreen (×2), GeoscapeScreen, XNetScreen
+- [x] Register XenoNew.png in `Content.mgcb` — ✅ Done (moved to `Content/Textures/UI/XenoNew.png`)
+- [x] Create 5 additional `.spritefont` files in `Content/SpriteFonts/` — ✅ Done
+  - `Xeno.spritefont` (Arial 8), `XenoBig.spritefont` (Arial 10 Bold)
+  - `LargeBaseName.spritefont` (Arial 24 Bold)
+  - `GeoTime.spritefont` (Consolas 10 Bold), `GeoTimeBig.spritefont` (Consolas 18 Bold)
+- [x] Register all spritefonts in `Content.mgcb` and `AssetRegistry.FontPaths` — ✅ Done
+- [ ] **Remaining: Gum theme/layout** — Create `.gumx` project file for button theming (TaharezLook spritesheet), proper UI layouts, and font configuration
+- [ ] **Remaining: CeGui Frame/Dialog replacement** — Replace `Frame.cs` CeGui dependency with Gum-native base class
+- [ ] **Remaining: BattlescapeScreen CeGui dependency** — Replace `CeGui.Widgets.StaticImage` with Gum-native viewport
+- [ ] **Manual: You** — verify backgrounds render correctly on each screen
+- [ ] **Manual: You** — verify software cursor renders and tracks mouse
 
 #### Key Design Decisions for Gum Screen Pattern
 
@@ -332,14 +357,18 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 ### Phase 6: Content Pipeline Rebuild
 - [x] Import 3D models (.fbx, .x) into MGCB — ✅ 37 model entries registered (all .X files + most .FBX)
 - [x] Update shaders (.fx) for D3D11 profile — ✅ Already in .mgcb (GeoscapeShader, skybox)
-- [x] Set up spritefont in MGCB — ✅ SpriteFont1 registered
+- [x] Set up spritefont in MGCB — ✅ SpriteFont1 + 5 additional fonts registered
 - [x] Import all textures — ✅ 3 textures in .mgcb; others loaded via direct file (Texture2D.FromFile)
 - [x] Register all 16 audio .ogg files — ✅ Done in Phase 5
 - [x] Add missing facility models (17 .x files) — ✅ generalstorage through neural_shield
 - [x] Add missing XCorps.X default model — ✅ Used by XNet screen
 - [x] Fix `Content\` double-prefix path bugs — ✅ XNetScene.cs + CreditsScreen.cs
 - [x] 3 FBX models converted + textures placed — ✅ FemaleShirt, Viper, Barracks compile with 0 errors
-- [ ] Content pipeline: additional missing textures pending (EarthDiffuseMap, screen backgrounds, etc.)
+- [x] Register UI background textures in MGCB — ✅ 4 backgrounds (StartScreen, BasesScreen, GeoscapeScreen, XnetScreen)
+- [x] Register XenoNew.png (TaharezLook spritesheet) in MGCB — ✅ Used for software cursor
+- [x] Register EarthDiffuseMap.jpg, EarthNightMap.png, EarthNormalMap.png in MGCB — ✅ Geoscape globe textures
+- [x] Register EquipScreenBackground.png, InventorySprites.png, textureAtlas.png in MGCB — ✅ EquipSoldier + Battlescape
+- [ ] Content pipeline: add remaining FBX model textures
 
 **Key findings:**
 - MGCB's `FbxImporter` only supports FBX 2011–2013; legacy FBX files (pre-2011) fail with `FBX-DOM unsupported`
@@ -414,12 +443,25 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 ## 5. Next Steps (Recommended Order)
 
 ### Immediate (get the game running)
-1. ~~**Content Pipeline Setup**~~ ✅ Done — 37 models, 2 shaders, 1 font, 3 textures, 16 audio files registered in MGCB
+1. ~~**Content Pipeline Setup**~~ ✅ Done — 37 models, 2 shaders, 6 fonts, 14 textures, 16 audio files registered in MGCB
 2. ~~**Replace audio stubs**~~ ✅ Done — Phase 5 complete
-3. **Remaining Content Gaps** — Register missing textures (EarthDiffuseMap, screen backgrounds) in MGCB; evaluate converting old-format FBX files
-4. **Replace CeGui# stubs with Gum** — Phase 4.2–4.6 pending (dialogs, management screens, core screens, 3D overlays)
-5. **Replace NUnit with xUnit.net** — Phase 0 remaining item
-6. **Cross-platform validation** — Phase 7 (build on Linux, fix path case issues)
-7. **Cleanup** — Phase 8 (remove old projects, dependencies, installers)
+3. ~~**Convert all screens to Gum**~~ ✅ Done — Phases 4.0–4.5 complete (27 screens + 13 dialogs)
+4. ~~**Hardware cursor**~~ ✅ Done — `IsMouseVisible = true` in Xenocide constructor
+5. ~~**Software cursor**~~ ✅ Done — `SoftwareCursor` component renders MouseArrow from XenoNew.png
+6. ~~**UI background rendering**~~ ✅ Done — GumScreen loads and renders screen backgrounds
+7. ~~**Register missing textures in MGCB**~~ ✅ Done — 11 new textures registered (UI backgrounds, globe maps, etc.)
+8. ~~**Additional spritefonts**~~ ✅ Done — 5 new spritefont files (Xeno, XenoBig, LargeBaseName, GeoTime, GeoTimeBig)
+9. **Gum Theme/Layout** — Create `.gumx` project, apply TaharezLook button theming, configure fonts and control styles
+10. **Remove CeGui# stubs** — Replace `Frame.cs` and `BattlescapeScreen.cs` CeGui dependencies with Gum-native equivalents
+11. **Cross-platform validation** — Phase 7 (build on Linux, fix path case issues)
+12. **Cleanup** — Phase 8 (remove old projects, dependencies, installers)
 
-**GUI decision made:** Gum (MonoGameGum) selected. Full analysis in `docs/legacy/GUI.md` and `docs/GUI.md`.
+### Gum UI Layout & Theming (Next Major Task)
+The Gum WYSIWYG editor (`Gum UI Tool`) can be invoked to create a `.gumx` project for visual layout design. The tool creates XML-based project files that define component styles, layouts, and data bindings. Currently all UI is built programmatically in C# (buttons, labels, stack panels in `CreateGumControls()`). The Gum editor would allow:
+
+1. **Visual layout design** — drag-and-drop controls, position elements precisely
+2. **Button theming** — create styled button components from the TaharezLook spritesheet (`XenoNew.png` has ButtonLeftNormal/Middle/RightNormal segments + highlight/pushed states)
+3. **Font configuration** — assign spritefonts to control types globally
+4. **Background images** — replace programmatic texture loading with Gum `Sprite` components
+
+The Gum editor can be installed via: `dotnet tool install -g GumUiTool`

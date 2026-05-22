@@ -195,11 +195,9 @@ namespace ProjectXenocide.UI.Screens
             {
                 if (Xenocide.StaticTables.StartSettings.Cheats.ControlAlienMissions)
                 {
-                    alienMissionButton = CeGui.GuiBuilder.CreateButton(GeoscapeScreen.CeguiId + "_ALIEN_MISSION");
-                    alienMissionButton.Text = XenocideResourceManager.Get("BUTTON_ALIEN_MISSION");
-                    alienMissionButton.Clicked += new CeGui.GuiEventHandler(OnAlienMissionsClicked);
-                    alienMissionButton.Clicked += (s, args) => Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick1);
-                    GeoscapeScreen.SceneWindow.AddChild(alienMissionButton);
+                    alienMissionButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_ALIEN_MISSION") };
+                    alienMissionButton.Click += (s, e) => OnAlienMissionsClicked(s, e);
+                    GeoscapeScreen.RootContainer.AddChild(alienMissionButton);
                 }
             }
 
@@ -304,36 +302,12 @@ namespace ProjectXenocide.UI.Screens
             /// <summary>React to user clicking the AlienMission button</summary>
             /// <param name="sender">unused</param>
             /// <param name="e">unused</param>
-            private void OnAlienMissionsClicked(object sender, CeGui.GuiEventArgs e)
+            private void OnAlienMissionsClicked(object sender, EventArgs e)
             {
-                // bring up the alien mission dialog
                 GeoscapeScreen.ScreenManager.ShowDialog(new AlienMissionDialog());
             }
 
-            /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>
-            /// <param name="pos">Position on earth where mouse was clicked</param>
-            public override void OnLeftMouseDownInScene(GeoPosition pos)
-            {
-                // if there's a craft near the location, bring up the appropriate info dialog
-                Craft craft = GeoscapeScreen.FindClosestCraft(pos);
-                if (null != craft)
-                {
-                    // bit nasty, craft could be either UFO or aircraft
-                    Aircraft aircraft = craft as Aircraft;
-                    if (null != aircraft)
-                    {
-                        Xenocide.ScreenManager.ShowDialog(new AircraftOrdersDialog(aircraft));
-                    }
-                    else
-                    {
-                        Ufo ufo = craft as Ufo;
-                        Debug.Assert(null != ufo);
-                        Xenocide.ScreenManager.ShowDialog(new UfoInfoDialog(ufo));
-                    }
-                }
-            }
-
-            private CeGui.Widgets.PushButton alienMissionButton;
+            private Button alienMissionButton;
         }
 
         /// <summary>
@@ -355,11 +329,9 @@ namespace ProjectXenocide.UI.Screens
             {
                 GeoscapeScreen.EnableButtonSounds = false;
 
-                cancelNewBaseButton = CeGui.GuiBuilder.CreateButton(GeoscapeScreen.CeguiId + "_CANCEL_NEW_BASE");
-                cancelNewBaseButton.Text = XenocideResourceManager.Get("BUTTON_CANCEL_NEW_BASE");
-                cancelNewBaseButton.Clicked += new CeGui.GuiEventHandler(GeoscapeScreen.OnCancelNewBase);
-                cancelNewBaseButton.Clicked += (s, args) => Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick1);
-                GeoscapeScreen.SceneWindow.AddChild(cancelNewBaseButton);
+                cancelNewBaseButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CANCEL_NEW_BASE") };
+                cancelNewBaseButton.Click += (s, e) => GeoscapeScreen.OnCancelNewBase(s, e);
+                GeoscapeScreen.RootContainer.AddChild(cancelNewBaseButton);
             }
 
             /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>
@@ -371,7 +343,7 @@ namespace ProjectXenocide.UI.Screens
                 GeoscapeScreen.ConfirmBasePositionDialog(pos, false);
             }
 
-            private CeGui.Widgets.PushButton cancelNewBaseButton;
+            private Button cancelNewBaseButton;
         }
 
         /// <summary>
@@ -393,9 +365,8 @@ namespace ProjectXenocide.UI.Screens
             {
                 GeoscapeScreen.EnableButtonSounds = false;
 
-                setFirstBaseTextWindow = CeGui.GuiBuilder.CreateText(GeoscapeScreen.CeguiId + "_setFirstBase");
-                GeoscapeScreen.SceneWindow.AddChild(setFirstBaseTextWindow);
-                setFirstBaseTextWindow.Text = Strings.SCREEN_GEOSCAPE_FIRST_BASE;
+                setFirstBaseTextWindow = new Label() { Text = Strings.SCREEN_GEOSCAPE_FIRST_BASE };
+                GeoscapeScreen.RootContainer.AddChild(setFirstBaseTextWindow);
             }
 
             /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>
@@ -407,7 +378,7 @@ namespace ProjectXenocide.UI.Screens
                 GeoscapeScreen.ConfirmBasePositionDialog(pos, true);
             }
 
-            private CeGui.Widgets.StaticText setFirstBaseTextWindow;
+            private Label setFirstBaseTextWindow;
         }
 
         /// <summary>
@@ -435,11 +406,9 @@ namespace ProjectXenocide.UI.Screens
             {
                 GeoscapeScreen.EnableButtonSounds = false;
 
-                cancelTargetingButton = CeGui.GuiBuilder.CreateButton(GeoscapeScreen.CeguiId + "_CANCEL_TARGETING");
-                cancelTargetingButton.Text = XenocideResourceManager.Get("BUTTON_CANCEL_TARGETING");
-                cancelTargetingButton.Clicked += new CeGui.GuiEventHandler(OnCancelTargeting);
-                cancelTargetingButton.Clicked += (s, args) => Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick1);
-                GeoscapeScreen.SceneWindow.AddChild(cancelTargetingButton);
+                cancelTargetingButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CANCEL_TARGETING") };
+                cancelTargetingButton.Click += OnCancelTargeting;
+                GeoscapeScreen.RootContainer.AddChild(cancelTargetingButton);
             }
 
             /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>
@@ -565,7 +534,7 @@ namespace ProjectXenocide.UI.Screens
             /// <param name="e">Not used</param>
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope",
                Justification = "FxCop False Positive")]
-            private void OnCancelTargeting(object sender, CeGui.GuiEventArgs e)
+            private void OnCancelTargeting(object sender, EventArgs e)
             {
                 // put Geoscape back in "view anything" mode
                 GeoscapeScreen.ScreenManager.ScheduleScreen(new GeoscapeScreen());
@@ -574,7 +543,7 @@ namespace ProjectXenocide.UI.Screens
             /// <summary>
             /// The "Cancel target selection" button
             /// </summary>
-            private CeGui.Widgets.PushButton cancelTargetingButton;
+            private Button cancelTargetingButton;
 
             #region Fields
 
@@ -616,11 +585,9 @@ namespace ProjectXenocide.UI.Screens
             {
                 GeoscapeScreen.EnableButtonSounds = false;
 
-                cancelTargetButton = CeGui.GuiBuilder.CreateButton(GeoscapeScreen.CeguiId + "_CANCEL_ALIEN_MISSION");
-                cancelTargetButton.Text = XenocideResourceManager.Get("BUTTON_CANCEL_ALIEN_MISSION");
-                cancelTargetButton.Clicked += new CeGui.GuiEventHandler(OnCancelAlienMission);
-                cancelTargetButton.Clicked += (s, args) => Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick1);
-                GeoscapeScreen.SceneWindow.AddChild(cancelTargetButton);
+                cancelTargetButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CANCEL_ALIEN_MISSION") };
+                cancelTargetButton.Click += OnCancelAlienMission;
+                GeoscapeScreen.RootContainer.AddChild(cancelTargetButton);
             }
 
             /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>
@@ -636,12 +603,12 @@ namespace ProjectXenocide.UI.Screens
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope",
                 Justification = "FxCop false positive")]
-            private void OnCancelAlienMission(object sender, CeGui.GuiEventArgs e)
+            private void OnCancelAlienMission(object sender, EventArgs e)
             {
                 GeoscapeScreen.ScreenManager.ScheduleScreen(new GeoscapeScreen());
             }
 
-            private CeGui.Widgets.PushButton cancelTargetButton;
+            private Button cancelTargetButton;
             private AlienMission missionType;
         }
     }

@@ -132,6 +132,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="device">Device to render the screen to</param>
         public override void Draw(GameTime gameTime, GraphicsDevice device)
         {
+            base.Draw(gameTime, device);
             Rectangle sceneWindow = GetSceneRectangle(device);
             scene.BeginDraw(sceneWindow);
             scene.DrawSoldiersInventory(sceneWindow, controller.Combatant.Inventory);

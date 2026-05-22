@@ -92,6 +92,7 @@ namespace ProjectXenocide
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 1024;
             Content.RootDirectory = "Content";
+            IsMouseVisible = true;
             gui = new GuiManager(this);
             screenManager = new ScreenManager();
             staticTables = new StaticTables();
@@ -123,6 +124,9 @@ namespace ProjectXenocide
             var audioComponent = new AudioSystem.GameAudioComponent(this);
             Components.Add(audioComponent);
             Services.AddService(typeof(AudioSystem.IAudioSystem), audioComponent);
+
+            var softwareCursor = new UI.SoftwareCursor(this);
+            Components.Add(softwareCursor);
 
             base.Initialize();
 

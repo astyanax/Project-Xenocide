@@ -25,6 +25,31 @@
 /processor:FontDescriptionProcessor
 /build:Content/SpriteFont1.spritefont
 
+#begin Content/SpriteFonts/Xeno.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Content/SpriteFonts/Xeno.spritefont
+
+#begin Content/SpriteFonts/XenoBig.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Content/SpriteFonts/XenoBig.spritefont
+
+#begin Content/SpriteFonts/LargeBaseName.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Content/SpriteFonts/LargeBaseName.spritefont
+
+#begin Content/SpriteFonts/GeoTime.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Content/SpriteFonts/GeoTime.spritefont
+
+#begin Content/SpriteFonts/GeoTimeBig.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/build:Content/SpriteFonts/GeoTimeBig.spritefont
+
 #begin Content/Textures/Geoscape/IconSpriteMap.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -35,10 +60,67 @@
 /processor:TextureProcessor
 /build:Content/Textures/Geoscape/skybox.png
 
+#begin Content/Textures/Geoscape/EarthDiffuseMap.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Content/Textures/Geoscape/EarthDiffuseMap.jpg
+
+#begin Content/Textures/Geoscape/EarthNightMap.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Content/Textures/Geoscape/EarthNightMap.png
+
+#begin Content/Textures/Geoscape/EarthNormalMap.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Content/Textures/Geoscape/EarthNormalMap.png
+
 #begin Content/Textures/OutpostLayout/BuildTimes.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /build:Content/Textures/OutpostLayout/BuildTimes.png
+
+#----------------------------- UI Textures -----------------------------------#
+
+#begin Content/Textures/UI/XenoNew.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Content/Textures/UI/XenoNew.png
+
+#begin Content/Textures/UI/StartScreenBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Content/Textures/UI/StartScreenBackground.png
+
+#begin Content/Textures/UI/BasesScreenBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Content/Textures/UI/BasesScreenBackground.png
+
+#begin Content/Textures/UI/GeoscapeScreenBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Content/Textures/UI/GeoscapeScreenBackground.png
+
+#begin Content/Textures/UI/XnetScreenBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Content/Textures/UI/XnetScreenBackground.png
+
+#begin Content/Textures/EquipSoldier/EquipScreenBackground.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Content/Textures/EquipSoldier/EquipScreenBackground.png
+
+#begin Content/Textures/EquipSoldier/InventorySprites.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Content/Textures/EquipSoldier/InventorySprites.png
+
+#begin Content/Textures/Battlescape/textureAtlas.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Content/Textures/Battlescape/textureAtlas.png
 
 #begin Content/Models/Characters/Alien/Morlock.X
 /importer:FbxImporter

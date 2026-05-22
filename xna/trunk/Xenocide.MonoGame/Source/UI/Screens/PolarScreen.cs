@@ -33,6 +33,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using ProjectXenocide.UI.Scenes.Common;
 using ProjectXenocide.Utils;
@@ -41,148 +42,103 @@ using ProjectXenocide.Utils;
 
 namespace ProjectXenocide.UI.Screens
 {
-    /// <summary>
-    /// Base class for a screen that shows a 3D model with a camera that moves 
-    /// in polar co-ordinates.  I.e. scene has single 3D model, with camera
-    /// that "revolves" around the model.  e.g. Geoscape, XNet, Human Base
-    /// </summary>
     public abstract class PolarScreen : GumScreen
     {
-        /// <summary>
-        /// Constructor (obviously)
-        /// </summary>
-        /// <param name="ceguiId">CeGui's identifer for this screen</param>
         protected PolarScreen(string ceguiId)
             : base(ceguiId)
         {
         }
 
-        /// <summary>
-        /// Constructor (obviously)
-        /// </summary>
-        /// <param name="ceguiId">CeGui's identifer for this screen</param>
-        /// <param name="backgroundFilename">Name of the file holding the window's background</param>
         protected PolarScreen(string ceguiId, String backgroundFilename)
             : base(ceguiId, backgroundFilename)
         {
         }
 
-        /// <summary>
-        /// Set up window indicating where the 3D scene is
-        /// </summary>
-        /// <param name="left">Position on screen for view's left edge</param>
-        /// <param name="top">Position on screen for view's top edge</param>
-        /// <param name="width">Width of view (relative to screen)</param>
-        /// <param name="height">Height of view (relative to screen)</param>
         public void SetView(float left, float top, float width, float height)
         {
-            sceneWindow = CeGui.GuiBuilder.CreateImage(CeguiId + "_viewport");
-            // sceneWindow is CeGui StaticImage for 3D scene rendering only
-
-            // mouse activity on the "Scene" window
-            sceneWindow.MouseMove += new CeGui.MouseEventHandler(OnMouseMoveInScene);
-            sceneWindow.MouseButtonsDown += new CeGui.MouseEventHandler(OnMouseDownInScene);
-            sceneWindow.MouseWheel += new CeGui.MouseEventHandler(OnMouseWheelInScene);
+            _viewportRect = new UiRect(left, top, left + width, top + height);
         }
-
-        /// <summary>
-        /// Load the Scene's graphic content
-        /// </summary>
-        /// <param name="content">content manager that fetches the content</param>
-        /// <param name="device">the display</param>
 
         public override void LoadContent(ContentManager content, GraphicsDevice device)
         {
             scene.LoadContent(content, device);
         }
 
-        /// <summary>
-        /// Render the 3D scene
-        /// </summary>
-        /// <param name="gameTime">time interval since last render</param>
-        /// <param name="device">Device to render the globe to</param>
         public override void Draw(GameTime gameTime, GraphicsDevice device)
         {
-            scene.Draw(gameTime, device, sceneWindow.Rect);
+            base.Draw(gameTime, device);
+            scene.Draw(gameTime, device, _viewportRect);
         }
 
-        #region event handlers
-        /// <summary>React to user moving the mouse wheel in 3D scene</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Mouse information</param>
-        private void OnMouseWheelInScene(object sender, CeGui.MouseEventArgs e)
+        public override void Update(GameTime gameTime)
         {
-            float zoomSpeed = 0.005f;
-            scene.ZoomCamera(zoomSpeed * e.WheelDelta);
+            base.Update(gameTime);
+            HandleMouseInput();
         }
 
-        /// <summary>React to user moving the mouse in the 3D scene</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Mouse information</param>
-        private void OnMouseMoveInScene(object sender, CeGui.MouseEventArgs e)
+        private void HandleMouseInput()
         {
-            // if user is right draging the mouse, rotate the scene
-            if (Util.IsRightMouseButtonDown())
+            var mouse = Mouse.GetState();
+            var device = Xenocide.Instance.GraphicsDevice;
+
+            int vpX = (int)(device.Viewport.Width * _viewportRect.Left);
+            int vpY = (int)(device.Viewport.Height * _viewportRect.Top);
+            int vpW = (int)(device.Viewport.Width * _viewportRect.Width);
+            int vpH = (int)(device.Viewport.Height * _viewportRect.Height);
+
+            bool inViewport = mouse.X >= vpX && mouse.X <= vpX + vpW
+                           && mouse.Y >= vpY && mouse.Y <= vpY + vpH;
+
+            if (inViewport)
             {
-                RotateSceneUsingMouse(e);
+                if (_prevRightDown && mouse.RightButton == ButtonState.Pressed)
+                {
+                    float deltaX = mouse.X - _prevMouseX;
+                    float deltaY = mouse.Y - _prevMouseY;
+                    float rotateSpeed = 0.005f + 0.004f * scene.CameraHeight;
+                    scene.RotateCamera(deltaX * rotateSpeed, deltaY * -rotateSpeed);
+                }
+                _prevMouseX = mouse.X;
+                _prevMouseY = mouse.Y;
             }
-        }
 
-        /// <summary>React to user clicking mouse in the 3D scene</summary>
-        /// <param name="sender">CeGui widget sending the event</param>
-        /// <param name="e">Mouse information</param>
-        private void OnMouseDownInScene(object sender, CeGui.MouseEventArgs e)
-        {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (mouse.LeftButton == ButtonState.Pressed && !_prevLeftDown)
             {
-                // let derived class handle it
-                OnLeftMouseDownInScene(e);
+                if (inViewport)
+                {
+                    float relX = (mouse.X - vpX) / (float)vpW;
+                    float relY = (mouse.Y - vpY) / (float)vpH;
+                    OnLeftMouseDownInScene(relX, relY);
+                }
             }
+
+            int wheelDelta = mouse.ScrollWheelValue - _prevScrollValue;
+            if (inViewport && wheelDelta != 0)
+            {
+                float zoomSpeed = 0.005f;
+                scene.ZoomCamera(zoomSpeed * wheelDelta);
+            }
+            _prevScrollValue = mouse.ScrollWheelValue;
+
+            _prevLeftDown = mouse.LeftButton == ButtonState.Pressed;
+            _prevRightDown = mouse.RightButton == ButtonState.Pressed;
         }
 
-        /// <summary>React to user clicking left mouse button in the 3D scene</summary>
-        /// <param name="e">Mouse information</param>
-        protected virtual void OnLeftMouseDownInScene(CeGui.MouseEventArgs e)
+        protected virtual void OnLeftMouseDownInScene(float relX, float relY)
         {
-            // default behaviour is to do nothing
         }
-
-        #endregion event handlers
-
-        /// <summary>
-        /// Move camera due to mouse move
-        /// </summary>
-        /// <param name="e">details of the mouse move</param>
-        protected virtual void RotateSceneUsingMouse(CeGui.MouseEventArgs e)
-        {
-            float rotateSpeed = 0.005f + 0.004f * scene.CameraHeight;
-            scene.RotateCamera(e.MoveDelta.X * rotateSpeed, e.MoveDelta.Y * -rotateSpeed);
-        }
-
 
         #region fields
 
-        /// <summary>
-        /// CeGui widget that shows the 3D scene
-        /// <remarks>Actually, at moment, indicates where to draw the 3D scene</remarks>
-        /// </summary>
-        protected CeGui.Widgets.StaticImage SceneWindow { get { return sceneWindow; } set { sceneWindow = value; } }
-
-        /// <summary>
-        /// The 3D view shown on the screen
-        /// </summary>
         protected PolarScene Scene { get { return scene; } set { scene = value; } }
 
-        /// <summary>
-        /// CeGui widget that shows the 3D scene
-        /// <remarks>Actually, at moment, indicates where to draw the 3D scene</remarks>
-        /// </summary>
-        private CeGui.Widgets.StaticImage sceneWindow;
-
-        /// <summary>
-        /// The 3D view shown on the screen
-        /// </summary>
         private PolarScene scene;
+        private UiRect _viewportRect;
+        private bool _prevLeftDown;
+        private bool _prevRightDown;
+        private int _prevMouseX;
+        private int _prevMouseY;
+        private int _prevScrollValue;
 
         #endregion fields
     }
