@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScreenSave xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>GeoscapeScreen</Name>
+  <State>
+    <Name>Default</Name>
+    <Variable Type="string" Name="basesButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="basesButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Bases</Value>
+    </Variable>
+    <Variable Type="float" Name="basesButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="basesButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="BGImage.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">6</Value>
+    </Variable>
+    <Variable Type="string" Name="BGImage.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true">
+      <Value xsi:type="xsd:string">..\Textures\UI\GeoscapeScreenBackground.png</Value>
+    </Variable>
+    <Variable Type="float" Name="BGImage.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="cameraDownButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="cameraDownButton.Text" SetsValue="true">
+      <Value xsi:type="xsd:string"></Value>
+    </Variable>
+    <Variable Type="string" Name="cameraDownButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">v</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraDownButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">50</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraDownButton.X" SetsValue="true">
+      <Value xsi:type="xsd:float">47</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraDownButton.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">22</Value>
+    </Variable>
+    <Variable Type="string" Name="cameraInButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="cameraInButton.Text" SetsValue="true">
+      <Value xsi:type="xsd:string"></Value>
+    </Variable>
+    <Variable Type="string" Name="cameraInButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">+</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraInButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">50</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraInButton.X" SetsValue="true">
+      <Value xsi:type="xsd:float">196</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraInButton.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">-30</Value>
+    </Variable>
+    <Variable Type="string" Name="cameraLeftButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="cameraLeftButton.Text" SetsValue="true">
+      <Value xsi:type="xsd:string"></Value>
+    </Variable>
+    <Variable Type="string" Name="cameraLeftButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">&lt;</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraLeftButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">50</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraLeftButton.X" SetsValue="true">
+      <Value xsi:type="xsd:float">13</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraLeftButton.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">-49</Value>
+    </Variable>
+    <Variable Type="string" Name="cameraOutButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="cameraOutButton.Text" SetsValue="true">
+      <Value xsi:type="xsd:string"></Value>
+    </Variable>
+    <Variable Type="string" Name="cameraOutButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">-</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraOutButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">50</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraOutButton.X" SetsValue="true">
+      <Value xsi:type="xsd:float">155</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraOutButton.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">6</Value>
+    </Variable>
+    <Variable Type="string" Name="cameraRightButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="cameraRightButton.Text" SetsValue="true">
+      <Value xsi:type="xsd:string"></Value>
+    </Variable>
+    <Variable Type="string" Name="cameraRightButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">&gt;</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraRightButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">50</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraRightButton.X" SetsValue="true">
+      <Value xsi:type="xsd:float">80</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraRightButton.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">-25</Value>
+    </Variable>
+    <Variable Type="string" Name="cameraUpButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="cameraUpButton.Text" SetsValue="true">
+      <Value xsi:type="xsd:string"></Value>
+    </Variable>
+    <Variable Type="string" Name="cameraUpButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">^</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraUpButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">50</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraUpButton.X" SetsValue="true">
+      <Value xsi:type="xsd:float">45</Value>
+    </Variable>
+    <Variable Type="float" Name="cameraUpButton.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">164</Value>
+    </Variable>
+    <Variable Type="ChildrenLayout" Name="ContainerInstance.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="ContainerInstance.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="ContainerInstance.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="fundingButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="fundingButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Funding</Value>
+    </Variable>
+    <Variable Type="float" Name="fundingButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="fundingButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="interceptButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="interceptButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Intercept</Value>
+    </Variable>
+    <Variable Type="float" Name="interceptButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="interceptButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="optionsButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="optionsButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Options</Value>
+    </Variable>
+    <Variable Type="float" Name="optionsButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="optionsButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="researchButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="researchButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Research</Value>
+    </Variable>
+    <Variable Type="float" Name="researchButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="researchButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="ChildrenLayout" Name="RightPanel.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="RightPanel.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">41.796875</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="RightPanel.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="RightPanel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable Type="float" Name="RightPanel.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">300</Value>
+    </Variable>
+    <Variable Type="float" Name="RightPanel.X" SetsValue="true">
+      <Value xsi:type="xsd:float">954</Value>
+    </Variable>
+    <Variable Type="float" Name="RightPanel.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">-537</Value>
+    </Variable>
+    <Variable Type="string" Name="statisticsButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="statisticsButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Statistics</Value>
+    </Variable>
+    <Variable Type="float" Name="statisticsButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="statisticsButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="timeDayButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="timeDayButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">1 Day</Value>
+    </Variable>
+    <Variable Type="float" Name="timeDayButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="timeDayButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="timeHourButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="timeHourButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">1 Hour</Value>
+    </Variable>
+    <Variable Type="float" Name="timeHourButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="timeHourButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="timeNormalButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="timeNormalButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">5 Sec</Value>
+    </Variable>
+    <Variable Type="float" Name="timeNormalButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="timeNormalButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="timeStopButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="timeStopButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Stop</Value>
+    </Variable>
+    <Variable Type="string" Name="timeStopButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="float" Name="timeStopButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="timeStopButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="timeNormalButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">1 Min</Value>
+    </Variable>
+    <Variable Type="string" Name="timeNormalButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="float" Name="timeNormalButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="timeNormalButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="timeHourButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">1 Hr</Value>
+    </Variable>
+    <Variable Type="string" Name="timeHourButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="float" Name="timeHourButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="timeHourButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="timeDayButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">1 Day</Value>
+    </Variable>
+    <Variable Type="float" Name="timeStopButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="timeStopButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="xnetButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">RightPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="xnetButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">X-Net</Value>
+    </Variable>
+    <Variable Type="float" Name="xnetButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="xnetButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+  </State>
+  <Instance Name="ContainerInstance" BaseType="Container" />
+  <Instance Name="BGImage" BaseType="Sprite" />
+  <Instance Name="RightPanel" BaseType="Container" />
+  <Instance Name="timeStopButton" BaseType="XenocideButton" />
+  <Instance Name="timeNormalButton" BaseType="XenocideButton" />
+  <Instance Name="timeHourButton" BaseType="XenocideButton" />
+  <Instance Name="timeDayButton" BaseType="XenocideButton" />
+  <Instance Name="interceptButton" BaseType="XenocideButton" />
+  <Instance Name="basesButton" BaseType="XenocideButton" />
+  <Instance Name="researchButton" BaseType="XenocideButton" />
+  <Instance Name="fundingButton" BaseType="XenocideButton" />
+  <Instance Name="statisticsButton" BaseType="XenocideButton" />
+  <Instance Name="xnetButton" BaseType="XenocideButton" />
+  <Instance Name="optionsButton" BaseType="XenocideButton" />
+  <Instance Name="cameraUpButton" BaseType="XenocideButton" />
+  <Instance Name="cameraDownButton" BaseType="XenocideButton" />
+  <Instance Name="cameraLeftButton" BaseType="XenocideButton" />
+  <Instance Name="cameraRightButton" BaseType="XenocideButton" />
+  <Instance Name="cameraInButton" BaseType="XenocideButton" />
+  <Instance Name="cameraOutButton" BaseType="XenocideButton" />
+  <Behaviors />
+</ScreenSave>

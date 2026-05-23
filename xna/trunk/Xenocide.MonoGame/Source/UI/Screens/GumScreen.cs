@@ -1,6 +1,8 @@
 using System;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
+using Gum.Wireframe;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,6 +16,7 @@ namespace ProjectXenocide.UI.Screens
     public abstract class GumScreen : Screen
     {
         protected StackPanel RootContainer { get; private set; }
+        protected GraphicalUiElement GumRoot { get; private set; }
         protected GumService GumUI => GumService.Default;
 
         private SpriteBatch _backgroundBatch;
@@ -27,24 +30,39 @@ namespace ProjectXenocide.UI.Screens
 
         public override void Show()
         {
-            RootContainer = new StackPanel();
-            RootContainer.AddToRoot();
+            var gumDisplay = TryLoadScreenFromGumx(CeguiId);
 
-            LoadBackground();
+            if (gumDisplay != null)
+            {
+                gumDisplay.AddToRoot();
+                GumRoot = gumDisplay;
+            }
+            else
+            {
+                RootContainer = new StackPanel();
+                RootContainer.AddToRoot();
+                LoadBackground();
+            }
 
             CreateGumControls();
-            WireClickSounds(RootContainer);
+
+            if (GumRoot == null)
+            {
+                WireClickSounds(RootContainer);
+            }
         }
 
-        private void LoadBackground()
+        private GraphicalUiElement TryLoadScreenFromGumx(string screenName)
         {
-            var filename = BackgroundFilename;
-            if (string.IsNullOrEmpty(filename))
-                return;
+            var project = Xenocide.GumProject;
+            if (project == null)
+                return null;
 
-            var device = Xenocide.Instance.GraphicsDevice;
-            _background = Texture2D.FromFile(device, filename);
-            _backgroundBatch = new SpriteBatch(device);
+            var screenSave = project.Screens.Find(s => s.Name == screenName);
+            if (screenSave == null)
+                return null;
+
+            return screenSave.ToGraphicalUiElement();
         }
 
         public override void Draw(GameTime gameTime, GraphicsDevice device)
@@ -64,6 +82,33 @@ namespace ProjectXenocide.UI.Screens
 
         protected override void CreateCeguiWidgets() { }
 
+        protected Button WireButton(string name, EventHandler handler)
+        {
+            if (GumRoot == null)
+                return null;
+
+            var btn = GumRoot.GetFrameworkElementByName<Button>(name);
+            if (btn != null)
+            {
+                btn.Click += OnAnyButtonClicked;
+                btn.Click += handler;
+            }
+            return btn;
+        }
+
+        protected static GraphicalUiElement FindVisualByName(GraphicalUiElement root, string name)
+        {
+            if (root.Name == name)
+                return root;
+            foreach (var child in root.Children)
+            {
+                var found = FindVisualByName(child, name);
+                if (found != null)
+                    return found;
+            }
+            return null;
+        }
+
         private static void WireClickSounds(FrameworkElement element)
         {
             if (element is Button button)
@@ -79,6 +124,17 @@ namespace ProjectXenocide.UI.Screens
             Xenocide.AudioSystem?.PlaySound(SoundId.ButtonClick1);
         }
 
+        private void LoadBackground()
+        {
+            var filename = BackgroundFilename;
+            if (string.IsNullOrEmpty(filename))
+                return;
+
+            var device = Xenocide.Instance.GraphicsDevice;
+            _background = Texture2D.FromFile(device, filename);
+            _backgroundBatch = new SpriteBatch(device);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -87,6 +143,12 @@ namespace ProjectXenocide.UI.Screens
                 _backgroundBatch = null;
                 _background?.Dispose();
                 _background = null;
+
+                if (GumRoot != null)
+                {
+                    GumRoot.RemoveFromRoot();
+                    GumRoot = null;
+                }
 
                 if (RootContainer != null)
                 {

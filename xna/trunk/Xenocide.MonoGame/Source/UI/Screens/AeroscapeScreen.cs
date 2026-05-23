@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using Microsoft.Xna.Framework;
@@ -32,6 +33,23 @@ namespace ProjectXenocide.UI.Screens
 
         protected override void CreateGumControls()
         {
+            if (GumRoot != null)
+            {
+                WireButton("realTimeBtn", OnRealTimeButton);
+                WireButton("advanceTimeBtn", OnAdvanceTimeButton);
+                WireButton("closeBtn", OnCloseButton);
+
+                craftNameLabel = new Label();
+                craftDamageLabel = new Label();
+                pod1Label = new Label();
+                pod2Label = new Label();
+                logLabel = new Label();
+
+                craftNameLabel.Text = aircraft.Name;
+                DrawScreen();
+                return;
+            }
+
             craftNameLabel = new Label();
             craftNameLabel.Text = aircraft.Name;
             RootContainer.AddChild(craftNameLabel);
@@ -88,16 +106,31 @@ namespace ProjectXenocide.UI.Screens
 
         private void OnCloseButton(object sender, EventArgs e)
         {
-            if (!ufo.IsDestroyed)
-            {
-                ufo.OnDogfightFinished();
-            }
-            if (!aircraft.IsDestroyed)
-            {
-                aircraft.OnDogfightFinished();
-            }
+            GoToStartScreen();
+        }
 
-            ScreenManager.ScheduleScreen(new GeoscapeScreen());
+        public override bool HandleEscape()
+        {
+            GoToStartScreen();
+            return true;
+        }
+
+        private void GoToStartScreen()
+        {
+            if (!ufo.IsDestroyed)
+                ufo.OnDogfightFinished();
+            if (!aircraft.IsDestroyed)
+                aircraft.OnDogfightFinished();
+
+            if (Xenocide.DebugTesting)
+            {
+                Xenocide.DebugTesting = false;
+                ScreenManager.ScheduleScreen(new StartScreen());
+            }
+            else
+            {
+                ScreenManager.ScheduleScreen(new GeoscapeScreen());
+            }
         }
 
         public override void Update(GameTime gameTime)

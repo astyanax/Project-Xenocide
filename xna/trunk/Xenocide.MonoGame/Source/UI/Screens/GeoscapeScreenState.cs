@@ -197,7 +197,7 @@ namespace ProjectXenocide.UI.Screens
                 {
                     alienMissionButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_ALIEN_MISSION") };
                     alienMissionButton.Click += (s, e) => OnAlienMissionsClicked(s, e);
-                    GeoscapeScreen.RootContainer.AddChild(alienMissionButton);
+                    GeoscapeScreen.AddControl(alienMissionButton);
                 }
             }
 
@@ -331,7 +331,7 @@ namespace ProjectXenocide.UI.Screens
 
                 cancelNewBaseButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CANCEL_NEW_BASE") };
                 cancelNewBaseButton.Click += (s, e) => GeoscapeScreen.OnCancelNewBase(s, e);
-                GeoscapeScreen.RootContainer.AddChild(cancelNewBaseButton);
+                GeoscapeScreen.AddControl(cancelNewBaseButton);
             }
 
             /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>
@@ -366,7 +366,7 @@ namespace ProjectXenocide.UI.Screens
                 GeoscapeScreen.EnableButtonSounds = false;
 
                 setFirstBaseTextWindow = new Label() { Text = Strings.SCREEN_GEOSCAPE_FIRST_BASE };
-                GeoscapeScreen.RootContainer.AddChild(setFirstBaseTextWindow);
+                GeoscapeScreen.AddControl(setFirstBaseTextWindow);
             }
 
             /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>
@@ -408,7 +408,7 @@ namespace ProjectXenocide.UI.Screens
 
                 cancelTargetingButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CANCEL_TARGETING") };
                 cancelTargetingButton.Click += OnCancelTargeting;
-                GeoscapeScreen.RootContainer.AddChild(cancelTargetingButton);
+                GeoscapeScreen.AddControl(cancelTargetingButton);
             }
 
             /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>
@@ -587,7 +587,7 @@ namespace ProjectXenocide.UI.Screens
 
                 cancelTargetButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CANCEL_ALIEN_MISSION") };
                 cancelTargetButton.Click += OnCancelAlienMission;
-                GeoscapeScreen.RootContainer.AddChild(cancelTargetButton);
+                GeoscapeScreen.AddControl(cancelTargetButton);
             }
 
             /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>

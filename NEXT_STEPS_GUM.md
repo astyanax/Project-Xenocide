@@ -1,137 +1,245 @@
-# Prompt for Next Session: Gum UI Layout & Theming
+# Gum UI Conversion — Status & Implementation Plan
 
-## Goal
-Replace the current programmatic Gum UI (`CreateGumControls()` in every screen) with a proper `.gumx` project file that provides visual layout, button theming from the TaharezLook spritesheet, and typographic styling. Also finish removing CeGui stubs so the entire UI layer is Gum-native.
+## Current Status (May 2026)
 
----
+### Completed
+| Item | Status |
+|------|--------|
+| `.gumx` project at `Content/Gum/Xenocide.gumx` | ✅ 1280×1024 canvas, multi-resolution previews |
+| `XenocideButton` component | ✅ 3-slice button (Left/Middle/Right Sprites) + ButtonBehavior, state categories (Enabled/Pushed/Highlighted) with TaharezLook texture coordinates |
+| `GumService.Initialize(this, "Gum/Xenocide.gumx")` | ✅ Loads project at startup, returns `GumProjectSave` |
+| `GumScreen` dual-mode loading | ✅ `Show()` tries `ScreenSave.ToGraphicalUiElement()` by CeguiId; falls back to programmatic |
+| `WireButton()` helper | ✅ Wires click sound + handler for named Gum buttons |
+| `StartScreen` fully Gum-native | ✅ `.gusx` layout + `CreateGumControls()` wires events |
+| `.csproj` content copy | ✅ All Gum file types + Textures copied to output |
+| Button stretch fix | ✅ MiddleSlice = Sprite, X=35, Width=-38 (RelativeToContainer), RightSlice X=0 (right-anchored) |
+| Button labels fixed | ✅ Set via `.gusx` state variables |
+| Version centralized | ✅ `Xenocide.GameVersion = "0.4"` |
+| CreditsScreen Escape fix | ✅ `HandleEscape()` override returns StartScreen |
+| Large texture fallback | ✅ `EarthGlobe.TryLoadTexture()` falls back to `_LEGACY_*` files |
 
-## 1. Set Up Gum UI Tool
-
-Install the Gum WYSIWYG editor:
+### Architecture
 ```
-dotnet tool install -g GumUiTool
-```
-Then invoke `gum` in the project directory to create a `.gumx` file. The `.gumx` should live at:
-```
-xna/trunk/Xenocide.MonoGame/Content/Gum/Xenocide.gumx
-```
-
-In the Gum tool, create a project targeting a resolution of **1280×1024**. Load it at runtime via `GumService.Default.Initialize(this, "Content/Gum/Xenocide.gumx")` instead of the current parameterless `Initialize(this)`.
-
----
-
-## 2. Create Styled Button Components from TaharezLook Spritesheet
-
-The spritesheet is at `Content/Textures/UI/XenoNew.png`. The button segments defined in `Resources/TaharezLook.imageset` (line 94–185):
-
-| State | Left | Middle | Right |
-|-------|------|--------|-------|
-| Normal | `ButtonLeftNormal` (261,130, 35×25) | `ButtonMiddleNormal` (297,130, 145×25) | `ButtonRightNormal` (442,130, 3×25) |
-| Pushed | `ButtonLeftPushed` (261,195, 35×25) | `ButtonMiddlePushed` (297,195, 145×25) | `ButtonRightPushed` (442,195, 3×25) |
-| Highlight | `ButtonLeftHighlight` (261,163, 35×25) | `ButtonMiddleHighlight` (297,163, 145×25) | `ButtonRightHighlight` (442,163, 3×25) |
-
-In Gum, create a **Component** called `XenocideButton` using `NineSlice` for each of the 3 horizontal segments (or a single `NineSlice` for the full button), with state categories for Normal/Pushed/Highlighted. Assign the `Xeno` spritefont (Arial 8) as the default text font.
-
----
-
-## 3. Define Global Styles / Typography
-
-Available spritefonts from `Content/SpriteFonts/`:
-
-| Style Name | Font | Size | Use |
-|-----------|------|------|-----|
-| `Xeno` | Arial | 8pt | Default UI text, button labels |
-| `XenoBig` | Arial | 10pt Bold | Section headers |
-| `LargeBaseName` | Arial | 24pt Bold | Base/screen titles |
-| `GeoTime` | Consolas | 10pt Bold | Geoscape time/date display |
-| `GeoTimeBig` | Consolas | 18pt Bold | Large geoscape readouts |
-| `SpriteFont1` | Arial | 10pt | Legacy fallback |
-
-Create a **Standard Element** or component-level font assignments so all `Button`, `Label`, and `TextBox` controls use the correct font automatically. Target: no `.Text` property assignments should need manual font overrides.
-
----
-
-## 4. Convert Screens from Programmatic to .gumx Layouts
-
-Currently every screen (27 total) builds Gum controls in C# via `protected override void CreateGumControls()`. The goal is to replace these with Gum editor-designed screens loaded at runtime.
-
-**Priority screens to convert first (most visible, set the pattern):**
-
-| Screen | Background | Key Controls |
-|--------|-----------|--------------|
-| `StartScreen` | `StartScreenBackground.png` | 5 buttons (New Game, Load, Credits, Quit, +DEBUG), version label |
-| `BasesScreen` | `BasesScreenBackground.png` | Base list (ListBox), facility grid, funds label, build/transfer buttons |
-| `GeoscapeScreen` | `GeoscapeScreenBackground.png` | Time/date labels, speed buttons, base/intercept controls, 3D viewport |
-| `BattlescapeScreen` | `BasesScreenBackground.png` | Equipment/right-hand/finish-turn/abort buttons, combatant stats label, 3D viewport |
-
-**Pattern for conversion:**
-```csharp
-protected override void CreateGumControls()
-{
-    // Load Gum screen from .gumx instead of building programmatically
-    RootContainer = GumService.Default.Root.GetFrameworkElementByName<StackPanel>("StartScreenRoot");
-    WireClickSounds(RootContainer);
-    // Wire event handlers to named controls from .gumx
-    var newGameBtn = RootContainer.GetChild<Button>("NewGameButton");
-    newGameBtn.Click += OnNewGameClicked;
-}
+GumScreen.Show()
+  ├── TryLoadScreenFromGumx(CeguiId)
+  │     └── gumProject.Screens.Find(s => s.Name == screenName)?.ToGraphicalUiElement()
+  ├── GumRoot ≠ null → AddToRoot(), CreateGumControls() wires named controls
+  └── GumRoot == null → programmatic fallback (RootContainer StackPanel)
 ```
 
 ---
 
-## 5. Replace CeGui Stubs in Frame and BattlescapeScreen
+## Phase Overview
 
-After all screens load from `.gumx`, the CeGui stubs in `Frame.cs` and `BattlescapeScreen.cs` can be removed:
-
-| File | CeGui Dependency | Replacement |
-|------|-----------------|-------------|
-| `Frame.cs:65` | `CeGui.Size` in constructor | `Microsoft.Xna.Framework.Vector2` or Gum-native sizing |
-| `Frame.cs:77-89` | `GuiSheet.AddChild(rootWidget)`, `CeGui.MetricsMode` | Gum `AddToRoot()` (already done in GumScreen) |
-| `Frame.cs:122` | `CeGui.WindowManager.Instance.DestroyWindow()` | Gum `Root.Children.Remove()` (already done in GumScreen) |
-| `Frame.cs:164-167` | `CeGui.GuiSheet` property | Remove — no longer needed |
-| `BattlescapeScreen.cs:135-136` | `CeGui.MouseEventHandler` on sceneWindow | MonoGame `Mouse.GetState()` polling in Update |
-| `BattlescapeScreen.cs:142` | `CeGui.Widgets.StaticImage sceneWindow` | Gum-native viewport or Rectangle |
-| `Screen.cs:100-134` | `LoadBackgroundImage()` via CeGui ImagesetManager | Already handled by GumScreen SpriteBatch (Phase 4.7) |
-| `Xenocide.cs:62,95,130` | `GuiManager`, `InitializeCegui()` | Remove — dead code since CeGui is stubbed |
-| `ScreenManager.cs:362-364,375` | `RootGuiSheet`, `Taharez.TLGuiBuilder` | Remove after Frame no longer uses GuiSheet |
-
-File `WinFormsStubs.cs` can also be removed — only used by `CeGui.MouseEventArgs.Button` which is a stub.
+| Phase | Screens | Effort Per Screen |
+|-------|---------|-------------------|
+| **Phase 1** ✅ Running | AeroscapeScreen, BattlescapeScreen, CreditsScreen | 1-2 Gum sessions |
+| **Phase 2** | StoresScreen, ShowTransfersScreen, MonthlyCostsScreen, MonthlyReportScreen, BattlescapeReportScreen | 1 Gum session each |
+| **Phase 3** | ResearchScreen, PurchaseScreen, SellScreen, BaseInfoScreen, MakeTransferScreen | 2 Gum sessions each |
+| **Phase 4** | BasesScreen, EquipCraftScreen, ManufactureScreen, SoldiersListScreen, LoadSaveGameScreen, EquipSoldierScreen, AssignToCraftScreen | 3-4 Gum sessions each |
+| **Phase 5** | GeoscapeScreen, XNetScreen, StatisticsScreen | 3-5 Gum sessions each (3D scenes) |
 
 ---
 
-## 6. Content Pipeline — Add .gumx
+## Phase 1: Simple Overlay Screens
 
-Register the `.gumx` and any Gum-exported assets in `Content.mgcb`:
-```
-#begin Content/Gum/Xenocide.gumx
-/importer:GumImporter
-/processor:GumProcessor
-/build:Content/Gum/Xenocide.gumx
-```
+### AeroscapeScreen
+| Property | Value |
+|----------|-------|
+| **CeguiId** | `AeroscapeScreen` |
+| **Background** | `GeoscapeScreenBackground.png` (default) |
+| **Buttons (3)** | `realTimeBtn` ("Real Time"), `advanceTimeBtn` ("Advance Time"), `closeBtn` ("Close") |
+| **Labels (5)** | `craftNameLabel`, `craftDamageLabel`, `pod1Label`, `pod2Label`, `logLabel` |
+| **Layout** | ButtonPanel (right, TopToBottom) + InfoLabelContainer (left/center) |
 
-Also add the `.gumx` to the `.csproj` content includes so it's copied to output.
+### BattlescapeScreen
+| Property | Value |
+|----------|-------|
+| **CeguiId** | `BattlescapeScreen` |
+| **Background** | `BasesScreenBackground.png` |
+| **Viewport** | Left 74.5% — UI on right 25.5% |
+| **Buttons (5)** | `equipmentButton`, `rightHandButton`, `finishTurnButton`, `topLevelButton`, `abortButton` |
+| **Labels (1)** | `combatantStatsTextWindow` (initially hidden) |
+
+### CreditsScreen
+| Property | Value |
+|----------|-------|
+| **CeguiId** | `CreditsScreen` |
+| **Approach** | No Gum controls needed — uses SpriteBatch for scrolling text. Keep `CreateGumControls()` empty. |
 
 ---
 
-## 7. Software Cursor Polish (Optional)
+## Phase 2: Single-Grid Screens (Template Pattern)
 
-The `SoftwareCursor` component at `Source/UI/SoftwareCursor.cs` works but could be improved:
-- Add hotspot offset (currently top-left of sprite = click point, typical arrow hotspot is ~(2,2))
-- Add context-sensitive cursors: `MouseTarget` (4,146, 19×19) for interactable targets, `MouseTextBar` (29,167, 7×12) for text entry
-- Add a `GameOptions` toggle to switch between HW and SW cursor
-- Currently disables HW cursor when loaded; consider making this configurable
+All share: Background + GridContainer (named `GridArea`) + BottomBar (buttons).
+
+| Screen | CeguiId | Buttons | Labels | Grid Columns |
+|---|---|---|---|---|
+| StoresScreen | `StoresScreen` | `okButton` (1) | — | Item, Qty, Space Used |
+| ShowTransfersScreen | `ShowTransfers` | `closeButton` (1) | — | Item, Qty, ETA |
+| MonthlyCostsScreen | `MonthlyCosts` | `closeButton` (1) | — | Name, Per Unit, Qty, Total |
+| MonthlyReportScreen | `MonthlyReportScreen` | `okButton` (1) | `monthText`, `scoreText` | Country, Attitude, Funds, Change |
+| BattlescapeReportScreen | `BattlescapeReportScreen` | `okButton` (1) | `recoveredLabelText` | 2 grids |
+
+**Gum template**: BGImage → TopBar → GridContainer → BottomBar
 
 ---
 
-## Current File Locations
+## Phase 3: Management Screens
 
-| What | Path |
-|------|------|
-| Spritesheet | `Content/Textures/UI/XenoNew.png` |
-| Imageset definitions | `Resources/TaharezLook.imageset` (250 lines of sprite coordinates) |
-| Software cursor | `Source/UI/SoftwareCursor.cs` |
-| GumScreen base | `Source/UI/Screens/GumScreen.cs` |
-| CeGui stubs | `Source/Stubs/CeGuiStubs.cs` (173 lines) |
-| MGCB project | `Content.mgcb` (project root) |
-| Build: 0 errors, 346 warnings (CA1852) | |
-| Tests: 5/5 pass (xUnit) | |
+### ResearchScreen
+| Property | Value |
+|----------|-------|
+| **CeguiId** | `Research` |
+| **Buttons (5)** | `addIdleScientistsButton`, `moreScientistsButton`, `lessScientistsButton`, `removeAllScientistsButton`, `closeButton` |
+| **Labels (1)** | `availableText` (idle scientists) |
+| **Grid** | Project, Scientists, ETA |
+
+### BaseInfoScreen
+| Property | Value |
+|----------|-------|
+| **CeguiId** | `BaseInfoScreen` |
+| **Buttons (4)** | `transfersButton`, `storesButton`, `costsButton`, `okButton` |
+| **Special** | ComboBox `outpostsListComboBox`, TextBox `nameEditBox` |
+| **Grids (2)** | Staff, Facilities |
+
+### PurchaseScreen / SellScreen
+| Screen | CeguiId | Buttons (4) | Labels (2) |
+|---|---|---|---|
+| PurchaseScreen | `PurchaseScreen` | `buyMoreButton`, `buyLessButton`, `confirmButton`, `cancelButton` | `fundsText`, `totalCostText` |
+| SellScreen | `SellScreen` | `sellMoreButton`, `sellLessButton`, `confirmButton`, `cancelButton` | `fundsText`, `totalValueText` |
+
+### MakeTransferScreen
+| Property | Value |
+|----------|-------|
+| **CeguiId** | `MakeTransferScreen` |
+| **Buttons (4)** | `moveMoreButton`, `moveLessButton`, `confirmButton`, `cancelButton` |
+| **Labels (2)** | `sourceText`, `totalCostText` |
+| **Special** | ComboBox `outpostsListComboBox` |
+
+---
+
+## Phase 4: Heavy Screens
+
+### BasesScreen
+| Property | Value |
+|----------|-------|
+| **CeguiId** | `BasesScreen` |
+| **Buttons (11)** | `newBaseButton`, `baseInfoButton`, `soldiersButton`, `equipCraftButton`, `buildFacButton`, `produceButton`, `transferButton`, `buyButton`, `sellButton`, `geoscapeButton` |
+| **Labels (1)** | `fundsText` |
+| **ComboBox (1)** | `basesListComboBox` |
+| **3D Scene** | FacilityScene, viewport left 66% |
+
+### ManufactureScreen
+| Property | Value |
+|----------|-------|
+| **CeguiId** | `Manufacture` |
+| **Buttons (8)** | `buildMoreButton`, `buildLessButton`, `cancelBuildButton`, `addIdleEngineersButton`, `moreEngineersButton`, `lessEngineersButton`, `removeAllEngineersButton`, `closeButton` |
+| **Labels (1)** | `availableText` |
+| **Grids (2)** | Project + Requirements |
+
+### SoldiersListScreen
+| Property | Value |
+|----------|-------|
+| **CeguiId** | `SoldiersListScreen` |
+| **Buttons (4)** | `psiTrainButton` (conditional), `craftButton`, `equipButton`, `closeButton` |
+| **Labels (1)** | `nameEditBox` (soldier name) |
+| **Grids (2)** | Soldier list + Attributes |
+
+### LoadSaveGameScreen
+| Property | Value |
+|----------|-------|
+| **CeguiId** | `LoadSaveGameScreen` |
+| **Buttons (3)** | `saveButton` (changes text per mode), `deleteButton`, `cancelButton` |
+| **TextBox (1)** | `filenameEditBox` |
+| **Grid (1)** | Saved games list |
+
+### EquipCraftScreen
+| Property | Value |
+|----------|-------|
+| **CeguiId** | `EquipCraftScreen` |
+| **Buttons (5)** | `emptyPod1Button`, `emptyPod2Button`, `setPod1Button`, `setPod2Button`, `closeButton` |
+| **Labels (3)** | `baseNameText`, `pod1Text`, `pod2Text` |
+| **Grids (2)** | Craft list + Weapons |
+
+### AssignToCraftScreen
+| Property | Value |
+|----------|-------|
+| **CeguiId** | `AssignToCraftScreen` |
+| **Buttons (7)** | `addXcapButton`, `removeXcapButton`, `addSoldierButton`, `removeSoldierButton`, `soldierUpButton`, `soldierDownButton`, `closeButton` |
+| **Grids (3)** | Craft, Soldiers, XCaps |
+
+### EquipSoldierScreen
+| Property | Value |
+|----------|-------|
+| **CeguiId** | `EquipSoldierScreen` |
+| **Buttons (3)** | `closeButton`, `leftButton`, `rightButton` |
+| **Labels (9)** | 8 static equipment zone labels + `ammoText` |
+| **3D Scene** | EquipSoldierScene |
+| **Note** | Skip for now — drag-drop and 3D scene make this the most complex screen |
+
+---
+
+## Phase 5: 3D Scene + Stateful Screens
+
+### GeoscapeScreen
+| Property | Value |
+|----------|-------|
+| **CeguiId** | `GeoscapeScreen` |
+| **Background** | `GeoscapeScreenBackground.png` |
+| **Viewport** | Left 74.5%, UI right 25.5% |
+| **Buttons (16)** | 4 time speed + 6 navigation + 6 camera |
+| **Labels (7)** | Time display, funds, tooltip |
+| **States** | 5 ScreenStates add/remove buttons dynamically |
+| **Note** | Most complex — time panel, speed buttons, nav buttons, camera d-pad need careful Gum layout |
+
+### XNetScreen
+| Property | Value |
+|----------|-------|
+| **CeguiId** | `XNetScreen` |
+| **Buttons (1)** | `closeButton` |
+| **ListBoxes (2)** | `entriesTree`, `textWindow` |
+| **3D Model** | XNetScene |
+
+### StatisticsScreen
+| Property | Value |
+|----------|-------|
+| **CeguiId** | `StatisticsScreen` |
+| **Buttons (6)** | `ufoByRegionButton`, `ufoByCountryButton`, `xcomByRegionButton`, `xcomByCountryButton`, `fundsButton`, `geoscapeButton` |
+| **ListBox (1)** | `seriesList` |
+| **3D Scene** | StatisticsScene graph |
+
+---
+
+## CeguiId → .gumx Name Mapping
+
+| CeguiId | .gumx Screen Name | Status |
+|---------|-------------------|--------|
+| `StartScreen` | `StartScreen` | ✅ Match |
+| `AeroscapeScreen` | `AeroscapeScreen` | ✅ New |
+| `BattlescapeScreen` | `BattlescapeScreen` | ✅ Renamed from BattleScape |
+| `GeoscapeScreen` | `GeoscapeScreen` | ⚠️ Rename from GeoScape |
+| `XNetScreen` | `XNetScreen` | ⚠️ Rename from XNet |
+| `BasesScreen` | `BasesScreen` | Created (empty) |
+| All others | Must match CeguiId | Create when needed |
+
+---
+
+## Per-Screen Gum Editor Checklist
+
+1. **Create screen** at 1280×1024
+2. **Background Sprite**: `BGImage`, SourceFile=appropriate PNG, Width=100% Height=100%
+3. **Button Panel**: `ButtonPanel` Container, ChildrenLayout=TopToBottom, positioned on side/bottom
+4. **Add XenocideButton** instances — name matches C# variable, set `ButtonText.Text` in state
+5. **Add Text instances** for dynamic labels — name matches C# variable
+6. **Add GridContainer** — empty Container named `GridArea` for programmatic grid population
+7. **Add ComboBox/TextBox** from Controls if needed
+8. **In C#**: `WireButton("Name", handler)` for buttons, `GetFrameworkElementByName<Label>("Name")` for labels
+9. **Set visibility**: elements that start hidden need `Visible = false` in `.gusx` state
+
+---
+
+## Backlog
+- [ ] CeGui stubs teardown (`Frame.cs`, `Screen.cs`, `Xenocide.cs` InitializeCegui, `ScreenManager.cs` RootGuiSheet)
+- [ ] Software cursor polish (hotspot, context-sensitive cursors, HW/SW toggle)
+- [ ] Dialogs GumX conversion (13 dialogs)

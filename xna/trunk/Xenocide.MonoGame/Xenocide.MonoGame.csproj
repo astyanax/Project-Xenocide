@@ -43,5 +43,19 @@
     <Content Include="Content\**\*.xml" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Content\**\*.ogg" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Content\**\*.txt" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\Gum\**\*.gumx" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\Gum\**\*.gusx" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\Gum\**\*.gucx" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\Gum\**\*.gutx" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\Gum\**\*.behx" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\Gum\**\*.ganx" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\Gum\**\*.gumfcs" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\Gum\**\*.bmfc" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\Gum\**\*.fnt" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\Gum\**\*.codsj" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\Gum\**\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\Gum\**\*.png" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\Textures\**\*.png" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content\Textures\**\*.jpg" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

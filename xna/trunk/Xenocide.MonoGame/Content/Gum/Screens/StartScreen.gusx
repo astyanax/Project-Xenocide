@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScreenSave xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>StartScreen</Name>
+  <State>
+    <Name>Default</Name>
+    <Variable Type="string" Name="AeroscapeDebugButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">DebugPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="AeroscapeDebugButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Debug Aeroscape</Value>
+    </Variable>
+    <Variable Type="float" Name="AeroscapeDebugButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="AeroscapeDebugButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="BattlescapeButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">DebugPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="BattlescapeButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Debug Battlescape</Value>
+    </Variable>
+    <Variable Type="float" Name="BattlescapeButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="BattlescapeButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="BGImage.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">106.8</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">6</Value>
+    </Variable>
+    <Variable Type="string" Name="BGImage.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true">
+      <Value xsi:type="xsd:string">..\Textures\UI\StartScreenBackground.png</Value>
+    </Variable>
+    <Variable Type="float" Name="BGImage.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="ChildrenLayout" Name="ButtonPanel.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="ButtonPanel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable Type="float" Name="ButtonPanel.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">250</Value>
+    </Variable>
+    <Variable Type="float" Name="ButtonPanel.X" SetsValue="true">
+      <Value xsi:type="xsd:float">-125</Value>
+    </Variable>
+    <Variable Type="PositionUnitType" Name="ButtonPanel.XUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">6</Value>
+    </Variable>
+    <Variable Type="float" Name="ButtonPanel.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">-200</Value>
+    </Variable>
+    <Variable Type="PositionUnitType" Name="ButtonPanel.YUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">5</Value>
+    </Variable>
+    <Variable Type="ChildrenLayout" Name="ContainerInstance.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="ContainerInstance.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="ContainerInstance.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="CreditsButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="CreditsButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Credits</Value>
+    </Variable>
+    <Variable Type="float" Name="CreditsButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="CreditsButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="ChildrenLayout" Name="DebugPanel.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="DebugPanel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable Type="float" Name="DebugPanel.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">250</Value>
+    </Variable>
+    <Variable Type="float" Name="DebugPanel.X" SetsValue="true">
+      <Value xsi:type="xsd:float">337</Value>
+    </Variable>
+    <Variable Type="PositionUnitType" Name="DebugPanel.XUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">6</Value>
+    </Variable>
+    <Variable Type="float" Name="DebugPanel.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">-128</Value>
+    </Variable>
+    <Variable Type="PositionUnitType" Name="DebugPanel.YUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">5</Value>
+    </Variable>
+    <Variable Type="string" Name="LoadGameButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="LoadGameButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Load Saved Game</Value>
+    </Variable>
+    <Variable Type="float" Name="LoadGameButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="LoadGameButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="NewGameButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="NewGameButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">New Game</Value>
+    </Variable>
+    <Variable Type="float" Name="NewGameButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="NewGameButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="NewGameButton.X" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="float" Name="NewGameButton.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">-1</Value>
+    </Variable>
+    <Variable Type="string" Name="QuitButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="QuitButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Quit</Value>
+    </Variable>
+    <Variable Type="float" Name="QuitButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="QuitButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="RunTestsButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">DebugPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="RunTestsButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Run Tests</Value>
+    </Variable>
+    <Variable Type="float" Name="RunTestsButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="RunTestsButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="int" Name="VersionLabel.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">12</Value>
+    </Variable>
+    <Variable Type="string" Name="VersionLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable Type="string" Name="VersionLabel.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">0.4</Value>
+    </Variable>
+    <Variable Type="float" Name="VersionLabel.X" SetsValue="true">
+      <Value xsi:type="xsd:float">22</Value>
+    </Variable>
+    <Variable Type="float" Name="VersionLabel.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">-12</Value>
+    </Variable>
+    <Variable Type="string" Name="XNetDebugButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">DebugPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="XNetDebugButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Debug XNet</Value>
+    </Variable>
+    <Variable Type="float" Name="XNetDebugButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="XNetDebugButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+  </State>
+  <Instance Name="NewGameButton" BaseType="XenocideButton" />
+  <Instance Name="LoadGameButton" BaseType="XenocideButton" />
+  <Instance Name="CreditsButton" BaseType="XenocideButton" />
+  <Instance Name="QuitButton" BaseType="XenocideButton" />
+  <Instance Name="RunTestsButton" BaseType="XenocideButton" />
+  <Instance Name="BattlescapeButton" BaseType="XenocideButton" />
+  <Instance Name="XNetDebugButton" BaseType="XenocideButton" />
+  <Instance Name="AeroscapeDebugButton" BaseType="XenocideButton" />
+  <Instance Name="ContainerInstance" BaseType="Container" />
+  <Instance Name="BGImage" BaseType="Sprite" />
+  <Instance Name="ButtonPanel" BaseType="Container" />
+  <Instance Name="DebugPanel" BaseType="Container" />
+  <Instance Name="VersionLabel" BaseType="Text" />
+  <Behaviors />
+</ScreenSave>

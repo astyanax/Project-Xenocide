@@ -33,6 +33,7 @@ using System.Globalization;
 using System.Text;
 using System.Threading;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using Microsoft.Xna.Framework;
@@ -107,6 +108,55 @@ namespace ProjectXenocide.UI.Screens
         protected override void CreateGumControls()
         {
             SetView(0.00f, 0.00f, 0.745f, 1f);
+
+            if (GumRoot != null)
+            {
+                WireButton("timeStopButton", OnTimeRateButtonClicked);
+                WireButton("timeNormalButton", OnTimeRateButtonClicked);
+                WireButton("timeHourButton", OnTimeRateButtonClicked);
+                WireButton("timeDayButton", OnTimeRateButtonClicked);
+                WireButton("interceptButton", OnInterceptButtonClicked);
+                WireButton("basesButton", ShowBasesScreen);
+                WireButton("researchButton", ShowResearchDialog);
+                WireButton("fundingButton", OnFundingButtonClicked);
+                WireButton("statisticsButton", ShowStatisticsScreen);
+                WireButton("xnetButton", ShowXNetScreen);
+                WireButton("optionsButton", ShowOptionsDialog);
+                WireButton("cameraUpButton", OnMoveCameraButtonClicked);
+                WireButton("cameraDownButton", OnMoveCameraButtonClicked);
+                WireButton("cameraLeftButton", OnMoveCameraButtonClicked);
+                WireButton("cameraRightButton", OnMoveCameraButtonClicked);
+                WireButton("cameraInButton", OnMoveCameraButtonClicked);
+                WireButton("cameraOutButton", OnMoveCameraButtonClicked);
+
+                var labelPanel = new StackPanel();
+                labelPanel.Visual.X = 20;
+                labelPanel.Visual.Y = 10;
+                GumRoot.Children.Add(labelPanel.Visual);
+
+                gameTimeTop = new Label();
+                gameTimeHour = new Label();
+                gameTimeSec = new Label();
+                fundsText = new Label();
+                fundsAmount = new Label();
+                sceneToolTip = new Label();
+                timeText = new Label();
+
+                labelPanel.AddChild(gameTimeTop);
+                labelPanel.AddChild(gameTimeHour);
+                labelPanel.AddChild(gameTimeSec);
+                labelPanel.AddChild(fundsText);
+                labelPanel.AddChild(fundsAmount);
+                labelPanel.AddChild(sceneToolTip);
+                labelPanel.AddChild(timeText);
+
+                fundsText.Text = Strings.SCREEN_GEOSCAPE_FUNDS;
+                fundsAmount.Text = Xenocide.GameState.GeoData.XCorp.Bank.DisplayCurrentBalance;
+                timeText.Text = Strings.SCREEN_GEOSCAPE_GMT;
+
+                state.CreateGumControls();
+                return;
+            }
 
             // add text giving the time
             gameTimeTop = new Label();
@@ -251,6 +301,14 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         /// <param name="widget">static text widget to adjust</param>
         /// <param name="fontName">Name of font widget should be using</param>
+        internal void AddControl(FrameworkElement control)
+        {
+            if (GumRoot != null)
+                GumRoot.Children.Add(control.Visual);
+            else if (RootContainer != null)
+                RootContainer.AddChild(control);
+        }
+
         private static void SetTimeFont(FrameworkElement widget, string fontName)
         {
             // Font/color configuration moved to Gum styles

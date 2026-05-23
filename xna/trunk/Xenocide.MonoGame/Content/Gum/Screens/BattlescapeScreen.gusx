@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScreenSave xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>BattlescapeScreen</Name>
+  <State>
+    <Name>Default</Name>
+    <Variable Type="string" Name="abortButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="abortButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Abort Mission</Value>
+    </Variable>
+    <Variable Type="float" Name="abortButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="abortButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="BGImage.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">6</Value>
+    </Variable>
+    <Variable Type="string" Name="BGImage.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true">
+      <Value xsi:type="xsd:string">..\Textures\UI\BasesScreenBackground.png</Value>
+    </Variable>
+    <Variable Type="float" Name="BGImage.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="ChildrenLayout" Name="ButtonPanel.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="ButtonPanel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable Type="float" Name="ButtonPanel.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">200</Value>
+    </Variable>
+    <Variable Type="float" Name="ButtonPanel.X" SetsValue="true">
+      <Value xsi:type="xsd:float">1000</Value>
+    </Variable>
+    <Variable Type="float" Name="ButtonPanel.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">40</Value>
+    </Variable>
+    <Variable Type="string" Name="combatantStatsTextWindow.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable Type="bool" Name="combatantStatsTextWindow.Visible" SetsValue="true">
+      <Value xsi:type="xsd:boolean">false</Value>
+    </Variable>
+    <Variable Type="float" Name="combatantStatsTextWindow.X" SetsValue="true">
+      <Value xsi:type="xsd:float">40</Value>
+    </Variable>
+    <Variable Type="float" Name="combatantStatsTextWindow.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">40</Value>
+    </Variable>
+    <Variable Type="ChildrenLayout" Name="ContainerInstance.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="ContainerInstance.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="ContainerInstance.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="equipmentButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="equipmentButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Equipment</Value>
+    </Variable>
+    <Variable Type="float" Name="equipmentButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="equipmentButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="finishTurnButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="finishTurnButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Finish Turn</Value>
+    </Variable>
+    <Variable Type="float" Name="finishTurnButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="finishTurnButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="rightHandButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="rightHandButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Right Hand</Value>
+    </Variable>
+    <Variable Type="float" Name="rightHandButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="rightHandButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="topLevelButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="topLevelButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Top Level</Value>
+    </Variable>
+    <Variable Type="float" Name="topLevelButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="topLevelButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+  </State>
+  <Instance Name="ContainerInstance" BaseType="Container" />
+  <Instance Name="BGImage" BaseType="Sprite" />
+  <Instance Name="ButtonPanel" BaseType="Container" />
+  <Instance Name="equipmentButton" BaseType="XenocideButton" />
+  <Instance Name="rightHandButton" BaseType="XenocideButton" />
+  <Instance Name="finishTurnButton" BaseType="XenocideButton" />
+  <Instance Name="topLevelButton" BaseType="XenocideButton" />
+  <Instance Name="abortButton" BaseType="XenocideButton" />
+  <Instance Name="combatantStatsTextWindow" BaseType="Text" />
+  <Behaviors />
+</ScreenSave>

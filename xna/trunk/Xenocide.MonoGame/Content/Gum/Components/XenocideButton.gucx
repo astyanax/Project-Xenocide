@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ComponentSave xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>XenocideButton</Name>
+  <BaseType>Container</BaseType>
+  <State>
+    <Name>Default</Name>
+    <Variable Type="ButtonCategory" Name="ButtonCategoryState" SetsValue="false" />
+    <Variable Type="float" Name="Height" SetsValue="true">
+      <Value xsi:type="xsd:float">25</Value>
+    </Variable>
+    <Variable Type="float" Name="LeftSlice.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">25</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="LeftSlice.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">0</Value>
+    </Variable>
+    <Variable IsFile="true" Type="string" Name="LeftSlice.SourceFile" SetsValue="true">
+      <Value xsi:type="xsd:string">..\Textures\UI\XenoNew.png</Value>
+    </Variable>
+    <Variable Type="TextureAddress" Name="LeftSlice.TextureAddress" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="int" Name="LeftSlice.TextureHeight" SetsValue="true">
+      <Value xsi:type="xsd:int">23</Value>
+    </Variable>
+    <Variable Type="int" Name="LeftSlice.TextureLeft" SetsValue="true">
+      <Value xsi:type="xsd:int">265</Value>
+    </Variable>
+    <Variable Type="int" Name="LeftSlice.TextureTop" SetsValue="true">
+      <Value xsi:type="xsd:int">131</Value>
+    </Variable>
+    <Variable Type="int" Name="LeftSlice.TextureWidth" SetsValue="true">
+      <Value xsi:type="xsd:int">30</Value>
+    </Variable>
+    <Variable Type="float" Name="LeftSlice.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">35</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="LeftSlice.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">0</Value>
+    </Variable>
+    <Variable Type="float" Name="LeftSlice.X" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="float" Name="MiddleSlice.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="string" Name="MiddleSlice.Parent" SetsValue="true" />
+    <Variable IsFile="true" Type="string" Name="MiddleSlice.SourceFile" SetsValue="true">
+      <Value xsi:type="xsd:string">..\Textures\UI\XenoNew.png</Value>
+    </Variable>
+    <Variable Type="int" Name="MiddleSlice.TextureHeight" SetsValue="true">
+      <Value xsi:type="xsd:int">23</Value>
+    </Variable>
+    <Variable Type="int" Name="MiddleSlice.TextureLeft" SetsValue="true">
+      <Value xsi:type="xsd:int">295</Value>
+    </Variable>
+    <Variable Type="int" Name="MiddleSlice.TextureTop" SetsValue="true">
+      <Value xsi:type="xsd:int">131</Value>
+    </Variable>
+    <Variable Type="int" Name="MiddleSlice.TextureWidth" SetsValue="true">
+      <Value xsi:type="xsd:int">147</Value>
+    </Variable>
+    <Variable Type="float" Name="MiddleSlice.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">-38</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="MiddleSlice.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">2</Value>
+    </Variable>
+    <Variable Type="float" Name="MiddleSlice.X" SetsValue="true">
+      <Value xsi:type="xsd:float">35</Value>
+    </Variable>
+    <Variable Type="PositionUnitType" Name="MiddleSlice.XUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">0</Value>
+    </Variable>
+    <Variable Type="float" Name="MiddleSlice.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="float" Name="RightSlice.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">25</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="RightSlice.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">0</Value>
+    </Variable>
+    <Variable IsFile="true" Type="string" Name="RightSlice.SourceFile" SetsValue="true">
+      <Value xsi:type="xsd:string">..\Textures\UI\XenoNew.png</Value>
+    </Variable>
+    <Variable Type="TextureAddress" Name="RightSlice.TextureAddress" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="int" Name="RightSlice.TextureHeight" SetsValue="true">
+      <Value xsi:type="xsd:int">25</Value>
+    </Variable>
+    <Variable Type="int" Name="RightSlice.TextureLeft" SetsValue="true">
+      <Value xsi:type="xsd:int">442</Value>
+    </Variable>
+    <Variable Type="int" Name="RightSlice.TextureTop" SetsValue="true">
+      <Value xsi:type="xsd:int">130</Value>
+    </Variable>
+    <Variable Type="int" Name="RightSlice.TextureWidth" SetsValue="true">
+      <Value xsi:type="xsd:int">3</Value>
+    </Variable>
+    <Variable Type="float" Name="RightSlice.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">3</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="RightSlice.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">0</Value>
+    </Variable>
+    <Variable Type="float" Name="RightSlice.X" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="HorizontalAlignment" Name="RightSlice.XOrigin" SetsValue="true">
+      <Value xsi:type="xsd:int">2</Value>
+    </Variable>
+    <Variable Type="PositionUnitType" Name="RightSlice.XUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">4</Value>
+    </Variable>
+    <Variable Type="State" Name="State" Category="States and Visibility" SetsValue="false">
+      <Value xsi:type="xsd:string">Default</Value>
+    </Variable>
+    <Variable Type="ColorCategory" Name="TextInstance.ColorCategoryState" SetsValue="true">
+      <Value xsi:type="xsd:string">Primary</Value>
+    </Variable>
+    <Variable Type="int" Name="TextInstance.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">12</Value>
+    </Variable>
+    <Variable Type="HorizontalAlignment" Name="TextInstance.HorizontalAlignment" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="bool" Name="TextInstance.IsBold" SetsValue="true">
+      <Value xsi:type="xsd:boolean">false</Value>
+    </Variable>
+    <Variable Type="string" Name="TextInstance.Text" ExposedAsName="Text" SetsValue="true">
+      <Value xsi:type="xsd:string">TODO</Value>
+    </Variable>
+    <Variable Type="bool" Name="TextInstance.UseFontSmoothing" SetsValue="true">
+      <Value xsi:type="xsd:boolean">false</Value>
+    </Variable>
+    <Variable Type="VerticalAlignment" Name="TextInstance.VerticalAlignment" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="TextInstance.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">2</Value>
+    </Variable>
+    <Variable Type="float" Name="TextInstance.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">5</Value>
+    </Variable>
+    <Variable Type="float" Name="Width" SetsValue="true">
+      <Value xsi:type="xsd:float">183</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">0</Value>
+    </Variable>
+    <Variable Type="float" Name="X" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="HorizontalAlignment" Name="XOrigin" SetsValue="true">
+      <Value xsi:type="xsd:int">0</Value>
+    </Variable>
+    <Variable Type="PositionUnitType" Name="XUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">0</Value>
+    </Variable>
+    <Variable Type="float" Name="Y" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="VerticalAlignment" Name="YOrigin" SetsValue="true">
+      <Value xsi:type="xsd:int">0</Value>
+    </Variable>
+    <Variable Type="PositionUnitType" Name="YUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+  </State>
+  <Category>
+    <Name>ButtonCategory</Name>
+    <State>
+      <Name>Enabled</Name>
+      <Variable Type="bool" Name="LeftSlice.Animate" SetsValue="true">
+        <Value xsi:type="xsd:boolean">false</Value>
+      </Variable>
+      <Variable Type="float" Name="LeftSlice.Height" SetsValue="true">
+        <Value xsi:type="xsd:float">23</Value>
+      </Variable>
+      <Variable Type="TextureAddress" Name="LeftSlice.TextureAddress" SetsValue="true">
+        <Value xsi:type="xsd:int">1</Value>
+      </Variable>
+      <Variable Type="int" Name="LeftSlice.TextureHeight" SetsValue="true">
+        <Value xsi:type="xsd:int">23</Value>
+      </Variable>
+      <Variable Type="int" Name="LeftSlice.TextureLeft" SetsValue="true">
+        <Value xsi:type="xsd:int">266</Value>
+      </Variable>
+      <Variable Type="int" Name="LeftSlice.TextureTop" SetsValue="true">
+        <Value xsi:type="xsd:int">131</Value>
+      </Variable>
+      <Variable Type="int" Name="LeftSlice.TextureWidth" SetsValue="true">
+        <Value xsi:type="xsd:int">29</Value>
+      </Variable>
+      <Variable Type="float" Name="LeftSlice.Width" SetsValue="true">
+        <Value xsi:type="xsd:float">29</Value>
+      </Variable>
+      <Variable Type="bool" Name="LeftSlice.Wrap" SetsValue="true">
+        <Value xsi:type="xsd:boolean">false</Value>
+      </Variable>
+      <Variable Type="float" Name="LeftSlice.X" SetsValue="true">
+        <Value xsi:type="xsd:float">0</Value>
+      </Variable>
+      <Variable Type="float" Name="MiddleSlice.Height" SetsValue="true">
+        <Value xsi:type="xsd:float">23</Value>
+      </Variable>
+      <Variable Type="DimensionUnitType" Name="MiddleSlice.HeightUnits" SetsValue="true">
+        <Value xsi:type="xsd:int">0</Value>
+      </Variable>
+      <Variable Type="TextureAddress" Name="MiddleSlice.TextureAddress" SetsValue="true">
+        <Value xsi:type="xsd:int">1</Value>
+      </Variable>
+      <Variable Type="int" Name="MiddleSlice.TextureHeight" SetsValue="true">
+        <Value xsi:type="xsd:int">23</Value>
+      </Variable>
+      <Variable Type="int" Name="MiddleSlice.TextureLeft" SetsValue="true">
+        <Value xsi:type="xsd:int">295</Value>
+      </Variable>
+      <Variable Type="int" Name="MiddleSlice.TextureTop" SetsValue="true">
+        <Value xsi:type="xsd:int">131</Value>
+      </Variable>
+      <Variable Type="int" Name="MiddleSlice.TextureWidth" SetsValue="true">
+        <Value xsi:type="xsd:int">144</Value>
+      </Variable>
+      <Variable Type="float" Name="MiddleSlice.Width" SetsValue="true">
+        <Value xsi:type="xsd:float">-38</Value>
+      </Variable>
+      <Variable Type="float" Name="MiddleSlice.X" SetsValue="true">
+        <Value xsi:type="xsd:float">29</Value>
+      </Variable>
+      <Variable Type="float" Name="RightSlice.Height" SetsValue="true">
+        <Value xsi:type="xsd:float">23</Value>
+      </Variable>
+      <Variable Type="int" Name="RightSlice.TextureHeight" SetsValue="true">
+        <Value xsi:type="xsd:int">23</Value>
+      </Variable>
+      <Variable Type="int" Name="RightSlice.TextureLeft" SetsValue="true">
+        <Value xsi:type="xsd:int">442</Value>
+      </Variable>
+      <Variable Type="int" Name="RightSlice.TextureTop" SetsValue="true">
+        <Value xsi:type="xsd:int">131</Value>
+      </Variable>
+      <Variable Type="int" Name="RightSlice.TextureWidth" SetsValue="true">
+        <Value xsi:type="xsd:int">2</Value>
+      </Variable>
+      <Variable Type="float" Name="RightSlice.Width" SetsValue="true">
+        <Value xsi:type="xsd:float">2</Value>
+      </Variable>
+      <Variable Type="float" Name="RightSlice.X" SetsValue="true">
+        <Value xsi:type="xsd:float">-7</Value>
+      </Variable>
+      <Variable Type="float" Name="RightSlice.Y" Category="Position" SetsValue="true">
+        <Value xsi:type="xsd:float">0</Value>
+      </Variable>
+      <Variable Type="float" Name="TextInstance.Height" SetsValue="true">
+        <Value xsi:type="xsd:float">5</Value>
+      </Variable>
+      <Variable Type="float" Name="TextInstance.Width" SetsValue="true">
+        <Value xsi:type="xsd:float">-43</Value>
+      </Variable>
+      <Variable Type="float" Name="TextInstance.X" SetsValue="true">
+        <Value xsi:type="xsd:float">31</Value>
+      </Variable>
+      <Variable Type="float" Name="TextInstance.Y" SetsValue="true">
+        <Value xsi:type="xsd:float">2</Value>
+      </Variable>
+    </State>
+    <State>
+      <Name>Pushed</Name>
+      <Variable Type="bool" Name="LeftSlice.Animate" SetsValue="true">
+        <Value xsi:type="xsd:boolean">false</Value>
+      </Variable>
+      <Variable Type="float" Name="LeftSlice.Height" SetsValue="true">
+        <Value xsi:type="xsd:float">23</Value>
+      </Variable>
+      <Variable Type="TextureAddress" Name="LeftSlice.TextureAddress" SetsValue="true">
+        <Value xsi:type="xsd:int">1</Value>
+      </Variable>
+      <Variable Type="int" Name="LeftSlice.TextureHeight" SetsValue="true">
+        <Value xsi:type="xsd:int">23</Value>
+      </Variable>
+      <Variable Type="int" Name="LeftSlice.TextureLeft" SetsValue="true">
+        <Value xsi:type="xsd:int">262</Value>
+      </Variable>
+      <Variable Type="int" Name="LeftSlice.TextureTop" SetsValue="true">
+        <Value xsi:type="xsd:int">196</Value>
+      </Variable>
+      <Variable Type="int" Name="LeftSlice.TextureWidth" SetsValue="true">
+        <Value xsi:type="xsd:int">34</Value>
+      </Variable>
+      <Variable Type="float" Name="LeftSlice.Width" SetsValue="true">
+        <Value xsi:type="xsd:float">29</Value>
+      </Variable>
+      <Variable Type="bool" Name="LeftSlice.Wrap" SetsValue="true">
+        <Value xsi:type="xsd:boolean">false</Value>
+      </Variable>
+      <Variable Type="float" Name="LeftSlice.X" SetsValue="true">
+        <Value xsi:type="xsd:float">0</Value>
+      </Variable>
+      <Variable Type="float" Name="MiddleSlice.Height" SetsValue="true">
+        <Value xsi:type="xsd:float">23</Value>
+      </Variable>
+      <Variable Type="DimensionUnitType" Name="MiddleSlice.HeightUnits" SetsValue="true">
+        <Value xsi:type="xsd:int">0</Value>
+      </Variable>
+      <Variable Type="TextureAddress" Name="MiddleSlice.TextureAddress" Category="Source" SetsValue="true">
+        <Value xsi:type="xsd:int">1</Value>
+      </Variable>
+      <Variable Type="int" Name="MiddleSlice.TextureHeight" SetsValue="true">
+        <Value xsi:type="xsd:int">23</Value>
+      </Variable>
+      <Variable Type="int" Name="MiddleSlice.TextureLeft" SetsValue="true">
+        <Value xsi:type="xsd:int">295</Value>
+      </Variable>
+      <Variable Type="int" Name="MiddleSlice.TextureTop" SetsValue="true">
+        <Value xsi:type="xsd:int">196</Value>
+      </Variable>
+      <Variable Type="int" Name="MiddleSlice.TextureWidth" SetsValue="true">
+        <Value xsi:type="xsd:int">148</Value>
+      </Variable>
+      <Variable Type="float" Name="MiddleSlice.Width" SetsValue="true">
+        <Value xsi:type="xsd:float">-37</Value>
+      </Variable>
+      <Variable Type="float" Name="MiddleSlice.X" SetsValue="true">
+        <Value xsi:type="xsd:float">29</Value>
+      </Variable>
+      <Variable Type="float" Name="RightSlice.Height" SetsValue="true">
+        <Value xsi:type="xsd:float">23</Value>
+      </Variable>
+      <Variable Type="int" Name="RightSlice.TextureHeight" SetsValue="true">
+        <Value xsi:type="xsd:int">23</Value>
+      </Variable>
+      <Variable Type="int" Name="RightSlice.TextureLeft" SetsValue="true">
+        <Value xsi:type="xsd:int">443</Value>
+      </Variable>
+      <Variable Type="int" Name="RightSlice.TextureTop" SetsValue="true">
+        <Value xsi:type="xsd:int">196</Value>
+      </Variable>
+      <Variable Type="int" Name="RightSlice.TextureWidth" SetsValue="true">
+        <Value xsi:type="xsd:int">2</Value>
+      </Variable>
+      <Variable Type="float" Name="RightSlice.Width" SetsValue="true">
+        <Value xsi:type="xsd:float">2</Value>
+      </Variable>
+      <Variable Type="float" Name="RightSlice.X" SetsValue="true">
+        <Value xsi:type="xsd:float">-6</Value>
+      </Variable>
+      <Variable Type="float" Name="RightSlice.Y" Category="Position" SetsValue="true">
+        <Value xsi:type="xsd:float">0</Value>
+      </Variable>
+      <Variable Type="float" Name="TextInstance.Height" SetsValue="true">
+        <Value xsi:type="xsd:float">5</Value>
+      </Variable>
+      <Variable Type="float" Name="TextInstance.Width" SetsValue="true">
+        <Value xsi:type="xsd:float">-43</Value>
+      </Variable>
+      <Variable Type="float" Name="TextInstance.X" SetsValue="true">
+        <Value xsi:type="xsd:float">31</Value>
+      </Variable>
+      <Variable Type="float" Name="TextInstance.Y" SetsValue="true">
+        <Value xsi:type="xsd:float">2</Value>
+      </Variable>
+    </State>
+    <State>
+      <Name>Highlighted</Name>
+      <Variable Type="bool" Name="LeftSlice.Animate" SetsValue="true">
+        <Value xsi:type="xsd:boolean">false</Value>
+      </Variable>
+      <Variable Type="float" Name="LeftSlice.Height" SetsValue="true">
+        <Value xsi:type="xsd:float">23</Value>
+      </Variable>
+      <Variable Type="TextureAddress" Name="LeftSlice.TextureAddress" SetsValue="true">
+        <Value xsi:type="xsd:int">1</Value>
+      </Variable>
+      <Variable Type="int" Name="LeftSlice.TextureHeight" SetsValue="true">
+        <Value xsi:type="xsd:int">23</Value>
+      </Variable>
+      <Variable Type="int" Name="LeftSlice.TextureLeft" SetsValue="true">
+        <Value xsi:type="xsd:int">262</Value>
+      </Variable>
+      <Variable Type="int" Name="LeftSlice.TextureTop" SetsValue="true">
+        <Value xsi:type="xsd:int">164</Value>
+      </Variable>
+      <Variable Type="int" Name="LeftSlice.TextureWidth" SetsValue="true">
+        <Value xsi:type="xsd:int">33</Value>
+      </Variable>
+      <Variable Type="float" Name="LeftSlice.Width" SetsValue="true">
+        <Value xsi:type="xsd:float">29</Value>
+      </Variable>
+      <Variable Type="bool" Name="LeftSlice.Wrap" SetsValue="true">
+        <Value xsi:type="xsd:boolean">false</Value>
+      </Variable>
+      <Variable Type="float" Name="LeftSlice.X" SetsValue="true">
+        <Value xsi:type="xsd:float">0</Value>
+      </Variable>
+      <Variable Type="float" Name="MiddleSlice.Height" SetsValue="true">
+        <Value xsi:type="xsd:float">23</Value>
+      </Variable>
+      <Variable Type="DimensionUnitType" Name="MiddleSlice.HeightUnits" SetsValue="true">
+        <Value xsi:type="xsd:int">0</Value>
+      </Variable>
+      <Variable Type="TextureAddress" Name="MiddleSlice.TextureAddress" Category="Source" SetsValue="true">
+        <Value xsi:type="xsd:int">1</Value>
+      </Variable>
+      <Variable Type="int" Name="MiddleSlice.TextureHeight" SetsValue="true">
+        <Value xsi:type="xsd:int">23</Value>
+      </Variable>
+      <Variable Type="int" Name="MiddleSlice.TextureLeft" SetsValue="true">
+        <Value xsi:type="xsd:int">295</Value>
+      </Variable>
+      <Variable Type="int" Name="MiddleSlice.TextureTop" SetsValue="true">
+        <Value xsi:type="xsd:int">164</Value>
+      </Variable>
+      <Variable Type="int" Name="MiddleSlice.TextureWidth" SetsValue="true">
+        <Value xsi:type="xsd:int">148</Value>
+      </Variable>
+      <Variable Type="float" Name="MiddleSlice.Width" SetsValue="true">
+        <Value xsi:type="xsd:float">-38</Value>
+      </Variable>
+      <Variable Type="float" Name="MiddleSlice.X" SetsValue="true">
+        <Value xsi:type="xsd:float">29</Value>
+      </Variable>
+      <Variable Type="float" Name="RightSlice.Height" SetsValue="true">
+        <Value xsi:type="xsd:float">24</Value>
+      </Variable>
+      <Variable Type="int" Name="RightSlice.TextureHeight" SetsValue="true">
+        <Value xsi:type="xsd:int">23</Value>
+      </Variable>
+      <Variable Type="int" Name="RightSlice.TextureLeft" SetsValue="true">
+        <Value xsi:type="xsd:int">443</Value>
+      </Variable>
+      <Variable Type="int" Name="RightSlice.TextureTop" SetsValue="true">
+        <Value xsi:type="xsd:int">163</Value>
+      </Variable>
+      <Variable Type="int" Name="RightSlice.TextureWidth" SetsValue="true">
+        <Value xsi:type="xsd:int">2</Value>
+      </Variable>
+      <Variable Type="float" Name="RightSlice.Width" SetsValue="true">
+        <Value xsi:type="xsd:float">2</Value>
+      </Variable>
+      <Variable Type="float" Name="RightSlice.X" SetsValue="true">
+        <Value xsi:type="xsd:float">-7</Value>
+      </Variable>
+      <Variable Type="float" Name="RightSlice.Y" SetsValue="true">
+        <Value xsi:type="xsd:float">-1</Value>
+      </Variable>
+      <Variable Type="float" Name="TextInstance.Height" SetsValue="true">
+        <Value xsi:type="xsd:float">5</Value>
+      </Variable>
+      <Variable Type="float" Name="TextInstance.Width" SetsValue="true">
+        <Value xsi:type="xsd:float">-43</Value>
+      </Variable>
+      <Variable Type="float" Name="TextInstance.X" SetsValue="true">
+        <Value xsi:type="xsd:float">31</Value>
+      </Variable>
+      <Variable Type="float" Name="TextInstance.Y" SetsValue="true">
+        <Value xsi:type="xsd:float">2</Value>
+      </Variable>
+    </State>
+  </Category>
+  <Instance Name="LeftSlice" BaseType="Sprite" />
+  <Instance Name="MiddleSlice" BaseType="Sprite" />
+  <Instance Name="RightSlice" BaseType="Sprite" />
+  <Instance Name="TextInstance" BaseType="Text" />
+  <Behaviors>
+    <ElementBehaviorReference>
+      <BehaviorName>ButtonBehavior</BehaviorName>
+    </ElementBehaviorReference>
+  </Behaviors>
+</ComponentSave>

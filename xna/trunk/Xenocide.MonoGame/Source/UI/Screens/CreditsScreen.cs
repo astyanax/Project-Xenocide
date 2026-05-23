@@ -208,14 +208,16 @@ namespace ProjectXenocide.UI.Screens
             spriteBatch.End();
         }
 
-        /// <summary>Look for esc key pressed to end screen</summary>
+        /// <summary>Return to StartScreen on Escape</summary>
+        public override bool HandleEscape()
+        {
+            ScreenManager.ScheduleScreen(new StartScreen());
+            return true;
+        }
+
         /// <param name="gameTime">unused</param>
         public override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                ScreenManager.ScheduleScreen(new StartScreen());
-            }
         }
 
         private void reset(GraphicsDevice graphicsDevice)

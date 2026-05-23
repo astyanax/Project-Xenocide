@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using Microsoft.Xna.Framework;
@@ -130,8 +131,20 @@ namespace ProjectXenocide.UI.Screens
 
         protected override void CreateGumControls()
         {
-            // Viewport rect: left 0, top 0, width 74.5%, height 100% (relative to 1280x1024)
             _viewportRect = new UiRect(0.00f, 0.00f, 0.745f, 1.00f);
+
+            if (GumRoot != null)
+            {
+                combatantStatsTextWindow = new Label();
+                combatantStatsTextWindow.Visual.Visible = false;
+
+                WireButton("equipmentButton", OnEquipmentButton);
+                WireButton("rightHandButton", OnRightHandButton);
+                WireButton("finishTurnButton", OnFinishTurnButton);
+                WireButton("topLevelButton", OnTopLevelButton);
+                WireButton("abortButton", OnAbortButton);
+                return;
+            }
 
             combatantStatsTextWindow = new Label(); RootContainer.AddChild(combatantStatsTextWindow);
             combatantStatsTextWindow.Visual.Visible = false;

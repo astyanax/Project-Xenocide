@@ -181,16 +181,42 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// <param name="device">the display</param>
         public void LoadContent(GraphicsDevice device)
         {
-            using (var fs = File.OpenRead(@"Content/Textures/Geoscape/EarthDiffuseMap.jpg"))
-                diffuseTexture = Texture2D.FromStream(Xenocide.Instance.GraphicsDevice, fs);
-            using (var fs = File.OpenRead(@"Content/Textures/Geoscape/EarthNightMap.png"))
-                nightTexture = Texture2D.FromStream(Xenocide.Instance.GraphicsDevice, fs);
-            using (var fs = File.OpenRead(@"Content/Textures/Geoscape/EarthNormalMap.png"))
-                normapMapTexture = Texture2D.FromStream(Xenocide.Instance.GraphicsDevice, fs);
+            diffuseTexture = TryLoadTexture(@"Content/Textures/Geoscape/EarthDiffuseMap.jpg",
+                @"Content/Textures/Geoscape/_LEGACY_EarthDiffuseMap.jpg", device);
+            nightTexture = TryLoadTexture(@"Content/Textures/Geoscape/EarthNightMap.jpg",
+                @"Content/Textures/Geoscape/_LEGACY_EarthNightMap.png", device);
+            normapMapTexture = TryLoadTexture(@"Content/Textures/Geoscape/EarthNormalMap.png", null, device);
 
             sphereMesh = new SphereMesh(15);
             vertexBuffer = sphereMesh.CreateVertexBuffer(device);
             indexBuffer = sphereMesh.CreateIndexBuffer(device);
+        }
+
+        private static Texture2D TryLoadTexture(string primaryPath, string fallbackPath, GraphicsDevice device)
+        {
+            string loadPath = primaryPath;
+            if (!File.Exists(primaryPath) && fallbackPath != null)
+            {
+                Console.WriteLine("EarthGlobe: {0} not found, falling back to {1}", primaryPath, fallbackPath);
+                loadPath = fallbackPath;
+            }
+
+            try
+            {
+                using (var fs = File.OpenRead(loadPath))
+                    return Texture2D.FromStream(device, fs);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("EarthGlobe: Failed to load {0}: {1}", loadPath, ex.Message);
+                if (fallbackPath != null && loadPath != fallbackPath && File.Exists(fallbackPath))
+                {
+                    Console.WriteLine("EarthGlobe: Falling back to {0}", fallbackPath);
+                    using (var fs = File.OpenRead(fallbackPath))
+                        return Texture2D.FromStream(device, fs);
+                }
+                throw;
+            }
         }
 
         /// <summary>

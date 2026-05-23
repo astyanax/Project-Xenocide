@@ -35,6 +35,8 @@ using AudioSystem;
 using CeGui;
 using CeGui.Renderers.Xna;
 
+using Gum.DataTypes;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -81,6 +83,8 @@ namespace ProjectXenocide
 
         /// <summary>Game balance class</summary>
         private static GameBalanceClass gameBalance;
+
+        private static GumProjectSave gumProject;
 
         /// <summary>
         /// Constructor
@@ -134,7 +138,10 @@ namespace ProjectXenocide
             InitializeCegui();
             InitializeAudioSystem();
 
-            GumService.Default.Initialize(this);
+            gumProject = GumService.Default.Initialize(this, "Gum/Xenocide.gumx");
+
+            var profileMax = GraphicsDevice.GraphicsProfile == GraphicsProfile.HiDef ? 4096 : 2048;
+            Console.WriteLine("MaxTextureSize (profile): {0} ({1})", profileMax, GraphicsDevice.GraphicsProfile);
         }
 
         /// <summary>
@@ -261,8 +268,8 @@ namespace ProjectXenocide
             }
             _prevKeyState = keyState;
 
-            screenManager.Update(gameTime);
             GumService.Default.Update(gameTime);
+            screenManager.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -310,10 +317,19 @@ namespace ProjectXenocide
         /// <summary>
         /// Get the sound playing system
         /// </summary>
+        public static GumProjectSave GumProject
+        {
+            get { return gumProject; }
+        }
+
         public static IAudioSystem AudioSystem
         {
             get { return Instance.Services.GetService(typeof(IAudioSystem)) as IAudioSystem; }
         }
+
+        public const string GameVersion = "0.4";
+
+        public static bool DebugTesting { get; set; }
 
         /// <summary>
         /// Current version of Xenocide

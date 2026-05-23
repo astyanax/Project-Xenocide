@@ -71,6 +71,9 @@ namespace ProjectXenocide.UI.Screens
         {
             SetView(0.005f, 0.0733f, 0.5038f, 0.4417f);
 
+            if (GumRoot != null)
+                return;
+
             // Fake the list of items with a list box
             InitEntriesTree();
 
@@ -114,6 +117,20 @@ namespace ProjectXenocide.UI.Screens
         private List<int> entryItemIds = new List<int>();
 
         #endregion Create the Gum controls
+
+        public override bool HandleEscape()
+        {
+            if (Xenocide.DebugTesting)
+            {
+                Xenocide.DebugTesting = false;
+                ScreenManager.ScheduleScreen(new StartScreen());
+            }
+            else
+            {
+                ScreenManager.ScheduleScreen(new GeoscapeScreen());
+            }
+            return true;
+        }
 
         #region event handlers
 

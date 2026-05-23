@@ -59,6 +59,24 @@ namespace ProjectXenocide.UI.Screens
 
         protected override void CreateGumControls()
         {
+            Xenocide.DebugTesting = false;
+
+            if (GumRoot != null)
+            {
+#if DEBUG
+                WireButton("RunTestsButton", OnRunTestsClicked);
+                WireButton("BattlescapeButton", OnBattlescapeClicked);
+                WireButton("XNetDebugButton", OnXNetDebugClicked);
+                WireButton("AeroscapeDebugButton", OnAeroscapeDebugClicked);
+#endif
+                WireButton("NewGameButton", OnNewGameClicked);
+                WireButton("LoadGameButton", OnShowLoadGameScreen);
+                WireButton("QuitButton", OnQuitGameClicked);
+                WireButton("CreditsButton", OnCreditsClicked);
+
+                return;
+            }
+
             RootContainer.Width = 250;
 
 #if DEBUG
@@ -71,6 +89,16 @@ namespace ProjectXenocide.UI.Screens
             battlescapeButton.Text = "Debug Battlescape";
             battlescapeButton.Click += OnBattlescapeClicked;
             RootContainer.AddChild(battlescapeButton);
+
+            var xnetDebugButton = new Button();
+            xnetDebugButton.Text = "Debug XNet";
+            xnetDebugButton.Click += OnXNetDebugClicked;
+            RootContainer.AddChild(xnetDebugButton);
+
+            var aeroscapeDebugButton = new Button();
+            aeroscapeDebugButton.Text = "Debug Aeroscape";
+            aeroscapeDebugButton.Click += OnAeroscapeDebugClicked;
+            RootContainer.AddChild(aeroscapeDebugButton);
 #endif
 
             var startButton = new Button();
@@ -104,9 +132,15 @@ namespace ProjectXenocide.UI.Screens
 
         #region event handlers
 
+        public override bool HandleEscape()
+        {
+            return true;
+        }
+
         private void OnRunTestsClicked(object sender, EventArgs e)
         {
             Console.WriteLine("StartScreen: Run Tests clicked");
+            Xenocide.DebugTesting = true;
             Xenocide.GameState.SetToStartGameCondition();
             Xenocide.StaticTables.StartSettings.Cheats.XcorpCantLooseAtStartOfMonth = true;
             ProjectXenocide.Model.Geoscape.Geography.Planet.RunTests();
@@ -146,6 +180,7 @@ namespace ProjectXenocide.UI.Screens
         private void OnBattlescapeClicked(object sender, EventArgs e)
         {
             Console.WriteLine("StartScreen: Battlescape clicked");
+            Xenocide.DebugTesting = true;
             StartDebugBattlescape();
         }
 
@@ -180,6 +215,39 @@ namespace ProjectXenocide.UI.Screens
             Console.WriteLine("StartScreen: Credits clicked");
             ShowCreditsScreen();
         }
+
+#if DEBUG
+        private void OnXNetDebugClicked(object sender, EventArgs e)
+        {
+            Xenocide.DebugTesting = true;
+            Console.WriteLine("StartScreen: Debug XNet clicked");
+            Xenocide.GameState.SetToStartGameCondition();
+            ScreenManager.ScheduleScreen(new XNetScreen());
+        }
+
+        private void OnAeroscapeDebugClicked(object sender, EventArgs e)
+        {
+            Xenocide.DebugTesting = true;
+            Console.WriteLine("StartScreen: Debug Aeroscape clicked");
+            Xenocide.GameState.SetToStartGameCondition();
+
+            GeoPosition pos = new GeoPosition();
+            Outpost outpost = new Outpost(pos, "Dummy");
+            outpost.SetupPlayersFirstBase();
+            Xenocide.GameState.GeoData.Outposts.Add(outpost);
+
+            Overmind overmind = Xenocide.GameState.GeoData.Overmind;
+            overmind.DiableStartOfMonth();
+            overmind.DebugCreateMission(AlienMission.Retaliation, pos);
+            RetaliationTask task = overmind.Tasks[0] as RetaliationTask;
+            InvasionTask.TestReleaseUfo(task);
+            Ufo ufo = overmind.Ufos[0];
+            ufo.DebugTransmute(Xenocide.StaticTables.ItemList["ITEM_UFO_RECON"]);
+
+            Aircraft aircraft = outpost.Fleet[2] as Aircraft;
+            ScreenManager.ScheduleScreen(new AeroscapeScreen(aircraft, ufo));
+        }
+#endif
 
         #endregion event handlers
 

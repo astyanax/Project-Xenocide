@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScreenSave xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>AeroscapeScreen</Name>
+  <State>
+    <Name>Default</Name>
+    <Variable Type="string" Name="advanceTimeBtn.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="advanceTimeBtn.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Advance Time</Value>
+    </Variable>
+    <Variable Type="float" Name="advanceTimeBtn.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="advanceTimeBtn.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="BGImage.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">6</Value>
+    </Variable>
+    <Variable Type="string" Name="BGImage.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true">
+      <Value xsi:type="xsd:string">..\Textures\UI\GeoscapeScreenBackground.png</Value>
+    </Variable>
+    <Variable Type="float" Name="BGImage.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="ChildrenLayout" Name="ButtonPanel.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="ButtonPanel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable Type="float" Name="ButtonPanel.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">200</Value>
+    </Variable>
+    <Variable Type="float" Name="ButtonPanel.X" SetsValue="true">
+      <Value xsi:type="xsd:float">20</Value>
+    </Variable>
+    <Variable Type="float" Name="ButtonPanel.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">900</Value>
+    </Variable>
+    <Variable Type="PositionUnitType" Name="ButtonPanel.YUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">3</Value>
+    </Variable>
+    <Variable Type="string" Name="closeBtn.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="closeBtn.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Close</Value>
+    </Variable>
+    <Variable Type="float" Name="closeBtn.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="closeBtn.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="ChildrenLayout" Name="ContainerInstance.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="ContainerInstance.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="ContainerInstance.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="craftDamageLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">InfoPanel</Value>
+    </Variable>
+    <Variable Type="int" Name="craftNameLabel.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">14</Value>
+    </Variable>
+    <Variable Type="string" Name="craftNameLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">InfoPanel</Value>
+    </Variable>
+    <Variable Type="ChildrenLayout" Name="InfoPanel.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="InfoPanel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable Type="float" Name="InfoPanel.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">900</Value>
+    </Variable>
+    <Variable Type="float" Name="InfoPanel.X" SetsValue="true">
+      <Value xsi:type="xsd:float">40</Value>
+    </Variable>
+    <Variable Type="float" Name="InfoPanel.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">40</Value>
+    </Variable>
+    <Variable Type="string" Name="logLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">InfoPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="pod1Label.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">InfoPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="pod2Label.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">InfoPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="realTimeBtn.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="realTimeBtn.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Real Time</Value>
+    </Variable>
+    <Variable Type="float" Name="realTimeBtn.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="realTimeBtn.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+  </State>
+  <Instance Name="ContainerInstance" BaseType="Container" />
+  <Instance Name="BGImage" BaseType="Sprite" />
+  <Instance Name="ButtonPanel" BaseType="Container" />
+  <Instance Name="InfoPanel" BaseType="Container" />
+  <Instance Name="realTimeBtn" BaseType="XenocideButton" />
+  <Instance Name="advanceTimeBtn" BaseType="XenocideButton" />
+  <Instance Name="closeBtn" BaseType="XenocideButton" />
+  <Instance Name="craftNameLabel" BaseType="Text" />
+  <Instance Name="craftDamageLabel" BaseType="Text" />
+  <Instance Name="pod1Label" BaseType="Text" />
+  <Instance Name="pod2Label" BaseType="Text" />
+  <Instance Name="logLabel" BaseType="Text" />
+  <Behaviors />
+</ScreenSave>

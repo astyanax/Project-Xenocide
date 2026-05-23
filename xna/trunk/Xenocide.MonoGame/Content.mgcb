@@ -60,16 +60,6 @@
 /processor:TextureProcessor
 /build:Content/Textures/Geoscape/skybox.png
 
-#begin Content/Textures/Geoscape/EarthDiffuseMap.jpg
-/importer:TextureImporter
-/processor:TextureProcessor
-/build:Content/Textures/Geoscape/EarthDiffuseMap.jpg
-
-#begin Content/Textures/Geoscape/EarthNightMap.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/build:Content/Textures/Geoscape/EarthNightMap.png
-
 #begin Content/Textures/Geoscape/EarthNormalMap.png
 /importer:TextureImporter
 /processor:TextureProcessor

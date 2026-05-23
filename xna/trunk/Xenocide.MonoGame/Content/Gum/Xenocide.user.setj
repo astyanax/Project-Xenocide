@@ -1,0 +1,18 @@
+{
+  "TreeViewState": {
+    "ExpandedNodes": [
+      "Screens",
+      "Screens/GeoscapeScreen",
+      "Screens/GeoscapeScreen/ContainerInstance",
+      "Screens/GeoscapeScreen/ContainerInstance/RightPanel",
+      "Screens/StartScreen",
+      "Screens/StartScreen/ContainerInstance",
+      "Screens/StartScreen/ContainerInstance/ButtonPanel",
+      "Screens/StartScreen/ContainerInstance/DebugPanel",
+      "Components",
+      "Components/XenocideButton",
+      "Standard",
+      "Behaviors"
+    ]
+  }
+}
