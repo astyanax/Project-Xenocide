@@ -99,7 +99,23 @@ namespace ProjectXenocide.UI.Scenes.XNet
             Matrix[] transforms = new Matrix[model.Bones.Count];
             model.CopyAbsoluteBoneTransformsTo(transforms);
 
-            //...Draw the model, a model can have multiple meshes, so loop
+            if (_needsFirstDrawProfile)
+            {
+                _needsFirstDrawProfile = false;
+                using (Profile.Time("XNet.Draw(first): " + modelName))
+                    DrawModel(transforms, viewMatrix, projection, device);
+            }
+            else
+            {
+                DrawModel(transforms, viewMatrix, projection, device);
+            }
+
+            // restore viewport
+            device.Viewport = oldview;
+        }
+
+        private void DrawModel(Matrix[] transforms, Matrix viewMatrix, Matrix projection, GraphicsDevice device)
+        {
             foreach (ModelMesh mesh in model.Meshes)
             {
                 //This is where the mesh orientation is set, as well as our camera and projection
@@ -156,7 +172,11 @@ namespace ProjectXenocide.UI.Scenes.XNet
         public void SetModel(string newModelName, Matrix initialRotation)
         {
             modelName = newModelName;
-            LoadModel(initialRotation);
+            using (Profile.Time("XNet.SetModel: " + modelName))
+            {
+                LoadModel(initialRotation);
+            }
+            _needsFirstDrawProfile = true;
             ResetCamera();
         }
 
@@ -251,6 +271,8 @@ namespace ProjectXenocide.UI.Scenes.XNet
         /// Matrix storing the rotation of the camera.
         /// </summary>
         private Matrix rotationMatrix = Matrix.Identity;
+
+        private bool _needsFirstDrawProfile;
 
         #endregion Fields
     }

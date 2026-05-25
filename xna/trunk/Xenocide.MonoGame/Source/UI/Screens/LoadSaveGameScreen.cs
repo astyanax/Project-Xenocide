@@ -184,6 +184,8 @@ namespace ProjectXenocide.UI.Screens
                 if (WriteToFile(saveName))
                 {
                     AddSaveGameToGrid(saveName);
+                    Util.ShowMessageBox("Game saved successfully.");
+                    ScreenManager.ScheduleScreen(new GeoscapeScreen());
                 }
             }
         }
@@ -199,7 +201,6 @@ namespace ProjectXenocide.UI.Screens
             {
                 string filename = savesgrid.GetSelectedCellText();
 
-                // load the file
                 GameState game = ReadFromFile(filename);
                 if (null != game)
                 {
@@ -208,7 +209,7 @@ namespace ProjectXenocide.UI.Screens
                     // We always restart with time suspended
                     Xenocide.GameState.GeoData.GeoTime.StopTime();
 
-                    // resume the game (may be either geoscape or battlescape)
+                    Util.ShowMessageBox("Game loaded successfully.");
                     ScreenManager.ScheduleScreen(new GeoscapeScreen());
                 }
             }
@@ -340,6 +341,8 @@ namespace ProjectXenocide.UI.Screens
             try
             {
                 string saveDir = GetSaveDirectory();
+                if (File.Exists(saveDir))
+                    File.Delete(saveDir);
                 Directory.CreateDirectory(saveDir);
                 string filename = Path.Combine(saveDir, saveName);
                 using (FileStream stream = File.Create(filename))

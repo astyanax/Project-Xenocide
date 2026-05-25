@@ -26,6 +26,12 @@ namespace Xenocide.Utils
             typeof(Vector2Json), typeof(Vector3Json), typeof(Vector4Json)
         };
 
+        private static readonly HashSet<Type> NonSerializableTypes = new()
+        {
+            typeof(IntPtr), typeof(UIntPtr),
+            typeof(RuntimeTypeHandle), typeof(RuntimeFieldHandle), typeof(RuntimeMethodHandle)
+        };
+
         [ThreadStatic]
         private static Dictionary<object, string> _writeRefs;
 
@@ -114,6 +120,7 @@ namespace Xenocide.Utils
                 {
                     if (field.IsStatic) continue;
                     if (field.GetCustomAttribute<JsonIgnoreAttribute>() != null) continue;
+                    if (NonSerializableTypes.Contains(field.FieldType)) continue;
                     writer.WritePropertyName(field.Name);
                     JsonSerializer.Serialize(writer, field.GetValue(value), field.FieldType, options);
                 }

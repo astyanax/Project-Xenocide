@@ -190,10 +190,10 @@ namespace ProjectXenocide.UI.Screens
                 {
                     // user clicked an entry, so show its text and model
                     XNetEntry entry = Xenocide.StaticTables.XNetEntryList[id];
-                    PopulateEntryText(entry);
-
-                    // and set the 3D model to show
-                    xnetScene.SetModel(entry.Graphic.Model, entry.Graphic.InitialRotation);
+                    using (Profile.Time("XNet.PopulateEntryText"))
+                        PopulateEntryText(entry);
+                    using (Profile.Time("XNet.SetModel: " + entry.Graphic.Model))
+                        xnetScene.SetModel(entry.Graphic.Model, entry.Graphic.InitialRotation);
                 }
             }
         }
@@ -246,26 +246,25 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>
-        /// Add this text as a new line to the entry's "text box"
+        /// Add this text as a new line to the entry's "text box".
+        /// Previously used CeGui-era manual word-wrapping (ExtractLine at 52 chars) which
+        /// called Items.Add for every wrapped line — hundreds of individual Gum layout
+        /// updates per entry. Now adds the entire text as a single item; Gum's ListBox
+        /// handles word-wrapping natively within each item's visual bounds.
         /// </summary>
         /// <param name="text">text to add</param>
         private void AddToEntryText(string text)
         {
-            string line = "";
-            string textLeft = FixupSpecialChars(text);
-            do
-            {
-                line = ExtractLine(ref textLeft);
-                textWindow.Items.Add(line);
-            }
-            while (0 < textLeft.Length);
+            string processed = FixupSpecialChars(text);
+            if (!string.IsNullOrEmpty(processed))
+                textWindow.Items.Add(processed);
         }
 
         /// <summary>
-        /// Extract enough text from string to fill one line of Text box
+        /// Legacy CeGui word-wrapping: splits text at ~52 characters per visual line.
+        /// No longer used in production; retained for reference since it handles
+        /// word-boundary splitting that native Gum wrapping may approach differently.
         /// </summary>
-        /// <param name="value">String to get text from.  (Text is removed from value)</param>
-        /// <returns>Enough text to fill a line</returns>
         private static string ExtractLine(ref string value)
         {
             const int MaxChars = 52;
