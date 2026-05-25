@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 using AudioSystem;
 
@@ -247,6 +248,11 @@ namespace ProjectXenocide
         protected override void LoadContent()
         {
             screenManager.LoadContent(graphics.GraphicsDevice);
+            ContentCache.PreloadGeoscapeContent(graphics.GraphicsDevice);
+
+            var modelNames = Xenocide.StaticTables.XNetEntryList
+                .Select(e => e.Graphic.Model).Distinct().ToList();
+            ContentCache.PreloadXNetModels(screenManager.Content, modelNames);
         }
 
 

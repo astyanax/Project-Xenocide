@@ -108,14 +108,16 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
 
         public override void LoadContent(ContentManager content, GraphicsDevice device)
         {
-            InitializeEffect(device);
-            earth.LoadContent(device);
-            skybox.LoadContent(content, device);
-            geoHud.LoadContent(content, device);
-            effect = content.Load<Effect>(@"Shaders/GeoscapeShader");
+            using (Profile.Time("GeoscapeScene.LoadContent"))
+            {
+                InitializeEffect(device);
+                earth.LoadContent(device);
+                skybox.LoadContent(content, device);
+                geoHud.LoadContent(content, device);
+                effect = content.Load<Effect>(@"Shaders/GeoscapeShader");
 
-            // figure out which shader we call to render the geoscape
-            geoTechnique = (Util.GetShaderVersion(device) < 2) ? "RenderGlobeStandard" : "RenderGlobeWithBump";
+                geoTechnique = (Util.GetShaderVersion(device) < 2) ? "RenderGlobeStandard" : "RenderGlobeWithBump";
+            }
         }
 
         private void InitializeEffect(GraphicsDevice device)

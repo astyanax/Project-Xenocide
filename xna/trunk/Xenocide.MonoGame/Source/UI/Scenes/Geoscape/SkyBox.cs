@@ -35,6 +35,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
+using ProjectXenocide.Utils;
+
 #endregion
 
 namespace ProjectXenocide.UI.Scenes.Geoscape
@@ -120,8 +122,17 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// <param name="device">the graphics device</param>
         public void LoadContent(ContentManager content, GraphicsDevice device)
         {
-            using (var fs = File.OpenRead(@"Content/Textures/Geoscape/skybox.png"))
-                texture = Texture2D.FromStream(device, fs);
+            if (ContentCache.TryGetTexture(@"Content/Textures/Geoscape/skybox.png", out var cached))
+            {
+                texture = cached;
+            }
+            else
+            {
+                using (var fs = File.OpenRead(@"Content/Textures/Geoscape/skybox.png"))
+                    texture = Texture2D.FromStream(device, fs);
+                ContentCache.StoreTexture(@"Content/Textures/Geoscape/skybox.png", texture);
+            }
+
             effect = content.Load<Effect>(@"Shaders/skybox");
 
             vertices = new VertexBuffer(device,

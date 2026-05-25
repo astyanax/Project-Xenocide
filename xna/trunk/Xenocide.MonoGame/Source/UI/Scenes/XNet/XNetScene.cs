@@ -67,9 +67,9 @@ namespace ProjectXenocide.UI.Scenes.XNet
 
         public override void LoadContent(ContentManager content, GraphicsDevice device)
         {
-            contentManger = content;
-
+            using (Profile.Time("XNetScene.LoadContent"))
             {
+                contentManger = content;
                 LoadModel(Matrix.Identity);
             }
         }
@@ -119,7 +119,24 @@ namespace ProjectXenocide.UI.Scenes.XNet
         }
 
         /// <summary>
-        /// Compute matrix to scale the model, to fit it inside a bounding sphere of radius 1 centered at origin
+        /// Compute matrix to scale the model, to fit it inside a bounding sphere of radius 1 centered at origin.
+        ///
+        /// X-Net displays 3D models of varying sizes (soldiers, aircraft, facilities) in a fixed viewport
+        /// with a camera at a fixed distance (defaultCameraDistance = 3.5 units). Without scaling, a soldier
+        /// model would be tiny and an aircraft model would overflow the viewport. This matrix normalizes them
+        /// all to a consistent visible size regardless of their original dimensions.
+        ///
+        /// How it works:
+        /// 1. Computes the model's combined bounding sphere by walking all meshes and merging their
+        ///    per-mesh bounding spheres with bone transforms applied (see Util.CalcBoundingSphere).
+        /// 2. Translates the model so its center sits at the origin (CreateTranslation(-sphere.Center)).
+        /// 3. Scales uniformly so the bounding sphere has radius 1 (CreateScale(1 / sphere.Radius)).
+        ///    A sphere of radius 1 at origin is guaranteed to fit within the fixed camera viewport.
+        /// 4. The resulting matrix is multiplied with the caller's initialRotation to produce the final
+        ///    world transform for the model's root node.
+        ///
+        /// This matrix is computed once during preloading (see ContentCache.ComputeScalingMatrix) and
+        /// reused from cache to avoid recalculating it on every model switch.
         /// </summary>
         /// <returns>The scaling matrix</returns>
         private Matrix CalculateScalingMatrix()
@@ -149,7 +166,14 @@ namespace ProjectXenocide.UI.Scenes.XNet
         /// <param name="initialRotation">The initial orientation of the model</param>
         private void LoadModel(Matrix initialRotation)
         {
-            // "Light" version of Xenocide has most models removed
+            var cached = ContentCache.GetCachedModel(modelName);
+            if (cached != null)
+            {
+                model = cached.Value.Model;
+                scalingMatrix = cached.Value.ScalingMatrix * initialRotation;
+                return;
+            }
+
             try
             {
                 model = contentManger.Load<Microsoft.Xna.Framework.Graphics.Model>("Models/" + modelName);

@@ -350,6 +350,7 @@ namespace ProjectXenocide.UI.Screens
             }
             catch (Exception e)
             {
+                Console.WriteLine($"[ERROR] Save failed: {e.Message}");
                 Util.ShowMessageBox(Strings.MSGBOX_UNABLE_TO_SAVE_FILE, e.Message);
                 return false;
             }

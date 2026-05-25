@@ -36,6 +36,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
+using ProjectXenocide.Utils;
+
 #endregion
 
 namespace ProjectXenocide.UI.Scenes.Geoscape
@@ -181,15 +183,28 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// <param name="device">the display</param>
         public void LoadContent(GraphicsDevice device)
         {
-            diffuseTexture = TryLoadTexture(@"Content/Textures/Geoscape/EarthDiffuseMap.jpg",
-                @"Content/Textures/Geoscape/_LEGACY_EarthDiffuseMap.jpg", device);
-            nightTexture = TryLoadTexture(@"Content/Textures/Geoscape/EarthNightMap.jpg",
-                @"Content/Textures/Geoscape/_LEGACY_EarthNightMap.png", device);
-            normapMapTexture = TryLoadTexture(@"Content/Textures/Geoscape/EarthNormalMap.png", null, device);
+            using (Profile.Time("EarthGlobe.LoadContent"))
+            {
+                diffuseTexture = LoadTextureCached(device, @"Content/Textures/Geoscape/EarthDiffuseMap.jpg",
+                    @"Content/Textures/Geoscape/_LEGACY_EarthDiffuseMap.jpg");
+                nightTexture = LoadTextureCached(device, @"Content/Textures/Geoscape/EarthNightMap.jpg",
+                    @"Content/Textures/Geoscape/_LEGACY_EarthNightMap.png");
+                normapMapTexture = LoadTextureCached(device, @"Content/Textures/Geoscape/EarthNormalMap.png", null);
 
-            sphereMesh = new SphereMesh(15);
-            vertexBuffer = sphereMesh.CreateVertexBuffer(device);
-            indexBuffer = sphereMesh.CreateIndexBuffer(device);
+                sphereMesh = new SphereMesh(15);
+                vertexBuffer = sphereMesh.CreateVertexBuffer(device);
+                indexBuffer = sphereMesh.CreateIndexBuffer(device);
+            }
+        }
+
+        private static Texture2D LoadTextureCached(GraphicsDevice device, string primaryPath, string fallbackPath)
+        {
+            if (ContentCache.TryGetTexture(primaryPath, out var cached))
+                return cached;
+
+            var tex = TryLoadTexture(primaryPath, fallbackPath, device);
+            ContentCache.StoreTexture(primaryPath, tex);
+            return tex;
         }
 
         private static Texture2D TryLoadTexture(string primaryPath, string fallbackPath, GraphicsDevice device)

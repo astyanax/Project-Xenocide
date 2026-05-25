@@ -140,7 +140,10 @@ namespace ProjectXenocide.UI.Screens
                 // and set up new screen
                 Screen screen = (null != nextScreen) ? nextScreen : pushScreen;
                 screenStack.Push(screen);
-                screen.LoadContent(content, Xenocide.Instance.GraphicsDevice);
+                using (Profile.Time("Screen.LoadContent: " + screen.GetType().Name))
+                {
+                    screen.LoadContent(content, Xenocide.Instance.GraphicsDevice);
+                }
                 screen.Show();
             }
 
@@ -423,6 +426,8 @@ namespace ProjectXenocide.UI.Screens
 
         /// <summary>The content manager</summary>
         private ContentManager content;
+
+        internal ContentManager Content => content;
 
         /// <summary>The screen to replace current screen with on next update</summary>
         private Screen nextScreen;
