@@ -84,9 +84,17 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("closeButton", OnCloseButton);
 
                 availableText = new Label() { Text = MakeIdleEngineersString() };
+                availableText.Visual.X = 20;
+                availableText.Visual.Y = 20;
                 AddChild(availableText);
 
                 InitializeGrids();
+                projectGrid.Visual.X = 20;
+                projectGrid.Visual.Y = 60;
+                projectGrid.Visual.Width = 750;
+                requirementsGrid.Visual.X = 20;
+                requirementsGrid.Visual.Y = 370;
+                requirementsGrid.Visual.Width = 750;
                 PopulateProjectGrid();
                 return;
             }

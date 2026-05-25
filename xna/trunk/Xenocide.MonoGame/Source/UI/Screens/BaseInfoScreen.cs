@@ -73,6 +73,9 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("okButton", ShowBasesScreen);
 
                 outpostsListComboBox = new ComboBox();
+                outpostsListComboBox.Visual.X = 20;
+                outpostsListComboBox.Visual.Y = 20;
+                outpostsListComboBox.Visual.Width = 300;
                 AddChild(outpostsListComboBox);
                 foreach (Outpost outpost in Xenocide.GameState.GeoData.Outposts)
                     outpostsListComboBox.Items.Add(outpost.Name);
@@ -80,12 +83,22 @@ namespace ProjectXenocide.UI.Screens
                 outpostsListComboBox.SelectionChanged += (s, args) => OnOutpostSelectionChanged(s, EventArgs.Empty);
 
                 nameEditBox = new TextBox();
+                nameEditBox.Visual.X = 20;
+                nameEditBox.Visual.Y = 55;
+                nameEditBox.Visual.Width = 300;
                 AddChild(nameEditBox);
                 nameEditBox.Text = SelectedOutpost.Name;
                 nameEditBox.PreviewTextInput += (s, args) => OnOutpostNameChange(s, EventArgs.Empty);
 
                 InitializeStaffGrid();
+                staffGrid.Visual.X = 20;
+                staffGrid.Visual.Y = 90;
+                staffGrid.Visual.Width = 380;
+
                 InitializeFacilitiesGrid();
+                facilitiesGrid.Visual.X = 420;
+                facilitiesGrid.Visual.Y = 90;
+                facilitiesGrid.Visual.Width = 380;
                 return;
             }
 

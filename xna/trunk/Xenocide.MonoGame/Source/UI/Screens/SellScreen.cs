@@ -76,15 +76,22 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("cancelButton", OnCancelButton);
 
                 fundsText = new Label();
+                fundsText.Visual.X = 20;
+                fundsText.Visual.Y = 20;
                 AddChild(fundsText);
                 fundsText.Text = Util.StringFormat(Strings.SCREEN_SELL_FUNDS,
                     Xenocide.GameState.GeoData.XCorp.Bank.CurrentBalance);
 
                 totalValueText = new Label();
+                totalValueText.Visual.X = 20;
+                totalValueText.Visual.Y = 45;
                 AddChild(totalValueText);
                 UpdateTotalValue();
 
                 InitializeGrid();
+                grid.Visual.X = 20;
+                grid.Visual.Y = 75;
+                grid.Visual.Width = 750;
                 PopulateGrid();
                 return;
             }

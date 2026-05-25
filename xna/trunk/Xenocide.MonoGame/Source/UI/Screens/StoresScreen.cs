@@ -72,6 +72,9 @@ namespace ProjectXenocide.UI.Screens
             {
                 WireButton("okButton", OnOKButton);
                 InitializeGrid();
+                grid.Visual.X = 20;
+                grid.Visual.Y = 20;
+                grid.Visual.Width = 800;
                 PopulateGrid();
                 return;
             }

@@ -78,14 +78,27 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("closeButton", OnCloseButton);
 
                 baseNameText = new Label() { Text = Util.StringFormat(Strings.SCREEN_EQUIP_CRAFT_BASE_NAME, SelectedOutpost.Name) };
+                baseNameText.Visual.X = 20;
+                baseNameText.Visual.Y = 20;
                 AddChild(baseNameText);
                 pod1Text = new Label();
+                pod1Text.Visual.X = 20;
+                pod1Text.Visual.Y = 50;
                 AddChild(pod1Text);
                 pod2Text = new Label();
+                pod2Text.Visual.X = 20;
+                pod2Text.Visual.Y = 70;
                 AddChild(pod2Text);
 
                 InitializeCraftGrid();
+                craftGrid.Visual.X = 20;
+                craftGrid.Visual.Y = 100;
+                craftGrid.Visual.Width = 750;
+
                 InitializeWeaponsGrid();
+                weaponsGrid.Visual.X = 20;
+                weaponsGrid.Visual.Y = 420;
+                weaponsGrid.Visual.Width = 750;
                 PopulateCraftGrid();
                 PopulateWeaponsGrid();
                 weaponsGrid.SelectionChanged += OnWeaponGridSelectionChanged;

@@ -91,12 +91,23 @@ namespace ProjectXenocide.UI.Screens
                 if (SelectedOutpost.Floorplan.HasWorkingFacility("FAC_PSIONIC_TRAINING_FACILITY"))
                 {
                     psiTrainButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_PSI_TRAIN") };
+                    psiTrainButton.Visual.X = 20;
+                    psiTrainButton.Visual.Y = 30;
                     AddChild(psiTrainButton);
                     psiTrainButton.Click += OnPsiTraining;
                 }
 
                 InitializeSoldiersGrid();
+                soldiersListGrid.Visual.X = 20;
+                soldiersListGrid.Visual.Y = 380;
+                soldiersListGrid.Visual.Width = 400;
+
                 InitializeSoldierDetailPanel();
+                nameEditBox.Visual.X = 20;
+                nameEditBox.Visual.Y = 60;
+                attributesGrid.Visual.X = 20;
+                attributesGrid.Visual.Y = 90;
+                attributesGrid.Visual.Width = 400;
                 return;
             }
 

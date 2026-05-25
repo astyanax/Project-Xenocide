@@ -132,6 +132,10 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("geoscapeButton", OnGeoscapeButton);
 
                 seriesList = new ListBox();
+                seriesList.Visual.X = 20;
+                seriesList.Visual.Y = 20;
+                seriesList.Visual.Width = 300;
+                seriesList.Visual.Height = 400;
                 AddChild(seriesList);
                 seriesList.SelectionChanged += (s, a) => OnSeriesSelected(s, EventArgs.Empty);
 

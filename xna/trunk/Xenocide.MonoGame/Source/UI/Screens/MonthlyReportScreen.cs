@@ -74,15 +74,22 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("okButton", OnOkButton);
 
                 monthText = new Label();
+                monthText.Visual.X = 20;
+                monthText.Visual.Y = 20;
                 AddChild(monthText);
                 monthText.Text = Util.StringFormat(Strings.SCREEN_MONTHLYREPORT_MONTH,
                     Xenocide.GameState.GeoData.GeoTime.ToString().Substring(0, 7));
 
                 scoreText = new Label();
+                scoreText.Visual.X = 20;
+                scoreText.Visual.Y = 50;
                 AddChild(scoreText);
                 scoreText.Text = MakeScoreString();
 
                 InitializeGrid();
+                grid.Visual.X = 20;
+                grid.Visual.Y = 80;
+                grid.Visual.Width = 800;
                 PopulateGrid();
                 return;
             }

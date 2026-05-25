@@ -156,6 +156,8 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("rightButton", OnRightButton);
 
                 ammoText = new Label();
+                ammoText.Visual.X = 20;
+                ammoText.Visual.Y = 20;
                 AddChild(ammoText);
                 ShowAmmoString();
 
@@ -167,6 +169,7 @@ namespace ProjectXenocide.UI.Screens
                 AddStaticText("SCREEN_EQUIP_SOLDIER_RIGHT_LEG");
                 AddStaticText("SCREEN_EQUIP_SOLDIER_BACKPACK");
                 AddStaticText("SCREEN_EQUIP_SOLDIER_BELT");
+                RepositionStaticTexts();
 
                 controller.CreateGumControls();
                 return;
@@ -205,12 +208,23 @@ namespace ProjectXenocide.UI.Screens
         private Button closeButton;
         private Button leftButton;
         private Button rightButton;
+        private readonly List<Label> _staticTextLabels = new();
 
         private void AddStaticText(string resourceName)
         {
             Label label = new Label();
             label.Text = XenocideResourceManager.Get(resourceName);
             AddChild(label);
+            _staticTextLabels.Add(label);
+        }
+
+        private void RepositionStaticTexts()
+        {
+            for (int i = 0; i < _staticTextLabels.Count; i++)
+            {
+                _staticTextLabels[i].Visual.X = 20;
+                _staticTextLabels[i].Visual.Y = 50 + i * 25;
+            }
         }
 
         #endregion Create the Gum controls

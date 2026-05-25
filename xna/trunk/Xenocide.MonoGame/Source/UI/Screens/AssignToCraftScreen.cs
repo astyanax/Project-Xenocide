@@ -83,13 +83,26 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("soldierDownButton", OnSoldierDownButton);
 
                 baseNameText = new Label() { Text = Util.StringFormat(Strings.SCREEN_EQUIP_CRAFT_BASE_NAME, SelectedOutpost.Name) };
+                baseNameText.Visual.X = 20;
+                baseNameText.Visual.Y = 20;
                 AddChild(baseNameText);
 
                 InitializeCraftGrid();
+                craftGrid.Visual.X = 20;
+                craftGrid.Visual.Y = 50;
+                craftGrid.Visual.Width = 750;
                 PopulateCraftGrid();
+
                 InitializeSoldierGrid();
+                soldierGrid.Visual.X = 20;
+                soldierGrid.Visual.Y = 370;
+                soldierGrid.Visual.Width = 750;
                 PopulateSoldierGrid();
+
                 InitializeXcapGrid();
+                xcapGrid.Visual.X = 20;
+                xcapGrid.Visual.Y = 690;
+                xcapGrid.Visual.Width = 750;
                 PopulateXcapGrid();
                 return;
             }

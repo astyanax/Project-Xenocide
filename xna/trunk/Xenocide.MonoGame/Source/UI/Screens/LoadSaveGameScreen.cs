@@ -83,14 +83,26 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("cancelButton", OnCloseScreen);
 
                 if (mode == Mode.Save)
-                    WireButton("saveButton", OnSaveGame);
+                {
+                    var btn = WireButton("saveButton", OnSaveGame);
+                    btn.Text = XenocideResourceManager.Get("BUTTON_SAVE");
+                }
                 else
-                    WireButton("saveButton", OnLoadGame);
+                {
+                    var btn = WireButton("saveButton", OnLoadGame);
+                    btn.Text = XenocideResourceManager.Get("BUTTON_LOAD");
+                }
 
                 filenameEditBox = new TextBox();
+                filenameEditBox.Visual.X = 20;
+                filenameEditBox.Visual.Y = 20;
+                filenameEditBox.Visual.Width = 300;
                 AddChild(filenameEditBox);
 
                 InitializeGrid();
+                savesgrid.Visual.X = 20;
+                savesgrid.Visual.Y = 60;
+                savesgrid.Visual.Width = 800;
                 return;
             }
 
@@ -328,6 +340,7 @@ namespace ProjectXenocide.UI.Screens
             try
             {
                 string saveDir = GetSaveDirectory();
+                Directory.CreateDirectory(saveDir);
                 string filename = Path.Combine(saveDir, saveName);
                 using (FileStream stream = File.Create(filename))
                 {
@@ -397,7 +410,7 @@ namespace ProjectXenocide.UI.Screens
         /// <returns>the container</returns>
         private string GetSaveDirectory()
         {
-            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, savesDirectory);
+            return savesDirectory;
         }
 
         #endregion File manipulation routines

@@ -146,16 +146,16 @@ namespace ProjectXenocide.UI.Screens
 
             if (GumRoot != null)
             {
-                WireButton("newBaseButton", OnNewBase);
-                WireButton("baseInfoButton", ShowBaseInfoScreen);
-                WireButton("soldiersButton", OnSoldiersButton);
-                WireButton("equipCraftButton", OnEquipCraftButton);
-                WireButton("buildFacButton", OnBuildFacilitiesButton);
-                WireButton("produceButton", OnManufactureButton);
-                WireButton("transferButton", OnTransferButton);
-                WireButton("buyButton", OnBuyButton);
-                WireButton("sellButton", OnSellButton);
-                WireButton("geoscapeButton", OnGeoscapeButton);
+                newBaseButton = WireButton("newBaseButton", OnNewBase);
+                baseInfoButton = WireButton("baseInfoButton", ShowBaseInfoScreen);
+                soldiersButton = WireButton("soldiersButton", OnSoldiersButton);
+                equipCraftButton = WireButton("equipCraftButton", OnEquipCraftButton);
+                buildFacButton = WireButton("buildFacButton", OnBuildFacilitiesButton);
+                produceButton = WireButton("produceButton", OnManufactureButton);
+                transferButton = WireButton("transferButton", OnTransferButton);
+                buyButton = WireButton("buyButton", OnBuyButton);
+                sellButton = WireButton("sellButton", OnSellButton);
+                geoscapeButton = WireButton("geoscapeButton", OnGeoscapeButton);
 
                 basesListComboBox = new ComboBox();
                 AddChild(basesListComboBox);

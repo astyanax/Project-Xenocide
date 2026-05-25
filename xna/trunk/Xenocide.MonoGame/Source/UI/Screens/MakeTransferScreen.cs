@@ -78,18 +78,28 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("cancelButton", OnCancelButton);
 
                 sourceText = new Label() { Text = Util.StringFormat(Strings.SCREEN_TRANSFER_SOURCE, SourceOutpost.Name) };
+                sourceText.Visual.X = 20;
+                sourceText.Visual.Y = 20;
                 AddChild(sourceText);
 
                 totalCostText = new Label();
+                totalCostText.Visual.X = 20;
+                totalCostText.Visual.Y = 50;
                 AddChild(totalCostText);
                 UpdateTotalCost();
 
                 outpostsListComboBox = new ComboBox();
+                outpostsListComboBox.Visual.X = 20;
+                outpostsListComboBox.Visual.Y = 80;
+                outpostsListComboBox.Visual.Width = 300;
                 AddChild(outpostsListComboBox);
                 Misc.PopulateHumanBasesList(outpostsListComboBox, destinationOutpostIndex);
                 outpostsListComboBox.SelectionChanged += (s, a) => OnOutpostSelectionChanged(s, EventArgs.Empty);
 
                 InitializeGrid();
+                grid.Visual.X = 20;
+                grid.Visual.Y = 115;
+                grid.Visual.Width = 750;
                 PopulateGrid();
                 return;
             }

@@ -81,11 +81,20 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("okButton", OnOkButton);
 
                 recoveredLabelText = new Label();
+                recoveredLabelText.Visual.X = 20;
+                recoveredLabelText.Visual.Y = 20;
                 AddChild(recoveredLabelText);
                 recoveredLabelText.Text = Strings.SCREEN_BATTLESCAPE_REPORT_RECOVERED_ITEMS_LABEL;
 
                 InitializeScoreGrid();
+                scoreGrid.Visual.X = 20;
+                scoreGrid.Visual.Y = 50;
+                scoreGrid.Visual.Width = 750;
+
                 InitializeRecoveredGrid();
+                recoveredGrid.Visual.X = 20;
+                recoveredGrid.Visual.Y = 370;
+                recoveredGrid.Visual.Width = 750;
                 PopulateScoreGrid();
                 PopulateRecoveredGrid();
                 return;
