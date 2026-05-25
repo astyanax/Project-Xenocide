@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using ProjectXenocide.Model.Battlescape.Combatants;
@@ -81,6 +82,24 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
+            if (GumRoot != null)
+            {
+                WireButton("craftButton", ShowAssignScreen);
+                WireButton("equipButton", OnEquipButton);
+                WireButton("closeButton", ShowBasesScreen);
+
+                if (SelectedOutpost.Floorplan.HasWorkingFacility("FAC_PSIONIC_TRAINING_FACILITY"))
+                {
+                    psiTrainButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_PSI_TRAIN") };
+                    AddChild(psiTrainButton);
+                    psiTrainButton.Click += OnPsiTraining;
+                }
+
+                InitializeSoldiersGrid();
+                InitializeSoldierDetailPanel();
+                return;
+            }
+
             InitializeSoldiersGrid();
             InitializeSoldierDetailPanel();
             CreateRightHandButtons();
@@ -92,12 +111,12 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeSoldierDetailPanel()
         {
             nameEditBox = new Label() { Text = XenocideResourceManager.Get("EDITBOX_NAME") };
-            RootContainer.AddChild(nameEditBox);
+            AddChild(nameEditBox);
 
             attributesGrid = new GridPanel();
             attributesGrid.AddColumn("Attribute", 250);
             attributesGrid.AddColumn("Value", 250);
-            RootContainer.AddChild(attributesGrid.Visual);
+            AddChild(attributesGrid.Visual);
 
             PopulateSoldierDetailPanel();
         }
@@ -109,7 +128,7 @@ namespace ProjectXenocide.UI.Screens
         {
             soldiersListGrid = new GridPanel();
             soldiersListGrid.AddColumn(XenocideResourceManager.Get("soldiersListGrid"), 300);
-            RootContainer.AddChild(soldiersListGrid.Visual);
+            AddChild(soldiersListGrid.Visual);
             soldiersListGrid.SelectionChanged += OnSelectedSoldierChanged;
 
             RefreshSoldiersGrid();

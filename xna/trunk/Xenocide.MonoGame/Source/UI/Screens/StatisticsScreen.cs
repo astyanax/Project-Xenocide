@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using Microsoft.Xna.Framework;
@@ -120,6 +121,23 @@ namespace ProjectXenocide.UI.Screens
         protected override void CreateGumControls()
         {
             sceneWindowRect = new UiRect(0.08f, 0.073f, 0.681f, 0.8534f);
+
+            if (GumRoot != null)
+            {
+                WireButton("ufoByRegionButton", OnUfoByRegion);
+                WireButton("ufoByCountryButton", OnUfoByCountry);
+                WireButton("xcomByRegionButton", OnXCorpByRegion);
+                WireButton("xcomByCountryButton", OnXCorpByCountry);
+                WireButton("fundsButton", OnFundsGraph);
+                WireButton("geoscapeButton", OnGeoscapeButton);
+
+                seriesList = new ListBox();
+                AddChild(seriesList);
+                seriesList.SelectionChanged += (s, a) => OnSeriesSelected(s, EventArgs.Empty);
+
+                SetupGraph(GraphId.Funding);
+                return;
+            }
 
             // ListBox provides list of series that can be shown on graph
             seriesList = new ListBox();

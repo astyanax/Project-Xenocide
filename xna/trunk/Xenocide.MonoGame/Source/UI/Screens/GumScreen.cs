@@ -15,9 +15,22 @@ namespace ProjectXenocide.UI.Screens
 {
     public abstract class GumScreen : Screen
     {
+        /// <summary>
+        /// When false (default), screens that fail to load their GumX layout throw
+        /// instead of using the programmatic CeGui fallback. Set to true during
+        /// development to keep the old code path working.
+        /// </summary>
+        public static bool EnableProgrammaticFallback { get; set; } = false;
+
         protected StackPanel RootContainer { get; private set; }
         protected GraphicalUiElement GumRoot { get; private set; }
         protected GumService GumUI => GumService.Default;
+
+        /// <summary>
+        /// Override and return false for screens that intentionally have no .gusx
+        /// (e.g., CreditsScreen with custom 2D rendering).
+        /// </summary>
+        protected virtual bool HasGumxLayout => true;
 
         private SpriteBatch _backgroundBatch;
         private Texture2D _background;
@@ -45,6 +58,11 @@ namespace ProjectXenocide.UI.Screens
             }
 
             CreateGumControls();
+
+            if (GumRoot == null && HasGumxLayout && !EnableProgrammaticFallback)
+                throw new InvalidOperationException(
+                    $"Screen '{GetType().Name}' has no GumX layout and programmatic fallback is disabled. " +
+                    "Set GumScreen.EnableProgrammaticFallback = true to use the legacy CeGui path.");
 
             if (GumRoot == null)
             {
@@ -96,17 +114,12 @@ namespace ProjectXenocide.UI.Screens
             return btn;
         }
 
-        protected static GraphicalUiElement FindVisualByName(GraphicalUiElement root, string name)
+        protected void AddChild(FrameworkElement child)
         {
-            if (root.Name == name)
-                return root;
-            foreach (var child in root.Children)
-            {
-                var found = FindVisualByName(child, name);
-                if (found != null)
-                    return found;
-            }
-            return null;
+            if (GumRoot != null)
+                GumRoot.Children.Add(child.Visual);
+            else if (RootContainer != null)
+                RootContainer.AddChild(child);
         }
 
         private static void WireClickSounds(FrameworkElement element)

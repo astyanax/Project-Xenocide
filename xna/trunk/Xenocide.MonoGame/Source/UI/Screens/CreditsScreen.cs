@@ -81,6 +81,8 @@ namespace ProjectXenocide.UI.Screens
         {
         }
 
+        protected override bool HasGumxLayout => false;
+
         /// <summary>
         /// Implement IDisposable
         /// </summary>

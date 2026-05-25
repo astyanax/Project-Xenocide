@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScreenSave xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>SellScreen</Name>
+  <State>
+    <Name>Default</Name>
+    <Variable Type="string" Name="BGImage.Parent" SetsValue="true"><Value xsi:type="xsd:string">ContainerInstance</Value></Variable>
+    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true"><Value xsi:type="xsd:string">..\Textures\UI\GeoscapeScreenBackground.png</Value></Variable>
+    <Variable Type="float" Name="BGImage.Height" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.HeightUnits" SetsValue="true"><Value xsi:type="xsd:int">6</Value></Variable>
+    <Variable Type="float" Name="BGImage.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+<Variable Type="float" Name="ContainerInstance.Height" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.HeightUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="float" Name="ContainerInstance.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="ChildrenLayout" Name="ButtonBar.ChildrenLayout" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="ButtonBar.Parent" SetsValue="true"><Value xsi:type="xsd:string">ContainerInstance</Value></Variable>
+    <Variable Type="float" Name="ButtonBar.Width" SetsValue="true"><Value xsi:type="xsd:float">200</Value></Variable>
+    <Variable Type="float" Name="ButtonBar.X" SetsValue="true"><Value xsi:type="xsd:float">1040</Value></Variable>
+    <Variable Type="float" Name="ButtonBar.Y" SetsValue="true"><Value xsi:type="xsd:float">10</Value></Variable>
+    <Variable Type="string" Name="sellMoreButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Sell +</Value></Variable>
+    <Variable Type="string" Name="sellMoreButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="sellMoreButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="sellMoreButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="sellLessButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Sell -</Value></Variable>
+    <Variable Type="string" Name="sellLessButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="sellLessButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="sellLessButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="confirmButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Confirm</Value></Variable>
+    <Variable Type="string" Name="confirmButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="confirmButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="confirmButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="cancelButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Cancel</Value></Variable>
+    <Variable Type="string" Name="cancelButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="cancelButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="cancelButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+  </State>
+  <Instance Name="ContainerInstance" BaseType="Container" />
+  <Instance Name="BGImage" BaseType="Sprite" />
+  <Instance Name="ButtonBar" BaseType="Container" />
+  <Instance Name="sellMoreButton" BaseType="XenocideButton" />
+  <Instance Name="sellLessButton" BaseType="XenocideButton" />
+  <Instance Name="confirmButton" BaseType="XenocideButton" />
+  <Instance Name="cancelButton" BaseType="XenocideButton" />
+  <Behaviors />
+</ScreenSave>

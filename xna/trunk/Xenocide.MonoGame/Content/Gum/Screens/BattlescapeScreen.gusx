@@ -60,9 +60,6 @@
     <Variable Type="float" Name="combatantStatsTextWindow.Y" SetsValue="true">
       <Value xsi:type="xsd:float">40</Value>
     </Variable>
-    <Variable Type="ChildrenLayout" Name="ContainerInstance.ChildrenLayout" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
-    </Variable>
     <Variable Type="float" Name="ContainerInstance.Height" SetsValue="true">
       <Value xsi:type="xsd:float">100</Value>
     </Variable>

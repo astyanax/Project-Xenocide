@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using ProjectXenocide.Model.Geoscape;
@@ -68,6 +69,29 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
+            if (GumRoot != null)
+            {
+                WireButton("emptyPod1Button", OnEmptyPod1Button);
+                WireButton("emptyPod2Button", OnEmptyPod2Button);
+                WireButton("setPod1Button", OnSetPod1Button);
+                WireButton("setPod2Button", OnSetPod2Button);
+                WireButton("closeButton", OnCloseButton);
+
+                baseNameText = new Label() { Text = Util.StringFormat(Strings.SCREEN_EQUIP_CRAFT_BASE_NAME, SelectedOutpost.Name) };
+                AddChild(baseNameText);
+                pod1Text = new Label();
+                AddChild(pod1Text);
+                pod2Text = new Label();
+                AddChild(pod2Text);
+
+                InitializeCraftGrid();
+                InitializeWeaponsGrid();
+                PopulateCraftGrid();
+                PopulateWeaponsGrid();
+                weaponsGrid.SelectionChanged += OnWeaponGridSelectionChanged;
+                return;
+            }
+
             baseNameText = new Label() { Text = Util.StringFormat(Strings.SCREEN_EQUIP_CRAFT_BASE_NAME, SelectedOutpost.Name) };
             RootContainer.AddChild(baseNameText);
 
@@ -123,7 +147,7 @@ namespace ProjectXenocide.UI.Screens
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_AMMO, 90);
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_CREW, 90);
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_HWP, 90);
-            RootContainer.AddChild(craftGrid.Visual);
+            AddChild(craftGrid.Visual);
 
             craftGrid.SelectionChanged += OnCraftGridSelectionChanged;
         }
@@ -135,7 +159,7 @@ namespace ProjectXenocide.UI.Screens
             weaponsGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_QUANTITY_IN_BASE, 84);
             weaponsGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_CLIP_SIZE, 90);
             weaponsGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_ROUNDS_IN_BASE, 160);
-            RootContainer.AddChild(weaponsGrid.Visual);
+            AddChild(weaponsGrid.Visual);
         }
 
         private void PopulateCraftGrid()

@@ -29,6 +29,7 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 using AudioSystem;
 
@@ -139,9 +140,22 @@ namespace ProjectXenocide
             InitializeAudioSystem();
 
             gumProject = GumService.Default.Initialize(this, "Gum/Xenocide.gumx");
+            ValidateGumx();
 
             var profileMax = GraphicsDevice.GraphicsProfile == GraphicsProfile.HiDef ? 4096 : 2048;
             Console.WriteLine("MaxTextureSize (profile): {0} ({1})", profileMax, GraphicsDevice.GraphicsProfile);
+        }
+
+        private void ValidateGumx()
+        {
+            if (gumProject == null) return;
+            var screenDir = Path.Combine(Content.RootDirectory, "Gum", "Screens");
+            foreach (var screen in gumProject.Screens)
+            {
+                var path = Path.Combine(screenDir, screen.Name + ".gusx");
+                if (!File.Exists(path))
+                    Console.Error.WriteLine("GumX validation: MISSING {0}", path);
+            }
         }
 
         /// <summary>

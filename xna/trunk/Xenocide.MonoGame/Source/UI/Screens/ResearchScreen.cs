@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using ProjectXenocide.Model;
@@ -68,21 +69,38 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
-            // Get projects to bring their progress up to date
             ProjectMgr.Update();
-
             FindIdleScientists();
 
-            // Text giving number of idle scientists
+            if (GumRoot != null)
+            {
+                WireButton("addIdleScientistsButton", OnAddIdleButton);
+                WireButton("moreScientistsButton", OnMoreButton);
+                WireButton("lessScientistsButton", OnLessButton);
+                WireButton("removeAllScientistsButton", OnRemoveAllButton);
+                WireButton("closeButton", OnCloseButton);
+
+                availableText = new Label();
+                availableText.Visual.X = 20;
+                availableText.Visual.Y = 80;
+                AddChild(availableText);
+                availableText.Text = MakeIdleScientistsString();
+
+                InitializeGrid();
+                grid.Visual.X = 20;
+                grid.Visual.Y = 110;
+                grid.Visual.Width = 800;
+                PopulateGrid();
+                return;
+            }
+
             availableText = new Label();
             RootContainer.AddChild(availableText);
             availableText.Text = MakeIdleScientistsString();
 
-            // The gird of research projects
             InitializeGrid();
             PopulateGrid();
 
-            // buttons
             addIdleScientistsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_ADD_IDLE_SCIENTISTS") };
             RootContainer.AddChild(addIdleScientistsButton);
             moreScientistsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_MORE_SCIENTISTS") };
@@ -115,7 +133,7 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeGrid()
         {
             grid = new GridPanel();
-            RootContainer.AddChild(grid.Visual);
+            AddChild(grid.Visual);
             grid.AddColumn(Strings.SCREEN_RESEARCH_COLUMN_PROJECT, (int)(0.50f * 800));
             grid.AddColumn(Strings.SCREEN_RESEARCH_COLUMN_SCIENTISTS, (int)(0.25f * 800));
             grid.AddColumn(Strings.SCREEN_RESEARCH_COLUMN_ETA, (int)(0.22f * 800));

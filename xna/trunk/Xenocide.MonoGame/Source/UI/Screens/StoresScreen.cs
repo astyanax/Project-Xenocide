@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using ProjectXenocide.Model.Geoscape;
@@ -67,11 +68,17 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
-            // The grid of items in inventory
+            if (GumRoot != null)
+            {
+                WireButton("okButton", OnOKButton);
+                InitializeGrid();
+                PopulateGrid();
+                return;
+            }
+
             InitializeGrid();
             PopulateGrid();
 
-            // buttons
             okButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_OK") };
             RootContainer.AddChild(okButton);
             okButton.Click += OnOKButton;
@@ -86,7 +93,7 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeGrid()
         {
             grid = new GridPanel();
-            RootContainer.AddChild(grid.Visual);
+            AddChild(grid.Visual);
             grid.AddColumn(Strings.SCREEN_STORES_COLUMN_ITEM, (int)(0.58f * 800));
             grid.AddColumn(Strings.SCREEN_STORES_COLUMN_QUANTITY, (int)(0.18f * 800));
             grid.AddColumn(Strings.SCREEN_STORES_COLUMN_SPACE_USED, (int)(0.19f * 800));

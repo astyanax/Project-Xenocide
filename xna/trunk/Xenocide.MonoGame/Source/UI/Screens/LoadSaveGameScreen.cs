@@ -33,6 +33,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using Microsoft.Xna.Framework;
@@ -76,6 +77,23 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
+            if (GumRoot != null)
+            {
+                WireButton("deleteButton", OnDeleteGame);
+                WireButton("cancelButton", OnCloseScreen);
+
+                if (mode == Mode.Save)
+                    WireButton("saveButton", OnSaveGame);
+                else
+                    WireButton("saveButton", OnLoadGame);
+
+                filenameEditBox = new TextBox();
+                AddChild(filenameEditBox);
+
+                InitializeGrid();
+                return;
+            }
+
             // initializeEditBox
             filenameEditBox = new TextBox();
             RootContainer.AddChild(filenameEditBox);
@@ -113,7 +131,7 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeGrid()
         {
             savesgrid = new GridPanel();
-            RootContainer.AddChild(savesgrid.Visual);
+            AddChild(savesgrid.Visual);
             savesgrid.AddColumn("Name", (int)(0.4f * 800));
             savesgrid.AddColumn("Real Time", (int)(0.295f * 800));
             savesgrid.AddColumn("Game Time", (int)(0.295f * 800));
@@ -431,6 +449,8 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private CancelScreen cancelScreen;
 
-        private string savesDirectory = "./XeNAcide/saves";
+        private string savesDirectory = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "Xenocide", "saves");
     }
 }

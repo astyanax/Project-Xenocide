@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using ProjectXenocide.Model.Geoscape;
@@ -64,6 +65,30 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
+            if (GumRoot != null)
+            {
+                WireButton("transfersButton", OnTransfersButton);
+                WireButton("storesButton", OnStoresButton);
+                WireButton("costsButton", OnMonthlyCostsButton);
+                WireButton("okButton", ShowBasesScreen);
+
+                outpostsListComboBox = new ComboBox();
+                AddChild(outpostsListComboBox);
+                foreach (Outpost outpost in Xenocide.GameState.GeoData.Outposts)
+                    outpostsListComboBox.Items.Add(outpost.Name);
+                outpostsListComboBox.SelectedIndex = selectedOutpostIndex;
+                outpostsListComboBox.SelectionChanged += (s, args) => OnOutpostSelectionChanged(s, EventArgs.Empty);
+
+                nameEditBox = new TextBox();
+                AddChild(nameEditBox);
+                nameEditBox.Text = SelectedOutpost.Name;
+                nameEditBox.PreviewTextInput += (s, args) => OnOutpostNameChange(s, EventArgs.Empty);
+
+                InitializeStaffGrid();
+                InitializeFacilitiesGrid();
+                return;
+            }
+
             // combo box to allow user to pick outpost to work on
             outpostsListComboBox = new ComboBox();
             RootContainer.AddChild(outpostsListComboBox);
@@ -115,7 +140,7 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeStaffGrid()
         {
             staffGrid = new GridPanel();
-            RootContainer.AddChild(staffGrid.Visual);
+            AddChild(staffGrid.Visual);
             staffGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_STAFF, (int)(0.69f * 800));
             staffGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_IDLE, (int)(0.15f * 800));
             staffGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_STAFF_TOTAL, (int)(0.15f * 800));
@@ -129,7 +154,7 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeFacilitiesGrid()
         {
             facilitiesGrid = new GridPanel();
-            RootContainer.AddChild(facilitiesGrid.Visual);
+            AddChild(facilitiesGrid.Visual);
             facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_SPACE_TYPE, (int)(0.54f * 800));
             facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_IN_USE, (int)(0.15f * 800));
             facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_TOTAL, (int)(0.15f * 800));

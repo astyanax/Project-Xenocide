@@ -8,5 +8,6 @@ namespace ProjectXenocide.Assets
         LargeBaseName,
         GeoTime,
         GeoTimeBig,
+        Arial,
     }
 }

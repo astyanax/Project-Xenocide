@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScreenSave xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>Research</Name>
+  <State>
+    <Name>Default</Name>
+    <Variable Type="string" Name="BGImage.Parent" SetsValue="true"><Value xsi:type="xsd:string">ContainerInstance</Value></Variable>
+    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true"><Value xsi:type="xsd:string">..\Textures\UI\GeoscapeScreenBackground.png</Value></Variable>
+    <Variable Type="float" Name="BGImage.Height" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.HeightUnits" SetsValue="true"><Value xsi:type="xsd:int">6</Value></Variable>
+    <Variable Type="float" Name="BGImage.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+<Variable Type="float" Name="ContainerInstance.Height" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.HeightUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="float" Name="ContainerInstance.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="ChildrenLayout" Name="ButtonBar.ChildrenLayout" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="ButtonBar.Parent" SetsValue="true"><Value xsi:type="xsd:string">ContainerInstance</Value></Variable>
+    <Variable Type="float" Name="ButtonBar.Width" SetsValue="true"><Value xsi:type="xsd:float">200</Value></Variable>
+    <Variable Type="float" Name="ButtonBar.X" SetsValue="true"><Value xsi:type="xsd:float">1040</Value></Variable>
+    <Variable Type="float" Name="ButtonBar.Y" SetsValue="true"><Value xsi:type="xsd:float">10</Value></Variable>
+    <Variable Type="string" Name="addIdleScientistsButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Add Idle</Value></Variable>
+    <Variable Type="string" Name="addIdleScientistsButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="addIdleScientistsButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="addIdleScientistsButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="moreScientistsButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">+1</Value></Variable>
+    <Variable Type="string" Name="moreScientistsButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="moreScientistsButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="moreScientistsButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="lessScientistsButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">-1</Value></Variable>
+    <Variable Type="string" Name="lessScientistsButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="lessScientistsButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="lessScientistsButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="removeAllScientistsButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Remove All</Value></Variable>
+    <Variable Type="string" Name="removeAllScientistsButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="removeAllScientistsButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="removeAllScientistsButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="closeButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Close</Value></Variable>
+    <Variable Type="string" Name="closeButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="closeButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="closeButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+  </State>
+  <Instance Name="ContainerInstance" BaseType="Container" />
+  <Instance Name="BGImage" BaseType="Sprite" />
+  <Instance Name="ButtonBar" BaseType="Container" />
+  <Instance Name="addIdleScientistsButton" BaseType="XenocideButton" />
+  <Instance Name="moreScientistsButton" BaseType="XenocideButton" />
+  <Instance Name="lessScientistsButton" BaseType="XenocideButton" />
+  <Instance Name="removeAllScientistsButton" BaseType="XenocideButton" />
+  <Instance Name="closeButton" BaseType="XenocideButton" />
+  <Behaviors />
+</ScreenSave>

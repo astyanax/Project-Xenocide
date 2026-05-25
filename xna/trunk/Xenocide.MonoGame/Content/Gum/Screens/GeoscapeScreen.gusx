@@ -141,9 +141,6 @@
     <Variable Type="float" Name="cameraUpButton.Y" SetsValue="true">
       <Value xsi:type="xsd:float">164</Value>
     </Variable>
-    <Variable Type="ChildrenLayout" Name="ContainerInstance.ChildrenLayout" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
-    </Variable>
     <Variable Type="float" Name="ContainerInstance.Height" SetsValue="true">
       <Value xsi:type="xsd:float">100</Value>
     </Variable>
@@ -207,9 +204,6 @@
     <Variable Type="ChildrenLayout" Name="RightPanel.ChildrenLayout" SetsValue="true">
       <Value xsi:type="xsd:int">1</Value>
     </Variable>
-    <Variable Type="float" Name="RightPanel.Height" SetsValue="true">
-      <Value xsi:type="xsd:float">41.796875</Value>
-    </Variable>
     <Variable Type="DimensionUnitType" Name="RightPanel.HeightUnits" SetsValue="true">
       <Value xsi:type="xsd:int">1</Value>
     </Variable>
@@ -223,7 +217,7 @@
       <Value xsi:type="xsd:float">954</Value>
     </Variable>
     <Variable Type="float" Name="RightPanel.Y" SetsValue="true">
-      <Value xsi:type="xsd:float">-537</Value>
+      <Value xsi:type="xsd:float">0</Value>
     </Variable>
     <Variable Type="string" Name="statisticsButton.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">RightPanel</Value>
@@ -253,7 +247,7 @@
       <Value xsi:type="xsd:string">RightPanel</Value>
     </Variable>
     <Variable Type="string" Name="timeHourButton.TextInstance.Text" SetsValue="true">
-      <Value xsi:type="xsd:string">1 Hour</Value>
+      <Value xsi:type="xsd:string">1 Hr</Value>
     </Variable>
     <Variable Type="float" Name="timeHourButton.Width" SetsValue="true">
       <Value xsi:type="xsd:float">100</Value>
@@ -265,7 +259,7 @@
       <Value xsi:type="xsd:string">RightPanel</Value>
     </Variable>
     <Variable Type="string" Name="timeNormalButton.TextInstance.Text" SetsValue="true">
-      <Value xsi:type="xsd:string">5 Sec</Value>
+      <Value xsi:type="xsd:string">1 Min</Value>
     </Variable>
     <Variable Type="float" Name="timeNormalButton.Width" SetsValue="true">
       <Value xsi:type="xsd:float">100</Value>
@@ -278,42 +272,6 @@
     </Variable>
     <Variable Type="string" Name="timeStopButton.TextInstance.Text" SetsValue="true">
       <Value xsi:type="xsd:string">Stop</Value>
-    </Variable>
-    <Variable Type="string" Name="timeStopButton.Parent" SetsValue="true">
-      <Value xsi:type="xsd:string">RightPanel</Value>
-    </Variable>
-    <Variable Type="float" Name="timeStopButton.Width" SetsValue="true">
-      <Value xsi:type="xsd:float">100</Value>
-    </Variable>
-    <Variable Type="DimensionUnitType" Name="timeStopButton.WidthUnits" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
-    </Variable>
-    <Variable Type="string" Name="timeNormalButton.TextInstance.Text" SetsValue="true">
-      <Value xsi:type="xsd:string">1 Min</Value>
-    </Variable>
-    <Variable Type="string" Name="timeNormalButton.Parent" SetsValue="true">
-      <Value xsi:type="xsd:string">RightPanel</Value>
-    </Variable>
-    <Variable Type="float" Name="timeNormalButton.Width" SetsValue="true">
-      <Value xsi:type="xsd:float">100</Value>
-    </Variable>
-    <Variable Type="DimensionUnitType" Name="timeNormalButton.WidthUnits" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
-    </Variable>
-    <Variable Type="string" Name="timeHourButton.TextInstance.Text" SetsValue="true">
-      <Value xsi:type="xsd:string">1 Hr</Value>
-    </Variable>
-    <Variable Type="string" Name="timeHourButton.Parent" SetsValue="true">
-      <Value xsi:type="xsd:string">RightPanel</Value>
-    </Variable>
-    <Variable Type="float" Name="timeHourButton.Width" SetsValue="true">
-      <Value xsi:type="xsd:float">100</Value>
-    </Variable>
-    <Variable Type="DimensionUnitType" Name="timeHourButton.WidthUnits" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
-    </Variable>
-    <Variable Type="string" Name="timeDayButton.TextInstance.Text" SetsValue="true">
-      <Value xsi:type="xsd:string">1 Day</Value>
     </Variable>
     <Variable Type="float" Name="timeStopButton.Width" SetsValue="true">
       <Value xsi:type="xsd:float">100</Value>

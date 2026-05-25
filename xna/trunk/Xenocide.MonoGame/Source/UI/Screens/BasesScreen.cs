@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using Microsoft.Xna.Framework;
@@ -141,9 +142,30 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
-            // Window indicating where the 3D scene is
-            //... dimensions chosen to make 3D scene 512 x 512 at 600 x 800 resolution.
             sceneWindowRect = new UiRect(0.02f, 0.073f, 0.661f, 0.9264f);
+
+            if (GumRoot != null)
+            {
+                WireButton("newBaseButton", OnNewBase);
+                WireButton("baseInfoButton", ShowBaseInfoScreen);
+                WireButton("soldiersButton", OnSoldiersButton);
+                WireButton("equipCraftButton", OnEquipCraftButton);
+                WireButton("buildFacButton", OnBuildFacilitiesButton);
+                WireButton("produceButton", OnManufactureButton);
+                WireButton("transferButton", OnTransferButton);
+                WireButton("buyButton", OnBuyButton);
+                WireButton("sellButton", OnSellButton);
+                WireButton("geoscapeButton", OnGeoscapeButton);
+
+                basesListComboBox = new ComboBox();
+                AddChild(basesListComboBox);
+                Misc.PopulateHumanBasesList(basesListComboBox, selectedBase);
+                basesListComboBox.SelectionChanged += (s, a) => OnBaseSelectionChanged(s, EventArgs.Empty);
+
+                fundsText = new Label();
+                AddChild(fundsText);
+                return;
+            }
 
             // combo box to allow user to pick base to work on
             basesListComboBox = new ComboBox();

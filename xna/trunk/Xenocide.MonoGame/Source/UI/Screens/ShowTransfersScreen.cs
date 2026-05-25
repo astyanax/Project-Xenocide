@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using ProjectXenocide.Model.Geoscape;
@@ -67,6 +68,14 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
+            if (GumRoot != null)
+            {
+                WireButton("closeButton", OnCloseButton);
+                InitializeGrid();
+                PopulateGrid();
+                return;
+            }
+
             // The grid of items being shiped to this outpost
             InitializeGrid();
             PopulateGrid();
@@ -86,7 +95,7 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeGrid()
         {
             grid = new GridPanel();
-            RootContainer.AddChild(grid.Visual);
+            AddChild(grid.Visual);
             grid.AddColumn(Strings.SCREEN_SHOW_TRANSFERS_COLUMN_ITEM, (int)(0.69f * 800));
             grid.AddColumn(Strings.SCREEN_SHOW_TRANSFERS_COLUMN_QUANTITY, (int)(0.15f * 800));
             grid.AddColumn(Strings.SCREEN_SHOW_TRANSFERS_COLUMN_ETA, (int)(0.15f * 800));

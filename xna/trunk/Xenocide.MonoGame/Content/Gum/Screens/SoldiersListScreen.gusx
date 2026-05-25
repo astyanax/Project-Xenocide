@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScreenSave xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Name>XNetScreen</Name>
+  <Name>SoldiersListScreen</Name>
   <State>
     <Name>Default</Name>
     <Variable Type="string" Name="BGImage.Parent" SetsValue="true"><Value xsi:type="xsd:string">ContainerInstance</Value></Variable>
-    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true"><Value xsi:type="xsd:string">..\Textures\UI\XnetScreenBackground.png</Value></Variable>
+    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true"><Value xsi:type="xsd:string">..\Textures\UI\BasesScreenBackground.png</Value></Variable>
     <Variable Type="float" Name="BGImage.Height" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
     <Variable Type="DimensionUnitType" Name="BGImage.HeightUnits" SetsValue="true"><Value xsi:type="xsd:int">6</Value></Variable>
     <Variable Type="float" Name="BGImage.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
@@ -18,6 +18,14 @@
     <Variable Type="float" Name="ButtonBar.Width" SetsValue="true"><Value xsi:type="xsd:float">200</Value></Variable>
     <Variable Type="float" Name="ButtonBar.X" SetsValue="true"><Value xsi:type="xsd:float">1040</Value></Variable>
     <Variable Type="float" Name="ButtonBar.Y" SetsValue="true"><Value xsi:type="xsd:float">10</Value></Variable>
+    <Variable Type="string" Name="craftButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Assign To Craft</Value></Variable>
+    <Variable Type="string" Name="craftButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="craftButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="craftButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="equipButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Equip Soldier</Value></Variable>
+    <Variable Type="string" Name="equipButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="equipButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="equipButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
     <Variable Type="string" Name="closeButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Close</Value></Variable>
     <Variable Type="string" Name="closeButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
     <Variable Type="float" Name="closeButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
@@ -26,6 +34,8 @@
   <Instance Name="ContainerInstance" BaseType="Container" />
   <Instance Name="BGImage" BaseType="Sprite" />
   <Instance Name="ButtonBar" BaseType="Container" />
+  <Instance Name="craftButton" BaseType="XenocideButton" />
+  <Instance Name="equipButton" BaseType="XenocideButton" />
   <Instance Name="closeButton" BaseType="XenocideButton" />
   <Behaviors />
 </ScreenSave>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScreenSave xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>BaseInfoScreen</Name>
+  <State>
+    <Name>Default</Name>
+    <Variable Type="string" Name="BGImage.Parent" SetsValue="true"><Value xsi:type="xsd:string">ContainerInstance</Value></Variable>
+    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true"><Value xsi:type="xsd:string">..\Textures\UI\GeoscapeScreenBackground.png</Value></Variable>
+    <Variable Type="float" Name="BGImage.Height" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.HeightUnits" SetsValue="true"><Value xsi:type="xsd:int">6</Value></Variable>
+    <Variable Type="float" Name="BGImage.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+<Variable Type="float" Name="ContainerInstance.Height" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.HeightUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="float" Name="ContainerInstance.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="ChildrenLayout" Name="ButtonBar.ChildrenLayout" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="ButtonBar.Parent" SetsValue="true"><Value xsi:type="xsd:string">ContainerInstance</Value></Variable>
+    <Variable Type="float" Name="ButtonBar.Width" SetsValue="true"><Value xsi:type="xsd:float">200</Value></Variable>
+    <Variable Type="float" Name="ButtonBar.X" SetsValue="true"><Value xsi:type="xsd:float">1040</Value></Variable>
+    <Variable Type="float" Name="ButtonBar.Y" SetsValue="true"><Value xsi:type="xsd:float">10</Value></Variable>
+    <Variable Type="string" Name="transfersButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Transfers</Value></Variable>
+    <Variable Type="string" Name="transfersButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="transfersButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="transfersButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="storesButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Stores</Value></Variable>
+    <Variable Type="string" Name="storesButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="storesButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="storesButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="costsButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Costs</Value></Variable>
+    <Variable Type="string" Name="costsButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="costsButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="costsButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="okButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">OK</Value></Variable>
+    <Variable Type="string" Name="okButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="okButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="okButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+  </State>
+  <Instance Name="ContainerInstance" BaseType="Container" />
+  <Instance Name="BGImage" BaseType="Sprite" />
+  <Instance Name="ButtonBar" BaseType="Container" />
+  <Instance Name="transfersButton" BaseType="XenocideButton" />
+  <Instance Name="storesButton" BaseType="XenocideButton" />
+  <Instance Name="costsButton" BaseType="XenocideButton" />
+  <Instance Name="okButton" BaseType="XenocideButton" />
+  <Behaviors />
+</ScreenSave>

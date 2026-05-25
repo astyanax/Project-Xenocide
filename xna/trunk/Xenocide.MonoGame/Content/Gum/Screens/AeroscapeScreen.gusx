@@ -43,13 +43,10 @@
       <Value xsi:type="xsd:float">200</Value>
     </Variable>
     <Variable Type="float" Name="ButtonPanel.X" SetsValue="true">
-      <Value xsi:type="xsd:float">20</Value>
+      <Value xsi:type="xsd:float">1040</Value>
     </Variable>
     <Variable Type="float" Name="ButtonPanel.Y" SetsValue="true">
-      <Value xsi:type="xsd:float">900</Value>
-    </Variable>
-    <Variable Type="PositionUnitType" Name="ButtonPanel.YUnits" SetsValue="true">
-      <Value xsi:type="xsd:int">3</Value>
+      <Value xsi:type="xsd:float">10</Value>
     </Variable>
     <Variable Type="string" Name="closeBtn.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">ButtonPanel</Value>
@@ -61,9 +58,6 @@
       <Value xsi:type="xsd:float">100</Value>
     </Variable>
     <Variable Type="DimensionUnitType" Name="closeBtn.WidthUnits" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
-    </Variable>
-    <Variable Type="ChildrenLayout" Name="ContainerInstance.ChildrenLayout" SetsValue="true">
       <Value xsi:type="xsd:int">1</Value>
     </Variable>
     <Variable Type="float" Name="ContainerInstance.Height" SetsValue="true">

@@ -32,6 +32,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Text;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using ProjectXenocide.Assets;
@@ -72,7 +73,22 @@ namespace ProjectXenocide.UI.Screens
             SetView(0.005f, 0.0733f, 0.5038f, 0.4417f);
 
             if (GumRoot != null)
+            {
+                WireButton("closeButton", OnCloseButton);
+                InitEntriesTree();
+                entriesTree.Visual.X = 20;
+                entriesTree.Visual.Y = 80;
+                entriesTree.Visual.Width = 300;
+                entriesTree.Visual.Height = 400;
+
+                textWindow = new ListBox();
+                textWindow.Visual.X = 340;
+                textWindow.Visual.Y = 80;
+                textWindow.Visual.Width = 300;
+                textWindow.Visual.Height = 400;
+                AddChild(textWindow);
                 return;
+            }
 
             // Fake the list of items with a list box
             InitEntriesTree();
@@ -95,7 +111,7 @@ namespace ProjectXenocide.UI.Screens
         {
             // create the list box
             entriesTree = new ListBox();
-            RootContainer.AddChild(entriesTree);
+            AddChild(entriesTree);
 
             Dictionary<string, int> catNames = new Dictionary<string, int>();
             foreach (XNetEntry e in Xenocide.StaticTables.XNetEntryList)
@@ -141,7 +157,15 @@ namespace ProjectXenocide.UI.Screens
            Justification = "FxCop False Positive")]
         private void OnCloseButton(object sender, EventArgs e)
         {
-            ScreenManager.ScheduleScreen(new GeoscapeScreen());
+            if (Xenocide.DebugTesting)
+            {
+                Xenocide.DebugTesting = false;
+                ScreenManager.ScheduleScreen(new StartScreen());
+            }
+            else
+            {
+                ScreenManager.ScheduleScreen(new GeoscapeScreen());
+            }
         }
 
         /// <summary>User has selected an X-Net entry to display</summary>

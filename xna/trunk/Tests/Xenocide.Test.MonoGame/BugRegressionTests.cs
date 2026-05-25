@@ -1,4 +1,6 @@
+using System.IO;
 using System.Reflection;
+using System.Xml.Linq;
 
 using CeGui;
 
@@ -77,5 +79,47 @@ public class BugRegressionTests
         var result = (string)getMethod.Invoke(null, new object[] { "BUTTON_TIME_STOP" })!;
         Assert.NotNull(result);
         Assert.Equal("Stop", result);
+    }
+
+    [Fact]
+    public void GumX_AllScreenReferencesHaveGusxFiles()
+    {
+        var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+        string gumxPath = null!;
+        for (int i = 0; i < 10; i++) { dir = Path.GetDirectoryName(dir)!; var p = Path.Combine(dir, "Xenocide.MonoGame", "Content", "Gum", "Xenocide.gumx"); if (File.Exists(p)) { gumxPath = p; break; } }
+        Assert.True(gumxPath != null, "Could not find .gumx by searching up from assembly");
+
+        var screensDir = Path.Combine(Path.GetDirectoryName(gumxPath)!, "Screens");
+        Assert.True(Directory.Exists(screensDir), $"Screens directory not found: {screensDir}");
+
+        var xml = XDocument.Load(gumxPath);
+        XNamespace ns = xml.Root!.GetDefaultNamespace();
+        var references = xml.Root.Descendants(ns + "ScreenReference").Select(x => x.Attribute("Name")?.Value).Where(n => n != null).ToList();
+
+        var files = Directory.GetFiles(screensDir, "*.gusx").Select(Path.GetFileNameWithoutExtension).ToHashSet();
+
+        foreach (var name in references)
+            Assert.True(files.Contains(name!), $"ScreenReference '{name}' has no matching .gusx file in {screensDir}");
+    }
+
+    [Fact]
+    public void GumX_AllGusxFilesHaveScreenReferences()
+    {
+        var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+        string gumxPath = null!;
+        for (int i = 0; i < 10; i++) { dir = Path.GetDirectoryName(dir)!; var p = Path.Combine(dir, "Xenocide.MonoGame", "Content", "Gum", "Xenocide.gumx"); if (File.Exists(p)) { gumxPath = p; break; } }
+        Assert.True(gumxPath != null, "Could not find .gumx by searching up from assembly");
+
+        var screensDir = Path.Combine(Path.GetDirectoryName(gumxPath)!, "Screens");
+        Assert.True(Directory.Exists(screensDir), $"Screens directory not found: {screensDir}");
+
+        var xml = XDocument.Load(gumxPath);
+        XNamespace ns = xml.Root!.GetDefaultNamespace();
+        var referenceNames = xml.Root.Descendants(ns + "ScreenReference").Select(x => x.Attribute("Name")?.Value).Where(n => n != null).ToHashSet();
+
+        var files = Directory.GetFiles(screensDir, "*.gusx").Select(Path.GetFileNameWithoutExtension);
+
+        foreach (var file in files)
+            Assert.True(referenceNames.Contains(file!), $".gusx file '{file}' has no matching ScreenReference in .gumx");
     }
 }

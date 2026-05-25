@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using ProjectXenocide.Model;
@@ -69,8 +70,26 @@ namespace ProjectXenocide.UI.Screens
         protected override void CreateGumControls()
         {
             ProjectMgr.Update();
-
             FindIdleEngineers();
+
+            if (GumRoot != null)
+            {
+                WireButton("buildMoreButton", OnBuildMoreButton);
+                WireButton("buildLessButton", OnBuildLessButton);
+                WireButton("cancelBuildButton", OnCancelBuildButton);
+                WireButton("addIdleEngineersButton", OnAddIdleButton);
+                WireButton("moreEngineersButton", OnMoreButton);
+                WireButton("lessEngineersButton", OnLessButton);
+                WireButton("removeAllEngineersButton", OnRemoveAllButton);
+                WireButton("closeButton", OnCloseButton);
+
+                availableText = new Label() { Text = MakeIdleEngineersString() };
+                AddChild(availableText);
+
+                InitializeGrids();
+                PopulateProjectGrid();
+                return;
+            }
 
             availableText = new Label() { Text = MakeIdleEngineersString() };
             RootContainer.AddChild(availableText);
@@ -125,14 +144,14 @@ namespace ProjectXenocide.UI.Screens
             projectGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_ENGINEERS, 105);
             projectGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_BUILD_QUANTITY, 105);
             projectGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_ETA, 105);
-            RootContainer.AddChild(projectGrid.Visual);
+            AddChild(projectGrid.Visual);
             projectGrid.SelectionChanged += OnProjectGridSelectionChanged;
 
             requirementsGrid = new GridPanel();
             requirementsGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_RESOURCE, 350);
             requirementsGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_QUANTITY_NEEDED, 160);
             requirementsGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_QUANTITY_AVAILABLE, 175);
-            RootContainer.AddChild(requirementsGrid.Visual);
+            AddChild(requirementsGrid.Visual);
         }
 
         private void PopulateProjectGrid()

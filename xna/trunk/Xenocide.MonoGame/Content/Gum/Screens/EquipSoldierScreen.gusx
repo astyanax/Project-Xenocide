@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScreenSave xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Name>XNetScreen</Name>
+  <Name>EquipSoldierScreen</Name>
   <State>
     <Name>Default</Name>
     <Variable Type="string" Name="BGImage.Parent" SetsValue="true"><Value xsi:type="xsd:string">ContainerInstance</Value></Variable>
-    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true"><Value xsi:type="xsd:string">..\Textures\UI\XnetScreenBackground.png</Value></Variable>
+    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true"><Value xsi:type="xsd:string">..\Textures\UI\GeoscapeScreenBackground.png</Value></Variable>
     <Variable Type="float" Name="BGImage.Height" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
     <Variable Type="DimensionUnitType" Name="BGImage.HeightUnits" SetsValue="true"><Value xsi:type="xsd:int">6</Value></Variable>
     <Variable Type="float" Name="BGImage.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
@@ -22,10 +22,20 @@
     <Variable Type="string" Name="closeButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
     <Variable Type="float" Name="closeButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
     <Variable Type="DimensionUnitType" Name="closeButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="leftButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">&lt; Left</Value></Variable>
+    <Variable Type="string" Name="leftButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="leftButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="leftButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="rightButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Right &gt;</Value></Variable>
+    <Variable Type="string" Name="rightButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
+    <Variable Type="float" Name="rightButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
+    <Variable Type="DimensionUnitType" Name="rightButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
   </State>
   <Instance Name="ContainerInstance" BaseType="Container" />
   <Instance Name="BGImage" BaseType="Sprite" />
   <Instance Name="ButtonBar" BaseType="Container" />
   <Instance Name="closeButton" BaseType="XenocideButton" />
+  <Instance Name="leftButton" BaseType="XenocideButton" />
+  <Instance Name="rightButton" BaseType="XenocideButton" />
   <Behaviors />
 </ScreenSave>

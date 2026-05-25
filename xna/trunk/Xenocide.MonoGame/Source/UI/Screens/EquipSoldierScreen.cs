@@ -35,6 +35,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using ProjectXenocide.Utils;
@@ -148,6 +149,29 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
+            if (GumRoot != null)
+            {
+                WireButton("closeButton", OnCloseButton);
+                WireButton("leftButton", OnLeftButton);
+                WireButton("rightButton", OnRightButton);
+
+                ammoText = new Label();
+                AddChild(ammoText);
+                ShowAmmoString();
+
+                AddStaticText("SCREEN_EQUIP_SOLDIER_LEFT_SHOULDER");
+                AddStaticText("SCREEN_EQUIP_SOLDIER_RIGHT_SHOULDER");
+                AddStaticText("SCREEN_EQUIP_SOLDIER_LEFT_HAND");
+                AddStaticText("SCREEN_EQUIP_SOLDIER_RIGHT_HAND");
+                AddStaticText("SCREEN_EQUIP_SOLDIER_LEFT_LEG");
+                AddStaticText("SCREEN_EQUIP_SOLDIER_RIGHT_LEG");
+                AddStaticText("SCREEN_EQUIP_SOLDIER_BACKPACK");
+                AddStaticText("SCREEN_EQUIP_SOLDIER_BELT");
+
+                controller.CreateGumControls();
+                return;
+            }
+
             // Text detailing ammo in weapon/clip
             ammoText = new Label();
             RootContainer.AddChild(ammoText);
@@ -186,7 +210,7 @@ namespace ProjectXenocide.UI.Screens
         {
             Label label = new Label();
             label.Text = XenocideResourceManager.Get(resourceName);
-            RootContainer.AddChild(label);
+            AddChild(label);
         }
 
         #endregion Create the Gum controls

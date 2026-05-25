@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using ProjectXenocide.Model.Geoscape;
@@ -69,6 +70,30 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
+            if (GumRoot != null)
+            {
+                WireButton("moveMoreButton", OnMoveMoreButton);
+                WireButton("moveLessButton", OnMoveLessButton);
+                WireButton("confirmButton", OnConfirmButton);
+                WireButton("cancelButton", OnCancelButton);
+
+                sourceText = new Label() { Text = Util.StringFormat(Strings.SCREEN_TRANSFER_SOURCE, SourceOutpost.Name) };
+                AddChild(sourceText);
+
+                totalCostText = new Label();
+                AddChild(totalCostText);
+                UpdateTotalCost();
+
+                outpostsListComboBox = new ComboBox();
+                AddChild(outpostsListComboBox);
+                Misc.PopulateHumanBasesList(outpostsListComboBox, destinationOutpostIndex);
+                outpostsListComboBox.SelectionChanged += (s, a) => OnOutpostSelectionChanged(s, EventArgs.Empty);
+
+                InitializeGrid();
+                PopulateGrid();
+                return;
+            }
+
             sourceText = new Label() { Text = Util.StringFormat(Strings.SCREEN_TRANSFER_SOURCE, SourceOutpost.Name) };
             RootContainer.AddChild(sourceText);
 
@@ -115,7 +140,7 @@ namespace ProjectXenocide.UI.Screens
             grid.AddColumn(Strings.SCREEN_TRANSFER_COLUMN_QUANTITY_IN_BASE, 84);
             grid.AddColumn(Strings.SCREEN_TRANSFER_COLUMN_QUANTITY_DESTINAION, 105);
             grid.AddColumn(Strings.SCREEN_TRANSFER_COLUMN_QUANTITY, 84);
-            RootContainer.AddChild(grid.Visual);
+            AddChild(grid.Visual);
         }
 
         private void PopulateGrid()

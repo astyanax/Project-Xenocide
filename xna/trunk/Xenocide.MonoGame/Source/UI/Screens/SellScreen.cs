@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using ProjectXenocide.Model.Geoscape;
@@ -67,6 +68,27 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
+            if (GumRoot != null)
+            {
+                WireButton("sellMoreButton", OnSellMoreButton);
+                WireButton("sellLessButton", OnSellLessButton);
+                WireButton("confirmButton", OnConfirmButton);
+                WireButton("cancelButton", OnCancelButton);
+
+                fundsText = new Label();
+                AddChild(fundsText);
+                fundsText.Text = Util.StringFormat(Strings.SCREEN_SELL_FUNDS,
+                    Xenocide.GameState.GeoData.XCorp.Bank.CurrentBalance);
+
+                totalValueText = new Label();
+                AddChild(totalValueText);
+                UpdateTotalValue();
+
+                InitializeGrid();
+                PopulateGrid();
+                return;
+            }
+
             // add text giving the available funds
             fundsText = new Label();
             RootContainer.AddChild(fundsText);
@@ -112,7 +134,7 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeGrid()
         {
             grid = new GridPanel();
-            RootContainer.AddChild(grid.Visual);
+            AddChild(grid.Visual);
             grid.AddColumn(Strings.SCREEN_SELL_COLUMN_ITEM, (int)(0.58f * 800));
             grid.AddColumn(Strings.SCREEN_SELL_COLUMN_QUANTITY_IN_BASE, (int)(0.12f * 800));
             grid.AddColumn(Strings.SCREEN_SELL_COLUMN_VALUE_PER_UNIT, (int)(0.13f * 800));

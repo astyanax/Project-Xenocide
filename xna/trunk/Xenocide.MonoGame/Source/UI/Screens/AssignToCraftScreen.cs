@@ -32,6 +32,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using ProjectXenocide.Model.Geoscape;
@@ -71,6 +72,28 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
+            if (GumRoot != null)
+            {
+                WireButton("closeButton", OnCloseButton);
+                WireButton("addXcapButton", OnAddXcapButton);
+                WireButton("removeXcapButton", OnRemoveXcapButton);
+                WireButton("addSoldierButton", OnAddSoldierButton);
+                WireButton("removeSoldierButton", OnRemoveSoldierButton);
+                WireButton("soldierUpButton", OnSoldierUpButton);
+                WireButton("soldierDownButton", OnSoldierDownButton);
+
+                baseNameText = new Label() { Text = Util.StringFormat(Strings.SCREEN_EQUIP_CRAFT_BASE_NAME, SelectedOutpost.Name) };
+                AddChild(baseNameText);
+
+                InitializeCraftGrid();
+                PopulateCraftGrid();
+                InitializeSoldierGrid();
+                PopulateSoldierGrid();
+                InitializeXcapGrid();
+                PopulateXcapGrid();
+                return;
+            }
+
             baseNameText = new Label() { Text = Util.StringFormat(Strings.SCREEN_EQUIP_CRAFT_BASE_NAME, SelectedOutpost.Name) };
             RootContainer.AddChild(baseNameText);
 
@@ -129,7 +152,7 @@ namespace ProjectXenocide.UI.Screens
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_AMMO, 90);
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_CREW, 90);
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_HWP, 90);
-            RootContainer.AddChild(craftGrid.Visual);
+            AddChild(craftGrid.Visual);
 
             craftGrid.SelectionChanged += OnCraftGridSelectionChanged;
         }
@@ -140,7 +163,7 @@ namespace ProjectXenocide.UI.Screens
             soldierGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_SOLDIER_NAME, 280);
             soldierGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_ASSIGNED_CRAFT, 230);
             soldierGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_POSITION_CRAFT, 160);
-            RootContainer.AddChild(soldierGrid.Visual);
+            AddChild(soldierGrid.Visual);
         }
 
         private void InitializeXcapGrid()
@@ -149,7 +172,7 @@ namespace ProjectXenocide.UI.Screens
             xcapGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_XCAP_TYPE, 350);
             xcapGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_AVAILABLE, 175);
             xcapGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_ASSIGNED_COUNT, 170);
-            RootContainer.AddChild(xcapGrid.Visual);
+            AddChild(xcapGrid.Visual);
         }
 
 

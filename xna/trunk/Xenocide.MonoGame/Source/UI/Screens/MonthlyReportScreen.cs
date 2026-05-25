@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Gum.Forms;
 using Gum.Forms.Controls;
 
 using ProjectXenocide.Model;
@@ -68,6 +69,24 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
+            if (GumRoot != null)
+            {
+                WireButton("okButton", OnOkButton);
+
+                monthText = new Label();
+                AddChild(monthText);
+                monthText.Text = Util.StringFormat(Strings.SCREEN_MONTHLYREPORT_MONTH,
+                    Xenocide.GameState.GeoData.GeoTime.ToString().Substring(0, 7));
+
+                scoreText = new Label();
+                AddChild(scoreText);
+                scoreText.Text = MakeScoreString();
+
+                InitializeGrid();
+                PopulateGrid();
+                return;
+            }
+
             // add text giving the month
             monthText = new Label();
             RootContainer.AddChild(monthText);
@@ -101,7 +120,7 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeGrid()
         {
             grid = new GridPanel();
-            RootContainer.AddChild(grid.Visual);
+            AddChild(grid.Visual);
             grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_COUNTRY, (int)(0.39f * 800));
             grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_ATTITUDE, (int)(0.20f * 800));
             grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_FUNDS, (int)(0.20f * 800));

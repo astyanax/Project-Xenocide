@@ -35,6 +35,7 @@ using System.Threading;
 
 using Gum.Forms;
 using Gum.Forms.Controls;
+using Gum.Wireframe;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -309,9 +310,17 @@ namespace ProjectXenocide.UI.Screens
                 RootContainer.AddChild(control);
         }
 
+        private static readonly Dictionary<string, FontId> FontNameMap = new()
+        {
+            ["GeoTime"] = FontId.Arial,
+            ["GeoTimeBig"] = FontId.Arial,
+            ["XenoBig"] = FontId.Arial,
+            ["XenoSmall"] = FontId.Arial,
+        };
+
         private static void SetTimeFont(FrameworkElement widget, string fontName)
         {
-            // Font/color configuration moved to Gum styles
+            ApplyFont(widget, fontName);
         }
 
         /// <summary>
@@ -321,7 +330,26 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="fontName"></param>
         private static void SetFont(FrameworkElement widget, string fontName)
         {
-            // Font configuration moved to Gum styles
+            ApplyFont(widget, fontName);
+        }
+
+        private static void ApplyFont(FrameworkElement widget, string fontName)
+        {
+            var fontId = FontNameMap.TryGetValue(fontName, out var id) ? id : FontId.Arial;
+            string fontFamily = fontId == FontId.Arial ? "Arial" : fontName;
+
+            switch (widget)
+            {
+                case Button btn:
+                {
+                    var textInstance = btn.Visual.GetChildByNameRecursively("TextInstance") as GraphicalUiElement;
+                    textInstance?.SetProperty("Font", fontFamily);
+                    break;
+                }
+                case Label lbl:
+                    lbl.Visual.SetProperty("Font", fontFamily);
+                    break;
+            }
         }
 
         #endregion Create the CeGui widgets

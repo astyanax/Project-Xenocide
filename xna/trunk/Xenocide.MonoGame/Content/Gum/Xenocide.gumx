@@ -53,10 +53,28 @@
   <ShowLocalizationInGum>true</ShowLocalizationInGum>
   <CurrentLanguageIndex>0</CurrentLanguageIndex>
   <ScreenReference Name="AeroscapeScreen" />
+  <ScreenReference Name="AssignToCraftScreen" />
+  <ScreenReference Name="BaseInfoScreen" />
+  <ScreenReference Name="BasesScreen" />
+  <ScreenReference Name="BattlescapeReportScreen" />
   <ScreenReference Name="BattlescapeScreen" />
+  <ScreenReference Name="EquipCraftScreen" />
+  <ScreenReference Name="EquipSoldierScreen" />
   <ScreenReference Name="GeoscapeScreen" />
-  <ScreenReference Name="MainMenu" />
+  <ScreenReference Name="LoadSaveGameScreen" />
+  <ScreenReference Name="MakeTransferScreen" />
+  <ScreenReference Name="Manufacture" />
+  <ScreenReference Name="MonthlyCosts" />
+  <ScreenReference Name="MonthlyReportScreen" />
+  <ScreenReference Name="PurchaseScreen" />
+  <ScreenReference Name="Research" />
+  <ScreenReference Name="SellScreen" />
+  <ScreenReference Name="ShowTransfers" />
+  <ScreenReference Name="SoldiersListScreen" />
   <ScreenReference Name="StartScreen" />
+  <ScreenReference Name="StatisticsScreen" />
+  <ScreenReference Name="StoresScreen" />
+  <ScreenReference Name="XNetScreen" />
   <ComponentReference Name="Controls/ButtonClose" />
   <ComponentReference Name="Controls/ButtonConfirm" />
   <ComponentReference Name="Controls/ButtonDeny" />
