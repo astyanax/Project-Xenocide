@@ -98,8 +98,6 @@ namespace ProjectXenocide.UI.Screens
 
         protected abstract void CreateGumControls();
 
-        protected override void CreateCeguiWidgets() { }
-
         protected Button WireButton(string name, EventHandler handler)
         {
             if (GumRoot == null)

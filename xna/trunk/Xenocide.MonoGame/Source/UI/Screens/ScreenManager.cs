@@ -30,8 +30,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-using CeGui.Renderers.Xna;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -382,31 +380,6 @@ namespace ProjectXenocide.UI.Screens
 
         #region Fields
 
-        /// <summary>
-        /// Retreive the Gui Sheet that is the root node of the tree of all CeGui#
-        /// windows on the display
-        /// </summary>
-        /// <returns>the Gui Sheet</returns>
-        /// RK:  BTW use a property named Sheet instead.
-        /// DT: Except the Gui Sheet ISN'T owned by the ScreenManager.
-        public static CeGui.GuiSheet RootGuiSheet
-        {
-            get { return (CeGui.GuiSheet)CeGui.WindowManager.Instance.GetWindow("Root"); }
-        }
-
-        /// <summary>
-        /// The CeGui gui builder used to create widgets (that we later attach to screens/dialogs)
-        /// </summary>
-        public CeGui.GuiBuilder GuiBuilder { get { return guiBuilder; } }
-
-        /// <summary>
-        /// The CeGui gui builder used to create widgets (that we later attach to screens/dialogs)
-        /// </summary>
-        private CeGui.GuiBuilder guiBuilder = new CeGui.WidgetSets.Taharez.TLGuiBuilder();
-
-        /// <summary>
-        /// The dialogs that are waiting to be shown to the user
-        /// </summary>
         private List<Dialog> queuedDialogs = new List<Dialog>();
 
         /// <summary>

@@ -23,15 +23,6 @@ namespace ProjectXenocide.UI.Dialogs
 
         protected abstract void CreateGumWidgets();
 
-        protected override void CreateCeguiWidgets()
-        {
-        }
-
-        protected override CeGui.Window ConstructRootWidget()
-        {
-            return null;
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing && RootContainer != null)

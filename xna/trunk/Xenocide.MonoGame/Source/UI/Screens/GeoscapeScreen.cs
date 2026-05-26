@@ -27,7 +27,6 @@ San Francisco, California, 94105, USA.
 #region Using Statements
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
@@ -188,9 +187,6 @@ namespace ProjectXenocide.UI.Screens
             timeNormalButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TIME_X60") };
             timeHourButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TIME_X3600") };
             timeDayButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TIME_X86400") };
-            AddButtonSound(timeNormalButton.Text, SoundId.PlanetViewSpeedSlow);
-            AddButtonSound(timeHourButton.Text, SoundId.PlanetViewSpeedFast);
-            AddButtonSound(timeDayButton.Text, SoundId.PlanetViewSpeedVeryFast);
 
             interceptButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_INTERCEPT") };
             basesButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BASES") };
@@ -310,24 +306,15 @@ namespace ProjectXenocide.UI.Screens
                 RootContainer.AddChild(control);
         }
 
-        private static readonly Dictionary<string, FontId> FontNameMap = new()
-        {
-            ["GeoTime"] = FontId.Arial,
-            ["GeoTimeBig"] = FontId.Arial,
-            ["XenoBig"] = FontId.Arial,
-            ["XenoSmall"] = FontId.Arial,
-        };
-
         private static void SetTimeFont(FrameworkElement widget, string fontName)
         {
             ApplyFont(widget, fontName);
         }
 
         /// <summary>
-        /// Set a widget's font
+        /// Set a widget's font using its legacy CeGui font name.
+        /// Resolves via FontRegistry.FontNameMap, defaulting to Arial.
         /// </summary>
-        /// <param name="widget"></param>
-        /// <param name="fontName"></param>
         private static void SetFont(FrameworkElement widget, string fontName)
         {
             ApplyFont(widget, fontName);
@@ -335,8 +322,8 @@ namespace ProjectXenocide.UI.Screens
 
         private static void ApplyFont(FrameworkElement widget, string fontName)
         {
-            var fontId = FontNameMap.TryGetValue(fontName, out var id) ? id : FontId.Arial;
-            string fontFamily = fontId == FontId.Arial ? "Arial" : fontName;
+            var fontId = FontRegistry.FontNameMap.TryGetValue(fontName, out var id) ? id : FontId.Arial;
+            string fontFamily = FontRegistry.GetFontFamily(fontId);
 
             switch (widget)
             {

@@ -34,9 +34,6 @@ using System.Linq;
 
 using AudioSystem;
 
-using CeGui;
-using CeGui.Renderers.Xna;
-
 using Gum.DataTypes;
 
 using Microsoft.Xna.Framework;
@@ -63,7 +60,6 @@ namespace ProjectXenocide
     public class Xenocide : Microsoft.Xna.Framework.Game
     {
         private GraphicsDeviceManager graphics;
-        private GuiManager gui;
         private static ScreenManager screenManager;
         private static Xenocide instance;
         private KeyboardState _prevKeyState;
@@ -99,13 +95,11 @@ namespace ProjectXenocide
             graphics.PreferredBackBufferHeight = 1024;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            gui = new GuiManager(this);
             screenManager = new ScreenManager();
             staticTables = new StaticTables();
             staticTables.Populate();
             gameBalance = new GameBalanceClass(Difficulty.Easy);
             gameState = new GameState();
-            Components.Add(gui);
         }
 
         /// <summary>
@@ -137,11 +131,12 @@ namespace ProjectXenocide
             base.Initialize();
 
             InitializeGameOptions();
-            InitializeCegui();
             InitializeAudioSystem();
 
             gumProject = GumService.Default.Initialize(this, "Gum/Xenocide.gumx");
             ValidateGumx();
+
+            screenManager.ScheduleScreen(new UI.Screens.StartScreen());
 
             var profileMax = GraphicsDevice.GraphicsProfile == GraphicsProfile.HiDef ? 4096 : 2048;
             Console.WriteLine("MaxTextureSize (profile): {0} ({1})", profileMax, GraphicsDevice.GraphicsProfile);
@@ -157,61 +152,6 @@ namespace ProjectXenocide
                 if (!File.Exists(path))
                     Console.Error.WriteLine("GumX validation: MISSING {0}", path);
             }
-        }
-
-        /// <summary>
-        /// Set up CeGui to do the work
-        /// </summary>
-        private static void InitializeCegui()
-        {
-            // When the gui imagery side of things is set up, we should load in a font.
-            // You should always load in at least one font, this is to ensure that there
-            // is a default available for any gui element which needs to draw text.
-            // The first font you load is automatically set as the initial default font,
-            // although you can change the default later on if so desired.  Again, it is
-            // possible to list fonts to be automatically loaded as part of a scheme, so
-            // this step may not usually be performed explicitly.
-            //
-            // Fonts are loaded via the FontManager singleton.
-            FontManager.Instance.CreateFont("Default", "Arial", 8, FontFlags.None);
-            FontManager.Instance.CreateFont("Xeno", "Gotthard", 8, FontFlags.None);
-            FontManager.Instance.CreateFont("XenoBig", "Gotthard", 10, FontFlags.Bold);
-            FontManager.Instance.CreateFont("XenoSmall", "Gotthard", 6, FontFlags.None);
-            FontManager.Instance.CreateFont("LargeBaseName", "Arial", 24, FontFlags.Bold);
-            FontManager.Instance.CreateFont("GeoTime", "OCR A Extended", 10, FontFlags.Bold);
-            FontManager.Instance.CreateFont("GeoTimeBig", "OCR A Extended", 18, FontFlags.Bold);
-            GuiSystem.Instance.SetDefaultFont("Default");
-
-            // The next thing we do is to set a default mouse cursor image.  This is
-            // not strictly essential, although it is nice to always have a visible
-            // cursor if a window or widget does not explicitly set one of its own.
-            //
-            // This is a bit hacky since we're assuming the TaharezLook image set, referenced
-            // below, will always be available.
-            GuiSystem.Instance.SetDefaultMouseCursor(
-              ImagesetManager.Instance.GetImageset("TaharezLook").GetImage("MouseArrow")
-            );
-
-            // Now that the system is initialised, we can actually create some UI elements,
-            // for this first example, a full-screen 'root' window is set as the active GUI
-            // sheet, and then a simple frame window will be created and attached to it.
-            //
-            // All windows and widgets are created via the WindowManager singleton.
-            WindowManager winMgr = WindowManager.Instance;
-
-            // Here we create a "DefaultWindow". This is a native type, that is, it does not
-            // have to be loaded via a scheme, it is always available. One common use for the
-            // DefaultWindow is as a generic container for other windows. Its size defaults
-            // to 1.0f x 1.0f using the relative metrics mode, which means when it is set as
-            // the root GUI sheet window, it will cover the entire display. The DefaultWindow
-            // does not perform any rendering of its own, so is invisible.
-            //
-            // Create a DefaultWindow called 'Root', and set as the GUI root window 
-            // (also known as the GUI "sheet"), so the gui we set up will be visible.
-            GuiSystem.Instance.GuiSheet = (GuiSheet)winMgr.CreateWindow("DefaultWindow", "Root");
-
-            // And load the start Screen
-            screenManager.ScheduleScreen(new UI.Screens.StartScreen());
         }
 
         /// <summary>

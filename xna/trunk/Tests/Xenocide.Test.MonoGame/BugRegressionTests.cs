@@ -2,20 +2,10 @@ using System.IO;
 using System.Reflection;
 using System.Xml.Linq;
 
-using CeGui;
-
 namespace Xenocide.Test.MonoGame;
 
 public class BugRegressionTests
 {
-    [Fact]
-    public void WindowSheet_CanCastToGuiSheet()
-    {
-        var window = WindowManager.Instance.GetWindow("Root");
-        var sheet = (GuiSheet)window;
-        Assert.NotNull(sheet);
-    }
-
     [Fact]
     public void Scheduler_TestAddRemove_WithFutureDates()
     {
@@ -62,13 +52,6 @@ public class BugRegressionTests
     {
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content", "Models", "Characters", "Alien", "Morlock.xnb");
         Assert.True(File.Exists(path), $"Expected Morlock.xnb at {path}");
-    }
-
-    [Fact]
-    public void CreateButton_SetsName()
-    {
-        var button = GuiBuilder.CreateButton("test_button_id");
-        Assert.Equal("test_button_id", button.Name);
     }
 
     [Fact]

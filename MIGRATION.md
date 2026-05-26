@@ -244,39 +244,43 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 
 **All 27 screens + 13 dialogs converted to Gum.** Conversion is complete; remaining items are manual verification, CeGui stubs removal, and polish.
 
-#### Phase 4.6: Cleanup
-- [x] Remove 10 unused `.layout` files from `Content/Layouts/` — ✅ Deleted
-- [x] Remove `Content\**\*.layout` glob from `.csproj` — ✅ Removed
-- [x] Remove `Frame(string, string)` layout constructor — ✅ Removed
-- [x] Remove `Dialog(string)` layout constructor — ✅ Removed
-- [x] Remove `layoutFilename` field from `Frame.cs` — ✅ Removed
-- [ ] Remove `CeGuiStubs.cs` — not yet; still needed by `Frame.cs` (CeGui.Window, CeGui.Size, CeGui.Point, CeGui.GuiSheet, CeGui.WindowManager), `Screen.cs` (CeGui.Widgets.StaticImage, ImagesetManager, GuiSystem), `BattlescapeScreen.cs` (CeGui.Widgets.StaticImage, CeGui.MouseEventHandler), `Xenocide.cs` (GuiManager, FontManager, GuiSystem, WindowManager)
-- [ ] Remove `using CeGui;` and `using CeGui.Renderers.Xna;` from all game files
-- [ ] Remove `InitializeCegui()` from `Xenocide.cs`
-- [ ] Remove `System.Drawing` using from CeGuiStubs.cs
-- [ ] **Manual: You** — verify full build with 0 errors
-- [ ] **Manual: You** — run game and verify all screens render and function
+#### Phase 4.6: CeGui Stubs Teardown
+- [x] Remove `CeGuiStubs.cs` — ✅ Deleted (all 21 CeGui type references removed from codebase)
+- [x] Remove all `using CeGui;` and `using CeGui.Renderers.Xna;` from game files — ✅ 7 files cleaned (Frame.cs, Screen.cs, Dialog.cs, GumDialog.cs, ScreenManager.cs, Xenocide.cs, BugRegressionTests.cs)
+- [x] Remove `InitializeCegui()` from `Xenocide.cs` — ✅ Replaced with inline `screenManager.ScheduleScreen(new StartScreen())`
+- [x] Remove `GuiManager` field from `Xenocide.cs` — ✅ Deleted
+- [x] Delete `IScreenManager.cs` — ✅ Deleted (was unimplemented dead code)
+- [x] Rewrite `Frame.cs` — ✅ Removed CeGui constructor parameter, Show(), Dispose(), Enable(), widget helper methods (AddButton, AddSlider, AddCheckbox, AddStaticText, AddEditBox, AddStaticImageButton, AddGrid, AddWidget, OnPlayButtonSound, AddButtonSound, CalculatePosition, ConstructRootWidget, CreateCeguiWidgets, GuiSheet, GuiBuilder, RootWidget). Kept: CeguiId, ScreenManager, LoadContent, UnloadContent, SaveState, HandleEscape, EnableButtonSounds, Visible, Enable, DefaultButtonClickSound.
+- [x] Rewrite `Screen.cs` — ✅ Removed ConstructRootWidget with CeGui.StaticImage, LoadBackgroundImage. Background handled by GumScreen SpriteBatch.
+- [x] Rewrite `Dialog.cs` — ✅ Removed CeGui.Window ConstructRootWidget override, CeGui.FrameWindow creation.
+- [x] Rewrite `GumDialog.cs` — ✅ Removed CeGui.Window ConstructRootWidget and CreateCeguiWidgets overrides.
+- [x] Clean `ScreenManager.cs` — ✅ Removed RootGuiSheet, GuiBuilder static properties; kept dialog queue infrastructure.
+- [x] Fix `GeoscapeScreen.cs` — ✅ Removed AddButtonSound calls from CeGui fallback path.
+- [x] Fix test project — ✅ Removed 2 CeGui-dependent tests (WindowSheet_CanCastToGuiSheet, CreateButton_SetsName).
+- [x] Build produces 0 errors; 5/5 tests pass; game launches with full screen navigation.
 
-#### Phase 4.7: UI Polish (Cursor, Backgrounds, Fonts)
+**CeGui# is now completely removed from the codebase.** No stubs, no usings, no dead code. The game runs on pure MonoGame + Gum.
+
+#### Phase 4.7: UI Polish & Performance
 - [x] Enable hardware cursor: `IsMouseVisible = true` in `Xenocide()` — ✅ Done
 - [x] Implement software cursor from TaharezLook spritesheet (`Source/UI/SoftwareCursor.cs`) — ✅ Done
-  - Loads `Content/Textures/UI/XenoNew.png`, renders `MouseArrow` region (142,127, 24x24) at mouse position
-  - `DrawableGameComponent` with `DrawOrder = int.MaxValue` ensures cursor on top of all UI
-  - Disables HW cursor when active
-- [x] UI background rendering in `GumScreen.Show()` — ✅ Done
-  - Loads background texture from screen's `BackgroundFilename` via `Texture2D.FromFile()`
-  - Draws full-screen via `SpriteBatch` in `GumScreen.Draw()` before 3D/Gum rendering
-  - `base.Draw()` calls added to all 7 screens that override `Draw()` (PolarScreen, BasesScreen, BattlescapeScreen, StatisticsScreen, CreditsScreen, EquipSoldierScreen)
-  - Backgrounds rendered: StartScreen, BasesScreen (×2), GeoscapeScreen, XNetScreen
-- [x] Register XenoNew.png in `Content.mgcb` — ✅ Done (moved to `Content/Textures/UI/XenoNew.png`)
-- [x] Create 5 additional `.spritefont` files in `Content/SpriteFonts/` — ✅ Done
-  - `Xeno.spritefont` (Arial 8), `XenoBig.spritefont` (Arial 10 Bold)
-  - `LargeBaseName.spritefont` (Arial 24 Bold)
-  - `GeoTime.spritefont` (Consolas 10 Bold), `GeoTimeBig.spritefont` (Consolas 18 Bold)
-- [x] Register all spritefonts in `Content.mgcb` and `AssetRegistry.FontPaths` — ✅ Done
-- [ ] **Remaining: Gum theme/layout** — Create `.gumx` project file for button theming (TaharezLook spritesheet), proper UI layouts, and font configuration
-- [ ] **Remaining: CeGui Frame/Dialog replacement** — Replace `Frame.cs` CeGui dependency with Gum-native base class
-- [ ] **Remaining: BattlescapeScreen CeGui dependency** — Replace `CeGui.Widgets.StaticImage` with Gum-native viewport
+- [x] UI background rendering in `GumScreen.Show()` via `SpriteBatch` — ✅ Done
+- [x] Register XenoNew.png in `Content.mgcb` — ✅ Done
+- [x] Create 5 additional `.spritefont` files — ✅ Done (Xeno, XenoBig, LargeBaseName, GeoTime, GeoTimeBig)
+- [x] Register all spritefonts in `Content.mgcb` — ✅ Done
+- [x] Gum `.gumx` project with 23 screen layouts + XenocideButton component — ✅ Done
+- [x] All 24 screens converted to `.gusx` layouts (CreditsScreen exempt) — ✅ Done
+- [x] Programmatic control positioning fixed in 14 screens (overlapping text bug) — ✅ Done
+- [x] Content preloading (Earth textures, skybox, all XNet models) — ✅ Done
+- [x] `ProfileTimer` utility for debugging performance — ✅ Done
+- [x] XNet `PopulateEntryText` 88x speedup (2660ms → 30ms) — ✅ Done
+- [x] XNet scaling matrix cached alongside models — ✅ Done
+- [x] Save/load UX (success messages, mode-dependent button text) — ✅ Done
+- [x] Save path fix (AppData directory, file/directory conflict handling) — ✅ Done
+- [x] IntPtr serialization fix in `ModelJsonConverter` — ✅ Done
+- [x] BasesScreen NRE fix (WireButton return value not saved) — ✅ Done
+- [ ] **Remaining:** Software cursor polish (hotspot, context-sensitive cursors, HW/SW toggle)
+- [ ] **Remaining:** Gum dialog `.gusx` file conversion (13 dialogs currently programmatic)
 - [ ] **Manual: You** — verify backgrounds render correctly on each screen
 - [ ] **Manual: You** — verify software cursor renders and tracks mouse
 
@@ -355,19 +359,16 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 - FMOD Ex wrapper files (`fmod.cs`, `fmod_dsp.cs`, `fmodex.dll`) remain in legacy branches only — not carried forward
 
 ### Phase 6: Content Pipeline Rebuild
-- [x] Import 3D models (.fbx, .x) into MGCB — ✅ 37 model entries registered (all .X files + most .FBX)
-- [x] Update shaders (.fx) for D3D11 profile — ✅ Already in .mgcb (GeoscapeShader, skybox)
-- [x] Set up spritefont in MGCB — ✅ SpriteFont1 + 5 additional fonts registered
-- [x] Import all textures — ✅ 3 textures in .mgcb; others loaded via direct file (Texture2D.FromFile)
-- [x] Register all 16 audio .ogg files — ✅ Done in Phase 5
-- [x] Add missing facility models (17 .x files) — ✅ generalstorage through neural_shield
-- [x] Add missing XCorps.X default model — ✅ Used by XNet screen
-- [x] Fix `Content\` double-prefix path bugs — ✅ XNetScene.cs + CreditsScreen.cs
-- [x] 3 FBX models converted + textures placed — ✅ FemaleShirt, Viper, Barracks compile with 0 errors
-- [x] Register UI background textures in MGCB — ✅ 4 backgrounds (StartScreen, BasesScreen, GeoscapeScreen, XnetScreen)
-- [x] Register XenoNew.png (TaharezLook spritesheet) in MGCB — ✅ Used for software cursor
-- [x] Register EarthDiffuseMap.jpg, EarthNightMap.png, EarthNormalMap.png in MGCB — ✅ Geoscape globe textures
-- [x] Register EquipScreenBackground.png, InventorySprites.png, textureAtlas.png in MGCB — ✅ EquipSoldier + Battlescape
+- [x] Import 3D models (.fbx, .x) into MGCB — ✅ 37 model entries registered
+- [x] Update shaders (.fx) for D3D11 profile — ✅ Done
+- [x] Set up spritefont in MGCB — ✅ 6 fonts registered
+- [x] Import all textures — ✅ 14 textures registered
+- [x] Register all 16 audio .ogg files — ✅ Done
+- [x] Add missing facility models (17 .x files) — ✅ Done
+- [x] Fix `Content\` double-prefix path bugs — ✅ Done
+- [x] Content preloading at startup (`ContentCache` loads Earth textures, skybox, all XNet models) — ✅ Done (~4s one-time cost)
+- [x] GeoscapeScreen loads in 0ms (was 839ms) after preload — ✅ Done
+- [x] XNet models loaded with precomputed scaling matrices — ✅ Done
 - [ ] Content pipeline: add remaining FBX model textures
 
 **Key findings:**
@@ -442,19 +443,28 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 
 ## 5. Next Steps (Recommended Order)
 
-### Immediate (get the game running)
-1. ~~**Content Pipeline Setup**~~ ✅ Done — 37 models, 2 shaders, 6 fonts, 14 textures, 16 audio files registered in MGCB
-2. ~~**Replace audio stubs**~~ ✅ Done — Phase 5 complete
-3. ~~**Convert all screens to Gum**~~ ✅ Done — Phases 4.0–4.5 complete (27 screens + 13 dialogs)
-4. ~~**Hardware cursor**~~ ✅ Done — `IsMouseVisible = true` in Xenocide constructor
-5. ~~**Software cursor**~~ ✅ Done — `SoftwareCursor` component renders MouseArrow from XenoNew.png
-6. ~~**UI background rendering**~~ ✅ Done — GumScreen loads and renders screen backgrounds
-7. ~~**Register missing textures in MGCB**~~ ✅ Done — 11 new textures registered (UI backgrounds, globe maps, etc.)
-8. ~~**Additional spritefonts**~~ ✅ Done — 5 new spritefont files (Xeno, XenoBig, LargeBaseName, GeoTime, GeoTimeBig)
-9. **Gum Theme/Layout** — Create `.gumx` project, apply TaharezLook button theming, configure fonts and control styles
-10. **Remove CeGui# stubs** — Replace `Frame.cs` and `BattlescapeScreen.cs` CeGui dependencies with Gum-native equivalents
-11. **Cross-platform validation** — Phase 7 (build on Linux, fix path case issues)
-12. **Cleanup** — Phase 8 (remove old projects, dependencies, installers)
+### Completed
+1. ~~**Content Pipeline Setup**~~ ✅ Done
+2. ~~**Replace audio stubs**~~ ✅ Done
+3. ~~**Convert all screens to Gum**~~ ✅ Done (27 screens + 13 dialogs)
+4. ~~**Hardware cursor**~~ ✅ Done
+5. ~~**Software cursor**~~ ✅ Done
+6. ~~**UI background rendering**~~ ✅ Done
+7. ~~**Register missing textures in MGCB**~~ ✅ Done
+8. ~~**Additional spritefonts**~~ ✅ Done
+9. ~~**Gum Theme/Layout**~~ ✅ Done (.gumx project, XenocideButton, 23 .gusx screens)
+10. ~~**Remove CeGui# stubs**~~ ✅ Done (complete teardown — stubs, usings, dead code removed)
+11. ~~**Content preloading**~~ ✅ Done (Earth textures, skybox, XNet models cached)
+12. ~~**Performance optimizations**~~ ✅ Done (XNet text 88x speedup, profile timer, GeoscapeScreen 0ms)
+13. ~~**Save/load UX**~~ ✅ Done (success messages, path fixes, serialization fix)
+
+### Remaining
+14. **Cross-platform validation** — Phase 7 (build on Linux, fix path case issues)
+15. **Dialog `.gusx` conversion** — 13 dialogs currently programmatic; create .gusx layouts
+16. **Software cursor polish** — hotspot, context-sensitive cursors, HW/SW toggle
+17. **Remaining FBX model textures** — add missing textures to MGCB
+18. **Cleanup** — Phase 8 (update README, CI/CD if applicable)
+19. **Manual testing** — verify all screens, dialogs, drag-drop, 3D overlays, input conflicts
 
 ### Gum UI Layout & Theming (Next Major Task)
 The Gum WYSIWYG editor (`Gum UI Tool`) can be invoked to create a `.gumx` project for visual layout design. The tool creates XML-based project files that define component styles, layouts, and data bindings. Currently all UI is built programmatically in C# (buttons, labels, stack panels in `CreateGumControls()`). The Gum editor would allow:

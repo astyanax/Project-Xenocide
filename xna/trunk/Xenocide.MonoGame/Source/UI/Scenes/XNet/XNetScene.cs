@@ -129,9 +129,6 @@ namespace ProjectXenocide.UI.Scenes.XNet
                 //Draw the mesh, will use the effects set above.
                 mesh.Draw();
             }
-
-            // restore viewport
-            device.Viewport = oldview;
         }
 
         /// <summary>
