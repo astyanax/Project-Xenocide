@@ -280,14 +280,17 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="dialog">The dialog to queue</param>
         public void QueueDialog(Dialog dialog)
         {
-            //ToDo: put dialog into queue in priority position
             queuedDialogs.Add(dialog);
+        }
+
+        public static void PostMessage(string text, Utils.MessageType type = Utils.MessageType.Info)
+        {
+            Utils.MessageLog.Post(text, type);
         }
 
         /// <summary>
         /// Put dialog into top of stack of dialogs being shown
         /// </summary>
-        /// <param name="dialog">The dialog to show</param>
         public void ShowDialog(Dialog dialog)
         {
             Util.GeoTimeDebugWriteLine("Showing dialog {0}", dialog.GetType().Name);

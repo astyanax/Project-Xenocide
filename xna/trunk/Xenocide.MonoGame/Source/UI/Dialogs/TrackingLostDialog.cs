@@ -13,7 +13,7 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class TrackingLostDialog : GumDialog
+    class TrackingLostDialog : ModalDialog
     {
         public TrackingLostDialog(GeoPosition target, Craft hunter)
         {
@@ -21,26 +21,26 @@ namespace ProjectXenocide.UI.Dialogs
             this.hunter = hunter;
         }
 
-        protected override void CreateGumWidgets()
+        protected override void CreateDialogWidgets()
         {
             var details = new Label();
             details.Text = Util.StringFormat(Strings.DLG_TRACKINGLOST_LOST_TRACKING, hunter.Name);
-            RootContainer.AddChild(details);
+            ContentArea.AddChild(details);
 
             var returnBtn = new Button();
             returnBtn.Text = Strings.BUTTON_RETURN_TO_BASE;
             returnBtn.Click += OnReturnClicked;
-            RootContainer.AddChild(returnBtn);
+            ContentArea.AddChild(returnBtn);
 
             var patrolBtn = new Button();
             patrolBtn.Text = Strings.BUTTON_PATROL;
             patrolBtn.Click += OnPatrolClicked;
-            RootContainer.AddChild(patrolBtn);
+            ContentArea.AddChild(patrolBtn);
 
             var lastKnownBtn = new Button();
             lastKnownBtn.Text = "Go to Last Known Position";
             lastKnownBtn.Click += OnLastKnownClicked;
-            RootContainer.AddChild(lastKnownBtn);
+            ContentArea.AddChild(lastKnownBtn);
         }
 
         public void OnReturnClicked(object sender, EventArgs e)

@@ -6,7 +6,7 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    public class GumYesNoDialog : GumDialog
+    public class GumYesNoDialog : ModalDialog
     {
         public GumYesNoDialog(string messageText)
             : this(messageText, Strings.DLG_YESNO_TITLE, null, null)
@@ -25,9 +25,10 @@ namespace ProjectXenocide.UI.Dialogs
 
         public GumYesNoDialog(string messageText, string title, string yesButtonText, string noButtonText)
         {
-            this.messageText = messageText;
-            this.yesButtonText = yesButtonText;
-            this.noButtonText = noButtonText;
+            _messageText = messageText;
+            Title = title;
+            _yesButtonText = yesButtonText;
+            _noButtonText = noButtonText;
         }
 
         public static GumYesNoDialog OkCancelDialog(string messageText)
@@ -40,42 +41,41 @@ namespace ProjectXenocide.UI.Dialogs
             return new GumYesNoDialog(messageText, title, Strings.BUTTON_OK, Strings.BUTTON_CANCEL);
         }
 
-        protected override void CreateGumWidgets()
+        protected override void CreateDialogWidgets()
         {
             var messageLabel = new Label();
-            messageLabel.Text = messageText;
-            RootContainer.AddChild(messageLabel);
+            messageLabel.Text = _messageText;
+            ContentArea.AddChild(messageLabel);
 
             var yesButton = new Button();
-            yesButton.Text = yesButtonText ?? Strings.BUTTON_YES;
-            yesButton.Click += OnYesClicked;
-            RootContainer.AddChild(yesButton);
+            yesButton.Text = _yesButtonText ?? Strings.BUTTON_YES;
+            yesButton.Click += (s, e) => Close();
+            ContentArea.AddChild(yesButton);
 
             var noButton = new Button();
-            noButton.Text = noButtonText ?? Strings.BUTTON_NO;
-            noButton.Click += OnNoClicked;
-            RootContainer.AddChild(noButton);
+            noButton.Text = _noButtonText ?? Strings.BUTTON_NO;
+            noButton.Click += (s, e) => Dismiss();
+            ContentArea.AddChild(noButton);
+
+            CloseAction = _yesAction;
         }
 
-        private void OnYesClicked(object sender, EventArgs e)
+        public Dialog.ButtonAction YesAction
         {
-            yesAction?.Invoke();
-            ScreenManager.CloseDialog(this);
+            get => _yesAction;
+            set { _yesAction = value; CloseAction = value; }
         }
 
-        private void OnNoClicked(object sender, EventArgs e)
+        public Dialog.ButtonAction NoAction
         {
-            noAction?.Invoke();
-            ScreenManager.CloseDialog(this);
+            get => _noAction;
+            set { _noAction = value; DismissAction = value; }
         }
 
-        public ButtonAction YesAction { get => yesAction; set => yesAction = value; }
-        public ButtonAction NoAction { get => noAction; set => noAction = value; }
-
-        private ButtonAction yesAction;
-        private ButtonAction noAction;
-        private string messageText;
-        private string yesButtonText;
-        private string noButtonText;
+        private Dialog.ButtonAction _yesAction;
+        private Dialog.ButtonAction _noAction;
+        private string _messageText;
+        private string _yesButtonText;
+        private string _noButtonText;
     }
 }

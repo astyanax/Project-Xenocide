@@ -206,11 +206,17 @@ namespace ProjectXenocide.UI.Screens
                 {
                     Xenocide.GameState = game;
 
-                    // We always restart with time suspended
                     Xenocide.GameState.GeoData.GeoTime.StopTime();
 
                     Util.ShowMessageBox("Game loaded successfully.");
                     ScreenManager.ScheduleScreen(new GeoscapeScreen());
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(filename))
+                        Util.ShowMessageBox("Please enter a filename to load.");
+                    else
+                        Util.ShowMessageBox($"No save file found named '{filename}'.");
                 }
             }
         }

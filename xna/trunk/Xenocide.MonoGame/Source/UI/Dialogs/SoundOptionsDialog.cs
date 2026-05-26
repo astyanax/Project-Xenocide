@@ -12,61 +12,61 @@ using ProjectXenocide.Utils;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class SoundOptionsDialog : GumDialog
+    class SoundOptionsDialog : ModalDialog
     {
         public SoundOptionsDialog()
         {
         }
 
-        protected override void CreateGumWidgets()
+        protected override void CreateDialogWidgets()
         {
             musicToggleBtn = new Button();
             UpdateMusicToggleText();
             musicToggleBtn.Click += OnMusicToggleClicked;
-            RootContainer.AddChild(musicToggleBtn);
+            ContentArea.AddChild(musicToggleBtn);
 
             musicUpBtn = new Button();
             musicUpBtn.Text = "Music +";
             musicUpBtn.Click += (s, e) => { musicLevel = Math.Min(10, musicLevel + 1); UpdateMusicVolume(); };
-            RootContainer.AddChild(musicUpBtn);
+            ContentArea.AddChild(musicUpBtn);
 
             musicDownBtn = new Button();
             musicDownBtn.Text = "Music -";
             musicDownBtn.Click += (s, e) => { musicLevel = Math.Max(0, musicLevel - 1); UpdateMusicVolume(); };
-            RootContainer.AddChild(musicDownBtn);
+            ContentArea.AddChild(musicDownBtn);
 
             musicLevelLabel = new Label();
             UpdateMusicLabel();
-            RootContainer.AddChild(musicLevelLabel);
+            ContentArea.AddChild(musicLevelLabel);
 
             soundToggleBtn = new Button();
             UpdateSoundToggleText();
             soundToggleBtn.Click += OnSoundToggleClicked;
-            RootContainer.AddChild(soundToggleBtn);
+            ContentArea.AddChild(soundToggleBtn);
 
             soundUpBtn = new Button();
             soundUpBtn.Text = "Sound +";
             soundUpBtn.Click += (s, e) => { soundLevel = Math.Min(10, soundLevel + 1); UpdateSoundVolume(); };
-            RootContainer.AddChild(soundUpBtn);
+            ContentArea.AddChild(soundUpBtn);
 
             soundDownBtn = new Button();
             soundDownBtn.Text = "Sound -";
             soundDownBtn.Click += (s, e) => { soundLevel = Math.Max(0, soundLevel - 1); UpdateSoundVolume(); };
-            RootContainer.AddChild(soundDownBtn);
+            ContentArea.AddChild(soundDownBtn);
 
             soundLevelLabel = new Label();
             UpdateSoundLabel();
-            RootContainer.AddChild(soundLevelLabel);
+            ContentArea.AddChild(soundLevelLabel);
 
             var saveBtn = new Button();
             saveBtn.Text = "Save";
             saveBtn.Click += OnSaveClicked;
-            RootContainer.AddChild(saveBtn);
+            ContentArea.AddChild(saveBtn);
 
             var cancelBtn = new Button();
             cancelBtn.Text = "Cancel";
             cancelBtn.Click += OnCancelClicked;
-            RootContainer.AddChild(cancelBtn);
+            ContentArea.AddChild(cancelBtn);
         }
 
         private Button musicToggleBtn;

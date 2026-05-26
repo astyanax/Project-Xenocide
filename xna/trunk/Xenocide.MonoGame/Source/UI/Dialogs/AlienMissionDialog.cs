@@ -9,13 +9,13 @@ using ProjectXenocide.UI.Screens;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class AlienMissionDialog : GumDialog
+    class AlienMissionDialog : ModalDialog
     {
         public AlienMissionDialog()
         {
         }
 
-        protected override void CreateGumWidgets()
+        protected override void CreateDialogWidgets()
         {
             string[] missionNames = Enum.GetNames(typeof(AlienMission));
             for (int i = 0; i < missionNames.Length; i++)
@@ -24,13 +24,13 @@ namespace ProjectXenocide.UI.Dialogs
                 var btn = new Button();
                 btn.Text = missionNames[i];
                 btn.Click += (s, e) => LaunchMission(idx);
-                RootContainer.AddChild(btn);
+                ContentArea.AddChild(btn);
             }
 
             var cancelBtn = new Button();
             cancelBtn.Text = "Cancel";
             cancelBtn.Click += (s, e) => ScreenManager.CloseDialog(this);
-            RootContainer.AddChild(cancelBtn);
+            ContentArea.AddChild(cancelBtn);
         }
 
         private void LaunchMission(int selectedMission)

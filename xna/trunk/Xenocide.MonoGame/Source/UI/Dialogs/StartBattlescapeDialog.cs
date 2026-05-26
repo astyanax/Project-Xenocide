@@ -11,35 +11,35 @@ using ProjectXenocide.Utils;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class StartBattlescapeDialog : GumDialog
+    class StartBattlescapeDialog : ModalDialog
     {
         public StartBattlescapeDialog(Mission mission)
         {
             this.mission = mission;
         }
 
-        protected override void CreateGumWidgets()
+        protected override void CreateDialogWidgets()
         {
             var details = new Label();
             details.Text = mission.MakeStartMissionText();
-            RootContainer.AddChild(details);
+            ContentArea.AddChild(details);
 
             var okBtn = new Button();
             okBtn.Text = "OK";
             okBtn.Click += OnOkClicked;
-            RootContainer.AddChild(okBtn);
+            ContentArea.AddChild(okBtn);
 
             var cancelBtn = new Button();
             cancelBtn.Text = "Cancel";
             cancelBtn.Click += OnCancelClicked;
-            RootContainer.AddChild(cancelBtn);
+            ContentArea.AddChild(cancelBtn);
 
             if (Xenocide.StaticTables.StartSettings.Cheats.AllowAutoWinBattlescape)
             {
                 var autoBtn = new Button();
                 autoBtn.Text = "Auto Complete";
                 autoBtn.Click += OnAutoCompleteClicked;
-                RootContainer.AddChild(autoBtn);
+                ContentArea.AddChild(autoBtn);
             }
         }
 

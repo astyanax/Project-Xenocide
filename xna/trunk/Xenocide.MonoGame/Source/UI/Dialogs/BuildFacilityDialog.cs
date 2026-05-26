@@ -13,18 +13,18 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class BuildFacilityDialog : GumDialog
+    class BuildFacilityDialog : ModalDialog
     {
         public BuildFacilityDialog(BasesScreen basesScreen)
         {
             this.basesScreen = basesScreen;
         }
 
-        protected override void CreateGumWidgets()
+        protected override void CreateDialogWidgets()
         {
             var header = new Label();
             header.Text = "Select Facility";
-            RootContainer.AddChild(header);
+            ContentArea.AddChild(header);
 
             int index = 0;
             foreach (FacilityInfo facility in Xenocide.StaticTables.FacilityList)
@@ -35,12 +35,12 @@ namespace ProjectXenocide.UI.Dialogs
                     var row = new Label();
                     row.Text = string.Format("{0} - ${1} ({2}d, ${3}/mo)",
                         facility.Name, facility.BuildCost, facility.BuildDays, facility.MonthlyMaintenance);
-                    RootContainer.AddChild(row);
+                    ContentArea.AddChild(row);
 
                     var selectBtn = new Button();
                     selectBtn.Text = "Select";
                     selectBtn.Click += (s, e) => OnFacilitySelected(idx);
-                    RootContainer.AddChild(selectBtn);
+                    ContentArea.AddChild(selectBtn);
                 }
                 ++index;
             }
@@ -48,7 +48,7 @@ namespace ProjectXenocide.UI.Dialogs
             var cancelBtn = new Button();
             cancelBtn.Text = Strings.BUTTON_CANCEL;
             cancelBtn.Click += OnCancelClicked;
-            RootContainer.AddChild(cancelBtn);
+            ContentArea.AddChild(cancelBtn);
         }
 
         private void OnFacilitySelected(int facilityIndex)

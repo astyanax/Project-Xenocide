@@ -6,38 +6,38 @@ using ProjectXenocide.UI.Screens;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class GumOptionsDialog : GumDialog
+    class GumOptionsDialog : ModalDialog
     {
         public GumOptionsDialog()
         {
         }
 
-        protected override void CreateGumWidgets()
+        protected override void CreateDialogWidgets()
         {
             var loadButton = new Button();
             loadButton.Text = "Load Game";
             loadButton.Click += OnLoadClicked;
-            RootContainer.AddChild(loadButton);
+            ContentArea.AddChild(loadButton);
 
             var saveButton = new Button();
             saveButton.Text = "Save Game";
             saveButton.Click += OnSaveClicked;
-            RootContainer.AddChild(saveButton);
+            ContentArea.AddChild(saveButton);
 
             var soundButton = new Button();
             soundButton.Text = "Sound Options";
             soundButton.Click += OnSoundClicked;
-            RootContainer.AddChild(soundButton);
+            ContentArea.AddChild(soundButton);
 
             var abandonButton = new Button();
             abandonButton.Text = "Abandon Game";
             abandonButton.Click += OnAbandonClicked;
-            RootContainer.AddChild(abandonButton);
+            ContentArea.AddChild(abandonButton);
 
             var cancelButton = new Button();
             cancelButton.Text = "Cancel";
             cancelButton.Click += OnCancelClicked;
-            RootContainer.AddChild(cancelButton);
+            ContentArea.AddChild(cancelButton);
         }
 
         public void OnCancelClicked(object sender, EventArgs e)

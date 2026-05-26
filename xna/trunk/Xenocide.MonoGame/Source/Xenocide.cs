@@ -45,6 +45,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGameGum;
 
 using ProjectXenocide.Model;
+using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Screens;
 using ProjectXenocide.Utils;
 
@@ -127,6 +128,7 @@ namespace ProjectXenocide
 
             var softwareCursor = new UI.SoftwareCursor(this);
             Components.Add(softwareCursor);
+            Components.Add(new ToastNotification(this));
 
             base.Initialize();
 

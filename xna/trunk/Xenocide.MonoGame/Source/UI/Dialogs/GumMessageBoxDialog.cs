@@ -6,7 +6,12 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    public class GumMessageBoxDialog : GumDialog
+    /// <summary>
+    /// A simple modal dialog with a message and an OK button.
+    /// The OK button invokes the registered OkAction and closes the dialog.
+    /// ESC dismisses without invoking the callback.
+    /// </summary>
+    public class GumMessageBoxDialog : ModalDialog
     {
         public GumMessageBoxDialog(string messageText)
             : this(messageText, Strings.DLG_MESSAGEBOX_TITLE)
@@ -15,30 +20,31 @@ namespace ProjectXenocide.UI.Dialogs
 
         public GumMessageBoxDialog(string messageText, string title)
         {
-            this.messageText = messageText;
+            _messageText = messageText;
+            Title = title;
         }
 
-        protected override void CreateGumWidgets()
+        protected override void CreateDialogWidgets()
         {
             var messageLabel = new Label();
-            messageLabel.Text = messageText;
-            RootContainer.AddChild(messageLabel);
+            messageLabel.Text = _messageText;
+            ContentArea.AddChild(messageLabel);
 
             var okButton = new Button();
             okButton.Text = Strings.BUTTON_OK;
-            okButton.Click += OnOkClicked;
-            RootContainer.AddChild(okButton);
+            okButton.Click += (s, e) => Close();
+            ContentArea.AddChild(okButton);
+
+            CloseAction = _okAction;
         }
 
-        private void OnOkClicked(object sender, EventArgs e)
+        public Dialog.ButtonAction OkAction
         {
-            ScreenManager.CloseDialog(this);
-            okAction?.Invoke();
+            get => _okAction;
+            set { _okAction = value; CloseAction = value; }
         }
 
-        public ButtonAction OkAction { get => okAction; set => okAction = value; }
-
-        private ButtonAction okAction;
-        private string messageText;
+        private Dialog.ButtonAction _okAction;
+        private string _messageText;
     }
 }

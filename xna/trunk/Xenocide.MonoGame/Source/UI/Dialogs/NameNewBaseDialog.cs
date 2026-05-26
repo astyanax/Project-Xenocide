@@ -13,7 +13,7 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    public class NameNewBaseDialog : GumDialog
+    public class NameNewBaseDialog : ModalDialog
     {
         public NameNewBaseDialog(GeoPosition pos, bool isFirstBase)
         {
@@ -21,20 +21,20 @@ namespace ProjectXenocide.UI.Dialogs
             this.isFirstBase = isFirstBase;
         }
 
-        protected override void CreateGumWidgets()
+        protected override void CreateDialogWidgets()
         {
             var prompt = new Label();
             prompt.Text = "Name your new base:";
-            RootContainer.AddChild(prompt);
+            ContentArea.AddChild(prompt);
 
             baseNameInput = new Label();
             baseNameInput.Text = "New Base";
-            RootContainer.AddChild(baseNameInput);
+            ContentArea.AddChild(baseNameInput);
 
             var okBtn = new Button();
             okBtn.Text = Strings.BUTTON_OK;
             okBtn.Click += OnOkClicked;
-            RootContainer.AddChild(okBtn);
+            ContentArea.AddChild(okBtn);
         }
 
         private Label baseNameInput;

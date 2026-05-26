@@ -119,6 +119,8 @@
   <ComponentReference Name="Elements/VerticalLines" />
   <ComponentReference Name="Styles" />
   <ComponentReference Name="XenocideButton" />
+  <ComponentReference Name="DialogPanel" />
+  <ComponentReference Name="DialogButton" />
   <StandardElementReference Name="Circle" />
   <StandardElementReference Name="ColoredRectangle" />
   <StandardElementReference Name="Component" />

@@ -75,6 +75,12 @@ namespace ProjectXenocide.Model
         /// </summary>
         public Battle Battlescape { get { return battlescape; } set { battlescape = value; } }
 
+        public List<Utils.MessageEntry> MessageLogEntries
+        {
+            get { return messageLogEntries; }
+            set { messageLogEntries = value ?? new(); }
+        }
+
         /// <summary>
         /// Data specific to the geoscape
         /// </summary>
@@ -84,6 +90,8 @@ namespace ProjectXenocide.Model
         /// The current battlescape (if there is one)
         /// </summary>
         private Battle battlescape;
+
+        private List<Utils.MessageEntry> messageLogEntries = new();
 
         #endregion Fields
     }

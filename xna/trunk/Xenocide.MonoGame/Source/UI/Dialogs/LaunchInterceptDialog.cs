@@ -15,17 +15,17 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class LaunchInterceptDialog : GumDialog
+    class LaunchInterceptDialog : ModalDialog
     {
         public LaunchInterceptDialog()
         {
         }
 
-        protected override void CreateGumWidgets()
+        protected override void CreateDialogWidgets()
         {
             var header = new Label();
             header.Text = "Select Interceptor";
-            RootContainer.AddChild(header);
+            ContentArea.AddChild(header);
 
             int rowNum = 0;
             foreach (Outpost outpost in Xenocide.GameState.GeoData.Outposts)
@@ -37,12 +37,12 @@ namespace ProjectXenocide.UI.Dialogs
                     var label = new Label();
                     label.Text = string.Format("{0} - {1} (Fuel:{2}% Hull:{3}%)",
                         aircraft.Name, aircraft.HomeBase.Name, aircraft.FuelPercent, aircraft.HullPercent);
-                    RootContainer.AddChild(label);
+                    ContentArea.AddChild(label);
 
                     var selectBtn = new Button();
                     selectBtn.Text = "Select";
                     selectBtn.Click += (s, e) => BringUpGeoscapeInTargetingMode(aircraft);
-                    RootContainer.AddChild(selectBtn);
+                    ContentArea.AddChild(selectBtn);
 
                     rowToCraft[rowNum] = aircraft;
                     ++rowNum;
@@ -52,7 +52,7 @@ namespace ProjectXenocide.UI.Dialogs
             var cancelBtn = new Button();
             cancelBtn.Text = Strings.BUTTON_CANCEL;
             cancelBtn.Click += OnCancelClicked;
-            RootContainer.AddChild(cancelBtn);
+            ContentArea.AddChild(cancelBtn);
         }
 
         private Dictionary<int, Aircraft> rowToCraft = new Dictionary<int, Aircraft>();

@@ -61,6 +61,10 @@ namespace ProjectXenocide.UI.Screens
         {
             Xenocide.DebugTesting = false;
 
+            Xenocide.GameState = new GameState();
+            Xenocide.GameState.SetToStartGameCondition();
+            Utils.MessageLog.LoadFromGameState();
+
             if (GumRoot != null)
             {
 #if DEBUG

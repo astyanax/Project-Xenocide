@@ -16,23 +16,23 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class UfoInfoDialog : GumDialog
+    class UfoInfoDialog : ModalDialog
     {
         public UfoInfoDialog(Ufo ufo)
         {
             this.ufo = ufo;
         }
 
-        protected override void CreateGumWidgets()
+        protected override void CreateDialogWidgets()
         {
             var details = new Label();
             details.Text = MakeDialogText();
-            RootContainer.AddChild(details);
+            ContentArea.AddChild(details);
 
             var cancelBtn = new Button();
             cancelBtn.Text = Strings.BUTTON_CLOSE;
             cancelBtn.Click += OnCancelClicked;
-            RootContainer.AddChild(cancelBtn);
+            ContentArea.AddChild(cancelBtn);
         }
 
         public void OnCancelClicked(object sender, EventArgs e)

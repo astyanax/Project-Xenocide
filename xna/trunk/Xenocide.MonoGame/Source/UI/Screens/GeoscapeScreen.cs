@@ -151,10 +151,14 @@ namespace ProjectXenocide.UI.Screens
                 labelPanel.AddChild(timeText);
 
                 fundsText.Text = Strings.SCREEN_GEOSCAPE_FUNDS;
-                fundsAmount.Text = Xenocide.GameState.GeoData.XCorp.Bank.DisplayCurrentBalance;
+                var gameState = Xenocide.GameState;
+                if (gameState?.GeoData?.XCorp?.Bank != null)
+                    fundsAmount.Text = gameState.GeoData.XCorp.Bank.DisplayCurrentBalance;
                 timeText.Text = Strings.SCREEN_GEOSCAPE_GMT;
 
-                state.CreateGumControls();
+                InitializeMessageLog();
+
+                State.CreateGumControls();
                 return;
             }
 
@@ -256,7 +260,9 @@ namespace ProjectXenocide.UI.Screens
 
             //Adds text to top of screen.
             fundsText.Text = Strings.SCREEN_GEOSCAPE_FUNDS;
-            fundsAmount.Text = Xenocide.GameState.GeoData.XCorp.Bank.DisplayCurrentBalance;
+            var gs = Xenocide.GameState;
+            if (gs?.GeoData?.XCorp?.Bank != null)
+                fundsAmount.Text = gs.GeoData.XCorp.Bank.DisplayCurrentBalance;
             timeText.Text = Strings.SCREEN_GEOSCAPE_GMT;
 
             // special widgets based on state, added directly to the scene window
@@ -289,6 +295,48 @@ namespace ProjectXenocide.UI.Screens
         private Label fundsAmount;
         private Label sceneToolTip;
         private Label timeText;
+        private ListBox _messageLogList;
+
+        private void InitializeMessageLog()
+        {
+            _messageLogList = new ListBox();
+
+            var vp = Xenocide.Instance.GraphicsDevice.Viewport;
+            int logWidth = 600;
+            int logHeight = 180;
+
+            _messageLogList.Visual.X = 20;
+            _messageLogList.Visual.Y = vp.Height - logHeight - 20;
+            _messageLogList.Visual.Width = logWidth;
+            _messageLogList.Visual.Height = logHeight;
+            _messageLogList.Visual.SetProperty("Alpha", 160);
+            _messageLogList.Visual.SetProperty("ColorCategoryState", "Primary");
+
+            GumRoot.Children.Add(_messageLogList.Visual);
+
+            MessageLog.MessagePosted += OnMessagePostedToLog;
+
+            foreach (var entry in MessageLog.Entries)
+                _messageLogList.Items.Add(FormatLogEntry(entry));
+        }
+
+        private void OnMessagePostedToLog(MessageEntry entry)
+        {
+            Console.WriteLine($"[MSGLOG] {entry.TimeString} {entry.Type}: {entry.Text}");
+            _messageLogList?.Items.Add(FormatLogEntry(entry));
+        }
+
+        private static string FormatLogEntry(MessageEntry entry)
+        {
+            string prefix = entry.Type switch
+            {
+                MessageType.Warning => "! ",
+                MessageType.Error => "X ",
+                MessageType.Required => "* ",
+                _ => "  ",
+            };
+            return $"{entry.TimeString} {prefix}{entry.Text}";
+        }
 
         //Used to keep track of time and avoid updating if needed.
         private string gameTimeText;
