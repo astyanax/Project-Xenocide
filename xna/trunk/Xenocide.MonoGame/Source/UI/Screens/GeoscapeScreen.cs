@@ -38,6 +38,8 @@ using Gum.Wireframe;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+
+using NLog;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -64,6 +66,8 @@ namespace ProjectXenocide.UI.Screens
     /// </summary>
     public partial class GeoscapeScreen : PolarScreen
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// constructor (obviously)
         /// </summary>
@@ -322,7 +326,7 @@ namespace ProjectXenocide.UI.Screens
 
         private void OnMessagePostedToLog(MessageEntry entry)
         {
-            Console.WriteLine($"[MSGLOG] {entry.TimeString} {entry.Type}: {entry.Text}");
+            Logger.Debug("[MSGLOG] {0} {1}: {2}", entry.TimeString, entry.Type, entry.Text);
             _messageLogList?.Items.Add(FormatLogEntry(entry));
         }
 

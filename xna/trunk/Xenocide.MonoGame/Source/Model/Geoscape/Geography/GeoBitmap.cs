@@ -34,6 +34,8 @@ using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using NLog;
+
 using ProjectXenocide.Utils;
 
 namespace ProjectXenocide.Model.Geoscape.Geography
@@ -47,6 +49,8 @@ namespace ProjectXenocide.Model.Geoscape.Geography
     [Serializable]
     class GeoBitmap
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Creates a new GeoBitmap for the given texture and list of members
         /// </summary>
@@ -321,7 +325,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
                 IGeoBitmapProperty property = o as IGeoBitmapProperty;
                 if (0 == property.Size)
                 {
-                    Console.Error.WriteLine("WARNING: File {0}: ARGB color {1:x} is not used", filename, property.ColorKey);
+                    Logger.Warn("WARNING: File {0}: ARGB color {1:x} is not used", filename, property.ColorKey);
                 }
             }
         }

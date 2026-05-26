@@ -36,6 +36,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
+using NLog;
+
 using ProjectXenocide.Utils;
 
 #endregion
@@ -168,6 +170,8 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
 
     class EarthGlobe
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         Texture2D diffuseTexture;
         Texture2D nightTexture;
         Texture2D normapMapTexture;
@@ -212,7 +216,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             string loadPath = primaryPath;
             if (!File.Exists(primaryPath) && fallbackPath != null)
             {
-                Console.WriteLine("EarthGlobe: {0} not found, falling back to {1}", primaryPath, fallbackPath);
+                Logger.Warn("EarthGlobe: {0} not found, falling back to {1}", primaryPath, fallbackPath);
                 loadPath = fallbackPath;
             }
 
@@ -223,10 +227,10 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             }
             catch (Exception ex)
             {
-                Console.WriteLine("EarthGlobe: Failed to load {0}: {1}", loadPath, ex.Message);
+                Logger.Warn("EarthGlobe: Failed to load {0}: {1}", loadPath, ex.Message);
                 if (fallbackPath != null && loadPath != fallbackPath && File.Exists(fallbackPath))
                 {
-                    Console.WriteLine("EarthGlobe: Falling back to {0}", fallbackPath);
+                    Logger.Warn("EarthGlobe: Falling back to {0}", fallbackPath);
                     using (var fs = File.OpenRead(fallbackPath))
                         return Texture2D.FromStream(device, fs);
                 }

@@ -33,6 +33,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
+using NLog;
+
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Utils;
 
@@ -46,6 +48,8 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
     /// <remarks>ToDo: This is really a hacked stub, needs to be replaced with something better</remarks>
     public class ProjectileMesh
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Load model we will use for projectile
         /// </summary>
@@ -60,7 +64,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
             }
             catch (Exception ex)
             {
-                Console.WriteLine("WARNING: Could not load Projectile model: {0}", ex.Message);
+                Logger.Warn("WARNING: Could not load Projectile model: {0}", ex.Message);
                 model = null;
             }
         }

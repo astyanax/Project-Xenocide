@@ -34,6 +34,8 @@ using Microsoft.Xna.Framework;
 
 using MonoGameGum;
 
+using NLog;
+
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
@@ -50,6 +52,8 @@ namespace ProjectXenocide.UI.Screens
 {
     public class StartScreen : GumScreen
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public StartScreen()
             : base("StartScreen", @"Content/Textures/UI/StartScreenBackground.png")
         {
@@ -143,7 +147,7 @@ namespace ProjectXenocide.UI.Screens
 
         private void OnRunTestsClicked(object sender, EventArgs e)
         {
-            Console.WriteLine("StartScreen: Run Tests clicked");
+            Logger.Debug("StartScreen: Run Tests clicked");
             Xenocide.DebugTesting = true;
             Xenocide.GameState.SetToStartGameCondition();
             Xenocide.StaticTables.StartSettings.Cheats.XcorpCantLooseAtStartOfMonth = true;
@@ -183,14 +187,14 @@ namespace ProjectXenocide.UI.Screens
 
         private void OnBattlescapeClicked(object sender, EventArgs e)
         {
-            Console.WriteLine("StartScreen: Battlescape clicked");
+            Logger.Debug("StartScreen: Battlescape clicked");
             Xenocide.DebugTesting = true;
             StartDebugBattlescape();
         }
 
         private void OnNewGameClicked(object sender, EventArgs e)
         {
-            Console.WriteLine("StartScreen: New Game clicked");
+            Logger.Debug("StartScreen: New Game clicked");
             Xenocide.GameState.SetToStartGameCondition();
             GeoscapeScreen geoscapeScreen = new GeoscapeScreen();
             geoscapeScreen.State = new GeoscapeScreen.AddingFirstBaseScreenState(geoscapeScreen);
@@ -199,7 +203,7 @@ namespace ProjectXenocide.UI.Screens
 
         private void OnShowLoadGameScreen(object sender, EventArgs e)
         {
-            Console.WriteLine("StartScreen: Load Game clicked");
+            Logger.Debug("StartScreen: Load Game clicked");
             ScreenManager.ScheduleScreen(
                 new LoadSaveGameScreen(
                     LoadSaveGameScreen.Mode.Load,
@@ -210,13 +214,13 @@ namespace ProjectXenocide.UI.Screens
 
         private void OnQuitGameClicked(object sender, EventArgs e)
         {
-            Console.WriteLine("StartScreen: Quit clicked");
+            Logger.Debug("StartScreen: Quit clicked");
             ScreenManager.QuitGame = true;
         }
 
         private void OnCreditsClicked(object sender, EventArgs e)
         {
-            Console.WriteLine("StartScreen: Credits clicked");
+            Logger.Debug("StartScreen: Credits clicked");
             ShowCreditsScreen();
         }
 
@@ -224,7 +228,7 @@ namespace ProjectXenocide.UI.Screens
         private void OnXNetDebugClicked(object sender, EventArgs e)
         {
             Xenocide.DebugTesting = true;
-            Console.WriteLine("StartScreen: Debug XNet clicked");
+            Logger.Debug("StartScreen: Debug XNet clicked");
             Xenocide.GameState.SetToStartGameCondition();
             ScreenManager.ScheduleScreen(new XNetScreen());
         }
@@ -232,7 +236,7 @@ namespace ProjectXenocide.UI.Screens
         private void OnAeroscapeDebugClicked(object sender, EventArgs e)
         {
             Xenocide.DebugTesting = true;
-            Console.WriteLine("StartScreen: Debug Aeroscape clicked");
+            Logger.Debug("StartScreen: Debug Aeroscape clicked");
             Xenocide.GameState.SetToStartGameCondition();
 
             GeoPosition pos = new GeoPosition();
@@ -257,13 +261,13 @@ namespace ProjectXenocide.UI.Screens
 
         private void ShowCreditsScreen()
         {
-            Console.WriteLine("StartScreen: Scheduling CreditsScreen");
+            Logger.Debug("StartScreen: Scheduling CreditsScreen");
             ScreenManager.ScheduleScreen(new CreditsScreen());
         }
 
         private void StartDebugBattlescape()
         {
-            Console.WriteLine("StartScreen: Starting debug battlescape");
+            Logger.Debug("StartScreen: Starting debug battlescape");
             Xenocide.GameState.SetToStartGameCondition();
 
             GeoPosition pos = new GeoPosition();

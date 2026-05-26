@@ -33,6 +33,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
+using NLog;
+
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.Model.StaticData;
@@ -49,6 +51,8 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
     /// </summary>
     public class CombatantMeshes
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Load models for all the combatants on the battlescape
         /// </summary>
@@ -71,7 +75,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine("WARNING: Could not load model '{0}': {1}", modelName, ex.Message);
+                            Logger.Warn("WARNING: Could not load model '{0}': {1}", modelName, ex.Message);
                             failedModels.Add(modelName);
                         }
                     }

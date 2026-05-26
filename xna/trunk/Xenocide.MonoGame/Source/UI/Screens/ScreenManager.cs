@@ -33,6 +33,8 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+
+using NLog;
 using Microsoft.Xna.Framework.Input;
 
 using ProjectXenocide.Model;
@@ -51,6 +53,8 @@ namespace ProjectXenocide.UI.Screens
     /// </summary>
     public class ScreenManager : IDisposable
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Set the screen to show on the next update()
         /// </summary>
@@ -65,7 +69,7 @@ namespace ProjectXenocide.UI.Screens
         {
             // we can only have one screen state change planed
             Debug.Assert((null == nextScreen) && (null == pushScreen) && !popScreen);
-            Console.WriteLine("ScreenManager: ScheduleScreen {0}", newScreen?.GetType().Name ?? "null");
+            Logger.Debug("ScreenManager: ScheduleScreen {0}", newScreen?.GetType().Name ?? "null");
             nextScreen = newScreen;
         }
 
@@ -82,7 +86,7 @@ namespace ProjectXenocide.UI.Screens
             // we can only have one screen state change planed
             Debug.Assert((null == nextScreen) && (null == pushScreen) && !popScreen);
             Debug.Assert(0 < screenStack.Count);
-            Console.WriteLine("ScreenManager: PushScreen {0}", newScreen?.GetType().Name ?? "null");
+            Logger.Debug("ScreenManager: PushScreen {0}", newScreen?.GetType().Name ?? "null");
             pushScreen = newScreen;
         }
 

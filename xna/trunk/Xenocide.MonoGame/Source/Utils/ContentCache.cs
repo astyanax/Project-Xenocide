@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
+using NLog;
+
 namespace ProjectXenocide.Utils
 {
     /// <summary>
@@ -30,6 +32,7 @@ namespace ProjectXenocide.Utils
 
     public static class ContentCache
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly Dictionary<string, object> _cache = new();
         private static bool _isPreloaded;
 
@@ -74,7 +77,7 @@ namespace ProjectXenocide.Utils
                 }
                 catch (ContentLoadException)
                 {
-                    Console.WriteLine("ContentCache: Failed to preload model " + modelName);
+                    Logger.Warn("ContentCache: Failed to preload model " + modelName);
                 }
             }
         }

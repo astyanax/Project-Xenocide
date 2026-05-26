@@ -33,6 +33,8 @@ using System.IO;
 using System.Text;
 using System.Threading;
 
+using NLog;
+
 using Gum.Forms;
 using Gum.Forms.Controls;
 
@@ -58,6 +60,8 @@ namespace ProjectXenocide.UI.Screens
     /// </summary>
     public class LoadSaveGameScreen : GumScreen
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -359,7 +363,7 @@ namespace ProjectXenocide.UI.Screens
             }
             catch (Exception e)
             {
-                Console.WriteLine($"[ERROR] Save failed: {e.Message}");
+                Logger.Error(e, "Save failed");
                 Util.ShowMessageBox(Strings.MSGBOX_UNABLE_TO_SAVE_FILE, e.Message);
                 return false;
             }

@@ -1,9 +1,12 @@
 using System;
 
+using NLog;
+
+var crashLogger = LogManager.GetLogger("Crash");
+
 AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
 {
-    Console.Error.WriteLine("=== UNHANDLED EXCEPTION ===");
-    Console.Error.WriteLine(args.ExceptionObject);
+    crashLogger.Fatal("=== UNHANDLED EXCEPTION ===\n{0}", args.ExceptionObject);
 };
 
 try
@@ -13,7 +16,7 @@ try
 }
 catch (Exception ex)
 {
-    Console.Error.WriteLine("=== GAME CRASHED ===");
-    Console.Error.WriteLine(ex);
+    crashLogger.Fatal(ex, "=== GAME CRASHED ===");
+    LogManager.Shutdown();
     throw;
 }

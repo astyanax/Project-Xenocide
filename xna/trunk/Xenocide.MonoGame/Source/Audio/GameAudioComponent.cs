@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -8,12 +7,16 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 
+using NLog;
+
 using ProjectXenocide.Assets;
 
 namespace AudioSystem
 {
     public class GameAudioComponent : GameComponent, IAudioSystem
     {
+        private static readonly Logger Log = LogManager.GetLogger("Audio");
+
         private readonly Dictionary<string, SoundEffect> _sounds = new();
         private readonly List<SongDef> _songDefs = new();
         private readonly Random _random = new();
@@ -27,10 +30,6 @@ namespace AudioSystem
 
         private const string SfxPrefix = "Audio/Sounds/";
         private const string MusicPrefix = "Audio/Music/";
-
-        private static readonly string LogPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "Xenocide", "audio_debug.log");
 
         public bool UseAudio { get; set; } = true;
         public bool IsInitialized { get; private set; }
@@ -58,22 +57,21 @@ namespace AudioSystem
 
         public override void Initialize()
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(LogPath));
-            Log("=== GameAudioComponent Initialize ===");
-            Log($"App base: {AppDomain.CurrentDomain.BaseDirectory}");
-            Log($"Content root: {Game.Content.RootDirectory}");
+            Log.Info("=== GameAudioComponent Initialize ===");
+            Log.Info("App base: {0}", AppDomain.CurrentDomain.BaseDirectory);
+            Log.Info("Content root: {0}", Game.Content.RootDirectory);
 
             var testPath = Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory,
                 Game.Content.RootDirectory,
                 "Audio", "Music", "main_theme.xnb");
-            Log($"Expected path: {testPath}");
-            Log($"File exists: {File.Exists(testPath)}");
+            Log.Info("Expected path: {0}", testPath);
+            Log.Info("File exists: {0}", File.Exists(testPath));
 
             foreach (var kvp in AssetRegistry.MusicDefs)
                 _songDefs.Add(new SongDef(kvp.Value.AssetName, kvp.Value.Category));
 
-            Log($"Registered {_songDefs.Count} music track definitions");
+            Log.Info("Registered {0} music track definitions", _songDefs.Count);
             IsInitialized = true;
             base.Initialize();
         }
@@ -92,16 +90,16 @@ namespace AudioSystem
             if (!UseAudio) return;
 
             var assetName = LegacyToSfxPath(soundName);
-            Log($"LoadSound: '{soundName}' -> asset '{assetName}'");
+            Log.Info("LoadSound: '{0}' -> asset '{1}'", soundName, assetName);
             try
             {
                 _sounds[soundName] = Game.Content.Load<SoundEffect>(assetName);
                 var sfx = _sounds[soundName];
-                Log($"  OK (duration={sfx.Duration.TotalSeconds:F2}s)");
+                Log.Info("  OK (duration={0:F2}s)", sfx.Duration.TotalSeconds);
             }
             catch (Exception ex)
             {
-                Log($"  FAILED: {ex.GetType().Name}: {ex.Message}");
+                Log.Warn("  FAILED: {0}: {1}", ex.GetType().Name, ex.Message);
             }
         }
 
@@ -137,7 +135,7 @@ namespace AudioSystem
             _autoAdvance = false;
 
             var assetName = LegacyToMusicPath(musicName);
-            Log($"PlayMusic: '{musicName}' -> asset '{assetName}'");
+            Log.Info("PlayMusic: '{0}' -> asset '{1}'", musicName, assetName);
             try
             {
                 var sfx = Game.Content.Load<SoundEffect>(assetName);
@@ -145,17 +143,17 @@ namespace AudioSystem
                 _currentMusic.IsLooped = true;
                 _currentMusic.Volume = _musicVolume;
                 _currentMusic.Play();
-                Log($"  Playing (duration={sfx.Duration.TotalSeconds:F2}s, state={_currentMusic.State})");
+                Log.Info("  Playing (duration={0:F2}s, state={1})", sfx.Duration.TotalSeconds, _currentMusic.State);
             }
             catch (Exception ex)
             {
-                Log($"  FAILED: {ex.GetType().Name}: {ex.Message}");
+                Log.Warn("  FAILED: {0}: {1}", ex.GetType().Name, ex.Message);
             }
         }
 
         public void PlayRandomMusic()
         {
-            Log($"PlayRandomMusic() called. UseAudio={UseAudio}, songs={_songDefs.Count}");
+            Log.Info("PlayRandomMusic() called. UseAudio={0}, songs={1}", UseAudio, _songDefs.Count);
             if (!UseAudio || _songDefs.Count == 0) return;
 
             StopMusicInternal();
@@ -167,7 +165,7 @@ namespace AudioSystem
 
         public void PlayRandomMusic(string category)
         {
-            Log($"PlayRandomMusic(\"{category}\") called");
+            Log.Info("PlayRandomMusic(\"{0}\") called", category);
             if (!UseAudio) return;
 
             StopMusicInternal();
@@ -180,7 +178,7 @@ namespace AudioSystem
 
             if (filtered.Count == 0)
             {
-                Log($"  No songs in category '{category}', falling back to all");
+                Log.Info("  No songs in category '{0}', falling back to all", category);
                 PlayRandomMusic();
                 return;
             }
@@ -222,7 +220,7 @@ namespace AudioSystem
         {
             if (_autoAdvance && _currentMusic != null && _currentMusic.State == SoundState.Stopped)
             {
-                Log("Auto-advancing to next track");
+                Log.Info("Auto-advancing to next track");
                 _currentMusic.Dispose();
                 _currentMusic = null;
                 PlayRandomFromCurrentPlaylist();
@@ -243,18 +241,18 @@ namespace AudioSystem
             if (_currentPlaylist == null || _currentPlaylist.Count == 0) return;
 
             var def = _currentPlaylist[_random.Next(_currentPlaylist.Count)];
-            Log($"PlayRandom: trying asset '{def.AssetName}'");
+            Log.Info("PlayRandom: trying asset '{0}'", def.AssetName);
             try
             {
                 var sfx = Game.Content.Load<SoundEffect>(def.AssetName);
                 _currentMusic = sfx.CreateInstance();
                 _currentMusic.Volume = _musicVolume;
                 _currentMusic.Play();
-                Log($"  Playing (duration={sfx.Duration.TotalSeconds:F2}s, state={_currentMusic.State})");
+                Log.Info("  Playing (duration={0:F2}s, state={1})", sfx.Duration.TotalSeconds, _currentMusic.State);
             }
             catch (Exception ex)
             {
-                Log($"  FAILED: {ex.GetType().Name}: {ex.Message}");
+                Log.Warn("  FAILED: {0}: {1}", ex.GetType().Name, ex.Message);
             }
         }
 
@@ -282,19 +280,6 @@ namespace AudioSystem
             if (name.EndsWith(".ogg", StringComparison.OrdinalIgnoreCase))
                 name = name.Substring(0, name.Length - 4);
             return MusicPrefix + name;
-        }
-
-        private static void Log(string message)
-        {
-            var line = $"{DateTime.Now:HH:mm:ss.fff} [Audio] {message}";
-            Debug.WriteLine(line);
-            try
-            {
-                File.AppendAllText(LogPath, line + Environment.NewLine);
-            }
-            catch
-            {
-            }
         }
 
         private class SongDef

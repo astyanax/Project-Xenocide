@@ -37,6 +37,8 @@ using AudioSystem;
 using Gum.DataTypes;
 
 using Microsoft.Xna.Framework;
+
+using NLog;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -60,6 +62,8 @@ namespace ProjectXenocide
     /// </summary>
     public class Xenocide : Microsoft.Xna.Framework.Game
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private GraphicsDeviceManager graphics;
         private static ScreenManager screenManager;
         private static Xenocide instance;
@@ -118,7 +122,7 @@ namespace ProjectXenocide
             // check shader version
             if (Util.GetShaderVersion(GraphicsDevice) == 1)
             {
-                Console.Error.WriteLine(Strings.EXCEPTION_USING_V1_1_SHADER);
+                Logger.Error(Strings.EXCEPTION_USING_V1_1_SHADER);
             }
 
             // Register audio system
@@ -141,7 +145,7 @@ namespace ProjectXenocide
             screenManager.ScheduleScreen(new UI.Screens.StartScreen());
 
             var profileMax = GraphicsDevice.GraphicsProfile == GraphicsProfile.HiDef ? 4096 : 2048;
-            Console.WriteLine("MaxTextureSize (profile): {0} ({1})", profileMax, GraphicsDevice.GraphicsProfile);
+            Logger.Info("MaxTextureSize (profile): {0} ({1})", profileMax, GraphicsDevice.GraphicsProfile);
         }
 
         private void ValidateGumx()
@@ -152,7 +156,7 @@ namespace ProjectXenocide
             {
                 var path = Path.Combine(screenDir, screen.Name + ".gusx");
                 if (!File.Exists(path))
-                    Console.Error.WriteLine("GumX validation: MISSING {0}", path);
+                    Logger.Warn("GumX validation: MISSING {0}", path);
             }
         }
 

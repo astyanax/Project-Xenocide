@@ -1,10 +1,14 @@
 using System;
 using System.Diagnostics;
 
+using NLog;
+
 namespace ProjectXenocide.Utils
 {
     public static class Profile
     {
+        private static readonly Logger Log = LogManager.GetLogger("Profile");
+
         public static IDisposable Time(string label)
         {
 #if DEBUG
@@ -15,9 +19,9 @@ namespace ProjectXenocide.Utils
         }
 
         [Conditional("DEBUG")]
-        public static void Log(string label, long elapsedMs)
+        public static void LogTiming(string label, long elapsedMs)
         {
-            Console.WriteLine($"[PROFILE] {label}: {elapsedMs}ms");
+            Log.Debug("[PROFILE] {0}: {1}ms", label, elapsedMs);
         }
 
         private class ProfileScope : IDisposable
@@ -34,7 +38,7 @@ namespace ProjectXenocide.Utils
             public void Dispose()
             {
                 _sw.Stop();
-                Log(_label, _sw.ElapsedMilliseconds);
+                LogTiming(_label, _sw.ElapsedMilliseconds);
             }
         }
     }

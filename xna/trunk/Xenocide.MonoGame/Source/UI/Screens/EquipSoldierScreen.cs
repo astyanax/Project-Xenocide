@@ -33,6 +33,8 @@ using System.Diagnostics;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+
+using NLog;
 using Microsoft.Xna.Framework.Graphics;
 
 using Gum.Forms;
@@ -60,6 +62,8 @@ namespace ProjectXenocide.UI.Screens
     /// </summary>
     public partial class EquipSoldierScreen : GumScreen
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Constructor used to equip soldiers in an outpost
         /// </summary>
@@ -460,7 +464,7 @@ namespace ProjectXenocide.UI.Screens
                 sb.Append(", y = ");
                 sb.Append(Util.ToString(location.Y));
             }
-            Debug.WriteLine(sb.ToString());
+            Logger.Debug(sb.ToString());
         }
 
         #region Fields

@@ -40,6 +40,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using NLog;
+
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.UI.Dialogs;
@@ -96,6 +98,8 @@ namespace ProjectXenocide.Utils
         Justification = "we're not going to be using System.Web.Util")]
     public static class Util
     {
+        private static readonly Logger GeoLog = LogManager.GetLogger("GeoTime");
+
         /// <summary>
         /// Slightly enhanced Debug.WriteLine(), will timestamp line with game's GeoTime
         /// </summary>
@@ -104,9 +108,7 @@ namespace ProjectXenocide.Utils
         [Conditional("DEBUG")]
         public static void GeoTimeDebugWriteLine(string format, params Object[] args)
         {
-            string msg = StringFormat(format, args);
-            Debug.WriteLine(msg);
-            Console.WriteLine(msg);
+            GeoLog.Debug(format, args);
         }
 
         /// <summary>

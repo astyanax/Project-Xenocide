@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework;
 
 using MonoGameGum;
 
+using NLog;
+
 using ProjectXenocide.Assets;
 using ProjectXenocide.UI.Screens;
 
@@ -13,6 +15,8 @@ namespace ProjectXenocide.UI.Dialogs
 {
     public abstract class ModalDialog : Dialog
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private StackPanel _panel;
         private StackPanel _titleBar;
         private Label _titleLabel;
@@ -53,19 +57,19 @@ namespace ProjectXenocide.UI.Dialogs
 
             _panel.AddToRoot();
 
-            Console.WriteLine($"[DIALOG] {GetType().Name}: \"{Title}\"");
+            Logger.Debug("[DIALOG] {0}: \"{1}\"", GetType().Name, Title);
         }
 
         public void Close()
         {
-            Console.WriteLine($"[DIALOG] {GetType().Name} Close");
+            Logger.Debug("[DIALOG] {0} Close", GetType().Name);
             CloseAction?.Invoke();
             ScreenManager.CloseDialog(this);
         }
 
         public void Dismiss()
         {
-            Console.WriteLine($"[DIALOG] {GetType().Name} Dismiss");
+            Logger.Debug("[DIALOG] {0} Dismiss", GetType().Name);
             DismissAction?.Invoke();
             ScreenManager.CloseDialog(this);
         }

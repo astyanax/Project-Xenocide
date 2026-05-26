@@ -33,6 +33,8 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 
+using NLog;
+
 using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Model.StaticData.Items;
 
@@ -45,6 +47,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
     /// </summary>
     public partial class OutpostInventory
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         #region UnitTests
 
@@ -253,7 +256,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             // list the contents of the base
             foreach (Item item in inventory.ListContents())
             {
-                Debug.WriteLine(item.ItemInfo.Name);
+                Logger.Debug(item.ItemInfo.Name);
             }
 
             // remove condor.

@@ -34,6 +34,8 @@ using System.Text;
 using Gum.Forms;
 using Gum.Forms.Controls;
 
+using NLog;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -56,6 +58,8 @@ namespace ProjectXenocide.UI.Screens
 {
     public partial class BattlescapeScreen : GumScreen
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public BattlescapeScreen()
             : base("BattlescapeScreen", @"Content/Textures/UI/BasesScreenBackground.png")
         {
@@ -210,7 +214,7 @@ namespace ProjectXenocide.UI.Screens
             state = newState;
             if (null != state)
             {
-                Debug.WriteLine("Entering Battlescape state " + state.GetType().ToString());
+                Logger.Debug("Entering Battlescape state {0}", state.GetType());
                 state.OnEnterState();
             }
         }
