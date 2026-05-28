@@ -146,9 +146,9 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 
 **Plan to remove System.Drawing from CeGuiStubs:**
 1. Replace all `PointF`/`SizeF` implicit operators in CeGuiStubs with direct `CeGui.Point`/`CeGui.Size` usage in callers — already done
-2. Remove `using System.Drawing;` and the two implicit operator pairs from CeGuiStubs
-3. This happens naturally when the real GUI library replaces the stub OR can be done earlier as a standalone cleanup
-4. After removal, the entire codebase will have zero `System.Drawing` dependency, improving cross-platform compatibility and reducing assembly load
+2. Remove `using System.Drawing;` and the two implicit operator pairs from CeGuiStubs — ✅ Done (CeGuiStubs.cs deleted entirely)
+3. ~~This happens naturally when the real GUI library replaces the stub OR can be done earlier as a standalone cleanup~~
+4. After removal, the entire codebase will have zero `System.Drawing` dependency, improving cross-platform compatibility and reducing assembly load — ✅ Done
 
 ### Phase 3: Save/Load System
 - [x] Replace `BinaryFormatter` with `System.Text.Json` — ✅ Done
@@ -346,7 +346,7 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
   - Auto-advance: polls `_currentMusic.State == SoundState.Stopped` in `Update()` to play next random track
   - Categories: music tracks tagged by screen (`MainMenu`, `PlanetView`, `BaseView`, `XNet`); `PlayRandomMusic(category)` filters by tag
   - Volume: `MusicVolume`/`SoundVolume` per-instance; `SetMasterVolume()` → `SoundEffect.MasterVolume`
-  - Log: writes to `%LOCALAPPDATA%\Xenocide\audio_debug.log`
+  - Log: writes to `%LOCALAPPDATA%\Xenocide\audio_debug.log` — ✅ Replaced with NLog (see docs/LOGGING.md)
 - `GumScreen.WireClickSounds()` — recursively walks Gum `StackPanel.Children`, finds all `Button` controls, wires `Click +=` to play `Menu\buttonclick1_ok.ogg`
 - `GeoscapeScreenState.cs` — 4 CeGui buttons manually wired with click sound lambdas
 
@@ -410,8 +410,11 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 - [x] Remove Dependancies/ directory — ✅ Already removed
 - [x] Remove old Lib/ directory — ✅ Already removed
 - [x] Remove old Installers/ directory — ✅ Already removed
-- [ ] Update README.md with final build instructions
-- [ ] Update CI/CD if applicable
+- [x] Update README.md with final build instructions — ✅ Done
+- [x] Set up GitHub Actions CI/CD (build.yml) — ✅ Done
+- [x] Remove System.Drawing dependency — ✅ Done (CeGuiStubs.cs deleted; zero System.Drawing references)
+- [x] Remove CeGuiStubs.cs — ✅ Done (all stale CeGui stubs removed)
+- [x] Remove WinFormsStubs.cs — unnecessary but inert (just MouseButtons enum, no System.Drawing)
 
 ---
 
@@ -459,14 +462,9 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 13. ~~**Save/load UX**~~ ✅ Done (success messages, path fixes, serialization fix)
 
 ### Remaining
-14. **Logging infrastructure** — NLog unified logging (coloured console, rotating file), 42 ad-hoc calls converted, custom file logger removed — ✅ Done
-15. **Settings screen** — Display/Sound/Notifications/GamePlay settings, Settings button on StartScreen — ✅ Done
-16. **Dialog `.gusx` conversion** — 4 dialogs fully converted (GumMessageBox, GumYesNo, GumOptions, SoundOptions), 9 have .gusx stubs for future editing — ✅ Progress
-17. **Software cursor polish** — hotspot, context-sensitive cursor types (Default/Pointer/Hand), HW/SW toggle — ✅ Done
-18. **Cross-platform validation** — Phase 7 (build on Linux, fix path case issues)
-19. **Remaining FBX model textures** — add missing textures to MGCB
-20. **Cleanup** — Phase 8 (update README, CI/CD if applicable)
-21. **Manual testing** — verify all screens, dialogs, drag-drop, 3D overlays, input conflicts
+18. **Cross-platform validation** — Phase 7 (build/test on Linux, path case issues already fixed)
+19. **Remaining FBX model textures** — add missing textures to MGCB (3 models fail preload)
+20. **Manual testing** — verify all screens, dialogs, drag-drop, 3D overlays, input conflicts
 
 ### Gum UI Layout & Theming (Next Major Task)
 The Gum WYSIWYG editor (`Gum UI Tool`) can be invoked to create a `.gumx` project for visual layout design. The tool creates XML-based project files that define component styles, layouts, and data bindings. Currently all UI is built programmatically in C# (buttons, labels, stack panels in `CreateGumControls()`). The Gum editor would allow:
