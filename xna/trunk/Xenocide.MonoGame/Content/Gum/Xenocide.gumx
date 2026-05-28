@@ -75,6 +75,19 @@
   <ScreenReference Name="StatisticsScreen" />
   <ScreenReference Name="StoresScreen" />
   <ScreenReference Name="XNetScreen" />
+  <ScreenReference Name="GumMessageBoxDialog" />
+  <ScreenReference Name="GumYesNoDialog" />
+  <ScreenReference Name="GumOptionsDialog" />
+  <ScreenReference Name="SoundOptionsDialog" />
+  <ScreenReference Name="AlienMissionDialog" />
+  <ScreenReference Name="AircraftOrdersDialog" />
+  <ScreenReference Name="BuildFacilityDialog" />
+  <ScreenReference Name="LaunchInterceptDialog" />
+  <ScreenReference Name="NameNewBaseDialog" />
+  <ScreenReference Name="PickActionDialog" />
+  <ScreenReference Name="StartBattlescapeDialog" />
+  <ScreenReference Name="TrackingLostDialog" />
+  <ScreenReference Name="UfoInfoDialog" />
   <ComponentReference Name="Controls/ButtonClose" />
   <ComponentReference Name="Controls/ButtonConfirm" />
   <ComponentReference Name="Controls/ButtonDeny" />
@@ -109,6 +122,8 @@
   <ComponentReference Name="Controls/TreeViewToggle" />
   <ComponentReference Name="Controls/UserControl" />
   <ComponentReference Name="Controls/Window" />
+  <ComponentReference Name="DialogButton" />
+  <ComponentReference Name="DialogPanel" />
   <ComponentReference Name="Elements/CautionLines" />
   <ComponentReference Name="Elements/Divider" />
   <ComponentReference Name="Elements/DividerHorizontal" />
@@ -119,8 +134,6 @@
   <ComponentReference Name="Elements/VerticalLines" />
   <ComponentReference Name="Styles" />
   <ComponentReference Name="XenocideButton" />
-  <ComponentReference Name="DialogPanel" />
-  <ComponentReference Name="DialogButton" />
   <StandardElementReference Name="Circle" />
   <StandardElementReference Name="ColoredRectangle" />
   <StandardElementReference Name="Component" />

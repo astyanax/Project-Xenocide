@@ -1,32 +1,19 @@
 # Project Xenocide
 
-**Xenocide** was a fan-made, open-source remake of the classic strategy game *X-COM: UFO Defense* (also known as *UFO: Enemy Unknown*). Originally built with C# and Microsoft XNA Game Studio 3.0 (~2007–2010), this project is currently being **migrated to MonoGame** for modern cross-platform support (Windows + Linux).
-
-> **Status:** This repository is an **archival snapshot** imported from the original Subversion repository, currently undergoing modernization. See [MIGRATION.md](MIGRATION.md) for the full plan and progress.
+**Xenocide** is a fan-made, open-source remake of the classic strategy game *X-COM: UFO Defense* (also known as *UFO: Enemy Unknown*). Originally built with C# and Microsoft XNA Game Studio 3.0 (~2007–2010), the project has been **migrated to MonoGame** for modern cross-platform support (Windows + Linux).
 
 ## Tech Stack
 
-### Original (Legacy XNA 3.0)
 | Component | Technology |
-|-----------|------------|
-| Language | C# (.NET 2.0) |
-| Game Framework | Microsoft XNA Game Studio 3.0 |
-| GUI | CeGui# (Crazy Eddie's GUI – .NET port) |
-| Audio | FMOD Ex |
-| Build | MSBuild (Visual Studio 2008) |
-| Testing | NUnit |
-| Installer | NSIS (current), Inno Setup (legacy) |
-
-### Target (MonoGame)
-| Component | Technology |
-|-----------|------------|
-| Language | C# (.NET 8.0+) |
-| Game Framework | MonoGame 3.8.4+ (DesktopGL — OpenGL + SDL2) |
-| GUI | Gum / MGUI / Myra *(to be decided)* |
-| Audio | MonoGame SoundEffect/Song or FMOD *(to be decided)* |
+|---|---|
+| Language | C# (.NET 9.0) |
+| Game Framework | MonoGame 3.8.x (DesktopGL — OpenGL + SDL2) |
+| GUI | **Gum** (Gum.MonoGame) — WYSIWYG layouts via `.gusx` files |
+| Audio | MonoGame `SoundEffect` via MGCB content pipeline |
+| Logging | **NLog** — coloured console + rotating file output |
 | Build | .NET SDK 9.0+, `dotnet` CLI, MGCB content pipeline |
-| Testing | **xUnit.net** (migrating from NUnit) |
-| Content | MGCB Editor (compiles .fbx, .fx, .spritefont, textures) |
+| Testing | **xUnit.net** 2.9.2 |
+| Content | MGCB Editor (compiles .fbx, .fx, .spritefont, textures, .ogg) |
 | Data | XML-driven game content |
 
 ## Features
@@ -55,79 +42,68 @@
 ### Aeroscape (Air Combat)
 - Interceptor-vs-UFO air combat (partially implemented)
 
-## Building (Modern — MonoGame)
+### Settings
+- Display options (resolution, fullscreen, software/hardware cursor)
+- Sound options (music/SFX volume)
+- Notification and gameplay settings
 
-The migration to MonoGame is in progress. See [MIGRATION.md](MIGRATION.md) for the full plan.
+## Building
 
 ### Prerequisites
 
-**1. Install .NET SDK**
-
-The .NET SDK is required. Use the official install script (recommended for cross-platform):
-
-```powershell
-# Windows (PowerShell)
-Invoke-WebRequest -Uri https://builds.dotnet.microsoft.com/dotnet/scripts/v1/dotnet-install.ps1 -OutFile dotnet-install.ps1
-.\dotnet-install.ps1 -Channel 9.0
-```
-
-```bash
-# Linux
-curl -sSL https://builds.dotnet.microsoft.com/dotnet/scripts/v1/dotnet-install.sh | bash /dev/stdin --channel 9.0
-```
-
-Alternatively, download the installer from:
-https://dotnet.microsoft.com/en-us/download/dotnet/9.0
-
-**2. Install MonoGame templates and MGCB tools**
-
-```powershell
-dotnet new install MonoGame.Templates.CSharp
-dotnet tool install -g dotnet-mgcb
-dotnet tool install -g dotnet-mgcb-editor
-```
+- **.NET SDK 9.0+** — [download](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
+- **MonoGame templates and MGCB tools:**
+  ```powershell
+  dotnet new install MonoGame.Templates.CSharp
+  dotnet tool install -g dotnet-mgcb
+  dotnet tool install -g dotnet-mgcb-editor
+  ```
 
 ### Build & Run
 
 ```powershell
-dotnet restore
 dotnet run --project xna/trunk/Xenocide.MonoGame
 ```
 
-> **Note:** The MGCB content pipeline compiles .fbx models, .fx shaders, textures, and spritefonts into .xnb format at build time via the `MonoGame.Content.Builder.Task` NuGet package.
+The MGCB content pipeline compiles .fbx models, .fx shaders, textures, spritefonts, and .ogg audio into .xnb format at build time.
 
----
+## Documentation
 
-## Building (Legacy — XNA 3.0)
-
-The original XNA 3.0 build is preserved for reference but **requires deprecated tooling**:
-
-- Visual C# Express 2008 or Visual Studio 2008
-- Microsoft XNA Game Studio 3.0
-- .NET Framework 2.0 SP1+
-- DirectX 9.0c (August 2008+)
-
-Open `xna/trunk/Xenocide.sln` in Visual Studio 2008, select Debug|x86 or Release|x86, and build.
-
-> Modern Windows systems generally **cannot** build the original XNA 3.0 project without running the legacy toolchain in a VM or compatibility environment.
+| Document | Description |
+|---|---|
+| [MIGRATION.md](MIGRATION.md) | Full migration plan and progress (XNA 3.0 → MonoGame) |
+| [docs/LOGGING.md](docs/LOGGING.md) | Logging architecture (NLog setup, log levels, configuration) |
+| [LEGACY.md](LEGACY.md) | Historical context and legacy releases |
 
 ## Project Structure
 
 ```
-MIGRATION.md             — Migration plan and roadmap (MonoGame)
-assets/                  — Artwork, design documents, sound, and pre-built installers
-  ProgressReleases/      — Historical release installers (see LEGACY.md)
+MIGRATION.md             — Migration plan and roadmap
+docs/
+  LOGGING.md             — Logging architecture documentation
+assets/                  — Artwork, design documents, sounds, historical installers
 xna/                     — Main source code
   trunk/
-    Xenocide/            — Game source (~93,650 lines of C#, 293 files) [LEGACY XNA 3.0]
-    Xenocide.MonoGame/   — MonoGame migration target [NEW]
-    Xenocide.Pipeline/   — XNA Content Pipeline extension [LEGACY]
-    Tests/               — NUnit unit tests [LEGACY]
-    docs/                — Design documents and developer guides
-  Installers/            — Installer build scripts (NSIS and legacy Inno Setup)
-  branches/              — Feature branches (XNA 3.0, component system, GUI sandbox)
+    Xenocide.MonoGame/   — MonoGame target (active development)
+      Source/
+        Audio/           — GameAudioComponent (MonoGame SoundEffect backend)
+        Model/           — Game state, geoscape, battlescape, static data
+        Services/        — Savegame service
+        UI/
+          Controls/      — Toast notifications, software cursor
+          Dialogs/       — 13 modal dialogs (4 with Gum .gusx layouts)
+          Scenes/        — 3D scenes (Geoscape, Battlescape, XNet, Facilities)
+          Screens/       — 27 game screens (Gum-based with .gusx layouts)
+        Utils/           — NLog logging, profiling, serialization, content cache
+      Content/           — MGCB assets (models, shaders, textures, fonts, audio)
+        Gum/             — Gum .gumx project + .gusx screen/dialog layouts
+    Tests/               — xUnit.net unit tests
 LICENSE                  — MIT License
 ```
+
+## Legacy Build (XNA 3.0)
+
+The original XNA 3.0 build is preserved for reference but requires deprecated tooling (Visual Studio 2008, XNA Game Studio 3.0, .NET Framework 2.0). Open `xna/trunk/Xenocide.sln` to build. Modern systems generally require a VM or compatibility environment.
 
 ## Media
 
@@ -137,7 +113,3 @@ LICENSE                  — MIT License
 ## License
 
 Licensed under the [MIT License](LICENSE). Copyright © 2010 Project Xenocide team.
-
-## Legacy Releases
-
-Pre-built installers tracking the project's development history are archived in `assets/ProgressReleases/` and `xna/Installers/`. See [LEGACY.md](LEGACY.md) for details.

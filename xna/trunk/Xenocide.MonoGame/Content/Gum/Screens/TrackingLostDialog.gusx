@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScreenSave xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>TrackingLostDialog</Name>
+  <State>
+    <Name>Default</Name>
+    <Variable Type="string" Name="CloseButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">X</Value>
+    </Variable>
+    <Variable Type="float" Name="CloseButton.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">24</Value>
+    </Variable>
+    <Variable Type="float" Name="CloseButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">24</Value>
+    </Variable>
+    <Variable Type="string" Name="CloseButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">TitleBar</Value>
+    </Variable>
+    <Variable Type="string" Name="ContentPanel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">DialogPanel</Value>
+    </Variable>
+    <Variable Type="float" Name="ContentPanel.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContentPanel.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="DialogPanel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable Type="float" Name="DialogPanel.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">250</Value>
+    </Variable>
+    <Variable Type="float" Name="DialogPanel.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">500</Value>
+    </Variable>
+    <Variable Type="float" Name="DialogPanel.X" SetsValue="true">
+      <Value xsi:type="xsd:float">-250</Value>
+    </Variable>
+    <Variable Type="PositionUnitType" Name="DialogPanel.XUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">6</Value>
+    </Variable>
+    <Variable Type="float" Name="DialogPanel.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">-125</Value>
+    </Variable>
+    <Variable Type="PositionUnitType" Name="DialogPanel.YUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">5</Value>
+    </Variable>
+    <Variable Type="float" Name="ContainerInstance.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="ContainerInstance.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="TitleBar.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">DialogPanel</Value>
+    </Variable>
+    <Variable Type="float" Name="TitleBar.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">28</Value>
+    </Variable>
+    <Variable Type="float" Name="TitleBar.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="TitleBar.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="TitleBar.VariableCategoryState" SetsValue="true">
+      <Value xsi:type="xsd:string">Primary</Value>
+    </Variable>
+    <Variable Type="string" Name="TitleLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">TitleBar</Value>
+    </Variable>
+    <Variable Type="string" Name="TitleLabel.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Tracking Lost</Value>
+    </Variable>
+    <Variable Type="float" Name="TitleLabel.X" SetsValue="true">
+      <Value xsi:type="xsd:float">8</Value>
+    </Variable>
+    <Variable Type="float" Name="TitleLabel.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">4</Value>
+    </Variable>
+  </State>
+  <Instance Name="ContainerInstance" BaseType="Container" />
+  <Instance Name="DialogPanel" BaseType="Container" />
+  <Instance Name="TitleBar" BaseType="Container" />
+  <Instance Name="TitleLabel" BaseType="Text" />
+  <Instance Name="CloseButton" BaseType="XenocideButton" />
+  <Instance Name="ContentPanel" BaseType="Container" />
+  <Behaviors />
+</ScreenSave>

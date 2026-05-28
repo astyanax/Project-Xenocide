@@ -3,45 +3,123 @@
   <Name>StatisticsScreen</Name>
   <State>
     <Name>Default</Name>
-    <Variable Type="string" Name="BGImage.Parent" SetsValue="true"><Value xsi:type="xsd:string">ContainerInstance</Value></Variable>
-    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true"><Value xsi:type="xsd:string">..\Textures\UI\GeoscapeScreenBackground.png</Value></Variable>
-    <Variable Type="float" Name="BGImage.Height" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="BGImage.HeightUnits" SetsValue="true"><Value xsi:type="xsd:int">6</Value></Variable>
-    <Variable Type="float" Name="BGImage.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="BGImage.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-<Variable Type="float" Name="ContainerInstance.Height" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="ContainerInstance.HeightUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="float" Name="ContainerInstance.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="ChildrenLayout" Name="ButtonBar.ChildrenLayout" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="string" Name="ButtonBar.Parent" SetsValue="true"><Value xsi:type="xsd:string">ContainerInstance</Value></Variable>
-    <Variable Type="float" Name="ButtonBar.Width" SetsValue="true"><Value xsi:type="xsd:float">200</Value></Variable>
-    <Variable Type="float" Name="ButtonBar.X" SetsValue="true"><Value xsi:type="xsd:float">1040</Value></Variable>
-    <Variable Type="float" Name="ButtonBar.Y" SetsValue="true"><Value xsi:type="xsd:float">10</Value></Variable>
-    <Variable Type="string" Name="ufoByRegionButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">UFO by Region</Value></Variable>
-    <Variable Type="string" Name="ufoByRegionButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
-    <Variable Type="float" Name="ufoByRegionButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="ufoByRegionButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="string" Name="ufoByCountryButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">UFO by Country</Value></Variable>
-    <Variable Type="string" Name="ufoByCountryButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
-    <Variable Type="float" Name="ufoByCountryButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="ufoByCountryButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="string" Name="xcomByRegionButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">X-Corp by Region</Value></Variable>
-    <Variable Type="string" Name="xcomByRegionButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
-    <Variable Type="float" Name="xcomByRegionButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="xcomByRegionButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="string" Name="xcomByCountryButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">X-Corp by Country</Value></Variable>
-    <Variable Type="string" Name="xcomByCountryButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
-    <Variable Type="float" Name="xcomByCountryButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="xcomByCountryButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="string" Name="fundsButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Funds</Value></Variable>
-    <Variable Type="string" Name="fundsButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
-    <Variable Type="float" Name="fundsButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="fundsButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="string" Name="geoscapeButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Geoscape</Value></Variable>
-    <Variable Type="string" Name="geoscapeButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
-    <Variable Type="float" Name="geoscapeButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="geoscapeButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="float" Name="BGImage.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">6</Value>
+    </Variable>
+    <Variable Type="string" Name="BGImage.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true">
+      <Value xsi:type="xsd:string">..\Textures\UI\GeoscapeScreenBackground.png</Value>
+    </Variable>
+    <Variable Type="float" Name="BGImage.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="ChildrenLayout" Name="ButtonBar.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="ButtonBar.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable Type="float" Name="ButtonBar.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">200</Value>
+    </Variable>
+    <Variable Type="float" Name="ButtonBar.X" SetsValue="true">
+      <Value xsi:type="xsd:float">1040</Value>
+    </Variable>
+    <Variable Type="float" Name="ButtonBar.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">10</Value>
+    </Variable>
+    <Variable Type="float" Name="ContainerInstance.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="ContainerInstance.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="fundsButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonBar</Value>
+    </Variable>
+    <Variable Type="string" Name="fundsButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Funds</Value>
+    </Variable>
+    <Variable Type="float" Name="fundsButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="fundsButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="geoscapeButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonBar</Value>
+    </Variable>
+    <Variable Type="string" Name="geoscapeButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Geoscape</Value>
+    </Variable>
+    <Variable Type="float" Name="geoscapeButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="geoscapeButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="ufoByCountryButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonBar</Value>
+    </Variable>
+    <Variable Type="string" Name="ufoByCountryButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">UFO by Country</Value>
+    </Variable>
+    <Variable Type="float" Name="ufoByCountryButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ufoByCountryButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="ufoByRegionButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonBar</Value>
+    </Variable>
+    <Variable Type="string" Name="ufoByRegionButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">UFO by Region</Value>
+    </Variable>
+    <Variable Type="float" Name="ufoByRegionButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ufoByRegionButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="xcomByCountryButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonBar</Value>
+    </Variable>
+    <Variable Type="string" Name="xcomByCountryButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">X-Corp by Country</Value>
+    </Variable>
+    <Variable Type="float" Name="xcomByCountryButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="xcomByCountryButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="xcomByRegionButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonBar</Value>
+    </Variable>
+    <Variable Type="string" Name="xcomByRegionButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">X-Corp by Region</Value>
+    </Variable>
+    <Variable Type="float" Name="xcomByRegionButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="xcomByRegionButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
   </State>
   <Instance Name="ContainerInstance" BaseType="Container" />
   <Instance Name="BGImage" BaseType="Sprite" />

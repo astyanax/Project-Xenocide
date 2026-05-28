@@ -149,3 +149,6 @@ Logger.Debug("ScreenManager: ScheduleScreen {0}", name);
 - [x] GeoBitmap.cs
 - [x] UnitTestOutpostInventory.cs
 - [x] GameAudioComponent.cs
+- [x] System.Diagnostics cleanup (41 files)
+- [x] SettingsScreen with NLog debug logging
+- [x] GumDialog NLog crash fix (Text vs Label)

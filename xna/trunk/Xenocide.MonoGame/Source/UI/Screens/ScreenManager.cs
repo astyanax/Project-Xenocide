@@ -297,7 +297,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         public void ShowDialog(Dialog dialog)
         {
-            Util.GeoTimeDebugWriteLine("Showing dialog {0}", dialog.GetType().Name);
+            Util.GeoTimeDebugWriteLine("Showing dialog {0}: \"{1}\"", dialog.GetType().Name, dialog.Title);
 
             // get the screen to remember its state
             // Ugly, Ugly hack.
@@ -320,7 +320,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="dialog">The dialog making the call (which should ALSO be the topmost dialog)</param>
         public void CloseDialog(Dialog dialog)
         {
-            Util.GeoTimeDebugWriteLine("Closing dialog {0}", dialog.GetType().Name);
+            Util.GeoTimeDebugWriteLine("Closing dialog {0}: \"{1}\"", dialog.GetType().Name, dialog.Title);
 
             Debug.Assert(dialog == showingDialogs.Peek());
 

@@ -6,7 +6,7 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    public class GumYesNoDialog : ModalDialog
+    public class GumYesNoDialog : GumDialog
     {
         public GumYesNoDialog(string messageText)
             : this(messageText, Strings.DLG_YESNO_TITLE, null, null)
@@ -24,9 +24,9 @@ namespace ProjectXenocide.UI.Dialogs
         }
 
         public GumYesNoDialog(string messageText, string title, string yesButtonText, string noButtonText)
+            : base(title)
         {
             _messageText = messageText;
-            Title = title;
             _yesButtonText = yesButtonText;
             _noButtonText = noButtonText;
         }
@@ -41,21 +41,26 @@ namespace ProjectXenocide.UI.Dialogs
             return new GumYesNoDialog(messageText, title, Strings.BUTTON_OK, Strings.BUTTON_CANCEL);
         }
 
-        protected override void CreateDialogWidgets()
+        protected override void WireGumControls()
         {
-            var messageLabel = new Label();
-            messageLabel.Text = _messageText;
-            ContentArea.AddChild(messageLabel);
+            base.WireGumControls();
 
-            var yesButton = new Button();
-            yesButton.Text = _yesButtonText ?? Strings.BUTTON_YES;
-            yesButton.Click += (s, e) => Close();
-            ContentArea.AddChild(yesButton);
+            SetText("TitleLabel", Title);
+            SetText("MessageLabel", _messageText);
 
-            var noButton = new Button();
-            noButton.Text = _noButtonText ?? Strings.BUTTON_NO;
-            noButton.Click += (s, e) => Dismiss();
-            ContentArea.AddChild(noButton);
+            var yesBtn = GetButton("YesButton");
+            if (yesBtn != null)
+            {
+                yesBtn.Text = _yesButtonText ?? Strings.BUTTON_YES;
+                yesBtn.Click += (s, e) => Close();
+            }
+
+            var noBtn = GetButton("NoButton");
+            if (noBtn != null)
+            {
+                noBtn.Text = _noButtonText ?? Strings.BUTTON_NO;
+                noBtn.Click += (s, e) => Dismiss();
+            }
 
             CloseAction = _yesAction;
         }

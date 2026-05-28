@@ -4,8 +4,16 @@
   <BaseType>XenocideButton</BaseType>
   <State>
     <Name>Default</Name>
+    <Variable Type="State" Name="State" Category="States and Visibility" SetsValue="false">
+      <Value xsi:type="xsd:string">Default</Value>
+    </Variable>
     <Variable Type="string" Name="TextInstance.Text" ExposedAsName="Text" SetsValue="true">
       <Value xsi:type="xsd:string">OK</Value>
     </Variable>
   </State>
+  <Instance Name="LeftSlice" BaseType="Sprite" DefinedByBase="true" />
+  <Instance Name="MiddleSlice" BaseType="Sprite" DefinedByBase="true" />
+  <Instance Name="RightSlice" BaseType="Sprite" DefinedByBase="true" />
+  <Instance Name="TextInstance" BaseType="Text" DefinedByBase="true" />
+  <Behaviors />
 </ComponentSave>

@@ -72,6 +72,9 @@ namespace ProjectXenocide.UI.Screens
 
         private GraphicalUiElement TryLoadScreenFromGumx(string screenName)
         {
+            if (!HasGumxLayout)
+                return null;
+
             var project = Xenocide.GumProject;
             if (project == null)
                 return null;

@@ -2,42 +2,32 @@ using System;
 
 using Gum.Forms.Controls;
 
+using ProjectXenocide.Assets;
 using ProjectXenocide.UI.Screens;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class GumOptionsDialog : ModalDialog
+    class GumOptionsDialog : GumDialog
     {
-        public GumOptionsDialog()
+        public GumOptionsDialog() : base("Options") { }
+        protected override void WireGumControls()
         {
-        }
+            base.WireGumControls();
 
-        protected override void CreateDialogWidgets()
-        {
-            var loadButton = new Button();
-            loadButton.Text = "Load Game";
-            loadButton.Click += OnLoadClicked;
-            ContentArea.AddChild(loadButton);
+            var loadBtn = GetButton("LoadButton");
+            if (loadBtn != null) loadBtn.Click += OnLoadClicked;
 
-            var saveButton = new Button();
-            saveButton.Text = "Save Game";
-            saveButton.Click += OnSaveClicked;
-            ContentArea.AddChild(saveButton);
+            var saveBtn = GetButton("SaveButton");
+            if (saveBtn != null) saveBtn.Click += OnSaveClicked;
 
-            var soundButton = new Button();
-            soundButton.Text = "Sound Options";
-            soundButton.Click += OnSoundClicked;
-            ContentArea.AddChild(soundButton);
+            var soundBtn = GetButton("SoundButton");
+            if (soundBtn != null) soundBtn.Click += OnSoundClicked;
 
-            var abandonButton = new Button();
-            abandonButton.Text = "Abandon Game";
-            abandonButton.Click += OnAbandonClicked;
-            ContentArea.AddChild(abandonButton);
+            var abandonBtn = GetButton("AbandonButton");
+            if (abandonBtn != null) abandonBtn.Click += OnAbandonClicked;
 
-            var cancelButton = new Button();
-            cancelButton.Text = "Cancel";
-            cancelButton.Click += OnCancelClicked;
-            ContentArea.AddChild(cancelButton);
+            var cancelBtn = GetButton("CancelButton");
+            if (cancelBtn != null) cancelBtn.Click += OnCancelClicked;
         }
 
         public void OnCancelClicked(object sender, EventArgs e)

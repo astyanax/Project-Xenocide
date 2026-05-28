@@ -6,12 +6,7 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    /// <summary>
-    /// A simple modal dialog with a message and an OK button.
-    /// The OK button invokes the registered OkAction and closes the dialog.
-    /// ESC dismisses without invoking the callback.
-    /// </summary>
-    public class GumMessageBoxDialog : ModalDialog
+    public class GumMessageBoxDialog : GumDialog
     {
         public GumMessageBoxDialog(string messageText)
             : this(messageText, Strings.DLG_MESSAGEBOX_TITLE)
@@ -19,23 +14,20 @@ namespace ProjectXenocide.UI.Dialogs
         }
 
         public GumMessageBoxDialog(string messageText, string title)
+            : base(title)
         {
             _messageText = messageText;
-            Title = title;
         }
 
-        protected override void CreateDialogWidgets()
+        protected override void WireGumControls()
         {
-            var messageLabel = new Label();
-            messageLabel.Text = _messageText;
-            ContentArea.AddChild(messageLabel);
+            base.WireGumControls();
 
-            var okButton = new Button();
-            okButton.Text = Strings.BUTTON_OK;
-            okButton.Click += (s, e) => Close();
-            ContentArea.AddChild(okButton);
+            SetText("TitleLabel", Title);
+            SetText("MessageLabel", _messageText);
 
-            CloseAction = _okAction;
+            var okBtn = GetButton("OkButton");
+            if (okBtn != null) okBtn.Click += (s, e) => Close();
         }
 
         public Dialog.ButtonAction OkAction

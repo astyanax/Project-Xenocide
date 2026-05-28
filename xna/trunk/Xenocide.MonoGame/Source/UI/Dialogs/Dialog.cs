@@ -27,5 +27,11 @@ namespace ProjectXenocide.UI.Dialogs
 
         private static int dialogIdCounter;
         private string title;
+
+        public string Title
+        {
+            get => title;
+            protected set => title = value;
+        }
     }
 }

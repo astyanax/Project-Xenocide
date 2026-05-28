@@ -3,53 +3,147 @@
   <Name>Manufacture</Name>
   <State>
     <Name>Default</Name>
-    <Variable Type="string" Name="BGImage.Parent" SetsValue="true"><Value xsi:type="xsd:string">ContainerInstance</Value></Variable>
-    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true"><Value xsi:type="xsd:string">..\Textures\UI\GeoscapeScreenBackground.png</Value></Variable>
-    <Variable Type="float" Name="BGImage.Height" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="BGImage.HeightUnits" SetsValue="true"><Value xsi:type="xsd:int">6</Value></Variable>
-    <Variable Type="float" Name="BGImage.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="BGImage.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-<Variable Type="float" Name="ContainerInstance.Height" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="ContainerInstance.HeightUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="float" Name="ContainerInstance.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="ChildrenLayout" Name="ButtonBar.ChildrenLayout" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="string" Name="ButtonBar.Parent" SetsValue="true"><Value xsi:type="xsd:string">ContainerInstance</Value></Variable>
-    <Variable Type="float" Name="ButtonBar.Width" SetsValue="true"><Value xsi:type="xsd:float">200</Value></Variable>
-    <Variable Type="float" Name="ButtonBar.X" SetsValue="true"><Value xsi:type="xsd:float">1040</Value></Variable>
-    <Variable Type="float" Name="ButtonBar.Y" SetsValue="true"><Value xsi:type="xsd:float">10</Value></Variable>
-    <Variable Type="string" Name="buildMoreButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Build +</Value></Variable>
-    <Variable Type="string" Name="buildMoreButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
-    <Variable Type="float" Name="buildMoreButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="buildMoreButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="string" Name="buildLessButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Build -</Value></Variable>
-    <Variable Type="string" Name="buildLessButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
-    <Variable Type="float" Name="buildLessButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="buildLessButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="string" Name="cancelBuildButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Cancel Build</Value></Variable>
-    <Variable Type="string" Name="cancelBuildButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
-    <Variable Type="float" Name="cancelBuildButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="cancelBuildButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="string" Name="addIdleEngineersButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Add Idle</Value></Variable>
-    <Variable Type="string" Name="addIdleEngineersButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
-    <Variable Type="float" Name="addIdleEngineersButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="addIdleEngineersButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="string" Name="moreEngineersButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">+1</Value></Variable>
-    <Variable Type="string" Name="moreEngineersButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
-    <Variable Type="float" Name="moreEngineersButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="moreEngineersButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="string" Name="lessEngineersButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">-1</Value></Variable>
-    <Variable Type="string" Name="lessEngineersButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
-    <Variable Type="float" Name="lessEngineersButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="lessEngineersButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="string" Name="removeAllEngineersButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Remove All</Value></Variable>
-    <Variable Type="string" Name="removeAllEngineersButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
-    <Variable Type="float" Name="removeAllEngineersButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="removeAllEngineersButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
-    <Variable Type="string" Name="closeButton.TextInstance.Text" SetsValue="true"><Value xsi:type="xsd:string">Close</Value></Variable>
-    <Variable Type="string" Name="closeButton.Parent" SetsValue="true"><Value xsi:type="xsd:string">ButtonBar</Value></Variable>
-    <Variable Type="float" Name="closeButton.Width" SetsValue="true"><Value xsi:type="xsd:float">100</Value></Variable>
-    <Variable Type="DimensionUnitType" Name="closeButton.WidthUnits" SetsValue="true"><Value xsi:type="xsd:int">1</Value></Variable>
+    <Variable Type="string" Name="addIdleEngineersButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonBar</Value>
+    </Variable>
+    <Variable Type="string" Name="addIdleEngineersButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Add Idle</Value>
+    </Variable>
+    <Variable Type="float" Name="addIdleEngineersButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="addIdleEngineersButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="BGImage.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">6</Value>
+    </Variable>
+    <Variable Type="string" Name="BGImage.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true">
+      <Value xsi:type="xsd:string">..\Textures\UI\GeoscapeScreenBackground.png</Value>
+    </Variable>
+    <Variable Type="float" Name="BGImage.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="BGImage.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="buildLessButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonBar</Value>
+    </Variable>
+    <Variable Type="string" Name="buildLessButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Build -</Value>
+    </Variable>
+    <Variable Type="float" Name="buildLessButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="buildLessButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="buildMoreButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonBar</Value>
+    </Variable>
+    <Variable Type="string" Name="buildMoreButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Build +</Value>
+    </Variable>
+    <Variable Type="float" Name="buildMoreButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="buildMoreButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="ChildrenLayout" Name="ButtonBar.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="ButtonBar.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable Type="float" Name="ButtonBar.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">200</Value>
+    </Variable>
+    <Variable Type="float" Name="ButtonBar.X" SetsValue="true">
+      <Value xsi:type="xsd:float">1040</Value>
+    </Variable>
+    <Variable Type="float" Name="ButtonBar.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">10</Value>
+    </Variable>
+    <Variable Type="string" Name="cancelBuildButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonBar</Value>
+    </Variable>
+    <Variable Type="string" Name="cancelBuildButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Cancel Build</Value>
+    </Variable>
+    <Variable Type="float" Name="cancelBuildButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="cancelBuildButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="closeButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonBar</Value>
+    </Variable>
+    <Variable Type="string" Name="closeButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Close</Value>
+    </Variable>
+    <Variable Type="float" Name="closeButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="closeButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="ContainerInstance.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="ContainerInstance.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="lessEngineersButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonBar</Value>
+    </Variable>
+    <Variable Type="string" Name="lessEngineersButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">-1</Value>
+    </Variable>
+    <Variable Type="float" Name="lessEngineersButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="lessEngineersButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="moreEngineersButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonBar</Value>
+    </Variable>
+    <Variable Type="string" Name="moreEngineersButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">+1</Value>
+    </Variable>
+    <Variable Type="float" Name="moreEngineersButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="moreEngineersButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="removeAllEngineersButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonBar</Value>
+    </Variable>
+    <Variable Type="string" Name="removeAllEngineersButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Remove All</Value>
+    </Variable>
+    <Variable Type="float" Name="removeAllEngineersButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="removeAllEngineersButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
   </State>
   <Instance Name="ContainerInstance" BaseType="Container" />
   <Instance Name="BGImage" BaseType="Sprite" />

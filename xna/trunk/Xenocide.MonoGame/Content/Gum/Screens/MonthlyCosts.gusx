@@ -3,46 +3,22 @@
   <Name>MonthlyCosts</Name>
   <State>
     <Name>Default</Name>
-    <Variable Type="string" Name="BGImage.Parent" SetsValue="true">
-      <Value xsi:type="xsd:string">ContainerInstance</Value>
-    </Variable>
-    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true">
-      <Value xsi:type="xsd:string">..\Textures\UI\GeoscapeScreenBackground.png</Value>
-    </Variable>
     <Variable Type="float" Name="BGImage.Height" SetsValue="true">
       <Value xsi:type="xsd:float">100</Value>
     </Variable>
     <Variable Type="DimensionUnitType" Name="BGImage.HeightUnits" SetsValue="true">
       <Value xsi:type="xsd:int">6</Value>
     </Variable>
+    <Variable Type="string" Name="BGImage.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true">
+      <Value xsi:type="xsd:string">..\Textures\UI\GeoscapeScreenBackground.png</Value>
+    </Variable>
     <Variable Type="float" Name="BGImage.Width" SetsValue="true">
       <Value xsi:type="xsd:float">100</Value>
     </Variable>
     <Variable Type="DimensionUnitType" Name="BGImage.WidthUnits" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
-    </Variable>
-    <Variable Type="float" Name="ContainerInstance.Height" SetsValue="true">
-      <Value xsi:type="xsd:float">100</Value>
-    </Variable>
-    <Variable Type="DimensionUnitType" Name="ContainerInstance.HeightUnits" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
-    </Variable>
-    <Variable Type="float" Name="ContainerInstance.Width" SetsValue="true">
-      <Value xsi:type="xsd:float">100</Value>
-    </Variable>
-    <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
-    </Variable>
-    <Variable Type="string" Name="closeButton.TextInstance.Text" SetsValue="true">
-      <Value xsi:type="xsd:string">Close</Value>
-    </Variable>
-    <Variable Type="string" Name="closeButton.Parent" SetsValue="true">
-      <Value xsi:type="xsd:string">ButtonBar</Value>
-    </Variable>
-    <Variable Type="float" Name="closeButton.Width" SetsValue="true">
-      <Value xsi:type="xsd:float">100</Value>
-    </Variable>
-    <Variable Type="DimensionUnitType" Name="closeButton.WidthUnits" SetsValue="true">
       <Value xsi:type="xsd:int">1</Value>
     </Variable>
     <Variable Type="ChildrenLayout" Name="ButtonBar.ChildrenLayout" SetsValue="true">
@@ -59,6 +35,30 @@
     </Variable>
     <Variable Type="float" Name="ButtonBar.Y" SetsValue="true">
       <Value xsi:type="xsd:float">10</Value>
+    </Variable>
+    <Variable Type="string" Name="closeButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonBar</Value>
+    </Variable>
+    <Variable Type="string" Name="closeButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Close</Value>
+    </Variable>
+    <Variable Type="float" Name="closeButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="closeButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="ContainerInstance.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="ContainerInstance.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
     </Variable>
   </State>
   <Instance Name="ContainerInstance" BaseType="Container" />

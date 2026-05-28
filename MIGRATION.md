@@ -279,8 +279,8 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] Save path fix (AppData directory, file/directory conflict handling) — ✅ Done
 - [x] IntPtr serialization fix in `ModelJsonConverter` — ✅ Done
 - [x] BasesScreen NRE fix (WireButton return value not saved) — ✅ Done
-- [ ] **Remaining:** Software cursor polish (hotspot, context-sensitive cursors, HW/SW toggle)
-- [ ] **Remaining:** Gum dialog `.gusx` file conversion (13 dialogs currently programmatic)
+- [ ] **Remaining:** Software cursor polish (hotspot, context-sensitive cursors, HW/SW toggle)~~ ✅ Done
+- [ ] **Remaining:** Gum dialog `.gusx` file conversion (13 dialogs — 4 fully converted with .gusx, 9 have stubs)~~ ✅ Progress
 - [ ] **Manual: You** — verify backgrounds render correctly on each screen
 - [ ] **Manual: You** — verify software cursor renders and tracks mouse
 
@@ -459,12 +459,14 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 13. ~~**Save/load UX**~~ ✅ Done (success messages, path fixes, serialization fix)
 
 ### Remaining
-14. **Cross-platform validation** — Phase 7 (build on Linux, fix path case issues)
-15. **Dialog `.gusx` conversion** — 13 dialogs currently programmatic; create .gusx layouts
-16. **Software cursor polish** — hotspot, context-sensitive cursors, HW/SW toggle
-17. **Remaining FBX model textures** — add missing textures to MGCB
-18. **Cleanup** — Phase 8 (update README, CI/CD if applicable)
-19. **Manual testing** — verify all screens, dialogs, drag-drop, 3D overlays, input conflicts
+14. **Logging infrastructure** — NLog unified logging (coloured console, rotating file), 42 ad-hoc calls converted, custom file logger removed — ✅ Done
+15. **Settings screen** — Display/Sound/Notifications/GamePlay settings, Settings button on StartScreen — ✅ Done
+16. **Dialog `.gusx` conversion** — 4 dialogs fully converted (GumMessageBox, GumYesNo, GumOptions, SoundOptions), 9 have .gusx stubs for future editing — ✅ Progress
+17. **Software cursor polish** — hotspot, context-sensitive cursor types (Default/Pointer/Hand), HW/SW toggle — ✅ Done
+18. **Cross-platform validation** — Phase 7 (build on Linux, fix path case issues)
+19. **Remaining FBX model textures** — add missing textures to MGCB
+20. **Cleanup** — Phase 8 (update README, CI/CD if applicable)
+21. **Manual testing** — verify all screens, dialogs, drag-drop, 3D overlays, input conflicts
 
 ### Gum UI Layout & Theming (Next Major Task)
 The Gum WYSIWYG editor (`Gum UI Tool`) can be invoked to create a `.gumx` project for visual layout design. The tool creates XML-based project files that define component styles, layouts, and data bindings. Currently all UI is built programmatically in C# (buttons, labels, stack panels in `CreateGumControls()`). The Gum editor would allow:

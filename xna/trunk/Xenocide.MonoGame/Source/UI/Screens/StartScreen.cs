@@ -81,6 +81,7 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("LoadGameButton", OnShowLoadGameScreen);
                 WireButton("QuitButton", OnQuitGameClicked);
                 WireButton("CreditsButton", OnCreditsClicked);
+                WireButton("SettingsButton", OnSettingsClicked);
 
                 return;
             }
@@ -129,6 +130,11 @@ namespace ProjectXenocide.UI.Screens
             creditsButton.Click += OnCreditsClicked;
             RootContainer.AddChild(creditsButton);
 
+            var settingsButton = new Button();
+            settingsButton.Text = "Settings";
+            settingsButton.Click += OnSettingsClicked;
+            RootContainer.AddChild(settingsButton);
+
             var spacer = new Label();
             spacer.Height = 20;
             RootContainer.AddChild(spacer);
@@ -143,6 +149,12 @@ namespace ProjectXenocide.UI.Screens
         public override bool HandleEscape()
         {
             return true;
+        }
+
+        private void OnSettingsClicked(object sender, EventArgs e)
+        {
+            Logger.Debug("StartScreen: Settings clicked");
+            ScreenManager.ScheduleScreen(new SettingsScreen());
         }
 
         private void OnRunTestsClicked(object sender, EventArgs e)
