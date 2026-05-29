@@ -31,6 +31,8 @@ using System.IO;
 using System.Text;
 using System.Xml;
 
+using NLog;
+
 using Xenocide.Source.Utils;
 #endregion
 
@@ -49,6 +51,7 @@ namespace ProjectXenocide.Model
     [Serializable]
     public class GameOptions
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// Apply these settings to the game
         /// </summary>
@@ -98,11 +101,9 @@ namespace ProjectXenocide.Model
                     w.WriteEndElement();
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                //Util.ShowMessageBox(Strings.MSGBOX_UNABLE_TO_SAVE_FILE, err.Message);
-                //TODO - It's not the end of the world if you can't save game options but it would
-                //be nice to save to a log file for details of the error.      
+                Logger.Warn(ex, "Unable to save game options");
             }
         }
 

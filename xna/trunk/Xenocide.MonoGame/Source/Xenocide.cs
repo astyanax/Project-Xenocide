@@ -248,8 +248,6 @@ namespace ProjectXenocide
         {
             graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
-
             screenManager.Draw(gameTime, graphics.GraphicsDevice);
             GumService.Default.Draw();
             base.Draw(gameTime);

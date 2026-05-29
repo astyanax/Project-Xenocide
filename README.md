@@ -72,6 +72,7 @@ The MGCB content pipeline compiles .fbx models, .fx shaders, textures, spritefon
 | Document | Description |
 |---|---|
 | [MIGRATION.md](MIGRATION.md) | Full migration plan and progress (XNA 3.0 → MonoGame) |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | System architecture (screens, AI/missions, game state, UI) |
 | [docs/LOGGING.md](docs/LOGGING.md) | Logging architecture (NLog setup, log levels, configuration) |
 | [LEGACY.md](LEGACY.md) | Historical context and legacy releases |
 

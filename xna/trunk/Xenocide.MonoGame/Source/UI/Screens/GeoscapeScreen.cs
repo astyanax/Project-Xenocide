@@ -104,7 +104,7 @@ namespace ProjectXenocide.UI.Screens
             }
         }
 
-        #region Create the CeGui widgets
+        #region Gum controls
 
         /// <summary>
         /// add the buttons to the screen
@@ -391,7 +391,7 @@ namespace ProjectXenocide.UI.Screens
             }
         }
 
-        #endregion Create the CeGui widgets
+        #endregion Gum controls
 
         #region 3D scene management
 
@@ -405,8 +405,7 @@ namespace ProjectXenocide.UI.Screens
             state.Update(gameTime);
 
             // update time shown on screen
-            // Note, if display hasn't changed, don't write new value to text window
-            // as this will make CeGui recompute all render quads.
+            // Only update the time text if it has changed to avoid unnecessary UI recomposition
             DateTime time = Xenocide.GameState.GeoData.GeoTime.Time;
             String newTime = time.ToString();
 

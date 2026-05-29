@@ -1074,7 +1074,7 @@
       <fluff>
         <paragraph>"We may not know what we're up to, but we're certainly determined to find out" - Rookie scientist, upon leaving the briefing room.</paragraph>
       </fluff>
-      <graphics model="Facility\Xnet\Research_Facility" x="90.0" y="0.0" z="0.0" />
+      <graphics model="Facility\research_facility" x="90.0" y="0.0" z="0.0" />
     </entry>
     <entry id="XNET_ENGINEERING_FACILITY" name="Engineering Facility">
       <statisticsLink objectType="FACILITY" object="FAC_ENGINEERING_FACILITY" />
@@ -1221,7 +1221,7 @@
         <paragraph>Well, it proved a bit too comfortable it seems. The Research Department at the Roswell base was totally wrecked when their captive woke up and I personally saw two guards commit suicide in front of my eyes before I caught on. The bastard was still grinning when I blew his brains out.</paragraph>
         <paragraph>Obviously the MK II needed some heavy security adjustments...and a new paint job, that’s when I came here." - Yohan Jarlsdottir, former Director of Security and Alien Containment of Roswell base.</paragraph>
       </fluff>
-      <graphics model="Facility\Xnet\alien_containment" x="0.0" y="0.0" z="0.0" />
+      <graphics model="Facility\alien_containment" x="0.0" y="0.0" z="0.0" />
     </entry>
     <entry id="XNET_GAIA_DEFENSE_ARRAY" name="GAIA Defense Array">
       <statisticsLink objectType="FACILITY" object="FAC_GAIA_DEFENSE_ARRAY" />

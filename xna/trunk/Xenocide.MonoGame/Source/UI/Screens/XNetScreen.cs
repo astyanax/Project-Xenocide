@@ -93,7 +93,7 @@ namespace ProjectXenocide.UI.Screens
             // Fake the list of items with a list box
             InitEntriesTree();
 
-            // CeGui# doesn't allow scrolling static text, so fake with list box
+            // Gum's ListBox provides native scrolling for long text entries
             textWindow = new ListBox();
             RootContainer.AddChild(textWindow);
 

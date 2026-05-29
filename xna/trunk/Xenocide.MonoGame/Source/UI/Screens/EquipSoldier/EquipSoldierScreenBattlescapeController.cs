@@ -70,14 +70,14 @@ namespace ProjectXenocide.UI.Screens
                 this.battlescape = battlescape;
             }
 
-            #region Create the CeGui widgets
+            #region Gum controls
 
             /// <summary>add Widgets to the screen</summary>
             public override void CreateGumControls()
             {
             }
 
-            #endregion Create the CeGui widgets
+            #endregion Gum controls
 
             #region event handlers
 

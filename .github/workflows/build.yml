@@ -6,18 +6,50 @@ on:
   pull_request:
     branches: [main, master, trunk]
 
+env:
+  SOLUTION: xna/trunk/Xenocide.MonoGame.sln
+  PROJECT: xna/trunk/Xenocide.MonoGame/Xenocide.MonoGame.csproj
+  DOTNET_VERSION: '9.0.x'
+
 jobs:
-  build:
+  lint:
     runs-on: windows-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Install MonoGame templates
+      run: dotnet new install MonoGame.Templates.CSharp
+
+    - name: Restore
+      run: dotnet restore ${{ env.SOLUTION }}
+
+    - name: Format check
+      run: dotnet format style ${{ env.SOLUTION }} --verify-no-changes --verbosity diagnostic
+
+    - name: Analyzer check
+      run: dotnet build ${{ env.SOLUTION }} --configuration Release -p:EnforceCodeStyleInBuild=true
+
+  build:
+    needs: lint
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Setup .NET 9.0
+    - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '9.0.x'
+        dotnet-version: ${{ env.DOTNET_VERSION }}
 
     - name: Install MonoGame templates
       run: dotnet new install MonoGame.Templates.CSharp
@@ -27,41 +59,52 @@ jobs:
         dotnet tool install -g dotnet-mgcb
         dotnet tool install -g dotnet-mgcb-editor
 
-    - name: Restore dependencies
-      run: dotnet restore xna/trunk/Xenocide.MonoGame/Xenocide.MonoGame.sln
+    - name: Restore
+      run: dotnet restore ${{ env.SOLUTION }}
 
     - name: Build
-      run: dotnet build xna/trunk/Xenocide.MonoGame/Xenocide.MonoGame.sln --configuration Release --no-restore
+      run: dotnet build ${{ env.SOLUTION }} --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test xna/trunk/Xenocide.MonoGame/Xenocide.MonoGame.sln --configuration Release --no-build --verbosity normal
+      if: runner.os == 'Windows'
+      run: dotnet test ${{ env.SOLUTION }} --configuration Release --no-build --verbosity normal
 
-  artifacts:
+  publish:
     needs: build
-    runs-on: windows-latest
     if: github.event_name == 'push'
+    strategy:
+      matrix:
+        include:
+          - runtime: win-x64
+            os: windows-latest
+          - runtime: linux-x64
+            os: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     steps:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Setup .NET 9.0
+    - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '9.0.x'
+        dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: Restore dependencies
-      run: dotnet restore xna/trunk/Xenocide.MonoGame/Xenocide.MonoGame.sln
+    - name: Install MonoGame templates
+      run: dotnet new install MonoGame.Templates.CSharp
 
-    - name: Publish (Windows x64)
-      run: dotnet publish xna/trunk/Xenocide.MonoGame/Xenocide.MonoGame.csproj --configuration Release --runtime win-x64 --self-contained false -o publish/win-x64
+    - name: Restore
+      run: dotnet restore ${{ env.SOLUTION }}
 
-    - name: Zip artifact (Windows x64)
-      run: Compress-Archive -Path publish/win-x64/* -DestinationPath Xenocide-win-x64.zip
+    - name: Publish
+      run: dotnet publish ${{ env.PROJECT }} --configuration Release --runtime ${{ matrix.runtime }} --self-contained false -o publish/${{ matrix.runtime }}
 
-    - name: Upload artifacts
+    - name: Zip artifact
+      shell: pwsh
+      run: Compress-Archive -Path publish/${{ matrix.runtime }}/* -DestinationPath Xenocide-${{ matrix.runtime }}.zip
+
+    - name: Upload
       uses: actions/upload-artifact@v4
       with:
-        name: Xenocide
-        path: |
-          Xenocide-win-x64.zip
+        name: Xenocide-${{ matrix.runtime }}
+        path: Xenocide-${{ matrix.runtime }}.zip

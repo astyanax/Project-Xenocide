@@ -7,8 +7,8 @@ namespace ProjectXenocide.Assets
 {
     /// <summary>
     /// Maps game event types to their notification behavior.
-    /// Currently hardcoded; future settings screen will make this user-configurable.
-    /// TODO: Add a "Notifications" section in the settings screen.
+    /// Currently hardcoded with a global on/off toggle in SettingsScreen.
+    /// TODO: Per-event-type notification toggles.
     /// </summary>
     public static class NotificationMapping
     {
