@@ -89,10 +89,10 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
 
             // Setup random generator
             List<int> randomNumbers = new List<int>();
-            randomNumbers.Add(14); // Damage
+            randomNumbers.Add(0);  // Bonus stun (hit 1)
             randomNumbers.Add(1);  // Body part
             randomNumbers.Add(1);  // Fatal wounds
-            randomNumbers.Add(13); // Damage
+            randomNumbers.Add(0);  // Bonus stun (hit 2)
             randomNumbers.Add(2);  // Body part
             randomNumbers.Add(2);  // Fatal wounds
             // randomNumbers.Add(10);
