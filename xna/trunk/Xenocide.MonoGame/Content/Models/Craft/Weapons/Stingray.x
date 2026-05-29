@@ -13335,7 +13335,7 @@ Mesh {
     1.0;
     1.0; 1.0; 1.0;;
     0.0; 0.0; 0.0;;
-  TextureFilename {    "STINGRAY.PNG";  }
+  TextureFilename {    "stingray.png";  }
   }  // End of Material
     }  //End of MeshMaterialList
   MeshNormals {

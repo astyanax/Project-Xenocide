@@ -1,5 +1,5 @@
 # Phase 1 - manual fixes script
-$src = "Xenocide.MonoGame\Source"
+$src = Join-Path $PSScriptRoot "Source"
 
 # ============================================================
 # 1. FileUtil.cs - Storage -> direct file I/O

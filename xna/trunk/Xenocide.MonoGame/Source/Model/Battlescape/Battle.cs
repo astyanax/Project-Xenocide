@@ -94,6 +94,33 @@ namespace ProjectXenocide.Model.Battlescape
             {
                 team.OnStartTurn();
             }
+
+            // Canon UFO Defense: units standing in smoke take 1-3 stun per turn
+            foreach (Team team in teams)
+            {
+                foreach (Combatant combatant in team.Combatants)
+                {
+                    if (combatant.CanTakeOrders)
+                        ApplySmokeStun(combatant);
+                }
+            }
+        }
+
+        private void ApplySmokeStun(Combatant combatant)
+        {
+            Vector3 pos = combatant.Position;
+            if (!terrain.IsOnTerrain((int)pos.X, (int)pos.Z, (int)pos.Y))
+                return;
+
+            int cellIndex = terrain.CellIndex(pos);
+            Cell cell = terrain[cellIndex];
+            if ((cell.Properties & CellProperties.Smoke) != 0)
+            {
+                int stun = Xenocide.Rng.Next(3) + 1;
+                combatant.Stats[Statistic.StunDamage] += stun;
+                if (combatant.Stats[Statistic.StunDamage] > 255)
+                    combatant.Stats[Statistic.StunDamage] = 255;
+            }
         }
 
         /// <summary>

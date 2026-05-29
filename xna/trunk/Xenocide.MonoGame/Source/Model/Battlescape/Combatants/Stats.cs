@@ -89,8 +89,11 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
                 currentValues[(int)Statistic.StaminaLeft] = currentValues[(int)Statistic.Stamina];
             }
 
-            // Stun damage recovery: max(1, Health/3) per turn
-            int stunRecovery = Math.Max(1, currentValues[(int)Statistic.Health] / 3);
+            // Stun damage recovery: 1 point per turn (canon UFO Defense rate).
+            // Alternative scale-based formula kept below for reference — makes high-HP
+            // units (Mutons) wake up far faster, which changes gameplay balance.
+            // int stunRecovery = Math.Max(1, currentValues[(int)Statistic.Health] / 3);
+            int stunRecovery = 1;
             currentValues[(int)Statistic.StunDamage] = Math.Max(0,
                 currentValues[(int)Statistic.StunDamage] - stunRecovery);
         }

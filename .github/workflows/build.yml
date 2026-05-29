@@ -46,6 +46,7 @@ jobs:
 
   build:
     strategy:
+      fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
@@ -67,6 +68,14 @@ jobs:
         dotnet tool install -g dotnet-mgcb
         dotnet tool install -g dotnet-mgcb-editor
 
+    - name: Setup Linux content build deps (Wine + fonts)
+      if: runner.os == 'Linux'
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo apt-get update
+        echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
+        sudo apt-get install -y wine wine32:i386 ttf-mscorefonts-installer fonts-liberation2
+
     - name: Restore
       run: dotnet restore ${{ env.SOLUTION }}
 
@@ -81,6 +90,7 @@ jobs:
     needs: build
     if: github.event_name == 'push'
     strategy:
+      fail-fast: false
       matrix:
         include:
           - runtime: win-x64
@@ -100,6 +110,14 @@ jobs:
 
     - name: Install MonoGame templates
       run: dotnet new install MonoGame.Templates.CSharp
+
+    - name: Setup Linux deps (Wine + fonts)
+      if: runner.os == 'Linux'
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo apt-get update
+        echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
+        sudo apt-get install -y wine wine32:i386 ttf-mscorefonts-installer fonts-liberation2
 
     - name: Restore
       run: dotnet restore ${{ env.SOLUTION }}

@@ -45,6 +45,9 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
     [Serializable]
     public partial class Combatant
     {
+        /// <summary>Canon UFO Defense: stun damage caps at 255</summary>
+        private const int MaxStunLevel = 255;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -141,7 +144,26 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             }
 
             Vector2 damage = Armor.DamageInflicted(damageInfo, side);
-            TakeDamage((int)damage.X, (int)damage.Y);
+            int penetratingDamage = (int)damage.X;
+            int incomingStunDamage = (int)damage.Y;
+            TakeDamage(penetratingDamage, incomingStunDamage);
+
+            // Canon UFO Defense: conventional weapons (all damage types except
+            // Incendiary, Smoke, and dedicated Stun weapons) inflict 0 to pen/4
+            // stun damage on top of the weapon's base stun output.
+            if (damageInfo.DamageType != DamageType.Fire
+                && damageInfo.DamageType != DamageType.Smoke
+                && damageInfo.DamageType != DamageType.Stun
+                && penetratingDamage > 0)
+            {
+                int bonusStun = Xenocide.Rng.Next(penetratingDamage / 4 + 1);
+                if (bonusStun > 0)
+                {
+                    stats[Statistic.StunDamage] += bonusStun;
+                    if (stats[Statistic.StunDamage] > MaxStunLevel)
+                        stats[Statistic.StunDamage] = MaxStunLevel;
+                }
+            }
 
             // Damage may result in fatal wounds
             // Randomize body part that gets the fatal wounds
@@ -157,6 +179,10 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         {
             stats[Statistic.InjuryDamage] += injuryDamage;
             stats[Statistic.StunDamage] += stunDamage;
+
+            // Canon UFO Defense: stun damage caps at 255 before overflow
+            if (stats[Statistic.StunDamage] > MaxStunLevel)
+                stats[Statistic.StunDamage] = MaxStunLevel;
 
             // additional processing of injury
             // dead & unconscious combatants don't see anything.

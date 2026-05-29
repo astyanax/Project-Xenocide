@@ -1,7 +1,7 @@
 # Phase 1: XNA 3.0 → 4.0 / MonoGame API conversion script
 # Applies mechanical transformations to all .cs files in Source/
 
-$src = "Xenocide.MonoGame\Source"
+$src = Join-Path $PSScriptRoot "Source"
 $files = Get-ChildItem -LiteralPath $src -Recurse -Filter "*.cs"
 
 Write-Host "Found $($files.Count) .cs files"

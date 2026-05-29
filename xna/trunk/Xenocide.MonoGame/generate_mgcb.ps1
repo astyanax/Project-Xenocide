@@ -1,7 +1,7 @@
 # Generates Content.mgcb from the original XNA 3.0 Content.contentproj
 param(
-    [string]$ContentProj = "Xenocide\Content\Content.contentproj",
-    [string]$OutputMgcb = "Xenocide.MonoGame\Content\Content.mgcb"
+        [string]$ContentProj = (Join-Path $PSScriptRoot "..\Xenocide\Content\Content.contentproj"),
+    [string]$OutputMgcb = (Join-Path $PSScriptRoot "Content\Content.mgcb")
 )
 
 [xml]$proj = Get-Content $ContentProj

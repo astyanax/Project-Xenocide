@@ -1,5 +1,5 @@
 # Phase 1 v2: Safe mechanical replacements only
-$src = "Xenocide.MonoGame\Source"
+$src = Join-Path $PSScriptRoot "Source"
 $files = Get-ChildItem -LiteralPath $src -Recurse -Filter "*.cs"
 
 Write-Host "Found $($files.Count) .cs files"
