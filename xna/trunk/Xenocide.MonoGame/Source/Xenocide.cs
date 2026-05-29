@@ -37,14 +37,14 @@ using AudioSystem;
 using Gum.DataTypes;
 
 using Microsoft.Xna.Framework;
-
-using NLog;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using MonoGameGum;
+
+using NLog;
 
 using ProjectXenocide.Model;
 using ProjectXenocide.UI.Controls;

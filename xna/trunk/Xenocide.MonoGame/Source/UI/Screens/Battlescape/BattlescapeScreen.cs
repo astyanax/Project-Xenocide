@@ -33,12 +33,12 @@ using System.Text;
 using Gum.Forms;
 using Gum.Forms.Controls;
 
-using NLog;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using NLog;
 
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;

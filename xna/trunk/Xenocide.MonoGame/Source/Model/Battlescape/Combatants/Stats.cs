@@ -89,7 +89,10 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
                 currentValues[(int)Statistic.StaminaLeft] = currentValues[(int)Statistic.Stamina];
             }
 
-            // TODO: Add update of stun damage, morale etc.
+            // Stun damage recovery: max(1, Health/3) per turn
+            int stunRecovery = Math.Max(1, currentValues[(int)Statistic.Health] / 3);
+            currentValues[(int)Statistic.StunDamage] = Math.Max(0,
+                currentValues[(int)Statistic.StunDamage] - stunRecovery);
         }
 
         /// <summary>Adjust accuracy due to injuries</summary>

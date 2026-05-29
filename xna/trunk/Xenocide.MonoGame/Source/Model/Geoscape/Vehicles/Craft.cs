@@ -583,7 +583,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <summary>
         /// Amount of fuel currently on board (in units)
         /// </summary>
-        public virtual Double Fuel { get { throw new NotImplementedException(Strings.EXCEPTION_UFOS_LACK_FUEL); } }
+        public virtual double Fuel => double.MaxValue;
 
         /// <summary>
         /// Hull's resistance to damage

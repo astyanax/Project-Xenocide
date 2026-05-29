@@ -35,6 +35,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
 using NLog;
+
 using Microsoft.Xna.Framework.Graphics;
 
 using Gum.Forms;

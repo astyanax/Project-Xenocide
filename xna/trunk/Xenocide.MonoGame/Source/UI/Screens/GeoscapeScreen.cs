@@ -38,10 +38,10 @@ using Gum.Wireframe;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-
-using NLog;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using NLog;
 
 using ProjectXenocide.Assets;
 using ProjectXenocide.Model;

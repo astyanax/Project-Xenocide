@@ -33,12 +33,12 @@ using System.IO;
 using System.Text;
 using System.Threading;
 
-using NLog;
-
 using Gum.Forms;
 using Gum.Forms.Controls;
 
 using Microsoft.Xna.Framework;
+
+using NLog;
 
 using ProjectXenocide.Assets;
 using ProjectXenocide.Model;
