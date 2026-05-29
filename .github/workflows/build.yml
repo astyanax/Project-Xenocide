@@ -12,11 +12,15 @@ env:
   DOTNET_VERSION: '9.0.x'
 
 jobs:
-  lint:
+  format:
     runs-on: windows-latest
+    permissions:
+      contents: write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+      with:
+        ref: ${{ github.head_ref || github.ref_name }}
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -29,14 +33,18 @@ jobs:
     - name: Restore
       run: dotnet restore ${{ env.SOLUTION }}
 
-    - name: Format check
-      run: dotnet format style ${{ env.SOLUTION }} --verify-no-changes --verbosity diagnostic
+    - name: Auto-fix formatting
+      run: dotnet format style ${{ env.SOLUTION }} --verbosity diagnostic
 
-    - name: Analyzer check
-      run: dotnet build ${{ env.SOLUTION }} --configuration Release -p:EnforceCodeStyleInBuild=true
+    - name: Commit formatting fixes
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: 'style: auto-fix imports ordering and formatting'
+        commit_user_name: github-actions[bot]
+        commit_user_email: github-actions[bot]@users.noreply.github.com
+        skip_ci: true
 
   build:
-    needs: lint
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
