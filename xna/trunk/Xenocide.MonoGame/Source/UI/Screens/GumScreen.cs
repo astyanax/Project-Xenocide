@@ -20,11 +20,11 @@ namespace ProjectXenocide.UI.Screens
         /// instead of using the programmatic CeGui fallback. Set to true during
         /// development to keep the old code path working.
         /// </summary>
-        public static bool EnableProgrammaticFallback { get; set; } = false;
+        public static bool EnableProgrammaticFallback { get; set; }
 
         protected StackPanel RootContainer { get; private set; }
         protected GraphicalUiElement GumRoot { get; private set; }
-        protected GumService GumUI => GumService.Default;
+        protected static GumService GumUI => GumService.Default;
 
         /// <summary>
         /// Override and return false for screens that intentionally have no .gusx

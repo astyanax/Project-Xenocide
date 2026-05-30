@@ -123,7 +123,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// Screen behaviour, when battlescape is starting a turn
         /// </summary>
-        private class StartTurnScreenState : ScreenState
+        private sealed class StartTurnScreenState : ScreenState
         {
             /// <summary>
             /// Constructor
@@ -154,7 +154,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// Screen behaviour, when combatant is processing order
         /// </summary>
-        private class CombatantActivityScreenState : ScreenState
+        private sealed class CombatantActivityScreenState : ScreenState
         {
             /// <summary>
             /// Constructor

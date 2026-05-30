@@ -42,7 +42,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
     /// However, it also masks off any areas that do not correspond to land
     /// </summary>
     [Serializable]
-    class LandMaskedGeoBitmap : GeoBitmap
+    sealed class LandMaskedGeoBitmap : GeoBitmap
     {
         /// <summary>
         /// Creates a new GeoBitmap for the given texture and list of members

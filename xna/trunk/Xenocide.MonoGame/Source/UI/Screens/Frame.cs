@@ -56,7 +56,7 @@ namespace ProjectXenocide.UI.Screens
 
         protected string CeguiId { get { return ceguiId; } }
 
-        protected ScreenManager ScreenManager { get { return Xenocide.ScreenManager; } }
+        protected static ScreenManager ScreenManager { get { return Xenocide.ScreenManager; } }
 
         public const SoundId DefaultButtonClickSound = SoundId.ButtonClick1;
 

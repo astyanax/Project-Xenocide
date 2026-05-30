@@ -59,7 +59,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// Screen behaviour, when player giving a combatant an order to move 
         /// </summary>
-        private class MoveOrderCombatantScreenState : OrderCombatantScreenState
+        private sealed class MoveOrderCombatantScreenState : OrderCombatantScreenState
         {
             /// <summary>
             /// Constructor

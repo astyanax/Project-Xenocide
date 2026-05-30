@@ -98,7 +98,7 @@ namespace ProjectXenocide.Model.StaticData
     /// <summary>
     /// Link to the statistics to show on X-Net for a base facility 
     /// </summary>
-    internal class FacilityXNetStatisticsLink : XNetStatisticsLink
+    internal sealed class FacilityXNetStatisticsLink : XNetStatisticsLink
     {
         /// <summary>
         /// Construct Link from information in an XML file
@@ -122,7 +122,7 @@ namespace ProjectXenocide.Model.StaticData
     /// <summary>
     /// Link to the statistics to show on X-Net for an item
     /// </summary>
-    internal class ItemXNetStatisticsLink : XNetStatisticsLink
+    internal sealed class ItemXNetStatisticsLink : XNetStatisticsLink
     {
         /// <summary>
         /// Construct Link from information in an XML file

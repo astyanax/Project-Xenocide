@@ -14,7 +14,7 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class BuildFacilityDialog : ModalDialog
+    sealed class BuildFacilityDialog : ModalDialog
     {
         public BuildFacilityDialog(BasesScreen basesScreen)
         {

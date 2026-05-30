@@ -48,7 +48,7 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Screens
 {
-    class MonthlyCostsScreen : GumScreen
+    sealed class MonthlyCostsScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)

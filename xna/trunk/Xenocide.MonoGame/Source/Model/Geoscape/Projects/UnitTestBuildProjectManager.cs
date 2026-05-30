@@ -118,7 +118,7 @@ namespace ProjectXenocide.Model.Geoscape
             Debug.Assert(129 == inventory.NumberInInventory(Xenocide.StaticTables.ItemList["ITEM_ALIEN_COMPOSITES"]));
             Debug.Assert(800000 == bank.CurrentBalance);
             Debug.Assert(1 == outposts[0].Statistics.Capacities[item.StorageType].Available);
-            Debug.Assert(20 == item.BuildInfo.GetCapacityInfo(outposts[0]).Available);
+            Debug.Assert(20 == BuildInfo.GetCapacityInfo(outposts[0]).Available);
 
             Debug.Assert(1 == project.BuildCount);
             project.BuildCount = 3;

@@ -144,7 +144,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         /// Details of a functioning Radar facility in the outpost
         /// </summary>
         [Serializable]
-        private class RadarInfo
+        private sealed class RadarInfo
         {
             /// <summary>
             /// Constructor

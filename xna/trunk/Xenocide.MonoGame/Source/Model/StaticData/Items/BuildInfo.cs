@@ -145,7 +145,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// <returns>amount of available space</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
             Justification = "will throw if outpost is null")]
-        public OutpostCapacityInfo GetCapacityInfo(Outpost outpost)
+        public static OutpostCapacityInfo GetCapacityInfo(Outpost outpost)
         {
             return outpost.Statistics.Capacities[SpaceType];
         }
@@ -196,7 +196,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// Type of space needed to build project
         /// </summary>
         /// <remarks>eventually, save the facility type from XML, and lookup storage space it provides</remarks>
-        private string SpaceType { get { return "STORAGE_ENGINEER"; } }
+        private static string SpaceType { get { return "STORAGE_ENGINEER"; } }
 
         #endregion Fields
     }

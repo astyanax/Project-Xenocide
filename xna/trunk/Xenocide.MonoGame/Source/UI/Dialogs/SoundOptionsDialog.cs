@@ -8,7 +8,7 @@ using ProjectXenocide.UI.Screens;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class SoundOptionsDialog : GumDialog
+    sealed class SoundOptionsDialog : GumDialog
     {
         private Button musicToggleBtn;
         private Button musicUpBtn;

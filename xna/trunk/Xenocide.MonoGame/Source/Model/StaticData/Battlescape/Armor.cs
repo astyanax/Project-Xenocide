@@ -129,7 +129,7 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
            Justification = "will throw if damageInfo is null")]
         public Vector2 DamageInflicted(DamageInfo damageInfo, Side side)
         {
-            int points = Xenocide.GameBalance.RandomWeaponDamage(damageInfo.Points);
+            int points = GameBalanceClass.RandomWeaponDamage(damageInfo.Points);
             points -= plates[(int)side];
             if (points < 0)
             {

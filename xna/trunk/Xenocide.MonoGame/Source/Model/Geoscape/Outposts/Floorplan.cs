@@ -235,7 +235,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         /// </summary>
         /// <param name="facility">facility to check</param>
         /// <returns>true if facility will be entirely within the base</returns>
-        private bool IsInsideBase(FacilityHandle facility)
+        private static bool IsInsideBase(FacilityHandle facility)
         {
             return
                 (0.0f <= facility.X) &&
@@ -386,12 +386,12 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         /// <summary>
         /// Width of base (along X axis) in cells
         /// </summary>
-        public int CellsWide { get { return 6; } }
+        public static int CellsWide { get { return 6; } }
 
         /// <summary>
         /// Height of base (along Z axis) in cells
         /// </summary>
-        public int CellsHigh { get { return 6; } }
+        public static int CellsHigh { get { return 6; } }
 
         /// <summary>
         /// The facilities in the base
@@ -470,16 +470,16 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             // create floorplan with access lift
             OutpostStatistics statistics = new OutpostStatistics();
             Floorplan floorplan = new Floorplan(statistics);
-            FacilityHandle lift = new FacilityHandle("FAC_BASE_ACCESS_FACILITY", floorplan.CellsWide - 1, floorplan.CellsHigh - 1);
+            FacilityHandle lift = new FacilityHandle("FAC_BASE_ACCESS_FACILITY", Floorplan.CellsWide - 1, Floorplan.CellsHigh - 1);
             floorplan.AddFacility(lift);
 
             // Check can't drawing a LandingPad too close to right and bottom margins
-            FacilityHandle pad = new FacilityHandle("FAC_LANDING_PAD", floorplan.CellsWide - 1, floorplan.CellsHigh - 3, false);
+            FacilityHandle pad = new FacilityHandle("FAC_LANDING_PAD", Floorplan.CellsWide - 1, Floorplan.CellsHigh - 3, false);
             Debug.Assert(XenoError.PositionNotInBase == floorplan.IsPositionLegal(pad));
             --pad.X;
             Debug.Assert(XenoError.None == floorplan.IsPositionLegal(pad));
-            pad.X = floorplan.CellsWide - 3;
-            pad.Y = floorplan.CellsHigh - 1;
+            pad.X = Floorplan.CellsWide - 3;
+            pad.Y = Floorplan.CellsHigh - 1;
             Debug.Assert(XenoError.PositionNotInBase == floorplan.IsPositionLegal(pad));
             --pad.Y;
             Debug.Assert(XenoError.None == floorplan.IsPositionLegal(pad));

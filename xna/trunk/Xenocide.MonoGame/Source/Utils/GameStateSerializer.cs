@@ -109,7 +109,7 @@ namespace Xenocide.Utils
         }
 
         [Serializable]
-        private class SaveFileWrapper
+        private sealed class SaveFileWrapper
         {
             public int FormatVersion { get; set; }
             public string SavedAt { get; set; }

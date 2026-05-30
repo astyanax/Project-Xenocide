@@ -54,7 +54,7 @@ namespace ProjectXenocide.UI.Screens
     public partial class BattlescapeScreen
     {
         /// <summary>Screen behaviour, when Alien AI is having it's moves after X-Corp's turn</summary>
-        private class AlienTurnScreenState : ScreenState
+        private sealed class AlienTurnScreenState : ScreenState
         {
             /// <summary>
             /// Constructor

@@ -26,7 +26,7 @@ namespace ProjectXenocide.UI
             DrawOrder = int.MaxValue;
         }
 
-        public enum CursorType { Default, Pointer, Hand }
+        public enum CursorType { Default, Arrow, Hand }
 
         public CursorType CurrentCursorType
         {
@@ -34,7 +34,7 @@ namespace ProjectXenocide.UI
             {
                 switch (value)
                 {
-                    case CursorType.Pointer:
+                    case CursorType.Arrow:
                         _cursorSourceRect = PointerCursorRect;
                         _hotspot = PointerHotspot;
                         break;

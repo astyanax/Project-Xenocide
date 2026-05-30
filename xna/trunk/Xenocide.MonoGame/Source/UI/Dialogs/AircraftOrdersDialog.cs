@@ -13,7 +13,7 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class AircraftOrdersDialog : ModalDialog
+    sealed class AircraftOrdersDialog : ModalDialog
     {
         public AircraftOrdersDialog(Aircraft craft)
         {

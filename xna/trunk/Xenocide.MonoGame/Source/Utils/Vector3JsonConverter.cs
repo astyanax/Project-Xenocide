@@ -26,7 +26,7 @@ namespace Xenocide.Utils
             return (JsonConverter)Activator.CreateInstance(converterType);
         }
 
-        private class Vector3DictionaryConverter<TValue> : JsonConverter<Dictionary<Vector3, TValue>>
+        private sealed class Vector3DictionaryConverter<TValue> : JsonConverter<Dictionary<Vector3, TValue>>
         {
             public override Dictionary<Vector3, TValue> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {

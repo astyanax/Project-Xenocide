@@ -53,7 +53,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// Specifies behaviour of screen, when Equipping a soldier in an outpost
         /// </summary>
-        private class InOutpostController : Controller
+        private sealed class InOutpostController : Controller
         {
             /// <summary>
             /// Constructor

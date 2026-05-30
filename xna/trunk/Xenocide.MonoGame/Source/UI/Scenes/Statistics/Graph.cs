@@ -45,7 +45,7 @@ namespace ProjectXenocide.UI.Scenes.Statistics
     /// <summary>
     /// A graph that displays game statistics
     /// </summary>
-    internal class Graph : LineMeshBuilder
+    internal sealed class Graph : LineMeshBuilder
     {
         /// <summary>
         /// Constructor

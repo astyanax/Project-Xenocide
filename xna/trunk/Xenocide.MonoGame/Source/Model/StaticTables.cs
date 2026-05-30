@@ -92,7 +92,7 @@ namespace ProjectXenocide.Model
         /// <summary>
         /// The directory holding all the XML data files.
         /// </summary>
-        public string DataDirectory { get { return AppDomain.CurrentDomain.BaseDirectory + "/Content/Schema/"; } }
+        public static string DataDirectory { get { return AppDomain.CurrentDomain.BaseDirectory + "/Content/Schema/"; } }
 
         /// <summary>
         /// Assorted configuration data for putting game into starting state

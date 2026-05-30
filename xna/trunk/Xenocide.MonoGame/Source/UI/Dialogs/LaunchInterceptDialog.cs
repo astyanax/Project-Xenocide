@@ -16,7 +16,7 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class LaunchInterceptDialog : ModalDialog
+    sealed class LaunchInterceptDialog : ModalDialog
     {
         public LaunchInterceptDialog()
         {

@@ -43,7 +43,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
     /// <summary>
     /// Used to draw a shape at a position of interest on the Globe
     /// </summary>
-    class GeoMarker
+    sealed class GeoMarker
     {
         private VertexPositionNormalTexture[] meshVertices;
         private short[] meshIndices;

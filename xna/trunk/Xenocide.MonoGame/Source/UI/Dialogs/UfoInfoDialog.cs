@@ -16,7 +16,7 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class UfoInfoDialog : ModalDialog
+    sealed class UfoInfoDialog : ModalDialog
     {
         public UfoInfoDialog(Ufo ufo)
         {

@@ -26,7 +26,7 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Xml;
 using System.Xml.XPath;
 
 using ProjectXenocide.Utils;
@@ -59,30 +59,33 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// <param name="filename">path to the file to parse (generally, a relative path)</param>
         public PeopleNames(string filename)
         {
-            XPathNavigator nav = (new XPathDocument(filename)).CreateNavigator();
-            IList<string> countriesWithDupes = ParseAllValuesFromXPath(nav, "/database/namegroups/group[count(name) > 0 and count(lastname) > 0]/@origin");
-
-            countries = new List<string>();
-            foreach (string country in countriesWithDupes)
+            using (var reader = XmlReader.Create(filename, new XmlReaderSettings { DtdProcessing = DtdProcessing.Prohibit, XmlResolver = null }))
             {
-                if (!countries.Contains(country))
+                XPathNavigator nav = (new XPathDocument(reader)).CreateNavigator();
+                List<string> countriesWithDupes = ParseAllValuesFromXPath(nav, "/database/namegroups/group[count(name) > 0 and count(lastname) > 0]/@origin");
+
+                countries = new List<string>();
+                foreach (string country in countriesWithDupes)
                 {
-                    countries.Add(country);
+                    if (!countries.Contains(country))
+                    {
+                        countries.Add(country);
+                    }
                 }
-            }
 
 
-            foreach (string country in countries)
-            {
-                List<string> givenNamess;// = ParseAllValuesFromXPath(nav, "/database/namegroups/group/name");
-                List<string> familyNamess;// = ParseAllValuesFromXPath(nav, "/database/namegroups/group/lastname");
+                foreach (string country in countries)
+                {
+                    List<string> givenNamess;// = ParseAllValuesFromXPath(nav, "/database/namegroups/group/name");
+                    List<string> familyNamess;// = ParseAllValuesFromXPath(nav, "/database/namegroups/group/lastname");
 
-                givenNamess = ParseAllValuesFromXPath(nav, "/database/namegroups/group[@origin = '" + country + "']/name");
-                familyNamess = ParseAllValuesFromXPath(nav, "/database/namegroups/group[@origin = '" + country + "']/lastname");
+                    givenNamess = ParseAllValuesFromXPath(nav, "/database/namegroups/group[@origin = '" + country + "']/name");
+                    familyNamess = ParseAllValuesFromXPath(nav, "/database/namegroups/group[@origin = '" + country + "']/lastname");
 
-                givenNamesByCountry.Add(country, givenNamess);
-                familyNamesByCountry.Add(country, familyNamess);
+                    givenNamesByCountry.Add(country, givenNamess);
+                    familyNamesByCountry.Add(country, familyNamess);
 
+                }
             }
         }
 
@@ -101,7 +104,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// </summary>
         /// <param name="list">List of strings to pick from</param>
         /// <returns>a string</returns>
-        private static String PickRandomItem(IList<String> list)
+        private static String PickRandomItem(List<String> list)
         {
             return list[Xenocide.Rng.Next(list.Count)];
         }

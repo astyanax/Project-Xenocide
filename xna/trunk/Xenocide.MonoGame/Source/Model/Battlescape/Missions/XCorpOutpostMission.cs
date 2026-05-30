@@ -33,6 +33,7 @@ using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.AI;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.Utils;
 
 using Xenocide.Resources;
@@ -92,7 +93,7 @@ namespace ProjectXenocide.Model.Battlescape
         /// </summary>
         public override Team CreateAlienTeam()
         {
-            return ufo.CreateCrew(Xenocide.StaticTables.StartSettings.Difficulty);
+            return ufo.CreateCrew(StartSettings.Difficulty);
         }
 
         /// <summary>Create the XCorp side for the battlescape</summary>

@@ -168,7 +168,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         }
     }
 
-    class EarthGlobe
+    sealed class EarthGlobe
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 

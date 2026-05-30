@@ -136,3 +136,7 @@ csharp_new_line_between_query_expression_clauses = true
 # Suppressions: pre-existing patterns in legacy codebase
 # Namespace (ProjectXenocide.*) intentionally differs from folder structure (Source/)
 dotnet_diagnostic.IDE0130.severity = none
+
+# [Flags] enums with Flag suffix are idiomatic .NET convention
+[xna/trunk/Xenocide.MonoGame/Source/Model/Battlescape/Terrain/Cell.cs]
+dotnet_diagnostic.CA1711.severity = none

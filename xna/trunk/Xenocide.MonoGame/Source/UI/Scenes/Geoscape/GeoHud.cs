@@ -49,7 +49,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
     /// <summary>
     /// Used to draw an icon representation of a point of interest on the geoscape
     /// </summary>
-    class GeoHud
+    sealed class GeoHud
     {
         #region privates
         SpriteBatch hudSprites;
@@ -286,7 +286,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// Sound to play if the rendered icon text has changed.  Typewrite effect?
         /// </summary>
         /// <param name="objectName"></param>
-        private void PlayTextChanged()
+        private static void PlayTextChanged()
         {
             Xenocide.AudioSystem.PlaySound(SoundId.ButtonOver);
         }
@@ -312,7 +312,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// IconState class, hold persistent information for each geoobject that relates to the current
         /// state of it's on screen icon.
         /// </summary>
-        public class IconState
+        public sealed class IconState
         {
             private const float fluxCapacitor = 15.0f;
 
@@ -460,13 +460,13 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             /// <summary>
             /// Outer ring current rotation
             /// </summary>
-            float rotation = 0.0f;
+            float rotation;
             public float Rotation
             {
                 get { return rotation; }
             }
 
-            float scale = 0.0f;
+            float scale;
             /// <summary>
             /// Icon current scale
             /// </summary>
@@ -488,14 +488,14 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             /// <summary>
             /// Time since last flash animation check
             /// </summary>
-            private float flashCheckTime = 0;
+            private float flashCheckTime;
 
             /// <summary>
             /// Time since being of last animation check
             /// </summary>
-            private float flashAnimTime = 0;
+            private float flashAnimTime;
 
-            private int ticks = 0;
+            private int ticks;
             /// <summary>
             /// Number of ticks since icon started
             /// </summary>
@@ -526,7 +526,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             /// <summary>
             /// Are we in the midst of a run of the text area animation effect
             /// </summary>
-            private bool inFlash = false;
+            private bool inFlash;
 
 
             #endregion

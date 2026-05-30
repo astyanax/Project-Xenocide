@@ -44,7 +44,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
     /// <summary>
     /// The 3D models of the different facilities that can be in a X-Corp outpost
     /// </summary>
-    internal class FacilityModels
+    internal sealed class FacilityModels
     {
         /// <summary>
         /// Load a copy of each of the facility models

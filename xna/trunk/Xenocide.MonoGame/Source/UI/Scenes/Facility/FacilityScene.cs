@@ -101,7 +101,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
 
             {
                 InitializeEffect(device);
-                grid.LoadContent(device, new Grid(floorplan.CellsWide, floorplan.CellsHigh));
+                grid.LoadContent(device, new Grid(Floorplan.CellsWide, Floorplan.CellsHigh));
                 models.LoadContent(content);
                 buildTimes.LoadContent(content, device);
             }
@@ -171,11 +171,11 @@ namespace ProjectXenocide.UI.Scenes.Facility
             double z = opositeSideLength * (coords.Y - 0.5);
 
             // Allow for center of screen being center of base
-            x += (floorplan.CellsWide / 2.0f);
-            z += (floorplan.CellsHigh / 2.0f);
+            x += (Floorplan.CellsWide / 2.0f);
+            z += (Floorplan.CellsHigh / 2.0f);
 
             // check that result is within the base
-            if ((x < 0.0f) || (floorplan.CellsWide < x) || (z < 0.0f) || (floorplan.CellsHigh < z))
+            if ((x < 0.0f) || (Floorplan.CellsWide < x) || (z < 0.0f) || (Floorplan.CellsHigh < z))
             {
                 x = -1.0f;
                 z = -1.0f;
@@ -195,8 +195,8 @@ namespace ProjectXenocide.UI.Scenes.Facility
                 FacilityInfo info = handle.FacilityInfo;
 
                 // calcuate position to draw model at
-                float xdisp = handle.X + ((info.XSize - floorplan.CellsWide) / 2.0f);
-                float zdisp = handle.Y + ((info.YSize - floorplan.CellsHigh) / 2.0f);
+                float xdisp = handle.X + ((info.XSize - Floorplan.CellsWide) / 2.0f);
+                float zdisp = handle.Y + ((info.YSize - Floorplan.CellsHigh) / 2.0f);
                 Matrix displacement = Matrix.CreateTranslation(xdisp, 0.0f, zdisp);
                 models.Draw(basicEffect, info.Id, displacement);
             }
@@ -242,11 +242,11 @@ namespace ProjectXenocide.UI.Scenes.Facility
         /// <remarks>Its above center of base, just high enough to see all facilities</remarks>
         /// </summary>
         /// <returns>Position for the camera</returns>
-        private Vector3 ComputeCameraPosition()
+        private static Vector3 ComputeCameraPosition()
         {
             // assumes aspect ratio is 1.0.
             // problem is, at this point in time, it's not known.
-            float oposite = MathHelper.Max(floorplan.CellsHigh, floorplan.CellsWide) * 0.5f;
+            float oposite = MathHelper.Max(Floorplan.CellsHigh, Floorplan.CellsWide) * 0.5f;
             float adjacent = (float)(oposite / Math.Tan(ViewAngle * 0.5));
             return new Vector3(0.0f, adjacent + 1.0f, 0.0f);
         }

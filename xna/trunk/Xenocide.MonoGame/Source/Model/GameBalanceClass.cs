@@ -34,7 +34,7 @@ namespace ProjectXenocide.Model
         /// </summary>
         /// <param name="baseWeaponDamage">The base weapon damage.</param>
         /// <returns>The generated damage.</returns>
-        public int RandomWeaponDamage(int baseWeaponDamage)
+        public static int RandomWeaponDamage(int baseWeaponDamage)
         {
             // TODO: Add difference between the difficulties.
             // Create random damage in the range 1-2*baseWeaponDamage
@@ -46,7 +46,7 @@ namespace ProjectXenocide.Model
         /// </summary>
         /// <param name="inflictedDamage">The damage inflicted to the target.</param>
         /// <returns>The number of fatal wounds.</returns>
-        public int GenerateFatalWounds(int inflictedDamage)
+        public static int GenerateFatalWounds(int inflictedDamage)
         {
             if (inflictedDamage > 10)
             {
@@ -69,7 +69,7 @@ namespace ProjectXenocide.Model
         /// Function that generates the number of fatal wounds healed at a time by a med kit.
         /// </summary>
         /// <returns>Number of fatal wounds healed.</returns>
-        public int HealFatalWounds()
+        public static int HealFatalWounds()
         {
             // Heal one wound each time
             return 1;
@@ -80,7 +80,7 @@ namespace ProjectXenocide.Model
         /// med kit.
         /// </summary>
         /// <returns>The number of injury points healed.</returns>
-        public int HealInjuryDamage()
+        public static int HealInjuryDamage()
         {
             // Heal three injury damage each time
             return 3;
@@ -92,7 +92,7 @@ namespace ProjectXenocide.Model
         /// </summary>
         /// <param name="lostHealthPoints">The number of lost health points.</param>
         /// <returns>The number of days it takes to recover the lost health.</returns>
-        public int WoundRecoveryDays(int lostHealthPoints)
+        public static int WoundRecoveryDays(int lostHealthPoints)
         {
             return Xenocide.Rng.Next(lostHealthPoints) + (int)Math.Truncate((double)lostHealthPoints / 2);
         }
@@ -102,7 +102,7 @@ namespace ProjectXenocide.Model
         /// </summary>
         /// <param name="fatalWoundsToLegs">The number of fatal wounds to the legs.</param>
         /// <returns>The time unit reduce factor.</returns>
-        public double TimeUnitDecreaseDueToFatalWounds(int fatalWoundsToLegs)
+        public static double TimeUnitDecreaseDueToFatalWounds(int fatalWoundsToLegs)
         {
             if (fatalWoundsToLegs < 9 && fatalWoundsToLegs > 0)
             {
@@ -123,7 +123,7 @@ namespace ProjectXenocide.Model
         /// </summary>
         /// <param name="fatalWoundsToBody">The number of fatal wounds to the body.</param>
         /// <returns>The energy recharge rate reduce factor.</returns>
-        public double EnergyRechargeDecreaseDueToFatalWounds(int fatalWoundsToBody)
+        public static double EnergyRechargeDecreaseDueToFatalWounds(int fatalWoundsToBody)
         {
             if (fatalWoundsToBody < 9 && fatalWoundsToBody > 0)
             {
@@ -144,7 +144,7 @@ namespace ProjectXenocide.Model
         /// </summary>
         /// <param name="fatalWounds">The number of fata wounds on affecting body parts</param>
         /// <returns>The accuracy reduction factor.</returns>
-        public double AccuracyDecreaseDueToFatalWounds(int fatalWounds)
+        public static double AccuracyDecreaseDueToFatalWounds(int fatalWounds)
         {
             if (fatalWounds < 9 && fatalWounds > 0)
             {
@@ -160,7 +160,7 @@ namespace ProjectXenocide.Model
             }
         }
 
-        public double AccuracyDecreaseDueToInjury(int injury, int maximumHealth)
+        public static double AccuracyDecreaseDueToInjury(int injury, int maximumHealth)
         {
             return (double)(maximumHealth - injury) / maximumHealth;
         }

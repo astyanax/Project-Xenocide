@@ -167,7 +167,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             return site;
         }
 
-        public double GetRandomSpeedModifier()
+        public static double GetRandomSpeedModifier()
         {
             double minimumSpeed = 0.6;
             minimumSpeed += (Xenocide.Rng.Next(400)) / 1000f;

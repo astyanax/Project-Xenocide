@@ -213,7 +213,7 @@ namespace Xenocide.Utils
             }
         }
 
-        private class ReferenceEqualityComparer : IEqualityComparer<object>
+        private sealed class ReferenceEqualityComparer : IEqualityComparer<object>
         {
             public static readonly ReferenceEqualityComparer Instance = new();
             public new bool Equals(object x, object y) => ReferenceEquals(x, y);
@@ -221,7 +221,9 @@ namespace Xenocide.Utils
         }
     }
 
+#pragma warning disable CS0649 // Fields populated via JSON deserialization
     internal struct Vector2Json { public float X; public float Y; }
     internal struct Vector3Json { public float X; public float Y; public float Z; }
     internal struct Vector4Json { public float X; public float Y; public float Z; public float W; }
+#pragma warning restore CS0649
 }

@@ -97,7 +97,7 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
         /// </summary>
         /// <param name="item">X-Cap to build combatant for</param>
         /// <returns>the constructed Combatant</returns>
-        public Combatant MakeXCap(Item item)
+        public static Combatant MakeXCap(Item item)
         {
             Debug.Assert(item.ItemInfo.IsXCap);
             // ToDo: implement
@@ -191,7 +191,7 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
         /// Check that the list of combatants we've loaded is good
         /// </summary>
         /// <remarks>Will throw if list isn't valid</remarks>
-        private void ValidateList()
+        private static void ValidateList()
         {
             // ToDo: Implement
         }

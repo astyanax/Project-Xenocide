@@ -85,7 +85,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
             Ufo ufo = task.Ufos[0];
             Debug.Assert(ufo.ItemInfo.Id == "ITEM_UFO_JUGGERNAUT");
 
-            task.TestWaitForUfoToSucceed(ufo);
+            InvasionTask.TestWaitForUfoToSucceed(ufo);
 
             // Confirm no outpost at this point in time
             Debug.Assert(0 == overmind.Sites.Count);

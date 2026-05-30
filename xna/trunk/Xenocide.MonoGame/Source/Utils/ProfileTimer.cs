@@ -24,7 +24,7 @@ namespace ProjectXenocide.Utils
             Log.Debug("[PROFILE] {0}: {1}ms", label, elapsedMs);
         }
 
-        private class ProfileScope : IDisposable
+        private sealed class ProfileScope : IDisposable
         {
             private readonly string _label;
             private readonly Stopwatch _sw;

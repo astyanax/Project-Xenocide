@@ -49,7 +49,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// Displays the Encyclopedia of research and info
     /// </summary>
-    class XNetScreen : PolarScreen
+    sealed class XNetScreen : PolarScreen
     {
 
         /// <summary>
@@ -315,7 +315,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// Manage the categories in the tree
         /// </summary>
-        private class Category
+        private sealed class Category
         {
             /// <summary>
             /// Constructor (duh)

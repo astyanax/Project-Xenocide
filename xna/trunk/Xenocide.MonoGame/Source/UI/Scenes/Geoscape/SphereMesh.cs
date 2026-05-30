@@ -38,7 +38,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
     /// <summary>
     /// Generate a spherical mesh of VertexPositionNormalTexture vertexes
     /// </summary>
-    class SphereMesh
+    sealed class SphereMesh
     {
         private int numStrips;
         private int nextIndex;

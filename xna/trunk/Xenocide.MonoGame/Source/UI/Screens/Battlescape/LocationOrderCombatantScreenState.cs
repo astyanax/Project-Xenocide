@@ -59,7 +59,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// Screen behaviour, waiting for player to give location needed by an order
         /// </summary>
-        private class LocationOrderCombatantScreenState : OrderCombatantScreenState
+        private sealed class LocationOrderCombatantScreenState : OrderCombatantScreenState
         {
             /// <summary>
             /// Constructor

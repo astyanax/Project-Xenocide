@@ -43,7 +43,7 @@ namespace ProjectXenocide.UI.Dialogs
             }
         }
 
-        private GraphicalUiElement LoadGumxLayout(string dialogName)
+        private static GraphicalUiElement LoadGumxLayout(string dialogName)
         {
             var project = Xenocide.GumProject;
             if (project == null)

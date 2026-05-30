@@ -258,7 +258,7 @@ namespace ProjectXenocide.UI.Screens
         /// Represents the outpost where we're getting items to add to a soldier (or where we're dumping the items
         /// removed from the soldier)
         /// </summary>
-        private class OutpostItemSource : ItemSource
+        private sealed class OutpostItemSource : ItemSource
         {
             /// <summary>
             /// Constructor

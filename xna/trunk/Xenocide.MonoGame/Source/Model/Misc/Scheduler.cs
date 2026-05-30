@@ -101,7 +101,7 @@ namespace ProjectXenocide.Model
         /// <summary>
         /// Stub class for testing
         /// </summary>
-        private class TestAppointment : Appointment
+        private sealed class TestAppointment : Appointment
         {
             public TestAppointment(DateTime occurs) : base(occurs) { }
             /// <summary>

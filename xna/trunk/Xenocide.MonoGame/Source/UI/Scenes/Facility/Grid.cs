@@ -40,7 +40,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
     /// <summary>
     /// A grid marking the cells in a X-Corp outpost that can hold a facility
     /// </summary>
-    internal class Grid : LineMeshBuilder
+    internal sealed class Grid : LineMeshBuilder
     {
         /// <summary>
         /// Ctor

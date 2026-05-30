@@ -334,7 +334,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope",
             Justification = "FxCop False Positive")]
-        private void GoToGeoscapeScreen()
+        private static void GoToGeoscapeScreen()
         {
             ScreenManager.ScheduleScreen(new GeoscapeScreen());
         }
@@ -431,7 +431,7 @@ namespace ProjectXenocide.UI.Screens
             #endregion Fields
         }
 
-        private class ProjectLineItem : LineItem
+        private sealed class ProjectLineItem : LineItem
         {
             /// <summary>
             /// Constructor
@@ -504,7 +504,7 @@ namespace ProjectXenocide.UI.Screens
             #endregion Fields
         }
 
-        private class TopicLineItem : LineItem
+        private sealed class TopicLineItem : LineItem
         {
             /// <summary>
             /// Constructor

@@ -81,7 +81,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// An option to pick from
         /// </summary>
         [Serializable]
-        private class Choice : IOdds
+        private sealed class Choice : IOdds
         {
             /// <summary>
             /// Ctor

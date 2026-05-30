@@ -187,7 +187,7 @@ namespace ProjectXenocide.Model.Battlescape
         }
 
         /// <summary>List of cells to examine</summary>
-        private partial class OpenList
+        private sealed partial class OpenList
         {
             /// <summary>
             /// Add node to list, keeping list in sorted order

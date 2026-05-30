@@ -229,7 +229,7 @@ namespace ProjectXenocide.Model.StaticData
         public Cheats Cheats { get { return cheats; } }
 
         /// <summary>How hard is it to win?</summary>
-        public Difficulty Difficulty { get { return difficulty; } }
+        public static Difficulty Difficulty { get { return difficulty; } }
 
         /// <summary>
         /// The facilities to put in the inital outpost

@@ -87,7 +87,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
 
                 // unload
                 Debug.Assert(!ufo0.Mission.Success);
-                task.TestWaitForUfoToSucceed(ufo0);
+                InvasionTask.TestWaitForUfoToSucceed(ufo0);
 
                 // depart
                 task.TestWaitForUfoToDepart(ufo0);
@@ -102,7 +102,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
             Debug.Assert(ufo.ItemInfo.Id == "ITEM_UFO_INTIMIDATOR");
 
             // kill bigger UFO after unload, should still reset
-            task.TestWaitForUfoToSucceed(ufo);
+            InvasionTask.TestWaitForUfoToSucceed(ufo);
             ufo.OnDestroyed();
             TestReleaseUfo(task);
             ufo = task.Ufos[0];

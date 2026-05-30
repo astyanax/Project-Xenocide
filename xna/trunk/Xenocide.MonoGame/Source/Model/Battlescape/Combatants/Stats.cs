@@ -80,10 +80,10 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             int fatalWoundsToLegs = currentValues[(int)Statistic.FatalWoundsLeftLeg] +
                 currentValues[(int)Statistic.FatalWoundsRightLeg];
             currentValues[(int)Statistic.TimeUnitsLeft] = (int)(currentValues[(int)Statistic.TimeUnits] *
-                Xenocide.GameBalance.TimeUnitDecreaseDueToFatalWounds(fatalWoundsToLegs));
+                GameBalanceClass.TimeUnitDecreaseDueToFatalWounds(fatalWoundsToLegs));
 
             currentValues[(int)Statistic.StaminaLeft] += (int)(currentValues[(int)Statistic.EnergyRecharge] *
-                Xenocide.GameBalance.EnergyRechargeDecreaseDueToFatalWounds(currentValues[(int)Statistic.FatalWoundsBody]));
+                GameBalanceClass.EnergyRechargeDecreaseDueToFatalWounds(currentValues[(int)Statistic.FatalWoundsBody]));
             if (currentValues[(int)Statistic.Stamina] < currentValues[(int)Statistic.StaminaLeft])
             {
                 currentValues[(int)Statistic.StaminaLeft] = currentValues[(int)Statistic.Stamina];
@@ -120,11 +120,11 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
                     break;
             }
 
-            double injuryAccuracyDecrease = Xenocide.GameBalance.AccuracyDecreaseDueToInjury(
+            double injuryAccuracyDecrease = GameBalanceClass.AccuracyDecreaseDueToInjury(
                 currentValues[(int)Statistic.InjuryDamage], currentValues[(int)Statistic.Health]);
 
             return (double)currentValues[(int)Statistic.FiringAccuracy] * injuryAccuracyDecrease *
-                Xenocide.GameBalance.AccuracyDecreaseDueToFatalWounds(fatalWounds);
+                GameBalanceClass.AccuracyDecreaseDueToFatalWounds(fatalWounds);
         }
 
         /// <summary>Number of days X-Corp staff member has been employed for</summary>

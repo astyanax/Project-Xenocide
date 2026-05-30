@@ -30,6 +30,7 @@ using System.Diagnostics;
 using System.Text;
 
 using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.Utils;
 
 using Xenocide.Resources;
@@ -116,7 +117,7 @@ namespace ProjectXenocide.Model.Battlescape
         /// </summary>
         public override Team CreateAlienTeam()
         {
-            return ufo.CreateCrew(Xenocide.StaticTables.StartSettings.Difficulty);
+            return ufo.CreateCrew(StartSettings.Difficulty);
         }
 
         #region Fields

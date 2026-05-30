@@ -194,7 +194,7 @@ namespace ProjectXenocide.UI.Screens
             if (0 < buildInfo.Space)
             {
                 string needed = Util.ToString(buildInfo.Space);
-                string available = Util.ToString((int)buildInfo.GetCapacityInfo(SelectedOutpost).Available);
+                string available = Util.ToString((int)BuildInfo.GetCapacityInfo(SelectedOutpost).Available);
                 AddRowToRequirementsGrid(Strings.SCREEN_MANUFACTURE_REPORT_ROW_WORKSPACE, needed, available);
             }
 
@@ -456,7 +456,7 @@ namespace ProjectXenocide.UI.Screens
             #endregion Fields
         }
 
-        private class ProjectLineItem : LineItem
+        private sealed class ProjectLineItem : LineItem
         {
             public ProjectLineItem(ManufactureScreen parent, BuildProject project)
                 :
@@ -514,7 +514,7 @@ namespace ProjectXenocide.UI.Screens
             #endregion Fields
         }
 
-        private class IdleLineItem : LineItem
+        private sealed class IdleLineItem : LineItem
         {
             public IdleLineItem(ManufactureScreen parent, ItemInfo item)
                 :

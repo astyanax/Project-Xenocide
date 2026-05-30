@@ -119,7 +119,7 @@ namespace ProjectXenocide.UI.Controls
             base.Dispose(disposing);
         }
 
-        private class ToastItem
+        private sealed class ToastItem
         {
             public string Text;
             public MessageType Type;

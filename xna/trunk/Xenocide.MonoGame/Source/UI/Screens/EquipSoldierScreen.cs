@@ -498,7 +498,9 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// Location of cursor on screen;
         /// </summary>
-        private Vector2 cursorPosition = new Vector2();
+#pragma warning disable CS0649 // Set via programmatic assignment before use
+        private Vector2 cursorPosition;
+#pragma warning restore CS0649
 
         /// <summary>
         /// where we're getting the items we're adding to a soldier

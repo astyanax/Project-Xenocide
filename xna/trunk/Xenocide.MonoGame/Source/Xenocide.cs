@@ -53,7 +53,11 @@ using ProjectXenocide.Utils;
 
 using Xenocide.Resources;
 
+using System.Resources;
+
 #endregion
+
+[assembly: NeutralResourcesLanguage("en")]
 
 namespace ProjectXenocide
 {

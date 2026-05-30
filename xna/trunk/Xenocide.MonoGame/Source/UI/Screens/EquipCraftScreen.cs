@@ -369,7 +369,7 @@ namespace ProjectXenocide.UI.Screens
             textControl.Text = info.ToString();
         }
 
-        private class WeaponRow
+        private sealed class WeaponRow
         {
             public WeaponRow(Item item, OutpostInventory inventory)
             {

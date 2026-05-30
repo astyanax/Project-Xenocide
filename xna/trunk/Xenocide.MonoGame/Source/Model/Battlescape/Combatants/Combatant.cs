@@ -169,7 +169,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             // Randomize body part that gets the fatal wounds
             int bodyPart = Xenocide.Rng.Next(6);
             stats[fatalWoundsStat[bodyPart]] +=
-                Xenocide.GameBalance.GenerateFatalWounds((int)damage.X);
+                GameBalanceClass.GenerateFatalWounds((int)damage.X);
         }
 
         /// <summary>Update state to reflect injury</summary>
@@ -334,8 +334,8 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
 
         public void Heal(BodyParts bodyPart)
         {
-            int healedWounds = Xenocide.GameBalance.HealFatalWounds();
-            int healedInjuryDamage = Xenocide.GameBalance.HealInjuryDamage();
+            int healedWounds = GameBalanceClass.HealFatalWounds();
+            int healedInjuryDamage = GameBalanceClass.HealInjuryDamage();
 
             Statistic bodyPartStat = fatalWoundsStat[(int)bodyPart];
             if (0 < stats[bodyPartStat])
@@ -528,7 +528,9 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         private Battle battlescape;
 
         /// <summary>Indicates if the combatant is kneeling or not.</summary>
+#pragma warning disable CS0649 // Intended future feature - kneeling functionality planned
         private bool kneeling;
+#pragma warning restore CS0649
 
         /// <summary>
         /// Table that holds the Fatal Wounds stat for each body part

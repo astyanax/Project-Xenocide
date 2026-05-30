@@ -112,7 +112,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
         protected Team CreateAlienTeam(string ufoType)
         {
             UfoItemInfo ufoInfo = Xenocide.StaticTables.ItemList[ufoType] as UfoItemInfo;
-            return ufoInfo.CreateCrew(Race, Xenocide.StaticTables.StartSettings.Difficulty, 100);
+            return ufoInfo.CreateCrew(Race, StartSettings.Difficulty, 100);
         }
 
         #region fields

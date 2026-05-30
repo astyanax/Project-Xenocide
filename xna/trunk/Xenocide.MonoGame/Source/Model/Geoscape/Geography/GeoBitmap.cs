@@ -373,7 +373,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         /// <summary>
         /// Class to encapsulate going from a Color to an IGeoBitmapProperty[] properties
         /// </summary>
-        protected class ColorToPropertyIndex
+        protected sealed class ColorToPropertyIndex
         {
             /// <summary>
             /// Constructor

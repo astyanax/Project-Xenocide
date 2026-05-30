@@ -260,7 +260,7 @@ namespace ProjectXenocide.UI.Screens
 
         private BattlescapeScene scene = new BattlescapeScene();
         private int topLevel;
-        private Vector3 cursorPosition = new Vector3();
+        private Vector3 cursorPosition;
         private Battle battlescape = Xenocide.GameState.Battlescape;
         private ScreenState state;
         private UiRect _viewportRect;

@@ -271,13 +271,13 @@ namespace ProjectXenocide.UI.Screens
 
         #endregion event handlers
 
-        private void ShowCreditsScreen()
+        private static void ShowCreditsScreen()
         {
             Logger.Debug("StartScreen: Scheduling CreditsScreen");
             ScreenManager.ScheduleScreen(new CreditsScreen());
         }
 
-        private void StartDebugBattlescape()
+        private static void StartDebugBattlescape()
         {
             Logger.Debug("StartScreen: Starting debug battlescape");
             Xenocide.GameState.SetToStartGameCondition();

@@ -44,7 +44,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
     /// <summary>
     /// Overlay for facilities, giving build time remaining
     /// </summary>
-    class BuildTimes
+    sealed class BuildTimes
     {
         /// <summary>
         /// Constructor
@@ -139,8 +139,8 @@ namespace ProjectXenocide.UI.Scenes.Facility
         private void AddQuadToMesh(FacilityHandle handle, int quadNum)
         {
             // compute position in scene for quad
-            float left = (floorplan.CellsWide * -0.5f) + handle.X + (handle.FacilityInfo.XSize * 0.5f) - 0.5f;
-            float top = (floorplan.CellsHigh * -0.5f) + handle.Y + (handle.FacilityInfo.YSize * 0.5f) - 0.5f;
+            float left = (Floorplan.CellsWide * -0.5f) + handle.X + (handle.FacilityInfo.XSize * 0.5f) - 0.5f;
+            float top = (Floorplan.CellsHigh * -0.5f) + handle.Y + (handle.FacilityInfo.YSize * 0.5f) - 0.5f;
             float height = 0.5f;
             Vector3 topLeft = new Vector3(left, height, top);
             Vector3 topRight = new Vector3(left + 1.0f, height, top);

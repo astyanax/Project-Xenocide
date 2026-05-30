@@ -9,7 +9,7 @@ using ProjectXenocide.UI.Screens;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class AlienMissionDialog : ModalDialog
+    sealed class AlienMissionDialog : ModalDialog
     {
         public AlienMissionDialog()
         {

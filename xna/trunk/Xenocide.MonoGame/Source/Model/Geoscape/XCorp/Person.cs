@@ -72,8 +72,38 @@ namespace ProjectXenocide.Model.Geoscape
         /// <returns></returns>
         public Int32 CompareTo(Person other)
         {
+            if (other is null) return 1;
             return string.Compare(this.name, other.name, StringComparison.Ordinal);
         }
+
+        public override bool Equals(object obj) => Equals(obj as Person);
+
+        public bool Equals(Person other)
+        {
+            if (other is null) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return string.Equals(this.name, other.name, StringComparison.Ordinal);
+        }
+
+        public override int GetHashCode() => name?.GetHashCode() ?? 0;
+
+        public static bool operator ==(Person left, Person right) =>
+            left is null ? right is null : left.Equals(right);
+
+        public static bool operator !=(Person left, Person right) => !(left == right);
+
+        public static bool operator <(Person left, Person right) =>
+            left is null ? right is not null : left.CompareTo(right) < 0;
+
+        public static bool operator <=(Person left, Person right) =>
+            left is null || left.CompareTo(right) <= 0;
+
+        public static bool operator >(Person left, Person right) =>
+            left is not null && left.CompareTo(right) > 0;
+
+        public static bool operator >=(Person left, Person right) =>
+            left is null ? right is null : left.CompareTo(right) >= 0;
+
         #endregion
 
         /// <summary>

@@ -282,7 +282,7 @@ namespace AudioSystem
             return MusicPrefix + name;
         }
 
-        private class SongDef
+        private sealed class SongDef
         {
             public readonly string AssetName;
             public readonly string Category;

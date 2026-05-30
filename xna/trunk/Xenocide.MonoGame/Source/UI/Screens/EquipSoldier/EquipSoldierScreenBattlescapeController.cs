@@ -55,7 +55,7 @@ namespace ProjectXenocide.UI.Screens
         /// 2. Alien soldier being probed on battlescape
         /// 3. Alien soldier being mind controlled on battlescape
         /// </summary>
-        private class BattlescapeController : Controller
+        private sealed class BattlescapeController : Controller
         {
             /// <summary>
             /// Constructor

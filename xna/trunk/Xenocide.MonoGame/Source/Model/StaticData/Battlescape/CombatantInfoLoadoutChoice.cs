@@ -51,7 +51,7 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
         /// a possible loadout this type of combatant may come equiped with
         /// </summary>
         [Serializable]
-        private class LoadoutChoice : IOdds
+        private sealed class LoadoutChoice : IOdds
         {
             /// <summary>
             /// Ctor

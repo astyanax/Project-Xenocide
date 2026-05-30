@@ -277,7 +277,7 @@ namespace ProjectXenocide.Model.Geoscape
         private void SetPlayerToStartGameCondition()
         {
             Outposts.Clear();
-            planet = PlanetParser.Parse(Xenocide.StaticTables.DataDirectory + "planets.xml");
+            planet = PlanetParser.Parse(StaticTables.DataDirectory + "planets.xml");
             xcorp = new XCorp();
             xcorp.StartOfMonth();
         }

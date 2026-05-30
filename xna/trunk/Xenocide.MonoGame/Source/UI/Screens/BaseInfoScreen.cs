@@ -47,7 +47,7 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Screens
 {
-    class BaseInfoScreen : GumScreen
+    sealed class BaseInfoScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)

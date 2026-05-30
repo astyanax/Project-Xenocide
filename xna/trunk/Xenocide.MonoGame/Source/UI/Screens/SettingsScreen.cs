@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 
 using ProjectXenocide.Assets;
 using ProjectXenocide.Model;
+using ProjectXenocide.Model.StaticData;
 
 namespace ProjectXenocide.UI.Screens
 {
@@ -42,7 +43,7 @@ namespace ProjectXenocide.UI.Screens
             _autosave = false;
             _cursorMode = Xenocide.Instance.IsMouseVisible ? 1 : 0;
             _resolutionIdx = 0;
-            _difficultyIdx = (int)Xenocide.StaticTables.StartSettings.Difficulty;
+            _difficultyIdx = (int)StartSettings.Difficulty;
         }
 
         protected override bool HasGumxLayout => false;
@@ -91,7 +92,7 @@ namespace ProjectXenocide.UI.Screens
             ShowDisplayTab();
         }
 
-        private Button MakeTabButton(string text, Action action)
+        private static Button MakeTabButton(string text, Action action)
         {
             var btn = new Button { Text = text };
             btn.Visual.Width = 150;

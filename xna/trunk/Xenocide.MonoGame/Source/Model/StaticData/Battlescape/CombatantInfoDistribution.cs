@@ -67,7 +67,7 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
         /// <summary>
         /// Statistic always has same value
         /// </summary>
-        private class CoreDistribution : Distribution
+        private sealed class CoreDistribution : Distribution
         {
             /// <summary>
             /// Construct distribution from an xml element
@@ -93,7 +93,7 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
         /// <summary>
         /// Statistic values follow normal distribution
         /// </summary>
-        private class NormalDistribution : Distribution
+        private sealed class NormalDistribution : Distribution
         {
             /// <summary>
             /// Construct distribution from an xml element
@@ -122,7 +122,7 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
         /// <summary>
         /// Statistic values follow uniform distribution
         /// </summary>
-        private class UniformDistribution : Distribution
+        private sealed class UniformDistribution : Distribution
         {
             /// <summary>
             /// Construct distribution from an xml element

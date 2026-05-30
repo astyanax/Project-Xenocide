@@ -54,7 +54,7 @@ namespace ProjectXenocide.UI.Screens
         /// Represents the battlescape where we're getting items to add to a soldier (or where we're dumping the items
         /// removed from the soldier)
         /// </summary>
-        private class BattlescapeItemSource : ItemSource
+        private sealed class BattlescapeItemSource : ItemSource
         {
             /// <summary>
             /// Constructor

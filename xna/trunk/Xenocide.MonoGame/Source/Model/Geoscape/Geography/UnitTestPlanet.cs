@@ -70,7 +70,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         [Conditional("DEBUG")]
         public static void TestSelectRandomRegion()
         {
-            Planet planet = PlanetParser.Parse(Xenocide.StaticTables.DataDirectory + "planets.xml");
+            Planet planet = PlanetParser.Parse(StaticTables.DataDirectory + "planets.xml");
             PlanetRegion region = planet.SelectRandomRegion();
             region.SelectRandomMission();
         }
@@ -81,7 +81,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         [Conditional("DEBUG")]
         public static void TestSelectCountryToInfiltrate()
         {
-            Planet planet = PlanetParser.Parse(Xenocide.StaticTables.DataDirectory + "planets.xml");
+            Planet planet = PlanetParser.Parse(StaticTables.DataDirectory + "planets.xml");
             Debug.Assert(null != planet.SelectCountryToInfiltrate());
             foreach (Country country in planet.AllCountries)
             {
@@ -97,7 +97,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         [Conditional("DEBUG")]
         public static void TestGetClosestLand()
         {
-            Planet planet = PlanetParser.Parse(Xenocide.StaticTables.DataDirectory + "planets.xml");
+            Planet planet = PlanetParser.Parse(StaticTables.DataDirectory + "planets.xml");
             for (int i = 0; i < 1000; i++)
             {
                 long x = (long)Xenocide.Rng.Next(1350);

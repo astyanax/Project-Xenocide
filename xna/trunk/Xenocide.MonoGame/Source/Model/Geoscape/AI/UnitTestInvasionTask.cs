@@ -72,7 +72,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
             Debug.Assert(false);
         }
 
-        public void TestWaitForUfoToSucceed(Ufo ufo)
+        public static void TestWaitForUfoToSucceed(Ufo ufo)
         {
             double onehour = 1000 * 60 * 60;
             for (int i = 0; i < 31 * 24; ++i)

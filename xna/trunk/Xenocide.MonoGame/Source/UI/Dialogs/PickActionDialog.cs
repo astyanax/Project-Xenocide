@@ -17,7 +17,7 @@ namespace ProjectXenocide.UI.Screens
 {
     public partial class BattlescapeScreen
     {
-        private class PickActionDialog : ModalDialog
+        private sealed class PickActionDialog : ModalDialog
         {
             public PickActionDialog(BattlescapeScreen battlescapeScreen, Item item, Combatant combatant, bool rightHand)
             {

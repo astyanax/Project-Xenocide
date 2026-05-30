@@ -7,7 +7,7 @@ using ProjectXenocide.UI.Screens;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class GumOptionsDialog : GumDialog
+    sealed class GumOptionsDialog : GumDialog
     {
         public GumOptionsDialog() : base("Options") { }
         protected override void WireGumControls()

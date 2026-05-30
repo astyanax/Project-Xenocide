@@ -43,7 +43,7 @@ using Microsoft.Xna.Framework.Input;
 namespace ProjectXenocide.UI.Screens
 {
     /// <summary>A line of text to display</summary>
-    class SpriteLine
+    sealed class SpriteLine
     {
         public SpriteLine(string givenText, SpriteFont givenFont)
         {

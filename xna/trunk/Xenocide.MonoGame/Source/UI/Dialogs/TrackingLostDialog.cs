@@ -13,7 +13,7 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class TrackingLostDialog : ModalDialog
+    sealed class TrackingLostDialog : ModalDialog
     {
         public TrackingLostDialog(GeoPosition target, Craft hunter)
         {

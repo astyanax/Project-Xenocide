@@ -11,7 +11,7 @@ using ProjectXenocide.Utils;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    class StartBattlescapeDialog : ModalDialog
+    sealed class StartBattlescapeDialog : ModalDialog
     {
         public StartBattlescapeDialog(Mission mission)
         {
