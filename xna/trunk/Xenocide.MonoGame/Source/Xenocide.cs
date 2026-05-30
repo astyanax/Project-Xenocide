@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Resources;
 
 using AudioSystem;
 
@@ -52,8 +53,6 @@ using ProjectXenocide.UI.Screens;
 using ProjectXenocide.Utils;
 
 using Xenocide.Resources;
-
-using System.Resources;
 
 #endregion
 
