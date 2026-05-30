@@ -19,8 +19,6 @@ namespace ProjectXenocide.UI.Dialogs
         public Dialog.ButtonAction DismissAction { get; set; }
         public bool IsRequired { get; set; }
 
-        protected StackPanel _programmaticContent;
-
         protected GumDialog(string title) : base(new UiSize(0.5f, 0.3f))
         {
             Title = title;

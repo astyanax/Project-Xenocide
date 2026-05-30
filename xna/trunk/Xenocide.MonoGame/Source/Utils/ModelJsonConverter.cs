@@ -171,9 +171,27 @@ namespace Xenocide.Utils
                     actualType = typeToConvert;
                 }
 
-                // RuntimeHelpers.GetUninitializedObject creates an instance without calling
-                // the constructor, so fields can be populated via reflection below.
-                // (Replaces deprecated FormatterServices.GetUninitializedObject).
+                // Instance creation rationale:
+                //
+                // RuntimeHelpers.GetUninitializedObject creates an object without executing
+                // its constructor, so fields can be populated via reflection below. This is
+                // necessary because model types (~100+) have only parameterized constructors
+                // (e.g. Combatant(CombatantInfo, int), Aircraft(ItemInfo)) that cannot be
+                // used for deserialization — they require runtime arguments not present in
+                // the JSON save data.
+                //
+                // Alternatives considered:
+                //   A) Add parameterless constructors to all ~90 model types + rework 10+
+                //      field initializers that allocate objects (e.g. new GeoTime()) which
+                //      would be immediately overwritten by JSON — wasted allocations.
+                //   B) Full System.Text.Json migration with [JsonConstructor] — would break
+                //      save file compatibility (JSON metadata format differs) and require
+                //      explicit derived-type registration for ~50+ polymorphic types.
+                //   C) (Current) RuntimeHelpers.GetUninitializedObject — not deprecated,
+                //      preserves save compatibility, handles complex type graphs cleanly.
+                //
+                // Previously used FormatterServices.GetUninitializedObject, which was
+                // deprecated in .NET 9 as part of the legacy binary-formatter removal.
                 var instance = System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(actualType);
 
                 if (root.TryGetProperty("$id", out var idProp))

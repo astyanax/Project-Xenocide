@@ -24,9 +24,9 @@ namespace ProjectXenocide.Utils
     /// </summary>
     public struct CachedModel
     {
-        public Microsoft.Xna.Framework.Graphics.Model Model;
+        public Microsoft.Xna.Framework.Graphics.Model Model { get; set; }
         /// <summary>World transform that translates and uniformly scales the model to fit a unit sphere.</summary>
-        public Matrix ScalingMatrix;
+        public Matrix ScalingMatrix { get; set; }
     }
 
     public static class ContentCache
