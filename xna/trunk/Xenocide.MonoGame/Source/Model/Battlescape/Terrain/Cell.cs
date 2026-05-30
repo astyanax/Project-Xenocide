@@ -274,7 +274,7 @@ namespace ProjectXenocide.Model.Battlescape
         /// <returns>byte value</returns>
         private static byte ToHex(string s, int offset)
         {
-            return byte.Parse(s.Substring(offset, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+            return byte.Parse(s.AsSpan(offset, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
         }
 
         #region Fields

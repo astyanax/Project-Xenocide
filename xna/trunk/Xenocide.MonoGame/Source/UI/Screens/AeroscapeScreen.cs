@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 
 using Gum.Forms;
@@ -175,7 +176,7 @@ namespace ProjectXenocide.UI.Screens
 
         private static void DrawPodInformation(Label textControl, WeaponPod pod, int podId)
         {
-            StringBuilder info = new StringBuilder(string.Format("Pod {0}", podId));
+            StringBuilder info = new StringBuilder(string.Format(CultureInfo.InvariantCulture, "Pod {0}", podId));
             info.Append(Util.Linefeed);
             info.Append(WeaponPod.PodInformationString(pod));
             textControl.Text = info.ToString();
@@ -183,7 +184,7 @@ namespace ProjectXenocide.UI.Screens
 
         private void DrawLog()
         {
-            StringBuilder sb = new StringBuilder(string.Format("Time: {0}", log.Now));
+            StringBuilder sb = new StringBuilder(string.Format(CultureInfo.InvariantCulture, "Time: {0}", log.Now));
             foreach (BattleLog.LogEntry entry in log.Entries)
             {
                 if (entry.Time == log.Now)

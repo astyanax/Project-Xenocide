@@ -697,7 +697,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
                         // add '/' separator, if there's 2 pods
                         if (!String.IsNullOrEmpty(status.ToString()))
                         {
-                            status.Append("/");
+                            status.Append('/');
                         }
                         status.Append(Util.StringFormat("{0}", WeaponPods[i].AmmoStatus));
                     }

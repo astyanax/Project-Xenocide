@@ -72,7 +72,7 @@ namespace ProjectXenocide.Model.Geoscape
         /// <returns></returns>
         public Int32 CompareTo(Person other)
         {
-            return this.name.CompareTo(other.name);
+            return string.Compare(this.name, other.name, StringComparison.Ordinal);
         }
         #endregion
 

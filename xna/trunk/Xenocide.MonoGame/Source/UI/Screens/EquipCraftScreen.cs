@@ -28,6 +28,7 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 using Gum.Forms;
@@ -182,8 +183,8 @@ namespace ProjectXenocide.UI.Screens
                 Aircraft aircraft = (Aircraft)craft;
                 craftGrid.AddRow(aircraft,
                     aircraft.Name,
-                    aircraft.FuelPercent.ToString(),
-                    aircraft.HullPercent.ToString(),
+                    aircraft.FuelPercent.ToString(CultureInfo.InvariantCulture),
+                    aircraft.HullPercent.ToString(CultureInfo.InvariantCulture),
                     aircraft.PodCountStatus.ToString(),
                     aircraft.AmmoStatus.ToString(),
                     aircraft.SoldierCountStatus.ToString(),
@@ -202,9 +203,9 @@ namespace ProjectXenocide.UI.Screens
                     WeaponRow weaponRow = new WeaponRow(i, SelectedOutpost.Inventory);
                     weaponsGrid.AddRow(weaponRow,
                         weaponRow.Name,
-                        weaponRow.OnHand.ToString(),
-                        weaponRow.ClipSize.ToString(),
-                        weaponRow.ClipsInBase.ToString());
+                        weaponRow.OnHand.ToString(CultureInfo.InvariantCulture),
+                        weaponRow.ClipSize.ToString(CultureInfo.InvariantCulture),
+                        weaponRow.ClipsInBase.ToString(CultureInfo.InvariantCulture));
                 }
             }
         }
@@ -305,12 +306,12 @@ namespace ProjectXenocide.UI.Screens
             int row = craftGrid.GetRowIndexByTag(aircraft);
             if (row < 0) return;
 
-            craftGrid.SetCell(row, 1, aircraft.FuelPercent.ToString());
-            craftGrid.SetCell(row, 2, aircraft.HullPercent.ToString());
-            craftGrid.SetCell(row, 3, aircraft.PodCountStatus.ToString());
-            craftGrid.SetCell(row, 4, aircraft.AmmoStatus.ToString());
-            craftGrid.SetCell(row, 5, aircraft.SoldierCountStatus.ToString());
-            craftGrid.SetCell(row, 6, aircraft.XcapCountStatus.ToString());
+            craftGrid.SetCell(row, 1, aircraft.FuelPercent.ToString(CultureInfo.InvariantCulture));
+            craftGrid.SetCell(row, 2, aircraft.HullPercent.ToString(CultureInfo.InvariantCulture));
+            craftGrid.SetCell(row, 3, aircraft.PodCountStatus.ToString(CultureInfo.InvariantCulture));
+            craftGrid.SetCell(row, 4, aircraft.AmmoStatus.ToString(CultureInfo.InvariantCulture));
+            craftGrid.SetCell(row, 5, aircraft.SoldierCountStatus.ToString(CultureInfo.InvariantCulture));
+            craftGrid.SetCell(row, 6, aircraft.XcapCountStatus.ToString(CultureInfo.InvariantCulture));
 
             DrawPodInformation(aircraft);
 

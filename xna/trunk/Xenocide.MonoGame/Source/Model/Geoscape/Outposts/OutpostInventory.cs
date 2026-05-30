@@ -324,10 +324,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         public int NumberInArmory(string itemType)
         {
             int number = 0;
-            if (armory.ContainsKey(itemType))
-            {
-                number = armory[itemType];
-            }
+            armory.TryGetValue(itemType, out number);
             return number;
         }
 

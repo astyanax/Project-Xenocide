@@ -407,7 +407,7 @@ namespace ProjectXenocide.UI.Screens
             // update time shown on screen
             // Only update the time text if it has changed to avoid unnecessary UI recomposition
             DateTime time = Xenocide.GameState.GeoData.GeoTime.Time;
-            String newTime = time.ToString();
+            String newTime = time.ToString(CultureInfo.InvariantCulture);
 
             if (gameTimeText != newTime)
             {
@@ -427,9 +427,9 @@ namespace ProjectXenocide.UI.Screens
 
                 //Change month to uppercase
                 string upper = time.ToString("MMMM", culture);
-                gametime.Append(" ");
+                gametime.Append(' ');
                 gametime.Append(upper.ToUpper(culture));
-                gametime.Append(" ");
+                gametime.Append(' ');
                 gametime.Append(time.ToString("yyyy", culture));
 
                 gameTimeTop.Text = gametime.ToString();
@@ -522,7 +522,7 @@ namespace ProjectXenocide.UI.Screens
         {
             string label = XenocideResourceManager.Get(resourceName);
             Debug.Assert(!String.IsNullOrEmpty(label));
-            return button.Text.EndsWith(label);
+            return button.Text.EndsWith(label, StringComparison.Ordinal);
         }
 
         /// <summary>React to user clicking on one of the "move camera" buttons</summary>

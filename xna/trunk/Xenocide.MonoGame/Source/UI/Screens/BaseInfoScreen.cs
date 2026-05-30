@@ -28,6 +28,7 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 using Gum.Forms;
@@ -199,7 +200,7 @@ namespace ProjectXenocide.UI.Screens
 
             // create the row
             int rowNum = staffGrid.RowCount;
-            staffGrid.AddRow(rowNum, typeName, idle.ToString(), total.ToString());
+            staffGrid.AddRow(rowNum, typeName, idle.ToString(CultureInfo.InvariantCulture), total.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
@@ -293,7 +294,7 @@ namespace ProjectXenocide.UI.Screens
         private void AddRowToFacilityGrid(string typeName, uint inUse, uint total, uint building)
         {
             int rowNum = facilitiesGrid.RowCount;
-            facilitiesGrid.AddRow(rowNum, typeName, inUse.ToString(), total.ToString(), building.ToString());
+            facilitiesGrid.AddRow(rowNum, typeName, inUse.ToString(CultureInfo.InvariantCulture), total.ToString(CultureInfo.InvariantCulture), building.ToString(CultureInfo.InvariantCulture));
         }
 
         #endregion Create the Gum controls
@@ -341,7 +342,7 @@ namespace ProjectXenocide.UI.Screens
                 foreach (Outpost outpost in Xenocide.GameState.GeoData.Outposts)
                 {
                     if ((outpost != SelectedOutpost)
-                        && text.Equals(outpost.Name, StringComparison.CurrentCultureIgnoreCase))
+                        && text.Equals(outpost.Name, StringComparison.OrdinalIgnoreCase))
                     {
                         Util.ShowMessageBox(Strings.MSGBOX_BASE_NAMES_ARE_UNIQUE, text);
                         valid = false;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 using Gum.Forms;
@@ -151,8 +152,7 @@ namespace ProjectXenocide.UI.Screens
 
             if (_fullscreen != Xenocide.Instance.GraphicsDevice.PresentationParameters.IsFullScreen)
             {
-                var gdm = (Microsoft.Xna.Framework.GraphicsDeviceManager)
-                    Xenocide.Instance.Services.GetService(typeof(Microsoft.Xna.Framework.IGraphicsDeviceManager));
+                var gdm = Xenocide.Instance.Services.GetService<Microsoft.Xna.Framework.IGraphicsDeviceManager>() as Microsoft.Xna.Framework.GraphicsDeviceManager;
                 gdm.ToggleFullScreen();
             }
 
@@ -217,7 +217,7 @@ namespace ProjectXenocide.UI.Screens
             downBtn.Visual.Width = 40;
             row.AddChild(downBtn);
 
-            var levelLabel = new Label { Text = getLevel().ToString() };
+            var levelLabel = new Label { Text = getLevel().ToString(CultureInfo.InvariantCulture) };
             levelLabel.Visual.Width = 40;
             row.AddChild(levelLabel);
 
@@ -229,13 +229,13 @@ namespace ProjectXenocide.UI.Screens
             {
                 Xenocide.AudioSystem?.PlaySound(SoundId.ButtonClick1);
                 setLevel(getLevel() - 1);
-                levelLabel.Text = getLevel().ToString();
+                levelLabel.Text = getLevel().ToString(CultureInfo.InvariantCulture);
             };
             upBtn.Click += (s, e) =>
             {
                 Xenocide.AudioSystem?.PlaySound(SoundId.ButtonClick1);
                 setLevel(getLevel() + 1);
-                levelLabel.Text = getLevel().ToString();
+                levelLabel.Text = getLevel().ToString(CultureInfo.InvariantCulture);
             };
 
             _contentPanel.AddChild(row);

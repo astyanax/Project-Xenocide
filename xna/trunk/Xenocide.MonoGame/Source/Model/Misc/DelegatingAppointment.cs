@@ -49,10 +49,7 @@ namespace ProjectXenocide.Model
         public DelegatingAppointment(DateTime occurs, ProcessAction action)
             : base(occurs)
         {
-            if (null == action)
-            {
-                throw new ArgumentNullException("action");
-            }
+            ArgumentNullException.ThrowIfNull(action);
             this.action = action;
         }
 

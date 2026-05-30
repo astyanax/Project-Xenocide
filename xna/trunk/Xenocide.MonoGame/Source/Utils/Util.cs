@@ -108,7 +108,7 @@ namespace ProjectXenocide.Utils
         [Conditional("DEBUG")]
         public static void GeoTimeDebugWriteLine(string format, params Object[] args)
         {
-            GeoLog.Debug(format, args);
+            GeoLog.Debug(CultureInfo.InvariantCulture, format, args);
         }
 
         /// <summary>

@@ -125,8 +125,6 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
                              PrimitiveType.TriangleList,
                              0,
                              0,
-                             numQuads[i] * 4,
-                             0,
                              numQuads[i] * 2
                          );
                     }

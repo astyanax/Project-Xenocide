@@ -261,9 +261,8 @@ namespace ProjectXenocide.Model.Battlescape
             // for reporting purposes, aggregate by type
             string name = Xenocide.StaticTables.ItemList[info.StunItemId].Name;
             int score = info.VictoryPoints * (dead ? 1 : 2);
-            if (dict.ContainsKey(name))
+            if (dict.TryGetValue(name, out KillAndPoints pair))
             {
-                KillAndPoints pair = dict[name];
                 ++pair.First;
                 pair.Second += score;
                 dict[name] = pair;

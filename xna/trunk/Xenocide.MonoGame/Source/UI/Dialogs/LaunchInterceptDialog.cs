@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 using Gum.Forms.Controls;
@@ -35,7 +36,7 @@ namespace ProjectXenocide.UI.Dialogs
                     Aircraft aircraft = (Aircraft)craft;
                     int row = rowNum;
                     var label = new Label();
-                    label.Text = string.Format("{0} - {1} (Fuel:{2}% Hull:{3}%)",
+                    label.Text = string.Format(CultureInfo.InvariantCulture, "{0} - {1} (Fuel:{2}% Hull:{3}%)",
                         aircraft.Name, aircraft.HomeBase.Name, aircraft.FuelPercent, aircraft.HullPercent);
                     ContentArea.AddChild(label);
 

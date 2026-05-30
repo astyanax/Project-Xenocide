@@ -446,7 +446,7 @@ namespace ProjectXenocide.UI.Screens
             /// Add a worker to the line item
             /// </summary>
             /// <param name="idle">list of idle workers to get worker from</param>
-            public void AddWorker(IList<Person> idle)
+            public void AddWorker(List<Person> idle)
             {
                 Person worker = idle[idle.Count - 1];
                 idle.RemoveAt(idle.Count - 1);

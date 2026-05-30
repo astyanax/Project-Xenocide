@@ -284,8 +284,8 @@ namespace ProjectXenocide.UI.Screens
                     length = MaxChars + 1;
                 }
 
-                temp = value.Substring(0, length - 1);
-                value = value.Substring(length, value.Length - length);
+                temp = value[..(length - 1)];
+                value = value[length..];
             }
             else
             {

@@ -110,7 +110,7 @@ namespace ProjectXenocide.UI.Dialogs
 
             foreach (Outpost outpost in Xenocide.GameState.GeoData.Outposts)
             {
-                if (outpost.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase))
+                if (outpost.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                 {
                     Util.ShowMessageBox(Strings.MSGBOX_BASE_NAMES_ARE_UNIQUE, name);
                     return false;

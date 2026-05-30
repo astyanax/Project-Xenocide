@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 using Gum.Forms.Controls;
@@ -33,7 +34,7 @@ namespace ProjectXenocide.UI.Dialogs
                 {
                     int idx = index;
                     var row = new Label();
-                    row.Text = string.Format("{0} - ${1} ({2}d, ${3}/mo)",
+                    row.Text = string.Format(CultureInfo.InvariantCulture, "{0} - ${1} ({2}d, ${3}/mo)",
                         facility.Name, facility.BuildCost, facility.BuildDays, facility.MonthlyMaintenance);
                     ContentArea.AddChild(row);
 

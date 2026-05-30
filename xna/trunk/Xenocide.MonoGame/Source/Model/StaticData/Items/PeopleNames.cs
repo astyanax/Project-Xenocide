@@ -74,8 +74,8 @@ namespace ProjectXenocide.Model.StaticData.Items
 
             foreach (string country in countries)
             {
-                IList<string> givenNamess;// = ParseAllValuesFromXPath(nav, "/database/namegroups/group/name");
-                IList<string> familyNamess;// = ParseAllValuesFromXPath(nav, "/database/namegroups/group/lastname");
+                List<string> givenNamess;// = ParseAllValuesFromXPath(nav, "/database/namegroups/group/name");
+                List<string> familyNamess;// = ParseAllValuesFromXPath(nav, "/database/namegroups/group/lastname");
 
                 givenNamess = ParseAllValuesFromXPath(nav, "/database/namegroups/group[@origin = '" + country + "']/name");
                 familyNamess = ParseAllValuesFromXPath(nav, "/database/namegroups/group[@origin = '" + country + "']/lastname");
@@ -112,9 +112,9 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// <param name="nav">Navigator for XML document</param>
         /// <param name="xPath">XPath the elements must satisfy</param>
         /// <returns>the values</returns>
-        private static IList<String> ParseAllValuesFromXPath(XPathNavigator nav, string xPath)
+        private static List<String> ParseAllValuesFromXPath(XPathNavigator nav, string xPath)
         {
-            IList<String> valuesList = new List<String>();
+            List<String> valuesList = new List<String>();
 
             // Extract all the given tags from the file, ignoring groups and so on
             foreach (XPathNavigator element in nav.Select(xPath))
@@ -133,17 +133,17 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// <summary>
         /// Countries (origins) to choose from
         /// </summary>
-        private IList<String> countries;
+        private List<String> countries;
 
         /// <summary>
         /// Given names arranged by country
         /// </summary>
-        private IDictionary<string, IList<string>> givenNamesByCountry = new Dictionary<string, IList<string>>();
+        private Dictionary<string, List<string>> givenNamesByCountry = new Dictionary<string, List<string>>();
 
         /// <summary>
         /// Family names arranged by country
         /// </summary>
-        private IDictionary<string, IList<string>> familyNamesByCountry = new Dictionary<string, IList<string>>();
+        private Dictionary<string, List<string>> familyNamesByCountry = new Dictionary<string, List<string>>();
 
         #endregion Fields
     }

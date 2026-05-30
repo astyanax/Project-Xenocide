@@ -22,7 +22,7 @@ namespace ProjectXenocide.UI.Dialogs
         private Label _titleLabel;
         private Button _closeButton;
 
-        public string Title
+        public new string Title
         {
             get => _titleLabel?.Text;
             set { if (_titleLabel != null) _titleLabel.Text = value; }
@@ -111,7 +111,7 @@ namespace ProjectXenocide.UI.Dialogs
             _titleBar.Visual.X = 0;
             _titleBar.Visual.Y = 0;
             _titleBar.Visual.Width = 0;
-            _titleBar.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToContainer;
+            _titleBar.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
             _titleBar.Visual.Height = 28;
             _titleBar.Visual.SetProperty("ColorCategoryState", "Primary");
 
@@ -139,7 +139,7 @@ namespace ProjectXenocide.UI.Dialogs
             ContentArea.Visual.X = 0;
             ContentArea.Visual.Y = 0;
             ContentArea.Visual.Width = 0;
-            ContentArea.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToContainer;
+            ContentArea.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
 
             _panel.AddChild(ContentArea);
         }

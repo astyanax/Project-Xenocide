@@ -198,11 +198,11 @@ namespace ProjectXenocide.UI.Screens
                 {
                     craftGrid.AddRow(aircraft,
                         aircraft.Name,
-                        aircraft.FuelPercent.ToString(),
-                        aircraft.HullPercent.ToString(),
-                        aircraft.PodCountStatus.ToString(),
-                        aircraft.AmmoStatus.ToString(),
-                        aircraft.SoldierCountStatus.ToString(),
+                        aircraft.FuelPercent.ToString(CultureInfo.InvariantCulture),
+                        aircraft.HullPercent.ToString(CultureInfo.InvariantCulture),
+                        aircraft.PodCountStatus.ToString(CultureInfo.InvariantCulture),
+                        aircraft.AmmoStatus.ToString(CultureInfo.InvariantCulture),
+                        aircraft.SoldierCountStatus.ToString(CultureInfo.InvariantCulture),
                         aircraft.XcapCountStatus.ToString());
 
                     rowToCraft.Add(aircraft);
@@ -221,10 +221,10 @@ namespace ProjectXenocide.UI.Screens
                 {
                     Aircraft aircraft = craft as Aircraft;
 
-                    if (aircraft.CanCarrySoldiers && aircraft.Soldiers.ContainsKey(soldier))
+                    if (aircraft.CanCarrySoldiers && aircraft.Soldiers.TryGetValue(soldier, out var soldierPosition))
                     {
                         craftName = aircraft.Name;
-                        position = Util.ToString(aircraft.Soldiers[soldier]);
+                        position = Util.ToString(soldierPosition);
                         break;
                     }
                 }
@@ -298,10 +298,10 @@ namespace ProjectXenocide.UI.Screens
 
                 if (craft != null)
                 {
-                    if (craft.Soldiers.ContainsKey(soldier))
+                    if (craft.Soldiers.TryGetValue(soldier, out var craftSoldierPosition))
                     {
                         soldierGrid.SetCell(soldierRow, 1, craft.Name);
-                        UpdateSoldierPosition(soldier, craft.Soldiers[soldier]);
+                        UpdateSoldierPosition(soldier, craftSoldierPosition);
                     }
                     else
                     {

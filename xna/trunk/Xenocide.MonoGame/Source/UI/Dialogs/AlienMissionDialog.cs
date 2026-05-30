@@ -17,7 +17,7 @@ namespace ProjectXenocide.UI.Dialogs
 
         protected override void CreateDialogWidgets()
         {
-            string[] missionNames = Enum.GetNames(typeof(AlienMission));
+            string[] missionNames = Enum.GetNames<AlienMission>();
             for (int i = 0; i < missionNames.Length; i++)
             {
                 int idx = i;
@@ -35,7 +35,7 @@ namespace ProjectXenocide.UI.Dialogs
 
         private void LaunchMission(int selectedMission)
         {
-            AlienMission missionType = (AlienMission)Enum.Parse(typeof(AlienMission), Enum.GetNames(typeof(AlienMission))[selectedMission]);
+            AlienMission missionType = (AlienMission)Enum.Parse<AlienMission>(Enum.GetNames<AlienMission>()[selectedMission]);
             GeoscapeScreen screen = new GeoscapeScreen();
             screen.State = new GeoscapeScreen.TargetAlienMissionState(screen, missionType);
             ScreenManager.ScheduleScreen(screen);

@@ -73,7 +73,7 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
             foreach (XPathNavigator node in armorNode.Select("c:susceptibility", manager))
             {
                 string typeName = Util.GetStringAttribute(node, "damageType");
-                susceptibilities[(int)Enum.Parse(typeof(DamageType), typeName)] = new Susceptibility(node);
+                susceptibilities[(int)Enum.Parse<DamageType>(typeName)] = new Susceptibility(node);
             }
         }
 
@@ -195,12 +195,12 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
         /// <summary>
         /// The armor that an attack can hit
         /// </summary>
-        private int[] plates = new int[Enum.GetValues(typeof(Side)).Length];
+        private int[] plates = new int[Enum.GetValues<Side>().Length];
 
         /// <summary>
         /// Table mapping damage type to points of damage inflicted
         /// </summary>
-        private Susceptibility[] susceptibilities = new Susceptibility[Enum.GetValues(typeof(DamageType)).Length];
+        private Susceptibility[] susceptibilities = new Susceptibility[Enum.GetValues<DamageType>().Length];
 
         /// <summary>Does armor give wearer ability to fly?</summary>
         private bool flyer;

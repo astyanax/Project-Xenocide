@@ -69,7 +69,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         #region Fields
 
         /// <summary>Number of times each type of act was done this mission</summary>
-        private int[] acts = new int[Enum.GetValues(typeof(Act)).Length];
+        private int[] acts = new int[Enum.GetValues<Act>().Length];
 
         #endregion Fields
     }

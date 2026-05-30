@@ -28,6 +28,7 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 using Gum.Forms;
@@ -157,7 +158,7 @@ namespace ProjectXenocide.UI.Screens
                 totalCost += (count * itemCost);
 
                 int rowNum = grid.RowCount;
-                grid.AddRow(rowNum, typeName, Util.FormatCurrency(itemCost), count.ToString(),
+                grid.AddRow(rowNum, typeName, Util.FormatCurrency(itemCost), count.ToString(CultureInfo.InvariantCulture),
                     Util.FormatCurrency(count * itemCost));
             }
         }

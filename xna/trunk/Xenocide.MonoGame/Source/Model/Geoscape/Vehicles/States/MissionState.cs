@@ -66,8 +66,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <param name="currentSpeed">Craft's current speed, in radians/second</param>
         protected MissionState(Mission mission, double currentSpeed)
         {
-            if (mission == null)
-                throw new ArgumentNullException("mission");
+            ArgumentNullException.ThrowIfNull(mission);
             this.mission = mission;
             this.currentSpeed = currentSpeed;
         }

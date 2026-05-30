@@ -110,7 +110,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             effect.Parameters["ambient"].SetValue(ambient);
             effect.Techniques[0].Passes[0].Apply();
 
-            device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 24, 0, 12);
+            device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 12);
         }
 
         #endregion

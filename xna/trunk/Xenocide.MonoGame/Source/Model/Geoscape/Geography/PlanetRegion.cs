@@ -156,7 +156,7 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         public int AlienAttackPriority
         {
             get { return alienAttackPriority; }
-            set { AlienAttackPriority = value; } //uints can't be null, so no need to check data.
+            set { alienAttackPriority = value; } //uints can't be null, so no need to check data.
         }
 
         /// <summary>

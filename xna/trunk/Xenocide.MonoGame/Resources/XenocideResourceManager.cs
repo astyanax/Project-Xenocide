@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using System.Text;
@@ -17,7 +18,7 @@ namespace Xenocide.Resources
 
         public static string Get(string resourceID)
         {
-            return mResourceManager.GetString(resourceID);
+            return mResourceManager.GetString(resourceID, CultureInfo.InvariantCulture);
         }
     }
 }

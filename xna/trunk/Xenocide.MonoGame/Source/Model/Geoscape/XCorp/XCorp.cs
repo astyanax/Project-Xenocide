@@ -89,9 +89,9 @@ namespace ProjectXenocide.Model.Geoscape
             // Figure out how many of this item there been
             // and record for next time
             int serialNumber = 1;
-            if (nextItemId.ContainsKey(itemType.Id))
+            if (nextItemId.TryGetValue(itemType.Id, out int existingSerial))
             {
-                serialNumber = nextItemId[itemType.Id] + 1;
+                serialNumber = existingSerial + 1;
             }
             nextItemId[itemType.Id] = serialNumber;
 

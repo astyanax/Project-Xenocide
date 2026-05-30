@@ -443,7 +443,7 @@ namespace ProjectXenocide.UI.Screens
             /// </summary>
             /// <param name="pos">center of search</param>
             /// <returns>closest UFO, or null if nothing found</returns>
-            private static Craft FindClosestUfo(GeoPosition pos)
+            private static Ufo FindClosestUfo(GeoPosition pos)
             {
                 return pos.FindClosest(Xenocide.GameState.GeoData.Overmind.Ufos, FindClosestMaxDistance);
             }

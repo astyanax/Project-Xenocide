@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 using Gum.Forms.Controls;
 
@@ -75,12 +76,12 @@ namespace ProjectXenocide.UI.Dialogs
 
         private void UpdateMusicLabel()
         {
-            SetText("MusicLevelLabel", "Music: " + (musicEnabled ? musicLevel.ToString() : "OFF"));
+            SetText("MusicLevelLabel", "Music: " + (musicEnabled ? musicLevel.ToString(CultureInfo.InvariantCulture) : "OFF"));
         }
 
         private void UpdateSoundLabel()
         {
-            SetText("SoundLevelLabel", "Sound: " + (soundEnabled ? soundLevel.ToString() : "OFF"));
+            SetText("SoundLevelLabel", "Sound: " + (soundEnabled ? soundLevel.ToString(CultureInfo.InvariantCulture) : "OFF"));
         }
 
         public void OnMusicToggleClicked(object sender, EventArgs e)

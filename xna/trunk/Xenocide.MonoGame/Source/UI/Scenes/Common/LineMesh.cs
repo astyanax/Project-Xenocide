@@ -190,8 +190,6 @@ namespace ProjectXenocide.UI.Scenes
                          PrimitiveType.LineList,
                          0,
                          0,
-                         numVertices,
-                         0,
                          lineCount
                      );
                 }

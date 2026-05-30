@@ -128,7 +128,7 @@ namespace ProjectXenocide
             // Register audio system
             var audioComponent = new AudioSystem.GameAudioComponent(this);
             Components.Add(audioComponent);
-            Services.AddService(typeof(AudioSystem.IAudioSystem), audioComponent);
+            Services.AddService<AudioSystem.IAudioSystem>(audioComponent);
 
             var softwareCursor = new UI.SoftwareCursor(this);
             Components.Add(softwareCursor);
@@ -288,7 +288,7 @@ namespace ProjectXenocide
 
         public static IAudioSystem AudioSystem
         {
-            get { return Instance.Services.GetService(typeof(IAudioSystem)) as IAudioSystem; }
+            get { return Instance.Services.GetService<IAudioSystem>(); }
         }
 
         public const string GameVersion = "0.4";

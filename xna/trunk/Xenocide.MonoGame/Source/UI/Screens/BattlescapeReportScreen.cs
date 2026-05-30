@@ -28,6 +28,7 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 using Gum.Forms;
@@ -155,7 +156,7 @@ namespace ProjectXenocide.UI.Screens
             foreach (ScoreEntry entry in mission.Scores)
             {
                 int rowNum = scoreGrid.RowCount;
-                scoreGrid.AddRow(rowNum, entry.First, entry.Second.ToString());
+                scoreGrid.AddRow(rowNum, entry.First, entry.Second.ToString(CultureInfo.InvariantCulture));
                 totalScore += entry.Second;
             }
         }
@@ -190,7 +191,7 @@ namespace ProjectXenocide.UI.Screens
         private void AddRowToRecoveredGrid(String item, String quantity, int score)
         {
             int rowNum = recoveredGrid.RowCount;
-            recoveredGrid.AddRow(rowNum, item, quantity, score.ToString());
+            recoveredGrid.AddRow(rowNum, item, quantity, score.ToString(CultureInfo.InvariantCulture));
         }
 
         #endregion Create the Gum controls

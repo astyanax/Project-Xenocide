@@ -354,7 +354,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
                 if (ticks > 0)
                 {
                     // Get the text we will be drawing
-                    textToDraw = name.Substring(0, Math.Min(name.Length, ticks)).ToUpper();
+                    textToDraw = name.Substring(0, Math.Min(name.Length, ticks)).ToUpperInvariant();
                 }
 
                 oldText = textToDraw;

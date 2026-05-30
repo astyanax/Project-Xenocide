@@ -369,7 +369,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// The dataSet of the currently selected graph
         /// </summary>
-        private IList<Series> DataSet { get { return graphSeries[(int)selectedGraph]; } }
+        private List<Series> DataSet { get { return graphSeries[(int)selectedGraph]; } }
 
         /// <summary>
         /// The colors of data items in list and on graph

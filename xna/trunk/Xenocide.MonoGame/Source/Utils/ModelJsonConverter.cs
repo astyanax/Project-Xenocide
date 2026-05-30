@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -63,7 +64,7 @@ namespace Xenocide.Utils
             if (type.Namespace == null) return false;
             foreach (var ns in ModelNamespaces)
             {
-                if (type.Namespace.StartsWith(ns)) return true;
+                if (type.Namespace.StartsWith(ns, StringComparison.Ordinal)) return true;
             }
             if (type.GetCustomAttribute<SerializableAttribute>() != null) return true;
             return false;
@@ -107,7 +108,7 @@ namespace Xenocide.Utils
                     return;
                 }
 
-                var id = (_writeNextId++).ToString();
+                var id = (_writeNextId++).ToString(CultureInfo.InvariantCulture);
                 _writeRefs[value] = id;
 
                 var type = value.GetType();

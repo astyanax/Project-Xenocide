@@ -163,8 +163,6 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
                      PrimitiveType.TriangleList,
                      0,
                      0,
-                     meshVertices.Length,
-                     0,
                      meshIndices.Length / 3
                  );
             }

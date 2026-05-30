@@ -28,6 +28,7 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 using Gum.Forms;
@@ -126,7 +127,7 @@ namespace ProjectXenocide.UI.Screens
         private void AddRowToGrid(Shipment.ManifestLine line, int hours)
         {
             int rowNum = grid.RowCount;
-            grid.AddRow(rowNum, line.Label, line.Quantity.ToString(), hours.ToString());
+            grid.AddRow(rowNum, line.Label, line.Quantity.ToString(CultureInfo.InvariantCulture), hours.ToString(CultureInfo.InvariantCulture));
         }
 
         #endregion Create the Gum controls

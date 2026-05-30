@@ -98,14 +98,14 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// Give a UFO a mission
         /// </summary>
         /// <param name="ufo">Ufo to give mission to</param>
-        /// <param name="numLandings">Number times the UFO will land</param>
-        /// <param name="numSublandings">Number of points the UFO will investigate between landings</param>
-        protected override void GiveMission(Ufo ufo, int numLandings, int numSublandings)
+        /// <param name="landings">Number times the UFO will land</param>
+        /// <param name="subLandings">Number of points the UFO will investigate between landings</param>
+        protected override void GiveMission(Ufo ufo, int landings, int subLandings)
         {
             // First half of UFOs are "scouting", other half do the "building"
             if (NextUfoToLaunch <= ufosInMission / 2)
             {
-                ufo.Mission = new ResearchMission(ufo, Centroid, numLandings, numSublandings);
+                ufo.Mission = new ResearchMission(ufo, Centroid, landings, subLandings);
             }
             else
             {

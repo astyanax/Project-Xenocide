@@ -260,8 +260,6 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
                      PrimitiveType.TriangleList,
                      0,
                      0,
-                     sphereMesh.TotalVertexes,
-                     0,
                      sphereMesh.TotalFaces
                  );
             }

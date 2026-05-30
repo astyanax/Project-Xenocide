@@ -82,7 +82,7 @@ namespace ProjectXenocide.Model.StaticData
             model = graphicNode.GetAttribute("model", String.Empty);
 
             // any entry with ".mesh" isn't one we want
-            if (model.EndsWith(".mesh"))
+            if (model.EndsWith(".mesh", StringComparison.Ordinal))
             {
                 model = "XCorps";
             }

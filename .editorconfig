@@ -136,17 +136,3 @@ csharp_new_line_between_query_expression_clauses = true
 # Suppressions: pre-existing patterns in legacy codebase
 # Namespace (ProjectXenocide.*) intentionally differs from folder structure (Source/)
 dotnet_diagnostic.IDE0130.severity = none
-# XML doc issues in legacy code - suppress for now
-dotnet_diagnostic.RCS1138.severity = none
-dotnet_diagnostic.RCS1139.severity = none
-dotnet_diagnostic.RCS1263.severity = suggestion
-# CeGui stub classes are intentionally non-static (matching original API)
-dotnet_diagnostic.RCS1102.severity = suggestion
-# AttributeUsage on custom attributes in stubs
-dotnet_diagnostic.RCS1203.severity = suggestion
-
-# CeGui stubs match legacy API (public fields, EventHandler naming, Flags suffix)
-[Source/Stubs/CeGuiStubs.cs]
-dotnet_diagnostic.CA1051.severity = none
-dotnet_diagnostic.CA1711.severity = none
-dotnet_diagnostic.CA1824.severity = none

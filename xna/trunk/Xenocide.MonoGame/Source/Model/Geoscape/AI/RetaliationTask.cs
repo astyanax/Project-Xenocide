@@ -102,14 +102,14 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// Give a UFO a mission
         /// </summary>
         /// <param name="ufo">Ufo to give mission to</param>
-        /// <param name="numLandings">Number times the UFO will land</param>
-        /// <param name="numSublandings">Number of points the UFO will investigate between landings</param>
-        protected override void GiveMission(Ufo ufo, int numLandings, int numSubLandings)
+        /// <param name="landings">Number times the UFO will land</param>
+        /// <param name="subLandings">Number of points the UFO will investigate between landings</param>
+        protected override void GiveMission(Ufo ufo, int landings, int subLandings)
         {
             if (locatedOutpost)
             {
                 // Outpost has been located, so just go for it.
-                ufo.Mission = new RetaliationMission(ufo, outpost.Position, outpost, numLandings, numLandings);
+                ufo.Mission = new RetaliationMission(ufo, outpost.Position, outpost, landings, landings);
             }
             else
             {
@@ -117,12 +117,12 @@ namespace ProjectXenocide.Model.Geoscape.AI
                 if ((null != outpost) && Xenocide.Rng.RollDice(outpost.Detectability()))
                 {
                     // Given enough time, the UFO will find the outpost
-                    ufo.Mission = new RetaliationMission(ufo, Centroid, outpost, numLandings, numSubLandings);
+                    ufo.Mission = new RetaliationMission(ufo, Centroid, outpost, landings, subLandings);
                 }
                 else
                 {
                     // UFO isn't going to find the outpost (or there isn't one)
-                    ufo.Mission = new ResearchMission(ufo, Centroid, numLandings, numSubLandings);
+                    ufo.Mission = new ResearchMission(ufo, Centroid, landings, subLandings);
                 }
             }
         }

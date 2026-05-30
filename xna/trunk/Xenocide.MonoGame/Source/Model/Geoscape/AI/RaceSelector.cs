@@ -100,7 +100,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
             public Race Race { get { return race; } }
 
             /// <summary>Odds this species will be picked</summary>
-            public int Odds { get { return odds; } set { Odds = value; } }
+            public int Odds { get { return odds; } set { odds = value; } }
 
             /// <summary>Species</summary>
             private Race race;

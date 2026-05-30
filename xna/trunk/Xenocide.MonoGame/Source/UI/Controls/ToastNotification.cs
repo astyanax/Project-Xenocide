@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
@@ -90,7 +91,7 @@ namespace ProjectXenocide.UI.Controls
         };
 
         private static string Truncate(string text, int maxLen) =>
-            text.Length <= maxLen ? text : text.Substring(0, maxLen - 3) + "...";
+            text.Length <= maxLen ? text : string.Concat(text.AsSpan(0, maxLen - 3), "...");
 
         private static Texture2D _whitePixel;
         private Texture2D GetWhitePixel()

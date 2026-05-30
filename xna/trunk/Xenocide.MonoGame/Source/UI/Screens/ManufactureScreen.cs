@@ -465,7 +465,7 @@ namespace ProjectXenocide.UI.Screens
                 this.project = project;
             }
 
-            public void AddWorker(IList<Person> idle)
+            public void AddWorker(List<Person> idle)
             {
                 Person worker = idle[idle.Count - 1];
                 idle.RemoveAt(idle.Count - 1);

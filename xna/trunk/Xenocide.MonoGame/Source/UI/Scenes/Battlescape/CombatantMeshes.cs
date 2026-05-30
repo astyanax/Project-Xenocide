@@ -93,8 +93,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         {
             // fetch model
             string modelName = combatant.Graphic.Model;
-            if (!models.ContainsKey(modelName)) return;
-            ModelInfo modelInfo = models[modelName];
+            if (!models.TryGetValue(modelName, out ModelInfo modelInfo)) return;
 
             // set up world matrix to position object in world
             Matrix world = modelInfo.scalingMatrix;
