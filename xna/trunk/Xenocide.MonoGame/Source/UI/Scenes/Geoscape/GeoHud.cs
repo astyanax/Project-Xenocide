@@ -49,7 +49,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
     /// <summary>
     /// Used to draw an icon representation of a point of interest on the geoscape
     /// </summary>
-    sealed class GeoHud
+    sealed class GeoHud : IDisposable
     {
         #region privates
         SpriteBatch hudSprites;
@@ -532,5 +532,15 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             #endregion
         }
         #endregion
+
+        /// <summary>
+        /// Frees GPU resources owned by this object
+        /// (see GeoMarker.cs for detailed explanation of the IDisposable pattern).
+        /// </summary>
+        public void Dispose()
+        {
+            hudSprites?.Dispose();
+            hudSprites = null;
+        }
     }
 }

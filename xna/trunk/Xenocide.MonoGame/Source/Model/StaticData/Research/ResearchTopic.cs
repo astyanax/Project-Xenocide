@@ -158,9 +158,12 @@ namespace ProjectXenocide.Model.StaticData.Research
         private string id;
 
         /// <summary>
-        /// Conditions that must be satisfied before research can start on this topic
+        /// Conditions that must be satisfied before research can start on this topic.
+        /// Stored as the concrete MultiPrerequisite type (not the abstract Prerequisite base)
+        /// because this field is only ever assigned a MultiPrerequisite (see constructor).
+        /// Using the concrete type enables JIT devirtualization of IsSatisfied calls.
         /// </summary>
-        private Prerequisite prerequisite;
+        private MultiPrerequisite prerequisite;
 
         /// <summary>
         /// Reward player recieves when a research topic is completed

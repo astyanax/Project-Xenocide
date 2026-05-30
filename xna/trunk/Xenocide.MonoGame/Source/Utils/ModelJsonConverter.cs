@@ -171,7 +171,10 @@ namespace Xenocide.Utils
                     actualType = typeToConvert;
                 }
 
-                var instance = FormatterServices.GetUninitializedObject(actualType);
+                // RuntimeHelpers.GetUninitializedObject creates an instance without calling
+                // the constructor, so fields can be populated via reflection below.
+                // (Replaces deprecated FormatterServices.GetUninitializedObject).
+                var instance = System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(actualType);
 
                 if (root.TryGetProperty("$id", out var idProp))
                 {

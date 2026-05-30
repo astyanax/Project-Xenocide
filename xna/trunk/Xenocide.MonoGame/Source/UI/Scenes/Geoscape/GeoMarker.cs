@@ -43,7 +43,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
     /// <summary>
     /// Used to draw a shape at a position of interest on the Globe
     /// </summary>
-    sealed class GeoMarker
+    sealed class GeoMarker : IDisposable
     {
         private VertexPositionNormalTexture[] meshVertices;
         private short[] meshIndices;
@@ -181,6 +181,25 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             return Matrix.CreateRotationX(-geoposition.Y)
                 * Matrix.CreateRotationY(geoposition.X)
                 * Matrix.CreateTranslation(GeoPosition.PolarToCartesian(geoposition));
+        }
+
+        /// <summary>
+        /// Frees GPU resources owned by this object.
+        ///
+        /// MonoGame types like VertexBuffer and IndexBuffer wrap native OpenGL/DirectX
+        /// memory allocations. These are not managed by the .NET GC — if not explicitly
+        /// disposed, GPU memory leaks until the GC finalizer runs (which may never
+        /// properly free unmanaged graphics resources).
+        ///
+        /// This class allocates GPU buffers in LoadContent() and is no longer usable
+        /// after disposal. See also: GeoHud.cs, BuildTimes.cs for the same pattern.
+        /// </summary>
+        public void Dispose()
+        {
+            vertexBuffer?.Dispose();
+            indexBuffer?.Dispose();
+            vertexBuffer = null;
+            indexBuffer = null;
         }
     }
 }

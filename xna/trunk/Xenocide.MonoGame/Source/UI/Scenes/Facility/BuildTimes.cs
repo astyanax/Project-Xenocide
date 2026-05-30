@@ -44,7 +44,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
     /// <summary>
     /// Overlay for facilities, giving build time remaining
     /// </summary>
-    sealed class BuildTimes
+    sealed class BuildTimes : IDisposable
     {
         /// <summary>
         /// Constructor
@@ -240,5 +240,17 @@ namespace ProjectXenocide.UI.Scenes.Facility
         private Floorplan floorplan;
 
         #endregion Fields
+
+        /// <summary>
+        /// Frees GPU resources owned by this object
+        /// (see GeoMarker.cs for detailed explanation of the IDisposable pattern).
+        /// </summary>
+        public void Dispose()
+        {
+            vertexBuffer?.Dispose();
+            indexBuffer?.Dispose();
+            vertexBuffer = null;
+            indexBuffer = null;
+        }
     }
 }
