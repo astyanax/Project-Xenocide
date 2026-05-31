@@ -19,6 +19,8 @@ namespace ProjectXenocide.UI.Dialogs
         public Dialog.ButtonAction DismissAction { get; set; }
         public bool IsRequired { get; set; }
 
+        protected StackPanel ContentPanel { get; private set; }
+
         protected GumDialog(string title) : base(new UiSize(0.5f, 0.3f))
         {
             Title = title;
@@ -77,9 +79,30 @@ namespace ProjectXenocide.UI.Dialogs
         {
             var closeBtn = GetButton("CloseButton");
             if (closeBtn != null)
-                closeBtn.Click += (s, e) => Close();
+                closeBtn.Click += (s, e) => Dismiss();
 
             WireClickSounds(GumRoot);
+        }
+
+        /// <summary>
+        /// Creates or returns a ContentPanel StackPanel for dialogs that add
+        /// dynamic widgets at runtime (e.g. aircraft lists, facility lists).
+        /// Call this only if the dialog adds children programmatically.
+        /// Dialogs with all content defined in the .gusx layout should NOT
+        /// call this — the Forms wrapper would overlay the .gusx buttons.
+        /// </summary>
+        protected StackPanel GetOrCreateContentPanel()
+        {
+            if (ContentPanel != null) return ContentPanel;
+
+            ContentPanel = new StackPanel();
+            ContentPanel.Visual.Width = 0;
+            ContentPanel.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
+            var contentElement = GetElement("ContentPanel");
+            if (contentElement != null)
+                contentElement.Children.Add(ContentPanel.Visual);
+
+            return ContentPanel;
         }
 
         protected Button GetButton(string name)

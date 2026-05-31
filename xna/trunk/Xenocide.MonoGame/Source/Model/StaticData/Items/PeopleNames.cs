@@ -59,7 +59,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// <param name="filename">path to the file to parse (generally, a relative path)</param>
         public PeopleNames(string filename)
         {
-            using (var reader = XmlReader.Create(filename, new XmlReaderSettings { DtdProcessing = DtdProcessing.Prohibit, XmlResolver = null }))
+            using (var reader = XmlReader.Create(filename, new XmlReaderSettings { DtdProcessing = DtdProcessing.Parse, XmlResolver = null }))
             {
                 XPathNavigator nav = (new XPathDocument(reader)).CreateNavigator();
                 List<string> countriesWithDupes = ParseAllValuesFromXPath(nav, "/database/namegroups/group[count(name) > 0 and count(lastname) > 0]/@origin");

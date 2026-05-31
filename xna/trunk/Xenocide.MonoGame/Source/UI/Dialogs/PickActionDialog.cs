@@ -17,9 +17,9 @@ namespace ProjectXenocide.UI.Screens
 {
     public partial class BattlescapeScreen
     {
-        private sealed class PickActionDialog : ModalDialog
+        private sealed class PickActionDialog : GumDialog
         {
-            public PickActionDialog(BattlescapeScreen battlescapeScreen, Item item, Combatant combatant, bool rightHand)
+            public PickActionDialog(BattlescapeScreen battlescapeScreen, Item item, Combatant combatant, bool rightHand) : base("Action")
             {
                 this.battlescapeScreen = battlescapeScreen;
                 this.item = item;
@@ -27,8 +27,12 @@ namespace ProjectXenocide.UI.Screens
                 this.rightHand = rightHand;
             }
 
-            protected override void CreateDialogWidgets()
+            protected override void WireGumControls()
             {
+                base.WireGumControls();
+
+                var content = GetOrCreateContentPanel();
+
                 Combatant.ActiveArm activeArm = Combatant.ActiveArm.Both;
                 if (combatant.Inventory.ItemAt(rightHand ? 1 : 0, 0) != null)
                 {
@@ -42,14 +46,14 @@ namespace ProjectXenocide.UI.Screens
                     var btn = new Button();
                     btn.Text = action.MenuEntry(combatant, activeArm);
                     btn.Click += (s, e) => DoSelectedAction(idx);
-                    ContentArea.AddChild(btn);
+                    content.AddChild(btn);
                     ++index;
                 }
 
                 var cancelBtn = new Button();
                 cancelBtn.Text = Strings.BUTTON_CANCEL;
                 cancelBtn.Click += OnCancelClicked;
-                ContentArea.AddChild(cancelBtn);
+                content.AddChild(cancelBtn);
             }
 
             public void OnCancelClicked(object sender, EventArgs e)

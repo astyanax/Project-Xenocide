@@ -78,18 +78,6 @@
     <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true">
       <Value xsi:type="xsd:int">1</Value>
     </Variable>
-    <Variable Type="string" Name="SettingsButton.Parent" SetsValue="true">
-      <Value xsi:type="xsd:string">ButtonPanel</Value>
-    </Variable>
-    <Variable Type="string" Name="SettingsButton.TextInstance.Text" SetsValue="true">
-      <Value xsi:type="xsd:string">Settings</Value>
-    </Variable>
-    <Variable Type="float" Name="SettingsButton.Width" SetsValue="true">
-      <Value xsi:type="xsd:float">100</Value>
-    </Variable>
-    <Variable Type="DimensionUnitType" Name="SettingsButton.WidthUnits" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
-    </Variable>
     <Variable Type="string" Name="CreditsButton.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">ButtonPanel</Value>
     </Variable>
@@ -175,6 +163,18 @@
       <Value xsi:type="xsd:float">100</Value>
     </Variable>
     <Variable Type="DimensionUnitType" Name="RunTestsButton.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="SettingsButton.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ButtonPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="SettingsButton.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Settings</Value>
+    </Variable>
+    <Variable Type="float" Name="SettingsButton.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="SettingsButton.WidthUnits" SetsValue="true">
       <Value xsi:type="xsd:int">1</Value>
     </Variable>
     <Variable Type="int" Name="VersionLabel.FontSize" SetsValue="true">

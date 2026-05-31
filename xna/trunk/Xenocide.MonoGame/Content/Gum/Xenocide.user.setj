@@ -2,6 +2,11 @@
   "TreeViewState": {
     "ExpandedNodes": [
       "Screens",
+      "Screens/GumYesNoDialog",
+      "Screens/GumYesNoDialog/ContainerInstance",
+      "Screens/GumYesNoDialog/ContainerInstance/DialogPanel",
+      "Screens/GumYesNoDialog/ContainerInstance/DialogPanel/TitleBar",
+      "Screens/GumYesNoDialog/ContainerInstance/DialogPanel/ContentPanel",
       "Components",
       "Standard",
       "Behaviors"

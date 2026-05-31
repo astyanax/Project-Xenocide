@@ -31,10 +31,10 @@
       <Value xsi:type="xsd:float">200</Value>
     </Variable>
     <Variable Type="float" Name="ButtonBar.X" SetsValue="true">
-      <Value xsi:type="xsd:float">1040</Value>
+      <Value xsi:type="xsd:float">956</Value>
     </Variable>
     <Variable Type="float" Name="ButtonBar.Y" SetsValue="true">
-      <Value xsi:type="xsd:float">10</Value>
+      <Value xsi:type="xsd:float">424</Value>
     </Variable>
     <Variable Type="string" Name="cancelButton.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">ButtonBar</Value>

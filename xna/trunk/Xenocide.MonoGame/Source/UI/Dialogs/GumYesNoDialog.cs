@@ -63,6 +63,7 @@ namespace ProjectXenocide.UI.Dialogs
             }
 
             CloseAction = _yesAction;
+            DismissAction = _noAction;
         }
 
         public Dialog.ButtonAction YesAction

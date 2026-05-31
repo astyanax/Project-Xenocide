@@ -192,8 +192,6 @@
 /processor:ModelProcessor
 /build:Content/Models/Weapons/Xcorps/smoke-grenade.x
 
-#----------------------------- Models: XCorps ---------------------------------#
-
 #begin Content/Models/XCorps.X
 /importer:FbxImporter
 /processor:ModelProcessor

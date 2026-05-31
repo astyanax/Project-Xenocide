@@ -140,3 +140,8 @@ dotnet_diagnostic.IDE0130.severity = none
 # [Flags] enums with Flag suffix are idiomatic .NET convention
 [xna/trunk/Xenocide.MonoGame/Source/Model/Battlescape/Terrain/Cell.cs]
 dotnet_diagnostic.CA1711.severity = none
+
+# Person implements IComparable for sorting by name, but uses reference equality
+# for identity (two soldiers can share the same name).
+[xna/trunk/Xenocide.MonoGame/Source/Model/Geoscape/XCorp/Person.cs]
+dotnet_diagnostic.CA1036.severity = none

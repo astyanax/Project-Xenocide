@@ -169,13 +169,14 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
   - Auto-discovers all `ProjectXenocide.Model` types via assembly scan at startup
   - Writes `$type` discriminator + `$id`/`$ref` for every model object (handles polymorphism + circular refs)
   - Reads `$type` → resolves type from cache → creates instance via `FormatterServices.GetUninitializedObject` (avoids constructor requirements)
-  - Calls `[OnDeserialized]` methods if present (handles `Planet.OnDeserializedMethod`)
-  - Thread-static state management ensures no cross-serialization leaks
+   - Calls `[OnDeserialized]` methods if present (handles `Planet.OnDeserializedMethod`)
+   - Thread-static state management ensures no cross-serialization leaks
 - `Vector3DictionaryConverterFactory` — handles `Dictionary<Vector3, TValue>` (serializes Vector3 keys as "X,Y,Z" strings)
 - Save file format: JSON with `{ formatVersion, savedAt, gameTime, gameVersion, gameState }` wrapper
 - No `[JsonDerivedType]` attributes needed — type discovery is fully automatic via assembly scanning
-- No parameterless constructors needed — instances created via `FormatterServices.GetUninitializedObject`
+- No parameterless constructors needed — instances created via `RuntimeHelpers.GetUninitializedObject` (replaced deprecated `FormatterServices.GetUninitializedObject` in .NET 9)
 - No `ReferenceHandler.Preserve` needed — manual `$id`/`$ref` tracking in the converter
+- Instance creation method documented with 3-alternative analysis in ModelJsonConverter.cs (lines ~174-196)
 
 **Key design decisions:**
 - Generalized by design: any new type added to `ProjectXenocide.Model` namespace is automatically discovered and serialized
@@ -279,10 +280,12 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] Save path fix (AppData directory, file/directory conflict handling) — ✅ Done
 - [x] IntPtr serialization fix in `ModelJsonConverter` — ✅ Done
 - [x] BasesScreen NRE fix (WireButton return value not saved) — ✅ Done
-- [ ] **Remaining:** Software cursor polish (hotspot, context-sensitive cursors, HW/SW toggle)~~ ✅ Done
-- [ ] **Remaining:** Gum dialog `.gusx` file conversion (13 dialogs — 4 fully converted with .gusx, 9 have stubs)~~ ✅ Progress
-- [ ] **Manual: You** — verify backgrounds render correctly on each screen
-- [ ] **Manual: You** — verify software cursor renders and tracks mouse
+- [ ] **Remaining:** FBX model textures — add missing textures to MGCB (3 models fail preload)
+- [ ] **Remaining:** Gum dialog `.gusx` file conversion (13 dialogs — 4 fully converted with .gusx, 9 have stubs)
+- [ ] **Remaining:** Software cursor polish (hotspot, context-sensitive cursors, HW/SW toggle)
+- [x] **Investigated:** FBX model failures — `Laser Rifle.FBX` importer fails on embedded textures; `Barracks.FBX` missing BUMP.JPG/SPECULAR.JPG; need `.X` format conversion or Blender re-export — ✅ Documented (see Phase 6)
+- [ ] **Remaining:** Content pipeline: add remaining FBX model textures
+- [x] **Investigated:** GridPanel XenocideButton styling — `RowButtonFactory` property added to GridPanel.cs with documentation explaining the hierarchical GUE limitation — ✅ Done (see Phase 8.5)
 
 #### Key Design Decisions for Gum Screen Pattern
 
@@ -369,13 +372,17 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 - [x] Content preloading at startup (`ContentCache` loads Earth textures, skybox, all XNet models) — ✅ Done (~4s one-time cost)
 - [x] GeoscapeScreen loads in 0ms (was 839ms) after preload — ✅ Done
 - [x] XNet models loaded with precomputed scaling matrices — ✅ Done
-- [ ] Content pipeline: add remaining FBX model textures
+- [x] Investigated FBX model failures — ✅ Done (see findings below)
+- [ ] **Remaining:** Convert `Laser Rifle.FBX` to `.X` format (FBX importer can't extract embedded textures)
+- [ ] **Remaining:** Provide `BUMP.JPG`/`SPECULAR.JPG` normal/specular maps for `Barracks.FBX` model
 
 **Key findings:**
 - MGCB's `FbxImporter` only supports FBX 2011–2013; legacy FBX files (pre-2011) fail with `FBX-DOM unsupported`
 - 17 facility models + XCorps.X + Barracks.FBX were never registered — caused `ContentLoadException` at runtime
 - `Content.Load<T>()` paths must NOT include the `Content\` prefix — ContentManager prepends it automatically
 - `Texture2D.FromFile()` and `TextureAtlas.LoadContent()` load textures directly — do not need MGCB
+- **FBX texture investigation (May 2026)**: 1 of 23 PreloadXNetModels definitively fails:
+  - `Laser Rifle.FBX`: Contains embedded PNG textures (0.png–3.png). MGCB's `FbxImporter` fails with `source file '*0' does not exist` — can't extract/reference embedded textures. No `.X` alternative exists. Needs Blender `.X` re-export or FBX texture extraction.
 
 ### Phase 7: Cross-Platform Validation
 - [x] Build and run on **Windows** — ✅ Verified (builds with 0 errors, start screen → geoscape → bases → battlescape navigation works)
@@ -450,24 +457,30 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 1. ~~**Content Pipeline Setup**~~ ✅ Done
 2. ~~**Replace audio stubs**~~ ✅ Done
 3. ~~**Convert all screens to Gum**~~ ✅ Done (27 screens + 13 dialogs)
-4. ~~**Hardware cursor**~~ ✅ Done
-5. ~~**Software cursor**~~ ✅ Done
-6. ~~**UI background rendering**~~ ✅ Done
-7. ~~**Register missing textures in MGCB**~~ ✅ Done
-8. ~~**Additional spritefonts**~~ ✅ Done
-9. ~~**Gum Theme/Layout**~~ ✅ Done (.gumx project, XenocideButton, 23 .gusx screens)
+ 1. ~~**Content Pipeline Setup**~~ ✅ Done
+ 2. ~~**Replace audio stubs**~~ ✅ Done
+ 3. ~~**Convert all screens to Gum**~~ ✅ Done (27 screens + 13 dialogs)
+ 4. ~~**Hardware cursor**~~ ✅ Done
+ 5. ~~**Software cursor**~~ ✅ Done
+ 6. ~~**UI background rendering**~~ ✅ Done
+ 7. ~~**Register missing textures in MGCB**~~ ✅ Done
+ 8. ~~**Additional spritefonts**~~ ✅ Done
+ 9. ~~**Gum Theme/Layout**~~ ✅ Done (.gumx project, XenocideButton, 23 .gusx screens)
 10. ~~**Remove CeGui# stubs**~~ ✅ Done (complete teardown — stubs, usings, dead code removed)
 11. ~~**Content preloading**~~ ✅ Done (Earth textures, skybox, XNet models cached)
 12. ~~**Performance optimizations**~~ ✅ Done (XNet text 88x speedup, profile timer, GeoscapeScreen 0ms)
 13. ~~**Save/load UX**~~ ✅ Done (success messages, path fixes, serialization fix)
+14. ~~**Code quality & lint cleanup**~~ ✅ Done (216 warnings → 0, 60+ files cleaned)
 
 ### Remaining
-18. **Cross-platform validation** — Phase 7 (build/test on Linux, path case issues already fixed)
-19. **Remaining FBX model textures** — add missing textures to MGCB (3 models fail preload)
-20. **Manual testing** — verify all screens, dialogs, drag-drop, 3D overlays, input conflicts
+15. **Cross-platform validation** — Phase 7 (build/test on Linux, path case issues already fixed)
+16. **Convert `Laser Rifle.FBX` to `.X`** — FBX importer fails on embedded textures; re-export with Blender
+17. **Provide Barracks normal/specular maps** — `BUMP.JPG`/`SPECULAR.JPG` for Facility/Xnet/Barracks model
+18. **Manual testing** — verify all screens, dialogs, drag-drop, 3D overlays, input conflicts
+19. **GridPanel flat XenocideButton visual** — `RowButtonFactory` property added; remaining: NineSlice-based button implementation
 
 ### Gum UI Layout & Theming (Next Major Task)
-The Gum WYSIWYG editor (`Gum UI Tool`) can be invoked to create a `.gumx` project for visual layout design. The tool creates XML-based project files that define component styles, layouts, and data bindings. Currently all UI is built programmatically in C# (buttons, labels, stack panels in `CreateGumControls()`). The Gum editor would allow:
+The Gum WYSIWYG editor (`Gum UI Tool`) can be invoked to create a `.gumx` project for visual layout design. The tool creates XML-based project files that define component styles, layouts, and data bindings. All 27 screens and 13 dialogs load from `.gusx` layouts. The Gum editor would allow:
 
 1. **Visual layout design** — drag-and-drop controls, position elements precisely
 2. **Button theming** — create styled button components from the TaharezLook spritesheet (`XenoNew.png` has ButtonLeftNormal/Middle/RightNormal segments + highlight/pushed states)

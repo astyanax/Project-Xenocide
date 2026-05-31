@@ -13,33 +13,37 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    sealed class AircraftOrdersDialog : ModalDialog
+    sealed class AircraftOrdersDialog : GumDialog
     {
-        public AircraftOrdersDialog(Aircraft craft)
+        public AircraftOrdersDialog(Aircraft craft) : base(craft.Name)
         {
             this.craft = craft;
         }
 
-        protected override void CreateDialogWidgets()
+        protected override void WireGumControls()
         {
+            base.WireGumControls();
+
+            var content = GetOrCreateContentPanel();
+
             var details = new Label();
             details.Text = MakeDialogText();
-            ContentArea.AddChild(details);
+            content.AddChild(details);
 
             var returnBtn = new Button();
             returnBtn.Text = Strings.BUTTON_RETURN_TO_BASE;
             returnBtn.Click += OnReturnClicked;
-            ContentArea.AddChild(returnBtn);
+            content.AddChild(returnBtn);
 
             var targetBtn = new Button();
             targetBtn.Text = "Target";
             targetBtn.Click += OnTargetClicked;
-            ContentArea.AddChild(targetBtn);
+            content.AddChild(targetBtn);
 
             var cancelBtn = new Button();
             cancelBtn.Text = Strings.BUTTON_CANCEL;
             cancelBtn.Click += OnCancelClicked;
-            ContentArea.AddChild(cancelBtn);
+            content.AddChild(cancelBtn);
         }
 
         public void OnReturnClicked(object sender, EventArgs e)

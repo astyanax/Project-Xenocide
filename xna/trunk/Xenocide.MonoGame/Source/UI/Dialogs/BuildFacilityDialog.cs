@@ -14,18 +14,18 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    sealed class BuildFacilityDialog : ModalDialog
+    sealed class BuildFacilityDialog : GumDialog
     {
-        public BuildFacilityDialog(BasesScreen basesScreen)
+        public BuildFacilityDialog(BasesScreen basesScreen) : base("Select Facility")
         {
             this.basesScreen = basesScreen;
         }
 
-        protected override void CreateDialogWidgets()
+        protected override void WireGumControls()
         {
-            var header = new Label();
-            header.Text = "Select Facility";
-            ContentArea.AddChild(header);
+            base.WireGumControls();
+
+            var content = GetOrCreateContentPanel();
 
             int index = 0;
             foreach (FacilityInfo facility in Xenocide.StaticTables.FacilityList)
@@ -36,12 +36,12 @@ namespace ProjectXenocide.UI.Dialogs
                     var row = new Label();
                     row.Text = string.Format(CultureInfo.InvariantCulture, "{0} - ${1} ({2}d, ${3}/mo)",
                         facility.Name, facility.BuildCost, facility.BuildDays, facility.MonthlyMaintenance);
-                    ContentArea.AddChild(row);
+                    content.AddChild(row);
 
                     var selectBtn = new Button();
                     selectBtn.Text = "Select";
                     selectBtn.Click += (s, e) => OnFacilitySelected(idx);
-                    ContentArea.AddChild(selectBtn);
+                    content.AddChild(selectBtn);
                 }
                 ++index;
             }
@@ -49,7 +49,7 @@ namespace ProjectXenocide.UI.Dialogs
             var cancelBtn = new Button();
             cancelBtn.Text = Strings.BUTTON_CANCEL;
             cancelBtn.Click += OnCancelClicked;
-            ContentArea.AddChild(cancelBtn);
+            content.AddChild(cancelBtn);
         }
 
         private void OnFacilitySelected(int facilityIndex)

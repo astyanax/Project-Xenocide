@@ -84,10 +84,20 @@ Programmatic controls in the GumX path had no X/Y positioning, causing overlap a
 
 ---
 
+## Code Quality Status (May 2026)
+- **Build: 0 warnings, 0 errors, 5/5 tests pass**
+- 216 Roslyn analyzer warnings resolved across 6 rounds of cleanup
+- SYSLIB0050: Replaced deprecated `FormatterServices.GetUninitializedObject` with `RuntimeHelpers.GetUninitializedObject`
+- CA1001: Implemented IDisposable on GeoMarker, GeoHud, BuildTimes (GPU resource cleanup)
+- CA130x/CA131x: Added culture-invariant formatting/comparison across ~42 call sites
+- CA1852: Sealed ~55 types; CA1822: ~25 members marked static
+- Created `Source/Utils/GameCulture.cs` helper for future localization
+- All dead CeGui/Stubs suppressions removed from `.editorconfig`
+
 ## Backlog
-- [ ] Dialog `.gusx` conversion — 13 dialogs currently programmatic
-- [ ] Software cursor polish — hotspot, context-sensitive cursors, HW/SW toggle
-- [ ] GridPanel XenocideButton styling — `RowButtonFactory` property exists but styling approach needs rework (InteractiveGue can't wrap hierarchical GUEs)
+- [ ] Dialog `.gusx` conversion — 9 dialogs currently programmatic (4 done: MessageBox, YesNo, Options, GumOptions)
+- [ ] Software cursor polish — context-sensitive cursors (hand/arrow per element), HW/SW toggle via settings
+- [ ] GridPanel XenocideButton styling — `RowButtonFactory` property added to GridPanel.cs; remaining: implement flat XenocideButton visual (NineSlice-based, avoiding hierarchical GUE limitation)
 - [ ] Cross-platform validation — build on Linux
-- [ ] Remaining FBX model textures — add to MGCB
-- [ ] Update README with final build instructions
+- [ ] FBX model fix — `Laser Rifle.FBX` needs `.X` re-export (Blender); `Barracks.FBX` missing BUMP.JPG/SPECULAR.JPG
+- [ ] Manual testing — verify all screens, dialogs, drag-drop, 3D overlays, input conflicts

@@ -11,65 +11,54 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    public class NameNewBaseDialog : ModalDialog
+    public class NameNewBaseDialog : GumDialog
     {
         public NameNewBaseDialog(GeoPosition pos, bool isFirstBase)
             : base("Name New Base")
         {
             this.pos = pos;
             this.isFirstBase = isFirstBase;
-            PanelWidth = 600;
-            PanelHeight = 280;
         }
 
-        protected override void CreateDialogWidgets()
+        protected override void WireGumControls()
         {
-            var spacerTop = new Label();
-            spacerTop.Height = 10;
-            ContentArea.AddChild(spacerTop);
+            base.WireGumControls();
+
+            var content = GetOrCreateContentPanel();
 
             var prompt = new Label();
             prompt.Text = isFirstBase
                 ? "Choose a name for your first base:"
                 : "Name your new base:";
-            prompt.Visual.Width = 560;
-            ContentArea.AddChild(prompt);
-
-            var spacer1 = new Label();
-            spacer1.Height = 10;
-            ContentArea.AddChild(spacer1);
+            content.AddChild(prompt);
 
             baseNameInput = new TextBox();
             baseNameInput.Text = "New Base";
             baseNameInput.Visual.Width = 560;
             baseNameInput.Visual.Height = 30;
-            ContentArea.AddChild(baseNameInput);
-
-            var spacer2 = new Label();
-            spacer2.Height = 20;
-            ContentArea.AddChild(spacer2);
+            content.AddChild(baseNameInput);
 
             var buttonRow = new StackPanel();
-            buttonRow.Visual.Width = 560;
-            buttonRow.Visual.Height = 40;
 
             var okBtn = new Button();
             okBtn.Text = Strings.BUTTON_OK;
             okBtn.Visual.Width = 180;
+            okBtn.Visual.Height = 30;
             okBtn.Click += OnOkClicked;
             buttonRow.AddChild(okBtn);
 
-            var spacerBtn = new Label();
-            spacerBtn.Visual.Width = 20;
-            buttonRow.AddChild(spacerBtn);
+            var spacer = new Label();
+            spacer.Visual.Width = 20;
+            buttonRow.AddChild(spacer);
 
             var cancelBtn = new Button();
             cancelBtn.Text = Strings.BUTTON_CANCEL;
             cancelBtn.Visual.Width = 180;
+            cancelBtn.Visual.Height = 30;
             cancelBtn.Click += (s, e) => ScreenManager.CloseDialog(this);
             buttonRow.AddChild(cancelBtn);
 
-            ContentArea.AddChild(buttonRow);
+            content.AddChild(buttonRow);
         }
 
         private TextBox baseNameInput;
