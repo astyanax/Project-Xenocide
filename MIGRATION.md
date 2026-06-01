@@ -423,6 +423,119 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 - [x] Remove CeGuiStubs.cs — ✅ Done (all stale CeGui stubs removed)
 - [x] Remove WinFormsStubs.cs — unnecessary but inert (just MouseButtons enum, no System.Drawing)
 
+### Phase 9: Legacy Design Features
+
+Features and game mechanics documented in `xna/trunk/docs/` that were planned for the original XNA project but never fully implemented. Source: review of all 9 legacy design documents (CodebaseTour, OverviewOfAIandCraft, GettingModalDialogsToWork, UfoBehaviour, research, Facility, Roadmap, SchedulerAndAppointments, aa-readme).
+
+#### 9.1: Research Tree Validation Tooling
+
+**Source:** `xna/trunk/docs/research.html:42-46`
+
+The legacy design explicitly calls for sanity checks against the XML-driven research tree. Implement build-time or runtime validation:
+
+- [ ] **No orphan topics** — every research topic must be reachable from a starting topic (no disconnected sub-trees)
+- [ ] **No prerequisite loops** — detect cycles (Topic A requires B, B requires C, C requires A)
+- [ ] **All items reachable** — every item in `items.xml` can be granted by at least one research topic
+- [ ] **All X-Net entries reachable** — every X-Net entry can be granted by at least one research topic
+- [ ] **Prerequisite integrity** — no topic references a non-existent prerequisite (technology, item, facility, or X-Net entry)
+- [ ] **Validation entry point** — `ResearchValidator.Validate()` called on game startup (or via unit tests), logs warnings for data issues
+
+**Implementation approach:** Static validation class in `Source/Model/ResearchValidator.cs`. Walks the research tree from all auto-granted starting topics, tracks visited nodes, reports unreachable topics and cycles. Can run as a DEBUG-only startup check or as a standalone test.
+
+#### 9.2: Facility Mechanics — Edge Cases & Rules Enforcement
+
+**Source:** `xna/trunk/docs/Facility.html`
+
+Several game rules from the legacy design need verification and possible enforcement:
+
+- [ ] **Defense facilities: shot count** — each defense facility gets 1 shot during alien base attack; 2 shots if Gravity Shield is present. Verify `DefenceArray` classes apply this correctly.
+- [ ] **Scan facilities: limit 1 per type** — a base may not have more than one Short Range Neudar, one Long Range Neudar, or one Tachyon Emissions Detector (`Facility.html:46`). Add validation in `FloorPlan`/`Base` construction logic.
+- [ ] **Neural Shielding visibility reduction** — Neural Shielding Facility reduces the "visibility" of a base to alien detection (`Facility.html:74`). Verify `Outpost.Visibility` or equivalent property is affected.
+- [ ] **Destroy restriction** — a facility cannot be destroyed if doing so would reduce the base's capacity below current usage (e.g., can't destroy a lab while assigned scientists > remaining lab capacity). Add `canDestroy()` guard in `FacilityInfo`/`FloorPlan` (`Facility.html:30-31`).
+- [ ] **Base Access Facility: exactly one per base** — every base must have exactly one. It must be the first facility built and the core around which others are constructed (`Facility.html:72`). Verify enforcement in base creation/loading logic.
+- [ ] **Gravity Shield: one per base** — max 1 per base (`Facility.html:73`). Add build restriction.
+- [ ] **Neural Shielding: one per base** — max 1 per base (`Facility.html:74`). Add build restriction.
+
+#### 9.3: UFO Mission Sequencing & Timing Data
+
+**Source:** `xna/trunk/docs/UfoBehaviour.html:87-149`
+
+The legacy document specifies exact UFO launch schedules and timing for each mission type. Externalize this data and use it to refine the `TaskFactory`/`TaskPlan` system:
+
+- [ ] **Research mission sequence** — small scout → (1 week) → medium scout → (1 week) → large scout → (3 days) → large scout
+- [ ] **Harvest mission sequence** — s.Scout → (3d) → s.Scout → (1w) → s.Scout → (3d) → l.Scout → (3d) → l.Scout → (1w) → Harvester → (3d) → Harvester → (1d) → Battleship
+- [ ] **Abduction mission sequence** — s.Scout → (1w) → m.Scout → (2w) → l.Scout → (3d) → Abductor → (3d) → Abductor → (1h) → Battleship
+- [ ] **Infiltration mission sequence** — s.Scout → (2w) → m.Scout → (2w) → m.Scout → (2w) → l.Scout → (3d) → l.Scout → (1h) → Terrorship → (1h) → Battleship → (1h) → Supply → (1h) → Battleship
+- [ ] **Base (Outpost) mission sequence** — s.Scout → m.Scout → l.Scout → Supply → Supply → Battleship (shooting down supply ships delays Battleship and triggers Retaliation)
+- [ ] **Terror mission sequence** — m.Scout → (1w) → l.Scout → (1w) → Terrorship → (1w) → Terrorship (each Terrorship creates one terror site)
+- [ ] **Retaliation mission sequence** — s.Scout → (?) → m.Scout → (32h) → m.Scout → (52h) → l.Scout → (?) → l.Scout → (?) → Battleship → (?) → Battleship
+- [ ] **Store schedules in XML** — create `MissionSchedules.xml` or extend existing XML data files so mission sequences are data-driven and moddable
+
+**Implementation approach:** `TaskPlan` already exists. Create `UfoMissionSchedule` class that reads from XML and provides pre-built `TaskPlan` instances for each mission type. `TaskFactory.Create()` uses these schedules. Allows tweaking without recompilation.
+
+#### 9.4: UFO Behavior — Timing Constants
+
+**Source:** `xna/trunk/docs/UfoBehaviour.html:78-84`
+
+Hardcoded timing values from the legacy design should be externalized to XML configuration:
+
+- [ ] **Crash site duration** — 1 to 4 days (`UfoBehaviour.html:81`). Currently may be hardcoded; move to configurable value in `GameOptions` or XML data.
+- [ ] **Landed UFO duration** — 4 to 12 hours, variable by mission type (`UfoBehaviour.html:82`). Make per-mission-type configurable.
+- [ ] **Terror site duration** — 4 to 10 hours (`UfoBehaviour.html:83`). Make configurable.
+- [ ] **Retaliation scout detection range** — 240 nautical miles (`UfoBehaviour.html:80`). Expose as a property on scan/retaliation logic.
+- [ ] **UFO never directly attacks X-Corp craft** — X-Corp is always the initiator of air-to-air combat (`UfoBehaviour.html:79`). Verify AI logic respects this.
+- [ ] **Crash site expiration** — crash sites auto-remove after duration expires. Verify `GeoData` cleanup logic.
+- [ ] **Landed UFO detection** — UFOs on the ground should be detectable and targetable for ground assault (Battlescape launch). Verify this path exists.
+
+#### 9.5: Aeroscape — Design & Implementation
+
+**Source:** `xna/trunk/docs/Roadmap.html — Iteration 11`
+
+Aeroscape (air combat between interceptors and UFOs) is listed as "partially implemented" in the README. The legacy roadmap (`Roadmap.html:261-265`) specifies only two planning steps (never executed):
+
+- [ ] **Specify requirements** — document Aeroscape game design: interception mechanics, weapon ranges, damage models, pilot actions, UFO countermeasures
+- [ ] **Document design** — class hierarchy, AeroscapeState integration with GeoData, screen flow (geoscape → aeroscape → result), HUD layout
+- [ ] **Implement air combat loop** — real-time or turn-based interception resolution, weapon fire/cooldown, damage application, craft destruction/retreat logic
+- [ ] **AeroscapeScreen** — Gum-based screen with 3D or 2D visualization of air combat, craft status displays, weapon controls
+
+#### 9.6: Statistics Graphs (Iteration 9, Phase 3)
+
+**Source:** `xna/trunk/docs/Roadmap.html:252-253`
+
+The Statistics screen currently shows data in tables/lists. The legacy plan includes a third phase:
+
+- [ ] **Graph rendering** — draw monthly data as line/bar graphs instead of (or in addition to) tables
+- [ ] **UFO activity by country** — line graph of UFO sightings/incidents per country over time
+- [ ] **UFO activity by region** — aggregate by geographic region
+- [ ] **X-Corp activity by country/region** — missions completed, UFOs shot down, etc.
+- [ ] **Monthly income by country** — funding trends per nation
+- [ ] **Accounting graph** — income, expenses, maintenance, balance over time
+
+**Implementation approach:** Use `SpriteBatch` to draw simple graph primitives (axes, lines, bars, labels) on the `StatisticsScreen`. Read historical data from `GameState.GeoData.FundingHistory` or equivalent monthly records.
+
+#### 9.7: Craft Refueling — Edge Cases
+
+**Source:** `xna/trunk/docs/SchedulerAndAppointments.txt:10-15`
+
+The legacy design explicitly decided NOT to use the Scheduler/Appointment system for craft refueling due to several edge cases. Verify the current implementation handles these:
+
+- [ ] **Xenium consumed at refuel start** — deduct required Xenium from outpost stores when refueling begins, to prevent issues if Xenium is transferred/sold mid-refuel (`SchedulerAndAppointments.txt:12`)
+- [ ] **Insufficient Xenium at start** — handle case where outpost lacks sufficient Xenium: pause refueling, raise warning/notification, auto-resume when Xenium becomes available (`SchedulerAndAppointments.txt:13`)
+- [ ] **Craft launch during refuel** — allow craft to launch before fully refueled (unlike X-COM 1 behavior which blocked this). Track partial fuel state correctly (`SchedulerAndAppointments.txt:14`)
+- [ ] **Refuel progress tracking** — refueling is a continuous process (not a scheduled appointment). Progress is tracked per-update based on refuel rate and elapsed time. Verify update loop handles this correctly.
+
+#### 9.8: Screen Partitioning Pattern
+
+**Source:** `xna/trunk/docs/CodebaseTour.html:63-73`
+
+The legacy architecture proposed splitting each screen into 3 separate classes for portability. While CeGui# has been fully replaced by Gum, this pattern has ongoing value:
+
+- [ ] **Document the pattern** — add to `docs/ARCHITECTURE.md`: each screen = GUI layer (Gum `.gusx` + event handlers) + control logic class (game state decisions) + scene class (3D rendering)
+- [ ] **Refactor existing screens** — identify screens where control logic is embedded in the screen class (e.g., complex purchasing logic in `PurchaseScreen`, research assignment logic in `ResearchScreen`) and extract into separate controller classes
+- [ ] **Benefits** — (1) unit-testable control logic without MonoGame/Gum dependency; (2) easier GUI framework swap in future; (3) clearer separation of concerns
+
+**Current state:** Some screens partially follow this pattern (e.g., `GeoscapeScreen` + `GeoscapeScene`). Others mix concerns heavily. This is a refactoring goal, not a blocker.
+
 ---
 
 ## 4. What You Need to Install
@@ -454,9 +567,6 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 ## 5. Next Steps (Recommended Order)
 
 ### Completed
-1. ~~**Content Pipeline Setup**~~ ✅ Done
-2. ~~**Replace audio stubs**~~ ✅ Done
-3. ~~**Convert all screens to Gum**~~ ✅ Done (27 screens + 13 dialogs)
  1. ~~**Content Pipeline Setup**~~ ✅ Done
  2. ~~**Replace audio stubs**~~ ✅ Done
  3. ~~**Convert all screens to Gum**~~ ✅ Done (27 screens + 13 dialogs)
@@ -473,11 +583,19 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 14. ~~**Code quality & lint cleanup**~~ ✅ Done (216 warnings → 0, 60+ files cleaned)
 
 ### Remaining
-15. **Cross-platform validation** — Phase 7 (build/test on Linux, path case issues already fixed)
-16. **Convert `Laser Rifle.FBX` to `.X`** — FBX importer fails on embedded textures; re-export with Blender
-17. **Provide Barracks normal/specular maps** — `BUMP.JPG`/`SPECULAR.JPG` for Facility/Xnet/Barracks model
-18. **Manual testing** — verify all screens, dialogs, drag-drop, 3D overlays, input conflicts
-19. **GridPanel flat XenocideButton visual** — `RowButtonFactory` property added; remaining: NineSlice-based button implementation
+ 15. **Cross-platform validation** — Phase 7 (build/test on Linux, path case issues already fixed)
+ 16. **Convert `Laser Rifle.FBX` to `.X`** — FBX importer fails on embedded textures; re-export with Blender
+ 17. **Provide Barracks normal/specular maps** — `BUMP.JPG`/`SPECULAR.JPG` for Facility/Xnet/Barracks model
+ 18. **Manual testing** — verify all screens, dialogs, drag-drop, 3D overlays, input conflicts
+ 19. **GridPanel flat XenocideButton visual** — `RowButtonFactory` property added; remaining: NineSlice-based button implementation
+ 20. **Phase 9.1: Research tree validation** — build-time sanity checks for loops, orphans, unreachable topics
+ 21. **Phase 9.2: Facility edge cases** — enforce defense shot counts, scan limits, destroy restrictions, visibility modifiers
+ 22. **Phase 9.3: UFO mission sequencing** — externalize mission schedules to XML, implement authentic X-COM pacing
+ 23. **Phase 9.4: UFO timing constants** — make crash site/landed/terror durations configurable
+ 24. **Phase 9.5: Aeroscape design** — specify requirements, document design, implement air combat loop
+ 25. **Phase 9.6: Statistics graphs** — render monthly data as line/bar graphs instead of tables
+ 26. **Phase 9.7: Craft refueling edge cases** — handle Xenium shortages, partial refuel, mid-refuel launch
+ 27. **Phase 9.8: Screen partitioning** — document and refactor screens into GUI/control/scene layers
 
 ### Gum UI Layout & Theming (Next Major Task)
 The Gum WYSIWYG editor (`Gum UI Tool`) can be invoked to create a `.gumx` project for visual layout design. The tool creates XML-based project files that define component styles, layouts, and data bindings. All 27 screens and 13 dialogs load from `.gusx` layouts. The Gum editor would allow:
