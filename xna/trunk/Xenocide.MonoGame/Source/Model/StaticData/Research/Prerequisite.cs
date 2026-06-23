@@ -36,6 +36,8 @@ using System.Xml.XPath;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Utils;
 
+using Xenocide.Resources;
+
 #endregion
 
 namespace ProjectXenocide.Model.StaticData.Research
@@ -90,9 +92,18 @@ namespace ProjectXenocide.Model.StaticData.Research
             {
                 return new TechnologyPrerequisite(element);
             }
+            else if (element.Name == "facilityref")
+            {
+                return new TechnologyPrerequisite(element);
+            }
             else if (element.Name == "itemref")
             {
                 return new ItemPrerequisite(element);
+            }
+            else if (element.Name == "combatantref")
+            {
+                throw new XPathException(Util.StringFormat(
+                    Strings.EXCEPTION_COMBATANTREF_IN_PREREQ, element.GetAttribute("name", "")));
             }
             else
             {

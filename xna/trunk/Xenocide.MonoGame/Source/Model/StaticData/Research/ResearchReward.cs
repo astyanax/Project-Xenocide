@@ -125,6 +125,14 @@ namespace ProjectXenocide.Model.StaticData.Research
             }
         }
 
+        /// <summary>
+        /// Return the list of technologies granted by this reward. Used by validation.
+        /// </summary>
+        internal IEnumerable<Technology> GetTechnologies()
+        {
+            return technologies;
+        }
+
         #region Fields
 
         /// <summary>

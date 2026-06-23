@@ -138,10 +138,13 @@ namespace ProjectXenocide.Model.StaticData.Research
         public void Validate(XNetEntryCollection xnetEntryList, FacilityInfoCollection facilities,
             ItemCollection items)
         {
-            TechnologyManager mgr = LookForInaccessableTopics();
-            ValidateXNetAgainstTech(mgr, xnetEntryList);
-            ValidateFacilityAgainstTech(mgr, facilities);
-            ValidateItemsAgainstTech(mgr, items);
+            List<string> errors = ResearchValidator.Validate(this, xnetEntryList, facilities, items);
+            if (errors.Count > 0)
+            {
+                throw new InvalidOperationException(
+                    "Research tree validation failed with " + errors.Count + " error(s):\n"
+                    + string.Join("\n", errors));
+            }
         }
 
         /// <summary>

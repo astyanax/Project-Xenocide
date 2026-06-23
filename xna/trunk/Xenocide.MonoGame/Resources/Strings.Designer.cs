@@ -1562,6 +1562,69 @@ namespace Xenocide.Resources {
                 return ResourceManager.GetString("EXCEPTION_UNREACHABLE_XNET_ENTRY", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to combatantref is not supported in prerequisites. Only itemref, topicref, xnetref, and facilityref are valid. (topic: {0}).
+        /// </summary>
+        internal static string EXCEPTION_COMBATANTREF_IN_PREREQ {
+            get {
+                return ResourceManager.GetString("EXCEPTION_COMBATANTREF_IN_PREREQ", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Research topic '{0}' grants non-existent facility '{1}'.
+        /// </summary>
+        internal static string EXCEPTION_GRANT_NONEXISTENT_FACILITY {
+            get {
+                return ResourceManager.GetString("EXCEPTION_GRANT_NONEXISTENT_FACILITY", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Research topic '{0}' grants non-existent item '{1}'.
+        /// </summary>
+        internal static string EXCEPTION_GRANT_NONEXISTENT_ITEM {
+            get {
+                return ResourceManager.GetString("EXCEPTION_GRANT_NONEXISTENT_ITEM", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Research topic '{0}' grants non-existent X-Net entry '{1}'.
+        /// </summary>
+        internal static string EXCEPTION_GRANT_NONEXISTENT_XNET {
+            get {
+                return ResourceManager.GetString("EXCEPTION_GRANT_NONEXISTENT_XNET", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Topic '{0}' prerequisite references non-existent item '{1}'.
+        /// </summary>
+        internal static string EXCEPTION_PREREQ_NONEXISTENT_ITEM {
+            get {
+                return ResourceManager.GetString("EXCEPTION_PREREQ_NONEXISTENT_ITEM", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Topic '{0}' prerequisite references non-existent topic '{1}'.
+        /// </summary>
+        internal static string EXCEPTION_PREREQ_NONEXISTENT_TOPIC {
+            get {
+                return ResourceManager.GetString("EXCEPTION_PREREQ_NONEXISTENT_TOPIC", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Cycle detected in research prerequisites: {0}.
+        /// </summary>
+        internal static string EXCEPTION_RESEARCH_CYCLE_DETECTED {
+            get {
+                return ResourceManager.GetString("EXCEPTION_RESEARCH_CYCLE_DETECTED", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Only Shader v1.1 available. Game will run, but graphics are going to be horrible..

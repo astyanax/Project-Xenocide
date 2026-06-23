@@ -107,6 +107,11 @@ namespace ProjectXenocide.Model.StaticData.Research
             Debug.Assert(false);
         }
 
+        /// <summary>
+        /// The item artefact required by this prerequisite. Used by validation.
+        /// </summary>
+        internal ItemInfo RequiredArtefact { get { return artefact; } }
+
         #region Fields
 
         /// <summary>

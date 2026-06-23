@@ -118,6 +118,45 @@ namespace ProjectXenocide.Model.StaticData.Research
             }
         }
 
+        /// <summary>
+        /// Collect all technology IDs referenced in this prerequisite tree. Used by validation.
+        /// </summary>
+        internal void CollectTechnologyIds(List<string> ids)
+        {
+            foreach (Prerequisite p in preconditions)
+            {
+                if (p is TechnologyPrerequisite tp)
+                {
+                    ids.Add(tp.RequiredTechnology.Id);
+                }
+                else if (p is MultiPrerequisite mp)
+                {
+                    mp.CollectTechnologyIds(ids);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Collect all failed prerequisite IDs against a technology manager. Used by validation.
+        /// </summary>
+        internal void CollectFailedIds(TechnologyManager mgr, List<string> failedIds)
+        {
+            foreach (Prerequisite p in preconditions)
+            {
+                if (p is TechnologyPrerequisite tp)
+                {
+                    if (!tp.IsSatisfied(mgr))
+                    {
+                        failedIds.Add(tp.RequiredTechnology.Id);
+                    }
+                }
+                else if (p is MultiPrerequisite mp)
+                {
+                    mp.CollectFailedIds(mgr, failedIds);
+                }
+            }
+        }
+
         #region Fields
 
         /// <summary>

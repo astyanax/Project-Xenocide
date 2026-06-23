@@ -79,6 +79,11 @@ namespace ProjectXenocide.Model.StaticData.Research
             return IsSatisfied(manager);
         }
 
+        /// <summary>
+        /// The technology required by this prerequisite. Used by validation.
+        /// </summary>
+        internal Technology RequiredTechnology { get { return requiredTech; } }
+
         #region Fields
 
         /// <summary>

@@ -130,6 +130,23 @@ namespace ProjectXenocide.Model.StaticData.Research
             return prerequisite.IsSatisfied(manager, outposts);
         }
 
+        /// <summary>
+        /// Collect all topic/technology IDs referenced in this topic's prerequisite tree.
+        /// Used by validation and cycle detection.
+        /// </summary>
+        internal void CollectPrerequisiteIds(List<string> ids)
+        {
+            prerequisite.CollectTechnologyIds(ids);
+        }
+
+        /// <summary>
+        /// Enumerate the technologies granted by completing this research topic.
+        /// </summary>
+        internal IEnumerable<Technology> GetRewardTechnologies()
+        {
+            return researchReward.GetTechnologies();
+        }
+
         #region Fields
 
         /// <summary>

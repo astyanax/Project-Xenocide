@@ -1070,6 +1070,27 @@
   <data name="EXCEPTION_UNREACHABLE_XNET_ENTRY" xml:space="preserve">
     <value>The X-Net entry {0} is missing from research.xml</value>
   </data>
+  <data name="EXCEPTION_COMBATANTREF_IN_PREREQ" xml:space="preserve">
+    <value>combatantref is not supported in prerequisites. Only itemref, topicref, xnetref, and facilityref are valid. (topic: {0})</value>
+  </data>
+  <data name="EXCEPTION_GRANT_NONEXISTENT_FACILITY" xml:space="preserve">
+    <value>Research topic '{0}' grants non-existent facility '{1}'</value>
+  </data>
+  <data name="EXCEPTION_GRANT_NONEXISTENT_ITEM" xml:space="preserve">
+    <value>Research topic '{0}' grants non-existent item '{1}'</value>
+  </data>
+  <data name="EXCEPTION_GRANT_NONEXISTENT_XNET" xml:space="preserve">
+    <value>Research topic '{0}' grants non-existent X-Net entry '{1}'</value>
+  </data>
+  <data name="EXCEPTION_PREREQ_NONEXISTENT_ITEM" xml:space="preserve">
+    <value>Topic '{0}' prerequisite references non-existent item '{1}'</value>
+  </data>
+  <data name="EXCEPTION_PREREQ_NONEXISTENT_TOPIC" xml:space="preserve">
+    <value>Topic '{0}' prerequisite references non-existent topic '{1}'</value>
+  </data>
+  <data name="EXCEPTION_RESEARCH_CYCLE_DETECTED" xml:space="preserve">
+    <value>Cycle detected in research prerequisites: {0}</value>
+  </data>
   <data name="BUTTON_LESS_SCIENTISTS" xml:space="preserve">
     <value>Less Scientists</value>
   </data>
