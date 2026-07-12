@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using ProjectXenocide.Model.Geoscape.Geography;
+using ProjectXenocide.Model.StaticData.AI;
 
 #endregion
 
@@ -140,13 +141,19 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// </summary>
         public override void OnDogfightFinished()
         {
-            // if UFO lost the dogfight and crashed it will remain on ground for 
-            // 12 hours before repairs are completed and it flys away
-            // otherwise, it continues its mission
+            // if UFO lost the dogfight and crashed it will remain on ground for
+            // crashSiteDuration before repairs are completed and it flies away.
+            // otherwise, it continues its mission.
+            //
+            // ORIGINAL BEHAVIOR: 12 hours hardcoded.
+            // NEW: value loaded from ufobehavior.xml (Phase 9.4).
+            // The legacy design doc (UfoBehaviour.html:81) suggests 1-4 days;
+            // we keep 12h for backward compat.
             if (Craft.IsCrashed)
             {
                 landings = 0;
-                SetState(new WaitState(this, 12 * 3600));
+                double seconds = Xenocide.StaticTables.UfoBehavior.CrashSiteDuration.TotalSeconds;
+                SetState(new WaitState(this, seconds));
             }
         }
 
@@ -197,9 +204,11 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <returns>Time on ground, in seconds</returns>
         protected static double CalcSecondsOnGround()
         {
-            // ToDo, at moment this is hard coded, may replace with RNG later
-            // 2 hours
-            return 2.0 * 60.0 * 60.0;
+            // ORIGINAL BEHAVIOR: 2 hours hardcoded.
+            // NEW: value loaded from ufobehavior.xml (Phase 9.4).
+            // Legacy design doc (UfoBehaviour.html:82) mentions 4-12 hours;
+            // we keep 2h for backward compat.
+            return Xenocide.StaticTables.UfoBehavior.LandedUfoDuration.TotalSeconds;
         }
 
         /// <summary>

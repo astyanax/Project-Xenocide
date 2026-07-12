@@ -135,7 +135,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
         {
             locatedOutpost = false;
             outpost = null;
-            float minDistance = searchRadius;
+            float minDistance = SearchRadius;
             foreach (Outpost o in Xenocide.GameState.GeoData.Outposts)
             {
                 float distance = Centroid.Distance(o.Position);
@@ -177,9 +177,19 @@ namespace ProjectXenocide.Model.Geoscape.AI
         #region constants
 
         /// <summary>
-        /// UFOs will search for outposts up to 3000km from site of destroyed UFO
+        /// UFOs will search for outposts within this radius of the destroyed UFO site.
+        ///
+        /// ORIGINAL BEHAVIOR: 3000 km hardcoded.
+        /// NEW: value loaded from ufobehavior.xml (Phase 9.4).
+        /// The legacy design doc (UfoBehaviour.html:80) says retaliation
+        /// scouts have a detection range of 240 nautical miles (~444 km),
+        /// but the C# implementation uses 3000 km for the search area
+        /// of the task, and we preserve that here.
         /// </summary>
-        private static readonly float searchRadius = (float)GeoPosition.KilometersToRadians(3000);
+        private static float SearchRadius
+        {
+            get { return Xenocide.StaticTables.UfoBehavior.RetaliationSearchRadius; }
+        }
 
         #endregion
 

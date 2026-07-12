@@ -33,8 +33,7 @@ using System.Text;
 
 using ProjectXenocide.Model.Geoscape.Geography;
 using ProjectXenocide.Model.Geoscape.Vehicles;
-
-using Xenocide.Resources;
+using ProjectXenocide.Model.StaticData.AI;
 
 #endregion
 
@@ -81,6 +80,18 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// Type of UFO to launch
         /// </summary>
         public String UfoType { get { return ufoType; } }
+
+        /// <summary>
+        /// Minimum delay (in hours) after the preceding launch before this UFO can launch.
+        /// (Original X-COM: random delay between [earliest, latest] hours)
+        /// </summary>
+        public float EarliestHours { get { return earliestLaunch; } }
+
+        /// <summary>
+        /// Maximum delay (in hours) after the preceding launch before this UFO must launch.
+        /// (Original X-COM: random delay between [earliest, latest] hours)
+        /// </summary>
+        public float LatestHours { get { return latestLaunch; } }
 
         /// <summary>
         /// Type of UFO to launch
@@ -170,7 +181,12 @@ namespace ProjectXenocide.Model.Geoscape.AI
     }
 
     /// <summary>
-    /// Creates the Overmind's tasks
+    /// Creates the Overmind's tasks.
+    ///
+    /// NOTE: As of Phase 9.3 of the migration, the 8 mission launch
+    /// sequences are no longer hardcoded in C#.  They are loaded from
+    /// ufobehavior.xml by UfoBehaviorSettings, and this class simply
+    /// delegates to that data source via GetPlan().
     /// </summary>
     [Serializable]
     public class TaskFactory
@@ -178,9 +194,13 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <remarks>
+        /// The original code called ConstructPlans() here to build the
+        /// 8 hardcoded plans.  That has been replaced by XML-driven
+        /// loading via StaticTables.UfoBehavior (see UfoBehaviorSettings).
+        /// </remarks>
         public TaskFactory()
         {
-            ConstructPlans();
         }
 
         /// <summary>
@@ -229,9 +249,14 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// <param name="overmind">Overmind that owns the task</param>
         /// <param name="centroid">Position on Geoscape that will be the center of the UFOs' activity</param>
         /// <returns>the task</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Performance", "CA1822:MarkMembersAsStatic",
+            Justification = "Kept as instance method for backward compat with " +
+                            "existing callers (Overmind.taskFactory.X); the data is " +
+                            "now loaded from XML and accessed via the static GetPlan().")]
         public ResearchTask CreateResearchTask(AlienMission type, Overmind overmind, GeoPosition centroid)
         {
-            return new ResearchTask(overmind, centroid, plans[(int)type]);
+            return new ResearchTask(overmind, centroid, GetPlan(type));
         }
 
         /// <summary>
@@ -239,12 +264,15 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// </summary>
         /// <param name="overmind">Overmind that owns the task</param>
         /// <returns>the task</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Performance", "CA1822:MarkMembersAsStatic",
+            Justification = "Instance method to match existing public API; data is XML-driven.")]
         public InfiltrationTask CreateInfiltrationTask(Overmind overmind)
         {
             Planet planet = Xenocide.GameState.GeoData.Planet;
             Country country = planet.SelectCountryToInfiltrate();
             GeoPosition centroid = planet.GetRandomPositionInCountry(country);
-            return new InfiltrationTask(overmind, centroid, plans[(int)AlienMission.Infiltration], country);
+            return new InfiltrationTask(overmind, centroid, GetPlan(AlienMission.Infiltration), country);
         }
 
         /// <summary>
@@ -253,11 +281,14 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// <param name="overmind">Overmind that owns the task</param>
         /// <param name="position">Position to infiltrate</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Performance", "CA1822:MarkMembersAsStatic",
+            Justification = "Instance method to match existing public API; data is XML-driven.")]
         public InfiltrationTask CreateInfiltrationTask(Overmind overmind, GeoPosition position)
         {
             Planet planet = Xenocide.GameState.GeoData.Planet;
             Country country = planet.GetCountryAtLocation(position);
-            return new InfiltrationTask(overmind, position, plans[(int)AlienMission.Infiltration], country);
+            return new InfiltrationTask(overmind, position, GetPlan(AlienMission.Infiltration), country);
         }
 
         /// <summary>
@@ -266,9 +297,12 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// <param name="overmind">Overmind that owns the task</param>
         /// <param name="centroid">Where to build the outpost</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Performance", "CA1822:MarkMembersAsStatic",
+            Justification = "Instance method to match existing public API; data is XML-driven.")]
         public BuildOutpostTask CreateBuildOutpostTask(Overmind overmind, GeoPosition centroid)
         {
-            return new BuildOutpostTask(overmind, centroid, plans[(int)AlienMission.Outpost]);
+            return new BuildOutpostTask(overmind, centroid, GetPlan(AlienMission.Outpost));
         }
 
         /// <summary>
@@ -276,9 +310,12 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// </summary>
         /// <param name="overmind">Overmind that owns the task</param>
         /// <returns>the task</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Performance", "CA1822:MarkMembersAsStatic",
+            Justification = "Instance method to match existing public API; data is XML-driven.")]
         public TerrorTask CreateTerrorTask(Overmind overmind)
         {
-            return new TerrorTask(overmind, plans[(int)AlienMission.Terror]);
+            return new TerrorTask(overmind, GetPlan(AlienMission.Terror));
         }
 
         /// <summary>
@@ -287,9 +324,12 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// <param name="overmind">Overmind that owns the task</param>
         /// <param name="outpost">Outpost that is being supplied</param>
         /// <returns>the task</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Performance", "CA1822:MarkMembersAsStatic",
+            Justification = "Instance method to match existing public API; data is XML-driven.")]
         public SupplyOutpostTask CreateSupplyTask(Overmind overmind, OutpostAlienSite outpost)
         {
-            return new SupplyOutpostTask(overmind, outpost, plans[(int)AlienMission.Supply]);
+            return new SupplyOutpostTask(overmind, outpost, GetPlan(AlienMission.Supply));
         }
 
         /// <summary>
@@ -298,107 +338,21 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// <param name="overmind">Overmind that owns the task</param>
         /// <param name="searchStart">Where Overmind will start it's search for X-Corp outposts</param>
         /// <returns>the task</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Performance", "CA1822:MarkMembersAsStatic",
+            Justification = "Instance method to match existing public API; data is XML-driven.")]
         public RetaliationTask CreateRetaliationTask(Overmind overmind, GeoPosition searchStart)
         {
-            return new RetaliationTask(overmind, searchStart, plans[(int)AlienMission.Retaliation]);
+            return new RetaliationTask(overmind, searchStart, GetPlan(AlienMission.Retaliation));
         }
 
         /// <summary>
-        /// Construct the set of missions that make up a Task
+        /// Look up the TaskPlan for a given alien mission type.
+        /// Source of truth: ufobehavior.xml via UfoBehaviorSettings.
         /// </summary>
-        private void ConstructPlans()
+        private static TaskPlan GetPlan(AlienMission type)
         {
-            plans = new List<TaskPlan>();
-
-            // Don't forget, number of landings includes the final destination.  A value of 1 will
-            // take them directly to thier final destination.
-
-            // Research
-            List<LaunchPlan> launches = new List<LaunchPlan>();
-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE", 20.0f, 30.0f, 1, 2));
-            launches.Add(new LaunchPlan("ITEM_UFO_RECON", 132.0f, 204.0f, 2, 2));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 132.0f, 204.0f, 2, 2));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f, 120.0f, 3, 1));
-            plans.Add(new TaskPlan(Strings.UFO_MISSION_RESEARCH, 20.0f, launches));
-
-            // Harvest
-            launches = new List<LaunchPlan>();
-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE", 48.0f, 120.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE", 48.0f, 120.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE", 132.0f, 204.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_REAPER", 132.0f, 204.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_REAPER", 48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 20.0f, 30.0f, 2, 3));
-            plans.Add(new TaskPlan(Strings.UFO_MISSION_HARVEST, 30.0f, launches));
-
-            // Abduction
-            launches = new List<LaunchPlan>();
-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE", 132.0f, 204.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_RECON", 132.0f, 204.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 240.0f, 432.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_COLLECTOR", 48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_COLLECTOR", 48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 0.5f, 2.5f, 2, 3));
-            plans.Add(new TaskPlan(Strings.UFO_MISSION_ABDUCTION, 50.0f, launches));
-
-            // Infiltration
-            launches = new List<LaunchPlan>();
-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE", 240.0f, 432.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_RECON", 240.0f, 432.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_RECON", 240.0f, 432.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 240.0f, 432.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR", 0.5f, 2.5f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR", 0.5f, 2.5f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 0.5f, 2.5f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 0.5f, 2.5f, 2, 3));
-            plans.Add(new TaskPlan(Strings.UFO_MISSION_INFILTRATION, 150.0f, launches));
-
-            // Outpost
-            launches = new List<LaunchPlan>();
-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE", 132.0f, 204.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_RECON", 132.0f, 204.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 132.0f, 204.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 0.5f, 2.5f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 0.5f, 2.5f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 0.5f, 2.5f, 2, 3));
-            plans.Add(new TaskPlan(Strings.UFO_MISSION_OUTPOST, 50.0f, launches));
-
-            // Terror (note, no score for the UFO, it's the terror site that earns the points)
-            launches = new List<LaunchPlan>();
-            launches.Add(new LaunchPlan("ITEM_UFO_RECON", 2.5f, 2.5f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 132.0f, 204.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR", 132.0f, 204.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR", 132.0f, 204.0f, 1, 3));
-            plans.Add(new TaskPlan(Strings.UFO_MISSION_TERROR, 0.0f, launches));
-
-            // Retaliation
-            launches = new List<LaunchPlan>();
-            launches.Add(new LaunchPlan("ITEM_UFO_PROBE", 50.0f, 50.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_RECON", 32.0f, 72.0f, 2, 2));
-            launches.Add(new LaunchPlan("ITEM_UFO_RECON", 48.0f, 120.0f, 2, 2));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_ESCORT", 48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 48.0f, 120.0f, 2, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 48.0f, 120.0f, 2, 3));
-            plans.Add(new TaskPlan(Strings.UFO_MISSION_RETALIATION, 0.0f, launches));
-
-            // Supply
-            launches = new List<LaunchPlan>();
-            launches.Add(new LaunchPlan("ITEM_UFO_ALIEN_FREIGHTER", 240.0f, 432.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_INTIMIDATOR", 240.0f, 432.0f, 1, 3));
-            launches.Add(new LaunchPlan("ITEM_UFO_JUGGERNAUT", 240.0f, 432.0f, 1, 3));
-            plans.Add(new TaskPlan(Strings.UFO_MISSION_SUPPLY, 3.0f, launches));
+            return Xenocide.StaticTables.UfoBehavior.GetPlan(type);
         }
-
-        #region Fields
-
-        private List<TaskPlan> plans;
-
-        #endregion Fields
-
     }
 }

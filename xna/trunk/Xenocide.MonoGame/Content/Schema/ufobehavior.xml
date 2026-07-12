@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  UFO Behavior Configuration
+  ==========================
+  Timing constants and mission launch sequences for the alien Overmind AI.
+  Values are loaded by ProjectXenocide.Model.StaticData.AI.UfoBehaviorSettings.
+
+  Source documents:
+  - xna/trunk/docs/UfoBehaviour.html (original X-COM mission sequencing)
+  - Original hardcoded values in TaskFactory.ConstructPlans() and various
+    mission/site classes (UfoMission, TerrorMissionAlienSite, etc.)
+
+  All values in this file match the original game's hardcoded values, so
+  gameplay is unchanged. The data is externalized to allow easy modding
+  and tuning without recompilation.
+
+  Hours values are "delay after preceding launch" or "duration in hours",
+  matching the units used in the original C# code.
+-->
+<ufobehavior xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="UfoBehaviorConfig ufobehavior.xsd" xmlns="UfoBehaviorConfig">
+
+  <!-- ============================================================== -->
+  <!-- Timing Constants (Phase 9.4)                                    -->
+  <!-- Source: xna/trunk/docs/UfoBehaviour.html:78-84                   -->
+  <!-- ============================================================== -->
+  <timingConstants>
+    <!--
+      Time a crashed UFO remains on the ground before "repairing" and
+      leaving Earth.  In the original game this was "12 hours" (UfoMission.cs:149).
+      The legacy design doc mentions 1-4 days but the C# implementation
+      uses 12 hours; we keep that behavior for compatibility.
+    -->
+    <crashSiteDuration hours="12" />
+
+    <!--
+      Time a UFO spends landed at a sampling/research site before taking
+      off and moving to the next point.  Original: 2 hours
+      (UfoMission.cs:202 - CalcSecondsOnGround).  The legacy design doc
+      mentions 4-12 hours but the C# implementation uses 2 hours.
+    -->
+    <landedUfoDuration hours="2" />
+
+    <!--
+      Time X-Corp has to respond to a terror site before aliens score.
+      Original: 12 hours (TerrorMissionAlienSite.cs:66).  Legacy doc says
+      4-10 hours; the C# implementation uses 12 hours.
+    -->
+    <terrorSiteDuration hours="12" />
+
+    <!--
+      Delay between the UFO leaving the city and the terror site
+      appearing on the geoscape (gives UFO time to depart).
+      Original: 30 minutes (TerrorMission.cs:77).
+    -->
+    <terrorSiteSpawnDelay minutes="30" />
+
+    <!--
+      How far from the destroyed UFO's site a retaliation UFO searches
+      for X-Corp outposts.  Original: 3000 km (RetaliationTask.cs:182).
+      Per legacy design doc, retaliation scouts have a detection range
+      of 240 nautical miles (~444 km) for actual outposts, but the
+      SEARCH area for the task itself is 3000 km.
+    -->
+    <retaliationSearchRadius kilometers="3000" />
+
+    <!--
+      Range at which X-Corp aircraft can detect UFOs and alien sites.
+      Original: 700 nautical miles (Aircraft.cs:491 - all craft same range).
+    -->
+    <aircraftRadarRange nauticalMiles="700" />
+  </timingConstants>
+
+  <!-- ============================================================== -->
+  <!-- Mission Launch Plans (Phase 9.3)                                -->
+  <!-- Source: xna/trunk/docs/UfoBehaviour.html:87-149                  -->
+  <!-- Each mission is a sequence of UFO launches, with random delay    -->
+  <!-- (uniform within [earliest, latest] hours) between launches.      -->
+  <!--                                                                  -->
+  <!-- Matching to original X-COM (UFO: Enemy Unknown):                 -->
+  <!--   The original game launched UFOs in waves (multiple UFOs in     -->
+  <!--   parallel/sequence per alien task) with delays of 1-2 weeks     -->
+  <!--   between waves.  Our hour values (132-204, 240-432) approximate -->
+  <!--   those delays (132h ~= 5.5 days, 204h ~= 8.5 days, 432h = 18d). -->
+  <!-- ============================================================== -->
+  <missionPlans>
+
+    <!--
+      Research: probe area to gather intel.
+      Original X-COM sequence: small scout, then medium scouts, then large scout.
+      Our plan uses 4 UFOs over ~2 weeks.
+    -->
+    <missionPlan type="Research" score="20">
+      <launch ufoType="ITEM_UFO_PROBE"   earliestLaunch="20"  latestLaunch="30"  landings="1" subLandings="2"/>
+      <launch ufoType="ITEM_UFO_RECON"   earliestLaunch="132" latestLaunch="204" landings="2" subLandings="2"/>
+      <launch ufoType="ITEM_UFO_ESCORT"  earliestLaunch="132" latestLaunch="204" landings="2" subLandings="2"/>
+      <launch ufoType="ITEM_UFO_ESCORT"  earliestLaunch="48"  latestLaunch="120" landings="3" subLandings="1"/>
+    </missionPlan>
+
+    <!--
+      Harvest: collect biological material from Earth.
+      Original X-COM: small scouts first, then large scouts, then harvester, then battleship.
+      Our plan: 8 UFOs over ~2-3 weeks.
+    -->
+    <missionPlan type="Harvest" score="30">
+      <launch ufoType="ITEM_UFO_PROBE"      earliestLaunch="48"  latestLaunch="120" landings="1" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_PROBE"      earliestLaunch="48"  latestLaunch="120" landings="1" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_PROBE"      earliestLaunch="132" latestLaunch="204" landings="1" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_ESCORT"     earliestLaunch="48"  latestLaunch="120" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_ESCORT"     earliestLaunch="48"  latestLaunch="120" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_REAPER"     earliestLaunch="132" latestLaunch="204" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_REAPER"     earliestLaunch="48"  latestLaunch="120" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_JUGGERNAUT" earliestLaunch="20"  latestLaunch="30"  landings="2" subLandings="3"/>
+    </missionPlan>
+
+    <!--
+      Abduction: capture humans for experimentation.
+      Original X-COM: small scout, medium scout, large scout, abductors, battleship.
+      Our plan: 6 UFOs.
+    -->
+    <missionPlan type="Abduction" score="50">
+      <launch ufoType="ITEM_UFO_PROBE"      earliestLaunch="132" latestLaunch="204" landings="1" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_RECON"      earliestLaunch="132" latestLaunch="204" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_ESCORT"     earliestLaunch="240" latestLaunch="432" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_COLLECTOR"  earliestLaunch="48"  latestLaunch="120" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_COLLECTOR"  earliestLaunch="48"  latestLaunch="120" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_JUGGERNAUT" earliestLaunch="0.5" latestLaunch="2.5" landings="2" subLandings="3"/>
+    </missionPlan>
+
+    <!--
+      Infiltration: persuade a country to sign an alien pact.
+      Original X-COM: scouts, terror, battleships, supply, battleship.
+      Our plan: 9 UFOs (longest sequence - 1+ month of activity).
+    -->
+    <missionPlan type="Infiltration" score="150">
+      <launch ufoType="ITEM_UFO_PROBE"          earliestLaunch="240" latestLaunch="432" landings="1" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_RECON"          earliestLaunch="240" latestLaunch="432" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_RECON"          earliestLaunch="240" latestLaunch="432" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_ESCORT"         earliestLaunch="240" latestLaunch="432" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_ESCORT"         earliestLaunch="48"  latestLaunch="120" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_INTIMIDATOR"    earliestLaunch="0.5" latestLaunch="2.5" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_INTIMIDATOR"    earliestLaunch="0.5" latestLaunch="2.5" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_ALIEN_FREIGHTER" earliestLaunch="0.5" latestLaunch="2.5" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_JUGGERNAUT"     earliestLaunch="0.5" latestLaunch="2.5" landings="2" subLandings="3"/>
+    </missionPlan>
+
+    <!--
+      Outpost (build alien base): scouting phase then construction phase.
+      Original X-COM: scouts, supply ships, battleship.
+      Our plan: 6 UFOs.  Outpost is constructed only if the last (Juggernaut)
+      UFO succeeds.
+    -->
+    <missionPlan type="Outpost" score="50">
+      <launch ufoType="ITEM_UFO_PROBE"           earliestLaunch="132" latestLaunch="204" landings="1" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_RECON"           earliestLaunch="132" latestLaunch="204" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_ESCORT"          earliestLaunch="132" latestLaunch="204" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_ALIEN_FREIGHTER" earliestLaunch="0.5" latestLaunch="2.5" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_ALIEN_FREIGHTER" earliestLaunch="0.5" latestLaunch="2.5" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_JUGGERNAUT"      earliestLaunch="0.5" latestLaunch="2.5" landings="2" subLandings="3"/>
+    </missionPlan>
+
+    <!--
+      Terror: attack a city to spread panic.
+      Note: no score for the UFO itself; the terror site awards the points
+      to the Overmind if X-Corp fails to respond in time.
+      Original X-COM: medium scout, large scout, terrorships.
+      Our plan: 4 UFOs.  TerrorTask is special - it never ends (it keeps
+      terrorizing new cities forever).
+    -->
+    <missionPlan type="Terror" score="0">
+      <launch ufoType="ITEM_UFO_RECON"        earliestLaunch="2.5"  latestLaunch="2.5"  landings="1" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_ESCORT"       earliestLaunch="132"  latestLaunch="204" landings="1" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_INTIMIDATOR"  earliestLaunch="132"  latestLaunch="204" landings="1" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_INTIMIDATOR"  earliestLaunch="132"  latestLaunch="204" landings="1" subLandings="3"/>
+    </missionPlan>
+
+    <!--
+      Retaliation: respond to a destroyed UFO by attacking an X-Corp base.
+      Original X-COM: scouting, escalating UFOs, then battleships.
+      Our plan: 8 UFOs.  Search radius for outposts is 3000 km (configured
+      above in retaliationSearchRadius).
+    -->
+    <missionPlan type="Retaliation" score="0">
+      <launch ufoType="ITEM_UFO_PROBE"      earliestLaunch="50"  latestLaunch="50"  landings="1" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_RECON"      earliestLaunch="32"  latestLaunch="72"  landings="2" subLandings="2"/>
+      <launch ufoType="ITEM_UFO_RECON"      earliestLaunch="48"  latestLaunch="120" landings="2" subLandings="2"/>
+      <launch ufoType="ITEM_UFO_ESCORT"     earliestLaunch="48"  latestLaunch="120" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_ESCORT"     earliestLaunch="48"  latestLaunch="120" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_ESCORT"     earliestLaunch="48"  latestLaunch="120" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_JUGGERNAUT" earliestLaunch="48"  latestLaunch="120" landings="2" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_JUGGERNAUT" earliestLaunch="48"  latestLaunch="120" landings="2" subLandings="3"/>
+    </missionPlan>
+
+    <!--
+      Supply: replenish an existing alien outpost.
+      Original X-COM: escalating UFO types based on previous failures.
+      Our plan: 3 UFOs (freighter, intimidator, juggernaut - escalation
+      handled in SupplyOutpostTask itself).
+    -->
+    <missionPlan type="Supply" score="3">
+      <launch ufoType="ITEM_UFO_ALIEN_FREIGHTER" earliestLaunch="240" latestLaunch="432" landings="1" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_INTIMIDATOR"     earliestLaunch="240" latestLaunch="432" landings="1" subLandings="3"/>
+      <launch ufoType="ITEM_UFO_JUGGERNAUT"      earliestLaunch="240" latestLaunch="432" landings="1" subLandings="3"/>
+    </missionPlan>
+
+  </missionPlans>
+
+</ufobehavior>

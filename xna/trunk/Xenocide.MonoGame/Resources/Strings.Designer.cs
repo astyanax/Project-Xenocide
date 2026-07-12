@@ -1573,6 +1573,15 @@ namespace Xenocide.Resources {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to ufobehavior.xml is missing required element {0}.
+        /// </summary>
+        internal static string EXCEPTION_UFOBEHAVIOR_MISSING_ELEMENT {
+            get {
+                return ResourceManager.GetString("EXCEPTION_UFOBEHAVIOR_MISSING_ELEMENT", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Research topic '{0}' grants non-existent facility '{1}'.
         /// </summary>
         internal static string EXCEPTION_GRANT_NONEXISTENT_FACILITY {

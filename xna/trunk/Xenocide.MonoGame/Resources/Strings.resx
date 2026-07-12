@@ -1073,6 +1073,9 @@
   <data name="EXCEPTION_COMBATANTREF_IN_PREREQ" xml:space="preserve">
     <value>combatantref is not supported in prerequisites. Only itemref, topicref, xnetref, and facilityref are valid. (topic: {0})</value>
   </data>
+  <data name="EXCEPTION_UFOBEHAVIOR_MISSING_ELEMENT" xml:space="preserve">
+    <value>ufobehavior.xml is missing required element {0}</value>
+  </data>
   <data name="EXCEPTION_GRANT_NONEXISTENT_FACILITY" xml:space="preserve">
     <value>Research topic '{0}' grants non-existent facility '{1}'</value>
   </data>

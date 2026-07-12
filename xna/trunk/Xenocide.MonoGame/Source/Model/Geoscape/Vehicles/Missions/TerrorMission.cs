@@ -33,6 +33,7 @@ using System.Text;
 using ProjectXenocide.Model.Geoscape.AI;
 using ProjectXenocide.Model.Geoscape.GeoEvents;
 using ProjectXenocide.Model.Geoscape.Geography;
+using ProjectXenocide.Model.StaticData.AI;
 
 using Xenocide.Resources;
 
@@ -71,10 +72,15 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// </summary>
         protected override void OnFinalLandingSiteReached()
         {
-            // Assault will start in 30 minutes. Give UFO time to get clear.
+            // Assault will start in [terrorSiteSpawnDelay]. Give UFO time to
+            // get clear before the terror site actually appears.
+            //
+            // ORIGINAL BEHAVIOR: 30 minutes hardcoded.
+            // NEW: value loaded from ufobehavior.xml (Phase 9.4).
             if (attackCity)
             {
-                Xenocide.GameState.GeoData.GeoTime.MakeAppointment(new TimeSpan(0, 30, 0), StartTerrorMission);
+                TimeSpan delay = Xenocide.StaticTables.UfoBehavior.TerrorSiteSpawnDelay;
+                Xenocide.GameState.GeoData.GeoTime.MakeAppointment(delay, StartTerrorMission);
             }
 
             // and leave earth

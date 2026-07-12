@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  UFO Behavior Configuration Schema
+  =================================
+  Defines the structure of ufobehavior.xml, which contains:
+  - Timing constants for UFO behavior on the Geoscape
+  - Launch sequences for the 8 alien mission types
+
+  All values are externalized from C# code so that the game's behavior
+  can be tuned without recompilation (and easily modded).
+-->
+<xs:schema targetNamespace="UfoBehaviorConfig" xmlns="UfoBehaviorConfig" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:include schemaLocation="basic.xsd" />
+
+  <!--
+    Timing constants that govern UFO behavior on the Geoscape.
+    Each constant has a fixed value in the original units.
+    Source: xna/trunk/docs/UfoBehaviour.html
+  -->
+  <xs:complexType name="timingConstantsType">
+    <xs:annotation>
+      <xs:documentation>
+        Timing constants for UFO behavior.
+        - crashSiteDuration: Time a crashed UFO stays on the ground (was: 12 hours in original)
+        - landedUfoDuration: Time UFO spends landed at a sampling site (was: 2 hours)
+        - terrorSiteDuration: Time X-Corp has to respond to a terror site (was: 12 hours)
+        - terrorSiteSpawnDelay: Delay between UFO leaving city and terror site appearing (was: 30 min)
+        - retaliationSearchRadius: How far from the destroyed UFO a retaliation UFO searches (was: 3000 km)
+        - aircraftRadarRange: Range at which X-Corp craft can detect UFOs/alien sites (was: 700 nm)
+      </xs:documentation>
+    </xs:annotation>
+    <xs:all>
+      <xs:element name="crashSiteDuration">
+        <xs:complexType>
+          <xs:attribute name="hours" type="xs:double" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="landedUfoDuration">
+        <xs:complexType>
+          <xs:attribute name="hours" type="xs:double" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="terrorSiteDuration">
+        <xs:complexType>
+          <xs:attribute name="hours" type="xs:double" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="terrorSiteSpawnDelay">
+        <xs:complexType>
+          <xs:attribute name="minutes" type="xs:double" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="retaliationSearchRadius">
+        <xs:complexType>
+          <xs:attribute name="kilometers" type="xs:double" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="aircraftRadarRange">
+        <xs:complexType>
+          <xs:attribute name="nauticalMiles" type="xs:double" use="required" />
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+
+  <!--
+    A single UFO launch within a mission plan.
+    earliestLaunch/latestLaunch are hours after the PRECEDING launch in the plan.
+    landings = number of times the UFO will land (including the final destination).
+    subLandings = number of sub-points the UFO investigates between landings.
+  -->
+  <xs:complexType name="launchType">
+    <xs:attribute name="ufoType" type="itemID" use="required" />
+    <xs:attribute name="earliestLaunch" type="xs:double" use="required" />
+    <xs:attribute name="latestLaunch" type="xs:double" use="required" />
+    <xs:attribute name="landings" type="xs:nonNegativeInteger" use="required" />
+    <xs:attribute name="subLandings" type="xs:nonNegativeInteger" use="required" />
+  </xs:complexType>
+
+  <!--
+    A complete mission plan: a named list of UFO launches, with the score
+    awarded to the Overmind for each UFO that survives its mission.
+  -->
+  <xs:complexType name="missionPlanType">
+    <xs:sequence>
+      <xs:element name="launch" type="launchType" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="type" type="alienMissionName" use="required" />
+    <xs:attribute name="score" type="xs:float" use="required" />
+  </xs:complexType>
+
+  <!--
+    A simple type listing the names of all 8 alien mission types.
+    Mirrors the AlienMission enum in C#.
+  -->
+  <xs:simpleType name="alienMissionName">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Research" />
+      <xs:enumeration value="Harvest" />
+      <xs:enumeration value="Abduction" />
+      <xs:enumeration value="Infiltration" />
+      <xs:enumeration value="Outpost" />
+      <xs:enumeration value="Terror" />
+      <xs:enumeration value="Retaliation" />
+      <xs:enumeration value="Supply" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!--
+    Root element: holds the timing constants and the 8 mission plans.
+  -->
+  <xs:element name="ufobehavior">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="timingConstants" type="timingConstantsType" />
+        <xs:element name="missionPlans">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="missionPlan" type="missionPlanType" minOccurs="1" maxOccurs="8" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -34,6 +34,7 @@ using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Geography;
 using ProjectXenocide.Model.StaticData;
+using ProjectXenocide.Model.StaticData.AI;
 using ProjectXenocide.Utils;
 
 using Xenocide.Resources;
@@ -62,8 +63,14 @@ namespace ProjectXenocide.Model.Geoscape.AI
         {
             this.city = city;
 
-            // X-Corp have 12 hours to get on site
-            TimeSpan delay = new TimeSpan(12, 0, 0);
+            // X-Corp have [terrorSiteDuration] to get on site before the
+            // aliens are awarded points and the site self-destructs.
+            //
+            // ORIGINAL BEHAVIOR: 12 hours hardcoded.
+            // NEW: value loaded from ufobehavior.xml (Phase 9.4).
+            // Legacy design doc (UfoBehaviour.html:83) mentions 4-10 hours;
+            // we keep 12h for backward compat.
+            TimeSpan delay = Xenocide.StaticTables.UfoBehavior.TerrorSiteDuration;
             appointment = Xenocide.GameState.GeoData.GeoTime.MakeAppointment(delay, OnAppointment);
         }
 

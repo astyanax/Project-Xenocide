@@ -32,6 +32,7 @@ using System.Collections.ObjectModel;
 using System.Text;
 
 using ProjectXenocide.Model.StaticData;
+using ProjectXenocide.Model.StaticData.AI;
 using ProjectXenocide.Model.StaticData.Battlescape;
 using ProjectXenocide.Model.StaticData.Facilities;
 using ProjectXenocide.Model.StaticData.Items;
@@ -69,6 +70,10 @@ namespace ProjectXenocide.Model
             startSettings.Populate(DataDirectory + "startsettings.xml");
             researchGraph.Populate(DataDirectory + "research.xml");
             combatantFactory.Populate(DataDirectory + "combatant.xml");
+            // UFO behavior settings (timing constants + 8 mission plans)
+            // MUST be loaded BEFORE any InvasionTask is constructed, since
+            // TaskFactory delegates to this for launch sequences.
+            ufoBehavior.Populate(DataDirectory + "ufobehavior.xml");
 
             // additional validation checks
             researchGraph.Validate(xnetEntryList, facilityList, itemList);
@@ -118,6 +123,12 @@ namespace ProjectXenocide.Model
         public CombatantFactory CombatantFactory { get { return combatantFactory; } }
 
         /// <summary>
+        /// UFO behavior settings (timing constants + mission launch plans).
+        /// Source: xna/trunk/docs/UfoBehaviour.html
+        /// </summary>
+        public UfoBehaviorSettings UfoBehavior { get { return ufoBehavior; } }
+
+        /// <summary>
         /// The X-Net entries
         /// </summary>
         private XNetEntryCollection xnetEntryList;
@@ -154,6 +165,13 @@ namespace ProjectXenocide.Model
 
         /// <summary>Builds combatants</summary>
         private CombatantFactory combatantFactory = new CombatantFactory();
+
+        /// <summary>
+        /// UFO behavior settings (timing constants + mission launch plans).
+        /// Pre-allocated in constructor so that any code that calls
+        /// Xenocide.StaticTables.UfoBehavior during static init can do so.
+        /// </summary>
+        private UfoBehaviorSettings ufoBehavior = new UfoBehaviorSettings();
     }
 }
 

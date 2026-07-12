@@ -81,7 +81,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <returns>true if other craft is showing</returns>
         public override bool IsOnRadar(GeoPosition otherPosition)
         {
-            return !InBase && Position.IsWithin(otherPosition, radarRange);
+            return !InBase && Position.IsWithin(otherPosition, RadarRange);
         }
 
         /// <summary>
@@ -269,7 +269,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         {
             foreach (AlienSite site in Xenocide.GameState.GeoData.Overmind.Sites)
             {
-                if (!site.IsKnownToXCorp && Position.IsWithin(site.Position, radarRange))
+                if (!site.IsKnownToXCorp && Position.IsWithin(site.Position, RadarRange))
                 {
                     site.IsKnownToXCorp = true;
                     MessageBoxGeoEvent.Queue(Strings.MSGBOX_ALIEN_ACTIVITY_DISCOVERED, site.Name);
@@ -486,9 +486,18 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         private bool outpostOutOfFuel;
 
         /// <summary>
-        /// Range of craft's radar  (all craft have the same range, 700 nautical miles)
+        /// Range of craft's radar (all craft have the same range).
+        ///
+        /// ORIGINAL BEHAVIOR: 700 nautical miles hardcoded.
+        /// NEW: value loaded from ufobehavior.xml (Phase 9.4).
+        /// The original X-COM (UFO: Enemy Unknown) had per-craft radar
+        /// ranges; we keep the simplification that all craft share a
+        /// single range.
         /// </summary>
-        private static readonly float radarRange = (float)GeoPosition.KnotsToRadians(700);
+        private static float RadarRange
+        {
+            get { return Xenocide.StaticTables.UfoBehavior.AircraftRadarRange; }
+        }
 
         /// <summary>
         /// List of soldiers assigned to this aircraft and their respective position
