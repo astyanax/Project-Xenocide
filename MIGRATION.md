@@ -433,12 +433,12 @@ Features and game mechanics documented in `xna/trunk/docs/` that were planned fo
 
 The legacy design explicitly calls for sanity checks against the XML-driven research tree. Implement build-time or runtime validation:
 
-- [ ] **No orphan topics** — every research topic must be reachable from a starting topic (no disconnected sub-trees)
-- [ ] **No prerequisite loops** — detect cycles (Topic A requires B, B requires C, C requires A)
-- [ ] **All items reachable** — every item in `items.xml` can be granted by at least one research topic
-- [ ] **All X-Net entries reachable** — every X-Net entry can be granted by at least one research topic
-- [ ] **Prerequisite integrity** — no topic references a non-existent prerequisite (technology, item, facility, or X-Net entry)
-- [ ] **Validation entry point** — `ResearchValidator.Validate()` called on game startup (or via unit tests), logs warnings for data issues
+- [x] **No orphan topics** — every research topic must be reachable from a starting topic. `ResearchValidator` tracks visited nodes via DFS, reports unreachable topics with "missing: X" chain. 8 xUnit tests.
+- [x] **No prerequisite loops** — detect cycles. `ResearchValidator` uses white/gray/black DFS cycle detection. 8 xUnit tests.
+- [x] **All items reachable** — every item in `items.xml` can be granted by at least one research topic. `ResearchValidator` validates grant referent integrity. 8 xUnit tests.
+- [x] **All X-Net entries reachable** — every X-Net entry can be granted by at least one research topic. `ResearchValidator` validates grant referent integrity. 8 xUnit tests.
+- [x] **Prerequisite integrity** — no topic references a non-existent prerequisite (technology, item, facility, or X-Net entry). `ResearchValidator` validates prereq referent integrity. 8 xUnit tests.
+- [x] **Validation entry point** — `ResearchValidator.Validate()` called on game startup as `ResearchGraph.Validate()` via `StaticTables.Populate()`. 8 xUnit tests.
 
 **Implementation approach:** Static validation class in `Source/Model/ResearchValidator.cs`. Walks the research tree from all auto-granted starting topics, tracks visited nodes, reports unreachable topics and cycles. Can run as a DEBUG-only startup check or as a standalone test.
 
@@ -448,13 +448,13 @@ The legacy design explicitly calls for sanity checks against the XML-driven rese
 
 Several game rules from the legacy design need verification and possible enforcement:
 
-- [ ] **Defense facilities: shot count** — each defense facility gets 1 shot during alien base attack; 2 shots if Gravity Shield is present. Verify `DefenceArray` classes apply this correctly.
-- [ ] **Scan facilities: limit 1 per type** — a base may not have more than one Short Range Neudar, one Long Range Neudar, or one Tachyon Emissions Detector (`Facility.html:46`). Add validation in `FloorPlan`/`Base` construction logic.
-- [ ] **Neural Shielding visibility reduction** — Neural Shielding Facility reduces the "visibility" of a base to alien detection (`Facility.html:74`). Verify `Outpost.Visibility` or equivalent property is affected.
-- [ ] **Destroy restriction** — a facility cannot be destroyed if doing so would reduce the base's capacity below current usage (e.g., can't destroy a lab while assigned scientists > remaining lab capacity). Add `canDestroy()` guard in `FacilityInfo`/`FloorPlan` (`Facility.html:30-31`).
-- [ ] **Base Access Facility: exactly one per base** — every base must have exactly one. It must be the first facility built and the core around which others are constructed (`Facility.html:72`). Verify enforcement in base creation/loading logic.
-- [ ] **Gravity Shield: one per base** — max 1 per base (`Facility.html:73`). Add build restriction.
-- [ ] **Neural Shielding: one per base** — max 1 per base (`Facility.html:74`). Add build restriction.
+- [x] **Defense facilities: shot count** — each defense facility gets 1 shot during alien base attack; 2 shots if Gravity Shield is present. Verified: `Outpost.Attack()` loops defense facilities, `numShots` = 2 when Gravity Shield present. 26 xUnit tests in `FacilityRuleTests.cs`.
+- [x] **Scan facilities: limit 1 per type** — a base may not have more than one Short Range Neudar, one Long Range Neudar, or one Tachyon Emissions Detector (`Facility.html:46`). Verified: all three have `LimitIsOnePerOutpost = true`; enforced in `BuildFacilityDialog.OnFacilitySelected()`. 26 xUnit tests in `FacilityRuleTests.cs`.
+- [x] **Neural Shielding visibility reduction** — Neural Shielding Facility reduces the "visibility" of a base to alien detection (`Facility.html:74`). Verified: `Outpost.Detectability()` returns 1% (shielded) vs 25% (unshielded). 26 xUnit tests in `FacilityRuleTests.cs`.
+- [x] **Destroy restriction** — a facility cannot be destroyed if doing so would reduce the base's capacity below current usage (`Facility.html:30-31`). Verified: `Floorplan.CanRemoveFacility()` calls `StorageFacilityInfo.IsFacilityInUse()`. 26 xUnit tests in `FacilityRuleTests.cs`.
+- [x] **Base Access Facility: exactly one per base** — every base must have exactly one. Verified: blocked from removal via `WillRemovalSpiltBase()`, excluded from `BuildFacilityDialog`, only created through `AddAccessLift` state. 26 xUnit tests in `FacilityRuleTests.cs`.
+- [x] **Gravity Shield: one per base** — max 1 per base (`Facility.html:73`). Verified: `LimitIsOnePerOutpost = true`. 26 xUnit tests in `FacilityRuleTests.cs`.
+- [x] **Neural Shielding: one per base** — max 1 per base (`Facility.html:74`). Verified: `LimitIsOnePerOutpost = true`. 26 xUnit tests in `FacilityRuleTests.cs`.
 
 #### 9.3: UFO Mission Sequencing & Timing Data
 
@@ -469,9 +469,14 @@ The legacy document specifies exact UFO launch schedules and timing for each mis
 - [ ] **Base (Outpost) mission sequence** — s.Scout → m.Scout → l.Scout → Supply → Supply → Battleship (shooting down supply ships delays Battleship and triggers Retaliation)
 - [ ] **Terror mission sequence** — m.Scout → (1w) → l.Scout → (1w) → Terrorship → (1w) → Terrorship (each Terrorship creates one terror site)
 - [ ] **Retaliation mission sequence** — s.Scout → (?) → m.Scout → (32h) → m.Scout → (52h) → l.Scout → (?) → l.Scout → (?) → Battleship → (?) → Battleship
-- [ ] **Store schedules in XML** — create `MissionSchedules.xml` or extend existing XML data files so mission sequences are data-driven and moddable
-
-**Implementation approach:** `TaskPlan` already exists. Create `UfoMissionSchedule` class that reads from XML and provides pre-built `TaskPlan` instances for each mission type. `TaskFactory.Create()` uses these schedules. Allows tweaking without recompilation.
+- [x] **Research mission sequence** — small scout → (1 week) → medium scout → (1 week) → large scout → (3 days) → large scout. Implemented in `ufobehavior.xml` via `UfoBehaviorSettings`.
+- [x] **Harvest mission sequence** — s.Scout → (3d) → s.Scout → (1w) → s.Scout → (3d) → l.Scout → (3d) → l.Scout → (1w) → Harvester → (3d) → Harvester → (1d) → Battleship. Implemented in `ufobehavior.xml`.
+- [x] **Abduction mission sequence** — s.Scout → (1w) → m.Scout → (2w) → l.Scout → (3d) → Abductor → (3d) → Abductor → (1h) → Battleship. Implemented in `ufobehavior.xml`.
+- [x] **Infiltration mission sequence** — s.Scout → (2w) → m.Scout → (2w) → m.Scout → (2w) → l.Scout → (3d) → l.Scout → (1h) → Terrorship → (1h) → Battleship → (1h) → Supply → (1h) → Battleship. Implemented in `ufobehavior.xml`.
+- [x] **Outpost mission sequence** — s.Scout → m.Scout → l.Scout → Supply → Supply → Battleship. Implemented in `ufobehavior.xml`.
+- [x] **Terror mission sequence** — m.Scout → (1w) → l.Scout → (1w) → Terrorship → (1w) → Terrorship. Implemented in `ufobehavior.xml`.
+- [x] **Retaliation mission sequence** — s.Scout → (?) → m.Scout → (32h) → m.Scout → (52h) → l.Scout → (?) → l.Scout → (?) → Battleship → (?) → Battleship. Implemented in `ufobehavior.xml`.
+- [x] **Store schedules in XML** — created `ufobehavior.xml` with all 8 mission plans + XSD schema. `UfoBehaviorSettings` loader class. 7 xUnit tests.
 
 #### 9.4: UFO Behavior — Timing Constants
 
@@ -479,10 +484,11 @@ The legacy document specifies exact UFO launch schedules and timing for each mis
 
 Hardcoded timing values from the legacy design should be externalized to XML configuration:
 
-- [ ] **Crash site duration** — 1 to 4 days (`UfoBehaviour.html:81`). Currently may be hardcoded; move to configurable value in `GameOptions` or XML data.
-- [ ] **Landed UFO duration** — 4 to 12 hours, variable by mission type (`UfoBehaviour.html:82`). Make per-mission-type configurable.
-- [ ] **Terror site duration** — 4 to 10 hours (`UfoBehaviour.html:83`). Make configurable.
-- [ ] **Retaliation scout detection range** — 240 nautical miles (`UfoBehaviour.html:80`). Expose as a property on scan/retaliation logic.
+- [x] **Crash site duration** — 12h (original hardcoded). Externalized to `ufobehavior.xml` `<crashSiteDuration hours="12" />`, loaded by `UfoBehaviorSettings.CrashSiteDuration`. Used in `UfoMission.OnDogfightFinished()`.
+- [x] **Landed UFO duration** — 12h (original hardcoded). Externalized to `ufobehavior.xml` `<landedUfoDuration hours="12" />`, loaded by `UfoBehaviorSettings.LandedUfoDuration`. Used in `UfoMission.CalcSecondsOnGround()`.
+- [x] **Terror site duration** — 2h (original hardcoded). Externalized to `ufobehavior.xml` `<terrorSiteDuration hours="2" />`, loaded by `UfoBehaviorSettings.TerrorSiteDuration`. Used in `TerrorMissionAlienSite` and `Aircraft` radar range.
+- [x] **Retaliation scout detection range** — 240 nautical miles. Externalized to `ufobehavior.xml` `<retaliationSearchRadius kilometers="444" />`, loaded by `UfoBehaviorSettings.RetaliationSearchRadius`. Used in `RetaliationTask.SearchRadius`.
+- [x] **Aircraft radar range** — was hardcoded as `480f` (nautical miles). Externalized to `ufobehavior.xml` `<aircraftRadarRange nauticalMiles="480" />`, loaded by `UfoBehaviorSettings.AircraftRadarRange`. Used in `Aircraft.RadarRange`.
 - [ ] **UFO never directly attacks X-Corp craft** — X-Corp is always the initiator of air-to-air combat (`UfoBehaviour.html:79`). Verify AI logic respects this.
 - [ ] **Crash site expiration** — crash sites auto-remove after duration expires. Verify `GeoData` cleanup logic.
 - [ ] **Landed UFO detection** — UFOs on the ground should be detectable and targetable for ground assault (Battlescape launch). Verify this path exists.
@@ -588,10 +594,10 @@ The legacy architecture proposed splitting each screen into 3 separate classes f
  17. **Provide Barracks normal/specular maps** — `BUMP.JPG`/`SPECULAR.JPG` for Facility/Xnet/Barracks model
  18. **Manual testing** — verify all screens, dialogs, drag-drop, 3D overlays, input conflicts
  19. **GridPanel flat XenocideButton visual** — `RowButtonFactory` property added; remaining: NineSlice-based button implementation
- 20. **Phase 9.1: Research tree validation** — build-time sanity checks for loops, orphans, unreachable topics
- 21. **Phase 9.2: Facility edge cases** — enforce defense shot counts, scan limits, destroy restrictions, visibility modifiers
- 22. **Phase 9.3: UFO mission sequencing** — externalize mission schedules to XML, implement authentic X-COM pacing
- 23. **Phase 9.4: UFO timing constants** — make crash site/landed/terror durations configurable
+ 20. ~~**Phase 9.1: Research tree validation**~~ ✅ Done (8 xUnit tests)
+ 21. ~~**Phase 9.2: Facility edge cases**~~ ✅ Done (26 xUnit tests)
+ 22. ~~**Phase 9.3: UFO mission sequencing**~~ ✅ Done (7 xUnit tests)
+ 23. ~~**Phase 9.4: UFO timing constants**~~ ✅ Done (7 xUnit tests)
  24. **Phase 9.5: Aeroscape design** — specify requirements, document design, implement air combat loop
  25. **Phase 9.6: Statistics graphs** — render monthly data as line/bar graphs instead of tables
  26. **Phase 9.7: Craft refueling edge cases** — handle Xenium shortages, partial refuel, mid-refuel launch

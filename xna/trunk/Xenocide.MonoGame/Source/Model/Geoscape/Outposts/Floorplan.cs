@@ -239,7 +239,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         {
             return
                 (0.0f <= facility.X) &&
-                (0.0f <= facility.X) &&
+                (0.0f <= facility.Y) &&
                 ((facility.X + facility.FacilityInfo.XSize) <= CellsWide) &&
                 ((facility.Y + facility.FacilityInfo.YSize) <= CellsHigh);
         }

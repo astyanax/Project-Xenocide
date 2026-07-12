@@ -24,6 +24,8 @@
 
   <ItemGroup>
     <Content Include="..\..\Xenocide.MonoGame\Content\**\*.xnb" CopyToOutputDirectory="PreserveNewest" Link="Content\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Content Include="..\..\Xenocide.MonoGame\Content\Schema\**\*.xml" CopyToOutputDirectory="PreserveNewest" Link="Content\Schema\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Content Include="..\..\Xenocide.MonoGame\Content\Schema\**\*.xsd" CopyToOutputDirectory="PreserveNewest" Link="Content\Schema\%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 
 </Project>

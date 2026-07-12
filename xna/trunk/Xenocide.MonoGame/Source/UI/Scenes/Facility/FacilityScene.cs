@@ -198,7 +198,26 @@ namespace ProjectXenocide.UI.Scenes.Facility
                 float xdisp = handle.X + ((info.XSize - Floorplan.CellsWide) / 2.0f);
                 float zdisp = handle.Y + ((info.YSize - Floorplan.CellsHigh) / 2.0f);
                 Matrix displacement = Matrix.CreateTranslation(xdisp, 0.0f, zdisp);
-                models.Draw(basicEffect, info.Id, displacement);
+
+                if (handle == newFacility)
+                {
+                    bool valid;
+                    if (floorplan.IsBaseEmpty())
+                    {
+                        valid = true;
+                    }
+                    else
+                    {
+                        valid = floorplan.IsPositionLegal(handle) == XenoError.None;
+                    }
+
+                    models.Draw(basicEffect, info.Id, displacement,
+                        valid ? Vector3.UnitY : Vector3.UnitX, 0.5f);
+                }
+                else
+                {
+                    models.Draw(basicEffect, info.Id, displacement);
+                }
             }
         }
 

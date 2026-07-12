@@ -68,7 +68,8 @@ namespace ProjectXenocide.UI.Scenes.Facility
         /// <param name="basicEffect">Holds assorted rendering information</param>
         /// <param name="facilityId">Name of facility type to draw</param>
         /// <param name="displacement">Position of the facility</param>
-        public void Draw(BasicEffect basicEffect, String facilityId, Matrix displacement)
+        public void Draw(BasicEffect basicEffect, String facilityId, Matrix displacement,
+            Vector3? diffuseColor = null, float alpha = 1.0f)
         {
             // get the model for this type of facility
             Microsoft.Xna.Framework.Graphics.Model model = models[facilityId];
@@ -88,6 +89,8 @@ namespace ProjectXenocide.UI.Scenes.Facility
                     effect.World = transforms[mesh.ParentBone.Index] * displacement;
                     effect.View = basicEffect.View;
                     effect.Projection = basicEffect.Projection;
+                    effect.DiffuseColor = diffuseColor ?? Vector3.One;
+                    effect.Alpha = alpha;
                 }
                 //Draw the mesh, will use the effects set above.
                 mesh.Draw();
