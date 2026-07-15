@@ -124,7 +124,7 @@ namespace ProjectXenocide.Model
 
         /// <summary>
         /// UFO behavior settings (timing constants + mission launch plans).
-        /// Source: xna/trunk/docs/UfoBehaviour.html
+        /// Source: docs/legacy/design/UfoBehaviour.html
         /// </summary>
         public UfoBehaviorSettings UfoBehavior { get { return ufoBehavior; } }
 

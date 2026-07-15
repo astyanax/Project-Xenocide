@@ -44,7 +44,7 @@ namespace ProjectXenocide.Model.StaticData.AI
     ///  - Mission launch plans (Phase 9.3): the 8 task plan sequences that
     ///    used to be hardcoded in TaskFactory.ConstructPlans().
     ///
-    /// Source: xna/trunk/docs/UfoBehaviour.html
+    /// Source: docs/legacy/design/UfoBehaviour.html
     ///
     /// Design notes:
     ///  - This is a singleton-style static-loaded service (lives on

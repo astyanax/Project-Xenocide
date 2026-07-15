@@ -6,7 +6,7 @@
   Values are loaded by ProjectXenocide.Model.StaticData.AI.UfoBehaviorSettings.
 
   Source documents:
-  - xna/trunk/docs/UfoBehaviour.html (original X-COM mission sequencing)
+  - docs/legacy/design/UfoBehaviour.html (original X-COM mission sequencing)
   - Original hardcoded values in TaskFactory.ConstructPlans() and various
     mission/site classes (UfoMission, TerrorMissionAlienSite, etc.)
 
@@ -21,7 +21,7 @@
 
   <!-- ============================================================== -->
   <!-- Timing Constants (Phase 9.4)                                    -->
-  <!-- Source: xna/trunk/docs/UfoBehaviour.html:78-84                   -->
+  <!-- Source: docs/legacy/design/UfoBehaviour.html:78-84                   -->
   <!-- ============================================================== -->
   <timingConstants>
     <!--
@@ -72,7 +72,7 @@
 
   <!-- ============================================================== -->
   <!-- Mission Launch Plans (Phase 9.3)                                -->
-  <!-- Source: xna/trunk/docs/UfoBehaviour.html:87-149                  -->
+  <!-- Source: docs/legacy/design/UfoBehaviour.html:87-149                  -->
   <!-- Each mission is a sequence of UFO launches, with random delay    -->
   <!-- (uniform within [earliest, latest] hours) between launches.      -->
   <!--                                                                  -->

@@ -106,7 +106,7 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] **Install .NET SDK 9.0** — ✅ Done (detected on system)
 - [x] Install MonoGame templates: `dotnet new install MonoGame.Templates.CSharp` — ✅ Done
 - [x] Install MGCB tools: `dotnet tool install -g dotnet-mgcb dotnet-mgcb-editor` — ✅ Done
-- [x] Create new MonoGame DesktopGL project: `dotnet new mgdesktopgl -o xna/trunk/Xenocide.MonoGame` — ✅ Done
+- [x] Create new MonoGame DesktopGL project: `dotnet new mgdesktopgl -o src/Xenocide.MonoGame` — ✅ Done
 - [x] Add NuGet packages: `MonoGame.Framework.DesktopGL`, `MonoGame.Content.Builder.Task` — ✅ Done
 - [x] Set up MGCB content project (`.mgcb`) with all asset references — ✅ Models, shaders, textures, fonts, audio registered
 - [x] Replace NUnit with xUnit.net in test project — ✅ Already done (xunit 2.9.2, 5 tests passing)
@@ -425,11 +425,11 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 
 ### Phase 9: Legacy Design Features
 
-Features and game mechanics documented in `xna/trunk/docs/` that were planned for the original XNA project but never fully implemented. Source: review of all 9 legacy design documents (CodebaseTour, OverviewOfAIandCraft, GettingModalDialogsToWork, UfoBehaviour, research, Facility, Roadmap, SchedulerAndAppointments, aa-readme).
+Features and game mechanics documented in `docs/legacy/design/` that were planned for the original XNA project but never fully implemented. Source: review of all 9 legacy design documents (CodebaseTour, OverviewOfAIandCraft, GettingModalDialogsToWork, UfoBehaviour, research, Facility, Roadmap, SchedulerAndAppointments, aa-readme).
 
 #### 9.1: Research Tree Validation Tooling
 
-**Source:** `xna/trunk/docs/research.html:42-46`
+**Source:** `docs/legacy/design/research.html:42-46`
 
 The legacy design explicitly calls for sanity checks against the XML-driven research tree. Implement build-time or runtime validation:
 
@@ -444,7 +444,7 @@ The legacy design explicitly calls for sanity checks against the XML-driven rese
 
 #### 9.2: Facility Mechanics — Edge Cases & Rules Enforcement
 
-**Source:** `xna/trunk/docs/Facility.html`
+**Source:** `docs/legacy/design/Facility.html`
 
 Several game rules from the legacy design need verification and possible enforcement:
 
@@ -458,7 +458,7 @@ Several game rules from the legacy design need verification and possible enforce
 
 #### 9.3: UFO Mission Sequencing & Timing Data
 
-**Source:** `xna/trunk/docs/UfoBehaviour.html:87-149`
+**Source:** `docs/legacy/design/UfoBehaviour.html:87-149`
 
 The legacy document specifies exact UFO launch schedules and timing for each mission type. Externalize this data and use it to refine the `TaskFactory`/`TaskPlan` system:
 
@@ -480,7 +480,7 @@ The legacy document specifies exact UFO launch schedules and timing for each mis
 
 #### 9.4: UFO Behavior — Timing Constants
 
-**Source:** `xna/trunk/docs/UfoBehaviour.html:78-84`
+**Source:** `docs/legacy/design/UfoBehaviour.html:78-84`
 
 Hardcoded timing values from the legacy design should be externalized to XML configuration:
 
@@ -495,7 +495,7 @@ Hardcoded timing values from the legacy design should be externalized to XML con
 
 #### 9.5: Aeroscape — Design & Implementation
 
-**Source:** `xna/trunk/docs/Roadmap.html — Iteration 11`
+**Source:** `docs/legacy/design/Roadmap.html — Iteration 11`
 
 Aeroscape (air combat between interceptors and UFOs) is listed as "partially implemented" in the README. The legacy roadmap (`Roadmap.html:261-265`) specifies only two planning steps (never executed):
 
@@ -506,7 +506,7 @@ Aeroscape (air combat between interceptors and UFOs) is listed as "partially imp
 
 #### 9.6: Statistics Graphs (Iteration 9, Phase 3)
 
-**Source:** `xna/trunk/docs/Roadmap.html:252-253`
+**Source:** `docs/legacy/design/Roadmap.html:252-253`
 
 The Statistics screen currently shows data in tables/lists. The legacy plan includes a third phase:
 
@@ -521,7 +521,7 @@ The Statistics screen currently shows data in tables/lists. The legacy plan incl
 
 #### 9.7: Craft Refueling — Edge Cases
 
-**Source:** `xna/trunk/docs/SchedulerAndAppointments.txt:10-15`
+**Source:** `docs/legacy/design/SchedulerAndAppointments.txt:10-15`
 
 The legacy design explicitly decided NOT to use the Scheduler/Appointment system for craft refueling due to several edge cases. Verify the current implementation handles these:
 
@@ -532,7 +532,7 @@ The legacy design explicitly decided NOT to use the Scheduler/Appointment system
 
 #### 9.8: Screen Partitioning Pattern
 
-**Source:** `xna/trunk/docs/CodebaseTour.html:63-73`
+**Source:** `docs/legacy/design/CodebaseTour.html:63-73`
 
 The legacy architecture proposed splitting each screen into 3 separate classes for portability. While CeGui# has been fully replaced by Gum, this pattern has ongoing value:
 

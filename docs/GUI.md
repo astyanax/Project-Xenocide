@@ -116,7 +116,7 @@ Features:
 ### Step 1: Add the NuGet Package
 
 ```bash
-dotnet add xna/trunk/Xenocide.MonoGame/Xenocide.MonoGame.csproj package Gum.MonoGame
+dotnet add src/Xenocide.MonoGame/Xenocide.MonoGame.csproj package Gum.MonoGame
 ```
 
 This installs `Gum.MonoGame` and its dependency `GumCore`.
@@ -259,16 +259,19 @@ debugPanel.SetBinding(nameof(StackPanel.Visible), nameof(MainMenuViewModel.IsDeb
 
 ---
 
-## Integration Plan
+## Migration Status (Completed)
 
-### Screen Migration Pattern
+All 27 screens and CeGui# stubs have been converted to Gum. See `MIGRATION.md` items 2-3 and 10-14 for details.
 
-Each existing screen needs to be converted from CeGUI# to Gum:
+### Architecture (GumScreen.Show pipeline)
 
-1. **Create a ViewModel** class for screen state (e.g., `StartScreenViewModel`)
-2. **Replace** `CreateCeguiWidgets()` with a Gum control tree
-3. **Replace** CeGUI# event handlers (`Clicked +=`) with Gum Click events or data binding
-4. **Remove** CeGUI# root widget references; Gum manages its own tree
+```
+GumScreen.Show()
+  ├── TryLoadScreenFromGumx(CeguiId)
+  │     └── gumProject.Screens.Find(s => s.Name == screenName)?.ToGraphicalUiElement()
+  ├── GumRoot ≠ null → AddToRoot(), CreateGumControls() wires named controls
+  └── GumRoot == null → throws (EnableProgrammaticFallback defaults to false)
+```
 
 ### CeGUI# to Gum Mapping
 
@@ -287,20 +290,45 @@ Each existing screen needs to be converted from CeGUI# to Gum:
 | `Menubar`/`PopupMenu`/`MenuItem` | `Menu` + `MenuItem` | Same concepts |
 | `Tooltip` | Custom (use `Window` or `Label`) | No built-in tooltip in Gum |
 
-### Screen Conversion Order (Recommended)
+### CeguiId → .gumx Name Mapping
 
-1. **StartScreen** — simplest; 6 buttons, 1 label → validate integration works end-to-end
-2. **LoadSaveGameScreen** — adds list/grid and text input
-3. **CreditsScreen** — static text display
-4. **MonthlyReportScreen** — formatted text + buttons
-5. **MessageBoxDialog** / **YesNoDialog** — dialog pattern
-6. **OptionsDialog** — sliders, checkboxes, combo boxes
-7. **ResearchScreen** — multi-column list + tree view
-8. **BasesScreen** — tabs, lists, grids
-9. **EquipSoldierScreen** — drag-drop (most complex)
-10. **GeoscapeScreen** — 3D scene integration (lowest UI complexity)
-11. **BattlescapeScreen** — 3D overlay UI
-12. Remaining management screens
+| CeguiId | .gumx Screen Name |
+|---------|-------------------|
+| `StartScreen` | `StartScreen` |
+| `AeroscapeScreen` | `AeroscapeScreen` |
+| `BattlescapeScreen` | `BattlescapeScreen` |
+| `GeoscapeScreen` | `GeoscapeScreen` |
+| `XNetScreen` | `XNetScreen` |
+| `BasesScreen` | `BasesScreen` |
+| All others | Must match CeguiId — all 23 match |
+
+### Per-Screen Positioning Fixes
+
+Programmatic controls in the GumX path had no X/Y positioning, causing overlap at (0,0). Fixed in:
+
+| Screen | Controls Positioned |
+|--------|-------------------|
+| ManufactureScreen | availableText, projectGrid, requirementsGrid |
+| SellScreen | fundsText, totalValueText, grid |
+| PurchaseScreen | fundsText, totalCostText, grid |
+| StoresScreen | grid |
+| MakeTransferScreen | sourceText, totalCostText, outpostsListComboBox, grid |
+| ShowTransfersScreen | grid |
+| MonthlyCostsScreen | grid |
+| BaseInfoScreen | outpostsListComboBox, nameEditBox, staffGrid, facilitiesGrid |
+| EquipCraftScreen | baseNameText, pod1Text, pod2Text, craftGrid, weaponsGrid |
+| AssignToCraftScreen | baseNameText, craftGrid, soldierGrid, xcapGrid |
+| StatisticsScreen | seriesList |
+| BattlescapeReportScreen | recoveredLabelText, scoreGrid, recoveredGrid |
+| SoldiersListScreen | psiTrainButton, nameEditBox, attributesGrid, soldiersListGrid |
+| EquipSoldierScreen | ammoText, 8 static labels |
+| LoadSaveGameScreen | filenameEditBox, savesgrid |
+
+### Remaining Gum Backlog
+
+- Dialog `.gusx` conversion — 9 dialogs currently programmatic (4 done: MessageBox, YesNo, Options, GumOptions)
+- Software cursor polish — context-sensitive cursors (hand/arrow per element), HW/SW toggle via settings
+- GridPanel XenocideButton styling — `RowButtonFactory` property added to GridPanel.cs; remaining: implement flat XenocideButton visual (NineSlice-based, avoiding hierarchical GUE limitation)
 
 ---
 

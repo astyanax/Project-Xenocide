@@ -15,7 +15,7 @@
   <!--
     Timing constants that govern UFO behavior on the Geoscape.
     Each constant has a fixed value in the original units.
-    Source: xna/trunk/docs/UfoBehaviour.html
+    Source: docs/legacy/design/UfoBehaviour.html
   -->
   <xs:complexType name="timingConstantsType">
     <xs:annotation>

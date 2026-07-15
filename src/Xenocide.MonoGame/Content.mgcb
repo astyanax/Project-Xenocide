@@ -197,20 +197,8 @@
 /processor:ModelProcessor
 /build:Content/Models/XCorps.X
 
-#begin Content/Models/Characters/XCorp/FemaleShirt.FBX
-/importer:FbxImporter
-/processor:ModelProcessor
-/build:Content/Models/Characters/XCorp/FemaleShirt.FBX
 
-#begin Content/Models/Characters/Alien/Viper.FBX
-/importer:FbxImporter
-/processor:ModelProcessor
-/build:Content/Models/Characters/Alien/Viper.FBX
 
-#begin Content/Models/Facility/Xnet/Barracks.FBX
-/importer:FbxImporter
-/processor:ModelProcessor
-/build:Content/Models/Facility/Xnet/Barracks.FBX
 
 #----------------------------- Models: Facilities ------------------------------#
 

@@ -62,7 +62,7 @@
 ### Build & Run
 
 ```powershell
-dotnet run --project xna/trunk/Xenocide.MonoGame
+dotnet run --project src/Xenocide.MonoGame
 ```
 
 The MGCB content pipeline compiles .fbx models, .fx shaders, textures, spritefonts, and .ogg audio into .xnb format at build time.
@@ -104,7 +104,7 @@ LICENSE                  — MIT License
 
 ## Legacy Build (XNA 3.0)
 
-The original XNA 3.0 build is preserved for reference but requires deprecated tooling (Visual Studio 2008, XNA Game Studio 3.0, .NET Framework 2.0). Open `xna/trunk/Xenocide.sln` to build. Modern systems generally require a VM or compatibility environment.
+The original XNA 3.0 build required deprecated tooling (Visual Studio 2008, XNA Game Studio 3.0, .NET Framework 2.0). It has been superseded by the MonoGame port.
 
 ## Media
 

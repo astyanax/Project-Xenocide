@@ -34,10 +34,6 @@ _ReSharper*/
 Thumbs.db
 ehthumbs.db
 
-# Installer build temp
-xna/Installers/Current Installer/Installers/
-xna/Installers/Old Inno Installer/Installers/
-
 # Python
 *.pyc
 __pycache__/

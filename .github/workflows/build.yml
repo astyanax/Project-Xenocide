@@ -7,8 +7,8 @@ on:
     branches: [main, master, trunk]
 
 env:
-  SOLUTION: xna/trunk/Xenocide.MonoGame.sln
-  PROJECT: xna/trunk/Xenocide.MonoGame/Xenocide.MonoGame.csproj
+  SOLUTION: Xenocide.sln
+  PROJECT: src/Xenocide.MonoGame/Xenocide.MonoGame.csproj
   DOTNET_VERSION: '9.0.x'
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
@@ -79,7 +79,7 @@ jobs:
     - name: Skip broken FBX models (absolute paths)
       shell: pwsh
       run: |
-        $mgcb = 'xna/trunk/Xenocide.MonoGame/Content.mgcb'
+        $mgcb = 'src/Xenocide.MonoGame/Content.mgcb'
         $content = [IO.File]::ReadAllText($mgcb)
         $content = $content -replace '(?ms)^#begin Content/Models/Characters/Alien/Viper\.FBX.*?(?=\n#begin|\n$)', ''
         $content = $content -replace '(?ms)^#begin Content/Models/Characters/XCorp/FemaleShirt\.FBX.*?(?=\n#begin|\n$)', ''
@@ -89,8 +89,8 @@ jobs:
     - name: Skip shader compilation on Linux (Wine setup incomplete)
       if: runner.os == 'Linux'
       run: |
-        sed -i '/^#begin Content\/Shaders\/GeoscapeShader\.fx/,/^$/d' xna/trunk/Xenocide.MonoGame/Content.mgcb
-        sed -i '/^#begin Content\/Shaders\/skybox\.fx/,/^$/d' xna/trunk/Xenocide.MonoGame/Content.mgcb
+        sed -i '/^#begin Content\/Shaders\/GeoscapeShader\.fx/,/^$/d' src/Xenocide.MonoGame/Content.mgcb
+        sed -i '/^#begin Content\/Shaders\/skybox\.fx/,/^$/d' src/Xenocide.MonoGame/Content.mgcb
 
     - name: Restore
       run: dotnet restore ${{ env.SOLUTION }}
@@ -137,7 +137,7 @@ jobs:
     - name: Skip broken FBX models (absolute paths)
       shell: pwsh
       run: |
-        $mgcb = 'xna/trunk/Xenocide.MonoGame/Content.mgcb'
+        $mgcb = 'src/Xenocide.MonoGame/Content.mgcb'
         $content = [IO.File]::ReadAllText($mgcb)
         $content = $content -replace '(?ms)^#begin Content/Models/Characters/Alien/Viper\.FBX.*?(?=\n#begin|\n$)', ''
         $content = $content -replace '(?ms)^#begin Content/Models/Characters/XCorp/FemaleShirt\.FBX.*?(?=\n#begin|\n$)', ''
@@ -147,8 +147,8 @@ jobs:
     - name: Skip shaders on Linux (no Wine)
       if: runner.os == 'Linux'
       run: |
-        sed -i '/^#begin Content\/Shaders\/GeoscapeShader\.fx/,/^$/d' xna/trunk/Xenocide.MonoGame/Content.mgcb
-        sed -i '/^#begin Content\/Shaders\/skybox\.fx/,/^$/d' xna/trunk/Xenocide.MonoGame/Content.mgcb
+        sed -i '/^#begin Content\/Shaders\/GeoscapeShader\.fx/,/^$/d' src/Xenocide.MonoGame/Content.mgcb
+        sed -i '/^#begin Content\/Shaders\/skybox\.fx/,/^$/d' src/Xenocide.MonoGame/Content.mgcb
 
     - name: Restore
       run: dotnet restore ${{ env.SOLUTION }}
