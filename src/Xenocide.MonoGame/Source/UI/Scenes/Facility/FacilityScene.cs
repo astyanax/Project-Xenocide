@@ -87,6 +87,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
                     grid.Dispose();
                     grid = null;
                 }
+                DisposeFloor();
             }
         }
 
@@ -104,6 +105,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
                 grid.LoadContent(device, new Grid(Floorplan.CellsWide, Floorplan.CellsHigh));
                 models.LoadContent(content);
                 buildTimes.LoadContent(content, device);
+                CreateFloor(device, content);
             }
         }
 
@@ -131,6 +133,9 @@ namespace ProjectXenocide.UI.Scenes.Facility
             device.RasterizerState = RasterizerState.CullCounterClockwise;
             device.DepthStencilState = DepthStencilState.Default;
             ;
+
+            // draw the underground floor plane (behind the grid lines)
+            DrawFloor(device);
 
             // draw the grid
             grid.ConfigureEffect(basicEffect);
@@ -347,6 +352,90 @@ namespace ProjectXenocide.UI.Scenes.Facility
         /// Quads to decorate facilities under construction with their build times
         /// </summary>
         private BuildTimes buildTimes;
+
+        #endregion
+
+        #region Underground floor plane
+
+        /// <summary>
+        /// Creates a textured quad representing the underground floor beneath the base grid.
+        /// The floor uses a tiled dirt/concrete texture loaded from the BaseDirtFloor asset
+        /// and sits just below y=0 so the grid lines remain visible on top.
+        /// </summary>
+        private void CreateFloor(GraphicsDevice device, ContentManager content)
+        {
+            floorTexture = content.Load<Texture2D>(@"Textures/UI/BaseDirtFloor");
+
+            // The floorplan is 6x6 cells, centered at origin.
+            // Grid spans from -3 to +3 on both X and Z.  We extend 0.5 beyond
+            // the outer grid lines so the floor fills the entire visible area.
+            float halfW = Floorplan.CellsWide * 0.5f + 0.5f;
+            float halfH = Floorplan.CellsHigh * 0.5f + 0.5f;
+            float y = -0.01f; // just below the grid lines
+
+            // Tile the texture ~3 times per cell so the pattern is finer and
+            // better proportioned to the facility model sizes on the grid.
+            float tileW = Floorplan.CellsWide * 3;
+            float tileH = Floorplan.CellsHigh * 3;
+
+            VertexPositionTexture[] verts = new VertexPositionTexture[4];
+            verts[0] = new VertexPositionTexture(new Vector3(-halfW, y, -halfH), new Vector2(0, 0));
+            verts[1] = new VertexPositionTexture(new Vector3(halfW, y, -halfH), new Vector2(tileW, 0));
+            verts[2] = new VertexPositionTexture(new Vector3(-halfW, y, halfH), new Vector2(0, tileH));
+            verts[3] = new VertexPositionTexture(new Vector3(halfW, y, halfH), new Vector2(tileW, tileH));
+
+            floorVertexBuffer = new VertexBuffer(device, VertexPositionTexture.VertexDeclaration, 4, BufferUsage.None);
+            floorVertexBuffer.SetData(verts);
+
+            floorIndexBuffer = new IndexBuffer(device, IndexElementSize.SixteenBits, 6, BufferUsage.None);
+            floorIndexBuffer.SetData(new short[] { 0, 1, 2, 1, 3, 2 });
+        }
+
+        /// <summary>
+        /// Draws the underground floor plane as a textured quad.
+        /// The effect is configured for unlit textured rendering so the
+        /// dirt/concrete pattern shows clearly behind the facility models.
+        /// </summary>
+        private void DrawFloor(GraphicsDevice device)
+        {
+            if (floorVertexBuffer == null || floorIndexBuffer == null)
+                return;
+
+            device.SetVertexBuffer(floorVertexBuffer);
+            device.Indices = floorIndexBuffer;
+
+            // Use wrap addressing so the 6x6 UV range tiles the texture across
+            // each grid cell rather than stretching or clamping at the edges.
+            device.SamplerStates[0] = SamplerState.LinearWrap;
+
+            basicEffect.Texture = floorTexture;
+            basicEffect.TextureEnabled = true;
+            basicEffect.LightingEnabled = false;
+            basicEffect.VertexColorEnabled = false;
+            basicEffect.World = Matrix.Identity;
+
+            foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 2);
+            }
+        }
+
+        /// <summary>
+        /// Releases GPU resources allocated for the floor plane.
+        /// </summary>
+        private void DisposeFloor()
+        {
+            floorVertexBuffer?.Dispose();
+            floorVertexBuffer = null;
+            floorIndexBuffer?.Dispose();
+            floorIndexBuffer = null;
+            floorTexture = null;
+        }
+
+        private VertexBuffer floorVertexBuffer;
+        private IndexBuffer floorIndexBuffer;
+        private Texture2D floorTexture;
 
         #endregion
 

@@ -54,6 +54,7 @@ namespace ProjectXenocide.Assets
         {
             [UIBackgroundId.StartScreen] = "Content/Textures/UI/StartScreenBackground.png",
             [UIBackgroundId.BasesScreen] = "Content/Textures/UI/BasesScreenBackground.png",
+            [UIBackgroundId.BaseDirtFloor] = "Content/Textures/UI/BaseDirtFloor.png",
             [UIBackgroundId.XnetScreen] = "Content/Textures/UI/XnetScreenBackground.png",
             [UIBackgroundId.GeoscapeScreen] = "Content/Textures/UI/GeoscapeScreenBackground.png",
         };

@@ -265,7 +265,9 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>
-        /// Render the 3D scene
+        /// Render the 3D scene.  If one or more dialogs are open, draws a
+        /// semi-transparent dark overlay over the full viewport so the scene
+        /// behind doesn't obscure dialog text or buttons.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         /// <param name="device">Device to use for render</param>
@@ -274,8 +276,42 @@ namespace ProjectXenocide.UI.Screens
             if (0 < screenStack.Count)
             {
                 screenStack.Peek().Draw(gameTime, device);
+
+                // When dialogs are active, dim the scene behind them so that
+                // text (error messages, confirm prompts) remains readable
+                // regardless of the 3D content drawn underneath.
+                if (showingDialogs.Count > 0)
+                {
+                    DrawDialogOverlay(device);
+                }
+
                 fpsCalcs();
             }
+        }
+
+        /// <summary>
+        /// Draws a full-screen dark semi-transparent quad that sits between the
+        /// 3D scene (drawn by the underlying screen) and the Gum-rendered dialogs
+        /// on top.  This ensures dialog text and buttons are always readable.
+        /// </summary>
+        private void DrawDialogOverlay(GraphicsDevice device)
+        {
+            if (_overlayTexture == null)
+            {
+                _overlayTexture = new Texture2D(device, 1, 1);
+                _overlayTexture.SetData(new[] { Color.White });
+            }
+
+            if (_overlayBatch == null)
+            {
+                _overlayBatch = new SpriteBatch(device);
+            }
+
+            _overlayBatch.Begin();
+            _overlayBatch.Draw(_overlayTexture,
+                new Rectangle(0, 0, device.Viewport.Width, device.Viewport.Height),
+                new Color(0, 0, 0, 180)); // semi-transparent black
+            _overlayBatch.End();
         }
 
         /// <summary>
@@ -382,6 +418,10 @@ namespace ProjectXenocide.UI.Screens
                     content.Dispose();
                     content = null;
                 }
+                _overlayTexture?.Dispose();
+                _overlayTexture = null;
+                _overlayBatch?.Dispose();
+                _overlayBatch = null;
             }
         }
 
@@ -423,6 +463,12 @@ namespace ProjectXenocide.UI.Screens
 
         /// <summary>Previous keyboard state for edge detection</summary>
         private KeyboardState _prevKeyState;
+
+        /// <summary>1x1 white texture used to draw the semi-transparent dialog overlay.</summary>
+        private Texture2D _overlayTexture;
+
+        /// <summary>SpriteBatch used to render the dialog overlay.</summary>
+        private SpriteBatch _overlayBatch;
 
         #endregion Fields
 

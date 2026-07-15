@@ -60,7 +60,9 @@ namespace ProjectXenocide.UI.Scenes.Facility
         /// <param name="indexes">order to draw lines</param>
         public override void Build(IList<VertexPositionColor> verts, IList<short> indexes)
         {
-            Color gridColor = Color.Red;
+            // Dark gray grid lines for a more subtle underground-base look.
+            // The grid delineates the 6x6 floorplan cells where facilities snap.
+            Color gridColor = Color.DarkGray;
 
             // limits of grid
             float maxX = (cellsWide / 2.0f);

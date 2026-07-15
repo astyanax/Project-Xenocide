@@ -33,6 +33,39 @@
     <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true">
       <Value xsi:type="xsd:int">2</Value>
     </Variable>
+    <Variable Type="int" Name="DialogBackground.Alpha" SetsValue="true">
+      <Value xsi:type="xsd:int">230</Value>
+    </Variable>
+    <Variable Type="int" Name="DialogBackground.Blue" SetsValue="true">
+      <Value xsi:type="xsd:int">18</Value>
+    </Variable>
+    <Variable Type="int" Name="DialogBackground.Green" SetsValue="true">
+      <Value xsi:type="xsd:int">14</Value>
+    </Variable>
+    <Variable Type="float" Name="DialogBackground.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="DialogBackground.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">2</Value>
+    </Variable>
+    <Variable Type="string" Name="DialogBackground.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">DialogPanel</Value>
+    </Variable>
+    <Variable Type="int" Name="DialogBackground.Red" SetsValue="true">
+      <Value xsi:type="xsd:int">15</Value>
+    </Variable>
+    <Variable Type="float" Name="DialogBackground.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="DialogBackground.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">2</Value>
+    </Variable>
+    <Variable Type="float" Name="DialogBackground.X" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="float" Name="DialogBackground.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
     <Variable Type="string" Name="ContentPanel.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">DialogPanel</Value>
     </Variable>
@@ -147,6 +180,7 @@
   </State>
   <Instance Name="ContainerInstance" BaseType="Container" />
   <Instance Name="DialogPanel" BaseType="Container" />
+  <Instance Name="DialogBackground" BaseType="ColoredRectangle" />
   <Instance Name="TitleBar" BaseType="Container" />
   <Instance Name="TitleLabel" BaseType="Text" />
   <Instance Name="CloseButton" BaseType="XenocideButton" />

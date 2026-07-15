@@ -249,7 +249,7 @@ namespace ProjectXenocide
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
+            graphics.GraphicsDevice.Clear(new Color(25, 20, 15)); // Dark underground brown - visible behind any transparent or uncovered areas of UI backgrounds
 
             screenManager.Draw(gameTime, graphics.GraphicsDevice);
             GumService.Default.Draw();

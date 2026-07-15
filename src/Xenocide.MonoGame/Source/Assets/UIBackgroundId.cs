@@ -4,6 +4,7 @@ namespace ProjectXenocide.Assets
     {
         StartScreen,
         BasesScreen,
+        BaseDirtFloor,
         XnetScreen,
         GeoscapeScreen,
     }

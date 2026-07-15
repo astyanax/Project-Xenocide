@@ -42,6 +42,7 @@ using Microsoft.Xna.Framework.Input;
 using ProjectXenocide.Assets;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData.Facilities;
+using ProjectXenocide.UI;
 using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.UI.Scenes.Facility;
 using ProjectXenocide.Utils;
@@ -63,7 +64,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         /// <param name="selectedBase">Index to X-Corp outpost screen is to show</param>
         public BasesScreen(int selectedBase)
-            : base("BasesScreen", @"Content/Textures/UI/BasesScreenBackground.png")
+            : base("BasesScreen", @"Content/Textures/UI/BaseDirtFloor.png")
         {
             this.selectedBase = selectedBase;
 
@@ -86,10 +87,21 @@ namespace ProjectXenocide.UI.Screens
 
         /// <summary>
         /// Perform processing which updates the screen.
+        /// Called every frame.  Delegates mouse input to the SceneMouseHandler,
+        /// which polls Mouse.GetState() and fires events when the cursor interacts
+        /// with the 3D viewport region.
         /// </summary>
         /// <param name="gameTime">snapshot of timing values</param>
         public override void Update(GameTime gameTime)
         {
+            if (sceneMouseHandler == null)
+            {
+                sceneMouseHandler = new SceneMouseHandler(sceneWindowRect);
+                sceneMouseHandler.MouseMoved += OnSceneMouseMoved;
+                sceneMouseHandler.LeftClicked += OnSceneLeftClicked;
+                sceneMouseHandler.RightClicked += OnSceneRightClicked;
+            }
+            sceneMouseHandler.Update();
         }
 
         public override bool HandleEscape()
@@ -230,12 +242,20 @@ namespace ProjectXenocide.UI.Screens
 
         #region event handlers
 
-        /// <summary>React to user moving the mouse in the 3D scene</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Mouse information</param>
-        private void OnMouseMoveInScene(object sender, EventArgs e)
+        #region Scene mouse event handlers
+
+        /// <summary>
+        /// Called by SceneMouseHandler when the cursor moves over the 3D viewport.
+        /// Converts relative viewport coords to floorplan cell coords and updates
+        /// the placement ghost (if we are in add-facility mode) so the red/green
+        /// preview shadow tracks the cursor in real time.
+        /// </summary>
+        private void OnSceneMouseMoved(float relX, float relY)
         {
-            var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
+            Vector2 cell = RelToCell(relX, relY);
+            if (cell.X < 0 || cell.Y < 0)
+                return; // outside the floorplan
+
             switch (state)
             {
                 case BasesScreenState.NotAdding:
@@ -243,7 +263,7 @@ namespace ProjectXenocide.UI.Screens
 
                 case BasesScreenState.AddAccessLift:
                 case BasesScreenState.AddFacility:
-                    UpdateNewFacilityPosition(MouseToCell(mouseState.X, mouseState.Y));
+                    UpdateNewFacilityPosition(cell);
                     break;
 
                 default:
@@ -252,29 +272,57 @@ namespace ProjectXenocide.UI.Screens
             }
         }
 
-        /// <summary>React to user clicking mouse in the 3D scene</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Mouse information</param>
-        private void OnMouseDownInScene(object sender, EventArgs e)
+    /// <summary>
+    /// Called by SceneMouseHandler when the left mouse button is pressed inside the
+    /// 3D viewport.  Places the facility when in add-facility mode; does nothing in
+    /// normal mode.  Demolition is triggered exclusively by right-click so there is
+    /// no risk of accidentally dismantling a facility while trying to place one.
+    /// </summary>
+    private void OnSceneLeftClicked(float relX, float relY)
+    {
+        Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick2);
+        Vector2 cell = RelToCell(relX, relY);
+        if (cell.X < 0 || cell.Y < 0)
+            return;
+
+        switch (state)
+        {
+            case BasesScreenState.NotAdding:
+                // Left-click in normal mode does nothing — only right-click demolishes.
+                break;
+
+            case BasesScreenState.AddAccessLift:
+            case BasesScreenState.AddFacility:
+                AddFacility(cell);
+                break;
+
+            default:
+                Debug.Assert(false);
+                break;
+        }
+    }
+
+        /// <summary>
+        /// Called by SceneMouseHandler when the right mouse button is pressed inside the
+        /// 3D viewport.  Always tries to demolish the facility under the cursor, regardless
+        /// of the current placement state, and always shows a confirmation dialog first.
+        /// </summary>
+        private void OnSceneRightClicked(float relX, float relY)
         {
             Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick2);
-            var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            switch (state)
+            Vector2 cell = RelToCell(relX, relY);
+            if (cell.X < 0 || cell.Y < 0)
+                return;
+
+            // Right-click always tries to demolish, even during placement mode
+            if (state != BasesScreenState.NotAdding)
             {
-                case BasesScreenState.NotAdding:
-                    RemoveFacility(MouseToCell(mouseState.X, mouseState.Y));
-                    break;
-
-                case BasesScreenState.AddAccessLift:
-                case BasesScreenState.AddFacility:
-                    AddFacility(MouseToCell(mouseState.X, mouseState.Y));
-                    break;
-
-                default:
-                    Debug.Assert(false);
-                    break;
+                CancelFacility();
             }
+            RemoveFacility(cell);
         }
+
+        #endregion
 
         /// <summary>user wants to look at a different base</summary>
         /// <param name="sender">Not used</param>
@@ -431,17 +479,15 @@ namespace ProjectXenocide.UI.Screens
         #region helper functions for event handlers
 
         /// <summary>
-        /// Convert the mouse's position to the cell co-ordinates on the Base's floorplan
+        /// Convert the scene viewport-relative coords (0..1) to floorplan cell coords.
+        /// The SceneMouseHandler fires callbacks with relative coords, which we pass
+        /// through the scene's projection ray to find which grid cell the cursor is over.
         /// </summary>
-        /// <param name="mouseX">Mouse X pixel position</param>
-        /// <param name="mouseY">Mouse Y pixel position</param>
-        /// <returns>Cell in base cursor is over</returns>
-        private Microsoft.Xna.Framework.Vector2 MouseToCell(int mouseX, int mouseY)
+        /// <param name="relX">Relative X in scene viewport (0 = left, 1 = right)</param>
+        /// <param name="relY">Relative Y in scene viewport (0 = top, 1 = bottom)</param>
+        /// <returns>Cell in base cursor is over, or (-1,-1) if outside the floorplan</returns>
+        private Vector2 RelToCell(float relX, float relY)
         {
-            var viewport = Xenocide.Instance.GraphicsDevice.Viewport;
-            float relX = (mouseX - viewport.Width * sceneWindowRect.Left) / (viewport.Width * sceneWindowRect.Width);
-            float relY = (mouseY - viewport.Height * sceneWindowRect.Top) / (viewport.Height * sceneWindowRect.Height);
-
             return scene.WindowToCell(new UiPoint(relX, relY));
         }
 
@@ -594,6 +640,12 @@ namespace ProjectXenocide.UI.Screens
                 {
                     NewFacility = new FacilityHandle("FAC_BASE_ACCESS_FACILITY");
                 }
+
+                // Reset the mouse handler's edge-detection so the button-up/-down
+                // state from whatever triggered this transition (e.g. clicking
+                // "Select" in the BuildFacilityDialog) doesn't leak through as a
+                // spurious click on the first frame the scene is active again.
+                sceneMouseHandler?.Reset();
             }
         }
 
@@ -631,6 +683,12 @@ namespace ProjectXenocide.UI.Screens
         /// The facility we are adding to the base
         /// </summary>
         private FacilityHandle newFacility;
+
+        /// <summary>
+        /// Polls mouse state each frame and fires scene-level events
+        /// (move, left-click, right-click) with relative viewport coords.
+        /// </summary>
+        private SceneMouseHandler sceneMouseHandler;
 
         #endregion Fields
     }
