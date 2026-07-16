@@ -14,8 +14,28 @@ namespace ProjectXenocide.UI
     /// handling so any screen with a 3D viewport can reuse the same hit-testing and
     /// edge-detection logic instead of duplicating it.
     ///
+    /// ARCHITECTURE NOTE:
+    /// - Screen-to-viewport projection: The UiRect passed to the constructor maps the scene's 3D
+    ///   viewport onto the full screen using relative coordinates (0..1).  Each frame
+    ///   we convert this to absolute pixels using the current GraphicsDevice.Viewport.
+    /// - Edge detection:  We track previous frame's button state to fire events only
+    ///   on the rising edge (press) not while held.  This prevents a single click
+    ///   from generating multiple events.
+    /// - Viewport-relative coords: Callbacks receive (relX, relY) in 0..1 space so
+    ///   the scene can project them into world coordinates without knowing screen
+    ///   resolution.  FacilityScene.WindowToCell() uses basic frustum trig to map
+    ///   back to the 6x6 floorplan grid.
+    /// - Leak prevention:  When a modal dialog closes (e.g. BuildFacilityDialog),
+    ///   the mouse button may still be pressed.  The next frame's Update() would
+    ///   see "leftDown && !prevLeftDown" and fire a spurious LeftClicked.  Call
+    ///   Reset() after any state transition that follows a dialog to re-sync the
+    ///   edge-detection baseline.
+    ///
     /// Usage in a screen's Update():
     ///   sceneMouseHandler.Update();
+    ///
+    /// Usage in a screen's state transition (e.g. BasesScreen.State setter):
+    ///   sceneMouseHandler?.Reset();
     /// </summary>
     public sealed class SceneMouseHandler
     {

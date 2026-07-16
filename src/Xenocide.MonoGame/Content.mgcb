@@ -97,6 +97,11 @@
 /processor:TextureProcessor
 /build:Content/Textures/UI/XnetScreenBackground.png
 
+#begin Content/Textures/UI/BaseDirtFloor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Content/Textures/UI/BaseDirtFloor.png
+
 #begin Content/Textures/EquipSoldier/EquipScreenBackground.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -375,6 +375,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
 
             // Tile the texture ~3 times per cell so the pattern is finer and
             // better proportioned to the facility model sizes on the grid.
+            // With a 6x6 grid, that means 18 repeats across the full quad.
             float tileW = Floorplan.CellsWide * 3;
             float tileH = Floorplan.CellsHigh * 3;
 
@@ -406,6 +407,9 @@ namespace ProjectXenocide.UI.Scenes.Facility
 
             // Use wrap addressing so the 6x6 UV range tiles the texture across
             // each grid cell rather than stretching or clamping at the edges.
+            // Save/restore the previous sampler state to avoid polluting
+            // subsequent draw calls (facilities, grid, build times).
+            SamplerState prevSampler = device.SamplerStates[0];
             device.SamplerStates[0] = SamplerState.LinearWrap;
 
             basicEffect.Texture = floorTexture;
@@ -419,6 +423,11 @@ namespace ProjectXenocide.UI.Scenes.Facility
                 pass.Apply();
                 device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 2);
             }
+
+            // Restore sampler state so downstream draw calls see the original
+            // (typically PointClamp or LinearClamp depending on what the
+            // facility models expect).
+            device.SamplerStates[0] = prevSampler;
         }
 
         /// <summary>

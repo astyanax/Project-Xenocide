@@ -83,6 +83,14 @@ namespace ProjectXenocide.UI.Screens
         public override void LoadContent(ContentManager content, GraphicsDevice device)
         {
             scene.LoadContent(content, device);
+
+            // Create the mouse handler here (not in Update) so it exists before
+            // the first frame.  This ensures Reset() can be called during state
+            // transitions even before the first Update() call.
+            sceneMouseHandler = new SceneMouseHandler(sceneWindowRect);
+            sceneMouseHandler.MouseMoved += OnSceneMouseMoved;
+            sceneMouseHandler.LeftClicked += OnSceneLeftClicked;
+            sceneMouseHandler.RightClicked += OnSceneRightClicked;
         }
 
         /// <summary>
@@ -94,13 +102,6 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="gameTime">snapshot of timing values</param>
         public override void Update(GameTime gameTime)
         {
-            if (sceneMouseHandler == null)
-            {
-                sceneMouseHandler = new SceneMouseHandler(sceneWindowRect);
-                sceneMouseHandler.MouseMoved += OnSceneMouseMoved;
-                sceneMouseHandler.LeftClicked += OnSceneLeftClicked;
-                sceneMouseHandler.RightClicked += OnSceneRightClicked;
-            }
             sceneMouseHandler.Update();
         }
 
