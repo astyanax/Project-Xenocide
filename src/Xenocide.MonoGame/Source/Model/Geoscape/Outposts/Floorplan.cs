@@ -33,6 +33,8 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 
+using NLog;
+
 using ProjectXenocide.Model.Geoscape.GeoEvents;
 using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.Model.StaticData.Facilities;
@@ -49,6 +51,8 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
     [Serializable]
     public class Floorplan
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -72,9 +76,11 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
                 if ((handle.X <= x) && (x < (handle.X + handle.FacilityInfo.XSize))
                     && (handle.Y <= y) && (y < (handle.Y + handle.FacilityInfo.YSize)))
                 {
+                    Logger.Trace("GetFacilityAt({0},{1}) -> {2}", x, y, handle.FacilityInfo.Id);
                     return handle;
                 }
             }
+            Logger.Trace("GetFacilityAt({0},{1}) -> null", x, y);
             // no facility found
             return null;
         }
@@ -121,21 +127,29 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             // check facility is completely inside the base
             if (!IsInsideBase(newFacility))
             {
+                Logger.Trace("IsPositionLegal: {0} at ({1},{2}) -> PositionNotInBase",
+                    newFacility.FacilityInfo.Id, newFacility.X, newFacility.Y);
                 return XenoError.PositionNotInBase;
             }
 
             // Check that all the cells wanted by this facility are empty
             if (AreCellsOccupied(newFacility))
             {
+                Logger.Trace("IsPositionLegal: {0} at ({1},{2}) -> PositionAlreadyOccupied",
+                    newFacility.FacilityInfo.Id, newFacility.X, newFacility.Y);
                 return XenoError.PositionAlreadyOccupied;
             }
 
             // Check that there is a fully constructed facility adjacent to the new facility
             if (0 == GetNeighbours(newFacility, false).Count)
             {
+                Logger.Trace("IsPositionLegal: {0} at ({1},{2}) -> CellHasNoNeighbours",
+                    newFacility.FacilityInfo.Id, newFacility.X, newFacility.Y);
                 return XenoError.CellHasNoNeighbours;
             }
 
+            Logger.Trace("IsPositionLegal: {0} at ({1},{2}) -> OK",
+                newFacility.FacilityInfo.Id, newFacility.X, newFacility.Y);
             // if get here, position is legal
             return XenoError.None;
         }

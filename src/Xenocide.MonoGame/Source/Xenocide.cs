@@ -179,6 +179,7 @@ namespace ProjectXenocide
             audioSystem.LoadSound(Assets.SoundId.ButtonClick2);
             audioSystem.LoadSound(Assets.SoundId.ButtonOver);
             audioSystem.LoadSound(Assets.SoundId.ExitGame);
+            audioSystem.LoadSound(Assets.SoundId.Error);
         }
 
         /// <summary>

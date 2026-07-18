@@ -324,6 +324,112 @@ Programmatic controls in the GumX path had no X/Y positioning, causing overlap a
 | EquipSoldierScreen | ammoText, 8 static labels |
 | LoadSaveGameScreen | filenameEditBox, savesgrid |
 
+---
+
+## Base Screen & Facility System Architecture
+
+### Overview
+
+The `BasesScreen` (a `GumScreen` subclass) manages the layout of facilities in an X-Corp Outpost. It owns a 3D `FacilityScene`, a `SceneMouseHandler` for input, and a `FacilityTooltip` for hover information.
+
+### Key Classes
+
+| Class | File | Responsibility |
+|-------|------|----------------|
+| `BasesScreen` | `UI/Screens/BasesScreen.cs` | State machine, placement logic, Gum button wiring |
+| `FacilityScene` | `UI/Scenes/Facility/FacilityScene.cs` | 3D rendering (grid, facilities, ghost, adjacency lines) |
+| `SceneMouseHandler` | `UI/SceneMouseHandler.cs` | Polls mouse state, fires viewport-relative events |
+| `Floorplan` | `Model/Geoscape/Outposts/Floorplan.cs` | 6×6 grid data model (facility positions, validation) |
+| `FacilityHandle` | `Model/Geoscape/Outposts/FacilityHandle.cs` | Placed facility instance (X, Y, FacilityInfo, IsUnderConstruction) |
+| `BuildFacilityDialog` | `UI/Dialogs/BuildFacilityDialog.cs` | Lists buildable facilities, triggers placement |
+| `FacilityTooltip` | `UI/Screens/FacilityTooltip.cs` | Gum StackPanel with 5 labels showing facility info |
+| `AdjacencyLines` | `UI/Scenes/Facility/AdjacencyLines.cs` | Builds colored lines (green=connected, red=overlapping) |
+| `LineMesh` | `UI/Scenes/Common/LineMesh.cs` | GPU vertex/index buffer wrapper for LineList rendering |
+
+### State Machine
+
+```
+BasesScreenState enum (defined in BasesScreen.cs):
+  NotAdding      → Normal mode. Right-click demolishes. "Build Facilities" button opens BuildFacilityDialog.
+  AddAccessLift  → Auto-entered when building into an empty base. Creates a ghost FacilityHandle.
+  AddFacility    → User selected a facility from BuildFacilityDialog. Ghost follows cursor.
+```
+
+State transitions:
+
+```
+"Build Facilities" click (Or B key)
+  ├── Base empty? → State = AddAccessLift → ghost = "FAC_BASE_ACCESS_FACILITY"
+  └── Has facilities? → Show BuildFacilityDialog
+                           └── User selects facility → BuildFacility(handle) → State = AddFacility
+
+Right-click / Escape / Backspace → CancelFacility → State = NotAdding, ghost = null
+```
+
+### Placement Flow
+
+1. **"Build Facilities" button** → `OnBuildFacilitiesButton()`
+   - Base empty → `State = AddAccessLift` (auto-creates access lift ghost)
+   - Has facilities → `ShowDialog(new BuildFacilityDialog(this))`
+
+2. **BuildFacilityDialog** (GumDialog subclass) populates `ContentPanel` with one `Button` per buildable facility. Each button embeds name, cost, build days, and monthly maintenance. A Cancel button is added last.
+
+3. **User clicks a facility** → `OnFacilitySelected(idx)` → checks `CanAfford` → checks `LimitIsOnePerOutpost` → `basesScreen.BuildFacility(handle)` → sets `scene.NewFacility` and `State = AddFacility`.
+
+4. **Each frame**: `SceneMouseHandler.Update()` polls `Mouse.GetState()`, hit-tests the viewport rect, and fires `MouseMoved(relX, relY)` → `OnSceneMouseMoved` → `RelToCell` → `UpdateNewFacilityPosition(cell)` → sets ghost X/Y → ghost `HasPosition` becomes true.
+
+5. **FacilityScene.Draw()** checks `null != newFacility` → calls `RebuildAdjacencyLines()` (builds green/red line indicators to neighbours) → calls `Draw(newFacility)` which renders the ghost model tinted green (valid) or red (invalid) via `IsPositionLegal`.
+
+6. **Left-click** → `OnSceneLeftClicked` → `AddFacility(cell)`:
+   - Checks `CanAfford` (guard for AddAccessLift path)
+   - Validates via `Floorplan.IsPositionLegal`
+   - If legal → `Bank.Debit(cost)` → `Floorplan.AddFacility(handle)` → `ScheduleScreen(new BasesScreen())` (full reload)
+   - If illegal → `Util.ShowMessageBox(error)`
+
+### Demolition Flow
+
+1. **Right-click** → `OnSceneRightClicked`:
+   - If in add mode → `CancelFacility()` first
+   - Then `RemoveFacility(cell)` → validates via `CanRemoveFacility` → shows `GumYesNoDialog`
+   - On yes → stores for Ctrl+Z undo, credits scrap revenue, removes from floorplan, schedules reload
+
+### Initialization Order & The sceneWindowRect Bug
+
+When `ScreenManager.SwapScreens()` schedules a new `BasesScreen`, the call order is:
+
+```
+ScreenManager.SwapScreens() (line 144–150):
+  1. screen.LoadContent(content, device)   ← LoadContent runs FIRST
+  2. screen.Show()                          ← Show runs SECOND
+```
+
+`BasesScreen.LoadContent()` creates the `SceneMouseHandler`, which receives `sceneWindowRect` **by value** (UiRect is a struct). But `sceneWindowRect` was historically initialized only in `CreateGumControls()`, which is called from `Show()` — which hadn't run yet!
+
+**The fix**: `sceneWindowRect` is initialized at field declaration in `BasesScreen.cs`:
+```csharp
+private UiRect sceneWindowRect = new UiRect(0.02f, 0.073f, 0.661f, 0.9264f);
+```
+This ensures the mouse handler is created with the correct non-zero viewport. The assignment in `CreateGumControls` is kept as a documentation safety net.
+
+**Without this fix**: The mouse handler has a zero-area viewport (Left=Top=Right=Bottom=0), so `inViewport` is always false, and no `MouseMoved`/`LeftClicked`/`RightClicked` events ever fire. The facility ghost never appears and placement clicks are silently swallowed.
+
+### GUSX Layout Notes (BuildFacilityDialog)
+
+The `BuildFacilityDialog.gusx` file defines the dialog's visual container layout: a `DialogPanel` (500×450, centered on screen) containing a `TitleBar` (28px), `DialogBackground`, and `ScrollViewerInstance` (Y=28, Height=-28). The `ContentPanel` inside the ScrollViewer has Height=0 (fill remaining space).
+
+Layout conventions in Gum for `DimensionUnitType.RelativeToParent`:
+- `0` = fill remaining space (100% of parent minus fixed-size siblings)
+- Negative values (e.g. `-28`) = parent dimension minus that many pixels (e.g. `Height = 100% - 28px`)
+
+This GUSX file CAN be loaded in the Gum UI Tool for visual layout editing — the container structure (ScrollViewer, ContentPanel, TitleBar, etc.) is all designer-defined. However, the individual facility buttons inside ContentPanel are populated **programmatically** in `WireGumControls()` (C#), so the designer shows an empty ContentPanel at design time. The layout values (heights, Y offsets) are shared between designer and runtime, which is why incorrect values (e.g. a zero-area ContentPanel) silently break the dialog at runtime.
+
+### Logging Levels
+
+All facility placement classes use NLog with three levels:
+- **INFO**: State transitions, facility placement/cancellation/demolition, affordability, important events
+- **DEBUG**: Edge-detect resets, button counts, mouse handler lifecycle
+- **TRACE**: Every mouse move, cell projection, ghost position update, IsPositionLegal checks
+
 ### Remaining Gum Backlog
 
 - Dialog `.gusx` conversion — 9 dialogs currently programmatic (4 done: MessageBox, YesNo, Options, GumOptions)

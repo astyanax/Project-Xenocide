@@ -26,6 +26,8 @@ San Francisco, California, 94105, USA.
 
 #region Using Statements
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 using Gum.Forms;
 using Gum.Forms.Controls;
@@ -163,38 +165,117 @@ namespace ProjectXenocide.UI.Screens
             Xenocide.DebugTesting = true;
             Xenocide.GameState.SetToStartGameCondition();
             Xenocide.StaticTables.StartSettings.Cheats.XcorpCantLooseAtStartOfMonth = true;
-            ProjectXenocide.Model.Geoscape.Geography.Planet.RunTests();
-            ProjectXenocide.Model.Battlescape.Mission.RunTests();
-            ProjectXenocide.Model.Battlescape.Combatants.Combatant.RunTests();
-            ProjectXenocide.Model.Battlescape.Trajectory.RunTests();
-            ProjectXenocide.Model.Battlescape.Terrain.RunTests();
-            ProjectXenocide.Model.Battlescape.Combatants.ShootOrder.RunTests();
-            ProjectXenocide.Model.Battlescape.Combatants.MoveOrder.RunTests();
-            ProjectXenocide.Model.Battlescape.CrewBuilder.RunTests();
-            ProjectXenocide.Model.Battlescape.Pathfinder.RunTests();
-            ProjectXenocide.Model.StaticData.Battlescape.CombatantFactory.RunTests();
-            ProjectXenocide.Model.StaticData.Battlescape.Armor.RunTests();
-            ProjectXenocide.Model.StaticData.Items.Item.RunItemTests();
-            ProjectXenocide.Model.Battlescape.Combatants.CombatantInventory.RunTests();
-            ProjectXenocide.Model.StaticData.Research.ResearchGraph.RunTests();
-            ProjectXenocide.Model.Geoscape.BuildProjectManager.RunTests();
-            ProjectXenocide.Model.Geoscape.ResearchProjectManager.RunTests();
-            ProjectXenocide.Model.Geoscape.AI.RetaliationTask.RunTests();
-            ProjectXenocide.Model.Geoscape.AI.BuildOutpostTask.RunTests();
-            ProjectXenocide.Model.Geoscape.AI.SupplyOutpostTask.RunTests();
-            ProjectXenocide.Model.Geoscape.AI.TerrorTask.RunTests();
-            ProjectXenocide.Model.Geoscape.AI.InfiltrationTask.RunTests();
-            ProjectXenocide.Model.Geoscape.Geography.GeoBitmap.RunTests();
-            ProjectXenocide.Model.Geoscape.GeoPosition.RunTests();
-            ProjectXenocide.Model.Scheduler.RunTests();
-            ProjectXenocide.Model.Geoscape.Vehicles.AttackAlienSiteMission.RunTests();
-            ProjectXenocide.Model.Geoscape.Outposts.OutpostStatistics.RunTests();
-            ProjectXenocide.Model.Geoscape.Outposts.Floorplan.RunTests();
-            ProjectXenocide.Model.Geoscape.Outposts.OutpostInventory.RunTests();
-            ProjectXenocide.Model.Geoscape.Vehicles.Ufo.RunTests();
-            ProjectXenocide.Model.Geoscape.Vehicles.Aircraft.RunTests();
-            ProjectXenocide.Model.ScoreLog.RunTests();
-            Util.ShowMessageBox("All unit tests passed");
+
+            var failures = new List<string>();
+
+            // Replace trace listeners so Debug.Assert failures are captured
+            // instead of terminating the process
+            var savedListeners = new System.Diagnostics.TraceListener[global::System.Diagnostics.Trace.Listeners.Count];
+            global::System.Diagnostics.Trace.Listeners.CopyTo(savedListeners, 0);
+            global::System.Diagnostics.Trace.Listeners.Clear();
+            global::System.Diagnostics.Trace.Listeners.Add(new AssertFailureLogger(failures));
+
+            try
+            {
+                RunTest("Planet.RunTests", () => ProjectXenocide.Model.Geoscape.Geography.Planet.RunTests(), failures);
+                RunTest("Mission.RunTests", () => ProjectXenocide.Model.Battlescape.Mission.RunTests(), failures);
+                RunTest("Combatant.RunTests", () => ProjectXenocide.Model.Battlescape.Combatants.Combatant.RunTests(), failures);
+                RunTest("Trajectory.RunTests", () => ProjectXenocide.Model.Battlescape.Trajectory.RunTests(), failures);
+                RunTest("Terrain.RunTests", () => ProjectXenocide.Model.Battlescape.Terrain.RunTests(), failures);
+                RunTest("ShootOrder.RunTests", () => ProjectXenocide.Model.Battlescape.Combatants.ShootOrder.RunTests(), failures);
+                RunTest("MoveOrder.RunTests", () => ProjectXenocide.Model.Battlescape.Combatants.MoveOrder.RunTests(), failures);
+                RunTest("CrewBuilder.RunTests", () => ProjectXenocide.Model.Battlescape.CrewBuilder.RunTests(), failures);
+                RunTest("Pathfinder.RunTests", () => ProjectXenocide.Model.Battlescape.Pathfinder.RunTests(), failures);
+                RunTest("CombatantFactory.RunTests", () => ProjectXenocide.Model.StaticData.Battlescape.CombatantFactory.RunTests(), failures);
+                RunTest("Armor.RunTests", () => ProjectXenocide.Model.StaticData.Battlescape.Armor.RunTests(), failures);
+                RunTest("Item.RunItemTests", () => ProjectXenocide.Model.StaticData.Items.Item.RunItemTests(), failures);
+                RunTest("CombatantInventory.RunTests", () => ProjectXenocide.Model.Battlescape.Combatants.CombatantInventory.RunTests(), failures);
+                RunTest("ResearchGraph.RunTests", () => ProjectXenocide.Model.StaticData.Research.ResearchGraph.RunTests(), failures);
+                RunTest("BuildProjectManager.RunTests", () => ProjectXenocide.Model.Geoscape.BuildProjectManager.RunTests(), failures);
+                RunTest("ResearchProjectManager.RunTests", () => ProjectXenocide.Model.Geoscape.ResearchProjectManager.RunTests(), failures);
+                RunTest("RetaliationTask.RunTests", () => ProjectXenocide.Model.Geoscape.AI.RetaliationTask.RunTests(), failures);
+                RunTest("BuildOutpostTask.RunTests", () => ProjectXenocide.Model.Geoscape.AI.BuildOutpostTask.RunTests(), failures);
+                RunTest("SupplyOutpostTask.RunTests", () => ProjectXenocide.Model.Geoscape.AI.SupplyOutpostTask.RunTests(), failures);
+                RunTest("TerrorTask.RunTests", () => ProjectXenocide.Model.Geoscape.AI.TerrorTask.RunTests(), failures);
+                RunTest("InfiltrationTask.RunTests", () => ProjectXenocide.Model.Geoscape.AI.InfiltrationTask.RunTests(), failures);
+                RunTest("GeoBitmap.RunTests", () => ProjectXenocide.Model.Geoscape.Geography.GeoBitmap.RunTests(), failures);
+                RunTest("GeoPosition.RunTests", () => ProjectXenocide.Model.Geoscape.GeoPosition.RunTests(), failures);
+                RunTest("Scheduler.RunTests", () => ProjectXenocide.Model.Scheduler.RunTests(), failures);
+                RunTest("AttackAlienSiteMission.RunTests", () => ProjectXenocide.Model.Geoscape.Vehicles.AttackAlienSiteMission.RunTests(), failures);
+                RunTest("OutpostStatistics.RunTests", () => ProjectXenocide.Model.Geoscape.Outposts.OutpostStatistics.RunTests(), failures);
+                RunTest("Floorplan.RunTests", () => ProjectXenocide.Model.Geoscape.Outposts.Floorplan.RunTests(), failures);
+                RunTest("OutpostInventory.RunTests", () => ProjectXenocide.Model.Geoscape.Outposts.OutpostInventory.RunTests(), failures);
+                RunTest("Ufo.RunTests", () => ProjectXenocide.Model.Geoscape.Vehicles.Ufo.RunTests(), failures);
+                RunTest("Aircraft.RunTests", () => ProjectXenocide.Model.Geoscape.Vehicles.Aircraft.RunTests(), failures);
+                RunTest("ScoreLog.RunTests", () => ProjectXenocide.Model.ScoreLog.RunTests(), failures);
+            }
+            finally
+            {
+                global::System.Diagnostics.Trace.Listeners.Clear();
+                foreach (var l in savedListeners)
+                    global::System.Diagnostics.Trace.Listeners.Add(l);
+            }
+
+            if (failures.Count > 0)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"Unit tests completed with {failures.Count} failure(s):");
+                sb.AppendLine();
+                foreach (var f in failures)
+                    sb.AppendLine("• " + f);
+                Util.ShowMessageBox(sb.ToString().TrimEnd());
+            }
+            else
+            {
+                Util.ShowMessageBox("All unit tests passed");
+            }
+        }
+
+        private static void RunTest(string name, Action test, List<string> failures)
+        {
+            int before = failures.Count;
+            try
+            {
+                test();
+            }
+            catch (Exception ex)
+            {
+                failures.Add($"{name}: {ex.GetType().Name}: {ex.Message}");
+            }
+
+            // Prefix any Debug.Assert failures collected during this test
+            for (int i = before; i < failures.Count; i++)
+            {
+                failures[i] = $"{name}: {failures[i]}";
+            }
+        }
+
+        /// <summary>
+        /// TraceListener that collects Debug.Assert failures into a list
+        /// instead of terminating the process.
+        /// </summary>
+        private sealed class AssertFailureLogger : System.Diagnostics.TraceListener
+        {
+            private readonly List<string> _failures;
+
+            public AssertFailureLogger(List<string> failures)
+            {
+                _failures = failures;
+            }
+
+            public override void Write(string message) { }
+
+            public override void WriteLine(string message) { }
+
+            public override void Fail(string message)
+            {
+                _failures.Add(message);
+            }
+
+            public override void Fail(string message, string detailMessage)
+            {
+                _failures.Add(message + Environment.NewLine + detailMessage);
+            }
         }
 
         private void OnBattlescapeClicked(object sender, EventArgs e)

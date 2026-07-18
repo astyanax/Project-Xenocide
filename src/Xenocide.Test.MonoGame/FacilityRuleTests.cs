@@ -9,6 +9,7 @@ using ProjectXenocide.Model.StaticData.Facilities;
 
 namespace Xenocide.Test.MonoGame;
 
+[Collection("GameStateInit")]
 public class FacilityRuleTests : IDisposable
 {
     public FacilityRuleTests()

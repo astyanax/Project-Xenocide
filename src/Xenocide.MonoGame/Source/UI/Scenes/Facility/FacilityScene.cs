@@ -34,6 +34,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
+using NLog;
+
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData.Facilities;
 using ProjectXenocide.UI;
@@ -47,6 +49,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
     /// </summary>
     public class FacilityScene : IDisposable
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// Constructor
         /// </summary>
@@ -87,6 +90,11 @@ namespace ProjectXenocide.UI.Scenes.Facility
                     grid.Dispose();
                     grid = null;
                 }
+                if (adjacencyMesh != null)
+                {
+                    adjacencyMesh.Dispose();
+                    adjacencyMesh = null;
+                }
                 DisposeFloor();
             }
         }
@@ -103,6 +111,7 @@ namespace ProjectXenocide.UI.Scenes.Facility
             {
                 InitializeEffect(device);
                 grid.LoadContent(device, new Grid(Floorplan.CellsWide, Floorplan.CellsHigh));
+                adjacencyMesh.LoadContent(device, adjacencyBuilder);
                 models.LoadContent(content);
                 buildTimes.LoadContent(content, device);
                 CreateFloor(device, content);
@@ -150,7 +159,18 @@ namespace ProjectXenocide.UI.Scenes.Facility
             // Draw the "new facility position" marker (if we're in add facility mode)
             if (null != newFacility)
             {
+                Logger.Trace("Draw: rendering ghost facility (id={0}, pos=({1},{2}), HasPosition={3})",
+                    newFacility.FacilityInfo.Id, newFacility.X, newFacility.Y, newFacility.HasPosition);
+                RebuildAdjacencyLines(device);
                 Draw(newFacility);
+
+                // Draw adjacency indicator lines above the grid
+                adjacencyMesh.ConfigureEffect(basicEffect);
+                adjacencyMesh.Draw(device, basicEffect);
+            }
+            else
+            {
+                Logger.Trace("Draw: no ghost facility to render");
             }
 
             // Draw the "build time remaining" labels
@@ -182,14 +202,29 @@ namespace ProjectXenocide.UI.Scenes.Facility
             // check that result is within the base
             if ((x < 0.0f) || (Floorplan.CellsWide < x) || (z < 0.0f) || (Floorplan.CellsHigh < z))
             {
+                Logger.Trace("WindowToCell: out of bounds — input ({0:F3},{1:F3}) projected to ({2:F1},{3:F1})",
+                    coords.X, coords.Y, x, z);
                 x = -1.0f;
                 z = -1.0f;
             }
-            return new Vector2((float)Math.Floor(x), (float)Math.Floor(z));
+            Vector2 result = new Vector2((float)Math.Floor(x), (float)Math.Floor(z));
+            Logger.Trace("WindowToCell: input ({0:F3},{1:F3}) -> cell ({2},{3})",
+                coords.X, coords.Y, result.X, result.Y);
+            return result;
         }
 
         /// <summary>
-        /// Render facility into scene
+        /// Render facility into scene.
+        ///
+        /// GHOST TINTING (handle == newFacility): When the user is placing a facility,
+        /// we render a semi-transparent ghost model at the cursor position. The color
+        /// indicates placement validity:
+        ///   - Green (Vector3.UnitY)  → IsPositionLegal returned XenoError.None
+        ///   - Red   (Vector3.UnitX)  → position is invalid (occupied, out of bounds, no neighbour)
+        /// For empty bases the ghost is always green until the first facility is placed.
+        ///
+        /// Adjacency indicator lines (green=connected, red=overlapping) are rendered
+        /// separately in RebuildAdjacencyLines.
         /// </summary>
         /// <param name="handle">The facility (and it's position in the base)</param>
         private void Draw(FacilityHandle handle)
@@ -224,6 +259,93 @@ namespace ProjectXenocide.UI.Scenes.Facility
                     models.Draw(basicEffect, info.Id, displacement);
                 }
             }
+        }
+
+        /// <summary>
+        /// Rebuild the adjacency indicator lines when the ghost moves to a new cell.
+        /// Green lines connect the ghost to valid adjacent facilities;
+        /// red lines indicate overlap with existing facilities.
+        /// </summary>
+        /// <param name="device">GPU device for buffer creation</param>
+        private void RebuildAdjacencyLines(GraphicsDevice device)
+        {
+            if (newFacility == null || !newFacility.HasPosition)
+            {
+                Logger.Trace("RebuildAdjacencyLines: skipped (newFacility={0}, HasPosition={1})",
+                    newFacility?.FacilityInfo.Id ?? "null", newFacility?.HasPosition);
+                return;
+            }
+
+            Vector2 cell = new Vector2(newFacility.X, newFacility.Y);
+            if (cell == lastAdjacencyCell)
+            {
+                Logger.Trace("RebuildAdjacencyLines: skipped — ghost still at ({0},{1})", cell.X, cell.Y);
+                return;
+            }
+            Logger.Trace("RebuildAdjacencyLines: rebuilding for ghost at ({0},{1})", cell.X, cell.Y);
+            lastAdjacencyCell = cell;
+
+            adjacencyBuilder.Clear();
+
+            FacilityInfo info = newFacility.FacilityInfo;
+            int gx = newFacility.X;
+            int gy = newFacility.Y;
+            float halfW = Floorplan.CellsWide * 0.5f;
+            float halfH = Floorplan.CellsHigh * 0.5f;
+
+            float ghostCx = gx + info.XSize * 0.5f - halfW;
+            float ghostCz = gy + info.YSize * 0.5f - halfH;
+            float lineY = 0.05f;
+
+            for (int dx = 0; dx < info.XSize; ++dx)
+            {
+                for (int dy = 0; dy < info.YSize; ++dy)
+                {
+                    int cx = gx + dx;
+                    int cy = gy + dy;
+
+                    if (cy > 0)
+                        TryAddAdjacencyLine(cx, cy, cx, cy - 1, ghostCx, ghostCz, lineY, halfW, halfH);
+
+                    if (cy + 1 < Floorplan.CellsHigh)
+                        TryAddAdjacencyLine(cx, cy, cx, cy + 1, ghostCx, ghostCz, lineY, halfW, halfH);
+
+                    if (cx > 0)
+                        TryAddAdjacencyLine(cx, cy, cx - 1, cy, ghostCx, ghostCz, lineY, halfW, halfH);
+
+                    if (cx + 1 < Floorplan.CellsWide)
+                        TryAddAdjacencyLine(cx, cy, cx + 1, cy, ghostCx, ghostCz, lineY, halfW, halfH);
+                }
+            }
+
+            adjacencyMesh.BuildMesh(device, adjacencyBuilder);
+        }
+
+        /// <summary>
+        /// If there is a facility at (nx, ny), add a colored line from the ghost center
+        /// to the neighbor center. Green = connected, Red = overlapping.
+        /// </summary>
+        private void TryAddAdjacencyLine(
+            int cx, int cy, int nx, int ny,
+            float ghostCx, float ghostCz, float lineY,
+            float halfW, float halfH)
+        {
+            FacilityHandle neighbor = floorplan.GetFacilityAt(nx, ny);
+            if (neighbor == null)
+                return;
+
+            bool overlaps = (nx >= newFacility.X && nx < newFacility.X + newFacility.FacilityInfo.XSize &&
+                             cy >= newFacility.Y && cy < newFacility.Y + newFacility.FacilityInfo.YSize);
+
+            Color color = overlaps ? Color.Red : Color.Green;
+
+            float nxWorld = nx + 0.5f - halfW;
+            float nzWorld = ny + 0.5f - halfH;
+
+            adjacencyBuilder.AddLine(
+                new Vector3(ghostCx, lineY, ghostCz),
+                new Vector3(nxWorld, lineY, nzWorld),
+                color);
         }
 
         /// <summary>
@@ -304,7 +426,12 @@ namespace ProjectXenocide.UI.Scenes.Facility
         public FacilityHandle NewFacility
         {
             get { return newFacility; }
-            set { newFacility = value; }
+            set
+            {
+                newFacility = value;
+                if (value == null)
+                    lastAdjacencyCell = new Vector2(-1, -1);
+            }
         }
 
         /// <summary>
@@ -352,6 +479,22 @@ namespace ProjectXenocide.UI.Scenes.Facility
         /// Quads to decorate facilities under construction with their build times
         /// </summary>
         private BuildTimes buildTimes;
+
+        /// <summary>
+        /// Builds colored lines connecting the placement ghost to adjacent facilities.
+        /// </summary>
+        private AdjacencyLines adjacencyBuilder = new AdjacencyLines();
+
+        /// <summary>
+        /// Line mesh for rendering adjacency indicators.
+        /// </summary>
+        private LineMesh adjacencyMesh = new LineMesh();
+
+        /// <summary>
+        /// Tracks the ghost cell position of the last adjacency rebuild
+        /// so we only rebuild when the ghost actually moves to a new cell.
+        /// </summary>
+        private Vector2 lastAdjacencyCell = new Vector2(-1, -1);
 
         #endregion
 

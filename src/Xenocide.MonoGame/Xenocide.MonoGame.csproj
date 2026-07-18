@@ -43,6 +43,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Xenocide.Test.MonoGame</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Content\**\*.xnb" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Content\**\*.xsd" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Content\**\*.xml" CopyToOutputDirectory="PreserveNewest" />

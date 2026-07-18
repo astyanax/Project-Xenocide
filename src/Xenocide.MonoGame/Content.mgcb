@@ -316,6 +316,11 @@
 /processor:SoundEffectProcessor
 /build:Content/Audio/Sounds/Menu/exitgame.ogg
 
+#begin Content/Audio/Sounds/Menu/error.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Sounds/Menu/error.ogg
+
 #begin Content/Audio/Sounds/PlanetView/clickobjectonplanet.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor

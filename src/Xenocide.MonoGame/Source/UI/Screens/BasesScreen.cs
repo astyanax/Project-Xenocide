@@ -39,6 +39,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using NLog;
+
 using ProjectXenocide.Assets;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData.Facilities;
@@ -56,9 +58,35 @@ namespace ProjectXenocide.UI.Screens
 {
     /// <summary>
     /// Screen that shows the layout of facilities in a X-Corp Outpost (Base)
+    ///
+    /// STATE MACHINE (BasesScreenState):
+    ///   NotAdding    — normal mode, right-click demolishes
+    ///   AddAccessLift — auto-entered when building into an empty base
+    ///   AddFacility  — user selected a facility from BuildFacilityDialog
+    ///
+    /// PLACEMENT FLOW:
+    ///   BuildFacilityDialog → BuildFacility(handle) → State = AddFacility
+    ///   SceneMouseHandler.MouseMoved → OnSceneMouseMoved → UpdateNewFacilityPosition
+    ///   FacilityScene.Draw renders ghost (green=valid, red=invalid)
+    ///   Left-click → AddFacility(cell) → validates → debits → adds to Floorplan
+    ///
+    /// INITIALIZATION ORDER (ScreenManager.SwapScreens):
+    ///   1. Constructor (BasesScreen) — creates FacilityScene
+    ///   2. LoadContent — creates SceneMouseHandler using sceneWindowRect
+    ///   3. Show / CreateGumControls — sets sceneWindowRect
+    ///   Because LoadContent runs BEFORE Show (see ScreenManager.cs:147-149),
+    ///   sceneWindowRect must be initialized at field declaration so the
+    ///   SceneMouseHandler receives a non-zero viewport rect. See field below.
+    ///
+    /// LEAK PREVENTION:
+    ///   sceneMouseHandler.Reset() is called in the State setter so that
+    ///   the button-down state from a dialog "Select" click doesn't
+    ///   leak through as a spurious LeftClicked event on the first frame.
     /// </summary>
     public class BasesScreen : GumScreen
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Constructor (obviously)
         /// </summary>
@@ -67,6 +95,7 @@ namespace ProjectXenocide.UI.Screens
             : base("BasesScreen", @"Content/Textures/UI/BaseDirtFloor.png")
         {
             this.selectedBase = selectedBase;
+            Logger.Info("BasesScreen ctor: baseIndex={0}", selectedBase);
 
             // Before showing, bring floorplan up to date 
             scene = new FacilityScene(SelectedBaseFloorplan);
@@ -84,9 +113,15 @@ namespace ProjectXenocide.UI.Screens
         {
             scene.LoadContent(content, device);
 
+            Logger.Info("LoadContent: sceneWindowRect=({0},{1},{2},{3})",
+                sceneWindowRect.Left, sceneWindowRect.Top, sceneWindowRect.Right, sceneWindowRect.Bottom);
+
             // Create the mouse handler here (not in Update) so it exists before
             // the first frame.  This ensures Reset() can be called during state
             // transitions even before the first Update() call.
+            // IMPORTANT: sceneWindowRect must be initialized BEFORE this call
+            // (it is set as a field initializer at declaration time) because
+            // ScreenManager.SwapScreens() calls LoadContent() before Show().
             sceneMouseHandler = new SceneMouseHandler(sceneWindowRect);
             sceneMouseHandler.MouseMoved += OnSceneMouseMoved;
             sceneMouseHandler.LeftClicked += OnSceneLeftClicked;
@@ -103,6 +138,63 @@ namespace ProjectXenocide.UI.Screens
         public override void Update(GameTime gameTime)
         {
             sceneMouseHandler.Update();
+
+            // Handle keyboard shortcuts with proper key-down detection
+            var keyboard = Microsoft.Xna.Framework.Input.Keyboard.GetState();
+            bool ctrlZPressed = keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftControl) &&
+                                keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Z) &&
+                                _prevKeyboardState.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.Z);
+
+            if (ctrlZPressed)
+            {
+                UndoDemolition();
+            }
+            else if (state == BasesScreenState.NotAdding)
+            {
+                // B key = open build dialog (same as clicking Build Facilities button)
+                if (keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.B) &&
+                    _prevKeyboardState.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.B))
+                {
+                    OnBuildFacilitiesButton(this, EventArgs.Empty);
+                }
+            }
+            else if (state == BasesScreenState.AddFacility)
+            {
+                // Backspace = cancel placement (in addition to Escape)
+                if (keyboard.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Back) &&
+                    _prevKeyboardState.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.Back))
+                {
+                    CancelFacility();
+                }
+            }
+
+            _prevKeyboardState = keyboard;
+
+            // Create tooltip lazily on first update if Gum is ready
+            if (tooltip == null && (GumRoot != null || RootContainer != null))
+            {
+                var tooltipRoot = GumRoot ?? RootContainer?.Visual;
+                if (tooltipRoot != null)
+                {
+                    tooltip = new FacilityTooltip(tooltipRoot);
+                }
+            }
+
+            // Hide tooltip if mouse leaves the scene viewport
+            var mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
+            var device = Xenocide.Instance.GraphicsDevice;
+            int vpX = (int)(device.Viewport.Width * sceneWindowRect.Left);
+            int vpY = (int)(device.Viewport.Height * sceneWindowRect.Top);
+            int vpW = (int)(device.Viewport.Width * sceneWindowRect.Width);
+            int vpH = (int)(device.Viewport.Height * sceneWindowRect.Height);
+
+            bool inViewport = mouse.X >= vpX && mouse.X < vpX + vpW
+                           && mouse.Y >= vpY && mouse.Y < vpY + vpH;
+
+            if (!inViewport)
+            {
+                tooltip?.Hide();
+            }
         }
 
         public override bool HandleEscape()
@@ -133,6 +225,13 @@ namespace ProjectXenocide.UI.Screens
             }
 
             scene.Draw(device, sceneWindowRect);
+
+            // Tooltip is rendered automatically by Gum system (no manual Draw needed)
+            // Just ensure it's hidden when dialogs are on top
+            if (ScreenManager.TopmostFrame != this)
+            {
+                tooltip?.Hide();
+            }
         }
 
         /// <summary>
@@ -142,6 +241,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="handle">Handle to the new facility to build.</param>
         public void BuildFacility(FacilityHandle handle)
         {
+            Logger.Info("BuildFacility: {0} (id={1})", handle.FacilityInfo.Name, handle.FacilityInfo.Id);
             NewFacility = handle;
             State = BasesScreen.BasesScreenState.AddFacility;
             // Change build button to cancel button
@@ -155,6 +255,10 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
+            // sceneWindowRect is initialized at field declaration so it's available
+            // during LoadContent() before Show()/CreateGumControls() runs.
+            // The field initializer below is kept as a safety net / documentation
+            // of the canonical viewport values.
             sceneWindowRect = new UiRect(0.02f, 0.073f, 0.661f, 0.9264f);
 
             if (GumRoot != null)
@@ -225,7 +329,7 @@ namespace ProjectXenocide.UI.Screens
             geoscapeButton.Click += OnGeoscapeButton;
         }
 
-        private UiRect sceneWindowRect;
+        private UiRect sceneWindowRect = new UiRect(0.02f, 0.073f, 0.661f, 0.9264f);
         private ComboBox basesListComboBox;
         private Label fundsText;
         private Button newBaseButton;
@@ -249,22 +353,48 @@ namespace ProjectXenocide.UI.Screens
         /// Called by SceneMouseHandler when the cursor moves over the 3D viewport.
         /// Converts relative viewport coords to floorplan cell coords and updates
         /// the placement ghost (if we are in add-facility mode) so the red/green
-        /// preview shadow tracks the cursor in real time.
+        /// preview shadow tracks the cursor in real time.  Also updates the hover
+        /// tooltip with facility info under the cursor.
         /// </summary>
         private void OnSceneMouseMoved(float relX, float relY)
         {
             Vector2 cell = RelToCell(relX, relY);
+            Logger.Trace("OnSceneMouseMoved: rel=({0:F3},{1:F3}) cell=({2},{3}) state={4}",
+                relX, relY, cell.X, cell.Y, state);
+
             if (cell.X < 0 || cell.Y < 0)
+            {
+                tooltip?.Hide();
                 return; // outside the floorplan
+            }
+
+            // Get screen position for tooltip placement
+            var mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
+            Vector2 screenPos = new Vector2(mouse.X, mouse.Y);
 
             switch (state)
             {
                 case BasesScreenState.NotAdding:
+                    // Show tooltip for facility under cursor, or empty cell hint
+                    FacilityHandle facility = SelectedBaseFloorplan.GetFacilityAt((int)cell.X, (int)cell.Y);
+                    if (facility != null)
+                    {
+                        tooltip?.ShowForFacility(facility.FacilityInfo, screenPos);
+                    }
+                    else
+                    {
+                        tooltip?.ShowEmpty(screenPos);
+                    }
                     break;
 
                 case BasesScreenState.AddAccessLift:
                 case BasesScreenState.AddFacility:
                     UpdateNewFacilityPosition(cell);
+                    // Show tooltip for the placement ghost
+                    if (newFacility != null)
+                    {
+                        tooltip?.ShowForPlacement(newFacility, screenPos);
+                    }
                     break;
 
                 default:
@@ -273,35 +403,39 @@ namespace ProjectXenocide.UI.Screens
             }
         }
 
-    /// <summary>
-    /// Called by SceneMouseHandler when the left mouse button is pressed inside the
-    /// 3D viewport.  Places the facility when in add-facility mode; does nothing in
-    /// normal mode.  Demolition is triggered exclusively by right-click so there is
-    /// no risk of accidentally dismantling a facility while trying to place one.
-    /// </summary>
-    private void OnSceneLeftClicked(float relX, float relY)
-    {
-        Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick2);
-        Vector2 cell = RelToCell(relX, relY);
-        if (cell.X < 0 || cell.Y < 0)
-            return;
-
-        switch (state)
+        /// <summary>
+        /// Called by SceneMouseHandler when the left mouse button is pressed inside the
+        /// 3D viewport.  Places the facility when in add-facility mode; does nothing in
+        /// normal mode.  Demolition is triggered exclusively by right-click so there is
+        /// no risk of accidentally dismantling a facility while trying to place one.
+        /// </summary>
+        private void OnSceneLeftClicked(float relX, float relY)
         {
-            case BasesScreenState.NotAdding:
-                // Left-click in normal mode does nothing — only right-click demolishes.
-                break;
+            Vector2 cell = RelToCell(relX, relY);
+            Logger.Info("OnSceneLeftClicked: rel=({0:F3},{1:F3}) cell=({2},{3}) state={4}",
+                relX, relY, cell.X, cell.Y, state);
 
-            case BasesScreenState.AddAccessLift:
-            case BasesScreenState.AddFacility:
-                AddFacility(cell);
-                break;
+            if (cell.X < 0 || cell.Y < 0)
+                return;
 
-            default:
-                Debug.Assert(false);
-                break;
+            Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick2);
+
+            switch (state)
+            {
+                case BasesScreenState.NotAdding:
+                    // Left-click in normal mode does nothing — only right-click demolishes.
+                    break;
+
+                case BasesScreenState.AddAccessLift:
+                case BasesScreenState.AddFacility:
+                    AddFacility(cell);
+                    break;
+
+                default:
+                    Debug.Assert(false);
+                    break;
+            }
         }
-    }
 
         /// <summary>
         /// Called by SceneMouseHandler when the right mouse button is pressed inside the
@@ -310,10 +444,14 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void OnSceneRightClicked(float relX, float relY)
         {
-            Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick2);
             Vector2 cell = RelToCell(relX, relY);
+            Logger.Info("OnSceneRightClicked: rel=({0:F3},{1:F3}) cell=({2},{3}) state={4}",
+                relX, relY, cell.X, cell.Y, state);
+
             if (cell.X < 0 || cell.Y < 0)
                 return;
+
+            Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick2);
 
             // Right-click always tries to demolish, even during placement mode
             if (state != BasesScreenState.NotAdding)
@@ -404,15 +542,19 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="e">Not used</param>
         private void OnBuildFacilitiesButton(object sender, EventArgs e)
         {
+            Logger.Info("OnBuildFacilitiesButton: state={0} baseEmpty={1}", state, SelectedBaseFloorplan.IsBaseEmpty());
+
             if (BasesScreenState.NotAdding == state)
             {
                 // if base is empty, first step is to add an access lift
                 if (SelectedBaseFloorplan.IsBaseEmpty())
                 {
+                    Logger.Info("Base empty — entering AddAccessLift mode");
                     State = BasesScreenState.AddAccessLift;
                 }
                 else
                 {
+                    Logger.Info("Opening BuildFacilityDialog");
                     ScreenManager.ShowDialog(new BuildFacilityDialog(this));
                 }
             }
@@ -499,6 +641,8 @@ namespace ProjectXenocide.UI.Screens
         private void UpdateNewFacilityPosition(Microsoft.Xna.Framework.Vector2 cellCoords)
         {
             Debug.Assert(null != newFacility);
+            Logger.Trace("UpdateNewFacilityPosition: ghost cell ({0},{1}) facility={2}",
+                cellCoords.X, cellCoords.Y, newFacility.FacilityInfo.Id);
             newFacility.X = (SByte)cellCoords.X;
             newFacility.Y = (SByte)cellCoords.Y;
         }
@@ -510,11 +654,29 @@ namespace ProjectXenocide.UI.Screens
         private void AddFacility(Microsoft.Xna.Framework.Vector2 cellCoords)
         {
             UpdateNewFacilityPosition(cellCoords);
+
+            // Check affordability before placing — the dialog checks this too, but
+            // the AddAccessLift path bypasses the dialog, so we guard here as well.
+            int cost = newFacility.FacilityInfo.BuildCost;
+            if (!Xenocide.GameState.GeoData.XCorp.Bank.CanAfford(cost))
+            {
+                Logger.Warn("AddFacility: cannot afford {0} (cost=${1}, balance=${2})",
+                    newFacility.FacilityInfo.Id, cost,
+                    Xenocide.GameState.GeoData.XCorp.Bank.CurrentBalance);
+                Util.ShowMessageBox(Strings.MSGBOX_INSUFFICIENT_FUNDS);
+                return;
+            }
+
             XenoError error = SelectedBaseFloorplan.IsPositionLegal(newFacility);
+            Logger.Debug("AddFacility: cell=({0},{1}) facility={2} cost=${3} error={4}",
+                cellCoords.X, cellCoords.Y, newFacility.FacilityInfo.Id, cost, error);
+
             if ((XenoError.None == error) ||
                 ((BasesScreenState.AddAccessLift == state) && (XenoError.CellHasNoNeighbours == error)))
             {
-                Xenocide.GameState.GeoData.XCorp.Bank.Debit(newFacility.FacilityInfo.BuildCost);
+                Logger.Info("AddFacility: PLACING {0} at ({1},{2}) baseIndex={3}",
+                    newFacility.FacilityInfo.Id, cellCoords.X, cellCoords.Y, selectedBase);
+                Xenocide.GameState.GeoData.XCorp.Bank.Debit(cost);
                 SelectedBaseFloorplan.AddFacility(newFacility);
 
                 // Redraw scene with changes
@@ -522,6 +684,8 @@ namespace ProjectXenocide.UI.Screens
             }
             else
             {
+                Logger.Info("AddFacility: REJECTED {0} at ({1},{2}) reason={3}",
+                    newFacility.FacilityInfo.Id, cellCoords.X, cellCoords.Y, error);
                 Util.ShowMessageBox(Util.GetErrorMessage(error));
             }
         }
@@ -531,6 +695,8 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void CancelFacility()
         {
+            Logger.Debug("CancelFacility: cancelling placement of {0}",
+                newFacility?.FacilityInfo?.Id ?? "null");
             State = BasesScreenState.NotAdding;
             NewFacility = null;
             // Set text back to normal
@@ -546,6 +712,7 @@ namespace ProjectXenocide.UI.Screens
             FacilityHandle facility = SelectedBaseFloorplan.GetFacilityAt((int)cellCoords.X, (int)cellCoords.Y);
             if (null != facility)
             {
+                Logger.Info("RemoveFacility: {0} at ({1},{2})", facility.FacilityInfo.Id, cellCoords.X, cellCoords.Y);
                 XenoError error = SelectedBaseFloorplan.CanRemoveFacility(facility);
                 if (XenoError.None == error)
                 {
@@ -556,6 +723,11 @@ namespace ProjectXenocide.UI.Screens
                     // if yes is pressed, delete the facility and redraw scene with changes
                     dlg.YesAction += delegate ()
                     {
+                        Logger.Info("RemoveFacility: CONFIRMED dismantle of {0}", facility.FacilityInfo.Id);
+                        // Store for potential undo
+                        lastDemolishedFacility = facility;
+                        lastDemolishedBaseIndex = selectedBase;
+
                         Xenocide.GameState.GeoData.XCorp.Bank.Credit(facility.FacilityInfo.ScrapRevenue);
                         SelectedBaseFloorplan.RemoveFacility(facility);
                         ScreenManager.ScheduleScreen(new BasesScreen(selectedBase));
@@ -565,8 +737,39 @@ namespace ProjectXenocide.UI.Screens
                 }
                 else
                 {
+                    Logger.Info("RemoveFacility: REJECTED reason={0}", error);
                     Util.ShowMessageBox(Util.GetErrorMessage(error));
                 }
+            }
+            else
+            {
+                Logger.Trace("RemoveFacility: no facility at ({0},{1})", cellCoords.X, cellCoords.Y);
+            }
+        }
+
+        /// <summary>
+        /// Undo the last demolition by restoring the demolished facility.
+        /// Called when user presses Ctrl+Z.
+        /// </summary>
+        private void UndoDemolition()
+        {
+            if (lastDemolishedFacility != null && lastDemolishedBaseIndex == selectedBase)
+            {
+                Logger.Info("UndoDemolition: restoring {0} at baseIndex={1}",
+                    lastDemolishedFacility.FacilityInfo.Id, selectedBase);
+
+                // Refund the scrap revenue we gave
+                Xenocide.GameState.GeoData.XCorp.Bank.Debit(lastDemolishedFacility.FacilityInfo.ScrapRevenue);
+                
+                // Re-add the facility
+                SelectedBaseFloorplan.AddFacility(lastDemolishedFacility);
+                
+                // Clear the undo buffer
+                lastDemolishedFacility = null;
+                lastDemolishedBaseIndex = -1;
+
+                // Redraw scene
+                ScreenManager.ScheduleScreen(new BasesScreen(selectedBase));
             }
         }
 
@@ -633,12 +836,15 @@ namespace ProjectXenocide.UI.Screens
             get { return state; }
             set
             {
+                Logger.Debug("State transition: {0} -> {1} (baseIndex={2})", state, value, selectedBase);
+
                 // if adding a facility, buttons are disabled
                 EnableButtonSounds = (value == BasesScreenState.NotAdding);
 
                 state = value;
                 if (BasesScreenState.AddAccessLift == state)
                 {
+                    Logger.Info("Auto-creating access lift ghost for empty base");
                     NewFacility = new FacilityHandle("FAC_BASE_ACCESS_FACILITY");
                 }
 
@@ -647,6 +853,9 @@ namespace ProjectXenocide.UI.Screens
                 // "Select" in the BuildFacilityDialog) doesn't leak through as a
                 // spurious click on the first frame the scene is active again.
                 sceneMouseHandler?.Reset();
+
+                // Hide tooltip on state change
+                tooltip?.Hide();
             }
         }
 
@@ -691,6 +900,40 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private SceneMouseHandler sceneMouseHandler;
 
+        /// <summary>
+        /// Hover tooltip showing facility info under the cursor.
+        /// </summary>
+        private FacilityTooltip tooltip;
+
+        /// <summary>
+        /// The last demolished facility, stored for potential undo via Ctrl+Z.
+        /// Null if no facility has been demolished yet or if the last action
+        /// wasn't a demolition.
+        /// </summary>
+        private FacilityHandle lastDemolishedFacility;
+
+        /// <summary>
+        /// The base index from which the last facility was demolished.
+        /// </summary>
+        private int lastDemolishedBaseIndex;
+
+        /// <summary>
+        /// Previous frame's keyboard state for key-down detection.
+        /// </summary>
+        private Microsoft.Xna.Framework.Input.KeyboardState _prevKeyboardState;
+
         #endregion Fields
+
+        /// <summary>
+        /// Implement IDisposable
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                tooltip?.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

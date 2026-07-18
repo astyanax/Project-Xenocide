@@ -85,17 +85,26 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             // get a soldier
             Mission mission = new MockMission();
             Battle battlescape = new Battle(mission);
-            Combatant combatant = battlescape.Teams[1].Combatants[0];
+            Combatant combatant = battlescape.Teams[Team.XCorp].Combatants[0];
+
+            // Use Cloak armor (side=35) so 50 damage produces the expected 15 injury
+            combatant.Armor = Xenocide.StaticTables.ArmorList["Cloak"];
+
+            // Set stats to match expected assertion values
+            combatant.Stats[Statistic.FiringAccuracy] = 70;
+            combatant.Stats[Statistic.Stamina] = 50;
+            combatant.Stats[Statistic.EnergyRecharge] = 50;
 
             // Setup random generator
             List<int> randomNumbers = new List<int>();
+            randomNumbers.Add(49); // Damage (hit 1)
             randomNumbers.Add(0);  // Bonus stun (hit 1)
-            randomNumbers.Add(1);  // Body part
-            randomNumbers.Add(1);  // Fatal wounds
+            randomNumbers.Add(1);  // Body part (hit 1)
+            randomNumbers.Add(1);  // Fatal wounds (hit 1)
+            randomNumbers.Add(48); // Damage (hit 2)
             randomNumbers.Add(0);  // Bonus stun (hit 2)
-            randomNumbers.Add(2);  // Body part
-            randomNumbers.Add(2);  // Fatal wounds
-            // randomNumbers.Add(10);
+            randomNumbers.Add(2);  // Body part (hit 2)
+            randomNumbers.Add(2);  // Fatal wounds (hit 2)
             Xenocide.Rng.RigDice(randomNumbers);
 
             // Set health of soldier
@@ -110,8 +119,8 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             Debug.Assert(combatant.Accuracy(ActiveArm.Both) == 70);
             Debug.Assert(combatant.Stats[Statistic.StaminaLeft] == 50);
 
-            // Hit the soldier (should use up first random number for damage and second random 
-            // number for fatal wounds body part and third number for the fata wounds)
+            // Hit the soldier (consumes: damage randomization, bonus stun, body part,
+            // and fatal wounds count — 4 RNG values per hit)
             combatant.Hit(new DamageInfo(50, DamageType.Plasma), new Vector3(1, 0, 0));
             Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 15);
             Debug.Assert(combatant.Stats[Statistic.FatalWoundsHead] == 0);

@@ -6,6 +6,7 @@ namespace ProjectXenocide.Assets
         ButtonClick2,
         ButtonOver,
         ExitGame,
+        Error,
         PlanetViewSpeedFast,
         PlanetViewSpeedSlow,
         PlanetViewSpeedVeryFast,

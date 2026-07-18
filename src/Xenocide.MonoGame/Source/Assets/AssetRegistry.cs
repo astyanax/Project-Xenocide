@@ -14,6 +14,7 @@ namespace ProjectXenocide.Assets
             [SoundId.ButtonClick2] = "Menu/buttonclick2_changesetting.ogg",
             [SoundId.ButtonOver] = "Menu/buttonover.ogg",
             [SoundId.ExitGame] = "Menu/exitgame.ogg",
+            [SoundId.Error] = "Menu/error.ogg",
             [SoundId.PlanetViewSpeedFast] = "PlanetView/speedfast.ogg",
             [SoundId.PlanetViewSpeedSlow] = "PlanetView/speedslow.ogg",
             [SoundId.PlanetViewSpeedVeryFast] = "PlanetView/speedveryfast.ogg",

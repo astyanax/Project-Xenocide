@@ -28,7 +28,7 @@
       <Value xsi:type="xsd:int">2</Value>
     </Variable>
     <Variable Type="float" Name="ContentPanel.Height" SetsValue="true">
-      <Value xsi:type="xsd:float">-28</Value>
+      <Value xsi:type="xsd:float">0</Value>
     </Variable>
     <Variable Type="DimensionUnitType" Name="ContentPanel.HeightUnits" SetsValue="true">
       <Value xsi:type="xsd:int">2</Value>
@@ -66,8 +66,29 @@
     <Variable Type="float" Name="DialogBackground.Y" SetsValue="true">
       <Value xsi:type="xsd:float">0</Value>
     </Variable>
-    <Variable Type="string" Name="ContentPanel.Parent" SetsValue="true">
+    <Variable Type="float" Name="ScrollViewerInstance.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">-28</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ScrollViewerInstance.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">2</Value>
+    </Variable>
+    <Variable Type="string" Name="ScrollViewerInstance.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">DialogPanel</Value>
+    </Variable>
+    <Variable Type="float" Name="ScrollViewerInstance.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ScrollViewerInstance.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">2</Value>
+    </Variable>
+    <Variable Type="float" Name="ScrollViewerInstance.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">28</Value>
+    </Variable>
+    <Variable Type="float" Name="ScrollViewerInstance.X" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="string" Name="ContentPanel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ScrollViewerInstance</Value>
     </Variable>
     <Variable Type="float" Name="ContentPanel.Width" SetsValue="true">
       <Value xsi:type="xsd:float">0</Value>
@@ -130,6 +151,7 @@
   <Instance Name="TitleBar" BaseType="Container" />
   <Instance Name="TitleLabel" BaseType="Text" />
   <Instance Name="CloseButton" BaseType="XenocideButton" />
+  <Instance Name="ScrollViewerInstance" BaseType="ScrollViewer" />
   <Instance Name="ContentPanel" BaseType="Container" />
   <Behaviors />
 </ScreenSave>

@@ -1,3 +1,5 @@
+using NLog;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -39,6 +41,8 @@ namespace ProjectXenocide.UI
     /// </summary>
     public sealed class SceneMouseHandler
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>Fires every frame the cursor is inside the viewport, with relative coords.</summary>
         public event System.Action<float, float> MouseMoved;
 
@@ -54,10 +58,14 @@ namespace ProjectXenocide.UI
         /// <param name="viewportRect">
         /// The scene area in relative screen coordinates (0..1).
         /// Typically matches the UiRect passed to the 3D scene's Draw().
+        /// A zero rect (default UiRect) means no area is hit-testable,
+        /// and no events will ever fire — see BasesScreen field initializer.
         /// </param>
         public SceneMouseHandler(UiRect viewportRect)
         {
             this.viewportRect = viewportRect;
+            Logger.Info("SceneMouseHandler ctor: viewportRect=({0},{1},{2},{3})",
+                viewportRect.Left, viewportRect.Top, viewportRect.Right, viewportRect.Bottom);
         }
 
         /// <summary>
@@ -81,6 +89,8 @@ namespace ProjectXenocide.UI
             prevLeftDown = current.LeftButton == ButtonState.Pressed;
             prevRightDown = current.RightButton == ButtonState.Pressed;
             prevScrollValue = current.ScrollWheelValue;
+            Logger.Debug("Reset: prevLeftDown={0} prevRightDown={1} prevScroll={2}",
+                prevLeftDown, prevRightDown, prevScrollValue);
         }
 
         /// <summary>
@@ -99,6 +109,15 @@ namespace ProjectXenocide.UI
 
             bool inViewport = mouse.X >= vpX && mouse.X < vpX + vpW
                            && mouse.Y >= vpY && mouse.Y < vpY + vpH;
+
+            Logger.Trace("SceneMouseHandler.Update: mouse=({0},{1}) vpRect=({2},{3},{4},{5}) inViewport={6}",
+                mouse.X, mouse.Y, vpX, vpY, vpX + vpW, vpY + vpH, inViewport);
+
+            if (!inViewport && vpW == 0 && vpH == 0)
+            {
+                Logger.Warn("SceneMouseHandler has zero-area viewport — mouse events will never fire. " +
+                    "Check that BasesScreen.sceneWindowRect is initialized before LoadContent.");
+            }
 
             // Fire MouseMoved every frame cursor is in the viewport
             if (inViewport)

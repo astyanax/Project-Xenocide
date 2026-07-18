@@ -274,7 +274,14 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             }
             else
             {
-                this.graphic = Xenocide.StaticTables.ItemList[Armor.Id].BattlescapeInfo.Graphic;
+                var itemList = Xenocide.StaticTables.ItemList;
+                try
+                {
+                    this.graphic = itemList[Armor.Id].BattlescapeInfo.Graphic;
+                }
+                catch (KeyNotFoundException)
+                {
+                }
             }
             this.flyer = Armor.Flyer;
         }
