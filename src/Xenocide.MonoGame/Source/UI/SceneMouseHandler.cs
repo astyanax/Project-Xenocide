@@ -1,8 +1,8 @@
-using NLog;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using NLog;
 
 namespace ProjectXenocide.UI
 {
