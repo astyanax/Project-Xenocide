@@ -20,13 +20,15 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Screens
 {
-    public class AeroscapeScreen : GumScreen
+    public partial class AeroscapeScreen : GumScreen
     {
         public AeroscapeScreen(Aircraft aircraft, Ufo ufo)
             : base("AeroscapeScreen")
         {
             this.aircraft = aircraft;
             this.ufo = ufo;
+            this.log = new BattleLog();
+            this.dogfightController = new DogfightController(aircraft, ufo, log);
 
             aircraft.OnDogfightStart();
             ufo.OnDogfightStart();
@@ -118,10 +120,7 @@ namespace ProjectXenocide.UI.Screens
 
         private void GoToStartScreen()
         {
-            if (!ufo.IsDestroyed)
-                ufo.OnDogfightFinished();
-            if (!aircraft.IsDestroyed)
-                aircraft.OnDogfightFinished();
+            dogfightController.EndDogfight();
 
             if (Xenocide.DebugTesting)
             {
@@ -199,52 +198,14 @@ namespace ProjectXenocide.UI.Screens
         private void UpdateDogfight()
         {
             elapsed = 0.0;
-
-            if (!dogfightOver)
-            {
-                int logsize = log.Entries.Count;
-                do
-                {
-                    log.UpdateTime(1.0);
-
-                    Attack(aircraft, ufo);
-                    if (!dogfightOver)
-                    {
-                        if (ufo.IsArmed)
-                        {
-                            Attack(ufo, aircraft);
-                        }
-                    }
-                } while (!dogfightOver && log.Entries.Count == logsize);
-                DrawScreen();
-            }
+            dogfightController.AdvanceTurn();
+            DrawScreen();
         }
 
-        private void Attack(Craft attacker, Craft target)
-        {
-            AttackResult result = attacker.Attack(target, log);
-            switch (result)
-            {
-                case AttackResult.OpponentCrashed:
-                case AttackResult.OpponentDestroyed:
-                case AttackResult.OpponentFled:
-                case AttackResult.OutOfAmmo:
-                    dogfightOver = true;
-                    break;
-
-                case AttackResult.Nothing:
-                    break;
-
-                default:
-                    Debug.Assert(false);
-                    break;
-            }
-        }
-
-        private bool dogfightOver;
+        private DogfightController dogfightController;
         private Ufo ufo;
         private Aircraft aircraft;
-        private BattleLog log = new BattleLog();
+        private BattleLog log;
         bool runRealTime;
         double elapsed;
     }

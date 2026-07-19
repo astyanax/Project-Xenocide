@@ -58,7 +58,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// Screen for Saving game to file, and loading game from a file
     /// </summary>
-    public class LoadSaveGameScreen : GumScreen
+    public partial class LoadSaveGameScreen : GumScreen
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -72,6 +72,7 @@ namespace ProjectXenocide.UI.Screens
         {
             this.mode = mode;
             this.cancelScreen = cancelScreen;
+            this.saveFileController = new SaveFileController();
         }
 
         #region Create the Gum controls
@@ -178,14 +179,13 @@ namespace ProjectXenocide.UI.Screens
         private void OnSaveGame(object sender, EventArgs e)
         {
             String saveName = filenameEditBox.Text;
-            if (SaveGameExists(saveName))
+            if (saveFileController.SaveGameExists(saveName))
             {
                 Util.ShowMessageBox(Strings.SCREEN_LOADSAVEGAME_DUPLICATE_FILENAME);
             }
             else
             {
-                // if able to save to file, update the grid
-                if (WriteToFile(saveName))
+                if (saveFileController.TrySaveGame(saveName))
                 {
                     AddSaveGameToGrid(saveName);
                     Util.ShowMessageBox("Game saved successfully.");
@@ -197,30 +197,18 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>Load the seleted game</summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope",
-           Justification = "FxCop False Positive")]
         private void OnLoadGame(object sender, EventArgs e)
         {
             if (savesgrid.SelectedRow != null)
             {
                 string filename = savesgrid.GetSelectedCellText();
-
-                GameState game = ReadFromFile(filename);
-                if (null != game)
+                GameState game = saveFileController.TryLoadGame(filename);
+                if (game != null)
                 {
                     Xenocide.GameState = game;
-
                     Xenocide.GameState.GeoData.GeoTime.StopTime();
-
                     Util.ShowMessageBox("Game loaded successfully.");
                     ScreenManager.ScheduleScreen(new GeoscapeScreen());
-                }
-                else
-                {
-                    if (string.IsNullOrEmpty(filename))
-                        Util.ShowMessageBox("Please enter a filename to load.");
-                    else
-                        Util.ShowMessageBox($"No save file found named '{filename}'.");
                 }
             }
         }
@@ -258,16 +246,11 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="e">Not used</param>
         private void OnDeleteGame(object sender, EventArgs e)
         {
-            // delete the currently selected save game
             if (savesgrid.SelectedRow != null)
             {
                 string filename = savesgrid.GetSelectedCellText();
+                saveFileController.TryDeleteSave(filename);
 
-                //ToDo: we should pop up a messagebox to confirm user really does want to delete the savegame
-
-                DeleteSaveGameFile(filename);
-
-                // Now remove the savegame from the screen's grid (and edit box)
                 savesgrid.RemoveRow(savesgrid.GetRowIndexByTag(filename));
                 filenameEditBox.Text = String.Empty;
             }
@@ -294,35 +277,14 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void AddSaveGamesToGrid()
         {
-            string saveDir = GetSaveDirectory();
-            if (Directory.Exists(saveDir))
+            foreach (string filename in saveFileController.GetSaveFiles())
             {
-                ICollection<string> FileList = Directory.GetFiles(saveDir);
-                foreach (string filename in FileList)
+                string name = Path.GetFileName(filename);
+                var header = saveFileController.ReadSaveHeader(name);
+                if (header != null)
                 {
-                    using (FileStream stream = File.Open(filename, FileMode.Open))
-                    {
-                        AddSaveGameToGrid(stream, Path.GetFileName(filename));
-                    }
+                    AddRowToGrid(name, header.RealTime, header.GameTime);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Add this save game to the grid of saved games
-        /// </summary>
-        /// <param name="stream">stream holding save game</param>
-        /// <param name="filename">Name of the file</param>
-        private void AddSaveGameToGrid(FileStream stream, String filename)
-        {
-            stream.Position = 0;
-            GameStateSerializer.SaveFileHeader header = GameStateSerializer.ReadHeader(stream);
-            if (header != null)
-            {
-                AddRowToGrid(
-                    filename,
-                    header.RealTime,
-                    header.GameTime);
             }
         }
 
@@ -332,100 +294,14 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="filename">filename of saved game</param>
         private void AddSaveGameToGrid(string filename)
         {
-            string saveDir = GetSaveDirectory();
-            using (FileStream stream = File.Open(Path.Combine(saveDir, filename), FileMode.Open))
+            var header = saveFileController.ReadSaveHeader(filename);
+            if (header != null)
             {
-                AddSaveGameToGrid(stream, filename);
+                AddRowToGrid(filename, header.RealTime, header.GameTime);
             }
         }
 
-        /// <summary>
-        /// Write the current game state to file
-        /// </summary>
-        /// <param name="saveName">Name of file to save game as</param>
-        /// <returns>true if successful</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes",
-            Justification = "Guideline is wrong in this case")]
-        private bool WriteToFile(string saveName)
-        {
-            try
-            {
-                string saveDir = GetSaveDirectory();
-                if (File.Exists(saveDir))
-                    File.Delete(saveDir);
-                Directory.CreateDirectory(saveDir);
-                string filename = Path.Combine(saveDir, saveName);
-                using (FileStream stream = File.Create(filename))
-                {
-                    GameStateSerializer.Save(stream, Xenocide.GameState, Xenocide.CurrentVersion);
-                }
-                return true;
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e, "Save failed");
-                Util.ShowMessageBox(Strings.MSGBOX_UNABLE_TO_SAVE_FILE, e.Message);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Retrieve a GameState from file
-        /// </summary>
-        /// <param name="filename">Name of file holding save game</param>
-        /// <returns>GameState to set game to</returns>
-        private GameState ReadFromFile(string filename)
-        {
-            string saveDir = GetSaveDirectory();
-            using (FileStream stream = File.Open(Path.Combine(saveDir, filename), FileMode.Open))
-            {
-                string error;
-                GameState gameState = GameStateSerializer.Load(stream, Xenocide.CurrentVersion, out error);
-                if (gameState != null)
-                {
-                    return gameState;
-                }
-                else
-                {
-                    Util.ShowMessageBox(Strings.SCREEN_LOADSAVEGAME_VERSION_CONFLICT);
-                    return null;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Does a SaveGame with this (file)name already exist?
-        /// </summary>
-        /// <param name="filename">filename to check</param>
-        /// <returns>true if it exists</returns>
-        private bool SaveGameExists(string filename)
-        {
-            string saveDir = GetSaveDirectory();
-            return File.Exists(Path.Combine(saveDir, filename));
-        }
-
-        /// <summary>
-        /// Delete the specified file (presumed to be a save game)
-        /// </summary>
-        /// <param name="filename">Name of file to delete</param>
-        private void DeleteSaveGameFile(string filename)
-        {
-            string saveDir = GetSaveDirectory();
-            string path = Path.Combine(saveDir, filename);
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
-
-        /// <summary>
-        /// Get the container (directory) holding the saved files
-        /// </summary>
-        /// <returns>the container</returns>
-        private string GetSaveDirectory()
-        {
-            return savesDirectory;
-        }
+        private SaveFileController saveFileController;
 
         #endregion File manipulation routines
 
@@ -475,9 +351,5 @@ namespace ProjectXenocide.UI.Screens
         /// Screen to go to if cancel is pressed
         /// </summary>
         private CancelScreen cancelScreen;
-
-        private string savesDirectory = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "Xenocide", "saves");
     }
 }

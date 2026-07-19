@@ -49,7 +49,12 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// This is the screen that allows user to sell items stored in an outpost
     /// </summary>
-    public class SellScreen : GumScreen
+    /// <remarks>
+    /// ARCHITECTURE: GUI layer only — all game logic is delegated to the nested Controller
+    /// class (in Sell/SellScreenController.cs). This screen manages the item grid
+    /// and handles sale interactions.
+    /// </remarks>
+    public partial class SellScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -59,6 +64,7 @@ namespace ProjectXenocide.UI.Screens
             : base("SellScreen")
         {
             this.selectedOutpostIndex = selectedOutpostIndex;
+            this.controller = new SellController(SelectedOutpost);
         }
 
         #region Create the Gum controls
@@ -153,12 +159,9 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void PopulateGrid()
         {
-            foreach (Item i in SelectedOutpost.Inventory.ListContents())
+            foreach (TransactionLineItem lineItem in controller.GetSellableItems())
             {
-                if (i.CanRemoveFromOutpost)
-                {
-                    AddRowToGrid(new TransactionLineItem(i, SelectedOutpost.Inventory));
-                }
+                AddRowToGrid(lineItem);
             }
         }
 
@@ -230,15 +233,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="e">Not used</param>
         private void OnConfirmButton(object sender, EventArgs e)
         {
-            // Get the money from selling the items
-            Xenocide.GameState.GeoData.XCorp.Bank.Credit(CalculateTotalValue());
-
-            // and now get rid of the items
-            foreach (TransactionLineItem lineItem in SalesList.Values)
-            {
-                lineItem.RemoveItems(SelectedOutpost.Inventory, null);
-            }
-
+            controller.ExecuteSale(SalesList);
             GoToBasesScreen();
         }
 
@@ -268,7 +263,8 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void UpdateTotalValue()
         {
-            totalValueText.Text = Util.StringFormat(Strings.SCREEN_SELL_TOTAL_VALUE, CalculateTotalValue());
+            totalValueText.Text = Util.StringFormat(Strings.SCREEN_SELL_TOTAL_VALUE,
+                SellController.CalculateTotalValue(SalesList));
         }
 
         /// <summary>
@@ -286,20 +282,6 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>
-        /// Figure out what the total value of the sales is going to be
-        /// </summary>
-        /// <returns>total value</returns>
-        private int CalculateTotalValue()
-        {
-            int value = 0;
-            foreach (TransactionLineItem lineItem in SalesList.Values)
-            {
-                value += lineItem.Value;
-            }
-            return value;
-        }
-
-        /// <summary>
         /// Close this screen and go back to the Bases Screen
         /// </summary>
         private void GoToBasesScreen()
@@ -308,6 +290,11 @@ namespace ProjectXenocide.UI.Screens
         }
 
         #region Fields
+
+        /// <summary>
+        /// Controller handling game logic for selling.
+        /// </summary>
+        private SellController controller;
 
         /// <summary>
         /// The outpost items will be taken from

@@ -47,7 +47,7 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Screens
 {
-    sealed class BaseInfoScreen : GumScreen
+    sealed partial class BaseInfoScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -57,6 +57,7 @@ namespace ProjectXenocide.UI.Screens
             : base("BaseInfoScreen")
         {
             this.selectedOutpostIndex = selectedOutpostIndex;
+            this.controller = new Controller(SelectedOutpost);
         }
 
         #region Create the Gum controls
@@ -193,12 +194,9 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="staffType">Type of people this row is about</param>
         private void AddRowToStaffGrid(string staffType)
         {
-            // figure out number of people of this type and number working
-            string typeName = Xenocide.StaticTables.ItemList[staffType].Name;
-            int total = Util.SequenceLength(SelectedOutpost.ListStaff(staffType));
-            int idle = Util.SequenceLength(SelectedOutpost.ListStaff(staffType, false));
+            string typeName = Controller.GetStaffTypeName(staffType);
+            var (idle, total) = controller.GetStaffCounts(staffType);
 
-            // create the row
             int rowNum = staffGrid.RowCount;
             staffGrid.AddRow(rowNum, typeName, idle.ToString(CultureInfo.InvariantCulture), total.ToString(CultureInfo.InvariantCulture));
         }
@@ -234,29 +232,8 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void CalcDefenseStrength()
         {
-            uint baseDefenseStrength = 0;
-            uint defensesInUse = 0;
-            uint defensesUnderConstruction = 0;
-            foreach (FacilityHandle f in SelectedOutpost.Floorplan.Facilities)
-            {
-                DefenseFacilityInfo df = f.FacilityInfo as DefenseFacilityInfo;
-                if (df != null)
-                {
-                    if (!f.IsUnderConstruction)
-                    {
-                        baseDefenseStrength += (uint)df.DefenseStrength;
-                        ++defensesInUse;
-                    }
-                    else
-                    {
-                        defensesUnderConstruction += (uint)df.DefenseStrength;
-                    }
-                }
-            }
-
-            // Defense rating
-            AddRowToFacilityGrid(Strings.SCREEN_BASEINFO_ROW_DEFENSE_STRENGTH, defensesInUse,
-                baseDefenseStrength, defensesUnderConstruction);
+            var (inUse, total, building) = controller.GetDefenseStrength();
+            AddRowToFacilityGrid(Strings.SCREEN_BASEINFO_ROW_DEFENSE_STRENGTH, inUse, total, building);
         }
 
         /// <summary>
@@ -265,22 +242,11 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="facilityName">identifer for type of facility</param>
         private void AddUniqueFacilityStatsToGrid(String facilityName)
         {
-            FacilityHandle facility = SelectedOutpost.Floorplan.FindUniqueFacility(facilityName);
-            String name = Xenocide.StaticTables.FacilityList[facilityName].Name;
-            if (null == facility)
+            String name = Controller.GetFacilityName(facilityName);
+            var stats = controller.GetUniqueFacilityStats(facilityName);
+            if (stats.HasValue)
             {
-                if (Xenocide.GameState.GeoData.XCorp.TechManager.IsAvailable(facilityName))
-                {
-                    AddRowToFacilityGrid(name, 0, 0, 0);
-                }
-            }
-            else if (facility.IsUnderConstruction)
-            {
-                AddRowToFacilityGrid(name, 0, 0, 1);
-            }
-            else
-            {
-                AddRowToFacilityGrid(name, 1, 1, 0);
+                AddRowToFacilityGrid(name, stats.Value.inUse, stats.Value.total, stats.Value.building);
             }
         }
 
@@ -321,48 +287,16 @@ namespace ProjectXenocide.UI.Screens
         private void OnOutpostNameChange(object sender, EventArgs e)
         {
             string text = nameEditBox.Text;
-            bool valid = true;
 
-            // If name is identical, do nothing (in case enter pressed repeatedly)
-            if (SelectedOutpost.Name == text)
+            if (controller.TryRenameOutpost(text))
             {
-                return;
-            }
-
-            // Ensure something was given
-            if (String.IsNullOrEmpty(text))
-            {
-                Util.ShowMessageBox(Strings.MSGBOX_BASE_NEEDS_NAME);
-                valid = false;
-            }
-            else
-            {
-                // See if name already exists for a different outpost. For this comparison
-                // ignore upper/lower case.
-                foreach (Outpost outpost in Xenocide.GameState.GeoData.Outposts)
-                {
-                    if ((outpost != SelectedOutpost)
-                        && text.Equals(outpost.Name, StringComparison.OrdinalIgnoreCase))
-                    {
-                        Util.ShowMessageBox(Strings.MSGBOX_BASE_NAMES_ARE_UNIQUE, text);
-                        valid = false;
-                        break;
-                    }
-                }
-            }
-
-            // If name is valid update it
-            if (valid)
-            {
-                SelectedOutpost.Name = text;
                 outpostsListComboBox.Text = text;
                 outpostsListComboBox.Items[selectedOutpostIndex] = text;
-                Util.ShowMessageBox(Strings.MSGBOX_BASE_NAME_CHANGED);
             }
             else
             {
                 // Put current name back into box
-                nameEditBox.Text = SelectedOutpost.Name;
+                nameEditBox.Text = controller.GetCurrentName();
             }
         }
 
@@ -419,6 +353,11 @@ namespace ProjectXenocide.UI.Screens
         }
 
         #region Fields
+
+        /// <summary>
+        /// Controller handling game logic for base information.
+        /// </summary>
+        private Controller controller;
 
         /// <summary>
         /// The outpost we're showing the details for

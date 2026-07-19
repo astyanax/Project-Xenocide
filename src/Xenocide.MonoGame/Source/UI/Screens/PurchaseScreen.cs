@@ -49,7 +49,12 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// This is the screen that allows user to buy items for a base
     /// </summary>
-    public class PurchaseScreen : GumScreen
+    /// <remarks>
+    /// ARCHITECTURE: GUI layer only — all game logic is delegated to the nested Controller
+    /// class (in Purchase/PurchaseScreenController.cs). This screen manages the item grid
+    /// and handles purchase interactions.
+    /// </remarks>
+    public partial class PurchaseScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -59,6 +64,7 @@ namespace ProjectXenocide.UI.Screens
             : base("PurchaseScreen")
         {
             this.selectedBaseIndex = selectedBaseIndex;
+            this.controller = new PurchaseController(SelectedBase);
         }
 
         #region Create the Gum controls
@@ -169,7 +175,7 @@ namespace ProjectXenocide.UI.Screens
         /// <returns>true if items can be purchased</returns>
         private static bool AvailableForPurchase(ItemInfo item)
         {
-            return item.CanPurchase && Xenocide.GameState.GeoData.XCorp.TechManager.IsAvailable(item.Id);
+            return PurchaseController.IsAvailableForPurchase(item);
         }
 
         /// <summary>
@@ -180,7 +186,7 @@ namespace ProjectXenocide.UI.Screens
         {
             int itemIndex = Xenocide.StaticTables.ItemList.IndexOf(item.Id);
             grid.AddRow(itemIndex, item.Name,
-                Util.ToString(SelectedBase.Inventory.NumberInInventory(item)),
+                Util.ToString(controller.GetItemCount(item)),
                 Util.ToString(item.BuyPrice),
                 "0");
 
@@ -202,9 +208,9 @@ namespace ProjectXenocide.UI.Screens
                 int itemListIndex = tag.Value;
                 ++ShoppingList[itemListIndex];
 
-                if (!CanFit() ||
-                    !Xenocide.GameState.GeoData.XCorp.Bank.CanAfford(CalculateTotalCost())
-                )
+                int totalCost = PurchaseController.CalculateTotalCost(ShoppingList);
+                if (!controller.CanFitAll(ShoppingList) ||
+                    !PurchaseController.CanAfford(totalCost))
                 {
                     --ShoppingList[itemListIndex];
                 }
@@ -237,19 +243,7 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="e">Not used</param>
         private void OnConfirmButton(object sender, EventArgs e)
         {
-            Xenocide.GameState.GeoData.XCorp.Bank.Debit(CalculateTotalCost());
-
-            Shipment shipment = new Shipment(SelectedBase, Shipment.CalcEta());
-            foreach (KeyValuePair<int, int> kvp in ShoppingList)
-            {
-                ItemInfo item = Xenocide.StaticTables.ItemList[kvp.Key];
-                for (int i = 0; i < kvp.Value; ++i)
-                {
-                    shipment.Add(item.Manufacture());
-                }
-            }
-            shipment.Ship();
-
+            controller.ExecutePurchase(ShoppingList);
             GoToBasesScreen();
         }
 
@@ -278,7 +272,8 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void UpdateTotalCost()
         {
-            totalCostText.Text = Util.StringFormat(Strings.SCREEN_PURCHASE_TOTAL_COST, CalculateTotalCost());
+            totalCostText.Text = Util.StringFormat(Strings.SCREEN_PURCHASE_TOTAL_COST,
+                PurchaseController.CalculateTotalCost(ShoppingList));
         }
 
         /// <summary>
@@ -294,61 +289,6 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>
-        /// Figure out what the total cost of the purchases is going to be
-        /// </summary>
-        /// <returns>total cost</returns>
-        private int CalculateTotalCost()
-        {
-            int cost = 0;
-            foreach (KeyValuePair<int, int> kvp in ShoppingList)
-            {
-                cost += (Xenocide.StaticTables.ItemList[kvp.Key].BuyPrice * kvp.Value);
-            }
-            return cost;
-        }
-
-        /// <summary>
-        /// Check if user fit everything on the shopping list into the outpost's inventory
-        /// <remarks>
-        /// 1. Gives a warning dialog if user has insufficent funds
-        /// 2. It's not very efficient, but it runs in response to user input, so doesn't need to be
-        /// </remarks>
-        /// </summary>
-        /// <returns>true if user can fit everything on the list</returns>
-        private bool CanFit()
-        {
-            bool canFit = true;
-
-            foreach (KeyValuePair<int, int> kvp in ShoppingList)
-            {
-                ItemInfo item = Xenocide.StaticTables.ItemList[kvp.Key];
-                for (int i = 0; i < kvp.Value; ++i)
-                {
-                    if (!SelectedBase.Inventory.CanFit(item))
-                    {
-                        canFit = false;
-                    }
-                    SelectedBase.Inventory.AllocateSpace(item);
-                }
-            }
-
-            foreach (KeyValuePair<int, int> kvp in ShoppingList)
-            {
-                ItemInfo item = Xenocide.StaticTables.ItemList[kvp.Key];
-                for (int i = 0; i < kvp.Value; ++i)
-                {
-                    SelectedBase.Inventory.ReleaseSpace(item);
-                }
-            }
-
-            if (!canFit)
-            {
-                Util.ShowMessageBox(Strings.MSGBOX_CANT_FIT);
-            }
-            return canFit;
-        }
-
-        /// <summary>
         /// Close this screen and go back to the Bases Screen
         /// </summary>
         private void GoToBasesScreen()
@@ -357,6 +297,11 @@ namespace ProjectXenocide.UI.Screens
         }
 
         #region Fields
+
+        /// <summary>
+        /// Controller handling game logic for purchasing.
+        /// </summary>
+        private PurchaseController controller;
 
         /// <summary>
         /// The outpost purchases will be sent to
