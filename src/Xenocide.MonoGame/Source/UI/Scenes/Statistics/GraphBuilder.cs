@@ -44,9 +44,8 @@ namespace ProjectXenocide.UI.Scenes.Statistics
     /// and line outlines connecting data points.
     /// </summary>
     /// <remarks>
-    /// ARCHITECTURE: Generates VertexPositionColor data in pixel coordinates.
-    /// The StatisticsRenderer calls Build() and draws the results with
-    /// DrawUserPrimitives().
+    /// ARCHITECTURE: Generates VertexPositionColor data in pixel coordinates,
+    /// using flat (non-indexed) vertex arrays for MonoGame DesktopGL compatibility.
     /// 
     /// COORDINATE SYSTEM: Pixel coordinates within the provided bounds rectangle.
     /// X-axis: 12 month positions evenly spaced across bounds.Width.
@@ -73,25 +72,16 @@ namespace ProjectXenocide.UI.Scenes.Statistics
         }
 
         /// <summary>
-        /// Builds all vertex and index data for rendering.
+        /// Builds all vertex data for rendering (no indices — flat vertex arrays).
         /// </summary>
-        /// <param name="fillVertices">Output: triangle vertices for filled areas</param>
-        /// <param name="fillIndices">Output: triangle indices for filled areas</param>
-        /// <param name="lineVertices">Output: line vertices for outlines</param>
-        /// <param name="lineIndices">Output: line indices for outlines</param>
+        /// <param name="fillVertices">Output: triangle vertices for filled areas (3 per triangle)</param>
+        /// <param name="lineVertices">Output: line vertices for outlines (2 per segment)</param>
         public void Build(
             out List<VertexPositionColor> fillVertices,
-            out List<short> fillIndices,
-            out List<VertexPositionColor> lineVertices,
-            out List<short> lineIndices)
+            out List<VertexPositionColor> lineVertices)
         {
             fillVertices = new List<VertexPositionColor>();
-            fillIndices = new List<short>();
             lineVertices = new List<VertexPositionColor>();
-            lineIndices = new List<short>();
-
-            short fillIndex = 0;
-            short lineIndex = 0;
 
             foreach (Series series in dataset)
             {
@@ -114,41 +104,34 @@ namespace ProjectXenocide.UI.Scenes.Statistics
                     month %= 12;
                 }
 
-                // Build filled area triangles (line to baseline)
-                for (int i = 0; i < 12; i++)
-                {
-                    float topX = points[i].X;
-                    float topY = points[i].Y;
-                    float bottomY = bounds.Bottom;
-
-                    fillVertices.Add(new VertexPositionColor(new Vector3(topX, topY, 0), fillColor));
-                    fillVertices.Add(new VertexPositionColor(new Vector3(topX, bottomY, 0), fillColor));
-                }
-
+                // Build filled area triangles (expanded to flat vertex list, no indices)
+                // Each pair of adjacent data points forms 2 triangles (a quad):
+                //   Triangle 1: top[i], bottom[i], top[i+1]
+                //   Triangle 2: bottom[i], bottom[i+1], top[i+1]
                 for (int i = 0; i < 11; i++)
                 {
-                    short baseIdx = (short)(fillIndex + i * 2);
+                    float topXi = points[i].X;
+                    float topYi = points[i].Y;
+                    float topXi1 = points[i + 1].X;
+                    float topYi1 = points[i + 1].Y;
+                    float bottomY = bounds.Bottom;
+
                     // Triangle 1: top[i], bottom[i], top[i+1]
-                    fillIndices.Add(baseIdx);
-                    fillIndices.Add((short)(baseIdx + 1));
-                    fillIndices.Add((short)(baseIdx + 2));
+                    fillVertices.Add(new VertexPositionColor(new Vector3(topXi, topYi, 0), fillColor));
+                    fillVertices.Add(new VertexPositionColor(new Vector3(topXi, bottomY, 0), fillColor));
+                    fillVertices.Add(new VertexPositionColor(new Vector3(topXi1, topYi1, 0), fillColor));
+
                     // Triangle 2: bottom[i], bottom[i+1], top[i+1]
-                    fillIndices.Add((short)(baseIdx + 1));
-                    fillIndices.Add((short)(baseIdx + 3));
-                    fillIndices.Add((short)(baseIdx + 2));
+                    fillVertices.Add(new VertexPositionColor(new Vector3(topXi, bottomY, 0), fillColor));
+                    fillVertices.Add(new VertexPositionColor(new Vector3(topXi1, bottomY, 0), fillColor));
+                    fillVertices.Add(new VertexPositionColor(new Vector3(topXi1, topYi1, 0), fillColor));
                 }
 
-                fillIndex += 24;
-
-                // Build line segments
+                // Build line segments (already flat pairs)
                 for (int i = 0; i < 11; i++)
                 {
                     lineVertices.Add(new VertexPositionColor(new Vector3(points[i].X, points[i].Y, 0), seriesColor));
                     lineVertices.Add(new VertexPositionColor(new Vector3(points[i + 1].X, points[i + 1].Y, 0), seriesColor));
-
-                    lineIndices.Add(lineIndex);
-                    lineIndices.Add((short)(lineIndex + 1));
-                    lineIndex += 2;
                 }
             }
         }
