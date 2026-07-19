@@ -55,7 +55,7 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// Screen that shows historical statistics
     /// </summary>
-    sealed class StatisticsScreen : GumScreen
+    sealed partial class StatisticsScreen : GumScreen
     {
         /// <summary>
         /// Default constructor (obviously)
