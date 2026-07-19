@@ -13,6 +13,20 @@ using ProjectXenocide.Assets;
 
 namespace ProjectXenocide.UI.Screens
 {
+    /// <summary>
+    /// Screen base class with Gum GUI framework integration. Handles loading
+    /// .gusx layouts, creating controls, and wiring button click sounds.
+    /// </summary>
+    /// <remarks>
+    /// ARCHITECTURE: Central class for all Gum-based screens. On Show(), attempts
+    /// to load a .gusx layout from the GumProject. Falls back to programmatic
+    /// StackPanel construction if no layout exists. Subclasses implement
+    /// CreateGumControls() to wire buttons and populate content.
+    /// 
+    /// GUI PATTERN: Use WireButton(name, handler) to attach click handlers to
+    /// named buttons in the .gusx layout. Use AddChild() to add controls to
+    /// either the Gum layout or fallback StackPanel.
+    /// </remarks>
     public abstract class GumScreen : Screen
     {
         /// <summary>

@@ -8,6 +8,16 @@ using ProjectXenocide.Assets;
 
 namespace ProjectXenocide.UI.Screens
 {
+    /// <summary>
+    /// Base class for all displayable UI frames. Provides lifecycle hooks,
+    /// content loading, and escape key handling.
+    /// </summary>
+    /// <remarks>
+    /// ARCHITECTURE: Root of the screen hierarchy. Manages the CeguiId used to
+    /// look up Gum .gusx layouts. Provides disposable pattern for cleanup.
+    /// 
+    /// LIFECYCLE: Show() → LoadContent() → Update()/Draw() → UnloadContent() → Dispose()
+    /// </remarks>
     public abstract class Frame : IDisposable
     {
         protected Frame(string ceguiId)

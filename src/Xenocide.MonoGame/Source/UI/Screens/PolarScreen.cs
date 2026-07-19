@@ -42,6 +42,18 @@ using ProjectXenocide.Utils;
 
 namespace ProjectXenocide.UI.Screens
 {
+    /// <summary>
+    /// Screen base class for 3D scenes with polar (spherical) camera control.
+    /// Manages viewport rendering and mouse-based camera rotation/zoom.
+    /// </summary>
+    /// <remarks>
+    /// ARCHITECTURE: Adds a PolarScene for 3D rendering and handles mouse input
+    /// for camera manipulation. Subclasses set the Scene property and override
+    /// OnLeftMouseDownInScene() for click interactions.
+    /// 
+    /// INPUT HANDLING: Right-drag rotates camera, scroll wheel zooms, left-click
+    /// dispatches to OnLeftMouseDownInScene() with normalized coordinates.
+    /// </remarks>
     public abstract class PolarScreen : GumScreen
     {
         protected PolarScreen(string ceguiId)

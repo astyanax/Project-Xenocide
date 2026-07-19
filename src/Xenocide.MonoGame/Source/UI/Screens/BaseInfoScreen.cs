@@ -47,6 +47,15 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Screens
 {
+    /// <summary>
+    /// Displays detailed information about an outpost including facilities,
+    /// staff, defense strength, and provides access to monthly costs.
+    /// </summary>
+    /// <remarks>
+    /// ARCHITECTURE: Screen delegates to BaseInfoScreenController for game logic.
+    /// Displays outpost statistics and provides navigation to facility management
+    /// and monthly cost breakdown screens.
+    /// </remarks>
     sealed partial class BaseInfoScreen : GumScreen
     {
         /// <summary>

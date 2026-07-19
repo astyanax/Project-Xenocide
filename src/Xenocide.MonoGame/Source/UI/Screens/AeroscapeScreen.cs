@@ -20,6 +20,16 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Screens
 {
+    /// <summary>
+    /// Dogfight screen for aerial combat between aircraft and UFOs.
+    /// Manages turn-based combat rounds and displays tactical HUD.
+    /// </summary>
+    /// <remarks>
+    /// ARCHITECTURE: Screen manages GUI while DogfightController handles all combat
+    /// logic. Uses BattlescapeScreen-style state machine for turn phases.
+    /// 
+    /// GAME STATE MUTATIONS: Advancing turns, applying damage, updating fuel/ammo.
+    /// </remarks>
     public partial class AeroscapeScreen : GumScreen
     {
         public AeroscapeScreen(Aircraft aircraft, Ufo ufo)
