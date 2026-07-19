@@ -50,12 +50,30 @@ using Xenocide.Resources;
 namespace ProjectXenocide.UI.Screens
 {
     /// <summary>
-    /// This is the screen that shows Topics being researched and available for research
+    /// Screen for managing research projects and assigning scientists to research topics.
     /// </summary>
-    public class ResearchScreen : GumScreen
+    /// <remarks>
+    /// ARCHITECTURE: This screen follows the 3-layer pattern (GUI / Controller / Scene).
+    /// This file contains the GUI layer only. All game logic (scientist assignment,
+    /// project management, topic validation) is delegated to the nested Controller class
+    /// in Research/ResearchScreenController.cs.
+    ///
+    /// DATA FLOW:
+    ///   User clicks "Add Scientist" → OnAddIdleButton → controller.AddWorkersToProject()
+    ///   → RefreshGrid → controller.GetActiveProjects() / controller.GetStartableTopics()
+    ///   → grid rows updated
+    ///
+    /// GRID LAYOUT:
+    ///   Column 0: Project/Topic name (50% width)
+    ///   Column 1: Assigned scientists count (25% width)
+    ///   Column 2: Days to completion / ETA (22% width)
+    ///   Rows are keyed by integer tags (lineItems dictionary) for stable identity
+    ///   across grid rebuilds.
+    /// </remarks>
+    public partial class ResearchScreen : GumScreen
     {
         /// <summary>
-        /// Constructor (obviously)
+        /// Constructs the research screen.
         /// </summary>
         public ResearchScreen()
             : base("Research")
@@ -65,12 +83,12 @@ namespace ProjectXenocide.UI.Screens
         #region Create the Gum controls
 
         /// <summary>
-        /// add the buttons to the screen
+        /// Initializes the Gum controls, controller, and populates the research grid.
         /// </summary>
         protected override void CreateGumControls()
         {
-            ProjectMgr.Update();
-            FindIdleScientists();
+            controller = new Controller();
+            controller.FindIdleScientists();
 
             if (GumRoot != null)
             {
@@ -84,7 +102,7 @@ namespace ProjectXenocide.UI.Screens
                 availableText.Visual.X = 20;
                 availableText.Visual.Y = 80;
                 AddChild(availableText);
-                availableText.Text = MakeIdleScientistsString();
+                availableText.Text = controller.MakeIdleScientistsString();
 
                 InitializeGrid();
                 grid.Visual.X = 20;
@@ -96,7 +114,7 @@ namespace ProjectXenocide.UI.Screens
 
             availableText = new Label();
             RootContainer.AddChild(availableText);
-            availableText.Text = MakeIdleScientistsString();
+            availableText.Text = controller.MakeIdleScientistsString();
 
             InitializeGrid();
             PopulateGrid();
@@ -128,7 +146,7 @@ namespace ProjectXenocide.UI.Screens
         private Button closeButton;
 
         /// <summary>
-        /// Create GridPanel which holds items being shiped
+        /// Creates the grid panel with column headers for the research display.
         /// </summary>
         private void InitializeGrid()
         {
@@ -140,114 +158,80 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>
-        /// Put the list of items being shiped into the grid
+        /// Populates the grid with active projects and startable topics from the controller.
         /// </summary>
         private void PopulateGrid()
         {
-            // active projects at top
-            foreach (ResearchProject project in ProjectMgr)
+            foreach (ProjectLineItem project in Controller.GetActiveProjects())
             {
-                AddRowToGrid(new ProjectLineItem(project));
+                AddRowToGrid(project);
             }
 
-            // followed by projects that could be started
-            ResearchGraph graph = Xenocide.StaticTables.ResearchGraph;
-            foreach (ResearchTopic topic in graph.StartableTopics(TechMgr, Outposts))
+            foreach (TopicLineItem topic in Controller.GetStartableTopics())
             {
-                if (!ProjectMgr.IsInProgress(topic.Id))
-                {
-                    AddRowToGrid(new TopicLineItem(topic));
-                }
+                AddRowToGrid(topic);
             }
         }
 
         /// <summary>
-        /// Add a row to the grid
+        /// Adds a single row to the research grid.
         /// </summary>
-        /// <param name="lineItem">data to put on line</param>
         private void AddRowToGrid(LineItem lineItem)
         {
             int rowNum = grid.RowCount;
             grid.AddRow(rowNum, lineItem.Name, lineItem.DisplayNumWorkers, lineItem.Eta);
-
-            // and record details of this item
             lineItems[rowNum] = lineItem;
         }
 
         #endregion Create the Gum controls
 
-        #region event handlers
+        #region Event handlers
 
-        /// <summary>React to user pressing the More Scientists</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
         private void OnMoreButton(object sender, EventArgs e)
         {
             AddIdleScientists(1);
         }
 
-        /// <summary>React to user pressing the Add Idle Scientists Button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
         private void OnAddIdleButton(object sender, EventArgs e)
         {
-            AddIdleScientists(idleScientists.Count);
+            AddIdleScientists(controller.IdleScientistCount);
         }
 
-        /// <summary>React to user pressing the Remove All Scientists Button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
         private void OnRemoveAllButton(object sender, EventArgs e)
         {
             RemoveAllScientists();
         }
 
-        /// <summary>React to user pressing the Less Scientists button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
         private void OnLessButton(object sender, EventArgs e)
         {
             RemoveScientist();
         }
 
-        /// <summary>React to user pressing the Close button</summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
         private void OnCloseButton(object sender, EventArgs e)
         {
             GoToGeoscapeScreen();
         }
 
-        #endregion event handlers
+        #endregion Event handlers
 
         /// <summary>
-        /// Add scientists to the currently selected project
+        /// Adds scientists to the currently selected project via the controller,
+        /// then refreshes the GUI.
         /// </summary>
-        /// <param name="count">number of scientists to add</param>
         private void AddIdleScientists(int count)
         {
             int? tag = GetSelectedTag();
             if (tag.HasValue)
             {
-                // can only add scientist if we have one that's idle
-                if (0 < idleScientists.Count)
+                if (0 < controller.IdleScientistCount)
                 {
-                    Debug.Assert((0 < count) && (count <= idleScientists.Count));
+                    Debug.Assert((0 < count) && (count <= controller.IdleScientistCount));
                     int rowNum = tag.Value;
                     ProjectLineItem project = lineItems[rowNum].GetProject();
-
-                    // update lineItems in case we've promoted from TopicLine to ProjectLine
                     lineItems[rowNum] = project;
 
-                    // add specified number of idle scientists to the project
-                    for (int i = 0; i < count; ++i)
-                    {
-                        project.AddWorker(idleScientists);
-                    }
+                    controller.AddWorkersToProject(project, count);
                     UpdateDetails(rowNum, project);
-
-                    // we may have started a new project and consumed an artifact needed to
-                    // start other research topics
                     RemoveUnavailableTopics();
                 }
                 else
@@ -258,7 +242,7 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>
-        /// Remove a scientist from the currently selected project
+        /// Removes a single scientist from the currently selected project.
         /// </summary>
         private void RemoveScientist()
         {
@@ -267,13 +251,13 @@ namespace ProjectXenocide.UI.Screens
             {
                 int rowNum = tag.Value;
                 LineItem lineItem = lineItems[rowNum];
-                lineItem.RemoveWorker(idleScientists);
+                controller.RemoveWorkerFromProject(lineItem);
                 UpdateDetails(rowNum, lineItem);
             }
         }
 
         /// <summary>
-        /// Remove all scientists from the currently selected project
+        /// Removes all scientists from the currently selected project.
         /// </summary>
         private void RemoveAllScientists()
         {
@@ -282,31 +266,25 @@ namespace ProjectXenocide.UI.Screens
             {
                 int rowNum = tag.Value;
                 LineItem lineItem = lineItems[rowNum];
-                while (0 < lineItem.NumWorkers)
-                {
-                    lineItem.RemoveWorker(idleScientists);
-                }
+                controller.RemoveAllWorkersFromProject(lineItem);
                 UpdateDetails(rowNum, lineItem);
             }
         }
 
         /// <summary>
-        /// Update the screen to reflect the latest changes
+        /// Updates the grid row and idle scientist display after a change.
         /// </summary>
-        /// <param name="rowNum">row in grid that is selected</param>
-        /// <param name="lineItem">LineItem associated with this row</param>
         private void UpdateDetails(int rowNum, LineItem lineItem)
         {
-            availableText.Text = MakeIdleScientistsString();
-
-            // update row in grid
+            availableText.Text = controller.MakeIdleScientistsString();
             int row = grid.GetRowIndexByTag(rowNum);
             grid.SetCell(row, 1, lineItem.DisplayNumWorkers);
             grid.SetCell(row, 2, lineItem.Eta);
         }
 
         /// <summary>
-        /// Remove any rows from the grid that can no longer be researched
+        /// Removes grid rows for topics that can no longer be researched
+        /// (e.g., prerequisites no longer met after using an artifact).
         /// </summary>
         private void RemoveUnavailableTopics()
         {
@@ -329,17 +307,11 @@ namespace ProjectXenocide.UI.Screens
             }
         }
 
-        /// <summary>
-        /// Close this screen and go back to the Geoscape screen
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope",
-            Justification = "FxCop False Positive")]
         private static void GoToGeoscapeScreen()
         {
             ScreenManager.ScheduleScreen(new GeoscapeScreen());
         }
 
-        // Get currently selected item from Grid.  Give error message if nothing selected
         private int? GetSelectedTag()
         {
             if (grid.SelectedRow == null)
@@ -350,236 +322,17 @@ namespace ProjectXenocide.UI.Screens
             return (int)grid.GetSelectedTag();
         }
 
-        /// <summary>
-        /// Make up text to show, giving number of Idle scientists
-        /// </summary>
-        /// <returns>text to show</returns>
-        private String MakeIdleScientistsString()
-        {
-            return Util.StringFormat(Strings.SCREEN_RESEARCH_IDLE_SCIENTISTS, idleScientists.Count);
-        }
-
-        /// <summary>
-        /// Find all the scientists (in X-Corp as whole) that are not doing anything
-        /// but have available lab space to work in
-        /// </summary>
-        private void FindIdleScientists()
-        {
-            foreach (Outpost outpost in Outposts)
-            {
-                uint spaceFree = outpost.Statistics.Capacities["STORAGE_SCIENTIST"].Available;
-                int count = -1;
-                foreach (Person p in outpost.Inventory.ListStaff("ITEM_PERSON_SCIENTIST", false))
-                {
-                    if (++count < spaceFree)
-                    {
-                        idleScientists.Add(p);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Holds the data for a line in the grid
-        /// </summary>
-        private abstract class LineItem
-        {
-            /// <summary>
-            /// Constructor
-            /// </summary>
-            protected LineItem() { }
-
-            /// <summary>
-            /// Remove a worker from the line item
-            /// </summary>
-            /// <param name="idle">list of idle workers to add now idle woker to</param>
-            public virtual void RemoveWorker(IList<Person> idle) { }
-
-            /// <summary>
-            /// Get the project line represented by this line in the Grid, creating a project if necessary
-            /// </summary>
-            /// <returns>line to put in grid for this topic</returns>
-            public abstract ProjectLineItem GetProject();
-
-            #region Fields
-
-            /// <summary>
-            /// Value to show in "Name" column
-            /// </summary>
-            public abstract string Name { get; }
-
-            /// <summary>
-            /// Value to show in "Assigned Scientists" column
-            /// </summary>
-            public virtual string DisplayNumWorkers { get { return String.Empty; } }
-
-            /// <summary>
-            /// Number of workers assigned to project
-            /// </summary>
-            public virtual int NumWorkers { get { return 0; } }
-
-            /// <summary>
-            /// Value to show in "Days Left" column
-            /// </summary>
-            public virtual string Eta { get { return String.Empty; } }
-
-            /// <summary>
-            /// Can line item still be researched?
-            /// </summary>
-            public virtual bool CanResearch { get { return true; } }
-
-            #endregion Fields
-        }
-
-        private sealed class ProjectLineItem : LineItem
-        {
-            /// <summary>
-            /// Constructor
-            /// </summary>
-            /// <param name="project">Research Project this line is giving details for</param>
-            public ProjectLineItem(ResearchProject project)
-            {
-                this.project = project;
-            }
-
-            /// <summary>
-            /// Add a worker to the line item
-            /// </summary>
-            /// <param name="idle">list of idle workers to get worker from</param>
-            public void AddWorker(List<Person> idle)
-            {
-                Person worker = idle[idle.Count - 1];
-                idle.RemoveAt(idle.Count - 1);
-                project.Add(worker);
-            }
-
-            /// <summary>
-            /// Remove a worker from the line item
-            /// </summary>
-            /// <param name="idle">list of idle workers to add now idle woker to</param>
-            public override void RemoveWorker(IList<Person> idle)
-            {
-                if (0 < project.NumWorkers)
-                {
-                    idle.Add(project.RemoveWorker());
-                }
-            }
-
-            /// <summary>
-            /// Get the project line represented by this line in the Grid, creating a project if necessary
-            /// </summary>
-            /// <returns>line to put in grid for this topic</returns>
-            public override ProjectLineItem GetProject()
-            {
-                return this;
-            }
-
-            #region Fields
-
-            /// <summary>
-            /// Value to show in "Name" column
-            /// </summary>
-            public override string Name { get { return project.Name; } }
-
-            /// <summary>
-            /// Value to show in "Assigned Scientists" column
-            /// </summary>
-            public override string DisplayNumWorkers { get { return Util.ToString(NumWorkers); } }
-
-            /// <summary>
-            /// Number of workers assigned to project
-            /// </summary>
-            public override int NumWorkers { get { return project.NumWorkers; } }
-
-            /// <summary>
-            /// Value to show in "Days Left" column
-            /// </summary>
-            public override string Eta { get { return project.CalcEtaToShow(); } }
-
-            /// <summary>
-            /// Research Project this line gives details for
-            /// </summary>
-            private ResearchProject project;
-
-            #endregion Fields
-        }
-
-        private sealed class TopicLineItem : LineItem
-        {
-            /// <summary>
-            /// Constructor
-            /// </summary>
-            /// <param name="topic">ResearchTopic  this line is giving details for</param>
-            public TopicLineItem(ResearchTopic topic)
-            {
-                this.topic = topic;
-            }
-
-            /// <summary>
-            /// Get the project line represented by this line in the Grid, creating a project if necessary
-            /// </summary>
-            /// <returns>line to put in grid for this topic</returns>
-            public override ProjectLineItem GetProject()
-            {
-                return new ProjectLineItem(ProjectMgr.CreateProject(topic.Id, TechMgr, Outposts));
-            }
-
-            #region Fields
-
-            /// <summary>
-            /// Value to show in "Name" column
-            /// </summary>
-            public override string Name { get { return topic.Name; } }
-
-            /// <summary>
-            /// Can line item still be researched?
-            /// </summary>
-            public override bool CanResearch { get { return topic.CanResearch(TechMgr, Outposts); } }
-
-            /// <summary>
-            /// Research Topic this line gives details for
-            /// </summary>
-            private ResearchTopic topic;
-
-            #endregion Fields
-        }
-
         #region Fields
 
         /// <summary>
-        /// Shortcut
+        /// Controller handling all research game logic (scientist assignment, project management).
         /// </summary>
-        private static ResearchProjectManager ProjectMgr
-        {
-            get { return Xenocide.GameState.GeoData.XCorp.ResearchManager; }
-        }
+        private Controller controller;
 
         /// <summary>
-        /// Shortcut
-        /// </summary>
-        private static TechnologyManager TechMgr
-        {
-            get { return Xenocide.GameState.GeoData.XCorp.TechManager; }
-        }
-
-        /// <summary>
-        /// Shortcut
-        /// </summary>
-        private static ICollection<Outpost> Outposts
-        {
-            get { return Xenocide.GameState.GeoData.Outposts; }
-        }
-
-        /// <summary>
-        /// Bind lines in grid to object providing data to show.
-        /// format is Dictionary&lt;line id, LineData&gt;
+        /// Maps grid row tags to LineItem data objects for stable identity across rebuilds.
         /// </summary>
         private Dictionary<int, LineItem> lineItems = new Dictionary<int, LineItem>();
-
-        /// <summary>
-        /// Scienists that currently are not working, but could work
-        /// </summary>
-        private List<Person> idleScientists = new List<Person>();
 
         #endregion Fields
     }

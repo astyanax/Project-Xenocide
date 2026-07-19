@@ -51,7 +51,12 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// This is the screen that allows user set craft's weapons and crew
     /// </summary>
-    public class EquipCraftScreen : GumScreen
+    /// <remarks>
+    /// ARCHITECTURE: GUI layer only — all game logic is delegated to the nested Controller
+    /// class (in EquipCraft/EquipCraftScreenController.cs). This screen manages
+    /// two grids (craft, weapons) and handles pod equip/empty interactions.
+    /// </remarks>
+    public partial class EquipCraftScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -61,6 +66,7 @@ namespace ProjectXenocide.UI.Screens
             : base("EquipCraftScreen")
         {
             this.selectedOutpostIndex = selectedOutpostIndex;
+            this.controller = new Controller(SelectedOutpost);
         }
 
         #region Create the Gum controls
@@ -274,29 +280,21 @@ namespace ProjectXenocide.UI.Screens
         private void EmptyPod(int podId)
         {
             Aircraft aircraft = GetSelectedCraft();
-            if (null != aircraft)
+            if (controller.TryEmptyPod(aircraft, podId))
             {
-                if ((podId <= aircraft.WeaponPods.Count) && (null != aircraft.WeaponPods[podId - 1]))
-                {
-                    SelectedOutpost.Inventory.Add(aircraft.WeaponPods[podId - 1], false);
-                    aircraft.WeaponPods[podId - 1] = null;
-                    Refresh(aircraft);
-                }
+                Refresh(aircraft);
             }
         }
 
         private void EquipPod(int podId)
         {
             Aircraft aircraft = GetSelectedCraft();
-            if (null != aircraft)
+            if (aircraft != null)
             {
                 WeaponRow weaponRow = GetSelectedWeapon();
-                if ((null != weaponRow) && (podId <= aircraft.WeaponPods.Count))
+                if (controller.TryEquipPod(aircraft, podId, weaponRow))
                 {
-                    if (weaponRow.EquipPod(aircraft, podId))
-                    {
-                        Refresh(aircraft);
-                    }
+                    Refresh(aircraft);
                 }
             }
         }
@@ -369,63 +367,12 @@ namespace ProjectXenocide.UI.Screens
             textControl.Text = info.ToString();
         }
 
-        private sealed class WeaponRow
-        {
-            public WeaponRow(Item item, OutpostInventory inventory)
-            {
-                this.item = item;
-                this.inventory = inventory;
-            }
-
-            public bool EquipPod(Aircraft aircraft, int podId)
-            {
-                if (null == aircraft.WeaponPods[podId - 1])
-                {
-                    WeaponPod pod = (WeaponPod)Weapon.Manufacture();
-                    aircraft.WeaponPods[podId - 1] = pod;
-                    inventory.Remove(pod);
-                    return true;
-                }
-                else
-                {
-                    Util.ShowMessageBox(Strings.MSGBOX_POD_ALREADY_HAS_WEAPON);
-                    return false;
-                }
-            }
-
-            public int OnHand { get { return inventory.NumberInInventory(item.ItemInfo); } }
-
-            public string ClipSize { get { return Weapon.ClipSizeString(); } }
-
-            public string ClipsInBase
-            {
-                get
-                {
-                    if (null == Weapon.Clip)
-                    {
-                        return Strings.SCREEN_EQUIP_CRAFT_IRRELEVANT;
-                    }
-                    else
-                    {
-                        return Util.StringFormat("{0}", inventory.NumberInArmory(Weapon.Clip.Id));
-                    }
-                }
-            }
-
-            public String Name { get { return item.Name; } }
-
-            private CraftWeaponItemInfo Weapon { get { return item.ItemInfo as CraftWeaponItemInfo; } }
-
-            #region Fields
-
-            private Item item;
-
-            private OutpostInventory inventory;
-
-            #endregion Fields
-        }
-
         #region Fields
+
+        /// <summary>
+        /// Controller handling game logic for craft equipping.
+        /// </summary>
+        private Controller controller;
 
         private Outpost SelectedOutpost { get { return Xenocide.GameState.GeoData.Outposts[selectedOutpostIndex]; } }
 

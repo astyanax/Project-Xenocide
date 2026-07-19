@@ -51,7 +51,12 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// In this screen soldiers and xcaps get assigned to aircraft.
     /// </summary>
-    public class AssignToCraftScreen : GumScreen
+    /// <remarks>
+    /// ARCHITECTURE: GUI layer only — all game logic is delegated to the nested Controller
+    /// class (in AssignToCraft/AssignToCraftScreenController.cs). This screen manages
+    /// three grids (craft, soldiers, xcaps) and handles user interactions.
+    /// </remarks>
+    public partial class AssignToCraftScreen : GumScreen
     {
         /// <summary>
         /// Constructs a screen listing the soldiers stationed at the given base.
@@ -62,6 +67,7 @@ namespace ProjectXenocide.UI.Screens
             this.selectedOutpostIndex = selectedOutpostIndex;
             this.soldiers = new List<Person>(SelectedOutpost.ListStaff("ITEM_PERSON_SOLDIER"));
             this.xcaps = new List<Item>(SelectedOutpost.ListXcaps());
+            this.controller = new Controller(SelectedOutpost);
         }
 
         #region Create the Gum controls
@@ -261,7 +267,7 @@ namespace ProjectXenocide.UI.Screens
                 {
                     if (!this.xcaps.Contains(xcap))
                     {
-                        int xcapsFound = CountItemsOnCraft(xcap.ItemInfo.Id, aircraft);
+                        int xcapsFound = Controller.CountItemsOnCraft(xcap.ItemInfo.Id, aircraft);
                         xcapGrid.AddRow(xcap,
                             xcap.Name,
                             Util.ToString(0),
@@ -341,7 +347,7 @@ namespace ProjectXenocide.UI.Screens
                 if (xcapRow < 0) return;
 
                 xcapGrid.SetCell(xcapRow, 1, Util.ToString(SelectedOutpost.Inventory.NumberInArmory(xcap.ItemInfo.Id)));
-                xcapGrid.SetCell(xcapRow, 2, Util.ToString(CountItemsOnCraft(xcap.ItemInfo.Id, craft)));
+                xcapGrid.SetCell(xcapRow, 2, Util.ToString(Controller.CountItemsOnCraft(xcap.ItemInfo.Id, craft)));
             }
         }
 
@@ -402,158 +408,57 @@ namespace ProjectXenocide.UI.Screens
         private bool TryAssignSoldierToCraft()
         {
             Aircraft selectedAircraft = GetSelectedCraft();
+            Person selectedSoldier = GetSelectedSoldier();
 
-            if (null != selectedAircraft)
+            if (Controller.TryAssignSoldierToCraft(selectedAircraft, selectedSoldier))
             {
-                Person selectedSoldier = GetSelectedSoldier();
-
-                if (null != selectedSoldier)
-                {
-                    Aircraft craftWithSoldier = selectedSoldier.Aircraft;
-
-                    if (selectedAircraft.Soldiers.Count < selectedAircraft.MaxHumans)
-                    {
-                        if (null == craftWithSoldier)
-                        {
-                            selectedAircraft.Soldiers.Add(selectedSoldier, GetNextAvailablePosition(selectedAircraft));
-                            UpdateSoldierAndCraft();
-                            return true;
-                        }
-                        else if (selectedAircraft == craftWithSoldier)
-                        {
-                            Util.ShowMessageBox(Strings.MSGBOX_SOLDIER_ALREADY_ASSIGNED_THIS_CRAFT);
-                        }
-                        else
-                        {
-                            Util.ShowMessageBox(Strings.MSGBOX_SOLDIER_ALREADY_ASSIGNED_OTHER_CRAFT);
-                        }
-                    }
-                    else
-                    {
-                        Util.ShowMessageBox(Strings.MSGBOX_CRAFT_FULL_HUMANS);
-                    }
-                }
+                UpdateSoldierAndCraft();
+                return true;
             }
-
             return false;
         }
 
         private bool TryUnassignSoldierFromCraft()
         {
             Person selectedSoldier = GetSelectedSoldier();
-
-            if (null != selectedSoldier)
-            {
-                Aircraft craftWithSoldier = selectedSoldier.Aircraft;
-
-                if (null == craftWithSoldier)
-                {
-                    Util.ShowMessageBox(Strings.MSGBOX_SOLDIER_NOT_ASSIGNED);
-                }
-                else
-                {
-                    craftWithSoldier.Remove(selectedSoldier);
-                    return true;
-                }
-            }
-
-            return false;
+            return Controller.TryUnassignSoldierFromCraft(selectedSoldier);
         }
 
         private bool TryAssignXcapToCraft()
         {
             Aircraft selectedAircraft = GetSelectedCraft();
+            Item xcap = GetSelectedXcap();
 
-            if (null != selectedAircraft)
+            if (controller.TryAssignXcapToCraft(selectedAircraft, xcap))
             {
-                Item xcap = GetSelectedXcap();
-
-                if (xcap != null)
-                {
-                    if (SelectedOutpost.Inventory.NumberInArmory(xcap.ItemInfo.Id) == 0)
-                    {
-                        Util.ShowMessageBox(Strings.MSGBOX_NO_MORE_XCAPS_OUTPOST);
-                    }
-                    else
-                    {
-                        if (selectedAircraft.XCaps.Count < selectedAircraft.MaxXcaps)
-                        {
-                            SelectedOutpost.Inventory.Remove(xcap);
-                            selectedAircraft.XCaps.Add(xcap);
-                            UpdateXcapAndCraft();
-                            return true;
-                        }
-                        else
-                        {
-                            Util.ShowMessageBox(Strings.MSGBOX_CRAFT_FULL_XCAPS);
-                        }
-                    }
-                }
-                else
-                {
-                    Util.ShowMessageBox(Strings.MSGBOX_NO_XCAP_SELECTED);
-                }
+                UpdateXcapAndCraft();
+                return true;
             }
-
             return false;
         }
 
         private bool TryUnassignXcapFromCraft()
         {
             Aircraft selectedAircraft = GetSelectedCraft();
-
-            if (null != selectedAircraft)
-            {
-                Item xcap = GetSelectedXcap();
-
-                if (xcap != null)
-                {
-                    if (selectedAircraft.XCaps.Count == 0)
-                    {
-                        Util.ShowMessageBox(Strings.MSGBOX_NO_MORE_XCAPS_CRAFT);
-                    }
-                    else
-                    {
-                        selectedAircraft.XCaps.Remove(xcap);
-                        SelectedOutpost.Inventory.Add(xcap, false);
-                        return true;
-                    }
-                }
-                else
-                {
-                    Util.ShowMessageBox(Strings.MSGBOX_NO_XCAP_SELECTED);
-                }
-            }
-
-            return false;
+            Item xcap = GetSelectedXcap();
+            return controller.TryUnassignXcapFromCraft(selectedAircraft, xcap);
         }
 
-        private static int CountItemsOnCraft(string type, Aircraft aircraft)
+        private void RepositionSoldier(int distance)
         {
-            int itemsFound = 0;
-
-            foreach (Item xcap in aircraft.XCaps)
+            Person soldier = GetSelectedSoldier();
+            if (Controller.TryRepositionSoldier(soldier, distance))
             {
-                if (xcap.ItemInfo.Id == type)
+                Aircraft craft = soldier.Aircraft;
+                if (craft != null)
                 {
-                    itemsFound++;
+                    // Refresh all soldier positions for this craft
+                    foreach (var pair in craft.Soldiers)
+                    {
+                        UpdateSoldierPosition(pair.Key, pair.Value);
+                    }
                 }
             }
-
-            return itemsFound;
-        }
-
-        private static int GetNextAvailablePosition(Aircraft aircraft)
-        {
-            for (int i = 1; i <= aircraft.MaxHumans; i++)
-            {
-                if (!aircraft.Soldiers.ContainsValue(i))
-                {
-                    return i;
-                }
-            }
-
-            return 0;
         }
 
         private Aircraft GetSelectedCraft()
@@ -581,42 +486,6 @@ namespace ProjectXenocide.UI.Screens
             return xcapGrid.GetSelectedTag() as Item;
         }
 
-        private void RepositionSoldier(int distance)
-        {
-            Person soldier = GetSelectedSoldier();
-            if (null == soldier)
-                return;
-
-            Aircraft craft = soldier.Aircraft;
-            if (null == craft)
-            {
-                Util.ShowMessageBox(Strings.MSGBOX_SOLDIER_NOT_ASSIGNED);
-                return;
-            }
-
-            int newPosition = craft.Soldiers[soldier] + distance;
-
-            if (newPosition < 1 || newPosition > craft.MaxHumans)
-            {
-                Util.ShowMessageBox(Strings.MSGBOX_NO_POSITION);
-            }
-            else
-            {
-                foreach (KeyValuePair<Person, int> pair in craft.Soldiers)
-                {
-                    if (pair.Value == newPosition)
-                    {
-                        craft.Soldiers[pair.Key] = craft.Soldiers[soldier];
-                        UpdateSoldierPosition(pair.Key, craft.Soldiers[soldier]);
-                        break;
-                    }
-                }
-
-                craft.Soldiers[soldier] = newPosition;
-                UpdateSoldierPosition(soldier, newPosition);
-            }
-        }
-
         #endregion
 
         #region Fields
@@ -634,6 +503,8 @@ namespace ProjectXenocide.UI.Screens
         private List<Person> rowToSoldier = new List<Person>();
 
         private List<Item> rowToXcap = new List<Item>();
+
+        private Controller controller;
 
         #endregion Fields
     }

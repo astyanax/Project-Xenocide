@@ -51,12 +51,39 @@ using Xenocide.Resources;
 namespace ProjectXenocide.UI.Screens
 {
     /// <summary>
-    /// This is the screen where player sets the items an outpost is manufacturing
+    /// Screen for managing manufacturing projects at an outpost.
     /// </summary>
-    public class ManufactureScreen : GumScreen
+    /// <remarks>
+    /// ARCHITECTURE: This screen follows the 3-layer pattern (GUI / Controller / Scene).
+    /// This file contains the GUI layer only. All game logic (engineer assignment,
+    /// project management, build quantity changes) is delegated to the nested Controller
+    /// class in Manufacture/ManufactureScreenController.cs.
+    ///
+    /// DATA FLOW:
+    ///   User clicks "More Engineers" → OnMoreButton → controller.AddWorkersToProject()
+    ///   → UpdateDetails → projectGrid.SetCell() + ShowRequirements()
+    ///
+    /// GRID LAYOUT:
+    ///   Project Grid (top):
+    ///     Column 0: Item name (350px)
+    ///     Column 1: Assigned engineers (105px)
+    ///     Column 2: Build quantity (105px)
+    ///     Column 3: Days to completion (105px)
+    ///   Requirements Grid (bottom):
+    ///     Column 0: Resource name (350px)
+    ///     Column 1: Quantity needed (160px)
+    ///     Column 2: Quantity available (175px)
+    ///
+    /// GAME MECHANICS:
+    ///   - Engineers work in workshops (STORAGE_ENGINEER capacity per outpost)
+    ///   - Each project requires workspace, hours, money, and materials
+    ///   - Engineers reduce remaining hours; when complete, item is produced
+    ///   - Build count can be adjusted (1-99); cancelling returns engineers to idle pool
+    /// </remarks>
+    public partial class ManufactureScreen : GumScreen
     {
         /// <summary>
-        /// Constructor (obviously)
+        /// Constructs the manufacture screen for the given outpost.
         /// </summary>
         /// <param name="selectedOutpostIndex">Index to outpost screen is to show</param>
         public ManufactureScreen(int selectedOutpostIndex)
@@ -69,8 +96,9 @@ namespace ProjectXenocide.UI.Screens
 
         protected override void CreateGumControls()
         {
+            controller = new Controller(SelectedOutpost);
             ProjectMgr.Update();
-            FindIdleEngineers();
+            controller.FindIdleEngineers();
 
             if (GumRoot != null)
             {
@@ -83,7 +111,7 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("removeAllEngineersButton", OnRemoveAllButton);
                 WireButton("closeButton", OnCloseButton);
 
-                availableText = new Label() { Text = MakeIdleEngineersString() };
+                availableText = new Label() { Text = controller.MakeIdleEngineersString() };
                 availableText.Visual.X = 20;
                 availableText.Visual.Y = 20;
                 AddChild(availableText);
@@ -99,7 +127,7 @@ namespace ProjectXenocide.UI.Screens
                 return;
             }
 
-            availableText = new Label() { Text = MakeIdleEngineersString() };
+            availableText = new Label() { Text = controller.MakeIdleEngineersString() };
             RootContainer.AddChild(availableText);
 
             InitializeGrids();
@@ -164,17 +192,14 @@ namespace ProjectXenocide.UI.Screens
 
         private void PopulateProjectGrid()
         {
-            foreach (BuildProject project in ProjectMgr)
+            foreach (LineItem project in controller.GetActiveProjects())
             {
-                AddRowToProjectGrid(new ProjectLineItem(this, project));
+                AddRowToProjectGrid(project);
             }
 
-            foreach (ItemInfo item in Xenocide.StaticTables.ItemList)
+            foreach (LineItem item in controller.GetBuildableItems())
             {
-                if ((null != item.BuildInfo) && TechMgr.IsAvailable(item.Id) && !ProjectMgr.IsInProgress(item.Id))
-                {
-                    AddRowToProjectGrid(new IdleLineItem(this, item));
-                }
+                AddRowToProjectGrid(item);
             }
 
             if (0 == projectGrid.RowCount)
@@ -194,7 +219,7 @@ namespace ProjectXenocide.UI.Screens
             if (0 < buildInfo.Space)
             {
                 string needed = Util.ToString(buildInfo.Space);
-                string available = Util.ToString((int)BuildInfo.GetCapacityInfo(SelectedOutpost).Available);
+                string available = controller.GetWorkspaceAvailable(buildInfo);
                 AddRowToRequirementsGrid(Strings.SCREEN_MANUFACTURE_REPORT_ROW_WORKSPACE, needed, available);
             }
 
@@ -208,14 +233,14 @@ namespace ProjectXenocide.UI.Screens
             if (0 < buildInfo.Dollars)
             {
                 string needed = Util.FormatCurrency(buildInfo.Dollars);
-                string available = Xenocide.GameState.GeoData.XCorp.Bank.DisplayCurrentBalance;
+                string available = Controller.BankBalance;
                 AddRowToRequirementsGrid(Strings.SCREEN_MANUFACTURE_REPORT_ROW_MONEY, needed, available);
             }
 
             foreach (ItemLine material in buildInfo.Materials)
             {
                 string needed = Util.ToString(material.Quantity);
-                string available = Util.ToString(SelectedOutpost.Inventory.NumberInInventory(material.ItemInfo));
+                string available = controller.GetMaterialAvailable(material.ItemInfo);
                 AddRowToRequirementsGrid(material.ItemInfo.Name, needed, available);
             }
         }
@@ -227,47 +252,16 @@ namespace ProjectXenocide.UI.Screens
 
         #endregion Create the Gum controls
 
-        #region event handlers
+        #region Event handlers
 
-        private void OnBuildMoreButton(object sender, EventArgs e)
-        {
-            ChangeBuildNumber(1);
-        }
-
-        private void OnBuildLessButton(object sender, EventArgs e)
-        {
-            ChangeBuildNumber(-1);
-        }
-
-        private void OnCancelBuildButton(object sender, EventArgs e)
-        {
-            CancelProject();
-        }
-
-        private void OnMoreButton(object sender, EventArgs e)
-        {
-            AddIdleEngineers(1);
-        }
-
-        private void OnAddIdleButton(object sender, EventArgs e)
-        {
-            AddIdleEngineers(idleEngineers.Count);
-        }
-
-        private void OnRemoveAllButton(object sender, EventArgs e)
-        {
-            RemoveAllEngineers();
-        }
-
-        private void OnLessButton(object sender, EventArgs e)
-        {
-            RemoveScientist();
-        }
-
-        private void OnCloseButton(object sender, EventArgs e)
-        {
-            ShowBasesScreen();
-        }
+        private void OnBuildMoreButton(object sender, EventArgs e) => ChangeBuildNumber(1);
+        private void OnBuildLessButton(object sender, EventArgs e) => ChangeBuildNumber(-1);
+        private void OnCancelBuildButton(object sender, EventArgs e) => CancelProject();
+        private void OnMoreButton(object sender, EventArgs e) => AddIdleEngineers(1);
+        private void OnAddIdleButton(object sender, EventArgs e) => AddIdleEngineers(controller.IdleEngineerCount);
+        private void OnRemoveAllButton(object sender, EventArgs e) => RemoveAllEngineers();
+        private void OnLessButton(object sender, EventArgs e) => RemoveScientist();
+        private void OnCloseButton(object sender, EventArgs e) => ShowBasesScreen();
 
         private void OnProjectGridSelectionChanged(object sender, EventArgs e)
         {
@@ -278,7 +272,7 @@ namespace ProjectXenocide.UI.Screens
             }
         }
 
-        #endregion event handlers
+        #endregion Event handlers
 
         private void AddIdleEngineers(int count)
         {
@@ -286,9 +280,9 @@ namespace ProjectXenocide.UI.Screens
             if (null == selectedLineItem)
                 return;
 
-            if (0 < idleEngineers.Count)
+            if (0 < controller.IdleEngineerCount)
             {
-                Debug.Assert((0 < count) && (count <= idleEngineers.Count));
+                Debug.Assert((0 < count) && (count <= controller.IdleEngineerCount));
                 ProjectLineItem project = selectedLineItem.GetProject();
                 if (null != project)
                 {
@@ -296,11 +290,7 @@ namespace ProjectXenocide.UI.Screens
                     projectGrid.RemoveRow(oldRow);
                     AddRowToProjectGrid(project);
 
-                    count = Math.Min(count, idleEngineers.Count);
-                    for (int i = 0; i < count; ++i)
-                    {
-                        project.AddWorker(idleEngineers);
-                    }
+                    controller.AddWorkersToProject(project, count);
                     UpdateDetails(project);
                 }
             }
@@ -316,7 +306,7 @@ namespace ProjectXenocide.UI.Screens
             if (null == lineItem)
                 return;
 
-            lineItem.RemoveWorker(idleEngineers);
+            controller.RemoveWorkerFromProject(lineItem);
             UpdateDetails(lineItem);
         }
 
@@ -326,10 +316,7 @@ namespace ProjectXenocide.UI.Screens
             if (null == lineItem)
                 return;
 
-            while (0 < lineItem.NumWorkers)
-            {
-                lineItem.RemoveWorker(idleEngineers);
-            }
+            controller.RemoveAllWorkersFromProject(lineItem);
             UpdateDetails(lineItem);
         }
 
@@ -363,10 +350,7 @@ namespace ProjectXenocide.UI.Screens
             ProjectLineItem project = selectedLineItem as ProjectLineItem;
             if (null != project)
             {
-                project.Cancel();
-                FindIdleEngineers();
-
-                IdleLineItem newLineItem = new IdleLineItem(this, project.Item);
+                IdleLineItem newLineItem = controller.CancelProject(project);
                 int oldRow = projectGrid.GetRowIndexByTag(project);
                 projectGrid.RemoveRow(oldRow);
                 AddRowToProjectGrid(newLineItem);
@@ -376,7 +360,7 @@ namespace ProjectXenocide.UI.Screens
 
         private void UpdateDetails(LineItem lineItem)
         {
-            availableText.Text = MakeIdleEngineersString();
+            availableText.Text = controller.MakeIdleEngineersString();
 
             int row = projectGrid.GetRowIndexByTag(lineItem);
             if (row < 0) return;
@@ -403,176 +387,18 @@ namespace ProjectXenocide.UI.Screens
             return lineItem;
         }
 
-        private String MakeIdleEngineersString()
-        {
-            return Util.StringFormat(Strings.SCREEN_MANUFACTURE_IDLE_ENGINEERS, idleEngineers.Count);
-        }
-
-        private void FindIdleEngineers()
-        {
-            idleEngineers.Clear();
-            uint spaceFree = SelectedOutpost.Statistics.Capacities["STORAGE_ENGINEER"].Available;
-            int count = -1;
-            foreach (Person p in SelectedOutpost.Inventory.ListStaff("ITEM_PERSON_ENGINEER", false))
-            {
-                if (++count < spaceFree)
-                {
-                    idleEngineers.Add(p);
-                }
-            }
-        }
-
-        private abstract class LineItem
-        {
-            protected LineItem(ManufactureScreen parent)
-            {
-                this.parent = parent;
-            }
-
-            public virtual void RemoveWorker(IList<Person> idle) { }
-
-            public abstract ProjectLineItem GetProject();
-
-            #region Fields
-
-            public abstract string Name { get; }
-
-            public virtual string DisplayNumWorkers { get { return String.Empty; } }
-
-            public virtual int NumWorkers { get { return 0; } }
-
-            public virtual string DisplayQuantity { get { return String.Empty; } }
-
-            public virtual int Quantity { get { return 0; } }
-
-            public virtual string Eta { get { return String.Empty; } }
-
-            public abstract BuildInfo BuildInfo { get; }
-
-            public ManufactureScreen Parent { get { return parent; } }
-
-            private ManufactureScreen parent;
-
-            #endregion Fields
-        }
-
-        private sealed class ProjectLineItem : LineItem
-        {
-            public ProjectLineItem(ManufactureScreen parent, BuildProject project)
-                :
-                base(parent)
-            {
-                this.project = project;
-            }
-
-            public void AddWorker(List<Person> idle)
-            {
-                Person worker = idle[idle.Count - 1];
-                idle.RemoveAt(idle.Count - 1);
-                project.Add(worker);
-            }
-
-            public override void RemoveWorker(IList<Person> idle)
-            {
-                if (0 < project.NumWorkers)
-                {
-                    idle.Add(project.RemoveWorker());
-                }
-            }
-
-            public override ProjectLineItem GetProject()
-            {
-                return this;
-            }
-
-            public void Cancel()
-            {
-                project.Cancel();
-                Parent.FindIdleEngineers();
-            }
-
-            #region Fields
-
-            public override string Name { get { return project.Name; } }
-
-            public override string DisplayNumWorkers { get { return Util.ToString(NumWorkers); } }
-
-            public override int NumWorkers { get { return project.NumWorkers; } }
-
-            public override string DisplayQuantity { get { return Util.ToString(project.BuildCount); } }
-
-            public int BuildCount { get { return project.BuildCount; } set { project.BuildCount = value; } }
-
-            public override string Eta { get { return project.CalcTotalItemsEtaToShow(); } }
-
-            public override BuildInfo BuildInfo { get { return Item.BuildInfo; } }
-
-            public ItemInfo Item { get { return project.Item; } }
-
-            private BuildProject project;
-
-            #endregion Fields
-        }
-
-        private sealed class IdleLineItem : LineItem
-        {
-            public IdleLineItem(ManufactureScreen parent, ItemInfo item)
-                :
-                base(parent)
-            {
-                this.item = item;
-            }
-
-            public override ProjectLineItem GetProject()
-            {
-                ProjectLineItem project = null;
-                string error = item.CanStartManufacture(TechMgr, Parent.SelectedOutpost, Bank);
-                if (null != error)
-                {
-                    Util.ShowMessageBox(Strings.MSGBOX_CANT_BUILD_ITEM, item.Name, error);
-                }
-                else
-                {
-                    project = new ProjectLineItem(
-                        Parent,
-                        Parent.ProjectMgr.CreateProject(item.Id, TechMgr, Parent.SelectedOutpost, Bank)
-                    );
-                    Parent.FindIdleEngineers();
-                }
-                return project;
-            }
-
-            #region Fields
-
-            public override string Name { get { return item.Name; } }
-
-            public override BuildInfo BuildInfo { get { return item.BuildInfo; } }
-
-            private ItemInfo item;
-
-            #endregion Fields
-        }
-
         #region Fields
 
+        /// <summary>
+        /// Controller handling all manufacturing game logic (engineer assignment, project management).
+        /// </summary>
+        private Controller controller;
+
         private BuildProjectManager ProjectMgr
-        {
-            get { return SelectedOutpost.BuildProjectManager; }
-        }
+            => SelectedOutpost.BuildProjectManager;
 
-        private static TechnologyManager TechMgr
-        {
-            get { return Xenocide.GameState.GeoData.XCorp.TechManager; }
-        }
-
-        private static Bank Bank
-        {
-            get { return Xenocide.GameState.GeoData.XCorp.Bank; }
-        }
-
-        private List<Person> idleEngineers = new List<Person>();
-
-        private Outpost SelectedOutpost { get { return Xenocide.GameState.GeoData.Outposts[selectedOutpostIndex]; } }
+        private Outpost SelectedOutpost
+            => Xenocide.GameState.GeoData.Outposts[selectedOutpostIndex];
 
         private int selectedOutpostIndex;
 

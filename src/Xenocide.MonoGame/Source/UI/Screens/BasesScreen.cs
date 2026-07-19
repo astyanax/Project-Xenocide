@@ -83,7 +83,7 @@ namespace ProjectXenocide.UI.Screens
     ///   the button-down state from a dialog "Select" click doesn't
     ///   leak through as a spurious LeftClicked event on the first frame.
     /// </summary>
-    public class BasesScreen : GumScreen
+    public partial class BasesScreen : GumScreen
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -95,6 +95,7 @@ namespace ProjectXenocide.UI.Screens
             : base("BasesScreen", @"Content/Textures/UI/BaseDirtFloor.png")
         {
             this.selectedBase = selectedBase;
+            this.controller = new Controller(Xenocide.GameState.GeoData.Outposts[selectedBase]);
             Logger.Info("BasesScreen ctor: baseIndex={0}", selectedBase);
 
             // Before showing, bring floorplan up to date 
@@ -216,9 +217,7 @@ namespace ProjectXenocide.UI.Screens
         {
             base.Draw(gameTime, device);
             // update funds shown on screen
-            // Note, if display hasn't changed, don't write new value to text window
-            String funds = Util.StringFormat(Strings.SCREEN_BASES_FUNDS,
-                Xenocide.GameState.GeoData.XCorp.Bank.CurrentBalance);
+            String funds = Controller.GetFundsDisplay();
             if (fundsText.Text != funds)
             {
                 fundsText.Text = funds;
@@ -509,12 +508,7 @@ namespace ProjectXenocide.UI.Screens
             // can't create a new base if we're adding a facility to this one
             if (BasesScreenState.NotAdding == state)
             {
-                // check that we haven't hit maximum number of bases allowed
-                if (8 <= Xenocide.GameState.GeoData.Outposts.Count)
-                {
-                    Util.ShowMessageBox(Strings.MSGBOX_MAX_EIGHT_BASES);
-                }
-                else
+                if (Controller.CanCreateNewBase())
                 {
                     // stop time
                     Xenocide.GameState.GeoData.GeoTime.StopTime();
@@ -655,38 +649,11 @@ namespace ProjectXenocide.UI.Screens
         {
             UpdateNewFacilityPosition(cellCoords);
 
-            // Check affordability before placing — the dialog checks this too, but
-            // the AddAccessLift path bypasses the dialog, so we guard here as well.
-            int cost = newFacility.FacilityInfo.BuildCost;
-            if (!Xenocide.GameState.GeoData.XCorp.Bank.CanAfford(cost))
+            bool isAccessLiftMode = (BasesScreenState.AddAccessLift == state);
+            if (controller.TryAddFacility(newFacility, cellCoords, isAccessLiftMode))
             {
-                Logger.Warn("AddFacility: cannot afford {0} (cost=${1}, balance=${2})",
-                    newFacility.FacilityInfo.Id, cost,
-                    Xenocide.GameState.GeoData.XCorp.Bank.CurrentBalance);
-                Util.ShowMessageBox(Strings.MSGBOX_INSUFFICIENT_FUNDS);
-                return;
-            }
-
-            XenoError error = SelectedBaseFloorplan.IsPositionLegal(newFacility);
-            Logger.Debug("AddFacility: cell=({0},{1}) facility={2} cost=${3} error={4}",
-                cellCoords.X, cellCoords.Y, newFacility.FacilityInfo.Id, cost, error);
-
-            if ((XenoError.None == error) ||
-                ((BasesScreenState.AddAccessLift == state) && (XenoError.CellHasNoNeighbours == error)))
-            {
-                Logger.Info("AddFacility: PLACING {0} at ({1},{2}) baseIndex={3}",
-                    newFacility.FacilityInfo.Id, cellCoords.X, cellCoords.Y, selectedBase);
-                Xenocide.GameState.GeoData.XCorp.Bank.Debit(cost);
-                SelectedBaseFloorplan.AddFacility(newFacility);
-
                 // Redraw scene with changes
                 ScreenManager.ScheduleScreen(new BasesScreen(selectedBase));
-            }
-            else
-            {
-                Logger.Info("AddFacility: REJECTED {0} at ({1},{2}) reason={3}",
-                    newFacility.FacilityInfo.Id, cellCoords.X, cellCoords.Y, error);
-                Util.ShowMessageBox(Util.GetErrorMessage(error));
             }
         }
 
@@ -709,37 +676,23 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="cellCoords">location in base of facility to remove</param>
         private void RemoveFacility(Microsoft.Xna.Framework.Vector2 cellCoords)
         {
-            FacilityHandle facility = SelectedBaseFloorplan.GetFacilityAt((int)cellCoords.X, (int)cellCoords.Y);
-            if (null != facility)
+            FacilityHandle facility = controller.GetRemovableFacility(cellCoords);
+            if (facility != null)
             {
                 Logger.Info("RemoveFacility: {0} at ({1},{2})", facility.FacilityInfo.Id, cellCoords.X, cellCoords.Y);
-                XenoError error = SelectedBaseFloorplan.CanRemoveFacility(facility);
-                if (XenoError.None == error)
+                GumYesNoDialog dlg = new GumYesNoDialog(
+                    Util.StringFormat(Strings.YESNOMSG_DISMANTLE_FACILITY, facility.FacilityInfo.Name)
+                );
+
+                // if yes is pressed, delete the facility and redraw scene with changes
+                dlg.YesAction += delegate ()
                 {
-                    GumYesNoDialog dlg = new GumYesNoDialog(
-                        Util.StringFormat(Strings.YESNOMSG_DISMANTLE_FACILITY, facility.FacilityInfo.Name)
-                    );
+                    Logger.Info("RemoveFacility: CONFIRMED dismantle of {0}", facility.FacilityInfo.Id);
+                    controller.DemolishFacility(facility, selectedBase);
+                    ScreenManager.ScheduleScreen(new BasesScreen(selectedBase));
+                };
 
-                    // if yes is pressed, delete the facility and redraw scene with changes
-                    dlg.YesAction += delegate ()
-                    {
-                        Logger.Info("RemoveFacility: CONFIRMED dismantle of {0}", facility.FacilityInfo.Id);
-                        // Store for potential undo
-                        lastDemolishedFacility = facility;
-                        lastDemolishedBaseIndex = selectedBase;
-
-                        Xenocide.GameState.GeoData.XCorp.Bank.Credit(facility.FacilityInfo.ScrapRevenue);
-                        SelectedBaseFloorplan.RemoveFacility(facility);
-                        ScreenManager.ScheduleScreen(new BasesScreen(selectedBase));
-                    };
-
-                    Xenocide.ScreenManager.ShowDialog(dlg);
-                }
-                else
-                {
-                    Logger.Info("RemoveFacility: REJECTED reason={0}", error);
-                    Util.ShowMessageBox(Util.GetErrorMessage(error));
-                }
+                Xenocide.ScreenManager.ShowDialog(dlg);
             }
             else
             {
@@ -753,21 +706,9 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void UndoDemolition()
         {
-            if (lastDemolishedFacility != null && lastDemolishedBaseIndex == selectedBase)
+            if (controller.TryUndoDemolition(selectedBase))
             {
-                Logger.Info("UndoDemolition: restoring {0} at baseIndex={1}",
-                    lastDemolishedFacility.FacilityInfo.Id, selectedBase);
-
-                // Refund the scrap revenue we gave
-                Xenocide.GameState.GeoData.XCorp.Bank.Debit(lastDemolishedFacility.FacilityInfo.ScrapRevenue);
-                
-                // Re-add the facility
-                SelectedBaseFloorplan.AddFacility(lastDemolishedFacility);
-                
-                // Clear the undo buffer
-                lastDemolishedFacility = null;
-                lastDemolishedBaseIndex = -1;
-
+                Logger.Info("UndoDemolition: restoring facility at baseIndex={0}", selectedBase);
                 // Redraw scene
                 ScreenManager.ScheduleScreen(new BasesScreen(selectedBase));
             }
@@ -787,15 +728,9 @@ namespace ProjectXenocide.UI.Screens
         {
             if (BasesScreenState.NotAdding == state)
             {
-                // if there's only one outpost, we can't transfer
-                int numOutposts = Xenocide.GameState.GeoData.Outposts.Count;
-                if (numOutposts < 2)
+                if (Controller.CanStartTransfer())
                 {
-                    Util.ShowMessageBox(Strings.MSGBOX_NEED_2_BASES_TO_TRANSFER);
-                }
-                else
-                {
-                    // pick another base for initial destination outpost for items
+                    int numOutposts = Xenocide.GameState.GeoData.Outposts.Count;
                     int destination = (selectedBase + 1) % numOutposts;
                     ScreenManager.ScheduleScreen(new MakeTransferScreen(selectedBase, destination));
                 }
@@ -827,6 +762,11 @@ namespace ProjectXenocide.UI.Screens
         }
 
         #region Fields
+
+        /// <summary>
+        /// Controller handling game logic for base management.
+        /// </summary>
+        private Controller controller;
 
         /// <summary>
         /// What mode are we in?
@@ -904,18 +844,6 @@ namespace ProjectXenocide.UI.Screens
         /// Hover tooltip showing facility info under the cursor.
         /// </summary>
         private FacilityTooltip tooltip;
-
-        /// <summary>
-        /// The last demolished facility, stored for potential undo via Ctrl+Z.
-        /// Null if no facility has been demolished yet or if the last action
-        /// wasn't a demolition.
-        /// </summary>
-        private FacilityHandle lastDemolishedFacility;
-
-        /// <summary>
-        /// The base index from which the last facility was demolished.
-        /// </summary>
-        private int lastDemolishedBaseIndex;
 
         /// <summary>
         /// Previous frame's keyboard state for key-down detection.
