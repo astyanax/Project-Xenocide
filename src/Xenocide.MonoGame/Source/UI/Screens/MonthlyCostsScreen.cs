@@ -48,6 +48,23 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Screens
 {
+    /// <summary>
+    /// Displays monthly cost breakdown for a specific outpost including craft, staff,
+    /// and facility maintenance charges.
+    /// </summary>
+    /// <remarks>
+    /// ARCHITECTURE: Display-only screen showing outpost operating costs. No game state
+    /// mutations — reads from outpost inventory, staff, and facility data.
+    /// 
+    /// DATA FLOW:
+    /// - Outpost.ListStaff() for staff counts
+    /// - Outpost.ListCrafts() for craft counts
+    /// - Outpost.CountItemsInTransit() for items in transit
+    /// - Outpost.CalcFacilityMaintenance() for facility upkeep
+    /// - ItemInfo.MonthlyCharge for per-unit costs
+    /// 
+    /// NAVIGATION: Returns to BaseInfoScreen when closed.
+    /// </remarks>
     sealed class MonthlyCostsScreen : GumScreen
     {
         /// <summary>

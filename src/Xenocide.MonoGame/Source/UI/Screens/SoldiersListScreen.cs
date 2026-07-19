@@ -53,6 +53,17 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// Lists soldiers currently at the base.
     /// </summary>
+    /// <remarks>
+    /// ARCHITECTURE: This screen displays soldier information and provides access to
+    /// related screens (equip, assign to craft, psi training). Game logic for psi
+    /// training is contained in the TogglePsiTraining method.
+    /// 
+    /// SCREEN FLOW:
+    /// - BasesScreen → SoldiersListScreen (select base)
+    /// - SoldiersListScreen → AssignToCraftScreen (assign soldiers to aircraft)
+    /// - SoldiersListScreen → EquipSoldierScreen (equip selected soldier)
+    /// - SoldiersListScreen → BasesScreen (close)
+    /// </remarks>
     public class SoldiersListScreen : GumScreen
     {
         /// <summary>

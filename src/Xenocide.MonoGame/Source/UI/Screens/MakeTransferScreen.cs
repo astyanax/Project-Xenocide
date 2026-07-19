@@ -49,7 +49,12 @@ namespace ProjectXenocide.UI.Screens
     /// <summary>
     /// This is the screen that allows user to move items between outposts
     /// </summary>
-    public class MakeTransferScreen : GumScreen
+    /// <remarks>
+    /// ARCHITECTURE: GUI layer only — all game logic is delegated to the nested Controller
+    /// class (in MakeTransfer/MakeTransferScreenController.cs). This screen manages the item
+    /// grid and handles transfer interactions.
+    /// </remarks>
+    public partial class MakeTransferScreen : GumScreen
     {
         /// <summary>
         /// Constructor (obviously)
@@ -61,6 +66,7 @@ namespace ProjectXenocide.UI.Screens
         {
             this.sourceOutpostIndex = sourceOutpostIndex;
             this.destinationOutpostIndex = destinationOutpostIndex;
+            this.controller = new TransferController(SourceOutpost, DestinationOutpost);
         }
 
         #region Create the Gum controls
@@ -155,12 +161,9 @@ namespace ProjectXenocide.UI.Screens
 
         private void PopulateGrid()
         {
-            foreach (Item i in SourceOutpost.Inventory.ListContents())
+            foreach (TransactionLineItem lineItem in controller.GetTransferableItems())
             {
-                if (i.CanRemoveFromOutpost)
-                {
-                    AddRowToGrid(new TransactionLineItem(i, SourceOutpost.Inventory, DestinationOutpost.Inventory));
-                }
+                AddRowToGrid(lineItem);
             }
         }
 
@@ -213,15 +216,7 @@ namespace ProjectXenocide.UI.Screens
 
         private void OnConfirmButton(object sender, EventArgs e)
         {
-            Xenocide.GameState.GeoData.XCorp.Bank.Debit(CalculateTotalCost());
-
-            Shipment shipment = new Shipment(DestinationOutpost, Shipment.CalcEta());
-            foreach (TransactionLineItem lineItem in transferItems)
-            {
-                lineItem.RemoveItems(SourceOutpost.Inventory, shipment);
-            }
-            shipment.Ship();
-
+            controller.ExecuteTransfer(transferItems);
             GoToBasesScreen();
         }
 
@@ -252,7 +247,8 @@ namespace ProjectXenocide.UI.Screens
 
         private void UpdateTotalCost()
         {
-            totalCostText.Text = Util.StringFormat(Strings.SCREEN_TRANSFER_TOTAL_COST, CalculateTotalCost());
+            totalCostText.Text = Util.StringFormat(Strings.SCREEN_TRANSFER_TOTAL_COST,
+                TransferController.CalculateTotalCost(transferItems));
         }
 
         private void UpdateDetails(TransactionLineItem lineItem)
@@ -264,41 +260,16 @@ namespace ProjectXenocide.UI.Screens
             grid.SetCell(row, 3, Util.ToString(lineItem.NumMoving));
         }
 
-        private int CalculateTotalCost()
-        {
-            int cost = 0;
-            foreach (TransactionLineItem lineItem in transferItems)
-            {
-                cost += lineItem.ShippingCost;
-            }
-            return cost;
-        }
-
         private bool CanManageTransfer()
         {
-            if (!TransactionLineItem.CanFit(DestinationOutpost.Inventory, transferItems))
-            {
-                Util.ShowMessageBox(Strings.MSGBOX_DESTINATION_CANT_FIT_ITEMS);
-                return false;
-            }
-            else
-            {
-                return Xenocide.GameState.GeoData.XCorp.Bank.CanAfford(CalculateTotalCost());
-            }
+            return controller.CanManageTransfer(transferItems);
         }
 
         private void ChangeDestinationOutpost(int newDestinationIndex)
         {
-            if (newDestinationIndex != destinationOutpostIndex)
+            if (TransferController.AreDifferentOutposts(sourceOutpostIndex, newDestinationIndex))
             {
-                if (newDestinationIndex == sourceOutpostIndex)
-                {
-                    Util.ShowMessageBox(Strings.MSGBOX_SOURCE_AND_DESTINATION_SAME);
-                }
-                else
-                {
-                    ScreenManager.ScheduleScreen(new MakeTransferScreen(sourceOutpostIndex, newDestinationIndex));
-                }
+                ScreenManager.ScheduleScreen(new MakeTransferScreen(sourceOutpostIndex, newDestinationIndex));
             }
         }
 
@@ -308,6 +279,11 @@ namespace ProjectXenocide.UI.Screens
         }
 
         #region Fields
+
+        /// <summary>
+        /// Controller handling game logic for transfers.
+        /// </summary>
+        private TransferController controller;
 
         private Outpost SourceOutpost { get { return Xenocide.GameState.GeoData.Outposts[sourceOutpostIndex]; } }
 

@@ -58,6 +58,20 @@ namespace ProjectXenocide.UI.Screens
     /// At moment, as we don't have battlescape, use salvage from UFO
     /// ToDo: results of real battlescape
     /// </summary>
+    /// <remarks>
+    /// ARCHITECTURE: Post-mission report screen. Performs game state mutations in event
+    /// handler — creates shipment of recovered items and updates score.
+    /// 
+    /// GAME STATE MUTATIONS (OnOkButton):
+    /// - Creates Shipment with mission salvage
+    /// - Adds score to XCorp or Alien based on total
+    /// - Navigates to GeoscapeScreen
+    /// 
+    /// DATA FLOW:
+    /// - Mission.Scores for activity-based scoring
+    /// - Mission.Salvage for recovered items
+    /// - ItemInfo.Score for item scoring values
+    /// </remarks>
     public class BattlescapeReportScreen : GumScreen
     {
         /// <summary>

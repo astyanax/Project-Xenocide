@@ -14,6 +14,22 @@ using ProjectXenocide.Model.StaticData;
 
 namespace ProjectXenocide.UI.Screens
 {
+    /// <summary>
+    /// Application settings screen with tabs for display, sound, notifications,
+    /// and gameplay options.
+    /// </summary>
+    /// <remarks>
+    /// ARCHITECTURE: Settings screen with tab-based navigation. Programmatic layout
+    /// (no .gusx file) — manages its own UI construction.
+    /// 
+    /// SETTINGS MANAGED:
+    /// - Display: Resolution, fullscreen, cursor mode
+    /// - Sound: Music volume, sound volume
+    /// - Notifications: Toast notification toggle
+    /// - Gameplay: Difficulty, autosave toggle
+    /// 
+    /// PERSISTENCE: Uses GameOptions.LoadFromFile() / SaveToFile() for persistence.
+    /// </remarks>
     public class SettingsScreen : GumScreen
     {
         private int _musicLevel;

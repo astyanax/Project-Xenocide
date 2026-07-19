@@ -52,6 +52,21 @@ using ProjectXenocide.Utils;
 
 namespace ProjectXenocide.UI.Screens
 {
+    /// <summary>
+    /// Main menu screen providing access to new game, load game, settings, and credits.
+    /// </summary>
+    /// <remarks>
+    /// ARCHITECTURE: Entry point screen for the application. Initializes new game state
+    /// and provides navigation to other screens. Debug-only buttons provide direct access
+    /// to subsystem testing (battlescape, aeroscape, xnet).
+    /// 
+    /// SCREEN FLOW:
+    /// - StartScreen → GeoscapeScreen (new game)
+    /// - StartScreen → LoadSaveGameScreen (load game)
+    /// - StartScreen → SettingsScreen (settings)
+    /// - StartScreen → CreditsScreen (credits)
+    /// - StartScreen → QuitGame (exit application)
+    /// </remarks>
     public class StartScreen : GumScreen
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();

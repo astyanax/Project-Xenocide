@@ -51,6 +51,16 @@ namespace ProjectXenocide.UI.Screens
     /// This is the screen that shows a breakdown of funding by country
     /// (Will probably also be used for "end of month" progress report)
     /// </summary>
+    /// <remarks>
+    /// ARCHITECTURE: Display-only screen showing monthly funding breakdown by country.
+    /// No game state mutations — reads from MonthlyLog and Country data.
+    /// 
+    /// DATA FLOW:
+    /// - MonthlyLog.ThisMonth / LastMonth for period selection
+    /// - Country.Funds[] for funding amounts
+    /// - Country.Attitude for diplomatic status
+    /// - XCorp.TotalScores.NetScore() for overall score
+    /// </remarks>
     public class MonthlyReportScreen : GumScreen
     {
         /// <summary>
