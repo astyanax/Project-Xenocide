@@ -50,7 +50,7 @@ namespace ProjectXenocide.UI.Screens
     /// </summary>
     /// <remarks>
     /// ARCHITECTURE: Screen manages GUI (Gum controls + radar rendering) while
-    /// DogfightController handles all combat logic. Radar viewport is drawn
+    /// AeroscapeSimulation handles all combat logic. Radar viewport is drawn
     /// via SpriteBatch in Draw(), overlaid with Gum HUD controls.
     ///
     /// VISUAL: 2D side-view radar inspired by OpenXCOM. Aircraft at bottom,
@@ -72,7 +72,12 @@ namespace ProjectXenocide.UI.Screens
             this.aircraft = aircraft;
             this.ufo = ufo;
             this.log = new BattleLog();
-            this.dogfightController = new DogfightController(aircraft, ufo, log);
+
+            // Create simulation state and engine
+            var aircraftList = new List<Aircraft> { aircraft };
+            this.simState = new AeroscapeState(ufo, aircraftList);
+            this.simulation = new AeroscapeSimulation(simState);
+            this.simulation.SetTacticalMode(0, TacticalMode.Standard);
 
             aircraft.OnDogfightStart();
             ufo.OnDogfightStart();
@@ -115,7 +120,8 @@ namespace ProjectXenocide.UI.Screens
         private Aircraft aircraft;
         private Ufo ufo;
         private BattleLog log;
-        private DogfightController dogfightController;
+        private AeroscapeState simState;
+        private AeroscapeSimulation simulation;
 
         // Speed control
         private bool runRealTime;
@@ -146,9 +152,8 @@ namespace ProjectXenocide.UI.Screens
         private Label distanceLabel;
         private Label logLabel;
 
-        // Weapon enable states
-        private bool weapon1Enabled = true;
-        private bool weapon2Enabled = true;
+        // Current tactical mode (for display)
+        private TacticalMode currentTacticalMode = TacticalMode.Standard;
 
         #endregion
 
@@ -156,31 +161,36 @@ namespace ProjectXenocide.UI.Screens
 
         private void OnStandoffButton(object sender, EventArgs e)
         {
-            dogfightController.SetTacticalMode(TacticalMode.Standoff);
+            currentTacticalMode = TacticalMode.Standoff;
+            simulation.SetTacticalMode(simState.SelectedInterceptorIndex, TacticalMode.Standoff);
             DrawScreen();
         }
 
         private void OnCautiousButton(object sender, EventArgs e)
         {
-            dogfightController.SetTacticalMode(TacticalMode.Cautious);
+            currentTacticalMode = TacticalMode.Cautious;
+            simulation.SetTacticalMode(simState.SelectedInterceptorIndex, TacticalMode.Cautious);
             DrawScreen();
         }
 
         private void OnStandardButton(object sender, EventArgs e)
         {
-            dogfightController.SetTacticalMode(TacticalMode.Standard);
+            currentTacticalMode = TacticalMode.Standard;
+            simulation.SetTacticalMode(simState.SelectedInterceptorIndex, TacticalMode.Standard);
             DrawScreen();
         }
 
         private void OnAggressiveButton(object sender, EventArgs e)
         {
-            dogfightController.SetTacticalMode(TacticalMode.Aggressive);
+            currentTacticalMode = TacticalMode.Aggressive;
+            simulation.SetTacticalMode(simState.SelectedInterceptorIndex, TacticalMode.Aggressive);
             DrawScreen();
         }
 
         private void OnDisengageButton(object sender, EventArgs e)
         {
-            dogfightController.SetTacticalMode(TacticalMode.Disengage);
+            currentTacticalMode = TacticalMode.Disengage;
+            simulation.DisengageInterceptor(simState.SelectedInterceptorIndex);
             DrawScreen();
         }
 
@@ -215,13 +225,13 @@ namespace ProjectXenocide.UI.Screens
 
         private void OnWeapon1Toggle(object sender, EventArgs e)
         {
-            weapon1Enabled = !weapon1Enabled;
+            simulation.ToggleWeapon(simState.SelectedInterceptorIndex, 0);
             DrawScreen();
         }
 
         private void OnWeapon2Toggle(object sender, EventArgs e)
         {
-            weapon2Enabled = !weapon2Enabled;
+            simulation.ToggleWeapon(simState.SelectedInterceptorIndex, 1);
             DrawScreen();
         }
 
@@ -245,7 +255,7 @@ namespace ProjectXenocide.UI.Screens
 
         private void GoToGeoscape()
         {
-            dogfightController.EndDogfight();
+            EndDogfight();
 
             if (Xenocide.DebugTesting)
             {
@@ -258,6 +268,17 @@ namespace ProjectXenocide.UI.Screens
             }
         }
 
+        /// <summary>
+        /// End the dogfight and clean up vehicle states.
+        /// </summary>
+        private void EndDogfight()
+        {
+            if (!ufo.IsDestroyed)
+                ufo.OnDogfightFinished();
+            if (!aircraft.IsDestroyed)
+                aircraft.OnDogfightFinished();
+        }
+
         #endregion
 
         #region Game Loop
@@ -267,7 +288,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         public override void Update(GameTime gameTime)
         {
-            if (runRealTime && !dogfightController.IsDogfightOver)
+            if (runRealTime && !simulation.IsDogfightOver)
             {
                 elapsed += gameTime.ElapsedGameTime.TotalMilliseconds;
                 double tickInterval = 1000.0 / speedMultiplier;
@@ -278,7 +299,7 @@ namespace ProjectXenocide.UI.Screens
             }
 
             // Check if dogfight ended
-            if (dogfightController.IsDogfightOver)
+            if (simulation.IsDogfightOver)
             {
                 GoToGeoscape();
             }
@@ -389,8 +410,21 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void DrawWeaponRanges(SpriteBatch sb, int x, int y, int w, int h)
         {
-            // TODO: Draw range lines for each weapon pod
-            // Range is mapped from meters to pixels: 80,000m = full height
+            var interceptor = simState.SelectedInterceptor;
+            if (interceptor == null)
+                return;
+
+            int maxRange = AeroscapeState.GetMaxWeaponRange(interceptor);
+            if (maxRange <= 0)
+                return;
+
+            // Map weapon range to radar position
+            float rangeNormalized = (float)((double)maxRange / AeroscapeState.MaxDistance);
+            int rangeLineY = y + (int)(h * rangeNormalized * 0.4f);
+
+            // Draw range line
+            Color rangeColor = new Color(100, 100, 0, 128);
+            sb.Draw(radarBackground, new Rectangle(x, rangeLineY, w, 1), rangeColor);
         }
 
         /// <summary>
@@ -398,9 +432,9 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private float CalculateUfoYPosition(int radarY, int radarHeight)
         {
-            double distance = dogfightController.CurrentDistance;
-            float normalized = (float)(distance / 80000.0); // 0.0 = point blank, 1.0 = standoff
-            return radarY + (radarHeight * normalized * 0.4f); // UFO in top 40%
+            double distance = simState.Distance;
+            float normalized = (float)(distance / AeroscapeState.MaxDistance);
+            return radarY + (radarHeight * normalized * 0.4f);
         }
 
         /// <summary>
@@ -408,9 +442,9 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private float CalculateCraftYPosition(int radarY, int radarHeight)
         {
-            double distance = dogfightController.CurrentDistance;
-            float normalized = (float)(distance / 80000.0);
-            return radarY + radarHeight - (radarHeight * normalized * 0.4f); // Craft in bottom 40%
+            double distance = simState.Distance;
+            float normalized = (float)(distance / AeroscapeState.MaxDistance);
+            return radarY + radarHeight - (radarHeight * normalized * 0.4f);
         }
 
         /// <summary>
@@ -435,7 +469,6 @@ namespace ProjectXenocide.UI.Screens
             {
                 for (int x = 0; x < width; x++)
                 {
-                    // Simple upward-pointing triangle
                     float centerX = width / 2f;
                     float progress = y / (float)height;
                     float halfWidth = progress * (width / 2f);
@@ -490,7 +523,7 @@ namespace ProjectXenocide.UI.Screens
         private void UpdateDogfight()
         {
             elapsed = 0.0;
-            dogfightController.AdvanceTurn();
+            simulation.Tick(1.0);
             DrawScreen();
         }
 
@@ -514,7 +547,7 @@ namespace ProjectXenocide.UI.Screens
         {
             if (statusLabel != null)
             {
-                statusLabel.Text = dogfightController.CurrentModeName;
+                statusLabel.Text = GetTacticalModeName(currentTacticalMode);
             }
         }
 
@@ -522,7 +555,7 @@ namespace ProjectXenocide.UI.Screens
         {
             if (timeLabel != null)
             {
-                timeLabel.Text = string.Format("Time: {0:F0}s", log.Now);
+                timeLabel.Text = string.Format("Time: {0:F0}s", simState.ElapsedSeconds);
             }
         }
 
@@ -530,7 +563,7 @@ namespace ProjectXenocide.UI.Screens
         {
             if (distanceLabel != null)
             {
-                int distanceKm = (int)(dogfightController.CurrentDistance / 1000.0);
+                int distanceKm = (int)(simState.Distance / 1000.0);
                 distanceLabel.Text = string.Format("Distance: {0}km", distanceKm);
             }
         }
@@ -549,18 +582,23 @@ namespace ProjectXenocide.UI.Screens
 
         private void UpdateWeaponInfo()
         {
-            DrawPodInformation(weapon1Label, weapon1InfoLabel, weapon1ToggleBtn, 0, weapon1Enabled);
-            DrawPodInformation(weapon2Label, weapon2InfoLabel, weapon2ToggleBtn, 1, weapon2Enabled);
+            var interceptor = simState.SelectedInterceptor;
+            if (interceptor == null)
+                return;
+
+            DrawPodInformation(weapon1Label, weapon1InfoLabel, weapon1ToggleBtn, interceptor, 0, interceptor.Weapon1Enabled);
+            DrawPodInformation(weapon2Label, weapon2InfoLabel, weapon2ToggleBtn, interceptor, 1, interceptor.Weapon2Enabled);
         }
 
-        private void DrawPodInformation(Label headerLabel, Label infoLabel, Button toggleBtn, int podIndex, bool isEnabled)
+        private void DrawPodInformation(Label headerLabel, Label infoLabel, Button toggleBtn,
+            InterceptorState interceptor, int podIndex, bool isEnabled)
         {
             if (headerLabel == null || infoLabel == null)
                 return;
 
-            if (podIndex < aircraft.WeaponPods.Count && aircraft.WeaponPods[podIndex] != null)
+            if (podIndex < interceptor.Aircraft.WeaponPods.Count && interceptor.Aircraft.WeaponPods[podIndex] != null)
             {
-                var pod = aircraft.WeaponPods[podIndex];
+                var pod = interceptor.Aircraft.WeaponPods[podIndex];
                 headerLabel.Text = string.Format("WEAPON {0}: {1}", podIndex + 1, pod.Name);
 
                 string ammoText = pod.UsesAmmo
@@ -613,14 +651,14 @@ namespace ProjectXenocide.UI.Screens
                 return;
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("Time: {0}", log.Now);
+            sb.AppendFormat("Time: {0:F0}s", simState.ElapsedSeconds);
 
             // Show last few entries
-            int startIdx = Math.Max(0, log.Entries.Count - 5);
-            for (int i = startIdx; i < log.Entries.Count; i++)
+            int startIdx = Math.Max(0, simState.Log.Entries.Count - 5);
+            for (int i = startIdx; i < simState.Log.Entries.Count; i++)
             {
                 sb.Append(Util.Linefeed);
-                sb.Append(log.Entries[i].Details);
+                sb.Append(simState.Log.Entries[i].Details);
             }
 
             logLabel.Text = sb.ToString();
@@ -634,6 +672,22 @@ namespace ProjectXenocide.UI.Screens
         private void UpdateTacticalButtons()
         {
             // Visual feedback for active tactical mode (would need button references to highlight)
+        }
+
+        /// <summary>
+        /// Get display name for a tactical mode.
+        /// </summary>
+        private static string GetTacticalModeName(TacticalMode mode)
+        {
+            switch (mode)
+            {
+                case TacticalMode.Standoff: return "STANDOFF";
+                case TacticalMode.Cautious: return "CAUTIOUS ATTACK";
+                case TacticalMode.Standard: return "STANDARD ATTACK";
+                case TacticalMode.Aggressive: return "AGGRESSIVE ATTACK";
+                case TacticalMode.Disengage: return "DISENGAGING";
+                default: return "UNKNOWN";
+            }
         }
 
         #endregion
