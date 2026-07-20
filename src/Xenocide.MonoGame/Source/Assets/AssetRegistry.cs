@@ -31,6 +31,7 @@ namespace ProjectXenocide.Assets
             [MusicId.PlanetviewThomas] = ("Audio/Music/Planetview/10. Thomas Torfs - Planetview", "PlanetView"),
             [MusicId.Baseview] = ("Audio/Music/Baseview/7. XerO - Baseview", "BaseView"),
             [MusicId.XNet] = ("Audio/Music/XNet/xnet", "XNet"),
+            [MusicId.Aeroscape] = ("Audio/Music/Aeroscape/aeroscape", "Aeroscape"),
         };
 
         public static readonly Dictionary<TextureId, string> TextureContentPaths = new()

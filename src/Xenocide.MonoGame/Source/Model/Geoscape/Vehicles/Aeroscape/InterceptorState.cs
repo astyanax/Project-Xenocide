@@ -73,15 +73,28 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         public bool IsActive { get; set; } = true;
 
         /// <summary>
+        /// Whether this interceptor has any weapon pods installed (regardless of ammo).
+        /// </summary>
+        public bool HasWeapons
+        {
+            get
+            {
+                foreach (var pod in Aircraft.WeaponPods)
+                {
+                    if (pod != null)
+                        return true;
+                }
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Whether this interceptor has any weapons that can still fire.
         /// </summary>
         public bool HasUsableWeapons
         {
             get
             {
-                if (Aircraft.WeaponPods.Count == 0)
-                    return false;
-
                 bool w1Ready = Weapon1Enabled && Aircraft.WeaponPods.Count > 0 &&
                                Aircraft.WeaponPods[0] != null && Aircraft.WeaponPods[0].HasAmmo;
                 bool w2Ready = Weapon2Enabled && Aircraft.WeaponPods.Count > 1 &&

@@ -28,6 +28,7 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Text;
 
@@ -156,7 +157,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <returns>The aliens to put on the battlescape</returns>
         public Team CreateCrew(Difficulty difficulty)
         {
-            int health = (int)Math.Round(100 * (1 - (HullDamage / MaxDamage)));
+            int health = (int)Math.Round(100 * (1 - (HullDamage / HullCapacity)));
             return UfoItemInfo.CreateCrew(Race, difficulty, health);
         }
 
@@ -286,5 +287,26 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         private static int UfoCounter { get { return Xenocide.GameState.GeoData.Overmind.NextUfoCounter; } }
 
         #endregion Fields
+
+        #region UnitTests
+
+        /// <summary>
+        /// Re-allocate weapon pods after DebugTransmute changes the UFO type.
+        /// Must be called after DebugTransmute to install the correct weapon.
+        /// </summary>
+        [Conditional("DEBUG")]
+        public void DebugRearm()
+        {
+            // Reallocate weapon pods array based on new hardpoint count
+            weaponPods = new WeaponPod[NumHardpoints];
+
+            // Install weapon pod if this UFO type has one
+            if (1 == NumHardpoints && null != UfoItemInfo.Weapon)
+            {
+                WeaponPods[0] = new WeaponPod(UfoItemInfo.Weapon);
+            }
+        }
+
+        #endregion UnitTests
     }
 }

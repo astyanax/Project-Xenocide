@@ -147,6 +147,10 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
                     UfoSiteMission battlescapeMission = new UfoSiteMission(target, Mission.Craft);
                     geoevent = new StartBattlescapeGeoEvent(battlescapeMission);
                 }
+                else if (Mission.Craft.IsArmed)
+                {
+                    Mission.SetState(new ShadowLandedCraftState(Mission, target));
+                }
                 else
                 {
                     Mission.SetState(new PatrolState(Mission, Mission.Craft.Position));

@@ -370,7 +370,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         public virtual void OnDestroyed()
         {
             // flag as destroyed
-            hullDamage = MaxDamage;
+            hullDamage = HullCapacity;
 
             // tell all hunters this craft no longer exists
             for (int i = Hunters.Count - 1; 0 <= i; --i)
@@ -593,7 +593,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <summary>
         /// Maximum damage craft can take before being destroyed
         /// </summary>
-        public int MaxDamage { get { return CraftItemInfo.MaxDamage; } }
+        public int HullCapacity { get { return CraftItemInfo.HullCapacity; } }
 
         /// <summary>
         /// Number of points damage that have been inflicated on craft
@@ -603,14 +603,14 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <summary>
         /// Has craft sustained sufficient damage to destroy it?
         /// </summary>
-        public bool IsDestroyed { get { return (MaxDamage <= hullDamage); } }
+        public bool IsDestroyed { get { return (HullCapacity <= hullDamage); } }
 
         /// <summary>
         /// Has craft sustained sufficient damage to force it to crash land?
         /// </summary>
         public virtual bool IsCrashed
         {
-            get { return ((MaxDamage / 2) < hullDamage) && !IsDestroyed; }
+            get { return ((HullCapacity / 2) < hullDamage) && !IsDestroyed; }
         }
 
         /// <summary>
@@ -664,7 +664,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <summary>
         /// State of craft's hull, to show on LaunchIntercept dialog
         /// </summary>
-        public int HullPercent { get { return Util.ToPercent(MaxDamage - HullDamage, MaxDamage); } }
+        public int HullPercent { get { return Util.ToPercent(HullCapacity - HullDamage, HullCapacity); } }
 
         /// <summary>
         /// Build up string of form [x]/[y] where [x] is number of pods and [y] is max pods possible 
@@ -762,7 +762,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <summary>
         /// The weapons being carried by this craft
         /// </summary>
-        private WeaponPod[] weaponPods;
+        protected WeaponPod[] weaponPods;
 
         /// <summary>
         /// Player readable identifier for this craft

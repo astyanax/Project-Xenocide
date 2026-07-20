@@ -380,3 +380,8 @@
 /importer:OggImporter
 /processor:SoundEffectProcessor
 /build:Content/Audio/Music/Baseview/7. XerO - Baseview.ogg
+
+#begin Content/Audio/Music/Aeroscape/aeroscape.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/build:Content/Audio/Music/Aeroscape/aeroscape.ogg

@@ -337,7 +337,7 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="maxDamage" type="xs:positiveInteger" use="required">
+      <xs:attribute name="hullCapacity" type="xs:positiveInteger" use="required">
         <xs:annotation>
           <xs:documentation source="guyver">How much damage points a craft can take before going down.</xs:documentation>
         </xs:annotation>

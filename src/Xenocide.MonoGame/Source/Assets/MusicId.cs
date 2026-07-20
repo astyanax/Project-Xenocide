@@ -8,5 +8,6 @@ namespace ProjectXenocide.Assets
         PlanetviewThomas,
         Baseview,
         XNet,
+        Aeroscape,
     }
 }

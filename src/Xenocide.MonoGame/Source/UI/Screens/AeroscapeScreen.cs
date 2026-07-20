@@ -30,11 +30,16 @@ using System.Text;
 
 using Gum.Forms;
 using Gum.Forms.Controls;
+using Gum.Wireframe;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
+using NLog;
+
+using ProjectXenocide.Assets;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Utils;
@@ -61,6 +66,8 @@ namespace ProjectXenocide.UI.Screens
     /// </remarks>
     public partial class AeroscapeScreen : GumScreen
     {
+        private static readonly Logger Logger = LogManager.GetLogger("Aeroscape");
+
         /// <summary>
         /// Initializes the dogfight screen for aerial combat.
         /// </summary>
@@ -71,7 +78,6 @@ namespace ProjectXenocide.UI.Screens
         {
             this.aircraft = aircraft;
             this.ufo = ufo;
-            this.log = new BattleLog();
 
             // Create simulation state and engine
             var aircraftList = new List<Aircraft> { aircraft };
@@ -81,6 +87,37 @@ namespace ProjectXenocide.UI.Screens
 
             aircraft.OnDogfightStart();
             ufo.OnDogfightStart();
+
+            // Log combatants
+            Logger.Info("=== AEROSCAPE STARTED ===");
+            Logger.Info("Interceptor: {0} (speed={1}m/s, hull={2}/{3}, fuel={4:F0}%)",
+                aircraft.Name, aircraft.CraftItemInfo.MaxSpeed,
+                aircraft.HullCapacity - aircraft.HullDamage, aircraft.HullCapacity,
+                aircraft.FuelPercent);
+            Logger.Info("UFO: {0} ({1}, speed={2}m/s, hull={3}/{4})",
+                ufo.Name, ufo.UfoItemInfo.UfoSize, ufo.CraftItemInfo.MaxSpeed,
+                ufo.HullCapacity - ufo.HullDamage, ufo.HullCapacity);
+            Logger.Info("Interceptor weapons:");
+            foreach (var pod in aircraft.WeaponPods)
+            {
+                if (pod != null)
+                    Logger.Info("  {0}: acc={1}%, dmg={2}, range={3}m, ammo={4}",
+                        pod.Name, pod.Weapon.Accuracy, pod.Weapon.WeaponDamage,
+                        pod.WeaponRange, pod.UsesAmmo ? string.Format("{0}/{1}", pod.ShotsLeft, pod.ClipSize) : "unlimited");
+            }
+            Logger.Info("UFO weapons:");
+            foreach (var pod in ufo.WeaponPods)
+            {
+                if (pod != null)
+                    Logger.Info("  {0}: dmg={1}, range={2}m",
+                        pod.Name, pod.Weapon.WeaponDamage, pod.WeaponRange);
+            }
+
+            // Initialize display interpolation
+            displayDistance = AeroscapeState.MaxDistance;
+
+            // Play aeroscape music
+            Xenocide.AudioSystem?.PlayRandomMusic("Aeroscape");
         }
 
         /// <summary>
@@ -107,9 +144,31 @@ namespace ProjectXenocide.UI.Screens
             // Wire close button
             WireButton("closeBtn", OnCloseButton);
 
-            // Initialize default state
-            runRealTime = false;
+            // Populate HUD labels from Gum tree
+            // Labels use BaseType="Text" in .gusx (visual-only), so use GetGraphicalUiElementByName
+            if (GumRoot != null)
+            {
+                statusLabel = GumRoot.GetGraphicalUiElementByName("statusLabel");
+                timeLabel = GumRoot.GetGraphicalUiElementByName("timeLabel");
+                weapon1Label = GumRoot.GetGraphicalUiElementByName("weapon1Label");
+                weapon1InfoLabel = GumRoot.GetGraphicalUiElementByName("weapon1InfoLabel");
+                weapon1ToggleBtn = GumRoot.GetFrameworkElementByName<Button>("weapon1ToggleBtn");
+                weapon2Label = GumRoot.GetGraphicalUiElementByName("weapon2Label");
+                weapon2InfoLabel = GumRoot.GetGraphicalUiElementByName("weapon2InfoLabel");
+                weapon2ToggleBtn = GumRoot.GetFrameworkElementByName<Button>("weapon2ToggleBtn");
+                ufoNameLabel = GumRoot.GetGraphicalUiElementByName("ufoNameLabel");
+                ufoHullLabel = GumRoot.GetGraphicalUiElementByName("ufoHullLabel");
+                ufoWeaponLabel = GumRoot.GetGraphicalUiElementByName("ufoWeaponLabel");
+                craftNameLabel = GumRoot.GetGraphicalUiElementByName("craftNameLabel");
+                craftHullLabel = GumRoot.GetGraphicalUiElementByName("craftHullLabel");
+                craftFuelLabel = GumRoot.GetGraphicalUiElementByName("craftFuelLabel");
+                distanceLabel = GumRoot.GetGraphicalUiElementByName("distanceLabel");
+                logLabel = GumRoot.GetGraphicalUiElementByName("logLabel");
+            }
+
+            // Start paused — player presses Normal or Fast to begin
             speedMultiplier = 0;
+            runRealTime = false;
 
             // Set initial display
             DrawScreen();
@@ -119,7 +178,6 @@ namespace ProjectXenocide.UI.Screens
 
         private Aircraft aircraft;
         private Ufo ufo;
-        private BattleLog log;
         private AeroscapeState simState;
         private AeroscapeSimulation simulation;
 
@@ -127,6 +185,7 @@ namespace ProjectXenocide.UI.Screens
         private bool runRealTime;
         private int speedMultiplier; // 0=paused, 1=normal, 2=fast
         private double elapsed;
+        private bool isExiting;
 
         // Radar rendering resources
         private SpriteBatch spriteBatch;
@@ -134,26 +193,35 @@ namespace ProjectXenocide.UI.Screens
         private Texture2D craftIcon;
         private Texture2D ufoBlob;
 
-        // HUD control references (populated from GumRoot or fallback)
-        private Label statusLabel;
-        private Label timeLabel;
-        private Label weapon1Label;
-        private Label weapon1InfoLabel;
+        // HUD label references (populated from GumRoot)
+        // NOTE: .gusx labels use BaseType="Text" (visual-only), not Forms Label.
+        // Must use GetGraphicalUiElementByName() + SetProperty("Text",...) instead of .Text.
+        private GraphicalUiElement statusLabel;
+        private GraphicalUiElement timeLabel;
+        private GraphicalUiElement weapon1Label;
+        private GraphicalUiElement weapon1InfoLabel;
         private Button weapon1ToggleBtn;
-        private Label weapon2Label;
-        private Label weapon2InfoLabel;
+        private GraphicalUiElement weapon2Label;
+        private GraphicalUiElement weapon2InfoLabel;
         private Button weapon2ToggleBtn;
-        private Label ufoNameLabel;
-        private Label ufoHullLabel;
-        private Label ufoWeaponLabel;
-        private Label craftNameLabel;
-        private Label craftHullLabel;
-        private Label craftFuelLabel;
-        private Label distanceLabel;
-        private Label logLabel;
+        private GraphicalUiElement ufoNameLabel;
+        private GraphicalUiElement ufoHullLabel;
+        private GraphicalUiElement ufoWeaponLabel;
+        private GraphicalUiElement craftNameLabel;
+        private GraphicalUiElement craftHullLabel;
+        private GraphicalUiElement craftFuelLabel;
+        private GraphicalUiElement distanceLabel;
+        private GraphicalUiElement logLabel;
 
         // Current tactical mode (for display)
         private TacticalMode currentTacticalMode = TacticalMode.Standard;
+
+        // Keyboard state for Tab cycling
+        private KeyboardState prevKeyboardState;
+
+        // Smooth display interpolation
+        private double displayDistance;          // smoothly interpolated distance for rendering
+        private double displayInterpolation;     // fractional progress between prev and current tick
 
         #endregion
 
@@ -189,7 +257,6 @@ namespace ProjectXenocide.UI.Screens
 
         private void OnDisengageButton(object sender, EventArgs e)
         {
-            currentTacticalMode = TacticalMode.Disengage;
             simulation.DisengageInterceptor(simState.SelectedInterceptorIndex);
             DrawScreen();
         }
@@ -214,7 +281,7 @@ namespace ProjectXenocide.UI.Screens
 
         private void OnFastButton(object sender, EventArgs e)
         {
-            speedMultiplier = 2;
+            speedMultiplier = 3;
             runRealTime = true;
             DrawScreen();
         }
@@ -255,6 +322,22 @@ namespace ProjectXenocide.UI.Screens
 
         private void GoToGeoscape()
         {
+            if (isExiting)
+                return;
+            isExiting = true;
+
+            // Log result
+            string resultStr = GetOutcomeString(simState.Outcome);
+            Logger.Info("=== AEROSCAPE ENDED: {0} ===", resultStr);
+            Logger.Info("Elapsed: {0:F0}s, Distance: {1:F0}m", simState.ElapsedSeconds, simState.Distance);
+            Logger.Info("UFO: {0} (hull {1:F0}%, health {2:F0}/{3:F0})", ufo.Name, ufo.HullPercent,
+                ufo.HullCapacity - ufo.HullDamage, ufo.HullCapacity);
+            Logger.Info("Interceptor: {0} (hull {1:F0}%, health {2:F0}/{3:F0}, fuel {4:F0}%)",
+                aircraft.Name, aircraft.HullPercent,
+                aircraft.HullCapacity - aircraft.HullDamage, aircraft.HullCapacity,
+                aircraft.FuelPercent);
+            Logger.Info("Outcome: {0}", simState.Outcome);
+
             EndDogfight();
 
             if (Xenocide.DebugTesting)
@@ -265,6 +348,19 @@ namespace ProjectXenocide.UI.Screens
             else
             {
                 ScreenManager.ScheduleScreen(new GeoscapeScreen());
+            }
+        }
+
+        private static string GetOutcomeString(DogfightOutcome outcome)
+        {
+            switch (outcome)
+            {
+                case DogfightOutcome.InProgress: return "IN PROGRESS";
+                case DogfightOutcome.AircraftVictory: return "AIRCRAFT VICTORY";
+                case DogfightOutcome.AircraftDestroyed: return "AIRCRAFT DESTROYED";
+                case DogfightOutcome.AircraftRetreated: return "AIRCRAFT RETREATED";
+                case DogfightOutcome.UFOEscaped: return "UFO ESCAPED";
+                default: return "UNKNOWN";
             }
         }
 
@@ -288,18 +384,39 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         public override void Update(GameTime gameTime)
         {
+            // Handle keyboard input
+            HandleKeyboardInput();
+
             if (runRealTime && !simulation.IsDogfightOver)
             {
                 elapsed += gameTime.ElapsedGameTime.TotalMilliseconds;
                 double tickInterval = 1000.0 / speedMultiplier;
-                if (elapsed >= tickInterval)
+                while (elapsed >= tickInterval)
                 {
+                    elapsed -= tickInterval;
                     UpdateDogfight();
                 }
+
+                // Smooth interpolation: blend between previous and current distance
+                if (tickInterval > 0)
+                {
+                    displayInterpolation = elapsed / tickInterval;
+                    displayDistance = simState.PrevDistance +
+                        (simState.Distance - simState.PrevDistance) * displayInterpolation;
+                }
+                else
+                {
+                    displayDistance = simState.Distance;
+                }
+            }
+            else
+            {
+                // Not running: snap to actual distance
+                displayDistance = simState.Distance;
             }
 
             // Check if dogfight ended
-            if (simulation.IsDogfightOver)
+            if (simulation.IsDogfightOver && !isExiting)
             {
                 GoToGeoscape();
             }
@@ -349,10 +466,49 @@ namespace ProjectXenocide.UI.Screens
 
         #endregion
 
+        #region Keyboard Input
+
+        private void HandleKeyboardInput()
+        {
+            KeyboardState keyboard = Keyboard.GetState();
+
+            // Tab: cycle to next interceptor
+            if (keyboard.IsKeyDown(Keys.Tab) && prevKeyboardState.IsKeyUp(Keys.Tab))
+            {
+                simulation.SelectNextInterceptor();
+                // Sync tactical mode display to newly selected interceptor
+                var selected = simState.SelectedInterceptor;
+                if (selected != null)
+                    currentTacticalMode = selected.Mode;
+                DrawScreen();
+            }
+
+            // Space: toggle pause
+            if (keyboard.IsKeyDown(Keys.Space) && prevKeyboardState.IsKeyUp(Keys.Space))
+            {
+                if (runRealTime)
+                {
+                    speedMultiplier = 0;
+                    runRealTime = false;
+                }
+                else
+                {
+                    speedMultiplier = 1;
+                    runRealTime = true;
+                }
+                DrawScreen();
+            }
+
+            prevKeyboardState = keyboard;
+        }
+
+        #endregion
+
         #region Radar Rendering
 
         /// <summary>
         /// Draw the 2D radar viewport showing aircraft, UFO, and weapon fire.
+        /// Uses smooth interpolated positions for artifact-free animation.
         /// </summary>
         private void DrawRadarViewport(GraphicsDevice device)
         {
@@ -376,17 +532,29 @@ namespace ProjectXenocide.UI.Screens
             // Draw weapon range indicators
             DrawWeaponRanges(spriteBatch, radarX, radarY, radarWidth, radarHeight);
 
-            // Draw UFO blob at top (moving down as distance decreases)
-            float ufoY = CalculateUfoYPosition(radarY, radarHeight);
-            spriteBatch.Draw(ufoBlob,
-                new Rectangle(radarX + (radarWidth / 2) - 16, (int)ufoY - 16, 32, 32),
-                Color.Red);
+            // Use smooth interpolated distance for positions
+            double renderDistance = displayDistance;
 
-            // Draw aircraft icon at bottom (moving up as distance decreases)
-            float craftY = CalculateCraftYPosition(radarY, radarHeight);
+            // Both icons are centered in the radar, converging toward the middle.
+            // As distance decreases, they approach the center line but never cross it.
+            float normalized = (float)(renderDistance / AeroscapeState.MaxDistance);
+            int centerX = radarX + (radarWidth / 2);
+
+            // Interceptor: starts at BOTTOM (far), ascends toward CENTER as it closes.
+            // At n=1 (MaxDistance): Y = radarY + radarHeight (bottom)
+            // At n=0 (contact):      Y = radarY + radarHeight/2 (center)
+            float craftY = radarY + (radarHeight / 2f) + (radarHeight * normalized / 2f);
             spriteBatch.Draw(craftIcon,
-                new Rectangle(radarX + (radarWidth / 2) - 12, (int)craftY - 12, 24, 24),
+                new Rectangle(centerX - 12, (int)craftY - 12, 24, 24),
                 Color.LimeGreen);
+
+            // UFO: starts at TOP (far), descends toward CENTER as interceptor closes.
+            // At n=1 (MaxDistance): Y = radarY (top)
+            // At n=0 (contact):      Y = radarY + radarHeight/2 (center)
+            float ufoY = radarY + (radarHeight / 2f) - (radarHeight * normalized / 2f);
+            spriteBatch.Draw(ufoBlob,
+                new Rectangle(centerX - 16, (int)ufoY - 16, 32, 32),
+                Color.Red);
 
             spriteBatch.End();
         }
@@ -407,6 +575,7 @@ namespace ProjectXenocide.UI.Screens
 
         /// <summary>
         /// Draw weapon range indicator lines on the radar.
+        /// Shows maximum reachable firing distance from the interceptor.
         /// </summary>
         private void DrawWeaponRanges(SpriteBatch sb, int x, int y, int w, int h)
         {
@@ -418,33 +587,13 @@ namespace ProjectXenocide.UI.Screens
             if (maxRange <= 0)
                 return;
 
-            // Map weapon range to radar position
-            float rangeNormalized = (float)((double)maxRange / AeroscapeState.MaxDistance);
-            int rangeLineY = y + (int)(h * rangeNormalized * 0.4f);
+            // Position the range line at the interceptor's Y when distance = maxRange
+            float normalized = (float)((double)maxRange / AeroscapeState.MaxDistance);
+            int rangeLineY = y + (int)((h / 2f) + (h * normalized / 2f));
 
             // Draw range line
             Color rangeColor = new Color(100, 100, 0, 128);
             sb.Draw(radarBackground, new Rectangle(x, rangeLineY, w, 1), rangeColor);
-        }
-
-        /// <summary>
-        /// Calculate Y position of UFO on radar based on current distance.
-        /// </summary>
-        private float CalculateUfoYPosition(int radarY, int radarHeight)
-        {
-            double distance = simState.Distance;
-            float normalized = (float)(distance / AeroscapeState.MaxDistance);
-            return radarY + (radarHeight * normalized * 0.4f);
-        }
-
-        /// <summary>
-        /// Calculate Y position of aircraft on radar based on current distance.
-        /// </summary>
-        private float CalculateCraftYPosition(int radarY, int radarHeight)
-        {
-            double distance = simState.Distance;
-            float normalized = (float)(distance / AeroscapeState.MaxDistance);
-            return radarY + radarHeight - (radarHeight * normalized * 0.4f);
         }
 
         /// <summary>
@@ -522,7 +671,6 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void UpdateDogfight()
         {
-            elapsed = 0.0;
             simulation.Tick(1.0);
             DrawScreen();
         }
@@ -545,39 +693,25 @@ namespace ProjectXenocide.UI.Screens
 
         private void UpdateStatusLabel()
         {
-            if (statusLabel != null)
-            {
-                statusLabel.Text = GetTacticalModeName(currentTacticalMode);
-            }
+            statusLabel?.SetProperty("Text", GetTacticalModeName(currentTacticalMode));
         }
 
         private void UpdateTimeDisplay()
         {
-            if (timeLabel != null)
-            {
-                timeLabel.Text = string.Format("Time: {0:F0}s", simState.ElapsedSeconds);
-            }
+            timeLabel?.SetProperty("Text", string.Format("Time: {0:F0}s", simState.ElapsedSeconds));
         }
 
         private void UpdateDistanceDisplay()
         {
-            if (distanceLabel != null)
-            {
-                int distanceKm = (int)(simState.Distance / 1000.0);
-                distanceLabel.Text = string.Format("Distance: {0}km", distanceKm);
-            }
+            int distanceKm = (int)(simState.Distance / 1000.0);
+            distanceLabel?.SetProperty("Text", string.Format("Distance: {0}km", distanceKm));
         }
 
         private void UpdateAircraftStatus()
         {
-            if (craftNameLabel != null)
-                craftNameLabel.Text = aircraft.Name;
-
-            if (craftHullLabel != null)
-                craftHullLabel.Text = string.Format("Hull: {0}%", aircraft.HullPercent);
-
-            if (craftFuelLabel != null)
-                craftFuelLabel.Text = string.Format("Fuel: {0}%", aircraft.FuelPercent);
+            craftNameLabel?.SetProperty("Text", aircraft.Name);
+            craftHullLabel?.SetProperty("Text", string.Format("Hull: {0}%", aircraft.HullPercent));
+            craftFuelLabel?.SetProperty("Text", string.Format("Fuel: {0}%", aircraft.FuelPercent));
         }
 
         private void UpdateWeaponInfo()
@@ -590,7 +724,7 @@ namespace ProjectXenocide.UI.Screens
             DrawPodInformation(weapon2Label, weapon2InfoLabel, weapon2ToggleBtn, interceptor, 1, interceptor.Weapon2Enabled);
         }
 
-        private void DrawPodInformation(Label headerLabel, Label infoLabel, Button toggleBtn,
+        private void DrawPodInformation(GraphicalUiElement headerLabel, GraphicalUiElement infoLabel, Button toggleBtn,
             InterceptorState interceptor, int podIndex, bool isEnabled)
         {
             if (headerLabel == null || infoLabel == null)
@@ -599,14 +733,14 @@ namespace ProjectXenocide.UI.Screens
             if (podIndex < interceptor.Aircraft.WeaponPods.Count && interceptor.Aircraft.WeaponPods[podIndex] != null)
             {
                 var pod = interceptor.Aircraft.WeaponPods[podIndex];
-                headerLabel.Text = string.Format("WEAPON {0}: {1}", podIndex + 1, pod.Name);
+                headerLabel.SetProperty("Text", string.Format("WEAPON {0}: {1}", podIndex + 1, pod.Name));
 
                 string ammoText = pod.UsesAmmo
                     ? string.Format("Ammo: {0}/{1}", pod.ShotsLeft, pod.ClipSize)
                     : "Ammo: Unlimited";
 
-                infoLabel.Text = string.Format("{0}  Range: {1}km  Dmg: {2}",
-                    ammoText, pod.WeaponRange / 1000, pod.WeaponDamage);
+                infoLabel.SetProperty("Text", string.Format("{0}  Range: {1}km  Dmg: {2}",
+                    ammoText, pod.WeaponRange / 1000, pod.WeaponDamage));
 
                 if (toggleBtn != null)
                 {
@@ -615,8 +749,8 @@ namespace ProjectXenocide.UI.Screens
             }
             else
             {
-                headerLabel.Text = string.Format("WEAPON {0}: Empty", podIndex + 1);
-                infoLabel.Text = "";
+                headerLabel.SetProperty("Text", string.Format("WEAPON {0}: Empty", podIndex + 1));
+                infoLabel.SetProperty("Text", "");
                 if (toggleBtn != null)
                 {
                     toggleBtn.Text = "N/A";
@@ -626,23 +760,13 @@ namespace ProjectXenocide.UI.Screens
 
         private void UpdateUfoInfo()
         {
-            if (ufoNameLabel != null)
-                ufoNameLabel.Text = string.Format("{0} ({1})", ufo.Name, ufo.UfoItemInfo.UfoSize);
+            ufoNameLabel?.SetProperty("Text", string.Format("{0} ({1})", ufo.Name, ufo.UfoItemInfo.UfoSize));
+            ufoHullLabel?.SetProperty("Text", string.Format("Hull: {0}%", ufo.HullPercent));
 
-            if (ufoHullLabel != null)
-                ufoHullLabel.Text = string.Format("Hull: {0}%", ufo.HullPercent);
-
-            if (ufoWeaponLabel != null)
-            {
-                if (ufo.WeaponPods.Count > 0 && ufo.WeaponPods[0] != null)
-                {
-                    ufoWeaponLabel.Text = string.Format("Weapon: {0}", ufo.WeaponPods[0].Name);
-                }
-                else
-                {
-                    ufoWeaponLabel.Text = "Weapon: None";
-                }
-            }
+            if (ufo.WeaponPods.Count > 0 && ufo.WeaponPods[0] != null)
+                ufoWeaponLabel?.SetProperty("Text", string.Format("Weapon: {0}", ufo.WeaponPods[0].Name));
+            else
+                ufoWeaponLabel?.SetProperty("Text", "Weapon: None");
         }
 
         private void UpdateCombatLog()
@@ -651,27 +775,46 @@ namespace ProjectXenocide.UI.Screens
                 return;
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("Time: {0:F0}s", simState.ElapsedSeconds);
-
-            // Show last few entries
-            int startIdx = Math.Max(0, simState.Log.Entries.Count - 5);
+            int startIdx = Math.Max(0, simState.Log.Entries.Count - 8);
             for (int i = startIdx; i < simState.Log.Entries.Count; i++)
             {
-                sb.Append(Util.Linefeed);
+                if (sb.Length > 0)
+                    sb.Append(Util.Linefeed);
                 sb.Append(simState.Log.Entries[i].Details);
             }
 
-            logLabel.Text = sb.ToString();
+            logLabel.SetProperty("Text", sb.ToString());
         }
 
         private void UpdateSpeedButtons()
         {
-            // Visual feedback for active speed (would need button references to highlight)
+            if (GumRoot == null) return;
+            var pause = GumRoot.GetFrameworkElementByName<Button>("pauseBtn");
+            var normal = GumRoot.GetFrameworkElementByName<Button>("normalBtn");
+            var fast = GumRoot.GetFrameworkElementByName<Button>("fastBtn");
+            if (pause != null)
+                pause.Text = (speedMultiplier == 0) ? "[Pause]" : "Pause";
+            if (normal != null)
+                normal.Text = (speedMultiplier == 1) ? "[Normal]" : "Normal";
+            if (fast != null)
+                fast.Text = (speedMultiplier == 3) ? "[Fast]" : "Fast";
         }
 
         private void UpdateTacticalButtons()
         {
-            // Visual feedback for active tactical mode (would need button references to highlight)
+            if (GumRoot == null) return;
+            var standoff = GumRoot.GetFrameworkElementByName<Button>("standoffBtn");
+            var cautious = GumRoot.GetFrameworkElementByName<Button>("cautiousBtn");
+            var standard = GumRoot.GetFrameworkElementByName<Button>("standardBtn");
+            var aggressive = GumRoot.GetFrameworkElementByName<Button>("aggressiveBtn");
+            if (standoff != null)
+                standoff.Text = (currentTacticalMode == TacticalMode.Standoff) ? "[STANDOFF]" : "STANDOFF";
+            if (cautious != null)
+                cautious.Text = (currentTacticalMode == TacticalMode.Cautious) ? "[CAUTIOUS]" : "CAUTIOUS";
+            if (standard != null)
+                standard.Text = (currentTacticalMode == TacticalMode.Standard) ? "[STANDARD]" : "STANDARD";
+            if (aggressive != null)
+                aggressive.Text = (currentTacticalMode == TacticalMode.Aggressive) ? "[AGGRESSIVE]" : "AGGRESSIVE";
         }
 
         /// <summary>

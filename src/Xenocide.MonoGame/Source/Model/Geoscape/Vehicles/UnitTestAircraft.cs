@@ -72,14 +72,14 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
 
             // Add damaged craft
             Aircraft aircraft = (Aircraft)Xenocide.StaticTables.ItemList["ITEM_XC-22_ECLIPSE"].Manufacture();
-            aircraft.HullDamage = aircraft.MaxDamage;
+            aircraft.HullDamage = aircraft.HullCapacity;
             outpost.Inventory.Add(aircraft, false);
 
             // Progress time
             // step size should be 90% of time required to repair a unit of damage
             // number of steps should be just under enough to repair craft
             double stepSize = 0.9 / repairRate;
-            int steps = (int)((aircraft.MaxDamage / 0.9)) - 1;
+            int steps = (int)((aircraft.HullCapacity / 0.9)) - 1;
             for (int i = 0; i < steps; ++i)
             {
                 aircraft.Update(stepSize);

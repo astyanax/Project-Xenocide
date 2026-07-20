@@ -358,9 +358,18 @@ namespace ProjectXenocide.UI.Screens
             RetaliationTask task = overmind.Tasks[0] as RetaliationTask;
             InvasionTask.TestReleaseUfo(task);
             Ufo ufo = overmind.Ufos[0];
-            ufo.DebugTransmute(Xenocide.StaticTables.ItemList["ITEM_UFO_RECON"]);
 
-            Aircraft aircraft = outpost.Fleet[2] as Aircraft;
+            // Pick a random armed UFO type (any except Probe which has no weapon)
+            string[] armedUfoTypes = {
+                "ITEM_UFO_RECON", "ITEM_UFO_ESCORT", "ITEM_UFO_REAPER",
+                "ITEM_UFO_COLLECTOR", "ITEM_UFO_INTIMIDATOR", "ITEM_UFO_JUGGERNAUT",
+                "ITEM_UFO_ALIEN_FREIGHTER"
+            };
+            string ufoType = armedUfoTypes[Xenocide.Rng.Next(armedUfoTypes.Length)];
+            ufo.DebugTransmute(Xenocide.StaticTables.ItemList[ufoType]);
+            ufo.DebugRearm();
+
+            Aircraft aircraft = outpost.Fleet[0] as Aircraft;
             ScreenManager.ScheduleScreen(new AeroscapeScreen(aircraft, ufo));
         }
 #endif

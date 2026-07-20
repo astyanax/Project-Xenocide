@@ -324,6 +324,55 @@ Programmatic controls in the GumX path had no X/Y positioning, causing overlap a
 | EquipSoldierScreen | ammoText, 8 static labels |
 | LoadSaveGameScreen | filenameEditBox, savesgrid |
 
+### Gum API Pitfalls & Practical Learnings
+
+These lessons were learned the hard way during the AeroscapeScreen implementation.
+
+#### .gusx `BaseType="Text"` Is NOT a Forms Label
+
+Every `.gusx` file in the project defines text elements as `<Instance Name="foo" BaseType="Text" />`. This creates a **visual-only** `GraphicalUiElement` that renders text — it is NOT a `Gum.Forms.Controls.Label` (Forms control).
+
+**What crashes:**
+```csharp
+// CRASHES — "Text" visual has no FormsControlAsObject
+var label = GumRoot.GetFrameworkElementByName<Label>("statusLabel");
+label.Text = "hello";
+```
+
+**What works — use the raw visual API instead:**
+```csharp
+var elem = GumRoot.GetGraphicalUiElementByName("statusLabel");
+elem.SetProperty("Text", "hello");
+```
+
+The `GetFrameworkElementByName<T>()` method requires `FormsControlAsObject` to be set on the element, which only happens for elements created via the Gum.Forms API (`new Label()`, `new Button()`, etc.), not for designer elements with `BaseType="Text"`.
+
+**Why `GetFrameworkElementByName<Button>()` works but `<Label>()` doesn't:** Buttons use `BaseType="XenocideButton"` (a custom Forms component) or the Gum V3 `Button` visual, which registers a Forms control. Text labels use `BaseType="Text"` with no Forms control registration.
+
+**Two patterns for reading text from .gusx:**
+
+| Pattern | Code | Used By |
+|---------|------|---------|
+| `GetGraphicalUiElementByName` + `SetProperty` | `elem.SetProperty("Text", value)` | GumDialog, AeroscapeScreen |
+| Create programmatically | `var label = new Label(); ... label.Text = value;` | GeoscapeScreen, BattlescapeScreen |
+
+#### Button `Color` Is Not a Direct Property
+
+`Gum.Forms.Controls.Button` (and its `.Visual` which is `InteractiveGue`) does not have a `Color` property. Button styling can be done through:
+
+1. **Text-based indication** — Change `button.Text` to show active state (e.g., `[STANDARD]` vs `STANDARD`). This is what AeroscapeScreen uses.
+2. **`SetProperty("ColorCategoryState", "Primary")`** — Apply a predefined Gum color style category. Used by `GridPanel` and `ModalDialog` for title bars.
+3. **V3 `ButtonVisual.BackgroundColor`** — The V3 default visual exposes `BackgroundColor`, `ForegroundColor`, and `FocusedIndicatorColor`. Access via the V3 visual type, not the Forms `Button` wrapper.
+
+#### Programmatic vs Designer Controls
+
+The codebase uses two distinct patterns for text elements in screens:
+
+1. **Designer-defined** — Text elements in `.gusx` (e.g., `BaseType="Text"`). Accessed via `GetGraphicalUiElementByName()` + `SetProperty("Text", ...)`. Layout is designer-controlled.
+2. **Programmatically created** — Labels created as `new Label()` in C# code. Accessed via `.Text` property directly. Must be manually positioned and added to a parent container.
+
+Most screens use designer-defined text for layout labels and programmatic labels for dynamic content. The AeroscapeScreen uses exclusively designer-defined text for its HUD.
+
 ---
 
 ## Base Screen & Facility System Architecture

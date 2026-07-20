@@ -49,21 +49,22 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
     /// TACTICAL MODES (per interceptor):
     /// - Standoff: maintain 80,000m, no fire
     /// - Cautious: target = max weapon range, 1.5x cooldown
-    /// - Standard: target = min weapon range, 1.0x cooldown
+    /// - Standard: target = max weapon range (safe firing distance), 1.0x cooldown
     /// - Aggressive: target = 1,000m, 0.75x cooldown
-    /// - Disengage: increase distance to 80,000m, then end
-    ///
-    /// UFO AI:
-    /// - Maintains optimal firing distance (5,000-15,000m)
-    /// - Fires when in weapon range
-    /// - Has an escape countdown that triggers if hull drops below threshold
+    /// - Disengage: increase distance to 80,000m, then deactivate
     /// </remarks>
     public class AeroscapeState
     {
         /// <summary>
         /// Maximum distance on the radar (standoff range) in meters.
+        /// Set to 60,000 so that long-range weapons (Titan 60km, GAIA 65km) can fire at standoff.
         /// </summary>
-        public const double MaxDistance = 80000.0;
+        public const double MaxDistance = 60000.0;
+
+        /// <summary>
+        /// Minimum safe distance (prevents collision/oscillation).
+        /// </summary>
+        public const double MinDistance = 100.0;
 
         /// <summary>
         /// The UFO being intercepted.
@@ -100,6 +101,11 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         public double Distance { get; set; }
 
         /// <summary>
+        /// Previous frame's distance, for smooth display interpolation.
+        /// </summary>
+        public double PrevDistance { get; set; }
+
+        /// <summary>
         /// Current dogfight outcome. Set when the fight ends.
         /// </summary>
         public DogfightOutcome Outcome { get; set; } = DogfightOutcome.InProgress;
@@ -116,9 +122,15 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
 
         /// <summary>
         /// UFO AI state: escape countdown in seconds.
-        /// Decreases when UFO hull is damaged. When it reaches 0, UFO flees.
+        /// Decreases over time (faster when damaged). When it reaches 0, UFO flees.
         /// </summary>
         public double UfoEscapeCountdown { get; set; }
+
+        /// <summary>
+        /// Whether the UFO is a large/aggressive type that actively hunts interceptors.
+        /// Small UFOs (scouts, research, supply) try to escape instead.
+        /// </summary>
+        public bool UfoIsAggressive { get; private set; }
 
         /// <summary>
         /// UFO AI state: target distance the UFO wants to maintain (in meters).
@@ -131,18 +143,25 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         public double UfoFireCountdown { get; set; }
 
         /// <summary>
-        /// Whether the nearest interceptor has any weapons left.
+        /// Whether all active interceptors have exhausted their weapons.
+        /// Unarmed interceptors are excluded (they were never "in ammo").
         /// </summary>
         public bool AllInterceptorsOutofAmmo
         {
             get
             {
-                foreach (var state in Interceptors)
+                bool anyHasWeapons = false;
+                foreach (var s in Interceptors)
                 {
-                    if (state.IsActive && state.HasUsableWeapons)
-                        return false;
+                    if (s.IsActive && s.HasWeapons)
+                    {
+                        anyHasWeapons = true;
+                        if (s.HasUsableWeapons)
+                            return false;
+                    }
                 }
-                return true;
+                // If no interceptor has weapons at all, this isn't "out of ammo"
+                return anyHasWeapons;
             }
         }
 
@@ -153,35 +172,12 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         {
             get
             {
-                foreach (var state in Interceptors)
+                foreach (var s in Interceptors)
                 {
-                    if (state.IsActive)
+                    if (s.IsActive)
                         return false;
                 }
                 return true;
-            }
-        }
-
-        /// <summary>
-        /// The active interceptor nearest to the UFO.
-        /// </summary>
-        public InterceptorState NearestInterceptor
-        {
-            get
-            {
-                InterceptorState nearest = null;
-                foreach (var state in Interceptors)
-                {
-                    if (state.IsActive)
-                    {
-                        if (nearest == null ||
-                            GetInterceptorSpeed(state) > GetInterceptorSpeed(nearest))
-                        {
-                            nearest = state;
-                        }
-                    }
-                }
-                return nearest;
             }
         }
 
@@ -194,8 +190,12 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             Log = new BattleLog();
             Distance = MaxDistance;
             UfoPreferredDistance = 10000.0;
-            UfoEscapeCountdown = 30.0;
+            UfoEscapeCountdown = 120.0;
             UfoFireCountdown = 3.0;
+
+            // Large and very large UFOs actively hunt interceptors
+            string size = ufo.UfoItemInfo.UfoSize;
+            UfoIsAggressive = size.Contains("LARGE") || size.Contains("Large");
 
             Interceptors = new List<InterceptorState>();
             if (aircraft != null)
@@ -209,6 +209,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
 
         /// <summary>
         /// Get the maximum weapon range across all weapons of an interceptor (in meters).
+        /// Returns 0 if the interceptor has no weapons.
         /// </summary>
         public static int GetMaxWeaponRange(InterceptorState interceptor)
         {
@@ -223,16 +224,26 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
 
         /// <summary>
         /// Get the minimum weapon range across all weapons of an interceptor (in meters).
+        /// Falls back to max range if no weapons (prevents 0-range suicide approach).
         /// </summary>
         public static int GetMinWeaponRange(InterceptorState interceptor)
         {
             int minRange = int.MaxValue;
+            int maxRange = 0;
             foreach (var pod in interceptor.Aircraft.WeaponPods)
             {
-                if (pod != null && pod.WeaponRange < minRange)
-                    minRange = pod.WeaponRange;
+                if (pod != null)
+                {
+                    if (pod.WeaponRange < minRange)
+                        minRange = pod.WeaponRange;
+                    if (pod.WeaponRange > maxRange)
+                        maxRange = pod.WeaponRange;
+                }
             }
-            return minRange == int.MaxValue ? 0 : minRange;
+            // If no weapons, return max range (which is 0, handled by caller)
+            if (minRange == int.MaxValue)
+                return maxRange;
+            return minRange;
         }
 
         /// <summary>
@@ -250,15 +261,17 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         }
 
         /// <summary>
-        /// Compute the speed multiplier for a given tactical mode.
+        /// Compute the cooldown speed multiplier for a given tactical mode.
+        /// Lower multiplier = faster firing.
         /// </summary>
         public static double GetCooldownMultiplier(TacticalMode mode)
         {
             switch (mode)
             {
-                case TacticalMode.Cautious: return 1.5;
+                // Matches original UFO:EU frame ratios (64:48:32 for launched weapons)
+                case TacticalMode.Cautious: return 1.333;
                 case TacticalMode.Standard: return 1.0;
-                case TacticalMode.Aggressive: return 0.75;
+                case TacticalMode.Aggressive: return 0.667;
                 default: return 1.0;
             }
         }
@@ -271,11 +284,14 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             switch (mode)
             {
                 case TacticalMode.Standoff:
-                    return MaxDistance;
+                    // Stand at max weapon range so long-range weapons can fire
+                    int standoffRange = GetMaxWeaponRange(interceptor);
+                    return standoffRange > 0 ? standoffRange : MaxDistance;
                 case TacticalMode.Cautious:
                     return GetMaxWeaponRange(interceptor);
                 case TacticalMode.Standard:
-                    return GetMinWeaponRange(interceptor);
+                    // Use max range for safety; min range for Standard would be risky
+                    return GetMaxWeaponRange(interceptor);
                 case TacticalMode.Aggressive:
                     return 1000.0;
                 case TacticalMode.Disengage:
@@ -283,11 +299,6 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
                 default:
                     return MaxDistance;
             }
-        }
-
-        private static double GetInterceptorSpeed(InterceptorState interceptor)
-        {
-            return interceptor.Aircraft.CraftItemInfo.MaxSpeed;
         }
     }
 }

@@ -79,7 +79,10 @@
       <Value xsi:type="xsd:string">TopBar</Value>
     </Variable>
     <Variable Type="ChildrenLayout" Name="SpeedPanel.ChildrenLayout" SetsValue="true">
-      <Value xsi:type="xsd:int">0</Value>
+      <Value xsi:type="xsd:int">2</Value>
+    </Variable>
+    <Variable Type="float" Name="SpeedPanel.StackSpacing" SetsValue="true">
+      <Value xsi:type="xsd:float">4</Value>
     </Variable>
     <Variable Type="float" Name="SpeedPanel.X" SetsValue="true">
       <Value xsi:type="xsd:float">500</Value>
@@ -91,25 +94,25 @@
       <Value xsi:type="xsd:string">Pause</Value>
     </Variable>
     <Variable Type="float" Name="pauseBtn.Width" SetsValue="true">
-      <Value xsi:type="xsd:float">60</Value>
+      <Value xsi:type="xsd:float">70</Value>
     </Variable>
     <Variable Type="string" Name="normalBtn.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">SpeedPanel</Value>
     </Variable>
     <Variable Type="string" Name="normalBtn.TextInstance.Text" SetsValue="true">
-      <Value xsi:type="xsd:string">1x</Value>
+      <Value xsi:type="xsd:string">Normal</Value>
     </Variable>
     <Variable Type="float" Name="normalBtn.Width" SetsValue="true">
-      <Value xsi:type="xsd:float">60</Value>
+      <Value xsi:type="xsd:float">70</Value>
     </Variable>
     <Variable Type="string" Name="fastBtn.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">SpeedPanel</Value>
     </Variable>
     <Variable Type="string" Name="fastBtn.TextInstance.Text" SetsValue="true">
-      <Value xsi:type="xsd:string">2x</Value>
+      <Value xsi:type="xsd:string">Fast</Value>
     </Variable>
     <Variable Type="float" Name="fastBtn.Width" SetsValue="true">
-      <Value xsi:type="xsd:float">60</Value>
+      <Value xsi:type="xsd:float">70</Value>
     </Variable>
     <!-- Close button (top right) -->
     <Variable Type="string" Name="closeBtn.Parent" SetsValue="true">
@@ -328,7 +331,10 @@
       <Value xsi:type="xsd:string">ContainerInstance</Value>
     </Variable>
     <Variable Type="ChildrenLayout" Name="StatusBar.ChildrenLayout" SetsValue="true">
-      <Value xsi:type="xsd:int">0</Value>
+      <Value xsi:type="xsd:int">2</Value>
+    </Variable>
+    <Variable Type="float" Name="StatusBar.StackSpacing" SetsValue="true">
+      <Value xsi:type="xsd:float">20</Value>
     </Variable>
     <Variable Type="float" Name="StatusBar.X" SetsValue="true">
       <Value xsi:type="xsd:float">20</Value>

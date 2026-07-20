@@ -1489,7 +1489,7 @@
     <ammo capacity="6">
       <ammoName name="ITEM_SIDEWINDER_LIGHT_MISSILE_CLIP"/>
     </ammo>
-    <shoot time="15" name="ACTION_SHIP_SHOT" accuracy="0.7" range="30000" />
+    <shoot time="12" name="ACTION_SHIP_SHOT" accuracy="0.7" range="30000" />
 </item>
 
 <item id="ITEM_TITAN_HEAVY_MISSILE_CLIP" name="Titan Missile" xsi:type="clipItemType" score="0">
@@ -1507,7 +1507,7 @@
     <ammo capacity="3">
       <ammoName name="ITEM_TITAN_HEAVY_MISSILE_CLIP"/>
     </ammo>
-    <shoot time="20" name="ACTION_SHIP_SHOT" accuracy="0.8" range="60000" />
+    <shoot time="18" name="ACTION_SHIP_SHOT" accuracy="0.8" range="60000" />
 </item>
 
 <item id="ITEM_GAIA_MISSILE_CLIP" name="GAIA Missile" xsi:type="clipItemType" score="0">
@@ -1537,7 +1537,7 @@
     <ammo capacity="2">
       <ammoName name="ITEM_GAIA_MISSILE_CLIP"/>
     </ammo>
-    <shoot time="25" name="ACTION_SHIP_SHOT" accuracy="1" range="65000" />
+    <shoot time="12" name="ACTION_SHIP_SHOT" accuracy="1" range="65000" />
 </item>
 
 <item id="ITEM_PLASMA_CANNON" name="Plasma Cannon" xsi:type="craftWeaponItemType" score="0">
@@ -1561,7 +1561,7 @@
         <cost hours="300" money="182000" />
     </construct>
     <damage type="Laser" amount="70" />
-    <shoot time="4" name="ACTION_SHIP_SHOT" accuracy="0.35" range="21000" />
+    <shoot time="6" name="ACTION_SHIP_SHOT" accuracy="0.35" range="21000" />
 </item>
 
 <item id="ITEM_CANNON_CLIP" name="Cannon Clip" xsi:type="clipItemType" score="0">
@@ -1579,7 +1579,7 @@
     <ammo capacity="200">
       <ammoName name="ITEM_CANNON_CLIP"/>
     </ammo>
-    <shoot time="2" name="ACTION_SHIP_SHOT" accuracy="0.25" range="10000" />
+    <shoot time="1" name="ACTION_SHIP_SHOT" accuracy="0.25" range="10000" />
 </item>
 
 <!-- These are the weapons used by UFOs. Put here so we only need one craft weapon class. -->
@@ -1640,8 +1640,8 @@
     <price buy="600000" sell="0" />
     <craftInfo>
         <specs>
-            <engine acceleration="3" maxSpeed="1080" consumptionRate="126" maxFuel="1000" fuelType="hydrogen"/>
-            <hull hardness="0.1" maxDamage="100" />
+            <engine acceleration="3" maxSpeed="960" consumptionRate="126" maxFuel="1000" fuelType="hydrogen"/>
+            <hull hardness="0.1" hullCapacity="100" />
         </specs>
         <mantainance montlyCost="600000" repairCost="150"/>
         <capacity numHardpoints="2" maxHumans="0" maxXcaps="0" />
@@ -1654,7 +1654,7 @@
     <craftInfo>
         <specs>
             <engine acceleration="2" maxSpeed="391" consumptionRate="42" maxFuel="1500" fuelType="hydrogen"/>
-            <hull hardness="0.3" maxDamage="150" />
+            <hull hardness="0.3" hullCapacity="150" />
         </specs>
         <mantainance montlyCost="500000" repairCost="150"/>
         <capacity numHardpoints="0" maxHumans="14" maxXcaps="2" />
@@ -1675,7 +1675,7 @@
     <craftInfo>
         <specs>
             <engine acceleration="9" maxSpeed="2161" consumptionRate="1.2" maxFuel="4" fuelType="xenium"/>
-            <hull hardness="0.3" maxDamage="500" />
+            <hull hardness="0.3" hullCapacity="500" />
         </specs>
         <mantainance montlyCost="0" repairCost="250"/>
         <capacity numHardpoints="2" maxHumans="0" maxXcaps="0" />
@@ -1696,7 +1696,7 @@
     <craftInfo>
         <specs>
             <engine acceleration="8" maxSpeed="1595" consumptionRate="1.2" maxFuel="6" fuelType="xenium"/>
-            <hull hardness="0.3" maxDamage="800" />
+            <hull hardness="0.3" hullCapacity="800" />
         </specs>
         <mantainance montlyCost="0" repairCost="500"/>
         <capacity numHardpoints="1" maxHumans="12" maxXcaps="0" />
@@ -1717,7 +1717,7 @@
     <craftInfo>
         <specs>
             <engine acceleration="10" maxSpeed="2778" consumptionRate="1.2" maxFuel="12" fuelType="xenium"/>
-            <hull hardness="0.3" maxDamage="1200" />
+            <hull hardness="0.3" hullCapacity="1200" />
         </specs>
         <mantainance montlyCost="0" repairCost="1000"/>
         <capacity numHardpoints="2" maxHumans="26" maxXcaps="4" />
@@ -1824,7 +1824,7 @@
     <storage type="STORAGE_CRAFT" units="1" />
     <price buy="0" sell="0" />
     <ufoInfo maxSpeed="1132" size="VERY_SMALL">
-        <hull hardness="0.3" maxDamage="50"/>
+        <hull hardness="0.3" hullCapacity="50"/>
         <salvage>
             <material type="ITEM_ALIEN_COMPOSITES" quantity="1" />
         </salvage>
@@ -1836,7 +1836,7 @@
     <storage type="STORAGE_CRAFT" units="1" />
     <price buy="0" sell="0" />
     <ufoInfo maxSpeed="1235" size="SMALL">
-        <hull hardness="0.3" maxDamage="200"/>
+        <hull hardness="0.3" hullCapacity="200"/>
         <weapon name="ITEM_UFO_RECON_WEAPON"/>
         <salvage>
             <material type="ITEM_ALIEN_COMPOSITES"         quantity="11" />
@@ -1853,7 +1853,7 @@
     <storage type="STORAGE_CRAFT" units="1" />
     <price buy="0" sell="0" />
     <ufoInfo maxSpeed="1389" size="SMALL">
-        <hull hardness="0.3" maxDamage="250"/>
+        <hull hardness="0.3" hullCapacity="250"/>
         <weapon name="ITEM_UFO_ESCORT_WEAPON"/>
         <salvage>
             <material type="ITEM_ALIEN_COMPOSITES"         quantity="35" />
@@ -1871,7 +1871,7 @@
     <storage type="STORAGE_CRAFT" units="1" />
     <price buy="0" sell="0" />
     <ufoInfo maxSpeed="2058" size="MEDIUM">
-        <hull hardness="0.3" maxDamage="500"/>
+        <hull hardness="0.3" hullCapacity="500"/>
         <weapon name="ITEM_UFO_REAPER_WEAPON"/>
         <salvage>
             <material type="ITEM_ALIEN_COMPOSITES"         quantity="97" />
@@ -1893,7 +1893,7 @@
     <storage type="STORAGE_CRAFT" units="1" />
     <price buy="0" sell="0" />
     <ufoInfo maxSpeed="2212" size="MEDIUM">
-        <hull hardness="0.3" maxDamage="500"/>
+        <hull hardness="0.3" hullCapacity="500"/>
         <weapon name="ITEM_UFO_COLLECTOR_WEAPON"/>
         <salvage>
             <material type="ITEM_ALIEN_COMPOSITES"         quantity="70" />
@@ -1914,7 +1914,7 @@
     <storage type="STORAGE_CRAFT" units="1" />
     <price buy="0" sell="0" />
     <ufoInfo maxSpeed="2469" size="LARGE">
-        <hull hardness="0.3" maxDamage="1200"/>
+        <hull hardness="0.3" hullCapacity="1200"/>
         <weapon name="ITEM_UFO_INTIMIDATOR_WEAPON"/>
         <salvage>
             <material type="ITEM_ALIEN_COMPOSITES"         quantity="92" />
@@ -1936,7 +1936,7 @@
     <storage type="STORAGE_CRAFT" units="1" />
     <price buy="0" sell="0" />
     <ufoInfo maxSpeed="2572" size="VERY_LARGE">
-        <hull hardness="0.3" maxDamage="3000"/>
+        <hull hardness="0.3" hullCapacity="3000"/>
         <weapon name="ITEM_UFO_JUGGERNAUT_WEAPON"/>
         <salvage>
             <material type="ITEM_ALIEN_COMPOSITES"         quantity="231" />
@@ -1959,7 +1959,7 @@
     <storage type="STORAGE_CRAFT" units="1" />
     <price buy="0" sell="0" />
     <ufoInfo maxSpeed="1646" size="LARGE">
-        <hull hardness="0.3" maxDamage="2200"/>
+        <hull hardness="0.3" hullCapacity="2200"/>
         <weapon name="ITEM_UFO_FREIGHTER_WEAPON"/>
         <salvage>
             <material type="ITEM_ALIEN_COMPOSITES"         quantity="141" />
@@ -1982,7 +1982,7 @@
     <storage type="STORAGE_CRAFT" units="0" />
     <price buy="0" sell="0" />
     <ufoInfo maxSpeed="1" size="VERY_LARGE">
-      <hull hardness="0" maxDamage="1"/>
+      <hull hardness="0" hullCapacity="1"/>
       <salvage>
         <material type="ITEM_ALIEN_COMPOSITES"         quantity="45" />
         <material type="ITEM_XENIUM-122"               quantity="50" />
@@ -2004,7 +2004,7 @@
     <storage type="STORAGE_CRAFT" units="0" />
     <price buy="0" sell="0" />
     <ufoInfo maxSpeed="1" size="VERY_LARGE">
-      <hull hardness="0" maxDamage="1"/>
+      <hull hardness="0" hullCapacity="1"/>
       <crew rank="Terrorist" minEasy="2" minHard="4" extra="0" />
       <crew rank="Soldier"   minEasy="4" minHard="6" extra="0" />
       <crew rank="Leader"    minEasy="3" minHard="5" extra="0" />
@@ -2017,7 +2017,7 @@
     <storage type="STORAGE_CRAFT" units="0" />
     <price buy="0" sell="0" />
     <ufoInfo maxSpeed="1" size="VERY_LARGE">
-      <hull hardness="0" maxDamage="1"/>
+      <hull hardness="0" hullCapacity="1"/>
       <crew rank="Terrorist" minEasy="10" minHard="19" extra="0" />
       <crew rank="Soldier"   minEasy="2"  minHard="4"  extra="0" />
       <crew rank="Leader"    minEasy="1"  minHard="3"  extra="0" />

@@ -107,7 +107,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         {
             XPathNavigator hull = node.SelectSingleNode("i:hull", manager);
             hullHardness = Util.GetDoubleAttribute(hull, "hardness");
-            maxDamage = Util.GetIntAttribute(hull, "maxDamage");
+            hullCapacity = Util.GetIntAttribute(hull, "hullCapacity");
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         protected override void XNetStatisticsCore(StringCollection stats)
         {
             stats.Add(Util.StringFormat(Strings.ITEM_STATS_CRAFT_MAX_SPEED, MaxSpeed));
-            stats.Add(Util.StringFormat(Strings.ITEM_STATS_CRAFT_DAMAGE_CAPACITY, MaxDamage));
+            stats.Add(Util.StringFormat(Strings.ITEM_STATS_CRAFT_DAMAGE_CAPACITY, HullCapacity));
         }
 
         #endregion
@@ -137,7 +137,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// <summary>
         /// Maximum damage craft can take before being destroyed
         /// </summary>
-        public int MaxDamage { get { return maxDamage; } }
+        public int HullCapacity { get { return hullCapacity; } }
 
         /// <summary>
         /// Number of weapon pods craft can carry
@@ -163,7 +163,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// <summary>
         /// Maximum damage craft can take before being destroyed
         /// </summary>
-        private int maxDamage;
+        private int hullCapacity;
 
         /// <summary>
         /// Number of weapon pods craft can carry
