@@ -22,23 +22,67 @@ namespace ProjectXenocide.UI.Screens
         ///   OpponentFled, or OutOfAmmo
         /// - Dogfight ends when any non-Nothing result occurs (except Nothing)
         /// - Real-time mode advances automatically; advance-time mode advances manually
+        ///
+        /// TODO: Full real-time simulation with distance model, tactical modes,
+        /// weapon cooldowns, UFO AI, and multiple interceptor support will be
+        /// implemented in the next phase.
         /// </remarks>
         private class DogfightController
         {
             private readonly Aircraft aircraft;
             private readonly Ufo ufo;
             private readonly BattleLog log;
+            private TacticalMode tacticalMode = TacticalMode.Standoff;
 
             /// <summary>
             /// Whether the dogfight has ended.
             /// </summary>
             public bool IsDogfightOver { get; private set; }
 
+            /// <summary>
+            /// Current distance between aircraft and UFO in meters.
+            /// TODO: Will be managed by distance model in next phase.
+            /// </summary>
+            public double CurrentDistance { get; private set; } = 64000.0;
+
+            /// <summary>
+            /// Display name of the current tactical mode.
+            /// </summary>
+            public string CurrentModeName
+            {
+                get
+                {
+                    switch (tacticalMode)
+                    {
+                        case TacticalMode.Standoff: return "STANDOFF";
+                        case TacticalMode.Cautious: return "CAUTIOUS ATTACK";
+                        case TacticalMode.Standard: return "STANDARD ATTACK";
+                        case TacticalMode.Aggressive: return "AGGRESSIVE ATTACK";
+                        case TacticalMode.Disengage: return "DISENGAGING";
+                        default: return "UNKNOWN";
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Current tactical mode setting.
+            /// </summary>
+            public TacticalMode CurrentMode { get { return tacticalMode; } }
+
             public DogfightController(Aircraft aircraft, Ufo ufo, BattleLog log)
             {
                 this.aircraft = aircraft;
                 this.ufo = ufo;
                 this.log = log;
+            }
+
+            /// <summary>
+            /// Sets the tactical engagement mode.
+            /// TODO: Full implementation will adjust distance targets and fire rates.
+            /// </summary>
+            public void SetTacticalMode(TacticalMode mode)
+            {
+                tacticalMode = mode;
             }
 
             /// <summary>

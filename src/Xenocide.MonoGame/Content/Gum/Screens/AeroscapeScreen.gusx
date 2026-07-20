@@ -3,18 +3,20 @@
   <Name>AeroscapeScreen</Name>
   <State>
     <Name>Default</Name>
-    <Variable Type="string" Name="advanceTimeBtn.Parent" SetsValue="true">
-      <Value xsi:type="xsd:string">ButtonPanel</Value>
-    </Variable>
-    <Variable Type="string" Name="advanceTimeBtn.TextInstance.Text" SetsValue="true">
-      <Value xsi:type="xsd:string">Advance Time</Value>
-    </Variable>
-    <Variable Type="float" Name="advanceTimeBtn.Width" SetsValue="true">
+    <!-- Root container: full screen -->
+    <Variable Type="float" Name="ContainerInstance.Height" SetsValue="true">
       <Value xsi:type="xsd:float">100</Value>
     </Variable>
-    <Variable Type="DimensionUnitType" Name="advanceTimeBtn.WidthUnits" SetsValue="true">
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.HeightUnits" SetsValue="true">
       <Value xsi:type="xsd:int">1</Value>
     </Variable>
+    <Variable Type="float" Name="ContainerInstance.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <!-- Background image -->
     <Variable Type="float" Name="BGImage.Height" SetsValue="true">
       <Value xsi:type="xsd:float">100</Value>
     </Variable>
@@ -31,104 +33,394 @@
       <Value xsi:type="xsd:float">100</Value>
     </Variable>
     <Variable Type="DimensionUnitType" Name="BGImage.WidthUnits" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
+      <Value xsi:type="xsd:int">6</Value>
     </Variable>
-    <Variable Type="ChildrenLayout" Name="ButtonPanel.ChildrenLayout" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
-    </Variable>
-    <Variable Type="string" Name="ButtonPanel.Parent" SetsValue="true">
+    <!-- Top bar: status text, time, speed controls -->
+    <Variable Type="string" Name="TopBar.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">ContainerInstance</Value>
     </Variable>
-    <Variable Type="float" Name="ButtonPanel.Width" SetsValue="true">
-      <Value xsi:type="xsd:float">200</Value>
+    <Variable Type="ChildrenLayout" Name="TopBar.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">0</Value>
     </Variable>
-    <Variable Type="float" Name="ButtonPanel.X" SetsValue="true">
-      <Value xsi:type="xsd:float">1040</Value>
+    <Variable Type="float" Name="TopBar.X" SetsValue="true">
+      <Value xsi:type="xsd:float">20</Value>
     </Variable>
-    <Variable Type="float" Name="ButtonPanel.Y" SetsValue="true">
+    <Variable Type="float" Name="TopBar.Y" SetsValue="true">
       <Value xsi:type="xsd:float">10</Value>
     </Variable>
+    <Variable Type="float" Name="TopBar.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">1240</Value>
+    </Variable>
+    <Variable Type="float" Name="TopBar.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">30</Value>
+    </Variable>
+    <!-- Status label in top bar -->
+    <Variable Type="string" Name="statusLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">TopBar</Value>
+    </Variable>
+    <Variable Type="float" Name="statusLabel.X" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="int" Name="statusLabel.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">12</Value>
+    </Variable>
+    <!-- Time label in top bar -->
+    <Variable Type="string" Name="timeLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">TopBar</Value>
+    </Variable>
+    <Variable Type="float" Name="timeLabel.X" SetsValue="true">
+      <Value xsi:type="xsd:float">300</Value>
+    </Variable>
+    <Variable Type="int" Name="timeLabel.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">12</Value>
+    </Variable>
+    <!-- Speed panel: pause, normal, fast -->
+    <Variable Type="string" Name="SpeedPanel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">TopBar</Value>
+    </Variable>
+    <Variable Type="ChildrenLayout" Name="SpeedPanel.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">0</Value>
+    </Variable>
+    <Variable Type="float" Name="SpeedPanel.X" SetsValue="true">
+      <Value xsi:type="xsd:float">500</Value>
+    </Variable>
+    <Variable Type="string" Name="pauseBtn.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">SpeedPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="pauseBtn.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Pause</Value>
+    </Variable>
+    <Variable Type="float" Name="pauseBtn.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">60</Value>
+    </Variable>
+    <Variable Type="string" Name="normalBtn.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">SpeedPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="normalBtn.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">1x</Value>
+    </Variable>
+    <Variable Type="float" Name="normalBtn.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">60</Value>
+    </Variable>
+    <Variable Type="string" Name="fastBtn.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">SpeedPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="fastBtn.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">2x</Value>
+    </Variable>
+    <Variable Type="float" Name="fastBtn.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">60</Value>
+    </Variable>
+    <!-- Close button (top right) -->
     <Variable Type="string" Name="closeBtn.Parent" SetsValue="true">
-      <Value xsi:type="xsd:string">ButtonPanel</Value>
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
     </Variable>
     <Variable Type="string" Name="closeBtn.TextInstance.Text" SetsValue="true">
       <Value xsi:type="xsd:string">Close</Value>
     </Variable>
+    <Variable Type="float" Name="closeBtn.X" SetsValue="true">
+      <Value xsi:type="xsd:float">1180</Value>
+    </Variable>
+    <Variable Type="float" Name="closeBtn.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">10</Value>
+    </Variable>
     <Variable Type="float" Name="closeBtn.Width" SetsValue="true">
-      <Value xsi:type="xsd:float">100</Value>
+      <Value xsi:type="xsd:float">80</Value>
     </Variable>
-    <Variable Type="DimensionUnitType" Name="closeBtn.WidthUnits" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
-    </Variable>
-    <Variable Type="float" Name="ContainerInstance.Height" SetsValue="true">
-      <Value xsi:type="xsd:float">100</Value>
-    </Variable>
-    <Variable Type="DimensionUnitType" Name="ContainerInstance.HeightUnits" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
-    </Variable>
-    <Variable Type="float" Name="ContainerInstance.Width" SetsValue="true">
-      <Value xsi:type="xsd:float">100</Value>
-    </Variable>
-    <Variable Type="DimensionUnitType" Name="ContainerInstance.WidthUnits" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
-    </Variable>
-    <Variable Type="string" Name="craftDamageLabel.Parent" SetsValue="true">
-      <Value xsi:type="xsd:string">InfoPanel</Value>
-    </Variable>
-    <Variable Type="int" Name="craftNameLabel.FontSize" SetsValue="true">
-      <Value xsi:type="xsd:int">14</Value>
-    </Variable>
-    <Variable Type="string" Name="craftNameLabel.Parent" SetsValue="true">
-      <Value xsi:type="xsd:string">InfoPanel</Value>
-    </Variable>
-    <Variable Type="ChildrenLayout" Name="InfoPanel.ChildrenLayout" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
-    </Variable>
-    <Variable Type="string" Name="InfoPanel.Parent" SetsValue="true">
+    <!-- Tactical mode panel (right side) -->
+    <Variable Type="string" Name="TacticalPanel.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">ContainerInstance</Value>
     </Variable>
-    <Variable Type="float" Name="InfoPanel.Width" SetsValue="true">
+    <Variable Type="ChildrenLayout" Name="TacticalPanel.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="TacticalPanel.X" SetsValue="true">
       <Value xsi:type="xsd:float">900</Value>
     </Variable>
-    <Variable Type="float" Name="InfoPanel.X" SetsValue="true">
-      <Value xsi:type="xsd:float">40</Value>
+    <Variable Type="float" Name="TacticalPanel.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">50</Value>
     </Variable>
-    <Variable Type="float" Name="InfoPanel.Y" SetsValue="true">
-      <Value xsi:type="xsd:float">40</Value>
+    <Variable Type="float" Name="TacticalPanel.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">340</Value>
     </Variable>
-    <Variable Type="string" Name="logLabel.Parent" SetsValue="true">
-      <Value xsi:type="xsd:string">InfoPanel</Value>
+    <!-- Tactical header -->
+    <Variable Type="string" Name="tacticalHeaderLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">TacticalPanel</Value>
     </Variable>
-    <Variable Type="string" Name="pod1Label.Parent" SetsValue="true">
-      <Value xsi:type="xsd:string">InfoPanel</Value>
+    <Variable Type="string" Name="tacticalHeaderLabel.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">TACTICAL MODE</Value>
     </Variable>
-    <Variable Type="string" Name="pod2Label.Parent" SetsValue="true">
-      <Value xsi:type="xsd:string">InfoPanel</Value>
+    <Variable Type="int" Name="tacticalHeaderLabel.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">12</Value>
     </Variable>
-    <Variable Type="string" Name="realTimeBtn.Parent" SetsValue="true">
-      <Value xsi:type="xsd:string">ButtonPanel</Value>
+    <!-- Tactical mode buttons -->
+    <Variable Type="string" Name="standoffBtn.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">TacticalPanel</Value>
     </Variable>
-    <Variable Type="string" Name="realTimeBtn.TextInstance.Text" SetsValue="true">
-      <Value xsi:type="xsd:string">Real Time</Value>
+    <Variable Type="string" Name="standoffBtn.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Standoff</Value>
     </Variable>
-    <Variable Type="float" Name="realTimeBtn.Width" SetsValue="true">
+    <Variable Type="float" Name="standoffBtn.Width" SetsValue="true">
       <Value xsi:type="xsd:float">100</Value>
     </Variable>
-    <Variable Type="DimensionUnitType" Name="realTimeBtn.WidthUnits" SetsValue="true">
+    <Variable Type="DimensionUnitType" Name="standoffBtn.WidthUnits" SetsValue="true">
       <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="cautiousBtn.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">TacticalPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="cautiousBtn.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Cautious</Value>
+    </Variable>
+    <Variable Type="float" Name="cautiousBtn.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="cautiousBtn.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="standardBtn.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">TacticalPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="standardBtn.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Standard</Value>
+    </Variable>
+    <Variable Type="float" Name="standardBtn.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="standardBtn.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="aggressiveBtn.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">TacticalPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="aggressiveBtn.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Aggressive</Value>
+    </Variable>
+    <Variable Type="float" Name="aggressiveBtn.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="aggressiveBtn.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="string" Name="disengageBtn.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">TacticalPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="disengageBtn.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">Disengage</Value>
+    </Variable>
+    <Variable Type="float" Name="disengageBtn.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">100</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="disengageBtn.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <!-- Weapon panel (right side, below tactical) -->
+    <Variable Type="string" Name="WeaponPanel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable Type="ChildrenLayout" Name="WeaponPanel.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="WeaponPanel.X" SetsValue="true">
+      <Value xsi:type="xsd:float">900</Value>
+    </Variable>
+    <Variable Type="float" Name="WeaponPanel.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">300</Value>
+    </Variable>
+    <Variable Type="float" Name="WeaponPanel.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">340</Value>
+    </Variable>
+    <!-- Weapon 1 -->
+    <Variable Type="string" Name="weapon1Label.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">WeaponPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="weapon1Label.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">WEAPON 1</Value>
+    </Variable>
+    <Variable Type="int" Name="weapon1Label.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">11</Value>
+    </Variable>
+    <Variable Type="string" Name="weapon1InfoLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">WeaponPanel</Value>
+    </Variable>
+    <Variable Type="int" Name="weapon1InfoLabel.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">10</Value>
+    </Variable>
+    <Variable Type="string" Name="weapon1ToggleBtn.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">WeaponPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="weapon1ToggleBtn.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">ON</Value>
+    </Variable>
+    <Variable Type="float" Name="weapon1ToggleBtn.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">60</Value>
+    </Variable>
+    <!-- Weapon 2 -->
+    <Variable Type="string" Name="weapon2Label.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">WeaponPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="weapon2Label.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">WEAPON 2</Value>
+    </Variable>
+    <Variable Type="int" Name="weapon2Label.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">11</Value>
+    </Variable>
+    <Variable Type="string" Name="weapon2InfoLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">WeaponPanel</Value>
+    </Variable>
+    <Variable Type="int" Name="weapon2InfoLabel.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">10</Value>
+    </Variable>
+    <Variable Type="string" Name="weapon2ToggleBtn.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">WeaponPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="weapon2ToggleBtn.TextInstance.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">ON</Value>
+    </Variable>
+    <Variable Type="float" Name="weapon2ToggleBtn.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">60</Value>
+    </Variable>
+    <!-- UFO info panel (right side, below weapons) -->
+    <Variable Type="string" Name="UfoInfoPanel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable Type="ChildrenLayout" Name="UfoInfoPanel.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="UfoInfoPanel.X" SetsValue="true">
+      <Value xsi:type="xsd:float">900</Value>
+    </Variable>
+    <Variable Type="float" Name="UfoInfoPanel.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">500</Value>
+    </Variable>
+    <Variable Type="float" Name="UfoInfoPanel.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">340</Value>
+    </Variable>
+    <Variable Type="string" Name="ufoHeaderLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">UfoInfoPanel</Value>
+    </Variable>
+    <Variable Type="string" Name="ufoHeaderLabel.Text" SetsValue="true">
+      <Value xsi:type="xsd:string">TARGET</Value>
+    </Variable>
+    <Variable Type="int" Name="ufoHeaderLabel.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">11</Value>
+    </Variable>
+    <Variable Type="string" Name="ufoNameLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">UfoInfoPanel</Value>
+    </Variable>
+    <Variable Type="int" Name="ufoNameLabel.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">10</Value>
+    </Variable>
+    <Variable Type="string" Name="ufoHullLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">UfoInfoPanel</Value>
+    </Variable>
+    <Variable Type="int" Name="ufoHullLabel.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">10</Value>
+    </Variable>
+    <Variable Type="string" Name="ufoWeaponLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">UfoInfoPanel</Value>
+    </Variable>
+    <Variable Type="int" Name="ufoWeaponLabel.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">10</Value>
+    </Variable>
+    <!-- Aircraft status bar (bottom) -->
+    <Variable Type="string" Name="StatusBar.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable Type="ChildrenLayout" Name="StatusBar.ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">0</Value>
+    </Variable>
+    <Variable Type="float" Name="StatusBar.X" SetsValue="true">
+      <Value xsi:type="xsd:float">20</Value>
+    </Variable>
+    <Variable Type="float" Name="StatusBar.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">700</Value>
+    </Variable>
+    <Variable Type="float" Name="StatusBar.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">860</Value>
+    </Variable>
+    <Variable Type="string" Name="craftNameLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">StatusBar</Value>
+    </Variable>
+    <Variable Type="int" Name="craftNameLabel.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">12</Value>
+    </Variable>
+    <Variable Type="string" Name="craftHullLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">StatusBar</Value>
+    </Variable>
+    <Variable Type="int" Name="craftHullLabel.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">11</Value>
+    </Variable>
+    <Variable Type="string" Name="craftFuelLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">StatusBar</Value>
+    </Variable>
+    <Variable Type="int" Name="craftFuelLabel.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">11</Value>
+    </Variable>
+    <Variable Type="string" Name="distanceLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">StatusBar</Value>
+    </Variable>
+    <Variable Type="int" Name="distanceLabel.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">11</Value>
+    </Variable>
+    <!-- Log panel (bottom, below status bar) -->
+    <Variable Type="string" Name="LogPanel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">ContainerInstance</Value>
+    </Variable>
+    <Variable Type="float" Name="LogPanel.X" SetsValue="true">
+      <Value xsi:type="xsd:float">20</Value>
+    </Variable>
+    <Variable Type="float" Name="LogPanel.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">730</Value>
+    </Variable>
+    <Variable Type="float" Name="LogPanel.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">1240</Value>
+    </Variable>
+    <Variable Type="float" Name="LogPanel.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">290</Value>
+    </Variable>
+    <Variable Type="string" Name="logLabel.Parent" SetsValue="true">
+      <Value xsi:type="xsd:string">LogPanel</Value>
+    </Variable>
+    <Variable Type="int" Name="logLabel.FontSize" SetsValue="true">
+      <Value xsi:type="xsd:int">10</Value>
     </Variable>
   </State>
   <Instance Name="ContainerInstance" BaseType="Container" />
   <Instance Name="BGImage" BaseType="Sprite" />
-  <Instance Name="ButtonPanel" BaseType="Container" />
-  <Instance Name="InfoPanel" BaseType="Container" />
-  <Instance Name="realTimeBtn" BaseType="XenocideButton" />
-  <Instance Name="advanceTimeBtn" BaseType="XenocideButton" />
+  <Instance Name="TopBar" BaseType="Container" />
+  <Instance Name="statusLabel" BaseType="Text" />
+  <Instance Name="timeLabel" BaseType="Text" />
+  <Instance Name="SpeedPanel" BaseType="Container" />
+  <Instance Name="pauseBtn" BaseType="XenocideButton" />
+  <Instance Name="normalBtn" BaseType="XenocideButton" />
+  <Instance Name="fastBtn" BaseType="XenocideButton" />
   <Instance Name="closeBtn" BaseType="XenocideButton" />
+  <Instance Name="TacticalPanel" BaseType="Container" />
+  <Instance Name="tacticalHeaderLabel" BaseType="Text" />
+  <Instance Name="standoffBtn" BaseType="XenocideButton" />
+  <Instance Name="cautiousBtn" BaseType="XenocideButton" />
+  <Instance Name="standardBtn" BaseType="XenocideButton" />
+  <Instance Name="aggressiveBtn" BaseType="XenocideButton" />
+  <Instance Name="disengageBtn" BaseType="XenocideButton" />
+  <Instance Name="WeaponPanel" BaseType="Container" />
+  <Instance Name="weapon1Label" BaseType="Text" />
+  <Instance Name="weapon1InfoLabel" BaseType="Text" />
+  <Instance Name="weapon1ToggleBtn" BaseType="XenocideButton" />
+  <Instance Name="weapon2Label" BaseType="Text" />
+  <Instance Name="weapon2InfoLabel" BaseType="Text" />
+  <Instance Name="weapon2ToggleBtn" BaseType="XenocideButton" />
+  <Instance Name="UfoInfoPanel" BaseType="Container" />
+  <Instance Name="ufoHeaderLabel" BaseType="Text" />
+  <Instance Name="ufoNameLabel" BaseType="Text" />
+  <Instance Name="ufoHullLabel" BaseType="Text" />
+  <Instance Name="ufoWeaponLabel" BaseType="Text" />
+  <Instance Name="StatusBar" BaseType="Container" />
   <Instance Name="craftNameLabel" BaseType="Text" />
-  <Instance Name="craftDamageLabel" BaseType="Text" />
-  <Instance Name="pod1Label" BaseType="Text" />
-  <Instance Name="pod2Label" BaseType="Text" />
+  <Instance Name="craftHullLabel" BaseType="Text" />
+  <Instance Name="craftFuelLabel" BaseType="Text" />
+  <Instance Name="distanceLabel" BaseType="Text" />
+  <Instance Name="LogPanel" BaseType="Container" />
   <Instance Name="logLabel" BaseType="Text" />
   <Behaviors />
 </ScreenSave>
