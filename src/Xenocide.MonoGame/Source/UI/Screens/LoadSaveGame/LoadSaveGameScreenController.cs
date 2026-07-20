@@ -6,9 +6,9 @@ using NLog;
 
 using ProjectXenocide.Model;
 using ProjectXenocide.Utils;
-using Xenocide.Utils;
 
 using Xenocide.Resources;
+using Xenocide.Utils;
 
 namespace ProjectXenocide.UI.Screens
 {
