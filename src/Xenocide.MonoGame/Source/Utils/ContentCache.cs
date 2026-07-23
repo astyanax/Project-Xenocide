@@ -13,6 +13,10 @@ namespace ProjectXenocide.Utils
     /// <summary>
     /// Stores a preloaded 3D model paired with its precomputed world-transform scaling matrix.
     ///
+    /// Thread safety: All public methods are called from the game thread only (during scene
+    /// transitions or Update). No concurrent access occurs, so a plain Dictionary suffices.
+    /// If multi-threaded loading is ever added, switch _cache to ConcurrentDictionary.
+    ///
     /// Each model in X-Net has vastly different dimensions — a soldier is a few units tall while
     /// an aircraft spans tens of units. To display them consistently at the same visible size in the
     /// fixed viewport, a scaling matrix is computed that translates and uniformly scales the model

@@ -28,6 +28,7 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 using Microsoft.Xna.Framework;
@@ -207,8 +208,15 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         /// <summary>
         /// Outpost has been destroyed
         /// </summary>
+        /// <remarks>
+        /// After OnDestroyed completes, the outpost is removed from Outposts and its
+        /// Statistics/Inventory fields are nulled. Any code holding a stale reference
+        /// to this Outpost should check IsDestroyed before accessing those fields.
+        /// </remarks>
         public void OnDestroyed()
         {
+            Debug.Assert(!IsDestroyed, "Outpost.OnDestroyed called more than once");
+
             // eliminate craft
             // ToDo: might only destroy craft in the base, assign other craft to surviving outposts
             // Also, may need to cleanup soldiers assigned to craft
@@ -220,7 +228,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             // Cancel any manufacturing activity in outpost
             buildProjectManager.OnOutpostDestroyed();
 
-            // elminiate facilities, statistics and inventory
+            // eliminate facilities, statistics and inventory
             inventory.OnOutpostDestroyed();
             statistics.OnOutpostDestroyed();
             floorplan.OnOutpostDestroyed();
@@ -230,6 +238,9 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
             // eliminate outpost itself
             Xenocide.GameState.GeoData.Outposts.Remove(this);
         }
+
+        /// <summary>True after OnDestroyed has been called — do not access Statistics or Inventory</summary>
+        public bool IsDestroyed { get { return (statistics == null); } }
 
         /// <summary>
         /// Get list of all Xcaps in base

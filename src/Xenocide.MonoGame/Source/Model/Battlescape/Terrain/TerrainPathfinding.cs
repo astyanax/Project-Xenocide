@@ -202,6 +202,7 @@ namespace ProjectXenocide.Model.Battlescape
             // if we're at top of a stair, then we try going up one level
             int dy = sy;
             if ((GroundFlag.FloorHeight70 == (ground.Flags & GroundFlag.FloorHeight70)) &&
+                (dy + 1 < levels) &&
                 (GroundFlag.FloorHeight0 == (GetGroundFace(dx, dy + 1, dz).Flags & GroundFlag.FloorHeight70)))
             {
                 ++dy;
