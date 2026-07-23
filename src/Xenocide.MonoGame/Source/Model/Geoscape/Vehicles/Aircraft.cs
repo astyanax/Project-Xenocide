@@ -202,7 +202,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
                 fuel = 0.0;
             }
 
-            return IsFuelLow();
+            return HasEnoughFuel();
         }
 
         /// <summary>
@@ -230,19 +230,19 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// Does craft need to return to outpost for refueling?
         /// </summary>
         /// <returns>false if craft has more than enough fuel to reach outpost</returns>
-        public override bool IsFuelLow()
+        public override bool HasEnoughFuel()
         {
             //... if tank is more than half full, then obviously not a problem
             if (0.5 < (fuel / MaxFuel))
             {
-                return false;
+                return true;
             }
             else
             {
                 // MaxSpeed is rad/sec, consumption rate is units/hour, distance is radians
                 double range = MaxSpeed * fuel * 3600 / FuelConsumptionRate;
                 double distance = Position.Distance(HomeBase.Position);
-                return (distance > range);
+                return (distance < range);
             }
         }
 

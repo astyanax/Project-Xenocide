@@ -99,7 +99,7 @@ namespace ProjectXenocide.Model.StaticData.Research
         /// <returns></returns>
         public IEnumerable<ResearchTopic> StartableTopics(TechnologyManager manager, ICollection<Outpost> outposts)
         {
-            return Util.FilterColection(topics.Values,
+            return Util.FilterCollection(topics.Values,
                 delegate (ResearchTopic topic) { return topic.CanResearch(manager, outposts); }
             );
         }

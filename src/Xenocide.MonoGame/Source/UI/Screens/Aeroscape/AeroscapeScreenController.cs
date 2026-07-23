@@ -168,9 +168,9 @@ namespace ProjectXenocide.UI.Screens
                 {
                     var interceptor = state.Interceptors[interceptorIndex];
                     interceptor.Mode = mode;
-                    Log.Info("{0} set to {1}", interceptor.Aircraft.Name, mode.ToString().ToUpper());
+                    Log.Info("{0} set to {1}", interceptor.Aircraft.Name, mode.ToString().ToUpperInvariant());
                     state.Log.Record("Interceptor {0} set to {1}",
-                        interceptor.Aircraft.Name, mode.ToString().ToUpper());
+                        interceptor.Aircraft.Name, mode.ToString().ToUpperInvariant());
                 }
             }
 
@@ -408,7 +408,7 @@ namespace ProjectXenocide.UI.Screens
                 }
             }
 
-            private double GetWeaponCooldown(InterceptorState interceptor, int podIndex)
+            private static double GetWeaponCooldown(InterceptorState interceptor, int podIndex)
             {
                 if (podIndex >= interceptor.Aircraft.WeaponPods.Count)
                     return 5.0;

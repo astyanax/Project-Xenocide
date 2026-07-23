@@ -372,7 +372,7 @@ namespace ProjectXenocide.Utils
         /// <returns>the iterator</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter",
            Justification = "FxCop bug, reporting false positive")]
-        public static IEnumerable<T> FilterColection<T>(IEnumerable<T> collection, Predicate<T> filter)
+        public static IEnumerable<T> FilterCollection<T>(IEnumerable<T> collection, Predicate<T> filter)
         {
             foreach (T t in collection)
             {

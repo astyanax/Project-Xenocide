@@ -298,7 +298,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         public void DebugRearm()
         {
             // Reallocate weapon pods array based on new hardpoint count
-            weaponPods = new WeaponPod[NumHardpoints];
+            ReinitializeWeaponPods(NumHardpoints);
 
             // Install weapon pod if this UFO type has one
             if (1 == NumHardpoints && null != UfoItemInfo.Weapon)

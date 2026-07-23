@@ -28,6 +28,7 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 using Microsoft.Xna.Framework;
 
@@ -185,7 +186,7 @@ namespace ProjectXenocide.UI.Screens
                     PrimaryLabel = Strings.SCREEN_STATISTICS_SERIES_BALANCE,
                     SecondaryValue = (income >= 0 ? "+" : "") + Util.FormatCurrency(income),
                     SecondaryLabel = "This Month",
-                    TrendValue = (change >= 0 ? "+" : "") + changePercent.ToString("0.0") + "%",
+                    TrendValue = (change >= 0 ? "+" : "") + changePercent.ToString("0.0", CultureInfo.InvariantCulture) + "%",
                     TrendLabel = "vs Last Month",
                     PrimaryColor = balance >= 0 ? DataColors[3] : DataColors[1],
                     SecondaryColor = income >= 0 ? DataColors[3] : DataColors[1],
@@ -193,7 +194,7 @@ namespace ProjectXenocide.UI.Screens
                 };
             }
 
-            private SummaryData GetActivitySummary(GraphId graph, IList<Series> data, Participant participant, int thisMonth, int lastMonth)
+            private static SummaryData GetActivitySummary(GraphId graph, IList<Series> data, Participant participant, int thisMonth, int lastMonth)
             {
                 int totalThisMonth = 0;
                 int totalLastMonth = 0;
@@ -227,7 +228,7 @@ namespace ProjectXenocide.UI.Screens
                     PrimaryLabel = isAlien ? "Alien Activity" : "X-Corp Activity",
                     SecondaryValue = topName,
                     SecondaryLabel = "Most Active",
-                    TrendValue = (change >= 0 ? "+" : "") + changePercent.ToString("0.0") + "%",
+                    TrendValue = (change >= 0 ? "+" : "") + changePercent.ToString("0.0", CultureInfo.InvariantCulture) + "%",
                     TrendLabel = "vs Last Month",
                     PrimaryColor = isAlien ? DataColors[1] : DataColors[0],
                     SecondaryColor = Color.White,

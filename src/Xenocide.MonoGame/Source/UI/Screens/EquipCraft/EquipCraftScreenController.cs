@@ -63,7 +63,7 @@ namespace ProjectXenocide.UI.Screens
             /// <param name="podId">1-based pod index</param>
             /// <param name="weaponRow">The weapon row containing the weapon to equip</param>
             /// <returns>True if weapon was equipped</returns>
-            public bool TryEquipPod(Aircraft aircraft, int podId, WeaponRow weaponRow)
+            public static bool TryEquipPod(Aircraft aircraft, int podId, WeaponRow weaponRow)
             {
                 if (aircraft == null || weaponRow == null)
                     return false;

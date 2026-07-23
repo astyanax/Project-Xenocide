@@ -292,7 +292,7 @@ namespace ProjectXenocide.UI.Screens
             if (aircraft != null)
             {
                 WeaponRow weaponRow = GetSelectedWeapon();
-                if (controller.TryEquipPod(aircraft, podId, weaponRow))
+                if (Controller.TryEquipPod(aircraft, podId, weaponRow))
                 {
                     Refresh(aircraft);
                 }

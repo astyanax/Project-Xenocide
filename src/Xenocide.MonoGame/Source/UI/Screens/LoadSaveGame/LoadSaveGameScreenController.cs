@@ -46,7 +46,7 @@ namespace ProjectXenocide.UI.Screens
             /// Gets the list of save files in the saves directory.
             /// </summary>
             /// <returns>Collection of filenames (not full paths)</returns>
-            public ICollection<string> GetSaveFiles()
+            public string[] GetSaveFiles()
             {
                 if (Directory.Exists(savesDirectory))
                 {

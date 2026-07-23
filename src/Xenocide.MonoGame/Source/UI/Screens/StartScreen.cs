@@ -234,7 +234,9 @@ namespace ProjectXenocide.UI.Screens
             if (failures.Count > 0)
             {
                 var sb = new StringBuilder();
-                sb.AppendLine($"Unit tests completed with {failures.Count} failure(s):");
+                sb.Append("Unit tests completed with ");
+                sb.Append(failures.Count);
+                sb.AppendLine(" failure(s):");
                 sb.AppendLine();
                 foreach (var f in failures)
                     sb.AppendLine("• " + f);

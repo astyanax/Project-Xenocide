@@ -68,7 +68,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             maxSpeed = GeoPosition.KilometersToRadians(CraftItemInfo.MaxSpeed / 1000.0);
 
             // allocate storage for weapons
-            weaponPods = new WeaponPod[NumHardpoints];
+            _weaponPods = new WeaponPod[NumHardpoints];
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             }
 
             AttackResult result = AttackResult.Nothing;
-            foreach (WeaponPod pod in weaponPods)
+            foreach (WeaponPod pod in _weaponPods)
             {
                 if (pod != null)
                 {
@@ -447,7 +447,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         public virtual void OnDogfightStart()
         {
             // prep weapon pods
-            foreach (WeaponPod pod in weaponPods)
+            foreach (WeaponPod pod in _weaponPods)
             {
                 if (null != pod)
                 {
@@ -491,13 +491,13 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         #region tests of craft's condition
 
         /// <summary>
-        /// Does craft need to return to base for refueling?
+        /// Does craft have enough fuel to continue its current mission?
         /// </summary>
-        /// <returns>true if craft has just enough fuel to reach base</returns>
-        /// <remarks>UFO's don't need fuel, so default is return false</remarks>
-        public virtual bool IsFuelLow()
+        /// <returns>true if craft has enough fuel; false if it should return to base</returns>
+        /// <remarks>UFOs don't consume fuel, so default is return true (always enough)</remarks>
+        public virtual bool HasEnoughFuel()
         {
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -507,6 +507,15 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         public virtual bool IsKnownToXCorp { get { return true; } }
 
         #endregion
+
+        /// <summary>
+        /// Re-allocate the weapon pods array. Used by subclasses when the craft type changes.
+        /// </summary>
+        /// <param name="hardpointCount">Number of hardpoints for the new configuration</param>
+        protected void ReinitializeWeaponPods(int hardpointCount)
+        {
+            _weaponPods = new WeaponPod[hardpointCount];
+        }
 
         #region Fields
 
@@ -616,7 +625,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <summary>
         /// The weapons being carried by this craft
         /// </summary>
-        public IList<WeaponPod> WeaponPods { get { return weaponPods; } }
+        public IList<WeaponPod> WeaponPods { get { return _weaponPods; } }
 
         /// <summary>
         /// Craft is carring at least one loaded weapon
@@ -695,7 +704,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
                     if (null != WeaponPods[i])
                     {
                         // add '/' separator, if there's 2 pods
-                        if (!String.IsNullOrEmpty(status.ToString()))
+                        if (status.Length > 0)
                         {
                             status.Append('/');
                         }
@@ -762,7 +771,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <summary>
         /// The weapons being carried by this craft
         /// </summary>
-        protected WeaponPod[] weaponPods;
+        private WeaponPod[] _weaponPods;
 
         /// <summary>
         /// Player readable identifier for this craft

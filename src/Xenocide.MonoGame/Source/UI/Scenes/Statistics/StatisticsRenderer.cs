@@ -142,6 +142,8 @@ namespace ProjectXenocide.UI.Scenes.Statistics
                     currentMaxValue = 0;
                 }
                 meshDirty = false;
+                fillVertsArray = null;
+                lineVertsArray = null;
             }
 
             DrawGridBackground(device, bounds);
@@ -158,6 +160,8 @@ namespace ProjectXenocide.UI.Scenes.Statistics
         private void DrawGridBackground(GraphicsDevice device, Rectangle bounds)
         {
             // Draw gradient background: darker at bottom, slightly lighter at top
+            spriteBatch.Begin();
+
             int steps = 20;
             int stepHeight = bounds.Height / steps;
             for (int i = 0; i < steps; i++)
@@ -167,11 +171,10 @@ namespace ProjectXenocide.UI.Scenes.Statistics
                 byte g = (byte)(25 + t * 10);
                 byte b = (byte)(35 + t * 10);
                 Color bgColor = new Color(r, g, b);
-
-                spriteBatch.Begin();
                 spriteBatch.Draw(pixelTexture, new Rectangle(bounds.Left, bounds.Top + i * stepHeight, bounds.Width, stepHeight), bgColor);
-                spriteBatch.End();
             }
+
+            spriteBatch.End();
         }
 
         private void DrawGridLines(GraphicsDevice device, Rectangle bounds)
@@ -201,39 +204,24 @@ namespace ProjectXenocide.UI.Scenes.Statistics
         {
             if (fillVerts == null || fillVerts.Count == 0) return;
 
-            // Draw filled triangles using basic effect
-            var basicEffect = new BasicEffect(device)
+            if (fillVertsArray == null)
             {
-                VertexColorEnabled = true,
-                View = Matrix.Identity,
-                Projection = Matrix.CreateOrthographicOffCenter(
-                    bounds.Left, bounds.Right,
-                    bounds.Bottom, bounds.Top,
-                    0, 1)
-            };
+                fillVertsArray = fillVerts.ToArray();
+            }
 
-            device.DrawUserPrimitives(PrimitiveType.TriangleList, fillVerts.ToArray(), 0, fillVerts.Count / 3, VertexPositionColor.VertexDeclaration);
-
-            basicEffect.Dispose();
+            device.DrawUserPrimitives(PrimitiveType.TriangleList, fillVertsArray, 0, fillVerts.Count / 3, VertexPositionColor.VertexDeclaration);
         }
 
         private void DrawDataLines(GraphicsDevice device, Rectangle bounds)
         {
             if (lineVerts == null || lineVerts.Count == 0) return;
 
-            var basicEffect = new BasicEffect(device)
+            if (lineVertsArray == null)
             {
-                VertexColorEnabled = true,
-                View = Matrix.Identity,
-                Projection = Matrix.CreateOrthographicOffCenter(
-                    bounds.Left, bounds.Right,
-                    bounds.Bottom, bounds.Top,
-                    0, 1)
-            };
+                lineVertsArray = lineVerts.ToArray();
+            }
 
-            device.DrawUserPrimitives(PrimitiveType.LineList, lineVerts.ToArray(), 0, lineVerts.Count / 2, VertexPositionColor.VertexDeclaration);
-
-            basicEffect.Dispose();
+            device.DrawUserPrimitives(PrimitiveType.LineList, lineVertsArray, 0, lineVerts.Count / 2, VertexPositionColor.VertexDeclaration);
         }
 
         private void DrawDataPoints(GraphicsDevice device, Rectangle bounds)
@@ -343,10 +331,11 @@ namespace ProjectXenocide.UI.Scenes.Statistics
 
         private static string GetMonthAbbreviation(int monthIndex)
         {
-            string[] abbreviations = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                                       "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-            return abbreviations[monthIndex % 12];
+            return MonthAbbreviations[monthIndex % 12];
         }
+
+        private static readonly string[] MonthAbbreviations = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                                                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
         #endregion
 
@@ -378,6 +367,8 @@ namespace ProjectXenocide.UI.Scenes.Statistics
 
         private List<VertexPositionColor> fillVerts;
         private List<VertexPositionColor> lineVerts;
+        private VertexPositionColor[] fillVertsArray;
+        private VertexPositionColor[] lineVertsArray;
         private int currentMaxValue;
 
         private const int DotRadius = 3;

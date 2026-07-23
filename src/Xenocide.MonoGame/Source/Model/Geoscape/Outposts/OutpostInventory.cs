@@ -459,7 +459,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         /// <returns>list of people</returns>
         public IEnumerable<Person> ListStaff(String type)
         {
-            return Util.FilterColection(Staff,
+            return Util.FilterCollection(Staff,
                 delegate (Person person) { return (person.ItemInfo.Id == type); });
         }
 
@@ -470,7 +470,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         /// <returns>list of crafts</returns>
         public IEnumerable<Craft> ListCrafts(String type)
         {
-            return Util.FilterColection(Fleet,
+            return Util.FilterCollection(Fleet,
                 delegate (Craft craft) { return (craft.ItemInfo.Id == type); });
         }
 
@@ -482,7 +482,7 @@ namespace ProjectXenocide.Model.Geoscape.Outposts
         /// <returns>list of people</returns>
         public IEnumerable<Person> ListStaff(String type, bool areWorking)
         {
-            return Util.FilterColection(Staff,
+            return Util.FilterCollection(Staff,
                 delegate (Person person) { return (person.ItemInfo.Id == type) && (person.IsWorking == areWorking); });
         }
 

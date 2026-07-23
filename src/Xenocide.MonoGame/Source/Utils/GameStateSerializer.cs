@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.Json;
@@ -33,7 +34,7 @@ namespace Xenocide.Utils
             var saveFile = new SaveFileWrapper
             {
                 FormatVersion = CurrentFormatVersion,
-                SavedAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", Thread.CurrentThread.CurrentCulture),
+                SavedAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
                 GameTime = FormatGameTime(state),
                 GameVersion = gameVersion,
                 GameState = state
@@ -93,7 +94,7 @@ namespace Xenocide.Utils
         {
             try
             {
-                return state.GeoData.GeoTime.Time.ToString("yyyy-MM-dd HH:mm:ss", Thread.CurrentThread.CurrentCulture);
+                return state.GeoData.GeoTime.Time.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
             }
             catch
             {

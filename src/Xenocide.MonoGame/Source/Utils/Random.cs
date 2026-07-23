@@ -61,6 +61,8 @@ namespace ProjectXenocide.Utils
         /// </summary>
         /// <param name="max">random number is in range [0, max - 1]</param>
         /// <returns>random number</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic",
+            Justification = "Accessed via Xenocide.Rng instance; making static would break all callers")]
         public int Next(int max)
         {
 #if DEBUG
