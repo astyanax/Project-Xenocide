@@ -30,6 +30,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 using Microsoft.Xna.Framework;
@@ -70,7 +71,7 @@ namespace ProjectXenocide.Model.Geoscape
         /// </summary>
         public void OnOutpostDestroyed()
         {
-            foreach (BuildProject project in Projects)
+            foreach (BuildProject project in Projects.ToList())
             {
                 project.Cancel();
             }

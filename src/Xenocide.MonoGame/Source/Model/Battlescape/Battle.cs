@@ -109,7 +109,7 @@ namespace ProjectXenocide.Model.Battlescape
         private void ApplySmokeStun(Combatant combatant)
         {
             Vector3 pos = combatant.Position;
-            if (!terrain.IsOnTerrain((int)pos.X, (int)pos.Z, (int)pos.Y))
+            if (!terrain.IsOnTerrain(pos))
                 return;
 
             int cellIndex = terrain.CellIndex(pos);

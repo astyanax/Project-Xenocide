@@ -235,14 +235,14 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             //... if tank is more than half full, then obviously not a problem
             if (0.5 < (fuel / MaxFuel))
             {
-                return true;
+                return false;
             }
             else
             {
                 // MaxSpeed is rad/sec, consumption rate is units/hour, distance is radians
                 double range = MaxSpeed * fuel * 3600 / FuelConsumptionRate;
                 double distance = Position.Distance(HomeBase.Position);
-                return (distance < range);
+                return (distance > range);
             }
         }
 
