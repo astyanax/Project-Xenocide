@@ -202,7 +202,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
             Vector3 viewSpace = new Vector3(x, y, -1);
 
             // convert vector into worldspace
-            Vector3 direction = Vector3.TransformNormal(viewSpace, Matrix.Invert(camera.View));
+            Vector3 direction = Vector3.TransformNormal(viewSpace, camera.ViewInverse);
             direction.Normalize();
 
             // if we're looking upwards, there is no intercept

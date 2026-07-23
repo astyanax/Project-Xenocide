@@ -111,8 +111,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
 
             // draw the model
             //...Copy any parent transforms
-            Matrix[] transforms = new Matrix[modelInfo.model.Bones.Count];
-            modelInfo.model.CopyAbsoluteBoneTransformsTo(transforms);
+            modelInfo.model.CopyAbsoluteBoneTransformsTo(modelInfo.boneTransforms);
 
             //...Draw the model, a model can have multiple meshes, so loop
             foreach (ModelMesh mesh in modelInfo.model.Meshes)
@@ -121,7 +120,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     effect.LightingEnabled = false;
-                    effect.World = transforms[mesh.ParentBone.Index] * world;
+                    effect.World = modelInfo.boneTransforms[mesh.ParentBone.Index] * world;
                     effect.View = basicEffect.View;
                     effect.Projection = basicEffect.Projection;
                     effect.Alpha = visible ? 1.0f : 0.5f;
@@ -161,10 +160,16 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
                 // adjust for origin of model not being centered correctly in XZ plane
                 Vector3 displacement = Vector3.Transform(sphere.Center, scalingMatrix);
                 scalingMatrix *= Matrix.CreateTranslation(-displacement.X, 0, -displacement.Z);
+
+                // Precompute bone transforms once — they are constant per model
+                boneTransforms = new Matrix[model.Bones.Count];
+                model.CopyAbsoluteBoneTransformsTo(boneTransforms);
             }
 
             public XnaModel model;
             public Matrix scalingMatrix;
+            /// <summary>Precomputed absolute bone transforms — avoids per-draw allocation</summary>
+            public Matrix[] boneTransforms;
         }
 
         /// <summary>The models</summary>

@@ -91,6 +91,11 @@ namespace ProjectXenocide.UI.Screens
                 }
 
                 // draw path, showing how far combatant can move
+                // Note: a new List is allocated per mouse-move rather than reusing a field
+                // because PathMeshBuilder.Path stores a reference to this list and reads it
+                // later during mesh Build(). Reusing would require copying on every assignment,
+                // negating the benefit. Path lists are short (~10-50 cells) and mouse-move
+                // events are infrequent, so the GC pressure is negligible.
                 if (Battlescape.Terrain.IsOnTerrain(pos))
                 {
                     List<MoveData> path = new List<MoveData>();

@@ -186,32 +186,37 @@ namespace ProjectXenocide.Model.Battlescape
             }
         }
 
-        /// <summary>List of cells to examine</summary>
+        /// <summary>
+        /// Min-priority queue for A* pathfinding, sorted ascending by cost.
+        ///
+        /// Performance notes:
+        /// - Add uses binary search for O(log N) comparison, then List.Insert for O(N) shift.
+        ///   A heap would give O(log N) insert+pop but makes Update (decrease-key) O(N) anyway,
+        ///   and for typical battlescape open lists (< ~200 cells) the constant factors of
+        ///   List operations (cache-friendly contiguous memory) beat pointer-chasing heaps.
+        /// - Pop removes from index 0 which shifts the array, but with small lists this is
+        ///   faster than reversing sort order and restructuring all callers.
+        /// - Update does a linear scan + cost replacement + bubble-sort fixup. A dictionary
+        ///   index would add complexity for marginal gain at this list size.
+        /// </summary>
         private sealed partial class OpenList
         {
             /// <summary>
-            /// Add node to list, keeping list in sorted order
+            /// Add node to list, keeping list in sorted ascending order by cost.
+            /// Uses binary search to find the insertion point, then shifts elements.
             /// </summary>
-            /// <param name="cost">Actual cost + Heuristic</param>
-            /// <param name="node">address of node in closedList</param>
             public void Add(float cost, MoveData node)
             {
-                list.Add(new OpenListElement(cost, node));
-
-                // bubblesort
-                for (int i = list.Count - 1; 0 < i; --i)
+                int lo = 0, hi = list.Count;
+                while (lo < hi)
                 {
-                    if (list[i].cost < list[i - 1].cost)
-                    {
-                        OpenListElement temp = list[i];
-                        list[i] = list[i - 1];
-                        list[i - 1] = temp;
-                    }
+                    int mid = (lo + hi) / 2;
+                    if (list[mid].cost <= cost)
+                        lo = mid + 1;
                     else
-                    {
-                        break;
-                    }
+                        hi = mid;
                 }
+                list.Insert(lo, new OpenListElement(cost, node));
             }
 
             /// <summary>Empty the list</summary>
@@ -223,7 +228,7 @@ namespace ProjectXenocide.Model.Battlescape
             /// <summary>true if list is empty</summary>
             public bool IsEmpty { get { return (0 == list.Count); } }
 
-            /// <summary>Return topmost item in list</summary>
+            /// <summary>Return the lowest-cost item from the front of the sorted list</summary>
             public MoveData Pop()
             {
                 MoveData temp = list[0].node;
@@ -232,17 +237,24 @@ namespace ProjectXenocide.Model.Battlescape
             }
 
             /// <summary>
-            /// Look for node with this index.  If found, update cost
+            /// Look for node with this address. If found, replace its cost and bubble
+            /// it back into sorted position.
             /// </summary>
-            /// <param name="cost">Actual cost + Heuristic</param>
-            /// <param name="node">address of node in closedList</param>
             public void Update(float cost, MoveData node)
             {
-                for (int i = 0; i < list.Count - 1; ++i)
+                for (int i = 0; i < list.Count; ++i)
                 {
                     if (list[i].node == node)
                     {
                         list[i] = new OpenListElement(cost, node);
+                        // bubble left to restore sort order
+                        while (i > 0 && list[i].cost < list[i - 1].cost)
+                        {
+                            OpenListElement temp = list[i];
+                            list[i] = list[i - 1];
+                            list[i - 1] = temp;
+                            --i;
+                        }
                         break;
                     }
                 }

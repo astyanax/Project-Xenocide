@@ -61,6 +61,10 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
                 model = content.Load<XnaModel>(@"Models/Craft/Weapons/Avalanche");
                 BoundingSphere sphere = Util.CalcBoundingSphere(model);
                 scalingMatrix = Matrix.CreateScale((float)(0.1f / sphere.Radius));
+
+                // Precompute bone transforms once during load — avoids per-draw allocation
+                boneTransforms = new Matrix[model.Bones.Count];
+                model.CopyAbsoluteBoneTransformsTo(boneTransforms);
             }
             catch (Exception ex)
             {
@@ -90,8 +94,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
 
             // draw the model
             //...Copy any parent transforms
-            Matrix[] transforms = new Matrix[model.Bones.Count];
-            model.CopyAbsoluteBoneTransformsTo(transforms);
+            model.CopyAbsoluteBoneTransformsTo(boneTransforms);
 
             //...Draw the model, a model can have multiple meshes, so loop
             foreach (ModelMesh mesh in model.Meshes)
@@ -100,7 +103,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     effect.LightingEnabled = false;
-                    effect.World = transforms[mesh.ParentBone.Index] * world;
+                    effect.World = boneTransforms[mesh.ParentBone.Index] * world;
                     effect.View = basicEffect.View;
                     effect.Projection = basicEffect.Projection;
                 }
@@ -116,6 +119,9 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
 
         /// <summary>Adjust model to meet our requirements</summary>
         private Matrix scalingMatrix;
+
+        /// <summary>Precomputed absolute bone transforms — avoids per-draw allocation</summary>
+        private Matrix[] boneTransforms;
 
         #endregion Fields
     }

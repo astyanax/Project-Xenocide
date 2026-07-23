@@ -26,6 +26,7 @@ San Francisco, California, 94105, USA.
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 using Gum.Forms;
@@ -103,7 +104,7 @@ namespace ProjectXenocide.UI.Screens
                 if (pod != null)
                     Logger.Info("  {0}: acc={1}%, dmg={2}, range={3}m, ammo={4}",
                         pod.Name, pod.Weapon.Accuracy, pod.Weapon.WeaponDamage,
-                        pod.WeaponRange, pod.UsesAmmo ? string.Format("{0}/{1}", pod.ShotsLeft, pod.ClipSize) : "unlimited");
+                        pod.WeaponRange, pod.UsesAmmo ? string.Format(CultureInfo.InvariantCulture, "{0}/{1}", pod.ShotsLeft, pod.ClipSize) : "unlimited");
             }
             Logger.Info("UFO weapons:");
             foreach (var pod in ufo.WeaponPods)
@@ -164,6 +165,15 @@ namespace ProjectXenocide.UI.Screens
                 craftFuelLabel = GumRoot.GetGraphicalUiElementByName("craftFuelLabel");
                 distanceLabel = GumRoot.GetGraphicalUiElementByName("distanceLabel");
                 logLabel = GumRoot.GetGraphicalUiElementByName("logLabel");
+
+                // Cache button references for per-frame updates
+                pauseBtn = GumRoot.GetFrameworkElementByName<Button>("pauseBtn");
+                normalBtn = GumRoot.GetFrameworkElementByName<Button>("normalBtn");
+                fastBtn = GumRoot.GetFrameworkElementByName<Button>("fastBtn");
+                standoffBtn = GumRoot.GetFrameworkElementByName<Button>("standoffBtn");
+                cautiousBtn = GumRoot.GetFrameworkElementByName<Button>("cautiousBtn");
+                standardBtn = GumRoot.GetFrameworkElementByName<Button>("standardBtn");
+                aggressiveBtn = GumRoot.GetFrameworkElementByName<Button>("aggressiveBtn");
             }
 
             // Start paused — player presses Normal or Fast to begin
@@ -212,6 +222,15 @@ namespace ProjectXenocide.UI.Screens
         private GraphicalUiElement craftFuelLabel;
         private GraphicalUiElement distanceLabel;
         private GraphicalUiElement logLabel;
+
+        // Cached button references (populated once in CreateGumControls)
+        private Button pauseBtn;
+        private Button normalBtn;
+        private Button fastBtn;
+        private Button standoffBtn;
+        private Button cautiousBtn;
+        private Button standardBtn;
+        private Button aggressiveBtn;
 
         // Current tactical mode (for display)
         private TacticalMode currentTacticalMode = TacticalMode.Standard;
@@ -677,6 +696,8 @@ namespace ProjectXenocide.UI.Screens
 
         /// <summary>
         /// Refresh all HUD elements from current game state.
+        /// Called only from button handlers and keyboard shortcuts (not per-frame),
+        /// so string allocations here are at user-interaction rate, not frame rate.
         /// </summary>
         private void DrawScreen()
         {
@@ -698,20 +719,20 @@ namespace ProjectXenocide.UI.Screens
 
         private void UpdateTimeDisplay()
         {
-            timeLabel?.SetProperty("Text", string.Format("Time: {0:F0}s", simState.ElapsedSeconds));
+            timeLabel?.SetProperty("Text", string.Format(CultureInfo.InvariantCulture, "Time: {0:F0}s", simState.ElapsedSeconds));
         }
 
         private void UpdateDistanceDisplay()
         {
             int distanceKm = (int)(simState.Distance / 1000.0);
-            distanceLabel?.SetProperty("Text", string.Format("Distance: {0}km", distanceKm));
+            distanceLabel?.SetProperty("Text", string.Format(CultureInfo.InvariantCulture, "Distance: {0}km", distanceKm));
         }
 
         private void UpdateAircraftStatus()
         {
             craftNameLabel?.SetProperty("Text", aircraft.Name);
-            craftHullLabel?.SetProperty("Text", string.Format("Hull: {0}%", aircraft.HullPercent));
-            craftFuelLabel?.SetProperty("Text", string.Format("Fuel: {0}%", aircraft.FuelPercent));
+            craftHullLabel?.SetProperty("Text", string.Format(CultureInfo.InvariantCulture, "Hull: {0}%", aircraft.HullPercent));
+            craftFuelLabel?.SetProperty("Text", string.Format(CultureInfo.InvariantCulture, "Fuel: {0}%", aircraft.FuelPercent));
         }
 
         private void UpdateWeaponInfo()
@@ -724,7 +745,7 @@ namespace ProjectXenocide.UI.Screens
             DrawPodInformation(weapon2Label, weapon2InfoLabel, weapon2ToggleBtn, interceptor, 1, interceptor.Weapon2Enabled);
         }
 
-        private void DrawPodInformation(GraphicalUiElement headerLabel, GraphicalUiElement infoLabel, Button toggleBtn,
+        private static void DrawPodInformation(GraphicalUiElement headerLabel, GraphicalUiElement infoLabel, Button toggleBtn,
             InterceptorState interceptor, int podIndex, bool isEnabled)
         {
             if (headerLabel == null || infoLabel == null)
@@ -733,13 +754,13 @@ namespace ProjectXenocide.UI.Screens
             if (podIndex < interceptor.Aircraft.WeaponPods.Count && interceptor.Aircraft.WeaponPods[podIndex] != null)
             {
                 var pod = interceptor.Aircraft.WeaponPods[podIndex];
-                headerLabel.SetProperty("Text", string.Format("WEAPON {0}: {1}", podIndex + 1, pod.Name));
+                headerLabel.SetProperty("Text", string.Format(CultureInfo.InvariantCulture, "WEAPON {0}: {1}", podIndex + 1, pod.Name));
 
                 string ammoText = pod.UsesAmmo
-                    ? string.Format("Ammo: {0}/{1}", pod.ShotsLeft, pod.ClipSize)
+                    ? string.Format(CultureInfo.InvariantCulture, "Ammo: {0}/{1}", pod.ShotsLeft, pod.ClipSize)
                     : "Ammo: Unlimited";
 
-                infoLabel.SetProperty("Text", string.Format("{0}  Range: {1}km  Dmg: {2}",
+                infoLabel.SetProperty("Text", string.Format(CultureInfo.InvariantCulture, "{0}  Range: {1}km  Dmg: {2}",
                     ammoText, pod.WeaponRange / 1000, pod.WeaponDamage));
 
                 if (toggleBtn != null)
@@ -749,7 +770,7 @@ namespace ProjectXenocide.UI.Screens
             }
             else
             {
-                headerLabel.SetProperty("Text", string.Format("WEAPON {0}: Empty", podIndex + 1));
+                headerLabel.SetProperty("Text", string.Format(CultureInfo.InvariantCulture, "WEAPON {0}: Empty", podIndex + 1));
                 infoLabel.SetProperty("Text", "");
                 if (toggleBtn != null)
                 {
@@ -760,11 +781,11 @@ namespace ProjectXenocide.UI.Screens
 
         private void UpdateUfoInfo()
         {
-            ufoNameLabel?.SetProperty("Text", string.Format("{0} ({1})", ufo.Name, ufo.UfoItemInfo.UfoSize));
-            ufoHullLabel?.SetProperty("Text", string.Format("Hull: {0}%", ufo.HullPercent));
+            ufoNameLabel?.SetProperty("Text", string.Format(CultureInfo.InvariantCulture, "{0} ({1})", ufo.Name, ufo.UfoItemInfo.UfoSize));
+            ufoHullLabel?.SetProperty("Text", string.Format(CultureInfo.InvariantCulture, "Hull: {0}%", ufo.HullPercent));
 
             if (ufo.WeaponPods.Count > 0 && ufo.WeaponPods[0] != null)
-                ufoWeaponLabel?.SetProperty("Text", string.Format("Weapon: {0}", ufo.WeaponPods[0].Name));
+                ufoWeaponLabel?.SetProperty("Text", string.Format(CultureInfo.InvariantCulture, "Weapon: {0}", ufo.WeaponPods[0].Name));
             else
                 ufoWeaponLabel?.SetProperty("Text", "Weapon: None");
         }
@@ -788,33 +809,24 @@ namespace ProjectXenocide.UI.Screens
 
         private void UpdateSpeedButtons()
         {
-            if (GumRoot == null) return;
-            var pause = GumRoot.GetFrameworkElementByName<Button>("pauseBtn");
-            var normal = GumRoot.GetFrameworkElementByName<Button>("normalBtn");
-            var fast = GumRoot.GetFrameworkElementByName<Button>("fastBtn");
-            if (pause != null)
-                pause.Text = (speedMultiplier == 0) ? "[Pause]" : "Pause";
-            if (normal != null)
-                normal.Text = (speedMultiplier == 1) ? "[Normal]" : "Normal";
-            if (fast != null)
-                fast.Text = (speedMultiplier == 3) ? "[Fast]" : "Fast";
+            if (pauseBtn != null)
+                pauseBtn.Text = (speedMultiplier == 0) ? "[Pause]" : "Pause";
+            if (normalBtn != null)
+                normalBtn.Text = (speedMultiplier == 1) ? "[Normal]" : "Normal";
+            if (fastBtn != null)
+                fastBtn.Text = (speedMultiplier == 3) ? "[Fast]" : "Fast";
         }
 
         private void UpdateTacticalButtons()
         {
-            if (GumRoot == null) return;
-            var standoff = GumRoot.GetFrameworkElementByName<Button>("standoffBtn");
-            var cautious = GumRoot.GetFrameworkElementByName<Button>("cautiousBtn");
-            var standard = GumRoot.GetFrameworkElementByName<Button>("standardBtn");
-            var aggressive = GumRoot.GetFrameworkElementByName<Button>("aggressiveBtn");
-            if (standoff != null)
-                standoff.Text = (currentTacticalMode == TacticalMode.Standoff) ? "[STANDOFF]" : "STANDOFF";
-            if (cautious != null)
-                cautious.Text = (currentTacticalMode == TacticalMode.Cautious) ? "[CAUTIOUS]" : "CAUTIOUS";
-            if (standard != null)
-                standard.Text = (currentTacticalMode == TacticalMode.Standard) ? "[STANDARD]" : "STANDARD";
-            if (aggressive != null)
-                aggressive.Text = (currentTacticalMode == TacticalMode.Aggressive) ? "[AGGRESSIVE]" : "AGGRESSIVE";
+            if (standoffBtn != null)
+                standoffBtn.Text = (currentTacticalMode == TacticalMode.Standoff) ? "[STANDOFF]" : "STANDOFF";
+            if (cautiousBtn != null)
+                cautiousBtn.Text = (currentTacticalMode == TacticalMode.Cautious) ? "[CAUTIOUS]" : "CAUTIOUS";
+            if (standardBtn != null)
+                standardBtn.Text = (currentTacticalMode == TacticalMode.Standard) ? "[STANDARD]" : "STANDARD";
+            if (aggressiveBtn != null)
+                aggressiveBtn.Text = (currentTacticalMode == TacticalMode.Aggressive) ? "[AGGRESSIVE]" : "AGGRESSIVE";
         }
 
         /// <summary>

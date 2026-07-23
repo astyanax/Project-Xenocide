@@ -119,6 +119,7 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         private void CalcViewMatrix()
         {
             view = Matrix.CreateLookAt(position, position + lookVector, Vector3.Up);
+            viewInverse = Matrix.Invert(view);
         }
 
         /// <summary>Return a unit vector in the X-Z plane in the same direction as the camera</summary>
@@ -135,6 +136,9 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
         /// <summary>View matrix, to use with Effect</summary>
         public Matrix View { get { return view; } }
 
+        /// <summary>Inverse of the view matrix, cached to avoid per-call Matrix.Invert</summary>
+        public Matrix ViewInverse { get { return viewInverse; } }
+
         /// <summary>Position of the camera in the scene</summary>
         public Vector3 Position { get { return position; } set { position = value; CalcViewMatrix(); } }
 
@@ -146,6 +150,9 @@ namespace ProjectXenocide.UI.Scenes.Battlescape
 
         /// <summary>view matrix that encapsulates all camera data</summary>
         private Matrix view;
+
+        /// <summary>Inverse of the view matrix, computed once per camera movement</summary>
+        private Matrix viewInverse;
 
         #endregion Fields
     }
