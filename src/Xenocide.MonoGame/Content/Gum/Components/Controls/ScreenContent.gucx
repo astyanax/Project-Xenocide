@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ComponentSave xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>Controls/ScreenContent</Name>
+  <BaseType>Container</BaseType>
+  <State>
+    <Name>Default</Name>
+    <!-- Vertical StackPanel with spacing -->
+    <Variable Type="ChildrenLayout" Name="ChildrenLayout" SetsValue="true">
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="StackSpacing" SetsValue="true">
+      <Value xsi:type="xsd:float">4</Value>
+    </Variable>
+    <!-- Fill parent width -->
+    <Variable Type="float" Name="Width" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">2</Value>
+    </Variable>
+    <!-- Auto-size height to children -->
+    <Variable Type="float" Name="Height" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">4</Value>
+    </Variable>
+    <Variable Type="State" Name="State" Category="States and Visibility" SetsValue="true" />
+  </State>
+  <Behaviors>
+    <ElementBehaviorReference>
+      <BehaviorName>PanelBehavior</BehaviorName>
+    </ElementBehaviorReference>
+  </Behaviors>
+</ComponentSave>

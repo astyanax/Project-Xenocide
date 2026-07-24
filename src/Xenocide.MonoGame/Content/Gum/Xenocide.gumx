@@ -107,6 +107,8 @@
   <ComponentReference Name="Controls/Menu" />
   <ComponentReference Name="Controls/MenuItem" />
   <ComponentReference Name="Controls/Panel" />
+  <ComponentReference Name="Controls/ScreenContent" />
+  <ComponentReference Name="Controls/ScreenLayout" />
   <ComponentReference Name="Controls/PasswordBox" />
   <ComponentReference Name="Controls/RadioButton" />
   <ComponentReference Name="Controls/ScrollBar" />

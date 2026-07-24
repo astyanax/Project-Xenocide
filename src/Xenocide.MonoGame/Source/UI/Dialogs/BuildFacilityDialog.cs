@@ -16,21 +16,19 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    sealed class BuildFacilityDialog : GumDialog
+    sealed class BuildFacilityDialog : ModalDialog
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         public BuildFacilityDialog(BasesScreen basesScreen) : base("Select Facility")
         {
             this.basesScreen = basesScreen;
+            PanelWidth = 600;
+            PanelHeight = 500;
         }
 
-        protected override void WireGumControls()
+        protected override void CreateDialogWidgets()
         {
-            base.WireGumControls();
-
-            var content = GetOrCreateContentPanel();
-
             int index = 0;
             int buttonCount = 0;
             foreach (FacilityInfo facility in Xenocide.StaticTables.FacilityList)
@@ -50,20 +48,20 @@ namespace ProjectXenocide.UI.Dialogs
                     rowBtn.Visual.Width = 0;
                     rowBtn.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
                     rowBtn.Click += (s, e) => OnFacilitySelected(idx);
-                    content.AddChild(rowBtn);
+                    ContentArea.AddChild(rowBtn);
                     ++buttonCount;
                 }
                 ++index;
             }
 
-            Logger.Debug("WireGumControls: added {0} facility buttons (plus Cancel)", buttonCount);
+            Logger.Debug("CreateDialogWidgets: added {0} facility buttons (plus Cancel)", buttonCount);
 
             var cancelBtn = new Button();
             cancelBtn.Text = Strings.BUTTON_CANCEL;
             cancelBtn.Visual.Width = 0;
             cancelBtn.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
             cancelBtn.Click += OnCancelClicked;
-            content.AddChild(cancelBtn);
+            ContentArea.AddChild(cancelBtn);
         }
 
         private void OnFacilitySelected(int facilityIndex)
@@ -83,7 +81,7 @@ namespace ProjectXenocide.UI.Dialogs
                 {
                     Logger.Info("OnFacilitySelected: proceeding to placement for {0}", info.Id);
                     basesScreen.BuildFacility(new FacilityHandle(facilityIndex));
-                    ScreenManager.CloseDialog(this);
+                    Close();
                 }
             }
             else
@@ -98,7 +96,7 @@ namespace ProjectXenocide.UI.Dialogs
 
         public void OnCancelClicked(object sender, EventArgs e)
         {
-            ScreenManager.CloseDialog(this);
+            Close();
         }
 
         private static bool CanBuildFacility(string facilityId)

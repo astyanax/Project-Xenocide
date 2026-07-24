@@ -487,6 +487,128 @@ All facility placement classes use NLog with three levels:
 
 ---
 
+## UI Component Architecture (Phase 4.7)
+
+### Overview
+
+The project provides a set of reusable UI components that standardize screen layout, typography, theming, and data grid presentation. These components eliminate hardcoded pixel positioning and ensure visual consistency across all screens.
+
+### Components
+
+| Component | File | Purpose |
+|-----------|------|---------|
+| `ScreenLayout` (.gucx + .cs) | `Content/Gum/Components/Controls/ScreenLayout.gucx`, `Source/UI/Controls/ScreenLayout.cs` | Standard screen structure: scrollable content area (75%), button bar (200px right), status bar (bottom) |
+| `ScreenContent` (.gucx) | `Content/Gum/Components/Controls/ScreenContent.gucx` | Scrollable StackPanel child for ScreenLayout.ContentPanel |
+| `ContentArea` (.cs) | `Source/UI/Controls/ContentArea.cs` | Manages dynamic content: AddHeader, AddLabel, AddGrid, AddSpacer, Clear |
+| `ThemedLabel` (.cs) | `Source/UI/Controls/ThemedLabel.cs` | Factory for pre-styled Labels (Title 28px, H1 22px, H2 18px, H3 16px, Normal 14px, Small 12px, Tiny 10px) |
+| `StyledGrid` (.cs) | `Source/UI/Controls/StyledGrid.cs` | GridPanel subclass with alternating row colors, header styling, 25px rows |
+
+### ScreenLayout Structure
+
+```
+┌──────────────────────────────────────────────────┐
+│  ScreenLayout (100% x 100%)                      │
+│  ┌──────────────────────────┐ ┌────────────────┐ │
+│  │ ContentScroll            │ │ ButtonBar      │ │
+│  │ (ScrollViewer, 75%)      │ │ (StackPanel,   │ │
+│  │ ┌──────────────────────┐ │ │  190px)        │ │
+│  │ │ ContentStack         │ │ │                │ │
+│  │ │ (StackPanel,         │ │ │ [Button1]      │ │
+│  │ │  vertical stack)     │ │ │ [Button2]      │ │
+│  │ │                      │ │ │ [Button3]      │ │
+│  │ └──────────────────────┘ │ │                │ │
+│  └──────────────────────────┘ └────────────────┘ │
+│  ┌──────────────────────────────────────────────┐│
+│  │ StatusBar (StackPanel, 30px, bottom)         ││
+│  └──────────────────────────────────────────────┘│
+└──────────────────────────────────────────────────┘
+```
+
+### Usage Pattern
+
+```csharp
+// In CreateGumControls():
+private ScreenLayout layout;
+private ContentArea content;
+
+protected override void CreateGumControls()
+{
+    layout = new ScreenLayout();
+    layout.AddToRoot();
+    content = new ContentArea(layout.ContentPanel);
+
+    // Buttons go to the right panel
+    layout.AddButton("Research", OnResearch);
+    layout.AddButton("Cancel", OnCancel);
+
+    // Content auto-stacks vertically in the scrollable area
+    content.AddHeader("Research Projects");
+    fundsText = ThemedLabel.CreateBody("");
+    content.AddLabel(fundsText);
+
+    grid = new StyledGrid();
+    grid.AddColumn("Name", 400);
+    grid.AddColumn("Cost", 200);
+    content.AddGrid(grid);
+}
+```
+
+### TextStyle Enum
+
+| Style | Size | Weight | Usage |
+|-------|------|--------|-------|
+| `Title` | 28px | Bold | Screen titles |
+| `H1` | 22px | Bold | Major headers |
+| `H2` | 18px | Bold | Section headers |
+| `H3` | 16px | Bold | Sub-section headers |
+| `Strong` | 14px | Bold | Button text, emphasis |
+| `Normal` | 14px | Regular | Body text |
+| `Emphasis` | 14px | Italic | Emphasis text |
+| `Small` | 12px | Regular | Captions, secondary |
+| `Tiny` | 10px | Regular | Micro labels |
+
+### StyledGrid Features
+
+- Alternating row colors (PrimaryLight tint for even rows)
+- Header row uses DarkGray background
+- Row height: 25px
+- Selection highlight: Primary color
+- Column width specified in pixels
+
+### Migration Path
+
+Each screen migration follows this template:
+
+**Before:**
+```csharp
+fundsText = new Label();
+fundsText.Visual.X = 20;
+fundsText.Visual.Y = 20;
+AddChild(fundsText);
+
+grid = new GridPanel();
+grid.Visual.X = 20;
+grid.Visual.Y = 60;
+grid.Visual.Width = 750;
+AddChild(grid);
+```
+
+**After:**
+```csharp
+layout = new ScreenLayout();
+layout.AddToRoot();
+content = new ContentArea(layout.ContentPanel);
+
+fundsText = ThemedLabel.CreateBody("");
+content.AddLabel(fundsText);
+
+grid = new StyledGrid();
+grid.AddColumn("Name", 400);
+content.AddGrid(grid);
+```
+
+---
+
 ## References
 
 - **Gum documentation**: https://docs.flatredball.com/gum/

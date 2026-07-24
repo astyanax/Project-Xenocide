@@ -53,109 +53,76 @@ namespace ProjectXenocide.UI.Screens
     /// </summary>
     /// <remarks>
     /// ARCHITECTURE: Screen delegates to BaseInfoScreenController for game logic.
-    /// Displays outpost statistics and provides navigation to facility management
-    /// and monthly cost breakdown screens.
+    /// Uses ScreenLayout for standard layout: scrollable content area (left),
+    /// button bar (right) with Transfers/Stores/Costs/OK buttons, and a status
+    /// bar (bottom). Content includes outpost selector, name editor, staff grid,
+    /// and facilities grid.
     /// </remarks>
     sealed partial class BaseInfoScreen : GumScreen
     {
+        private ScreenLayout layout;
+        private ContentArea content;
+
         /// <summary>
         /// Constructor (obviously)
         /// </summary>
         /// <param name="selectedOutpostIndex">Index to outpost screen is to show</param>
         public BaseInfoScreen(int selectedOutpostIndex)
-            : base("BaseInfoScreen")
+            : base("BaseInfoScreen", @"Content/Textures/UI/GeoscapeScreenBackground.png")
         {
             this.selectedOutpostIndex = selectedOutpostIndex;
             this.controller = new Controller(SelectedOutpost);
         }
 
+        protected override bool HasGumxLayout => false;
+
         #region Create the Gum controls
 
         /// <summary>
-        /// add the buttons to the screen
+        /// Builds the screen layout using ScreenLayout and ContentArea.
         /// </summary>
         protected override void CreateGumControls()
         {
-            if (GumRoot != null)
-            {
-                WireButton("transfersButton", OnTransfersButton);
-                WireButton("storesButton", OnStoresButton);
-                WireButton("costsButton", OnMonthlyCostsButton);
-                WireButton("okButton", ShowBasesScreen);
+            layout = new ScreenLayout();
+            layout.AddToRoot();
+            content = new ContentArea(layout.ContentPanel);
 
-                outpostsListComboBox = new ComboBox();
-                outpostsListComboBox.Visual.X = 20;
-                outpostsListComboBox.Visual.Y = 20;
-                outpostsListComboBox.Visual.Width = 300;
-                AddChild(outpostsListComboBox);
-                foreach (Outpost outpost in Xenocide.GameState.GeoData.Outposts)
-                    outpostsListComboBox.Items.Add(outpost.Name);
-                outpostsListComboBox.SelectedIndex = selectedOutpostIndex;
-                outpostsListComboBox.SelectionChanged += (s, args) => OnOutpostSelectionChanged(s, EventArgs.Empty);
+            // Button bar (right side)
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_TRANSFERS"), OnTransfersButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_STORES"), OnStoresButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_MONTHLY_COSTS"), OnMonthlyCostsButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_OK"), ShowBasesScreen);
 
-                nameEditBox = new TextBox();
-                nameEditBox.Visual.X = 20;
-                nameEditBox.Visual.Y = 55;
-                nameEditBox.Visual.Width = 300;
-                AddChild(nameEditBox);
-                nameEditBox.Text = SelectedOutpost.Name;
-                nameEditBox.PreviewTextInput += (s, args) => OnOutpostNameChange(s, EventArgs.Empty);
-
-                InitializeStaffGrid();
-                staffGrid.Visual.X = 20;
-                staffGrid.Visual.Y = 90;
-                staffGrid.Visual.Width = 380;
-
-                InitializeFacilitiesGrid();
-                facilitiesGrid.Visual.X = 420;
-                facilitiesGrid.Visual.Y = 90;
-                facilitiesGrid.Visual.Width = 380;
-                return;
-            }
-
-            // combo box to allow user to pick outpost to work on
+            // Outpost selector combo box
             outpostsListComboBox = new ComboBox();
-            RootContainer.AddChild(outpostsListComboBox);
+            outpostsListComboBox.Visual.Width = 300;
+            content.Panel.AddChild(outpostsListComboBox);
             foreach (Outpost outpost in Xenocide.GameState.GeoData.Outposts)
-            {
                 outpostsListComboBox.Items.Add(outpost.Name);
-            }
             outpostsListComboBox.SelectedIndex = selectedOutpostIndex;
             outpostsListComboBox.SelectionChanged += (s, args) => OnOutpostSelectionChanged(s, EventArgs.Empty);
 
-            // The girds detailing staff and facilities in outpost
-            InitializeStaffGrid();
-            InitializeFacilitiesGrid();
-
-            // other buttons
-            transfersButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TRANSFERS") };
-            RootContainer.AddChild(transfersButton);
-            storesButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_STORES") };
-            RootContainer.AddChild(storesButton);
-            costsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_MONTHLY_COSTS") };
-            RootContainer.AddChild(costsButton);
-            okButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_OK") };
-            RootContainer.AddChild(okButton);
-
-            // edit box for outpost name
+            // Outpost name editor
             nameEditBox = new TextBox();
-            RootContainer.AddChild(nameEditBox);
+            nameEditBox.Visual.Width = 300;
+            content.Panel.AddChild(nameEditBox);
             nameEditBox.Text = SelectedOutpost.Name;
             nameEditBox.PreviewTextInput += (s, args) => OnOutpostNameChange(s, EventArgs.Empty);
 
-            transfersButton.Click += OnTransfersButton;
-            storesButton.Click += OnStoresButton;
-            costsButton.Click += OnMonthlyCostsButton;
-            okButton.Click += ShowBasesScreen;
+            content.AddSpacer(10);
+
+            // Staff grid
+            InitializeStaffGrid();
+
+            content.AddSpacer(10);
+
+            // Facilities grid
+            InitializeFacilitiesGrid();
         }
 
         private GridPanel staffGrid;
         private GridPanel facilitiesGrid;
         private ComboBox outpostsListComboBox;
-        private Button transfersButton;
-        private Button storesButton;
-        private Button costsButton;
-        private Button okButton;
         private TextBox nameEditBox;
 
         /// <summary>
@@ -164,10 +131,10 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeStaffGrid()
         {
             staffGrid = new GridPanel();
-            AddChild(staffGrid.Visual);
             staffGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_STAFF, (int)(0.69f * 800));
             staffGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_IDLE, (int)(0.15f * 800));
             staffGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_STAFF_TOTAL, (int)(0.15f * 800));
+            content.AddGrid(staffGrid);
 
             PopulateStaffGrid();
         }
@@ -178,11 +145,11 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeFacilitiesGrid()
         {
             facilitiesGrid = new GridPanel();
-            AddChild(facilitiesGrid.Visual);
             facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_SPACE_TYPE, (int)(0.54f * 800));
             facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_IN_USE, (int)(0.15f * 800));
             facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_TOTAL, (int)(0.15f * 800));
             facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_BUILDING, (int)(0.15f * 800));
+            content.AddGrid(facilitiesGrid);
 
             PopulateFacilitiesGrid();
         }

@@ -45,6 +45,7 @@ using ProjectXenocide.Assets;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData.Facilities;
 using ProjectXenocide.UI;
+using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.UI.Scenes.Facility;
 using ProjectXenocide.Utils;
@@ -92,17 +93,24 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         /// <param name="selectedBase">Index to X-Corp outpost screen is to show</param>
         public BasesScreen(int selectedBase)
-            : base("BasesScreen", @"Content/Textures/UI/BaseDirtFloor.png")
+            : base("BasesScreen")
         {
             this.selectedBase = selectedBase;
             this.controller = new Controller(Xenocide.GameState.GeoData.Outposts[selectedBase]);
             Logger.Info("BasesScreen ctor: baseIndex={0}", selectedBase);
+
+            // sceneWindowRect must be set before LoadContent() so SceneMouseHandler
+            // receives the correct viewport rect. Layout mirrors ScreenLayout's
+            // ContentPanel (75% width) with margins.
+            sceneWindowRect = new UiRect(0.02f, 0.073f, 0.72f, 0.9264f);
 
             // Before showing, bring floorplan up to date 
             scene = new FacilityScene(SelectedBaseFloorplan);
             if (Xenocide.AudioSystem != null)
                 Xenocide.AudioSystem.PlayRandomMusic("BaseView");
         }
+
+        protected override bool HasGumxLayout => false;
 
         /// <summary>
         /// Load the Scene's graphic content
@@ -121,8 +129,8 @@ namespace ProjectXenocide.UI.Screens
             // the first frame.  This ensures Reset() can be called during state
             // transitions even before the first Update() call.
             // IMPORTANT: sceneWindowRect must be initialized BEFORE this call
-            // (it is set as a field initializer at declaration time) because
-            // ScreenManager.SwapScreens() calls LoadContent() before Show().
+            // (it is set in the constructor) because ScreenManager.SwapScreens()
+            // calls LoadContent() before Show().
             sceneMouseHandler = new SceneMouseHandler(sceneWindowRect);
             sceneMouseHandler.MouseMoved += OnSceneMouseMoved;
             sceneMouseHandler.LeftClicked += OnSceneLeftClicked;
@@ -171,16 +179,6 @@ namespace ProjectXenocide.UI.Screens
 
             _prevKeyboardState = keyboard;
 
-            // Create tooltip lazily on first update if Gum is ready
-            if (tooltip == null && (GumRoot != null || RootContainer != null))
-            {
-                var tooltipRoot = GumRoot ?? RootContainer?.Visual;
-                if (tooltipRoot != null)
-                {
-                    tooltip = new FacilityTooltip(tooltipRoot);
-                }
-            }
-
             // Hide tooltip if mouse leaves the scene viewport
             var mouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
             var device = Xenocide.Instance.GraphicsDevice;
@@ -209,13 +207,25 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>
-        /// Render the 3D scene
+        /// Render the background and 3D scene
         /// </summary>
         /// <param name="gameTime">time interval since last render</param>
         /// <param name="device">Device to render the globe to</param>
         public override void Draw(GameTime gameTime, GraphicsDevice device)
         {
             base.Draw(gameTime, device);
+
+            // Draw background via SpriteBatch
+            if (_background != null)
+            {
+                _backgroundBatch.Begin();
+                _backgroundBatch.Draw(
+                    _background,
+                    new Rectangle(0, 0, device.Viewport.Width, device.Viewport.Height),
+                    Color.White);
+                _backgroundBatch.End();
+            }
+
             // update funds shown on screen
             String funds = Controller.GetFundsDisplay();
             if (fundsText.Text != funds)
@@ -249,86 +259,51 @@ namespace ProjectXenocide.UI.Screens
 
         #region Create the Gum controls
 
+        private ScreenLayout layout;
+        private ContentArea content;
+
         /// <summary>
-        /// add the buttons to the screen
+        /// Builds the screen layout using ScreenLayout and ContentArea.
+        /// The 3D scene renders via SpriteBatch in Draw() within sceneWindowRect.
         /// </summary>
         protected override void CreateGumControls()
         {
-            // sceneWindowRect is initialized at field declaration so it's available
-            // during LoadContent() before Show()/CreateGumControls() runs.
-            // The field initializer below is kept as a safety net / documentation
-            // of the canonical viewport values.
-            sceneWindowRect = new UiRect(0.02f, 0.073f, 0.661f, 0.9264f);
+            layout = new ScreenLayout();
+            layout.AddToRoot();
+            content = new ContentArea(layout.ContentPanel);
 
-            if (GumRoot != null)
-            {
-                newBaseButton = WireButton("newBaseButton", OnNewBase);
-                baseInfoButton = WireButton("baseInfoButton", ShowBaseInfoScreen);
-                soldiersButton = WireButton("soldiersButton", OnSoldiersButton);
-                equipCraftButton = WireButton("equipCraftButton", OnEquipCraftButton);
-                buildFacButton = WireButton("buildFacButton", OnBuildFacilitiesButton);
-                produceButton = WireButton("produceButton", OnManufactureButton);
-                transferButton = WireButton("transferButton", OnTransferButton);
-                buyButton = WireButton("buyButton", OnBuyButton);
-                sellButton = WireButton("sellButton", OnSellButton);
-                geoscapeButton = WireButton("geoscapeButton", OnGeoscapeButton);
+            // Button bar (right side)
+            newBaseButton = layout.AddButton(XenocideResourceManager.Get("BUTTON_BUILD_NEW_BASE"), OnNewBase);
+            baseInfoButton = layout.AddButton(XenocideResourceManager.Get("BUTTON_BASE_INFORMATION"), ShowBaseInfoScreen);
+            soldiersButton = layout.AddButton(XenocideResourceManager.Get("BUTTON_SOLDIERS"), OnSoldiersButton);
+            equipCraftButton = layout.AddButton(XenocideResourceManager.Get("BUTTON_EQUIP_CRAFT"), OnEquipCraftButton);
+            buildFacButton = layout.AddButton(XenocideResourceManager.Get("BUTTON_BUILD_FACILITIES"), OnBuildFacilitiesButton);
+            produceButton = layout.AddButton(XenocideResourceManager.Get("BUTTON_MANUFACTURE"), OnManufactureButton);
+            transferButton = layout.AddButton(XenocideResourceManager.Get("BUTTON_TRANSFER"), OnTransferButton);
+            buyButton = layout.AddButton(XenocideResourceManager.Get("BUTTON_BUY"), OnBuyButton);
+            sellButton = layout.AddButton(XenocideResourceManager.Get("BUTTON_SELL"), OnSellButton);
+            geoscapeButton = layout.AddButton(XenocideResourceManager.Get("BUTTON_GEOSCAPE"), OnGeoscapeButton);
 
-                basesListComboBox = new ComboBox();
-                AddChild(basesListComboBox);
-                Misc.PopulateHumanBasesList(basesListComboBox, selectedBase);
-                basesListComboBox.SelectionChanged += (s, a) => OnBaseSelectionChanged(s, EventArgs.Empty);
-
-                fundsText = new Label();
-                AddChild(fundsText);
-                return;
-            }
-
-            // combo box to allow user to pick base to work on
+            // Base selector combo box
             basesListComboBox = new ComboBox();
-            RootContainer.AddChild(basesListComboBox);
+            basesListComboBox.Visual.Width = 300;
+            content.Panel.AddChild(basesListComboBox);
             Misc.PopulateHumanBasesList(basesListComboBox, selectedBase);
             basesListComboBox.SelectionChanged += (s, a) => OnBaseSelectionChanged(s, EventArgs.Empty);
 
-            // add text giving available funds
+            // Funds display
             fundsText = new Label();
-            RootContainer.AddChild(fundsText);
+            content.Panel.AddChild(fundsText);
 
-            // other buttons
-            newBaseButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BUILD_NEW_BASE") };
-            RootContainer.AddChild(newBaseButton);
-            baseInfoButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BASE_INFORMATION") };
-            RootContainer.AddChild(baseInfoButton);
-            soldiersButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_SOLDIERS") };
-            RootContainer.AddChild(soldiersButton);
-            equipCraftButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_EQUIP_CRAFT") };
-            RootContainer.AddChild(equipCraftButton);
-            buildFacButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BUILD_FACILITIES") };
-            RootContainer.AddChild(buildFacButton);
-            produceButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_MANUFACTURE") };
-            RootContainer.AddChild(produceButton);
-            transferButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TRANSFER") };
-            RootContainer.AddChild(transferButton);
-            buyButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BUY") };
-            RootContainer.AddChild(buyButton);
-            sellButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_SELL") };
-            RootContainer.AddChild(sellButton);
-            geoscapeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_GEOSCAPE") };
-            RootContainer.AddChild(geoscapeButton);
+            // Load background for SpriteBatch rendering
+            LoadBackground();
 
-            // other buttons being pressed
-            newBaseButton.Click += OnNewBase;
-            baseInfoButton.Click += ShowBaseInfoScreen;
-            soldiersButton.Click += OnSoldiersButton;
-            equipCraftButton.Click += OnEquipCraftButton;
-            buildFacButton.Click += OnBuildFacilitiesButton;
-            produceButton.Click += OnManufactureButton;
-            transferButton.Click += OnTransferButton;
-            buyButton.Click += OnBuyButton;
-            sellButton.Click += OnSellButton;
-            geoscapeButton.Click += OnGeoscapeButton;
+            // Create tooltip now that GumRoot is available
+            var tooltipRoot = layout.Visual;
+            tooltip = new FacilityTooltip(tooltipRoot);
         }
 
-        private UiRect sceneWindowRect = new UiRect(0.02f, 0.073f, 0.661f, 0.9264f);
+        private UiRect sceneWindowRect;
         private ComboBox basesListComboBox;
         private Label fundsText;
         private Button newBaseButton;
@@ -850,6 +825,17 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private Microsoft.Xna.Framework.Input.KeyboardState _prevKeyboardState;
 
+        private Texture2D _background;
+        private SpriteBatch _backgroundBatch;
+
+        private void LoadBackground()
+        {
+            const string filename = @"Content/Textures/UI/BasesScreenBackground.png";
+            var device = Xenocide.Instance.GraphicsDevice;
+            _background = Texture2D.FromFile(device, filename);
+            _backgroundBatch = new SpriteBatch(device);
+        }
+
         #endregion Fields
 
         /// <summary>
@@ -860,6 +846,10 @@ namespace ProjectXenocide.UI.Screens
             if (disposing)
             {
                 tooltip?.Dispose();
+                _backgroundBatch?.Dispose();
+                _backgroundBatch = null;
+                _background?.Dispose();
+                _background = null;
             }
             base.Dispose(disposing);
         }
