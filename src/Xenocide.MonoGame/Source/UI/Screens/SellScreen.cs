@@ -88,12 +88,12 @@ namespace ProjectXenocide.UI.Screens
             layout.AddButton(XenocideResourceManager.Get("BUTTON_CONFIRM"), OnConfirmButton);
             layout.AddButton(XenocideResourceManager.Get("BUTTON_CANCEL"), OnCancelButton);
 
-            fundsText = new Label();
+            fundsText = ThemedLabel.Create("");
             fundsText.Text = Util.StringFormat(Strings.SCREEN_SELL_FUNDS,
                 Xenocide.GameState.GeoData.XCorp.Bank.CurrentBalance);
             content.Panel.AddChild(fundsText);
 
-            totalValueText = new Label();
+            totalValueText = ThemedLabel.Create("");
             content.Panel.AddChild(totalValueText);
             UpdateTotalValue();
 
@@ -111,7 +111,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void InitializeGrid()
         {
-            grid = new GridPanel();
+            grid = new StyledGrid();
             grid.AddColumn(Strings.SCREEN_SELL_COLUMN_ITEM, (int)(0.58f * 800));
             grid.AddColumn(Strings.SCREEN_SELL_COLUMN_QUANTITY_IN_BASE, (int)(0.12f * 800));
             grid.AddColumn(Strings.SCREEN_SELL_COLUMN_VALUE_PER_UNIT, (int)(0.13f * 800));

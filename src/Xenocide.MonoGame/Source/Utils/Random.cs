@@ -119,6 +119,16 @@ namespace ProjectXenocide.Utils
             }
         }
 
+        /// <summary>
+        /// Clear any pre-loaded values from RigDice.
+        /// Call before each test to prevent values leaking between tests.
+        /// </summary>
+        [Conditional("DEBUG")]
+        public void ClearLoadedValues()
+        {
+            loadedValues.Clear();
+        }
+
         #region Fields
 
         /// <summary>real random number generator</summary>

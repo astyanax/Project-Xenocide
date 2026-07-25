@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScreenSave xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>XenocideButtonTemplate</Name>
+  <State>
+    <Name>Default</Name>
+    <Variable Type="float" Name="Button.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">25</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="Button.HeightUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">0</Value>
+    </Variable>
+    <Variable Type="float" Name="Button.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="DimensionUnitType" Name="Button.WidthUnits" SetsValue="true">
+      <Value xsi:type="xsd:int">2</Value>
+    </Variable>
+  </State>
+  <Instance Name="Button" BaseType="XenocideButton" />
+  <Behaviors />
+</ScreenSave>

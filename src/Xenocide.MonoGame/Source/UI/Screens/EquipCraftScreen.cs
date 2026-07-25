@@ -91,13 +91,13 @@ namespace ProjectXenocide.UI.Screens
             layout.AddButton(XenocideResourceManager.Get("BUTTON_SET_POD_2"), OnSetPod2Button);
             layout.AddButton(XenocideResourceManager.Get("BUTTON_CLOSE"), OnCloseButton);
 
-            baseNameText = new Label() { Text = Util.StringFormat(Strings.SCREEN_EQUIP_CRAFT_BASE_NAME, SelectedOutpost.Name) };
+            baseNameText = ThemedLabel.Create(Util.StringFormat(Strings.SCREEN_EQUIP_CRAFT_BASE_NAME, SelectedOutpost.Name));
             content.Panel.AddChild(baseNameText);
 
-            pod1Text = new Label();
+            pod1Text = ThemedLabel.Create("");
             content.Panel.AddChild(pod1Text);
 
-            pod2Text = new Label();
+            pod2Text = ThemedLabel.Create("");
             content.Panel.AddChild(pod2Text);
 
             InitializeCraftGrid();
@@ -119,7 +119,7 @@ namespace ProjectXenocide.UI.Screens
 
         private void InitializeCraftGrid()
         {
-            craftGrid = new GridPanel();
+            craftGrid = new StyledGrid();
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_CRAFT_NAME, 140);
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_FUEL, 90);
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_HULL, 90);
@@ -132,7 +132,7 @@ namespace ProjectXenocide.UI.Screens
 
         private void InitializeWeaponsGrid()
         {
-            weaponsGrid = new GridPanel();
+            weaponsGrid = new StyledGrid();
             weaponsGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_ITEM, 350);
             weaponsGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_QUANTITY_IN_BASE, 84);
             weaponsGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_CLIP_SIZE, 90);

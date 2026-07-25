@@ -50,6 +50,7 @@ using ProjectXenocide.Model.Geoscape.AI;
 using ProjectXenocide.Model.Geoscape.Geography;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.UI.Scenes.Geoscape;
 using ProjectXenocide.Utils;
@@ -111,7 +112,8 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
-            SetView(0.00f, 0.00f, 0.745f, 1f);
+            var viewportLayout = new ScreenLayout { Mode = ViewportMode.SplitViewport };
+            ViewportRect = viewportLayout.ViewportRect ?? new UiRect(0, 0, 0.745f, 1.0f);
 
             if (GumRoot != null)
             {
@@ -163,134 +165,8 @@ namespace ProjectXenocide.UI.Screens
                 InitializeMessageLog();
 
                 State.CreateGumControls();
-                return;
             }
-
-            // add text giving the time
-            gameTimeTop = new Label();
-            gameTimeHour = new Label();
-            gameTimeSec = new Label();
-            fundsText = new Label();
-            fundsAmount = new Label();
-            sceneToolTip = new Label();
-            timeText = new Label();
-
-            RootContainer.AddChild(gameTimeTop);
-            RootContainer.AddChild(gameTimeHour);
-            RootContainer.AddChild(gameTimeSec);
-            RootContainer.AddChild(fundsText);
-            RootContainer.AddChild(fundsAmount);
-            RootContainer.AddChild(sceneToolTip);
-            RootContainer.AddChild(timeText);
-
-            // Set Font and color for text
-            SetTimeFont(gameTimeTop, "GeoTime");
-            SetTimeFont(gameTimeHour, "GeoTimeBig");
-            SetTimeFont(gameTimeSec, "GeoTime");
-            SetTimeFont(timeText, "GeoTime");
-            SetFont(fundsAmount, "XenoBig");
-
-            // change time buttons
-            timeStopButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TIME_STOP") };
-            timeNormalButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TIME_X60") };
-            timeHourButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TIME_X3600") };
-            timeDayButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TIME_X86400") };
-
-            interceptButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_INTERCEPT") };
-            basesButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BASES") };
-            researchButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_RESEARCH") };
-            fundingButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_FUNDING") };
-            statisticsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_STATISTICS") };
-            xnetButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_XNET") };
-            optionsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_OPTIONS") };
-
-            RootContainer.AddChild(timeStopButton);
-            RootContainer.AddChild(timeNormalButton);
-            RootContainer.AddChild(timeHourButton);
-            RootContainer.AddChild(timeDayButton);
-            RootContainer.AddChild(interceptButton);
-            RootContainer.AddChild(basesButton);
-            RootContainer.AddChild(researchButton);
-            RootContainer.AddChild(fundingButton);
-            RootContainer.AddChild(statisticsButton);
-            RootContainer.AddChild(xnetButton);
-            RootContainer.AddChild(optionsButton);
-
-            // move camera buttons
-            cameraUpButton = new Button() { Text = "BUTTON_UP" };
-            cameraDownButton = new Button() { Text = "BUTTON_DOWN" };
-            cameraLeftButton = new Button() { Text = "BUTTON_LEFT" };
-            cameraRightButton = new Button() { Text = "BUTTON_RIGHT" };
-            cameraInButton = new Button() { Text = "BUTTON_ZOOM_IN" };
-            cameraOutButton = new Button() { Text = "BUTTON_ZOOM_OUT" };
-
-            RootContainer.AddChild(cameraUpButton);
-            RootContainer.AddChild(cameraDownButton);
-            RootContainer.AddChild(cameraLeftButton);
-            RootContainer.AddChild(cameraRightButton);
-            RootContainer.AddChild(cameraInButton);
-            RootContainer.AddChild(cameraOutButton);
-
-            // change rate of time
-            timeStopButton.Click += OnTimeRateButtonClicked;
-            timeNormalButton.Click += OnTimeRateButtonClicked;
-            timeHourButton.Click += OnTimeRateButtonClicked;
-            timeDayButton.Click += OnTimeRateButtonClicked;
-
-            interceptButton.Click += OnInterceptButtonClicked;
-            basesButton.Click += ShowBasesScreen;
-            researchButton.Click += ShowResearchDialog;
-            fundingButton.Click += OnFundingButtonClicked;
-            statisticsButton.Click += ShowStatisticsScreen;
-            xnetButton.Click += ShowXNetScreen;
-            optionsButton.Click += ShowOptionsDialog;
-
-            cameraUpButton.Click += OnMoveCameraButtonClicked;
-            cameraDownButton.Click += OnMoveCameraButtonClicked;
-            cameraLeftButton.Click += OnMoveCameraButtonClicked;
-            cameraRightButton.Click += OnMoveCameraButtonClicked;
-            cameraInButton.Click += OnMoveCameraButtonClicked;
-            cameraOutButton.Click += OnMoveCameraButtonClicked;
-
-            //Change button size
-            SetFont(timeStopButton, "XenoSmall");
-            SetFont(timeHourButton, "XenoSmall");
-            SetFont(timeDayButton, "XenoSmall");
-            SetFont(timeNormalButton, "XenoSmall");
-            SetFont(cameraUpButton, "XenoSmall");
-            SetFont(cameraDownButton, "XenoSmall");
-            SetFont(cameraLeftButton, "XenoSmall");
-            SetFont(cameraRightButton, "XenoSmall");
-
-            //Adds text to top of screen.
-            fundsText.Text = Strings.SCREEN_GEOSCAPE_FUNDS;
-            var gs = Xenocide.GameState;
-            if (gs?.GeoData?.XCorp?.Bank != null)
-                fundsAmount.Text = gs.GeoData.XCorp.Bank.DisplayCurrentBalance;
-            timeText.Text = Strings.SCREEN_GEOSCAPE_GMT;
-
-            // special widgets based on state, added directly to the scene window
-            state.CreateGumControls();
         }
-
-        private Button timeStopButton;
-        private Button timeNormalButton;
-        private Button timeHourButton;
-        private Button timeDayButton;
-        private Button interceptButton;
-        private Button basesButton;
-        private Button researchButton;
-        private Button fundingButton;
-        private Button statisticsButton;
-        private Button xnetButton;
-        private Button optionsButton;
-
-        private Button cameraUpButton;
-        private Button cameraDownButton;
-        private Button cameraLeftButton;
-        private Button cameraRightButton;
-        private Button cameraInButton;
-        private Button cameraOutButton;
 
         private Label gameTimeTop;
         private Label gameTimeHour;
@@ -356,39 +232,6 @@ namespace ProjectXenocide.UI.Screens
                 GumRoot.Children.Add(control.Visual);
             else if (RootContainer != null)
                 RootContainer.AddChild(control);
-        }
-
-        private static void SetTimeFont(FrameworkElement widget, string fontName)
-        {
-            ApplyFont(widget, fontName);
-        }
-
-        /// <summary>
-        /// Set a widget's font using its legacy CeGui font name.
-        /// Resolves via FontRegistry.FontNameMap, defaulting to Arial.
-        /// </summary>
-        private static void SetFont(FrameworkElement widget, string fontName)
-        {
-            ApplyFont(widget, fontName);
-        }
-
-        private static void ApplyFont(FrameworkElement widget, string fontName)
-        {
-            var fontId = FontRegistry.FontNameMap.TryGetValue(fontName, out var id) ? id : FontId.Arial;
-            string fontFamily = FontRegistry.GetFontFamily(fontId);
-
-            switch (widget)
-            {
-                case Button btn:
-                {
-                    var textInstance = btn.Visual.GetChildByNameRecursively("TextInstance") as GraphicalUiElement;
-                    textInstance?.SetProperty("Font", fontFamily);
-                    break;
-                }
-                case Label lbl:
-                    lbl.Visual.SetProperty("Font", fontFamily);
-                    break;
-            }
         }
 
         #endregion Gum controls
@@ -530,35 +373,24 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="e">Not used</param>
         private void OnMoveCameraButtonClicked(object sender, EventArgs e)
         {
-            // turn an 1/8th of a revolution
             const float rotation = (float)(Math.PI / 4);
-
-            // Step size to move camera in
             const float zoomStep = 0.5f;
 
-            if (sender == cameraLeftButton)
+            if (sender is Button btn)
             {
-                Scene.RotateCamera(-rotation, 0.0f);
-            }
-            else if (sender == cameraRightButton)
-            {
-                Scene.RotateCamera(rotation, 0.0f);
-            }
-            else if (sender == cameraUpButton)
-            {
-                Scene.RotateCamera(0.0f, rotation);
-            }
-            else if (sender == cameraDownButton)
-            {
-                Scene.RotateCamera(0.0f, -rotation);
-            }
-            else if (sender == cameraInButton)
-            {
-                Scene.ZoomCamera(-zoomStep);
-            }
-            else if (sender == cameraOutButton)
-            {
-                Scene.ZoomCamera(zoomStep);
+                string name = btn.Name ?? string.Empty;
+                if (name.Contains("Left", StringComparison.OrdinalIgnoreCase))
+                    Scene.RotateCamera(-rotation, 0.0f);
+                else if (name.Contains("Right", StringComparison.OrdinalIgnoreCase))
+                    Scene.RotateCamera(rotation, 0.0f);
+                else if (name.Contains("Up", StringComparison.OrdinalIgnoreCase))
+                    Scene.RotateCamera(0.0f, rotation);
+                else if (name.Contains("Down", StringComparison.OrdinalIgnoreCase))
+                    Scene.RotateCamera(0.0f, -rotation);
+                else if (name.Contains("In", StringComparison.OrdinalIgnoreCase))
+                    Scene.ZoomCamera(-zoomStep);
+                else if (name.Contains("Out", StringComparison.OrdinalIgnoreCase))
+                    Scene.ZoomCamera(zoomStep);
             }
         }
 

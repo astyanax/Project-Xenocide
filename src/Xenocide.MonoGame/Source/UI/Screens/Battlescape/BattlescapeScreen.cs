@@ -42,6 +42,7 @@ using NLog;
 
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.UI.Scenes.Battlescape;
 using ProjectXenocide.Utils;
@@ -134,7 +135,8 @@ namespace ProjectXenocide.UI.Screens
 
         protected override void CreateGumControls()
         {
-            _viewportRect = new UiRect(0.00f, 0.00f, 0.745f, 1.00f);
+            var viewportLayout = new ScreenLayout { Mode = ViewportMode.SplitViewport };
+            _viewportRect = viewportLayout.ViewportRect ?? new UiRect(0.00f, 0.00f, 0.745f, 1.00f);
 
             if (GumRoot != null)
             {
@@ -146,32 +148,8 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("finishTurnButton", OnFinishTurnButton);
                 WireButton("topLevelButton", OnTopLevelButton);
                 WireButton("abortButton", OnAbortButton);
-                return;
             }
-
-            combatantStatsTextWindow = new Label(); RootContainer.AddChild(combatantStatsTextWindow);
-            combatantStatsTextWindow.Visual.Visible = false;
-
-            equipmentButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_EQUIPMENT") }; RootContainer.AddChild(equipmentButton);
-            rightHandButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_RIGHT_HAND") }; RootContainer.AddChild(rightHandButton);
-            finishTurnButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_FINISH_TURN") }; RootContainer.AddChild(finishTurnButton);
-            topLevelButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_TOP_LEVEL") }; RootContainer.AddChild(topLevelButton);
-            abortButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_ABORT_MISSION") }; RootContainer.AddChild(abortButton);
-
-            equipmentButton.Click += OnEquipmentButton;
-            rightHandButton.Click += OnRightHandButton;
-            finishTurnButton.Click += OnFinishTurnButton;
-            topLevelButton.Click += OnTopLevelButton;
-            abortButton.Click += OnAbortButton;
         }
-
-        private Label combatantStatsTextWindow;
-
-        private Button equipmentButton;
-        private Button rightHandButton;
-        private Button finishTurnButton;
-        private Button topLevelButton;
-        private Button abortButton;
 
         #endregion Create the Gum controls
 
@@ -258,6 +236,7 @@ namespace ProjectXenocide.UI.Screens
 
         #region Fields
 
+        private Label combatantStatsTextWindow;
         private BattlescapeScene scene = new BattlescapeScene();
         private int topLevel;
         private Vector3 cursorPosition;

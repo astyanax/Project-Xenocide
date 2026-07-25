@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData.Facilities;
+using ProjectXenocide.UI.Controls;
 
 namespace ProjectXenocide.UI.Screens
 {
@@ -37,16 +38,11 @@ namespace ProjectXenocide.UI.Screens
             panel.Visual.X = 0;
             panel.Visual.Y = 0;
 
-            nameLabel = new Label();
-            nameLabel.Text = "";
-            costLabel = new Label();
-            costLabel.Text = "";
-            maintenanceLabel = new Label();
-            maintenanceLabel.Text = "";
-            buildTimeLabel = new Label();
-            buildTimeLabel.Text = "";
-            capacityLabel = new Label();
-            capacityLabel.Text = "";
+            nameLabel = ThemedLabel.Create("");
+            costLabel = ThemedLabel.Create("");
+            maintenanceLabel = ThemedLabel.Create("");
+            buildTimeLabel = ThemedLabel.Create("");
+            capacityLabel = ThemedLabel.Create("");
 
             panel.AddChild(nameLabel);
             panel.AddChild(costLabel);

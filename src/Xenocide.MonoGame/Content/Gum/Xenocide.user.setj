@@ -2,6 +2,10 @@
   "TreeViewState": {
     "ExpandedNodes": [
       "Screens",
+      "Screens/BuildFacilityDialog",
+      "Screens/BuildFacilityDialog/ContainerInstance",
+      "Screens/BuildFacilityDialog/ContainerInstance/DialogPanel",
+      "Screens/BuildFacilityDialog/ContainerInstance/DialogPanel/ScrollViewerInstance",
       "Screens/GumYesNoDialog",
       "Screens/GumYesNoDialog/ContainerInstance",
       "Screens/GumYesNoDialog/ContainerInstance/DialogPanel",

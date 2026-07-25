@@ -12,6 +12,8 @@ public class InGameUnitTests : IDisposable
 {
     public InGameUnitTests()
     {
+        ProjectXenocide.Xenocide.Rng.ClearLoadedValues();
+
         var staticTables = new StaticTables();
         var staticTablesField = typeof(ProjectXenocide.Xenocide).GetField("staticTables", BindingFlags.Static | BindingFlags.NonPublic)!;
         staticTablesField.SetValue(null, staticTables);
@@ -21,6 +23,7 @@ public class InGameUnitTests : IDisposable
         gameBalanceField.SetValue(null, new GameBalanceClass(Difficulty.Easy));
 
         ProjectXenocide.Xenocide.GameState = new GameState();
+        ProjectXenocide.Xenocide.GameState.SetToStartGameCondition();
     }
 
     public void Dispose()

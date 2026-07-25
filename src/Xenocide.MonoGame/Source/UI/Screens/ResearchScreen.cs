@@ -105,8 +105,7 @@ namespace ProjectXenocide.UI.Screens
             layout.AddButton(XenocideResourceManager.Get("BUTTON_REMOVE_ALL_SCIENTISTS"), OnRemoveAllButton);
             layout.AddButton(XenocideResourceManager.Get("BUTTON_CLOSE"), OnCloseButton);
 
-            availableText = new Label();
-            availableText.Text = controller.MakeIdleScientistsString();
+            availableText = ThemedLabel.Create(controller.MakeIdleScientistsString());
             content.Panel.AddChild(availableText);
 
             InitializeGrid();
@@ -122,7 +121,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void InitializeGrid()
         {
-            grid = new GridPanel();
+            grid = new StyledGrid();
             grid.AddColumn(Strings.SCREEN_RESEARCH_COLUMN_PROJECT, (int)(0.50f * 800));
             grid.AddColumn(Strings.SCREEN_RESEARCH_COLUMN_SCIENTISTS, (int)(0.25f * 800));
             grid.AddColumn(Strings.SCREEN_RESEARCH_COLUMN_ETA, (int)(0.22f * 800));

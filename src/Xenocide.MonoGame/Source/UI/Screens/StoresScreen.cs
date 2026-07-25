@@ -92,7 +92,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void InitializeGrid()
         {
-            grid = new GridPanel();
+            grid = new StyledGrid();
             grid.AddColumn(Strings.SCREEN_STORES_COLUMN_ITEM, (int)(0.58f * 800));
             grid.AddColumn(Strings.SCREEN_STORES_COLUMN_QUANTITY, (int)(0.18f * 800));
             grid.AddColumn(Strings.SCREEN_STORES_COLUMN_SPACE_USED, (int)(0.19f * 800));

@@ -313,6 +313,18 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] **New:** EquipCraftScreen migrated to ScreenLayout — 5 buttons, base name, pod text, craft + weapons grids — ✅ Done
 - [x] **New:** SoldiersListScreen migrated to ScreenLayout — 4 buttons, detail panel + attributes grid + soldiers grid — ✅ Done
 
+#### Phase 4.8: ScreenLayout Viewport Modes
+- [x] **New:** `ViewportMode` enum added to `ScreenLayout.cs` — `Standard`, `SplitViewport`, `FullScene` — ✅ Done
+- [x] **New:** `ScreenLayout.Mode` property — repositions button bar and content area based on viewport mode — ✅ Done
+- [x] **New:** `ScreenLayout.ViewportRect` computed property — returns normalized viewport rectangle for scene rendering based on Mode and window dimensions — ✅ Done
+- [x] **New:** `PolarScreen.ViewportRect` public property — allows screens to override viewport rect for 3D scene rendering and mouse input — ✅ Done
+- [x] **Migrated:** GeoscapeScreen — uses `ScreenLayout { Mode = ViewportMode.SplitViewport }` for viewport computation, removed fallback code path (17 buttons + labels now from .gusx only) — ✅ Done
+- [x] **Migrated:** BattlescapeScreen — uses `ScreenLayout { Mode = ViewportMode.SplitViewport }` for viewport computation, removed fallback code path (5 buttons from .gusx only) — ✅ Done
+- [x] **Migrated:** XNetScreen — uses `ScreenLayout { Mode = ViewportMode.SplitViewport }` for viewport computation, removed fallback code path (1 button + 2 ListBoxes from .gusx only) — ✅ Done
+- [ ] **Remaining:** EquipSoldierScreen — needs `FullScene` mode (full-screen 3D with Gum overlay); currently uses `GetSceneRectangle()` — deferred
+- [ ] **Remaining:** AeroscapeScreen — needs `FullScene` mode (2D radar with Gum HUD); currently uses hard-coded pixel coordinates — deferred
+- [ ] **Remaining:** StatisticsScreen — needs assessment (2D graph renderer, sceneWindowRect-based) — deferred
+
 #### Key Design Decisions for Gum Screen Pattern
 
 ```csharp

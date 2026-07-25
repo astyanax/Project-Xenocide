@@ -21,26 +21,30 @@ namespace ProjectXenocide.UI.Controls
         /// <summary>
         /// Optional factory for creating row buttons with custom styling.
         /// When set, each AddRow call uses this factory instead of the default.
-        ///
-        /// Note: XenocideButton is a hierarchical GUE (Container with child Sprites)
-        /// which cannot be directly wrapped by Gum's InteractiveGue bridging layer.
-        /// Row button styling must use a flat visual.
         /// </summary>
         public Func<Button> RowButtonFactory { get; set; }
 
         /// <summary>
-        /// Creates a themed row button matching the XenocideButton look.
-        /// Uses XenocideButton's runtime GUE from the Gum project when available,
-        /// falling back to a height/color-styled default Button.
+        /// Creates a themed row button using the XenocideButton component
+        /// (textured 3-slice from XenoNew.png). Falls back to a plain Button
+        /// if the template is unavailable.
         /// </summary>
         public static Button CreateStyledRowButton()
         {
-            var button = new Button();
-            button.Visual.Height = 25;
-            button.Visual.Width = 0;
-            button.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
-            button.Visual.SetProperty("ColorCategoryState", "Primary");
-            return button;
+            var button = ScreenLayout.CreateXenocideButton("", null);
+            if (button != null)
+            {
+                button.Visual.Height = 25;
+                button.Visual.Width = 0;
+                button.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
+                return button;
+            }
+
+            var fallback = new Button();
+            fallback.Visual.Height = 25;
+            fallback.Visual.Width = 0;
+            fallback.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
+            return fallback;
         }
 
         public GridPanel()

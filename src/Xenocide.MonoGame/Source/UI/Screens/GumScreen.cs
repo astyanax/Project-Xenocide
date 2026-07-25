@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGameGum;
 
 using ProjectXenocide.Assets;
+using ProjectXenocide.UI.Controls;
 
 namespace ProjectXenocide.UI.Screens
 {
@@ -171,6 +172,8 @@ namespace ProjectXenocide.UI.Screens
                 _backgroundBatch = null;
                 _background?.Dispose();
                 _background = null;
+
+                ScreenLayout.RemoveAllFromRoot();
 
                 if (GumRoot != null)
                 {

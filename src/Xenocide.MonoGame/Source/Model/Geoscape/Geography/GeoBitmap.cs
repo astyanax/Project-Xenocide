@@ -25,14 +25,17 @@ San Francisco, California, 94105, USA.
 #endregion
 
 using System;
+using System.Buffers.Binary;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Text.Json.Serialization;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StbImageSharp;
 
 using NLog;
 
@@ -63,12 +66,27 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         }
 
         /// <summary>
-        /// Load the file containing the bitmap and process it
+        /// Load the file containing the bitmap and process it.
+        /// Uses StbImageSharp as a fallback when no GraphicsDevice is available (unit tests).
         /// </summary>
         /// <param name="properties">The properties encoded into the bitmap</param>
         public void Load(IList properties)
         {
-            // load bitmaps from file (not content manager, since content manager cannot load dynamically)
+            if (Xenocide.Instance?.GraphicsDevice != null)
+            {
+                LoadViaTexture(properties);
+            }
+            else
+            {
+                LoadViaStb(properties);
+            }
+        }
+
+        /// <summary>
+        /// Load bitmap via MonoGame Texture2D (normal runtime path)
+        /// </summary>
+        private void LoadViaTexture(IList properties)
+        {
             Texture2D texture = Texture2D.FromFile(Xenocide.Instance.GraphicsDevice, filename);
 
             this.width = texture.Width;
@@ -76,6 +94,28 @@ namespace ProjectXenocide.Model.Geoscape.Geography
             tuples = new List<Tuple>();
             rowIndexes = new int[height];
             EncodeTuples(texture, properties);
+        }
+
+        /// <summary>
+        /// Load bitmap via StbImageSharp (headless/test path, no GraphicsDevice needed)
+        /// </summary>
+        private void LoadViaStb(IList properties)
+        {
+            string resolvedPath = ResolvePath(filename);
+            using var stream = File.OpenRead(resolvedPath);
+            var image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
+
+            this.width = image.Width;
+            this.height = image.Height;
+            tuples = new List<Tuple>();
+            rowIndexes = new int[height];
+
+            // StbImageSharp returns RGBA bytes. On little-endian, reinterpreting as uint[]
+            // yields the same 0xAABBGGRR layout that Texture2D.GetData<uint>() produces.
+            uint[] pixels = new uint[width * height];
+            Buffer.BlockCopy(image.Data, 0, pixels, 0, image.Data.Length);
+
+            EncodeTuples(pixels, properties);
         }
 
         /// <summary>
@@ -272,7 +312,16 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         {
             uint[] pixels = new uint[width * height];
             texture.GetData<uint>(pixels);
+            EncodeTuples(pixels, properties);
+        }
 
+        /// <summary>
+        /// Preforms RLE compression on the bitmap into a List of Tuples
+        /// </summary>
+        /// <param name="pixels">raw pixel data in 0xAABBGGRR uint format</param>
+        /// <param name="properties">the properties represented by colors in the uncompressed bitmap</param>
+        private void EncodeTuples(uint[] pixels, IList properties)
+        {
             // set size to zero, becuase we're going to recalc it
             foreach (Object o in properties)
             {
@@ -346,6 +395,43 @@ namespace ProjectXenocide.Model.Geoscape.Geography
             {
                 (properties[tuple.Index] as IGeoBitmapProperty).Size += tuple.Count;
             }
+        }
+
+        /// <summary>
+        /// Resolve a relative path against the game project directory.
+        /// The game runs from the project root, so relative paths like
+        /// ".\Content\DataFiles\Geoscape\regions.png" work at runtime.
+        /// In test contexts the CWD is different, so we walk up ancestors
+        /// and try each as a potential project root.
+        /// </summary>
+        private static string ResolvePath(string relativePath)
+        {
+            if (File.Exists(relativePath))
+                return relativePath;
+
+            string stripped = relativePath.TrimStart('.', '\\', '/');
+            string dir = Path.GetDirectoryName(typeof(GeoBitmap).Assembly.Location)!;
+            for (int i = 0; i < 10; i++)
+            {
+                dir = Path.GetDirectoryName(dir);
+                if (dir == null) break;
+
+                // Check this dir directly
+                string candidate = Path.Combine(dir, stripped);
+                if (File.Exists(candidate))
+                    return candidate;
+
+                // Check Xenocide.MonoGame subdirectory (game project is a sibling of test project)
+                string gameProjectDir = Path.Combine(dir, "Xenocide.MonoGame");
+                if (Directory.Exists(gameProjectDir))
+                {
+                    candidate = Path.Combine(gameProjectDir, stripped);
+                    if (File.Exists(candidate))
+                        return candidate;
+                }
+            }
+
+            return relativePath;
         }
 
         /// <summary>

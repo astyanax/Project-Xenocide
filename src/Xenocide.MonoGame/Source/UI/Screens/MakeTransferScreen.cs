@@ -90,10 +90,10 @@ namespace ProjectXenocide.UI.Screens
             layout.AddButton(XenocideResourceManager.Get("BUTTON_CONFIRM"), OnConfirmButton);
             layout.AddButton(XenocideResourceManager.Get("BUTTON_CANCEL"), OnCancelButton);
 
-            sourceText = new Label() { Text = Util.StringFormat(Strings.SCREEN_TRANSFER_SOURCE, SourceOutpost.Name) };
+            sourceText = ThemedLabel.Create(Util.StringFormat(Strings.SCREEN_TRANSFER_SOURCE, SourceOutpost.Name));
             content.Panel.AddChild(sourceText);
 
-            totalCostText = new Label();
+            totalCostText = ThemedLabel.Create("");
             content.Panel.AddChild(totalCostText);
             UpdateTotalCost();
 
@@ -115,7 +115,7 @@ namespace ProjectXenocide.UI.Screens
 
         private void InitializeGrid()
         {
-            grid = new GridPanel();
+            grid = new StyledGrid();
             grid.AddColumn(Strings.SCREEN_TRANSFER_COLUMN_ITEM, 400);
             grid.AddColumn(Strings.SCREEN_TRANSFER_COLUMN_QUANTITY_IN_BASE, 84);
             grid.AddColumn(Strings.SCREEN_TRANSFER_COLUMN_QUANTITY_DESTINAION, 105);

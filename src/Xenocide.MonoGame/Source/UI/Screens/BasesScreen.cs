@@ -260,17 +260,19 @@ namespace ProjectXenocide.UI.Screens
         #region Create the Gum controls
 
         private ScreenLayout layout;
-        private ContentArea content;
 
         /// <summary>
-        /// Builds the screen layout using ScreenLayout and ContentArea.
+        /// Builds the screen layout using ScreenLayout in SplitViewport mode.
         /// The 3D scene renders via SpriteBatch in Draw() within sceneWindowRect.
+        /// ContentScroll is hidden so it doesn't cover the 3D viewport; the
+        /// base selector combo is positioned above the viewport and funds in
+        /// the status bar.
         /// </summary>
         protected override void CreateGumControls()
         {
             layout = new ScreenLayout();
+            layout.Mode = ViewportMode.SplitViewport;
             layout.AddToRoot();
-            content = new ContentArea(layout.ContentPanel);
 
             // Button bar (right side)
             newBaseButton = layout.AddButton(XenocideResourceManager.Get("BUTTON_BUILD_NEW_BASE"), OnNewBase);
@@ -284,23 +286,24 @@ namespace ProjectXenocide.UI.Screens
             sellButton = layout.AddButton(XenocideResourceManager.Get("BUTTON_SELL"), OnSellButton);
             geoscapeButton = layout.AddButton(XenocideResourceManager.Get("BUTTON_GEOSCAPE"), OnGeoscapeButton);
 
-            // Base selector combo box
+            // Base selector combo box — positioned above the 3D viewport (top 7%)
             basesListComboBox = new ComboBox();
+            basesListComboBox.Visual.X = 20;
+            basesListComboBox.Visual.Y = 5;
             basesListComboBox.Visual.Width = 300;
-            content.Panel.AddChild(basesListComboBox);
+            layout.Visual.Children.Add(basesListComboBox.Visual);
             Misc.PopulateHumanBasesList(basesListComboBox, selectedBase);
             basesListComboBox.SelectionChanged += (s, a) => OnBaseSelectionChanged(s, EventArgs.Empty);
 
-            // Funds display
-            fundsText = new Label();
-            content.Panel.AddChild(fundsText);
+            // Funds display — in the status bar at the bottom
+            fundsText = ThemedLabel.Create("");
+            layout.StatusBar.AddChild(fundsText);
 
             // Load background for SpriteBatch rendering
             LoadBackground();
 
-            // Create tooltip now that GumRoot is available
-            var tooltipRoot = layout.Visual;
-            tooltip = new FacilityTooltip(tooltipRoot);
+            // Create tooltip
+            tooltip = new FacilityTooltip(layout.Visual);
         }
 
         private UiRect sceneWindowRect;
@@ -846,6 +849,7 @@ namespace ProjectXenocide.UI.Screens
             if (disposing)
             {
                 tooltip?.Dispose();
+                layout?.RemoveFromRoot();
                 _backgroundBatch?.Dispose();
                 _backgroundBatch = null;
                 _background?.Dispose();

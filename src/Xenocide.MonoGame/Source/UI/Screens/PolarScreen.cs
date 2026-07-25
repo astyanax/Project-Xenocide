@@ -144,6 +144,18 @@ namespace ProjectXenocide.UI.Screens
 
         protected PolarScene Scene { get { return scene; } set { scene = value; } }
 
+        /// <summary>
+        /// The viewport rectangle (normalized 0-1 coordinates) that the 3D scene
+        /// renders into and mouse input is constrained to. Screens can set this
+        /// property to override the default viewport (e.g., when using ScreenLayout
+        /// with SplitViewport mode).
+        /// </summary>
+        public UiRect ViewportRect
+        {
+            get => _viewportRect;
+            set => _viewportRect = value;
+        }
+
         private PolarScene scene;
         private UiRect _viewportRect;
         private bool _prevLeftDown;

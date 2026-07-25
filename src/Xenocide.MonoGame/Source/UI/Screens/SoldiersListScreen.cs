@@ -119,10 +119,10 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void InitializeSoldierDetailPanel()
         {
-            nameEditBox = new Label() { Text = XenocideResourceManager.Get("EDITBOX_NAME") };
+            nameEditBox = ThemedLabel.Create(XenocideResourceManager.Get("EDITBOX_NAME"));
             content.Panel.AddChild(nameEditBox);
 
-            attributesGrid = new GridPanel();
+            attributesGrid = new StyledGrid();
             attributesGrid.AddColumn("Attribute", 250);
             attributesGrid.AddColumn("Value", 250);
             content.AddGrid(attributesGrid);
@@ -135,7 +135,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void InitializeSoldiersGrid()
         {
-            soldiersListGrid = new GridPanel();
+            soldiersListGrid = new StyledGrid();
             soldiersListGrid.AddColumn(XenocideResourceManager.Get("soldiersListGrid"), 300);
             content.AddGrid(soldiersListGrid);
             soldiersListGrid.SelectionChanged += OnSelectedSoldierChanged;

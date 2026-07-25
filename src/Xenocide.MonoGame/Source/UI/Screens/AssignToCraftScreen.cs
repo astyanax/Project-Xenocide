@@ -94,7 +94,7 @@ namespace ProjectXenocide.UI.Screens
             layout.AddButton(XenocideResourceManager.Get("BUTTON_SOLDIER_DOWN"), OnSoldierDownButton);
             layout.AddButton(XenocideResourceManager.Get("BUTTON_CLOSE"), OnCloseButton);
 
-            baseNameText = new Label() { Text = Util.StringFormat(Strings.SCREEN_EQUIP_CRAFT_BASE_NAME, SelectedOutpost.Name) };
+            baseNameText = ThemedLabel.Create(Util.StringFormat(Strings.SCREEN_EQUIP_CRAFT_BASE_NAME, SelectedOutpost.Name));
             content.Panel.AddChild(baseNameText);
 
             InitializeCraftGrid();
@@ -117,7 +117,7 @@ namespace ProjectXenocide.UI.Screens
 
         private void InitializeCraftGrid()
         {
-            craftGrid = new GridPanel();
+            craftGrid = new StyledGrid();
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_CRAFT_NAME, 140);
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_FUEL, 90);
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_HULL, 90);
@@ -130,7 +130,7 @@ namespace ProjectXenocide.UI.Screens
 
         private void InitializeSoldierGrid()
         {
-            soldierGrid = new GridPanel();
+            soldierGrid = new StyledGrid();
             soldierGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_SOLDIER_NAME, 280);
             soldierGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_ASSIGNED_CRAFT, 230);
             soldierGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_POSITION_CRAFT, 160);
@@ -138,7 +138,7 @@ namespace ProjectXenocide.UI.Screens
 
         private void InitializeXcapGrid()
         {
-            xcapGrid = new GridPanel();
+            xcapGrid = new StyledGrid();
             xcapGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_XCAP_TYPE, 350);
             xcapGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_AVAILABLE, 175);
             xcapGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_ASSIGNED_COUNT, 170);

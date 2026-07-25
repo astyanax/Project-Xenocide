@@ -37,10 +37,9 @@ using Gum.Forms.Controls;
 
 using ProjectXenocide.Assets;
 using ProjectXenocide.Model.StaticData;
+using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Scenes.XNet;
 using ProjectXenocide.Utils;
-
-using Xenocide.Resources;
 
 #endregion
 
@@ -70,7 +69,8 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
-            SetView(0.005f, 0.0733f, 0.5038f, 0.4417f);
+            var viewportLayout = new ScreenLayout { Mode = ViewportMode.SplitViewport };
+            ViewportRect = viewportLayout.ViewportRect ?? new UiRect(0.005f, 0.0733f, 0.5088f, 0.515f);
 
             if (GumRoot != null)
             {
@@ -87,20 +87,7 @@ namespace ProjectXenocide.UI.Screens
                 textWindow.Visual.Width = 300;
                 textWindow.Visual.Height = 400;
                 AddChild(textWindow);
-                return;
             }
-
-            // Fake the list of items with a list box
-            InitEntriesTree();
-
-            // Gum's ListBox provides native scrolling for long text entries
-            textWindow = new ListBox();
-            RootContainer.AddChild(textWindow);
-
-            // and provide a close button
-            closeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CLOSE") };
-            RootContainer.AddChild(closeButton);
-            closeButton.Click += OnCloseButton;
         }
 
         /// <summary>
@@ -127,7 +114,6 @@ namespace ProjectXenocide.UI.Screens
         }
 
         private ListBox entriesTree;
-        private Button closeButton;
         private ListBox textWindow;
 
         private List<int> entryItemIds = new List<int>();

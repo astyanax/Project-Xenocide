@@ -115,7 +115,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void InitializeGrid()
         {
-            savesgrid = new GridPanel();
+            savesgrid = new StyledGrid();
             savesgrid.AddColumn("Name", (int)(0.4f * 800));
             savesgrid.AddColumn("Real Time", (int)(0.295f * 800));
             savesgrid.AddColumn("Game Time", (int)(0.295f * 800));

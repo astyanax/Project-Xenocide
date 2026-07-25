@@ -92,14 +92,12 @@ namespace ProjectXenocide.UI.Screens
             layout.AddButton(XenocideResourceManager.Get("BUTTON_OK"), OnOkButton);
 
             // month text
-            Label monthText = new Label();
-            monthText.Text = Util.StringFormat(Strings.SCREEN_MONTHLYREPORT_MONTH,
-                Xenocide.GameState.GeoData.GeoTime.ToString().Substring(0, 7));
+            Label monthText = ThemedLabel.Create(Util.StringFormat(Strings.SCREEN_MONTHLYREPORT_MONTH,
+                Xenocide.GameState.GeoData.GeoTime.ToString().Substring(0, 7)));
             content.Panel.AddChild(monthText);
 
             // score text
-            Label scoreText = new Label();
-            scoreText.Text = MakeScoreString();
+            Label scoreText = ThemedLabel.Create(MakeScoreString());
             content.Panel.AddChild(scoreText);
 
             // The grid detailing per country details
@@ -115,7 +113,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void InitializeGrid()
         {
-            grid = new GridPanel();
+            grid = new StyledGrid();
             grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_COUNTRY, (int)(0.39f * 800));
             grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_ATTITUDE, (int)(0.20f * 800));
             grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_FUNDS, (int)(0.20f * 800));

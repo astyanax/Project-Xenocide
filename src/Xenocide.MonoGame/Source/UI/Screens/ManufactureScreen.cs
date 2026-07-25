@@ -118,7 +118,7 @@ namespace ProjectXenocide.UI.Screens
             layout.AddButton(XenocideResourceManager.Get("BUTTON_REMOVE_ALL_ENGINEERS"), OnRemoveAllButton);
             layout.AddButton(XenocideResourceManager.Get("BUTTON_CLOSE"), OnCloseButton);
 
-            availableText = new Label() { Text = controller.MakeIdleEngineersString() };
+            availableText = ThemedLabel.Create(controller.MakeIdleEngineersString());
             content.Panel.AddChild(availableText);
 
             InitializeGrids();
@@ -134,14 +134,14 @@ namespace ProjectXenocide.UI.Screens
 
         private void InitializeGrids()
         {
-            projectGrid = new GridPanel();
+            projectGrid = new StyledGrid();
             projectGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_PROJECT, 350);
             projectGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_ENGINEERS, 105);
             projectGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_BUILD_QUANTITY, 105);
             projectGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_ETA, 105);
             projectGrid.SelectionChanged += OnProjectGridSelectionChanged;
 
-            requirementsGrid = new GridPanel();
+            requirementsGrid = new StyledGrid();
             requirementsGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_RESOURCE, 350);
             requirementsGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_QUANTITY_NEEDED, 160);
             requirementsGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_QUANTITY_AVAILABLE, 175);

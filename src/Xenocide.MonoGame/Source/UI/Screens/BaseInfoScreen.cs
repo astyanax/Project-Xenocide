@@ -130,7 +130,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void InitializeStaffGrid()
         {
-            staffGrid = new GridPanel();
+            staffGrid = new StyledGrid();
             staffGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_STAFF, (int)(0.69f * 800));
             staffGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_IDLE, (int)(0.15f * 800));
             staffGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_STAFF_TOTAL, (int)(0.15f * 800));
@@ -144,7 +144,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void InitializeFacilitiesGrid()
         {
-            facilitiesGrid = new GridPanel();
+            facilitiesGrid = new StyledGrid();
             facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_SPACE_TYPE, (int)(0.54f * 800));
             facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_IN_USE, (int)(0.15f * 800));
             facilitiesGrid.AddColumn(Strings.SCREEN_BASEINFO_COLUMN_TOTAL, (int)(0.15f * 800));

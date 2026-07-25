@@ -120,7 +120,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void InitializeScoreGrid()
         {
-            scoreGrid = new GridPanel();
+            scoreGrid = new StyledGrid();
             scoreGrid.AddColumn(Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_ACTION, (int)(0.70f * 800));
             scoreGrid.AddColumn(Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_SCORE, (int)(0.25f * 800));
         }
@@ -130,7 +130,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void InitializeRecoveredGrid()
         {
-            recoveredGrid = new GridPanel();
+            recoveredGrid = new StyledGrid();
             recoveredGrid.AddColumn(Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_ITEM, (int)(0.45f * 800));
             recoveredGrid.AddColumn(Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_QUANTITY, (int)(0.25f * 800));
             recoveredGrid.AddColumn(Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_SCORE, (int)(0.25f * 800));
