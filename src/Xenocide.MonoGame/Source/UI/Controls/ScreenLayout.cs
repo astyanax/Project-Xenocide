@@ -2,17 +2,17 @@ using System;
 
 using Gum.Forms.Controls;
 using Gum.Wireframe;
-
 using MonoGameGum;
+using MonoGameGum.GueDeriving;
 
 namespace ProjectXenocide.UI.Controls
 {
     /// <summary>
     /// Reusable screen layout component providing a standard structure:
-    /// background image, scrollable content area (left 75%), button bar (right 200px),
+    /// scrollable content area (left 75%), button bar (right 190px),
     /// and optional status bar (bottom 30px).
     ///
-    /// USAGE (programmatic):
+    /// USAGE:
     ///   var layout = new ScreenLayout();
     ///   layout.AddToRoot();
     ///   layout.AddButton("Research", OnResearch);
@@ -26,7 +26,7 @@ namespace ProjectXenocide.UI.Controls
 
         public ScreenLayout()
         {
-            Visual = new GraphicalUiElement();
+            Visual = new ContainerRuntime();
             Visual.Width = 100;
             Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.PercentageOfParent;
             Visual.Height = 100;
@@ -63,7 +63,7 @@ namespace ProjectXenocide.UI.Controls
         }
 
         /// <summary>Root visual element to add to Gum root.</summary>
-        public GraphicalUiElement Visual { get; }
+        public ContainerRuntime Visual { get; }
 
         /// <summary>Scrollable content area (left 75% of screen).</summary>
         public ScrollViewer ContentScroll { get; }
@@ -71,7 +71,7 @@ namespace ProjectXenocide.UI.Controls
         /// <summary>StackPanel inside ContentScroll for adding content children.</summary>
         public StackPanel ContentPanel { get; }
 
-        /// <summary>Vertical button bar (right 200px of screen).</summary>
+        /// <summary>Vertical button bar (right 190px of screen).</summary>
         public StackPanel ButtonBar { get; }
 
         /// <summary>Horizontal status bar (bottom 30px of screen).</summary>
