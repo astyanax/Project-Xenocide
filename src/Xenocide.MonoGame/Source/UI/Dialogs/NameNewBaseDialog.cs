@@ -4,6 +4,7 @@ using Gum.Forms.Controls;
 
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Outposts;
+using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Screens;
 using ProjectXenocide.Utils;
 
@@ -11,32 +12,29 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    public class NameNewBaseDialog : GumDialog
+    public class NameNewBaseDialog : ModalDialog
     {
         public NameNewBaseDialog(GeoPosition pos, bool isFirstBase)
             : base("Name New Base")
         {
             this.pos = pos;
             this.isFirstBase = isFirstBase;
+            PanelWidth = 600;
+            PanelHeight = 200;
         }
 
-        protected override void WireGumControls()
+        protected override void CreateDialogWidgets()
         {
-            base.WireGumControls();
-
-            var content = GetOrCreateContentPanel();
-
-            var prompt = new Label();
-            prompt.Text = isFirstBase
+            var prompt = ThemedLabel.CreateBody(isFirstBase
                 ? "Choose a name for your first base:"
-                : "Name your new base:";
-            content.AddChild(prompt);
+                : "Name your new base:");
+            ContentArea.AddChild(prompt);
 
             baseNameInput = new TextBox();
             baseNameInput.Text = "New Base";
             baseNameInput.Visual.Width = 560;
             baseNameInput.Visual.Height = 30;
-            content.AddChild(baseNameInput);
+            ContentArea.AddChild(baseNameInput);
 
             var buttonRow = new StackPanel();
 
@@ -47,7 +45,7 @@ namespace ProjectXenocide.UI.Dialogs
             okBtn.Click += OnOkClicked;
             buttonRow.AddChild(okBtn);
 
-            var spacer = new Label();
+            var spacer = ThemedLabel.Create("");
             spacer.Visual.Width = 20;
             buttonRow.AddChild(spacer);
 
@@ -55,10 +53,10 @@ namespace ProjectXenocide.UI.Dialogs
             cancelBtn.Text = Strings.BUTTON_CANCEL;
             cancelBtn.Visual.Width = 180;
             cancelBtn.Visual.Height = 30;
-            cancelBtn.Click += (s, e) => ScreenManager.CloseDialog(this);
+            cancelBtn.Click += (s, e) => Dismiss();
             buttonRow.AddChild(cancelBtn);
 
-            content.AddChild(buttonRow);
+            ContentArea.AddChild(buttonRow);
         }
 
         private TextBox baseNameInput;
@@ -86,7 +84,7 @@ namespace ProjectXenocide.UI.Dialogs
                 basesScreen.State = BasesScreen.BasesScreenState.AddAccessLift;
 
             ScreenManager.ScheduleScreen(basesScreen);
-            ScreenManager.CloseDialog(this);
+            Close();
         }
 
         private static bool IsNameLegal(string name)

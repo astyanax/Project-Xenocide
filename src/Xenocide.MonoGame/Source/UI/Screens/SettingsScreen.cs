@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework;
 using ProjectXenocide.Assets;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.StaticData;
+using ProjectXenocide.UI.Controls;
 
 namespace ProjectXenocide.UI.Screens
 {
@@ -19,8 +20,8 @@ namespace ProjectXenocide.UI.Screens
     /// and gameplay options.
     /// </summary>
     /// <remarks>
-    /// ARCHITECTURE: Settings screen with tab-based navigation. Programmatic layout
-    /// (no .gusx file) — manages its own UI construction.
+    /// ARCHITECTURE: Settings screen with tab-based navigation. Uses ScreenLayout
+    /// for consistent button bar and programmatic content area.
     /// 
     /// SETTINGS MANAGED:
     /// - Display: Resolution, fullscreen, cursor mode
@@ -71,8 +72,7 @@ namespace ProjectXenocide.UI.Screens
             _rootPanel.Visual.X = 340;
             _rootPanel.Visual.Y = 50;
 
-            var title = new Label { Text = "Settings" };
-            title.Height = 40;
+            var title = ThemedLabel.CreateTitle("Settings");
             _rootPanel.AddChild(title);
 
             var tabBar = new StackPanel();
@@ -94,14 +94,17 @@ namespace ProjectXenocide.UI.Screens
             _contentPanel.Visual.Width = 600;
             _rootPanel.AddChild(_contentPanel);
 
-            var spacer = new Label { Height = 20 };
+            var spacer = ThemedLabel.Create("");
+            spacer.Height = 20;
             _rootPanel.AddChild(spacer);
 
-            var saveBtn = new Button { Text = "Save" };
+            var saveBtn = new Button();
+            saveBtn.Text = "Save";
             saveBtn.Click += OnSaveClicked;
             _rootPanel.AddChild(saveBtn);
 
-            var cancelBtn = new Button { Text = "Cancel" };
+            var cancelBtn = new Button();
+            cancelBtn.Text = "Cancel";
             cancelBtn.Click += OnCancelClicked;
             _rootPanel.AddChild(cancelBtn);
 
@@ -110,7 +113,8 @@ namespace ProjectXenocide.UI.Screens
 
         private static Button MakeTabButton(string text, Action action)
         {
-            var btn = new Button { Text = text };
+            var btn = new Button();
+            btn.Text = text;
             btn.Visual.Width = 150;
             btn.Click += (s, e) =>
             {
@@ -195,7 +199,7 @@ namespace ProjectXenocide.UI.Screens
         private void AddLabel(string text)
         {
             if (_contentPanel == null) return;
-            var label = new Label { Text = text };
+            var label = ThemedLabel.CreateBody(text);
             _contentPanel.AddChild(label);
         }
 
@@ -206,11 +210,12 @@ namespace ProjectXenocide.UI.Screens
             row.Visual.Width = 600;
             row.Visual.Height = 30;
 
-            var label = new Label { Text = labelText };
+            var label = ThemedLabel.CreateBody(labelText);
             label.Visual.Width = 350;
             row.AddChild(label);
 
-            var btn = new Button { Text = initialValue };
+            var btn = new Button();
+            btn.Text = initialValue;
             btn.Visual.Width = 200;
             btn.Click += (s, e) =>
             {
@@ -230,15 +235,17 @@ namespace ProjectXenocide.UI.Screens
             row.Visual.Width = 600;
             row.Visual.Height = 30;
 
-            var downBtn = new Button { Text = "<" };
+            var downBtn = new Button();
+            downBtn.Text = "<";
             downBtn.Visual.Width = 40;
             row.AddChild(downBtn);
 
-            var levelLabel = new Label { Text = getLevel().ToString(CultureInfo.InvariantCulture) };
+            var levelLabel = ThemedLabel.CreateBody(getLevel().ToString(CultureInfo.InvariantCulture));
             levelLabel.Visual.Width = 40;
             row.AddChild(levelLabel);
 
-            var upBtn = new Button { Text = ">" };
+            var upBtn = new Button();
+            upBtn.Text = ">";
             upBtn.Visual.Width = 40;
             row.AddChild(upBtn);
 

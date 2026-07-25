@@ -6,6 +6,7 @@ using Gum.Forms.Controls;
 
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Screens;
 using ProjectXenocide.Utils;
 
@@ -13,7 +14,7 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    sealed class TrackingLostDialog : GumDialog
+    sealed class TrackingLostDialog : ModalDialog
     {
         public TrackingLostDialog(GeoPosition target, Craft hunter) : base("Tracking Lost")
         {
@@ -21,35 +22,30 @@ namespace ProjectXenocide.UI.Dialogs
             this.hunter = hunter;
         }
 
-        protected override void WireGumControls()
+        protected override void CreateDialogWidgets()
         {
-            base.WireGumControls();
-
-            var content = GetOrCreateContentPanel();
-
-            var details = new Label();
-            details.Text = Util.StringFormat(Strings.DLG_TRACKINGLOST_LOST_TRACKING, hunter.Name);
-            content.AddChild(details);
+            var details = ThemedLabel.CreateBody(Util.StringFormat(Strings.DLG_TRACKINGLOST_LOST_TRACKING, hunter.Name));
+            ContentArea.AddChild(details);
 
             var returnBtn = new Button();
             returnBtn.Text = Strings.BUTTON_RETURN_TO_BASE;
             returnBtn.Click += OnReturnClicked;
-            content.AddChild(returnBtn);
+            ContentArea.AddChild(returnBtn);
 
             var patrolBtn = new Button();
             patrolBtn.Text = Strings.BUTTON_PATROL;
             patrolBtn.Click += OnPatrolClicked;
-            content.AddChild(patrolBtn);
+            ContentArea.AddChild(patrolBtn);
 
             var lastKnownBtn = new Button();
             lastKnownBtn.Text = "Go to Last Known Position";
             lastKnownBtn.Click += OnLastKnownClicked;
-            content.AddChild(lastKnownBtn);
+            ContentArea.AddChild(lastKnownBtn);
         }
 
         public void OnReturnClicked(object sender, EventArgs e)
         {
-            ScreenManager.CloseDialog(this);
+            Dismiss();
         }
 
         public void OnPatrolClicked(object sender, EventArgs e)
@@ -66,7 +62,7 @@ namespace ProjectXenocide.UI.Dialogs
         {
             hunter.Mission.Abort();
             hunter.Mission = new PatrolMission(hunter, position);
-            ScreenManager.CloseDialog(this);
+            Close();
         }
 
         private GeoPosition target;

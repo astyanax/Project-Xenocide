@@ -7,38 +7,46 @@ using ProjectXenocide.UI.Screens;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    sealed class GumOptionsDialog : GumDialog
+    sealed class GumOptionsDialog : ModalDialog
     {
         public GumOptionsDialog() : base("Options") { }
-        protected override void WireGumControls()
+        protected override void CreateDialogWidgets()
         {
-            base.WireGumControls();
+            var loadBtn = new Button();
+            loadBtn.Text = "Load";
+            loadBtn.Click += OnLoadClicked;
+            ContentArea.AddChild(loadBtn);
 
-            var loadBtn = GetButton("LoadButton");
-            if (loadBtn != null) loadBtn.Click += OnLoadClicked;
+            var saveBtn = new Button();
+            saveBtn.Text = "Save";
+            saveBtn.Click += OnSaveClicked;
+            ContentArea.AddChild(saveBtn);
 
-            var saveBtn = GetButton("SaveButton");
-            if (saveBtn != null) saveBtn.Click += OnSaveClicked;
+            var soundBtn = new Button();
+            soundBtn.Text = "Sound";
+            soundBtn.Click += OnSoundClicked;
+            ContentArea.AddChild(soundBtn);
 
-            var soundBtn = GetButton("SoundButton");
-            if (soundBtn != null) soundBtn.Click += OnSoundClicked;
+            var abandonBtn = new Button();
+            abandonBtn.Text = "Abandon";
+            abandonBtn.Click += OnAbandonClicked;
+            ContentArea.AddChild(abandonBtn);
 
-            var abandonBtn = GetButton("AbandonButton");
-            if (abandonBtn != null) abandonBtn.Click += OnAbandonClicked;
-
-            var cancelBtn = GetButton("CancelButton");
-            if (cancelBtn != null) cancelBtn.Click += OnCancelClicked;
+            var cancelBtn = new Button();
+            cancelBtn.Text = "Cancel";
+            cancelBtn.Click += OnCancelClicked;
+            ContentArea.AddChild(cancelBtn);
         }
 
         public void OnCancelClicked(object sender, EventArgs e)
         {
-            ScreenManager.CloseDialog(this);
+            Dismiss();
         }
 
         public void OnAbandonClicked(object sender, EventArgs e)
         {
             Screen screen = new StartScreen();
-            ScreenManager.CloseDialog(this);
+            Close();
             ScreenManager.ScheduleScreen(screen);
         }
 
@@ -47,7 +55,7 @@ namespace ProjectXenocide.UI.Dialogs
             Screen screen = new LoadSaveGameScreen(
                     LoadSaveGameScreen.Mode.Load,
                     LoadSaveGameScreen.CancelScreen.Geoscape);
-            ScreenManager.CloseDialog(this);
+            Close();
             ScreenManager.ScheduleScreen(screen);
         }
 
@@ -56,13 +64,13 @@ namespace ProjectXenocide.UI.Dialogs
             Screen screen = new LoadSaveGameScreen(
                     LoadSaveGameScreen.Mode.Save,
                     LoadSaveGameScreen.CancelScreen.Geoscape);
-            ScreenManager.CloseDialog(this);
+            Close();
             ScreenManager.ScheduleScreen(screen);
         }
 
         public void OnSoundClicked(object sender, EventArgs e)
         {
-            ScreenManager.CloseDialog(this);
+            Close();
             ScreenManager.ShowDialog(new SoundOptionsDialog());
         }
     }

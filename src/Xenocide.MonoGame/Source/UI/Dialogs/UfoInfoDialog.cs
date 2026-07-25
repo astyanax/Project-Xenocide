@@ -9,6 +9,7 @@ using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Geography;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Screens;
 using ProjectXenocide.Utils;
 
@@ -16,32 +17,27 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    sealed class UfoInfoDialog : GumDialog
+    sealed class UfoInfoDialog : ModalDialog
     {
         public UfoInfoDialog(Ufo ufo) : base(ufo.Name)
         {
             this.ufo = ufo;
         }
 
-        protected override void WireGumControls()
+        protected override void CreateDialogWidgets()
         {
-            base.WireGumControls();
-
-            var content = GetOrCreateContentPanel();
-
-            var details = new Label();
-            details.Text = MakeDialogText();
-            content.AddChild(details);
+            var details = ThemedLabel.CreateBody(MakeDialogText());
+            ContentArea.AddChild(details);
 
             var cancelBtn = new Button();
             cancelBtn.Text = Strings.BUTTON_CLOSE;
             cancelBtn.Click += OnCancelClicked;
-            content.AddChild(cancelBtn);
+            ContentArea.AddChild(cancelBtn);
         }
 
         public void OnCancelClicked(object sender, EventArgs e)
         {
-            ScreenManager.CloseDialog(this);
+            Dismiss();
         }
 
         private String MakeDialogText()

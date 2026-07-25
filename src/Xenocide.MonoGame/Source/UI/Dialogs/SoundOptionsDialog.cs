@@ -4,11 +4,12 @@ using System.Globalization;
 using Gum.Forms.Controls;
 
 using ProjectXenocide.Model;
+using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Screens;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    sealed class SoundOptionsDialog : GumDialog
+    sealed class SoundOptionsDialog : ModalDialog
     {
         private Button musicToggleBtn;
         private Button musicUpBtn;
@@ -16,6 +17,8 @@ namespace ProjectXenocide.UI.Dialogs
         private Button soundToggleBtn;
         private Button soundUpBtn;
         private Button soundDownBtn;
+        private Label musicLevelLabel;
+        private Label soundLevelLabel;
 
         private int musicLevel;
         private bool musicEnabled;
@@ -34,67 +37,82 @@ namespace ProjectXenocide.UI.Dialogs
             soundEnabled = Xenocide.AudioSystem.SoundVolume > 0;
             musicLast = Xenocide.AudioSystem.MusicVolume;
             soundLast = Xenocide.AudioSystem.SoundVolume;
+            PanelWidth = 500;
         }
 
-        protected override void WireGumControls()
+        protected override void CreateDialogWidgets()
         {
-            base.WireGumControls();
+            // Music section
+            musicToggleBtn = new Button();
+            musicToggleBtn.Text = musicEnabled ? "Music: ON" : "Music: OFF";
+            musicToggleBtn.Click += OnMusicToggleClicked;
+            ContentArea.AddChild(musicToggleBtn);
 
-            musicToggleBtn = GetButton("MusicToggleBtn");
-            musicUpBtn = GetButton("MusicUpBtn");
-            musicDownBtn = GetButton("MusicDownBtn");
-            soundToggleBtn = GetButton("SoundToggleBtn");
-            soundUpBtn = GetButton("SoundUpBtn");
-            soundDownBtn = GetButton("SoundDownBtn");
-            var saveBtn = GetButton("SaveBtn");
-            var cancelBtn = GetButton("CancelBtn");
+            musicDownBtn = new Button();
+            musicDownBtn.Text = "Music -";
+            musicDownBtn.Click += (s, e) => { musicLevel = Math.Max(0, musicLevel - 1); UpdateMusicLabel(); };
+            ContentArea.AddChild(musicDownBtn);
 
-            if (musicToggleBtn != null) musicToggleBtn.Click += OnMusicToggleClicked;
-            if (musicUpBtn != null) musicUpBtn.Click += (s, e) => { musicLevel = Math.Min(10, musicLevel + 1); UpdateMusicLabel(); };
-            if (musicDownBtn != null) musicDownBtn.Click += (s, e) => { musicLevel = Math.Max(0, musicLevel - 1); UpdateMusicLabel(); };
-            if (soundToggleBtn != null) soundToggleBtn.Click += OnSoundToggleClicked;
-            if (soundUpBtn != null) soundUpBtn.Click += (s, e) => { soundLevel = Math.Min(10, soundLevel + 1); UpdateSoundLabel(); };
-            if (soundDownBtn != null) soundDownBtn.Click += (s, e) => { soundLevel = Math.Max(0, soundLevel - 1); UpdateSoundLabel(); };
-            if (saveBtn != null) saveBtn.Click += OnSaveClicked;
-            if (cancelBtn != null) cancelBtn.Click += OnCancelClicked;
+            musicUpBtn = new Button();
+            musicUpBtn.Text = "Music +";
+            musicUpBtn.Click += (s, e) => { musicLevel = Math.Min(10, musicLevel + 1); UpdateMusicLabel(); };
+            ContentArea.AddChild(musicUpBtn);
 
-            UpdateMusicLabel();
-            UpdateMusicToggleText();
-            UpdateSoundLabel();
-            UpdateSoundToggleText();
-        }
+            musicLevelLabel = ThemedLabel.CreateBody("Music: " + (musicEnabled ? musicLevel.ToString(CultureInfo.InvariantCulture) : "OFF"));
+            ContentArea.AddChild(musicLevelLabel);
 
-        private void UpdateMusicToggleText()
-        {
-            if (musicToggleBtn != null) musicToggleBtn.Text = musicEnabled ? "Music: ON" : "Music: OFF";
-        }
+            // Sound section
+            soundToggleBtn = new Button();
+            soundToggleBtn.Text = soundEnabled ? "Sound: ON" : "Sound: OFF";
+            soundToggleBtn.Click += OnSoundToggleClicked;
+            ContentArea.AddChild(soundToggleBtn);
 
-        private void UpdateSoundToggleText()
-        {
-            if (soundToggleBtn != null) soundToggleBtn.Text = soundEnabled ? "Sound: ON" : "Sound: OFF";
+            soundDownBtn = new Button();
+            soundDownBtn.Text = "Sound -";
+            soundDownBtn.Click += (s, e) => { soundLevel = Math.Max(0, soundLevel - 1); UpdateSoundLabel(); };
+            ContentArea.AddChild(soundDownBtn);
+
+            soundUpBtn = new Button();
+            soundUpBtn.Text = "Sound +";
+            soundUpBtn.Click += (s, e) => { soundLevel = Math.Min(10, soundLevel + 1); UpdateSoundLabel(); };
+            ContentArea.AddChild(soundUpBtn);
+
+            soundLevelLabel = ThemedLabel.CreateBody("Sound: " + (soundEnabled ? soundLevel.ToString(CultureInfo.InvariantCulture) : "OFF"));
+            ContentArea.AddChild(soundLevelLabel);
+
+            // Action buttons
+            var saveBtn = new Button();
+            saveBtn.Text = "Save";
+            saveBtn.Click += OnSaveClicked;
+            ContentArea.AddChild(saveBtn);
+
+            var cancelBtn = new Button();
+            cancelBtn.Text = "Cancel";
+            cancelBtn.Click += OnCancelClicked;
+            ContentArea.AddChild(cancelBtn);
         }
 
         private void UpdateMusicLabel()
         {
-            SetText("MusicLevelLabel", "Music: " + (musicEnabled ? musicLevel.ToString(CultureInfo.InvariantCulture) : "OFF"));
+            musicLevelLabel.Text = "Music: " + (musicEnabled ? musicLevel.ToString(CultureInfo.InvariantCulture) : "OFF");
         }
 
         private void UpdateSoundLabel()
         {
-            SetText("SoundLevelLabel", "Sound: " + (soundEnabled ? soundLevel.ToString(CultureInfo.InvariantCulture) : "OFF"));
+            soundLevelLabel.Text = "Sound: " + (soundEnabled ? soundLevel.ToString(CultureInfo.InvariantCulture) : "OFF");
         }
 
         public void OnMusicToggleClicked(object sender, EventArgs e)
         {
             musicEnabled = !musicEnabled;
-            UpdateMusicToggleText();
+            musicToggleBtn.Text = musicEnabled ? "Music: ON" : "Music: OFF";
             UpdateMusicLabel();
         }
 
         public void OnSoundToggleClicked(object sender, EventArgs e)
         {
             soundEnabled = !soundEnabled;
-            UpdateSoundToggleText();
+            soundToggleBtn.Text = soundEnabled ? "Sound: ON" : "Sound: OFF";
             UpdateSoundLabel();
         }
 
@@ -108,14 +126,14 @@ namespace ProjectXenocide.UI.Dialogs
             options.SoundVolume = Xenocide.AudioSystem.SoundVolume;
             options.SaveToFile();
 
-            ScreenManager.CloseDialog(this);
+            Close();
         }
 
         public void OnCancelClicked(object sender, EventArgs e)
         {
             Xenocide.AudioSystem.MusicVolume = musicLast;
             Xenocide.AudioSystem.SoundVolume = soundLast;
-            ScreenManager.CloseDialog(this);
+            Dismiss();
         }
     }
 }

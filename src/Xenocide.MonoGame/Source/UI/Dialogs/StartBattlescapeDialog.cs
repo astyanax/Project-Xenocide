@@ -6,44 +6,40 @@ using Gum.Forms.Controls;
 
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Screens;
 using ProjectXenocide.Utils;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    sealed class StartBattlescapeDialog : GumDialog
+    sealed class StartBattlescapeDialog : ModalDialog
     {
         public StartBattlescapeDialog(Mission mission) : base("Battlescape")
         {
             this.mission = mission;
         }
 
-        protected override void WireGumControls()
+        protected override void CreateDialogWidgets()
         {
-            base.WireGumControls();
-
-            var content = GetOrCreateContentPanel();
-
-            var details = new Label();
-            details.Text = mission.MakeStartMissionText();
-            content.AddChild(details);
+            var details = ThemedLabel.CreateBody(mission.MakeStartMissionText());
+            ContentArea.AddChild(details);
 
             var okBtn = new Button();
             okBtn.Text = "OK";
             okBtn.Click += OnOkClicked;
-            content.AddChild(okBtn);
+            ContentArea.AddChild(okBtn);
 
             var cancelBtn = new Button();
             cancelBtn.Text = "Cancel";
             cancelBtn.Click += OnCancelClicked;
-            content.AddChild(cancelBtn);
+            ContentArea.AddChild(cancelBtn);
 
             if (Xenocide.StaticTables.StartSettings.Cheats.AllowAutoWinBattlescape)
             {
                 var autoBtn = new Button();
                 autoBtn.Text = "Auto Complete";
                 autoBtn.Click += OnAutoCompleteClicked;
-                content.AddChild(autoBtn);
+                ContentArea.AddChild(autoBtn);
             }
         }
 
@@ -64,20 +60,20 @@ namespace ProjectXenocide.UI.Dialogs
             Xenocide.GameState.Battlescape.PostMissionCleanup();
             Xenocide.GameState.Battlescape = null;
             ScreenManager.ScheduleScreen(new BattlescapeReportScreen(mission));
-            ScreenManager.CloseDialog(this);
+            Close();
         }
 
         private void DoBattlescape()
         {
             Xenocide.GameState.Battlescape = new Battle(mission);
             ScreenManager.ScheduleScreen(new BattlescapeScreen());
-            ScreenManager.CloseDialog(this);
+            Close();
         }
 
         private void DoCancel()
         {
             mission.DontStart();
-            ScreenManager.CloseDialog(this);
+            Dismiss();
         }
 
         private Mission mission;

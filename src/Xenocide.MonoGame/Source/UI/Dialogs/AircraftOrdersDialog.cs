@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 using Gum.Forms.Controls;
 
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Screens;
 using ProjectXenocide.Utils;
 
@@ -13,37 +13,32 @@ using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    sealed class AircraftOrdersDialog : GumDialog
+    sealed class AircraftOrdersDialog : ModalDialog
     {
         public AircraftOrdersDialog(Aircraft craft) : base(craft.Name)
         {
             this.craft = craft;
         }
 
-        protected override void WireGumControls()
+        protected override void CreateDialogWidgets()
         {
-            base.WireGumControls();
-
-            var content = GetOrCreateContentPanel();
-
-            var details = new Label();
-            details.Text = MakeDialogText();
-            content.AddChild(details);
+            var details = ThemedLabel.CreateBody(MakeDialogText());
+            ContentArea.AddChild(details);
 
             var returnBtn = new Button();
             returnBtn.Text = Strings.BUTTON_RETURN_TO_BASE;
             returnBtn.Click += OnReturnClicked;
-            content.AddChild(returnBtn);
+            ContentArea.AddChild(returnBtn);
 
             var targetBtn = new Button();
             targetBtn.Text = "Target";
             targetBtn.Click += OnTargetClicked;
-            content.AddChild(targetBtn);
+            ContentArea.AddChild(targetBtn);
 
             var cancelBtn = new Button();
             cancelBtn.Text = Strings.BUTTON_CANCEL;
             cancelBtn.Click += OnCancelClicked;
-            content.AddChild(cancelBtn);
+            ContentArea.AddChild(cancelBtn);
         }
 
         public void OnReturnClicked(object sender, EventArgs e)
@@ -58,7 +53,7 @@ namespace ProjectXenocide.UI.Dialogs
 
         public void OnCancelClicked(object sender, EventArgs e)
         {
-            ScreenManager.CloseDialog(this);
+            Dismiss();
         }
 
         private void SetReturnToBaseMission()
@@ -66,7 +61,7 @@ namespace ProjectXenocide.UI.Dialogs
             craft.Mission.Abort();
             craft.Mission = new PatrolMission(craft, craft.HomeBase.Position);
             craft.Mission.SetState(new ReturnToBaseState(craft.Mission));
-            ScreenManager.CloseDialog(this);
+            Close();
         }
 
         private void NewTarget()
@@ -74,7 +69,7 @@ namespace ProjectXenocide.UI.Dialogs
             GeoscapeScreen geoscapeScreen = new GeoscapeScreen();
             geoscapeScreen.State = new GeoscapeScreen.TargetingScreenState(geoscapeScreen, craft);
             ScreenManager.ScheduleScreen(geoscapeScreen);
-            ScreenManager.CloseDialog(this);
+            Close();
         }
 
         private String MakeDialogText()

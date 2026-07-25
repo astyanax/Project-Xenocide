@@ -2,11 +2,13 @@ using System;
 
 using Gum.Forms.Controls;
 
+using ProjectXenocide.UI.Controls;
+
 using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    public class GumMessageBoxDialog : GumDialog
+    public class GumMessageBoxDialog : ModalDialog
     {
         public GumMessageBoxDialog(string messageText)
             : this(messageText, Strings.DLG_MESSAGEBOX_TITLE)
@@ -17,17 +19,19 @@ namespace ProjectXenocide.UI.Dialogs
             : base(title)
         {
             _messageText = messageText;
+            PanelWidth = 500;
+            PanelHeight = 200;
         }
 
-        protected override void WireGumControls()
+        protected override void CreateDialogWidgets()
         {
-            base.WireGumControls();
+            var messageLabel = ThemedLabel.CreateBody(_messageText);
+            ContentArea.AddChild(messageLabel);
 
-            SetText("TitleLabel", Title);
-            SetText("MessageLabel", _messageText);
-
-            var okBtn = GetButton("OkButton");
-            if (okBtn != null) okBtn.Click += (s, e) => Close();
+            var okBtn = new Button();
+            okBtn.Text = Strings.BUTTON_OK;
+            okBtn.Click += (s, e) => Close();
+            ContentArea.AddChild(okBtn);
         }
 
         public Dialog.ButtonAction OkAction

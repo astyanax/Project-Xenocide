@@ -17,7 +17,7 @@ namespace ProjectXenocide.UI.Screens
 {
     public partial class BattlescapeScreen
     {
-        private sealed class PickActionDialog : GumDialog
+        private sealed class PickActionDialog : ModalDialog
         {
             public PickActionDialog(BattlescapeScreen battlescapeScreen, Item item, Combatant combatant, bool rightHand) : base("Action")
             {
@@ -27,12 +27,8 @@ namespace ProjectXenocide.UI.Screens
                 this.rightHand = rightHand;
             }
 
-            protected override void WireGumControls()
+            protected override void CreateDialogWidgets()
             {
-                base.WireGumControls();
-
-                var content = GetOrCreateContentPanel();
-
                 Combatant.ActiveArm activeArm = Combatant.ActiveArm.Both;
                 if (combatant.Inventory.ItemAt(rightHand ? 1 : 0, 0) != null)
                 {
@@ -46,19 +42,19 @@ namespace ProjectXenocide.UI.Screens
                     var btn = new Button();
                     btn.Text = action.MenuEntry(combatant, activeArm);
                     btn.Click += (s, e) => DoSelectedAction(idx);
-                    content.AddChild(btn);
+                    ContentArea.AddChild(btn);
                     ++index;
                 }
 
                 var cancelBtn = new Button();
                 cancelBtn.Text = Strings.BUTTON_CANCEL;
                 cancelBtn.Click += OnCancelClicked;
-                content.AddChild(cancelBtn);
+                ContentArea.AddChild(cancelBtn);
             }
 
             public void OnCancelClicked(object sender, EventArgs e)
             {
-                ScreenManager.CloseDialog(this);
+                Dismiss();
             }
 
             private void DoSelectedAction(int actionIndex)
@@ -82,7 +78,7 @@ namespace ProjectXenocide.UI.Screens
                         battlescapeScreen.ChangeState(
                            new LocationOrderCombatantScreenState(battlescapeScreen, item, combatant, action));
                     }
-                    ScreenManager.CloseDialog(this);
+                    Close();
                 }
             }
 

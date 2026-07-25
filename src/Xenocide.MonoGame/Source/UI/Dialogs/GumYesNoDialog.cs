@@ -2,11 +2,13 @@ using System;
 
 using Gum.Forms.Controls;
 
+using ProjectXenocide.UI.Controls;
+
 using Xenocide.Resources;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    public class GumYesNoDialog : GumDialog
+    public class GumYesNoDialog : ModalDialog
     {
         public GumYesNoDialog(string messageText)
             : this(messageText, Strings.DLG_YESNO_TITLE, null, null)
@@ -29,6 +31,8 @@ namespace ProjectXenocide.UI.Dialogs
             _messageText = messageText;
             _yesButtonText = yesButtonText;
             _noButtonText = noButtonText;
+            PanelWidth = 500;
+            PanelHeight = 200;
         }
 
         public static GumYesNoDialog OkCancelDialog(string messageText)
@@ -41,26 +45,20 @@ namespace ProjectXenocide.UI.Dialogs
             return new GumYesNoDialog(messageText, title, Strings.BUTTON_OK, Strings.BUTTON_CANCEL);
         }
 
-        protected override void WireGumControls()
+        protected override void CreateDialogWidgets()
         {
-            base.WireGumControls();
+            var messageLabel = ThemedLabel.CreateBody(_messageText);
+            ContentArea.AddChild(messageLabel);
 
-            SetText("TitleLabel", Title);
-            SetText("MessageLabel", _messageText);
+            var yesBtn = new Button();
+            yesBtn.Text = _yesButtonText ?? Strings.BUTTON_YES;
+            yesBtn.Click += (s, e) => Close();
+            ContentArea.AddChild(yesBtn);
 
-            var yesBtn = GetButton("YesButton");
-            if (yesBtn != null)
-            {
-                yesBtn.Text = _yesButtonText ?? Strings.BUTTON_YES;
-                yesBtn.Click += (s, e) => Close();
-            }
-
-            var noBtn = GetButton("NoButton");
-            if (noBtn != null)
-            {
-                noBtn.Text = _noButtonText ?? Strings.BUTTON_NO;
-                noBtn.Click += (s, e) => Dismiss();
-            }
+            var noBtn = new Button();
+            noBtn.Text = _noButtonText ?? Strings.BUTTON_NO;
+            noBtn.Click += (s, e) => Dismiss();
+            ContentArea.AddChild(noBtn);
 
             CloseAction = _yesAction;
             DismissAction = _noAction;

@@ -9,17 +9,14 @@ using ProjectXenocide.UI.Screens;
 
 namespace ProjectXenocide.UI.Dialogs
 {
-    sealed class AlienMissionDialog : GumDialog
+    sealed class AlienMissionDialog : ModalDialog
     {
         public AlienMissionDialog() : base("Alien Mission")
         {
         }
 
-        protected override void WireGumControls()
+        protected override void CreateDialogWidgets()
         {
-            base.WireGumControls();
-            var content = GetOrCreateContentPanel();
-
             string[] missionNames = Enum.GetNames<AlienMission>();
             for (int i = 0; i < missionNames.Length; i++)
             {
@@ -27,13 +24,13 @@ namespace ProjectXenocide.UI.Dialogs
                 var btn = new Button();
                 btn.Text = missionNames[i];
                 btn.Click += (s, e) => LaunchMission(idx);
-                content.AddChild(btn);
+                ContentArea.AddChild(btn);
             }
 
             var cancelBtn = new Button();
             cancelBtn.Text = "Cancel";
-            cancelBtn.Click += (s, e) => ScreenManager.CloseDialog(this);
-            content.AddChild(cancelBtn);
+            cancelBtn.Click += (s, e) => Dismiss();
+            ContentArea.AddChild(cancelBtn);
         }
 
         private void LaunchMission(int selectedMission)
@@ -42,7 +39,7 @@ namespace ProjectXenocide.UI.Dialogs
             GeoscapeScreen screen = new GeoscapeScreen();
             screen.State = new GeoscapeScreen.TargetAlienMissionState(screen, missionType);
             ScreenManager.ScheduleScreen(screen);
-            ScreenManager.CloseDialog(this);
+            Close();
         }
     }
 }
