@@ -56,6 +56,9 @@ namespace ProjectXenocide.UI.Screens
     /// </remarks>
     public partial class MakeTransferScreen : GumScreen
     {
+        private ScreenLayout layout;
+        private ContentArea content;
+
         /// <summary>
         /// Constructor (obviously)
         /// </summary>
@@ -69,6 +72,8 @@ namespace ProjectXenocide.UI.Screens
             this.controller = new TransferController(SourceOutpost, DestinationOutpost);
         }
 
+        protected override bool HasGumxLayout => false;
+
         #region Create the Gum controls
 
         /// <summary>
@@ -76,78 +81,37 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
-            if (GumRoot != null)
-            {
-                WireButton("moveMoreButton", OnMoveMoreButton);
-                WireButton("moveLessButton", OnMoveLessButton);
-                WireButton("confirmButton", OnConfirmButton);
-                WireButton("cancelButton", OnCancelButton);
+            layout = new ScreenLayout();
+            layout.AddToRoot();
+            content = new ContentArea(layout.ContentPanel);
 
-                sourceText = new Label() { Text = Util.StringFormat(Strings.SCREEN_TRANSFER_SOURCE, SourceOutpost.Name) };
-                sourceText.Visual.X = 20;
-                sourceText.Visual.Y = 20;
-                AddChild(sourceText);
-
-                totalCostText = new Label();
-                totalCostText.Visual.X = 20;
-                totalCostText.Visual.Y = 50;
-                AddChild(totalCostText);
-                UpdateTotalCost();
-
-                outpostsListComboBox = new ComboBox();
-                outpostsListComboBox.Visual.X = 20;
-                outpostsListComboBox.Visual.Y = 80;
-                outpostsListComboBox.Visual.Width = 300;
-                AddChild(outpostsListComboBox);
-                Misc.PopulateHumanBasesList(outpostsListComboBox, destinationOutpostIndex);
-                outpostsListComboBox.SelectionChanged += (s, a) => OnOutpostSelectionChanged(s, EventArgs.Empty);
-
-                InitializeGrid();
-                grid.Visual.X = 20;
-                grid.Visual.Y = 115;
-                grid.Visual.Width = 750;
-                PopulateGrid();
-                return;
-            }
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_MOVE_MORE"), OnMoveMoreButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_MOVE_LESS"), OnMoveLessButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_CONFIRM"), OnConfirmButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_CANCEL"), OnCancelButton);
 
             sourceText = new Label() { Text = Util.StringFormat(Strings.SCREEN_TRANSFER_SOURCE, SourceOutpost.Name) };
-            RootContainer.AddChild(sourceText);
+            content.Panel.AddChild(sourceText);
 
             totalCostText = new Label();
-            RootContainer.AddChild(totalCostText);
+            content.Panel.AddChild(totalCostText);
             UpdateTotalCost();
 
             outpostsListComboBox = new ComboBox();
-            RootContainer.AddChild(outpostsListComboBox);
+            outpostsListComboBox.Visual.Width = 300;
+            content.Panel.AddChild(outpostsListComboBox);
             Misc.PopulateHumanBasesList(outpostsListComboBox, destinationOutpostIndex);
             outpostsListComboBox.SelectionChanged += (s, a) => OnOutpostSelectionChanged(s, EventArgs.Empty);
 
             InitializeGrid();
+            content.AddGrid(grid);
             PopulateGrid();
-
-            moveMoreButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_MOVE_MORE") };
-            RootContainer.AddChild(moveMoreButton);
-            moveLessButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_MOVE_LESS") };
-            RootContainer.AddChild(moveLessButton);
-            confirmButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CONFIRM") };
-            RootContainer.AddChild(confirmButton);
-            cancelButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CANCEL") };
-            RootContainer.AddChild(cancelButton);
-
-            moveMoreButton.Click += OnMoveMoreButton;
-            moveLessButton.Click += OnMoveLessButton;
-            confirmButton.Click += OnConfirmButton;
-            cancelButton.Click += OnCancelButton;
         }
 
         private Label sourceText;
         private Label totalCostText;
         private ComboBox outpostsListComboBox;
         private GridPanel grid;
-        private Button moveMoreButton;
-        private Button moveLessButton;
-        private Button confirmButton;
-        private Button cancelButton;
 
         private void InitializeGrid()
         {
@@ -156,7 +120,6 @@ namespace ProjectXenocide.UI.Screens
             grid.AddColumn(Strings.SCREEN_TRANSFER_COLUMN_QUANTITY_IN_BASE, 84);
             grid.AddColumn(Strings.SCREEN_TRANSFER_COLUMN_QUANTITY_DESTINAION, 105);
             grid.AddColumn(Strings.SCREEN_TRANSFER_COLUMN_QUANTITY, 84);
-            AddChild(grid.Visual);
         }
 
         private void PopulateGrid()

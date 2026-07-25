@@ -3,12 +3,12 @@
 --------------------------------------------------------------------------------
 This source file is part of Xenocide
   by  Project Xenocide Team
- 
+
 For the latest info on Xenocide, see http://www.projectxenocide.com/
- 
+
 This work is licensed under the Creative Commons
 Attribution-NonCommercial-ShareAlike 2.5 License.
- 
+
 To view a copy of this license, visit
 http://creativecommons.org/licenses/by-nc-sa/2.5/
 or send a letter to Creative Commons, 543 Howard Street, 5th Floor,
@@ -66,6 +66,9 @@ namespace ProjectXenocide.UI.Screens
     /// </remarks>
     public class SoldiersListScreen : GumScreen
     {
+        private ScreenLayout layout;
+        private ContentArea content;
+
         /// <summary>
         /// Constructs a screen listing the soldiers stationed at the given base.
         /// </summary>
@@ -85,46 +88,30 @@ namespace ProjectXenocide.UI.Screens
             }
         }
 
+        protected override bool HasGumxLayout => false;
+
         #region Create the Gum controls
 
         /// <summary>
-        /// Add all the widgets to the screen. We'll delegate to a different method for each
-        /// part of the screen.
+        /// Add all the widgets to the screen.
         /// </summary>
         protected override void CreateGumControls()
         {
-            if (GumRoot != null)
+            layout = new ScreenLayout();
+            layout.AddToRoot();
+            content = new ContentArea(layout.ContentPanel);
+
+            if (SelectedOutpost.Floorplan.HasWorkingFacility("FAC_PSIONIC_TRAINING_FACILITY"))
             {
-                WireButton("craftButton", ShowAssignScreen);
-                WireButton("equipButton", OnEquipButton);
-                WireButton("closeButton", ShowBasesScreen);
-
-                if (SelectedOutpost.Floorplan.HasWorkingFacility("FAC_PSIONIC_TRAINING_FACILITY"))
-                {
-                    psiTrainButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_PSI_TRAIN") };
-                    psiTrainButton.Visual.X = 20;
-                    psiTrainButton.Visual.Y = 30;
-                    AddChild(psiTrainButton);
-                    psiTrainButton.Click += OnPsiTraining;
-                }
-
-                InitializeSoldiersGrid();
-                soldiersListGrid.Visual.X = 20;
-                soldiersListGrid.Visual.Y = 380;
-                soldiersListGrid.Visual.Width = 400;
-
-                InitializeSoldierDetailPanel();
-                nameEditBox.Visual.X = 20;
-                nameEditBox.Visual.Y = 60;
-                attributesGrid.Visual.X = 20;
-                attributesGrid.Visual.Y = 90;
-                attributesGrid.Visual.Width = 400;
-                return;
+                layout.AddButton(XenocideResourceManager.Get("BUTTON_PSI_TRAIN"), OnPsiTraining);
             }
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_ASSIGN_TO_CRAFT"), ShowAssignScreen);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_EQUIP_SOLDIER"), OnEquipButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_CLOSE"), ShowBasesScreen);
 
-            InitializeSoldiersGrid();
             InitializeSoldierDetailPanel();
-            CreateRightHandButtons();
+            content.AddSpacer(10);
+            InitializeSoldiersGrid();
         }
 
         /// <summary>
@@ -133,12 +120,12 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeSoldierDetailPanel()
         {
             nameEditBox = new Label() { Text = XenocideResourceManager.Get("EDITBOX_NAME") };
-            AddChild(nameEditBox);
+            content.Panel.AddChild(nameEditBox);
 
             attributesGrid = new GridPanel();
             attributesGrid.AddColumn("Attribute", 250);
             attributesGrid.AddColumn("Value", 250);
-            AddChild(attributesGrid.Visual);
+            content.AddGrid(attributesGrid);
 
             PopulateSoldierDetailPanel();
         }
@@ -150,15 +137,14 @@ namespace ProjectXenocide.UI.Screens
         {
             soldiersListGrid = new GridPanel();
             soldiersListGrid.AddColumn(XenocideResourceManager.Get("soldiersListGrid"), 300);
-            AddChild(soldiersListGrid.Visual);
+            content.AddGrid(soldiersListGrid);
             soldiersListGrid.SelectionChanged += OnSelectedSoldierChanged;
 
             RefreshSoldiersGrid();
         }
 
         /// <summary>
-        /// Display (or redisplay) soldiers stationed at this base. If a soldier is selected
-        /// when this is called, the same soldier will be selected afterwards.
+        /// Display (or redisplay) soldiers stationed at this base.
         /// </summary>
         private void RefreshSoldiersGrid()
         {
@@ -171,7 +157,7 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>
-        /// Fill the details pannel with the details of the currently selected soldier
+        /// Fill the details panel with the details of the currently selected soldier
         /// </summary>
         private void PopulateSoldierDetailPanel()
         {
@@ -225,8 +211,6 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>Add a soldier's statistic to the list of stats shown screen</summary>
-        /// <param name="combatant">soldier who has statistic</param>
-        /// <param name="s">Statistic to show</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity",
             Justification = "Not possible to reduce")]
         private void AddStatistic(Combatant combatant, Statistic s)
@@ -292,43 +276,14 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// Add a row to the attributes grid
         /// </summary>
-        /// <param name="attribute">text to put in the attributes column</param>
-        /// <param name="value">text to put in the value column</param>
         private void AddAttributeRow(string attribute, string value)
         {
             attributesGrid.AddRow(null, attribute, value);
         }
 
-        /// <summary>
-        /// Adds buttons to the right hand panel of the screen.
-        /// </summary>
-        private void CreateRightHandButtons()
-        {
-            if (SelectedOutpost.Floorplan.HasWorkingFacility("FAC_PSIONIC_TRAINING_FACILITY"))
-            {
-                psiTrainButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_PSI_TRAIN") };
-                RootContainer.AddChild(psiTrainButton);
-                psiTrainButton.Click += OnPsiTraining;
-            }
-            craftButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_ASSIGN_TO_CRAFT") };
-            RootContainer.AddChild(craftButton);
-            equipButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_EQUIP_SOLDIER") };
-            RootContainer.AddChild(equipButton);
-            closeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CLOSE") };
-            RootContainer.AddChild(closeButton);
-
-            craftButton.Click += ShowAssignScreen;
-            equipButton.Click += OnEquipButton;
-            closeButton.Click += ShowBasesScreen;
-        }
-
         private Label nameEditBox;
         private GridPanel soldiersListGrid;
         private GridPanel attributesGrid;
-        private Button craftButton;
-        private Button equipButton;
-        private Button psiTrainButton;
-        private Button closeButton;
 
         #endregion
 

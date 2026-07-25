@@ -63,6 +63,9 @@ namespace ProjectXenocide.UI.Screens
     /// </remarks>
     public class MonthlyReportScreen : GumScreen
     {
+        private ScreenLayout layout;
+        private ContentArea content;
+
         /// <summary>
         /// Constructor (obviously)
         /// </summary>
@@ -73,6 +76,8 @@ namespace ProjectXenocide.UI.Screens
             this.isEndOfMonth = isEndOfMonth;
         }
 
+        protected override bool HasGumxLayout => false;
+
         #region Create the Gum controls
 
         /// <summary>
@@ -80,57 +85,30 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
-            if (GumRoot != null)
-            {
-                WireButton("okButton", OnOkButton);
+            layout = new ScreenLayout();
+            layout.AddToRoot();
+            content = new ContentArea(layout.ContentPanel);
 
-                monthText = new Label();
-                monthText.Visual.X = 20;
-                monthText.Visual.Y = 20;
-                AddChild(monthText);
-                monthText.Text = Util.StringFormat(Strings.SCREEN_MONTHLYREPORT_MONTH,
-                    Xenocide.GameState.GeoData.GeoTime.ToString().Substring(0, 7));
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_OK"), OnOkButton);
 
-                scoreText = new Label();
-                scoreText.Visual.X = 20;
-                scoreText.Visual.Y = 50;
-                AddChild(scoreText);
-                scoreText.Text = MakeScoreString();
-
-                InitializeGrid();
-                grid.Visual.X = 20;
-                grid.Visual.Y = 80;
-                grid.Visual.Width = 800;
-                PopulateGrid();
-                return;
-            }
-
-            // add text giving the month
-            monthText = new Label();
-            RootContainer.AddChild(monthText);
+            // month text
+            Label monthText = new Label();
             monthText.Text = Util.StringFormat(Strings.SCREEN_MONTHLYREPORT_MONTH,
                 Xenocide.GameState.GeoData.GeoTime.ToString().Substring(0, 7));
+            content.Panel.AddChild(monthText);
 
-            // add text giving the score
-            scoreText = new Label();
-            RootContainer.AddChild(scoreText);
+            // score text
+            Label scoreText = new Label();
             scoreText.Text = MakeScoreString();
+            content.Panel.AddChild(scoreText);
 
-            // The gird detailing per country details
+            // The grid detailing per country details
             InitializeGrid();
+            content.AddGrid(grid);
             PopulateGrid();
-
-            // other buttons
-            okButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_OK") };
-            RootContainer.AddChild(okButton);
-
-            okButton.Click += OnOkButton;
         }
 
-        private Label monthText;
-        private Label scoreText;
         private GridPanel grid;
-        private Button okButton;
 
         /// <summary>
         /// Creates and populates a GridPanel which holds funding details for each country
@@ -138,7 +116,6 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeGrid()
         {
             grid = new GridPanel();
-            AddChild(grid.Visual);
             grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_COUNTRY, (int)(0.39f * 800));
             grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_ATTITUDE, (int)(0.20f * 800));
             grid.AddColumn(Strings.SCREEN_MONTHLYREPORT_COLUMN_FUNDS, (int)(0.20f * 800));

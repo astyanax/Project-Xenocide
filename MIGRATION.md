@@ -298,6 +298,20 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] **New:** BaseInfoScreen migrated to ScreenLayout — programmatic layout with ComboBox, TextBox, StaffGrid, FacilitiesGrid in ContentPanel — ✅ Done
 - [x] **New:** BasesScreen migrated to ScreenLayout — 10 buttons via AddButton(), ComboBox + fundsText in ContentPanel, 3D scene renders via SpriteBatch, background loaded programmatically — ✅ Done
 - [x] **New:** BuildFacilityDialog migrated from GumDialog to ModalDialog — facility list in ContentArea with title bar and close button — ✅ Done
+- [x] **New:** BattlescapeReportScreen migrated to ScreenLayout — score + recovered items grids, OK button — ✅ Done
+- [x] **New:** MonthlyReportScreen migrated to ScreenLayout — country funding grid, OK button — ✅ Done
+- [x] **New:** MonthlyCostsScreen migrated to ScreenLayout — cost breakdown grid, Close button — ✅ Done
+- [x] **New:** StoresScreen migrated to ScreenLayout — inventory grid, OK button — ✅ Done
+- [x] **New:** ShowTransfersScreen migrated to ScreenLayout — shipment grid, Close button — ✅ Done
+- [x] **New:** MakeTransferScreen migrated to ScreenLayout — 4 buttons, source label, cost text, ComboBox, transfer grid — ✅ Done
+- [x] **New:** PurchaseScreen migrated to ScreenLayout — 4 buttons, funds/cost labels, purchase grid — ✅ Done
+- [x] **New:** SellScreen migrated to ScreenLayout — 4 buttons, funds/value labels, sell grid — ✅ Done
+- [x] **New:** LoadSaveGameScreen migrated to ScreenLayout — 3 buttons, TextBox, saves grid — ✅ Done
+- [x] **New:** ResearchScreen migrated to ScreenLayout — 5 buttons, idle scientists label, research grid — ✅ Done
+- [x] **New:** ManufactureScreen migrated to ScreenLayout — 8 buttons, idle engineers label, project + requirements grids — ✅ Done
+- [x] **New:** AssignToCraftScreen migrated to ScreenLayout — 7 buttons, base name, craft + soldier + xcap grids — ✅ Done
+- [x] **New:** EquipCraftScreen migrated to ScreenLayout — 5 buttons, base name, pod text, craft + weapons grids — ✅ Done
+- [x] **New:** SoldiersListScreen migrated to ScreenLayout — 4 buttons, detail panel + attributes grid + soldiers grid — ✅ Done
 
 #### Key Design Decisions for Gum Screen Pattern
 

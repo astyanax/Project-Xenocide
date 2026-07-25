@@ -67,6 +67,9 @@ namespace ProjectXenocide.UI.Screens
     /// </remarks>
     sealed class MonthlyCostsScreen : GumScreen
     {
+        private ScreenLayout layout;
+        private ContentArea content;
+
         /// <summary>
         /// Constructor (obviously)
         /// </summary>
@@ -77,6 +80,8 @@ namespace ProjectXenocide.UI.Screens
             this.selectedOutpostIndex = selectedOutpostIndex;
         }
 
+        protected override bool HasGumxLayout => false;
+
         #region Create the Gum controls
 
         /// <summary>
@@ -84,29 +89,19 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
-            if (GumRoot != null)
-            {
-                WireButton("closeButton", OnCloseButton);
-                InitializeGrid();
-                grid.Visual.X = 20;
-                grid.Visual.Y = 20;
-                grid.Visual.Width = 800;
-                PopulateGrid();
-                return;
-            }
+            layout = new ScreenLayout();
+            layout.AddToRoot();
+            content = new ContentArea(layout.ContentPanel);
 
-            // The grid of montly costs
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_CLOSE"), OnCloseButton);
+
+            // The grid of monthly costs
             InitializeGrid();
+            content.AddGrid(grid);
             PopulateGrid();
-
-            // buttons
-            closeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CLOSE") };
-            RootContainer.AddChild(closeButton);
-            closeButton.Click += OnCloseButton;
         }
 
         private GridPanel grid;
-        private Button closeButton;
 
         /// <summary>
         /// Create GridPanel which holds items being shiped
@@ -114,7 +109,6 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeGrid()
         {
             grid = new GridPanel();
-            AddChild(grid.Visual);
             grid.AddColumn("", (int)(0.40f * 800));
             grid.AddColumn(Strings.SCREEN_MONTHLY_COSTS_COLUMN_PER_UNIT, (int)(0.22f * 800));
             grid.AddColumn(Strings.SCREEN_MONTHLY_COSTS_COLUMN_QUANTITY, (int)(0.15f * 800));

@@ -52,6 +52,9 @@ namespace ProjectXenocide.UI.Screens
     /// </summary>
     public class StoresScreen : GumScreen
     {
+        private ScreenLayout layout;
+        private ContentArea content;
+
         /// <summary>
         /// Constructor (obviously)
         /// </summary>
@@ -62,6 +65,8 @@ namespace ProjectXenocide.UI.Screens
             this.selectedOutpostIndex = selectedOutpostIndex;
         }
 
+        protected override bool HasGumxLayout => false;
+
         #region Create the Gum controls
 
         /// <summary>
@@ -69,27 +74,18 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
-            if (GumRoot != null)
-            {
-                WireButton("okButton", OnOKButton);
-                InitializeGrid();
-                grid.Visual.X = 20;
-                grid.Visual.Y = 20;
-                grid.Visual.Width = 800;
-                PopulateGrid();
-                return;
-            }
+            layout = new ScreenLayout();
+            layout.AddToRoot();
+            content = new ContentArea(layout.ContentPanel);
+
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_OK"), OnOKButton);
 
             InitializeGrid();
+            content.AddGrid(grid);
             PopulateGrid();
-
-            okButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_OK") };
-            RootContainer.AddChild(okButton);
-            okButton.Click += OnOKButton;
         }
 
         private GridPanel grid;
-        private Button okButton;
 
         /// <summary>
         /// Create GridPanel which holds items in inventory
@@ -97,7 +93,6 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeGrid()
         {
             grid = new GridPanel();
-            AddChild(grid.Visual);
             grid.AddColumn(Strings.SCREEN_STORES_COLUMN_ITEM, (int)(0.58f * 800));
             grid.AddColumn(Strings.SCREEN_STORES_COLUMN_QUANTITY, (int)(0.18f * 800));
             grid.AddColumn(Strings.SCREEN_STORES_COLUMN_SPACE_USED, (int)(0.19f * 800));

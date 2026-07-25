@@ -74,6 +74,9 @@ namespace ProjectXenocide.UI.Screens
     /// </remarks>
     public class BattlescapeReportScreen : GumScreen
     {
+        private ScreenLayout layout;
+        private ContentArea content;
+
         /// <summary>
         /// Constructor (obviously)
         /// </summary>
@@ -84,6 +87,8 @@ namespace ProjectXenocide.UI.Screens
             this.mission = mission;
         }
 
+        protected override bool HasGumxLayout => false;
+
         #region Create the Gum controls
 
         /// <summary>
@@ -91,52 +96,23 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
-            if (GumRoot != null)
-            {
-                WireButton("okButton", OnOkButton);
+            layout = new ScreenLayout();
+            layout.AddToRoot();
+            content = new ContentArea(layout.ContentPanel);
 
-                recoveredLabelText = new Label();
-                recoveredLabelText.Visual.X = 20;
-                recoveredLabelText.Visual.Y = 20;
-                AddChild(recoveredLabelText);
-                recoveredLabelText.Text = Strings.SCREEN_BATTLESCAPE_REPORT_RECOVERED_ITEMS_LABEL;
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_OK"), OnOkButton);
 
-                InitializeScoreGrid();
-                scoreGrid.Visual.X = 20;
-                scoreGrid.Visual.Y = 50;
-                scoreGrid.Visual.Width = 750;
-
-                InitializeRecoveredGrid();
-                recoveredGrid.Visual.X = 20;
-                recoveredGrid.Visual.Y = 370;
-                recoveredGrid.Visual.Width = 750;
-                PopulateScoreGrid();
-                PopulateRecoveredGrid();
-                return;
-            }
-
-            // label the recovered items grid
-            recoveredLabelText = new Label();
-            RootContainer.AddChild(recoveredLabelText);
-            recoveredLabelText.Text = Strings.SCREEN_BATTLESCAPE_REPORT_RECOVERED_ITEMS_LABEL;
-
-            // The girds detailing items recovered
             InitializeScoreGrid();
+            content.AddGrid(scoreGrid);
+
             InitializeRecoveredGrid();
+            content.AddGrid(recoveredGrid);
             PopulateScoreGrid();
             PopulateRecoveredGrid();
-
-            // other buttons
-            okButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_OK") };
-            RootContainer.AddChild(okButton);
-
-            okButton.Click += OnOkButton;
         }
 
-        private Label recoveredLabelText;
         private GridPanel scoreGrid;
         private GridPanel recoveredGrid;
-        private Button okButton;
 
         /// <summary>
         /// Creates a GridPanel which holds score information about
@@ -145,7 +121,6 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeScoreGrid()
         {
             scoreGrid = new GridPanel();
-            AddChild(scoreGrid.Visual);
             scoreGrid.AddColumn(Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_ACTION, (int)(0.70f * 800));
             scoreGrid.AddColumn(Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_SCORE, (int)(0.25f * 800));
         }
@@ -156,7 +131,6 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeRecoveredGrid()
         {
             recoveredGrid = new GridPanel();
-            AddChild(recoveredGrid.Visual);
             recoveredGrid.AddColumn(Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_ITEM, (int)(0.45f * 800));
             recoveredGrid.AddColumn(Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_QUANTITY, (int)(0.25f * 800));
             recoveredGrid.AddColumn(Strings.SCREEN_BATTLESCAPE_REPORT_COLUMN_SCORE, (int)(0.25f * 800));

@@ -58,6 +58,9 @@ namespace ProjectXenocide.UI.Screens
     /// </remarks>
     public partial class AssignToCraftScreen : GumScreen
     {
+        private ScreenLayout layout;
+        private ContentArea content;
+
         /// <summary>
         /// Constructs a screen listing the soldiers stationed at the given base.
         /// </summary>
@@ -70,6 +73,8 @@ namespace ProjectXenocide.UI.Screens
             this.controller = new Controller(SelectedOutpost);
         }
 
+        protected override bool HasGumxLayout => false;
+
         #region Create the Gum controls
 
         /// <summary>
@@ -77,88 +82,38 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
-            if (GumRoot != null)
-            {
-                WireButton("closeButton", OnCloseButton);
-                WireButton("addXcapButton", OnAddXcapButton);
-                WireButton("removeXcapButton", OnRemoveXcapButton);
-                WireButton("addSoldierButton", OnAddSoldierButton);
-                WireButton("removeSoldierButton", OnRemoveSoldierButton);
-                WireButton("soldierUpButton", OnSoldierUpButton);
-                WireButton("soldierDownButton", OnSoldierDownButton);
+            layout = new ScreenLayout();
+            layout.AddToRoot();
+            content = new ContentArea(layout.ContentPanel);
 
-                baseNameText = new Label() { Text = Util.StringFormat(Strings.SCREEN_EQUIP_CRAFT_BASE_NAME, SelectedOutpost.Name) };
-                baseNameText.Visual.X = 20;
-                baseNameText.Visual.Y = 20;
-                AddChild(baseNameText);
-
-                InitializeCraftGrid();
-                craftGrid.Visual.X = 20;
-                craftGrid.Visual.Y = 50;
-                craftGrid.Visual.Width = 750;
-                PopulateCraftGrid();
-
-                InitializeSoldierGrid();
-                soldierGrid.Visual.X = 20;
-                soldierGrid.Visual.Y = 370;
-                soldierGrid.Visual.Width = 750;
-                PopulateSoldierGrid();
-
-                InitializeXcapGrid();
-                xcapGrid.Visual.X = 20;
-                xcapGrid.Visual.Y = 690;
-                xcapGrid.Visual.Width = 750;
-                PopulateXcapGrid();
-                return;
-            }
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_ADD_XCAP"), OnAddXcapButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_REMOVE_XCAP"), OnRemoveXcapButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_ADD_SOLDIER"), OnAddSoldierButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_REMOVE_SOLDIER"), OnRemoveSoldierButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_SOLDIER_UP"), OnSoldierUpButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_SOLDIER_DOWN"), OnSoldierDownButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_CLOSE"), OnCloseButton);
 
             baseNameText = new Label() { Text = Util.StringFormat(Strings.SCREEN_EQUIP_CRAFT_BASE_NAME, SelectedOutpost.Name) };
-            RootContainer.AddChild(baseNameText);
+            content.Panel.AddChild(baseNameText);
 
             InitializeCraftGrid();
+            content.AddGrid(craftGrid);
             PopulateCraftGrid();
 
             InitializeSoldierGrid();
+            content.AddGrid(soldierGrid);
             PopulateSoldierGrid();
 
             InitializeXcapGrid();
+            content.AddGrid(xcapGrid);
             PopulateXcapGrid();
-
-            addXcapButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_ADD_XCAP") };
-            RootContainer.AddChild(addXcapButton);
-            removeXcapButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_REMOVE_XCAP") };
-            RootContainer.AddChild(removeXcapButton);
-            addSoldierButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_ADD_SOLDIER") };
-            RootContainer.AddChild(addSoldierButton);
-            removeSoldierButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_REMOVE_SOLDIER") };
-            RootContainer.AddChild(removeSoldierButton);
-            soldierUpButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_SOLDIER_UP") };
-            RootContainer.AddChild(soldierUpButton);
-            soldierDownButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_SOLDIER_DOWN") };
-            RootContainer.AddChild(soldierDownButton);
-            closeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CLOSE") };
-            RootContainer.AddChild(closeButton);
-
-            addXcapButton.Click += OnAddXcapButton;
-            removeXcapButton.Click += OnRemoveXcapButton;
-            addSoldierButton.Click += OnAddSoldierButton;
-            removeSoldierButton.Click += OnRemoveSoldierButton;
-            soldierUpButton.Click += OnSoldierUpButton;
-            soldierDownButton.Click += OnSoldierDownButton;
-            closeButton.Click += OnCloseButton;
         }
 
         private Label baseNameText;
         private GridPanel craftGrid;
         private GridPanel soldierGrid;
         private GridPanel xcapGrid;
-        private Button closeButton;
-        private Button addXcapButton;
-        private Button removeXcapButton;
-        private Button addSoldierButton;
-        private Button removeSoldierButton;
-        private Button soldierUpButton;
-        private Button soldierDownButton;
 
         private void InitializeCraftGrid()
         {
@@ -170,8 +125,6 @@ namespace ProjectXenocide.UI.Screens
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_AMMO, 90);
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_CREW, 90);
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_HWP, 90);
-            AddChild(craftGrid.Visual);
-
             craftGrid.SelectionChanged += OnCraftGridSelectionChanged;
         }
 
@@ -181,7 +134,6 @@ namespace ProjectXenocide.UI.Screens
             soldierGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_SOLDIER_NAME, 280);
             soldierGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_ASSIGNED_CRAFT, 230);
             soldierGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_POSITION_CRAFT, 160);
-            AddChild(soldierGrid.Visual);
         }
 
         private void InitializeXcapGrid()
@@ -190,9 +142,7 @@ namespace ProjectXenocide.UI.Screens
             xcapGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_XCAP_TYPE, 350);
             xcapGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_AVAILABLE, 175);
             xcapGrid.AddColumn(Strings.SCREEN_ASSIGN_CRAFT_COLUMN_ASSIGNED_COUNT, 170);
-            AddChild(xcapGrid.Visual);
         }
-
 
         private void PopulateCraftGrid()
         {
@@ -452,7 +402,6 @@ namespace ProjectXenocide.UI.Screens
                 Aircraft craft = soldier.Aircraft;
                 if (craft != null)
                 {
-                    // Refresh all soldier positions for this craft
                     foreach (var pair in craft.Soldiers)
                     {
                         UpdateSoldierPosition(pair.Key, pair.Value);

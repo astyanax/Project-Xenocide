@@ -61,6 +61,8 @@ namespace ProjectXenocide.UI.Screens
     public partial class LoadSaveGameScreen : GumScreen
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private ScreenLayout layout;
+        private ContentArea content;
 
         /// <summary>
         /// Constructor
@@ -75,6 +77,8 @@ namespace ProjectXenocide.UI.Screens
             this.saveFileController = new SaveFileController();
         }
 
+        protected override bool HasGumxLayout => false;
+
         #region Create the Gum controls
 
         /// <summary>
@@ -82,64 +86,28 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
-            if (GumRoot != null)
-            {
-                WireButton("deleteButton", OnDeleteGame);
-                WireButton("cancelButton", OnCloseScreen);
+            layout = new ScreenLayout();
+            layout.AddToRoot();
+            content = new ContentArea(layout.ContentPanel);
 
-                if (mode == Mode.Save)
-                {
-                    var btn = WireButton("saveButton", OnSaveGame);
-                    btn.Text = XenocideResourceManager.Get("BUTTON_SAVE");
-                }
-                else
-                {
-                    var btn = WireButton("saveButton", OnLoadGame);
-                    btn.Text = XenocideResourceManager.Get("BUTTON_LOAD");
-                }
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_DELETE"), OnDeleteGame);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_CANCEL"), OnCloseScreen);
 
-                filenameEditBox = new TextBox();
-                filenameEditBox.Visual.X = 20;
-                filenameEditBox.Visual.Y = 20;
-                filenameEditBox.Visual.Width = 300;
-                AddChild(filenameEditBox);
-
-                InitializeGrid();
-                savesgrid.Visual.X = 20;
-                savesgrid.Visual.Y = 60;
-                savesgrid.Visual.Width = 800;
-                return;
-            }
-
-            // initializeEditBox
-            filenameEditBox = new TextBox();
-            RootContainer.AddChild(filenameEditBox);
-
-            // The list of saved games
-            InitializeGrid();
-
-            // and the buttons
-            deleteButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_DELETE") };
-            RootContainer.AddChild(deleteButton);
-            cancelButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CANCEL") };
-            RootContainer.AddChild(cancelButton);
-
-            deleteButton.Click += OnDeleteGame;
-            cancelButton.Click += OnCloseScreen;
-
-            // save/load button depends on mode
             if (mode == Mode.Save)
             {
-                saveButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_SAVE") };
-                RootContainer.AddChild(saveButton);
-                saveButton.Click += OnSaveGame;
+                layout.AddButton(XenocideResourceManager.Get("BUTTON_SAVE"), OnSaveGame);
             }
             else
             {
-                saveButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_LOAD") };
-                RootContainer.AddChild(saveButton);
-                saveButton.Click += OnLoadGame;
+                layout.AddButton(XenocideResourceManager.Get("BUTTON_LOAD"), OnLoadGame);
             }
+
+            filenameEditBox = new TextBox();
+            filenameEditBox.Visual.Width = 300;
+            content.Panel.AddChild(filenameEditBox);
+
+            InitializeGrid();
+            content.AddGrid(savesgrid);
         }
 
         /// <summary>
@@ -148,7 +116,6 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeGrid()
         {
             savesgrid = new GridPanel();
-            AddChild(savesgrid.Visual);
             savesgrid.AddColumn("Name", (int)(0.4f * 800));
             savesgrid.AddColumn("Real Time", (int)(0.295f * 800));
             savesgrid.AddColumn("Game Time", (int)(0.295f * 800));
@@ -165,9 +132,6 @@ namespace ProjectXenocide.UI.Screens
 
         private GridPanel savesgrid;
         private TextBox filenameEditBox;
-        private Button saveButton;
-        private Button deleteButton;
-        private Button cancelButton;
 
         #endregion Create the Gum controls
 

@@ -479,6 +479,82 @@ All facility placement classes use NLog with three levels:
 - **DEBUG**: Edge-detect resets, button counts, mouse handler lifecycle
 - **TRACE**: Every mouse move, cell projection, ghost position update, IsPositionLegal checks
 
+### Gum Runtime Type Hierarchy (Reflection Findings)
+
+Understanding Gum's internal type hierarchy is critical for programmatic UI construction. The two layers — **Wireframe** (low-level visual tree) and **Forms** (high-level controls) — have different rules for creating containers.
+
+#### The Core Problem: Bare `GraphicalUiElement` Has No Runtime
+
+```csharp
+var gue = new GraphicalUiElement();  // NO runtime
+gue.Children.Add(child);             // THROWS: read-only collection
+```
+
+`new GraphicalUiElement()` creates a visual element without a `RuntimeObject`. Without a runtime, the `Children` collection (`GraphicalUiElementCollection`) is **read-only** and throws `InvalidOperationException` on any mutation attempt. Adding the bare GUE to `GumService.Default.Root.Children` does NOT fix this — the parent-child relationship is established but the child's own `Children` remains read-only.
+
+#### Container Types Comparison
+
+| Type | Namespace | Has Runtime | Children Writable | Auto-Layout | Use Case |
+|------|-----------|:-----------:|:-----------------:|:-----------:|----------|
+| `GraphicalUiElement` | `Gum.Wireframe` | **No** | **No** | No | Base class only — never instantiate directly |
+| `ContainerRuntime` | `MonoGameGum.GueDeriving` | Yes | **Yes** | **No** | **Recommended** — invisible container, manual positioning |
+| `InteractiveGue` | `MonoGameGum.GueDeriving` | Yes | Yes | No | Interactive container (receives mouse/keyboard input) |
+| `StackPanel` | `Gum.Forms.Controls` | Yes | Yes (via `AddChild`) | **Yes** (vertical/horizontal) | Sequential layout of Form controls |
+| `Panel` | `Gum.Forms.Controls` | Yes | Yes (via `AddChild`) | Yes | Base Forms panel (StackPanel inherits from this) |
+
+#### Correct Pattern: `ContainerRuntime`
+
+```csharp
+using MonoGameGum.GueDeriving;
+
+var container = new ContainerRuntime();
+container.Width = 100;
+container.WidthUnits = Gum.DataTypes.DimensionUnitType.PercentageOfParent;
+container.Height = 100;
+container.HeightUnits = Gum.DataTypes.DimensionUnitType.PercentageOfParent;
+
+// Children are fully writable — manual positioning
+container.Children.Add(childGue);
+// OR
+container.AddChild(childGue);
+
+// Add to root
+GumService.Default.Root.Children.Add(container);
+```
+
+`ContainerRuntime` is the concrete type that backs the `Container` BaseType in `.gusx` files. It creates a proper invisible container renderable with manual (absolute) positioning — no auto-layout engine processes its children.
+
+#### Incorrect Patterns
+
+```csharp
+// WRONG: bare GUE — Children is read-only
+var root = new GraphicalUiElement();
+root.Children.Add(child);  // InvalidOperationException
+
+// WRONG: StackPanel auto-arranges children vertically
+var root = new StackPanel();
+GumService.Default.Root.Children.Add(root.Visual);
+root.Visual.Children.Add(child);  // child position may be overridden by layout
+
+// WRONG: ScreenSave on a programmatic element — needs project context
+var screenSave = new ScreenSave();
+screenSave.Instances.Add(...);
+var gue = screenSave.ToGraphicalUiElement();  // may fail without GumProject
+```
+
+#### When to Use Each Type
+
+| Scenario | Type | Why |
+|----------|------|-----|
+| Root container for a programmatic screen layout | `ContainerRuntime` | Writable Children, no auto-layout, matches .gusx Container behavior |
+| Vertical/horizontal list of controls | `StackPanel` | Built-in stacking, spacing, orientation |
+| Adding a Forms control (Button, Label, etc.) | Call `.AddChild(control)` on parent | FrameworkElement.AddChild handles Visual tree integration |
+| Adding a raw GUE to a parent | `parent.Children.Add(gue.Visual)` | Direct Visual tree manipulation (parent must have runtime) |
+
+#### The Runtime Rule
+
+A `GraphicalUiElement` has writable `Children` **if and only if** it was created through a type that initializes a `RuntimeObject` in its constructor. All `FrameworkElement` subclasses (Button, Label, StackPanel, etc.) and `ContainerRuntime`/`InteractiveGue` do this. The bare `GraphicalUiElement()` constructor does not.
+
 ### Remaining Gum Backlog
 
 - Dialog `.gusx` conversion — 9 dialogs currently programmatic (4 done: MessageBox, YesNo, Options, GumOptions)

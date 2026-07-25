@@ -72,6 +72,9 @@ namespace ProjectXenocide.UI.Screens
     /// </remarks>
     public partial class ResearchScreen : GumScreen
     {
+        private ScreenLayout layout;
+        private ContentArea content;
+
         /// <summary>
         /// Constructs the research screen.
         /// </summary>
@@ -79,6 +82,8 @@ namespace ProjectXenocide.UI.Screens
             : base("Research")
         {
         }
+
+        protected override bool HasGumxLayout => false;
 
         #region Create the Gum controls
 
@@ -90,60 +95,27 @@ namespace ProjectXenocide.UI.Screens
             controller = new Controller();
             controller.FindIdleScientists();
 
-            if (GumRoot != null)
-            {
-                WireButton("addIdleScientistsButton", OnAddIdleButton);
-                WireButton("moreScientistsButton", OnMoreButton);
-                WireButton("lessScientistsButton", OnLessButton);
-                WireButton("removeAllScientistsButton", OnRemoveAllButton);
-                WireButton("closeButton", OnCloseButton);
+            layout = new ScreenLayout();
+            layout.AddToRoot();
+            content = new ContentArea(layout.ContentPanel);
 
-                availableText = new Label();
-                availableText.Visual.X = 20;
-                availableText.Visual.Y = 80;
-                AddChild(availableText);
-                availableText.Text = controller.MakeIdleScientistsString();
-
-                InitializeGrid();
-                grid.Visual.X = 20;
-                grid.Visual.Y = 110;
-                grid.Visual.Width = 800;
-                PopulateGrid();
-                return;
-            }
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_ADD_IDLE_SCIENTISTS"), OnAddIdleButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_MORE_SCIENTISTS"), OnMoreButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_LESS_SCIENTISTS"), OnLessButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_REMOVE_ALL_SCIENTISTS"), OnRemoveAllButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_CLOSE"), OnCloseButton);
 
             availableText = new Label();
-            RootContainer.AddChild(availableText);
             availableText.Text = controller.MakeIdleScientistsString();
+            content.Panel.AddChild(availableText);
 
             InitializeGrid();
+            content.AddGrid(grid);
             PopulateGrid();
-
-            addIdleScientistsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_ADD_IDLE_SCIENTISTS") };
-            RootContainer.AddChild(addIdleScientistsButton);
-            moreScientistsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_MORE_SCIENTISTS") };
-            RootContainer.AddChild(moreScientistsButton);
-            lessScientistsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_LESS_SCIENTISTS") };
-            RootContainer.AddChild(lessScientistsButton);
-            removeAllScientistsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_REMOVE_ALL_SCIENTISTS") };
-            RootContainer.AddChild(removeAllScientistsButton);
-            closeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CLOSE") };
-            RootContainer.AddChild(closeButton);
-
-            moreScientistsButton.Click += OnMoreButton;
-            lessScientistsButton.Click += OnLessButton;
-            addIdleScientistsButton.Click += OnAddIdleButton;
-            removeAllScientistsButton.Click += OnRemoveAllButton;
-            closeButton.Click += OnCloseButton;
         }
 
         private Label availableText;
         private GridPanel grid;
-        private Button moreScientistsButton;
-        private Button lessScientistsButton;
-        private Button removeAllScientistsButton;
-        private Button addIdleScientistsButton;
-        private Button closeButton;
 
         /// <summary>
         /// Creates the grid panel with column headers for the research display.
@@ -151,7 +123,6 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeGrid()
         {
             grid = new GridPanel();
-            AddChild(grid.Visual);
             grid.AddColumn(Strings.SCREEN_RESEARCH_COLUMN_PROJECT, (int)(0.50f * 800));
             grid.AddColumn(Strings.SCREEN_RESEARCH_COLUMN_SCIENTISTS, (int)(0.25f * 800));
             grid.AddColumn(Strings.SCREEN_RESEARCH_COLUMN_ETA, (int)(0.22f * 800));

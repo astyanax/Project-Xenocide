@@ -82,6 +82,9 @@ namespace ProjectXenocide.UI.Screens
     /// </remarks>
     public partial class ManufactureScreen : GumScreen
     {
+        private ScreenLayout layout;
+        private ContentArea content;
+
         /// <summary>
         /// Constructs the manufacture screen for the given outpost.
         /// </summary>
@@ -92,6 +95,8 @@ namespace ProjectXenocide.UI.Screens
             this.selectedOutpostIndex = selectedOutpostIndex;
         }
 
+        protected override bool HasGumxLayout => false;
+
         #region Create the Gum controls
 
         protected override void CreateGumControls()
@@ -100,78 +105,32 @@ namespace ProjectXenocide.UI.Screens
             ProjectMgr.Update();
             controller.FindIdleEngineers();
 
-            if (GumRoot != null)
-            {
-                WireButton("buildMoreButton", OnBuildMoreButton);
-                WireButton("buildLessButton", OnBuildLessButton);
-                WireButton("cancelBuildButton", OnCancelBuildButton);
-                WireButton("addIdleEngineersButton", OnAddIdleButton);
-                WireButton("moreEngineersButton", OnMoreButton);
-                WireButton("lessEngineersButton", OnLessButton);
-                WireButton("removeAllEngineersButton", OnRemoveAllButton);
-                WireButton("closeButton", OnCloseButton);
+            layout = new ScreenLayout();
+            layout.AddToRoot();
+            content = new ContentArea(layout.ContentPanel);
 
-                availableText = new Label() { Text = controller.MakeIdleEngineersString() };
-                availableText.Visual.X = 20;
-                availableText.Visual.Y = 20;
-                AddChild(availableText);
-
-                InitializeGrids();
-                projectGrid.Visual.X = 20;
-                projectGrid.Visual.Y = 60;
-                projectGrid.Visual.Width = 750;
-                requirementsGrid.Visual.X = 20;
-                requirementsGrid.Visual.Y = 370;
-                requirementsGrid.Visual.Width = 750;
-                PopulateProjectGrid();
-                return;
-            }
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_BUILD_MORE"), OnBuildMoreButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_BUILD_LESS"), OnBuildLessButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_CANCEL_BUILD"), OnCancelBuildButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_ADD_IDLE_ENGINEERS"), OnAddIdleButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_MORE_ENGINEERS"), OnMoreButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_LESS_ENGINEERS"), OnLessButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_REMOVE_ALL_ENGINEERS"), OnRemoveAllButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_CLOSE"), OnCloseButton);
 
             availableText = new Label() { Text = controller.MakeIdleEngineersString() };
-            RootContainer.AddChild(availableText);
+            content.Panel.AddChild(availableText);
 
             InitializeGrids();
+            content.AddGrid(projectGrid);
+            content.AddSpacer(10);
+            content.AddGrid(requirementsGrid);
             PopulateProjectGrid();
-
-            buildMoreButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BUILD_MORE") };
-            RootContainer.AddChild(buildMoreButton);
-            buildLessButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BUILD_LESS") };
-            RootContainer.AddChild(buildLessButton);
-            cancelBuildButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CANCEL_BUILD") };
-            RootContainer.AddChild(cancelBuildButton);
-            addIdleEngineersButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_ADD_IDLE_ENGINEERS") };
-            RootContainer.AddChild(addIdleEngineersButton);
-            moreEngineersButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_MORE_ENGINEERS") };
-            RootContainer.AddChild(moreEngineersButton);
-            lessEngineersButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_LESS_ENGINEERS") };
-            RootContainer.AddChild(lessEngineersButton);
-            removeAllEngineersButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_REMOVE_ALL_ENGINEERS") };
-            RootContainer.AddChild(removeAllEngineersButton);
-            closeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CLOSE") };
-            RootContainer.AddChild(closeButton);
-
-            buildMoreButton.Click += OnBuildMoreButton;
-            buildLessButton.Click += OnBuildLessButton;
-            cancelBuildButton.Click += OnCancelBuildButton;
-            moreEngineersButton.Click += OnMoreButton;
-            lessEngineersButton.Click += OnLessButton;
-            addIdleEngineersButton.Click += OnAddIdleButton;
-            removeAllEngineersButton.Click += OnRemoveAllButton;
-            closeButton.Click += OnCloseButton;
         }
 
         private Label availableText;
         private GridPanel projectGrid;
         private GridPanel requirementsGrid;
-
-        private Button buildMoreButton;
-        private Button buildLessButton;
-        private Button cancelBuildButton;
-        private Button moreEngineersButton;
-        private Button lessEngineersButton;
-        private Button removeAllEngineersButton;
-        private Button addIdleEngineersButton;
-        private Button closeButton;
 
         private void InitializeGrids()
         {
@@ -180,14 +139,12 @@ namespace ProjectXenocide.UI.Screens
             projectGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_ENGINEERS, 105);
             projectGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_BUILD_QUANTITY, 105);
             projectGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_ETA, 105);
-            AddChild(projectGrid.Visual);
             projectGrid.SelectionChanged += OnProjectGridSelectionChanged;
 
             requirementsGrid = new GridPanel();
             requirementsGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_RESOURCE, 350);
             requirementsGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_QUANTITY_NEEDED, 160);
             requirementsGrid.AddColumn(Strings.SCREEN_MANUFACTURE_COLUMN_QUANTITY_AVAILABLE, 175);
-            AddChild(requirementsGrid.Visual);
         }
 
         private void PopulateProjectGrid()

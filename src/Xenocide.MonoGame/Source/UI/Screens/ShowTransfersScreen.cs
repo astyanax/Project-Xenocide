@@ -52,6 +52,9 @@ namespace ProjectXenocide.UI.Screens
     /// </summary>
     public class ShowTransfersScreen : GumScreen
     {
+        private ScreenLayout layout;
+        private ContentArea content;
+
         /// <summary>
         /// Constructor (obviously)
         /// </summary>
@@ -62,6 +65,8 @@ namespace ProjectXenocide.UI.Screens
             this.selectedOutpostIndex = selectedOutpostIndex;
         }
 
+        protected override bool HasGumxLayout => false;
+
         #region Create the Gum controls
 
         /// <summary>
@@ -69,29 +74,18 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
-            if (GumRoot != null)
-            {
-                WireButton("closeButton", OnCloseButton);
-                InitializeGrid();
-                grid.Visual.X = 20;
-                grid.Visual.Y = 20;
-                grid.Visual.Width = 800;
-                PopulateGrid();
-                return;
-            }
+            layout = new ScreenLayout();
+            layout.AddToRoot();
+            content = new ContentArea(layout.ContentPanel);
 
-            // The grid of items being shiped to this outpost
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_CLOSE"), OnCloseButton);
+
             InitializeGrid();
+            content.AddGrid(grid);
             PopulateGrid();
-
-            // buttons
-            closeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CLOSE") };
-            RootContainer.AddChild(closeButton);
-            closeButton.Click += OnCloseButton;
         }
 
         private GridPanel grid;
-        private Button closeButton;
 
         /// <summary>
         /// Create GridPanel which holds items being shiped
@@ -99,7 +93,6 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeGrid()
         {
             grid = new GridPanel();
-            AddChild(grid.Visual);
             grid.AddColumn(Strings.SCREEN_SHOW_TRANSFERS_COLUMN_ITEM, (int)(0.69f * 800));
             grid.AddColumn(Strings.SCREEN_SHOW_TRANSFERS_COLUMN_QUANTITY, (int)(0.15f * 800));
             grid.AddColumn(Strings.SCREEN_SHOW_TRANSFERS_COLUMN_ETA, (int)(0.15f * 800));

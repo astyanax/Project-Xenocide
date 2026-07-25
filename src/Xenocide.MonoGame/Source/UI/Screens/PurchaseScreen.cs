@@ -56,6 +56,9 @@ namespace ProjectXenocide.UI.Screens
     /// </remarks>
     public partial class PurchaseScreen : GumScreen
     {
+        private ScreenLayout layout;
+        private ContentArea content;
+
         /// <summary>
         /// Constructor (obviously)
         /// </summary>
@@ -67,6 +70,8 @@ namespace ProjectXenocide.UI.Screens
             this.controller = new PurchaseController(SelectedBase);
         }
 
+        protected override bool HasGumxLayout => false;
+
         #region Create the Gum controls
 
         /// <summary>
@@ -74,72 +79,32 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
-            if (GumRoot != null)
-            {
-                WireButton("buyMoreButton", OnBuyMoreButton);
-                WireButton("buyLessButton", OnBuyLessButton);
-                WireButton("confirmButton", OnConfirmButton);
-                WireButton("cancelButton", OnCancelButton);
+            layout = new ScreenLayout();
+            layout.AddToRoot();
+            content = new ContentArea(layout.ContentPanel);
 
-                fundsText = new Label();
-                fundsText.Visual.X = 20;
-                fundsText.Visual.Y = 20;
-                AddChild(fundsText);
-                fundsText.Text = Util.StringFormat(Strings.SCREEN_PURCHASE_FUNDS,
-                    Xenocide.GameState.GeoData.XCorp.Bank.CurrentBalance);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_BUY_MORE"), OnBuyMoreButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_BUY_LESS"), OnBuyLessButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_CONFIRM"), OnConfirmButton);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_CANCEL"), OnCancelButton);
 
-                totalCostText = new Label();
-                totalCostText.Visual.X = 20;
-                totalCostText.Visual.Y = 45;
-                AddChild(totalCostText);
-                UpdateTotalCost();
-
-                InitializeGrid();
-                grid.Visual.X = 20;
-                grid.Visual.Y = 75;
-                grid.Visual.Width = 750;
-                PopulateGrid();
-                return;
-            }
-
-            // add text giving the available funds
             fundsText = new Label();
-            RootContainer.AddChild(fundsText);
             fundsText.Text = Util.StringFormat(Strings.SCREEN_PURCHASE_FUNDS,
                 Xenocide.GameState.GeoData.XCorp.Bank.CurrentBalance);
+            content.Panel.AddChild(fundsText);
 
-            // add text giving the running total of the items selected for purchase
             totalCostText = new Label();
-            RootContainer.AddChild(totalCostText);
+            content.Panel.AddChild(totalCostText);
             UpdateTotalCost();
 
-            // The gird of items available for purchase
             InitializeGrid();
+            content.AddGrid(grid);
             PopulateGrid();
-
-            // other buttons
-            buyMoreButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BUY_MORE") };
-            RootContainer.AddChild(buyMoreButton);
-            buyLessButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_BUY_LESS") };
-            RootContainer.AddChild(buyLessButton);
-            confirmButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CONFIRM") };
-            RootContainer.AddChild(confirmButton);
-            cancelButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CANCEL") };
-            RootContainer.AddChild(cancelButton);
-
-            buyMoreButton.Click += OnBuyMoreButton;
-            buyLessButton.Click += OnBuyLessButton;
-            confirmButton.Click += OnConfirmButton;
-            cancelButton.Click += OnCancelButton;
         }
 
         private Label fundsText;
         private Label totalCostText;
         private GridPanel grid;
-        private Button buyMoreButton;
-        private Button buyLessButton;
-        private Button confirmButton;
-        private Button cancelButton;
 
         /// <summary>
         /// Create GridPanel which holds items available for purchase
@@ -147,7 +112,6 @@ namespace ProjectXenocide.UI.Screens
         private void InitializeGrid()
         {
             grid = new GridPanel();
-            AddChild(grid.Visual);
             grid.AddColumn(Strings.SCREEN_PURCHASE_COLUMN_ITEM, (int)(0.58f * 800));
             grid.AddColumn(Strings.SCREEN_PURCHASE_COLUMN_QUANTITY_IN_BASE, (int)(0.12f * 800));
             grid.AddColumn(Strings.SCREEN_PURCHASE_COLUMN_COST_PER_UNIT, (int)(0.13f * 800));

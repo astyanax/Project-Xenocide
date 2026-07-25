@@ -58,6 +58,9 @@ namespace ProjectXenocide.UI.Screens
     /// </remarks>
     public partial class EquipCraftScreen : GumScreen
     {
+        private ScreenLayout layout;
+        private ContentArea content;
+
         /// <summary>
         /// Constructor (obviously)
         /// </summary>
@@ -69,6 +72,8 @@ namespace ProjectXenocide.UI.Screens
             this.controller = new Controller(SelectedOutpost);
         }
 
+        protected override bool HasGumxLayout => false;
+
         #region Create the Gum controls
 
         /// <summary>
@@ -76,73 +81,33 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
-            if (GumRoot != null)
-            {
-                WireButton("emptyPod1Button", OnEmptyPod1Button);
-                WireButton("emptyPod2Button", OnEmptyPod2Button);
-                WireButton("setPod1Button", OnSetPod1Button);
-                WireButton("setPod2Button", OnSetPod2Button);
-                WireButton("closeButton", OnCloseButton);
+            layout = new ScreenLayout();
+            layout.AddToRoot();
+            content = new ContentArea(layout.ContentPanel);
 
-                baseNameText = new Label() { Text = Util.StringFormat(Strings.SCREEN_EQUIP_CRAFT_BASE_NAME, SelectedOutpost.Name) };
-                baseNameText.Visual.X = 20;
-                baseNameText.Visual.Y = 20;
-                AddChild(baseNameText);
-                pod1Text = new Label();
-                pod1Text.Visual.X = 20;
-                pod1Text.Visual.Y = 50;
-                AddChild(pod1Text);
-                pod2Text = new Label();
-                pod2Text.Visual.X = 20;
-                pod2Text.Visual.Y = 70;
-                AddChild(pod2Text);
-
-                InitializeCraftGrid();
-                craftGrid.Visual.X = 20;
-                craftGrid.Visual.Y = 100;
-                craftGrid.Visual.Width = 750;
-
-                InitializeWeaponsGrid();
-                weaponsGrid.Visual.X = 20;
-                weaponsGrid.Visual.Y = 420;
-                weaponsGrid.Visual.Width = 750;
-                PopulateCraftGrid();
-                PopulateWeaponsGrid();
-                weaponsGrid.SelectionChanged += OnWeaponGridSelectionChanged;
-                return;
-            }
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_EMPTY_POD_1"), OnEmptyPod1Button);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_EMPTY_POD_2"), OnEmptyPod2Button);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_SET_POD_1"), OnSetPod1Button);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_SET_POD_2"), OnSetPod2Button);
+            layout.AddButton(XenocideResourceManager.Get("BUTTON_CLOSE"), OnCloseButton);
 
             baseNameText = new Label() { Text = Util.StringFormat(Strings.SCREEN_EQUIP_CRAFT_BASE_NAME, SelectedOutpost.Name) };
-            RootContainer.AddChild(baseNameText);
-
-            InitializeCraftGrid();
-            InitializeWeaponsGrid();
-            PopulateCraftGrid();
-            PopulateWeaponsGrid();
+            content.Panel.AddChild(baseNameText);
 
             pod1Text = new Label();
-            RootContainer.AddChild(pod1Text);
+            content.Panel.AddChild(pod1Text);
 
             pod2Text = new Label();
-            RootContainer.AddChild(pod2Text);
+            content.Panel.AddChild(pod2Text);
 
-            emptyPod1Button = new Button() { Text = XenocideResourceManager.Get("BUTTON_EMPTY_POD_1") };
-            RootContainer.AddChild(emptyPod1Button);
-            emptyPod2Button = new Button() { Text = XenocideResourceManager.Get("BUTTON_EMPTY_POD_2") };
-            RootContainer.AddChild(emptyPod2Button);
-            setPod1Button = new Button() { Text = XenocideResourceManager.Get("BUTTON_SET_POD_1") };
-            RootContainer.AddChild(setPod1Button);
-            setPod2Button = new Button() { Text = XenocideResourceManager.Get("BUTTON_SET_POD_2") };
-            RootContainer.AddChild(setPod2Button);
-            closeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CLOSE") };
-            RootContainer.AddChild(closeButton);
+            InitializeCraftGrid();
+            content.AddGrid(craftGrid);
 
-            emptyPod1Button.Click += OnEmptyPod1Button;
-            emptyPod2Button.Click += OnEmptyPod2Button;
-            setPod1Button.Click += OnSetPod1Button;
-            setPod2Button.Click += OnSetPod2Button;
-            closeButton.Click += OnCloseButton;
+            InitializeWeaponsGrid();
+            content.AddGrid(weaponsGrid);
 
+            PopulateCraftGrid();
+            PopulateWeaponsGrid();
             weaponsGrid.SelectionChanged += OnWeaponGridSelectionChanged;
         }
 
@@ -151,11 +116,6 @@ namespace ProjectXenocide.UI.Screens
         private Label pod2Text;
         private GridPanel craftGrid;
         private GridPanel weaponsGrid;
-        private Button emptyPod1Button;
-        private Button emptyPod2Button;
-        private Button setPod1Button;
-        private Button setPod2Button;
-        private Button closeButton;
 
         private void InitializeCraftGrid()
         {
@@ -167,8 +127,6 @@ namespace ProjectXenocide.UI.Screens
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_AMMO, 90);
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_CREW, 90);
             craftGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_HWP, 90);
-            AddChild(craftGrid.Visual);
-
             craftGrid.SelectionChanged += OnCraftGridSelectionChanged;
         }
 
@@ -179,7 +137,6 @@ namespace ProjectXenocide.UI.Screens
             weaponsGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_QUANTITY_IN_BASE, 84);
             weaponsGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_CLIP_SIZE, 90);
             weaponsGrid.AddColumn(Strings.SCREEN_EQUIP_CRAFT_COLUMN_ROUNDS_IN_BASE, 160);
-            AddChild(weaponsGrid.Visual);
         }
 
         private void PopulateCraftGrid()
