@@ -28,10 +28,7 @@ namespace ProjectXenocide.UI.Dialogs
             var messageLabel = ThemedLabel.CreateBody(_messageText);
             ContentArea.AddChild(messageLabel);
 
-            var okBtn = new Button();
-            okBtn.Text = Strings.BUTTON_OK;
-            okBtn.Click += (s, e) => Close();
-            ContentArea.AddChild(okBtn);
+            AddButton(Strings.BUTTON_OK, (s, e) => Close());
         }
 
         public Dialog.ButtonAction OkAction

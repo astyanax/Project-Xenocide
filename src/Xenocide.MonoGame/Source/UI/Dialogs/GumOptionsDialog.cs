@@ -12,30 +12,11 @@ namespace ProjectXenocide.UI.Dialogs
         public GumOptionsDialog() : base("Options") { }
         protected override void CreateDialogWidgets()
         {
-            var loadBtn = new Button();
-            loadBtn.Text = "Load";
-            loadBtn.Click += OnLoadClicked;
-            ContentArea.AddChild(loadBtn);
-
-            var saveBtn = new Button();
-            saveBtn.Text = "Save";
-            saveBtn.Click += OnSaveClicked;
-            ContentArea.AddChild(saveBtn);
-
-            var soundBtn = new Button();
-            soundBtn.Text = "Sound";
-            soundBtn.Click += OnSoundClicked;
-            ContentArea.AddChild(soundBtn);
-
-            var abandonBtn = new Button();
-            abandonBtn.Text = "Abandon";
-            abandonBtn.Click += OnAbandonClicked;
-            ContentArea.AddChild(abandonBtn);
-
-            var cancelBtn = new Button();
-            cancelBtn.Text = "Cancel";
-            cancelBtn.Click += OnCancelClicked;
-            ContentArea.AddChild(cancelBtn);
+            AddButton("Load", OnLoadClicked);
+            AddButton("Save", OnSaveClicked);
+            AddButton("Sound", OnSoundClicked);
+            AddButton("Abandon", OnAbandonClicked);
+            AddButton("Cancel", OnCancelClicked);
         }
 
         public void OnCancelClicked(object sender, EventArgs e)

@@ -114,7 +114,7 @@ namespace ProjectXenocide.UI.Screens
         }
 
         private Label availableText;
-        private GridPanel grid;
+        private StyledGrid grid;
 
         /// <summary>
         /// Creates the grid panel with column headers for the research display.

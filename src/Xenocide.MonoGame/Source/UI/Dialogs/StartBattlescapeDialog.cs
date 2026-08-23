@@ -24,22 +24,12 @@ namespace ProjectXenocide.UI.Dialogs
             var details = ThemedLabel.CreateBody(mission.MakeStartMissionText());
             ContentArea.AddChild(details);
 
-            var okBtn = new Button();
-            okBtn.Text = "OK";
-            okBtn.Click += OnOkClicked;
-            ContentArea.AddChild(okBtn);
-
-            var cancelBtn = new Button();
-            cancelBtn.Text = "Cancel";
-            cancelBtn.Click += OnCancelClicked;
-            ContentArea.AddChild(cancelBtn);
+            AddButton("OK", OnOkClicked);
+            AddButton("Cancel", OnCancelClicked);
 
             if (Xenocide.StaticTables.StartSettings.Cheats.AllowAutoWinBattlescape)
             {
-                var autoBtn = new Button();
-                autoBtn.Text = "Auto Complete";
-                autoBtn.Click += OnAutoCompleteClicked;
-                ContentArea.AddChild(autoBtn);
+                AddButton("Auto Complete", OnAutoCompleteClicked);
             }
         }
 

@@ -27,20 +27,9 @@ namespace ProjectXenocide.UI.Dialogs
             var details = ThemedLabel.CreateBody(Util.StringFormat(Strings.DLG_TRACKINGLOST_LOST_TRACKING, hunter.Name));
             ContentArea.AddChild(details);
 
-            var returnBtn = new Button();
-            returnBtn.Text = Strings.BUTTON_RETURN_TO_BASE;
-            returnBtn.Click += OnReturnClicked;
-            ContentArea.AddChild(returnBtn);
-
-            var patrolBtn = new Button();
-            patrolBtn.Text = Strings.BUTTON_PATROL;
-            patrolBtn.Click += OnPatrolClicked;
-            ContentArea.AddChild(patrolBtn);
-
-            var lastKnownBtn = new Button();
-            lastKnownBtn.Text = "Go to Last Known Position";
-            lastKnownBtn.Click += OnLastKnownClicked;
-            ContentArea.AddChild(lastKnownBtn);
+            AddButton(Strings.BUTTON_RETURN_TO_BASE, OnReturnClicked);
+            AddButton(Strings.BUTTON_PATROL, OnPatrolClicked);
+            AddButton("Go to Last Known Position", OnLastKnownClicked);
         }
 
         public void OnReturnClicked(object sender, EventArgs e)

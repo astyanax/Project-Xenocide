@@ -46,6 +46,7 @@ using ProjectXenocide.Model.Geoscape.AI;
 using ProjectXenocide.Model.Geoscape.Geography;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.UI.Scenes.Geoscape;
 using ProjectXenocide.Utils;
@@ -195,8 +196,7 @@ namespace ProjectXenocide.UI.Screens
             {
                 if (Xenocide.StaticTables.StartSettings.Cheats.ControlAlienMissions)
                 {
-                    alienMissionButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_ALIEN_MISSION") };
-                    alienMissionButton.Click += (s, e) => OnAlienMissionsClicked(s, e);
+                    alienMissionButton = ThemedButton.Create(XenocideResourceManager.Get("BUTTON_ALIEN_MISSION"), (s, e) => OnAlienMissionsClicked(s, e));
                     GeoscapeScreen.AddControl(alienMissionButton);
                 }
             }
@@ -329,8 +329,7 @@ namespace ProjectXenocide.UI.Screens
             {
                 GeoscapeScreen.EnableButtonSounds = false;
 
-                cancelNewBaseButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CANCEL_NEW_BASE") };
-                cancelNewBaseButton.Click += (s, e) => GeoscapeScreen.OnCancelNewBase(s, e);
+                cancelNewBaseButton = ThemedButton.Create(XenocideResourceManager.Get("BUTTON_CANCEL_NEW_BASE"), (s, e) => GeoscapeScreen.OnCancelNewBase(s, e));
                 GeoscapeScreen.AddControl(cancelNewBaseButton);
             }
 
@@ -365,7 +364,7 @@ namespace ProjectXenocide.UI.Screens
             {
                 GeoscapeScreen.EnableButtonSounds = false;
 
-                setFirstBaseTextWindow = new Label() { Text = Strings.SCREEN_GEOSCAPE_FIRST_BASE };
+                setFirstBaseTextWindow = ThemedLabel.CreateBody(Strings.SCREEN_GEOSCAPE_FIRST_BASE);
                 GeoscapeScreen.AddControl(setFirstBaseTextWindow);
             }
 
@@ -406,8 +405,7 @@ namespace ProjectXenocide.UI.Screens
             {
                 GeoscapeScreen.EnableButtonSounds = false;
 
-                cancelTargetingButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CANCEL_TARGETING") };
-                cancelTargetingButton.Click += OnCancelTargeting;
+                cancelTargetingButton = ThemedButton.Create(XenocideResourceManager.Get("BUTTON_CANCEL_TARGETING"), OnCancelTargeting);
                 GeoscapeScreen.AddControl(cancelTargetingButton);
             }
 
@@ -585,8 +583,7 @@ namespace ProjectXenocide.UI.Screens
             {
                 GeoscapeScreen.EnableButtonSounds = false;
 
-                cancelTargetButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CANCEL_ALIEN_MISSION") };
-                cancelTargetButton.Click += OnCancelAlienMission;
+                cancelTargetButton = ThemedButton.Create(XenocideResourceManager.Get("BUTTON_CANCEL_ALIEN_MISSION"), OnCancelAlienMission);
                 GeoscapeScreen.AddControl(cancelTargetButton);
             }
 

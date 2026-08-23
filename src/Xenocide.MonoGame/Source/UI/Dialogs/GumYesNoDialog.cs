@@ -50,15 +50,8 @@ namespace ProjectXenocide.UI.Dialogs
             var messageLabel = ThemedLabel.CreateBody(_messageText);
             ContentArea.AddChild(messageLabel);
 
-            var yesBtn = new Button();
-            yesBtn.Text = _yesButtonText ?? Strings.BUTTON_YES;
-            yesBtn.Click += (s, e) => Close();
-            ContentArea.AddChild(yesBtn);
-
-            var noBtn = new Button();
-            noBtn.Text = _noButtonText ?? Strings.BUTTON_NO;
-            noBtn.Click += (s, e) => Dismiss();
-            ContentArea.AddChild(noBtn);
+            AddButton(_yesButtonText ?? Strings.BUTTON_YES, (s, e) => Close());
+            AddButton(_noButtonText ?? Strings.BUTTON_NO, (s, e) => Dismiss());
 
             CloseAction = _yesAction;
             DismissAction = _noAction;

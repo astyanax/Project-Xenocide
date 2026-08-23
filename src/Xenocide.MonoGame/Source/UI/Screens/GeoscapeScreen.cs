@@ -140,13 +140,13 @@ namespace ProjectXenocide.UI.Screens
                 labelPanel.Visual.Y = 10;
                 GumRoot.Children.Add(labelPanel.Visual);
 
-                gameTimeTop = new Label();
-                gameTimeHour = new Label();
-                gameTimeSec = new Label();
-                fundsText = new Label();
-                fundsAmount = new Label();
-                sceneToolTip = new Label();
-                timeText = new Label();
+                gameTimeTop = ThemedLabel.CreateSection("");
+                gameTimeHour = ThemedLabel.CreateBody("");
+                gameTimeSec = ThemedLabel.CreateBody("");
+                fundsText = ThemedLabel.CreateCaption(Strings.SCREEN_GEOSCAPE_FUNDS);
+                fundsAmount = ThemedLabel.CreateBody("");
+                sceneToolTip = ThemedLabel.CreateBody("");
+                timeText = ThemedLabel.CreateCaption(Strings.SCREEN_GEOSCAPE_GMT);
 
                 labelPanel.AddChild(gameTimeTop);
                 labelPanel.AddChild(gameTimeHour);
@@ -156,11 +156,9 @@ namespace ProjectXenocide.UI.Screens
                 labelPanel.AddChild(sceneToolTip);
                 labelPanel.AddChild(timeText);
 
-                fundsText.Text = Strings.SCREEN_GEOSCAPE_FUNDS;
                 var gameState = Xenocide.GameState;
                 if (gameState?.GeoData?.XCorp?.Bank != null)
                     fundsAmount.Text = gameState.GeoData.XCorp.Bank.DisplayCurrentBalance;
-                timeText.Text = Strings.SCREEN_GEOSCAPE_GMT;
 
                 InitializeMessageLog();
 

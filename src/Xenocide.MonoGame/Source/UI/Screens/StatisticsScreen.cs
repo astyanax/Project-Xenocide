@@ -121,62 +121,26 @@ namespace ProjectXenocide.UI.Screens
         {
             sceneWindowRect = new UiRect(0.08f, 0.073f, 0.681f, 0.8534f);
 
-            if (GumRoot != null)
-            {
-                WireButton("ufoByRegionButton", OnUfoByRegion);
-                WireButton("ufoByCountryButton", OnUfoByCountry);
-                WireButton("xcomByRegionButton", OnXCorpByRegion);
-                WireButton("xcomByCountryButton", OnXCorpByCountry);
-                WireButton("fundsButton", OnFundsGraph);
-                WireButton("geoscapeButton", OnGeoscapeButton);
-
-                seriesList = new ListBox();
-                seriesList.Visual.X = 20;
-                seriesList.Visual.Y = 20;
-                seriesList.Visual.Width = 300;
-                seriesList.Visual.Height = 400;
-                AddChild(seriesList);
-                seriesList.SelectionChanged += (s, a) => OnSeriesSelected(s, EventArgs.Empty);
-
-                SetupGraph(GraphId.Funding);
-                return;
-            }
+            WireButton("ufoByRegionButton", OnUfoByRegion);
+            WireButton("ufoByCountryButton", OnUfoByCountry);
+            WireButton("xcomByRegionButton", OnXCorpByRegion);
+            WireButton("xcomByCountryButton", OnXCorpByCountry);
+            WireButton("fundsButton", OnFundsGraph);
+            WireButton("geoscapeButton", OnGeoscapeButton);
 
             seriesList = new ListBox();
-            RootContainer.AddChild(seriesList);
-
-            ufoByRegionButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_UFO_BY_REGION") };
-            RootContainer.AddChild(ufoByRegionButton);
-            ufoByCountryButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_UFO_BY_COUNTRY") };
-            RootContainer.AddChild(ufoByCountryButton);
-            xcomByRegionButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_XCORP_BY_REGION") };
-            RootContainer.AddChild(xcomByRegionButton);
-            xcomByCountryButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_XCORP_BY_COUNTRY") };
-            RootContainer.AddChild(xcomByCountryButton);
-            fundsButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_FUNDS") };
-            RootContainer.AddChild(fundsButton);
-            geoscapeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_GEOSCAPE") };
-            RootContainer.AddChild(geoscapeButton);
-
+            seriesList.Visual.X = 20;
+            seriesList.Visual.Y = 20;
+            seriesList.Visual.Width = 300;
+            seriesList.Visual.Height = 400;
+            AddChild(seriesList);
             seriesList.SelectionChanged += (s, a) => OnSeriesSelected(s, EventArgs.Empty);
-            ufoByRegionButton.Click += OnUfoByRegion;
-            ufoByCountryButton.Click += OnUfoByCountry;
-            xcomByRegionButton.Click += OnXCorpByRegion;
-            xcomByCountryButton.Click += OnXCorpByCountry;
-            fundsButton.Click += OnFundsGraph;
-            geoscapeButton.Click += OnGeoscapeButton;
 
             SetupGraph(GraphId.Funding);
         }
 
         private UiRect sceneWindowRect;
         private ListBox seriesList;
-        private Button ufoByRegionButton;
-        private Button ufoByCountryButton;
-        private Button xcomByRegionButton;
-        private Button xcomByCountryButton;
-        private Button fundsButton;
-        private Button geoscapeButton;
 
         #endregion Create the Gum controls
 

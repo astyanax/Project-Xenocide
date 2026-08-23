@@ -38,9 +38,9 @@ namespace ProjectXenocide.UI.Dialogs
                         aircraft.Name, aircraft.HomeBase.Name, aircraft.FuelPercent, aircraft.HullPercent));
                     ContentArea.AddChild(label);
 
-                    var selectBtn = new Button();
-                    selectBtn.Text = "Select";
-                    selectBtn.Click += (s, e) => BringUpGeoscapeInTargetingMode(aircraft);
+                    // Select plays a distinct ButtonClick2, so suppress the auto ButtonClick1.
+                    var selectBtn = ThemedButton.Create("Select",
+                        (s, e) => BringUpGeoscapeInTargetingMode(aircraft), playSound: false);
                     ContentArea.AddChild(selectBtn);
 
                     rowToCraft[rowNum] = aircraft;
@@ -48,10 +48,7 @@ namespace ProjectXenocide.UI.Dialogs
                 }
             }
 
-            var cancelBtn = new Button();
-            cancelBtn.Text = Strings.BUTTON_CANCEL;
-            cancelBtn.Click += OnCancelClicked;
-            ContentArea.AddChild(cancelBtn);
+            AddButton(Strings.BUTTON_CANCEL, OnCancelClicked);
         }
 
         private Dictionary<int, Aircraft> rowToCraft = new Dictionary<int, Aircraft>();

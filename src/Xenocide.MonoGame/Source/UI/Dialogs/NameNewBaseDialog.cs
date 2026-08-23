@@ -38,22 +38,18 @@ namespace ProjectXenocide.UI.Dialogs
 
             var buttonRow = new StackPanel();
 
-            var okBtn = new Button();
-            okBtn.Text = Strings.BUTTON_OK;
+            var okBtn = ThemedButton.Create(Strings.BUTTON_OK, OnOkClicked);
             okBtn.Visual.Width = 180;
             okBtn.Visual.Height = 30;
-            okBtn.Click += OnOkClicked;
             buttonRow.AddChild(okBtn);
 
             var spacer = ThemedLabel.Create("");
             spacer.Visual.Width = 20;
             buttonRow.AddChild(spacer);
 
-            var cancelBtn = new Button();
-            cancelBtn.Text = Strings.BUTTON_CANCEL;
+            var cancelBtn = ThemedButton.Create(Strings.BUTTON_CANCEL, (s, e) => Dismiss());
             cancelBtn.Visual.Width = 180;
             cancelBtn.Visual.Height = 30;
-            cancelBtn.Click += (s, e) => Dismiss();
             buttonRow.AddChild(cancelBtn);
 
             ContentArea.AddChild(buttonRow);

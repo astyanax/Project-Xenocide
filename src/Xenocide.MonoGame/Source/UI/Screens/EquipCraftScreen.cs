@@ -114,8 +114,8 @@ namespace ProjectXenocide.UI.Screens
         private Label baseNameText;
         private Label pod1Text;
         private Label pod2Text;
-        private GridPanel craftGrid;
-        private GridPanel weaponsGrid;
+        private StyledGrid craftGrid;
+        private StyledGrid weaponsGrid;
 
         private void InitializeCraftGrid()
         {

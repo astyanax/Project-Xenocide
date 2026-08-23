@@ -48,6 +48,8 @@ using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Utils;
 
+using ProjectXenocide.UI.Controls;
+
 #endregion Using Statements
 
 namespace ProjectXenocide.UI.Screens
@@ -99,66 +101,7 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("QuitButton", OnQuitGameClicked);
                 WireButton("CreditsButton", OnCreditsClicked);
                 WireButton("SettingsButton", OnSettingsClicked);
-
-                return;
             }
-
-            RootContainer.Width = 250;
-
-#if DEBUG
-            var testsButton = new Button();
-            testsButton.Text = "Run Tests";
-            testsButton.Click += OnRunTestsClicked;
-            RootContainer.AddChild(testsButton);
-
-            var battlescapeButton = new Button();
-            battlescapeButton.Text = "Debug Battlescape";
-            battlescapeButton.Click += OnBattlescapeClicked;
-            RootContainer.AddChild(battlescapeButton);
-
-            var xnetDebugButton = new Button();
-            xnetDebugButton.Text = "Debug XNet";
-            xnetDebugButton.Click += OnXNetDebugClicked;
-            RootContainer.AddChild(xnetDebugButton);
-
-            var aeroscapeDebugButton = new Button();
-            aeroscapeDebugButton.Text = "Debug Aeroscape";
-            aeroscapeDebugButton.Click += OnAeroscapeDebugClicked;
-            RootContainer.AddChild(aeroscapeDebugButton);
-#endif
-
-            var startButton = new Button();
-            startButton.Text = "New Game";
-            startButton.Click += OnNewGameClicked;
-            RootContainer.AddChild(startButton);
-
-            var loadButton = new Button();
-            loadButton.Text = "Load Saved Game";
-            loadButton.Click += OnShowLoadGameScreen;
-            RootContainer.AddChild(loadButton);
-
-            var quitButton = new Button();
-            quitButton.Text = "Quit";
-            quitButton.Click += OnQuitGameClicked;
-            RootContainer.AddChild(quitButton);
-
-            var creditsButton = new Button();
-            creditsButton.Text = "Credits";
-            creditsButton.Click += OnCreditsClicked;
-            RootContainer.AddChild(creditsButton);
-
-            var settingsButton = new Button();
-            settingsButton.Text = "Settings";
-            settingsButton.Click += OnSettingsClicked;
-            RootContainer.AddChild(settingsButton);
-
-            var spacer = new Label();
-            spacer.Height = 20;
-            RootContainer.AddChild(spacer);
-
-            var versionLabel = new Label();
-            versionLabel.Text = Xenocide.CurrentVersion;
-            RootContainer.AddChild(versionLabel);
         }
 
         #region event handlers

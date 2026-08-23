@@ -4,7 +4,7 @@ namespace ProjectXenocide.UI.Controls
 {
     /// <summary>
     /// Text style presets matching the Styles.gucx design tokens.
-    /// Maps to Gum's StyleCategoryState values.
+    /// Maps to concrete Text variable values (FontSize/IsBold/IsItalic).
     /// </summary>
     public enum TextStyle
     {
@@ -73,20 +73,29 @@ namespace ProjectXenocide.UI.Controls
 
         private static void ApplyStyle(Label label, TextStyle style)
         {
-            string styleName = style switch
+            // Apply the concrete Text variables (FontSize, IsBold, IsItalic) that the
+            // Gum text renderer actually honors, matching the values in Styles.gucx.
+            // These mirror the child Text instances defined under TextStyles there.
+            int fontSize;
+            bool isBold;
+            bool isItalic;
+
+            switch (style)
             {
-                TextStyle.Tiny => "Tiny",
-                TextStyle.Small => "Small",
-                TextStyle.Normal => "Normal",
-                TextStyle.Emphasis => "Emphasis",
-                TextStyle.Strong => "Strong",
-                TextStyle.H3 => "H3",
-                TextStyle.H2 => "H2",
-                TextStyle.H1 => "H1",
-                TextStyle.Title => "Title",
-                _ => "Normal",
-            };
-            label.Visual.SetProperty("StyleCategoryState", styleName);
+                case TextStyle.Tiny:      fontSize = 10; isBold = false; isItalic = false; break;
+                case TextStyle.Small:     fontSize = 12; isBold = false; isItalic = false; break;
+                case TextStyle.Emphasis:  fontSize = 14; isBold = false; isItalic = true;  break;
+                case TextStyle.Strong:    fontSize = 14; isBold = true;  isItalic = false; break;
+                case TextStyle.H3:        fontSize = 16; isBold = true;  isItalic = false; break;
+                case TextStyle.H2:        fontSize = 18; isBold = true;  isItalic = false; break;
+                case TextStyle.H1:        fontSize = 22; isBold = true;  isItalic = false; break;
+                case TextStyle.Title:     fontSize = 28; isBold = true;  isItalic = false; break;
+                default:                  fontSize = 14; isBold = false; isItalic = false; break;
+            }
+
+            label.Visual.SetProperty("FontSize", fontSize);
+            label.Visual.SetProperty("IsBold", isBold);
+            label.Visual.SetProperty("IsItalic", isItalic);
         }
     }
 }

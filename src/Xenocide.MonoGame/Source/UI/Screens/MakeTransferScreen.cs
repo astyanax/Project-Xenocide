@@ -111,7 +111,7 @@ namespace ProjectXenocide.UI.Screens
         private Label sourceText;
         private Label totalCostText;
         private ComboBox outpostsListComboBox;
-        private GridPanel grid;
+        private StyledGrid grid;
 
         private void InitializeGrid()
         {

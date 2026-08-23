@@ -106,7 +106,7 @@ namespace ProjectXenocide.UI.Screens
             PopulateGrid();
         }
 
-        private GridPanel grid;
+        private StyledGrid grid;
 
         /// <summary>
         /// Creates and populates a GridPanel which holds funding details for each country

@@ -246,52 +246,9 @@ namespace ProjectXenocide.UI.Controls
         /// <returns>The created Button for further customization.</returns>
         public Button AddButton(string text, EventHandler onClick)
         {
-            var button = CreateXenocideButton(text, onClick)
-                         ?? CreateFallbackButton(text, onClick);
+            var button = ThemedButton.Create(text, onClick);
             ButtonBar.AddChild(button);
             return button;
-        }
-
-        internal static Button CreateXenocideButton(string text, EventHandler onClick)
-        {
-            var project = Xenocide.GumProject;
-            if (project == null)
-                return null;
-
-            if (buttonTemplate == null)
-                buttonTemplate = project.Screens.Find(s => s.Name == "XenocideButtonTemplate");
-            if (buttonTemplate == null)
-                return null;
-
-            var templateRoot = buttonTemplate.ToGraphicalUiElement();
-            var button = templateRoot.GetFrameworkElementByName<Button>("Button");
-            if (button == null)
-                return null;
-
-            button.Text = text;
-            button.Click += OnAnyButtonClicked;
-            if (onClick != null)
-                button.Click += onClick;
-            return button;
-        }
-
-        private static Button CreateFallbackButton(string text, EventHandler onClick)
-        {
-            var button = new Button();
-            button.Text = text;
-            button.Visual.Width = 0;
-            button.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
-            button.Click += OnAnyButtonClicked;
-            if (onClick != null)
-                button.Click += onClick;
-            return button;
-        }
-
-        private static ElementSave buttonTemplate;
-
-        private static void OnAnyButtonClicked(object sender, EventArgs e)
-        {
-            Xenocide.AudioSystem?.PlaySound(Assets.SoundId.ButtonClick1);
         }
     }
 }

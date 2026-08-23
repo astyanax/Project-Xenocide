@@ -9,6 +9,7 @@ using MonoGameGum;
 using NLog;
 
 using ProjectXenocide.Assets;
+using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Screens;
 
 namespace ProjectXenocide.UI.Dialogs
@@ -142,6 +143,20 @@ namespace ProjectXenocide.UI.Dialogs
             ContentArea.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
 
             _panel.AddChild(ContentArea);
+        }
+
+        /// <summary>
+        /// Creates a themed button and adds it to the dialog's content area.
+        /// The ButtonClick1 sound is auto-wired by ThemedButton.
+        /// </summary>
+        /// <param name="text">Button label text.</param>
+        /// <param name="onClick">Click event handler.</param>
+        /// <returns>The created Button for further customization.</returns>
+        protected Button AddButton(string text, EventHandler onClick)
+        {
+            var button = ThemedButton.Create(text, onClick);
+            ContentArea.AddChild(button);
+            return button;
         }
 
         private void OnCloseClicked(object sender, EventArgs e)

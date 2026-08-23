@@ -98,14 +98,10 @@ namespace ProjectXenocide.UI.Screens
             spacer.Height = 20;
             _rootPanel.AddChild(spacer);
 
-            var saveBtn = new Button();
-            saveBtn.Text = "Save";
-            saveBtn.Click += OnSaveClicked;
+            var saveBtn = ThemedButton.Create("Save", OnSaveClicked);
             _rootPanel.AddChild(saveBtn);
 
-            var cancelBtn = new Button();
-            cancelBtn.Text = "Cancel";
-            cancelBtn.Click += OnCancelClicked;
+            var cancelBtn = ThemedButton.Create("Cancel", OnCancelClicked);
             _rootPanel.AddChild(cancelBtn);
 
             ShowDisplayTab();
@@ -113,14 +109,9 @@ namespace ProjectXenocide.UI.Screens
 
         private static Button MakeTabButton(string text, Action action)
         {
-            var btn = new Button();
-            btn.Text = text;
+            var btn = ThemedButton.Create(text);
             btn.Visual.Width = 150;
-            btn.Click += (s, e) =>
-            {
-                Xenocide.AudioSystem?.PlaySound(SoundId.ButtonClick1);
-                action();
-            };
+            btn.Click += (s, e) => action();
             return btn;
         }
 
@@ -214,14 +205,9 @@ namespace ProjectXenocide.UI.Screens
             label.Visual.Width = 350;
             row.AddChild(label);
 
-            var btn = new Button();
-            btn.Text = initialValue;
+            var btn = ThemedButton.Create(initialValue);
             btn.Visual.Width = 200;
-            btn.Click += (s, e) =>
-            {
-                Xenocide.AudioSystem?.PlaySound(SoundId.ButtonClick1);
-                btn.Text = onToggle();
-            };
+            btn.Click += (s, e) => { btn.Text = onToggle(); };
             row.AddChild(btn);
 
             _contentPanel.AddChild(row);
@@ -235,8 +221,7 @@ namespace ProjectXenocide.UI.Screens
             row.Visual.Width = 600;
             row.Visual.Height = 30;
 
-            var downBtn = new Button();
-            downBtn.Text = "<";
+            var downBtn = ThemedButton.Create("<");
             downBtn.Visual.Width = 40;
             row.AddChild(downBtn);
 
@@ -244,20 +229,17 @@ namespace ProjectXenocide.UI.Screens
             levelLabel.Visual.Width = 40;
             row.AddChild(levelLabel);
 
-            var upBtn = new Button();
-            upBtn.Text = ">";
+            var upBtn = ThemedButton.Create(">");
             upBtn.Visual.Width = 40;
             row.AddChild(upBtn);
 
             downBtn.Click += (s, e) =>
             {
-                Xenocide.AudioSystem?.PlaySound(SoundId.ButtonClick1);
                 setLevel(getLevel() - 1);
                 levelLabel.Text = getLevel().ToString(CultureInfo.InvariantCulture);
             };
             upBtn.Click += (s, e) =>
             {
-                Xenocide.AudioSystem?.PlaySound(SoundId.ButtonClick1);
                 setLevel(getLevel() + 1);
                 levelLabel.Text = getLevel().ToString(CultureInfo.InvariantCulture);
             };

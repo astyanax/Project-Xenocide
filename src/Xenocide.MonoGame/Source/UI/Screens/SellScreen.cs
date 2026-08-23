@@ -104,7 +104,7 @@ namespace ProjectXenocide.UI.Screens
 
         private Label fundsText;
         private Label totalValueText;
-        private GridPanel grid;
+        private StyledGrid grid;
 
         /// <summary>
         /// Create GridPanel which holds items available to sell

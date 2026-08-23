@@ -43,8 +43,7 @@ using NLog;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
 using ProjectXenocide.UI.Controls;
-using ProjectXenocide.UI.Dialogs;
-using ProjectXenocide.UI.Scenes.Battlescape;
+using ProjectXenocide.UI.Dialogs;using ProjectXenocide.UI.Scenes.Battlescape;
 using ProjectXenocide.Utils;
 
 using Xenocide.Resources;
@@ -140,7 +139,7 @@ namespace ProjectXenocide.UI.Screens
 
             if (GumRoot != null)
             {
-                combatantStatsTextWindow = new Label();
+                combatantStatsTextWindow = ThemedLabel.CreateCaption("");
                 combatantStatsTextWindow.Visual.Visible = false;
 
                 WireButton("equipmentButton", OnEquipmentButton);

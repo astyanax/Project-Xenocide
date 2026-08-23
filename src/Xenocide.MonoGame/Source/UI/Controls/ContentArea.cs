@@ -84,17 +84,6 @@ namespace ProjectXenocide.UI.Controls
         }
 
         /// <summary>
-        /// Adds a StyledGrid to the content area with built-in theming.
-        /// </summary>
-        /// <param name="grid">The StyledGrid to add.</param>
-        public void AddGrid(StyledGrid grid)
-        {
-            grid.Visual.Width = 0;
-            grid.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
-            _panel.Visual.Children.Add(grid.Visual.Visual);
-        }
-
-        /// <summary>
         /// Adds vertical spacing between content items.
         /// </summary>
         /// <param name="height">Spacer height in pixels (default 10).</param>

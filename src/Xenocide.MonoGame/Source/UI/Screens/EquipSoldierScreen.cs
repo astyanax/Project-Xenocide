@@ -47,6 +47,7 @@ using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData.Items;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Battlescape.Combatants;
+using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Scenes;
 #endregion
 
@@ -154,48 +155,15 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         protected override void CreateGumControls()
         {
-            if (GumRoot != null)
-            {
-                WireButton("closeButton", OnCloseButton);
-                WireButton("leftButton", OnLeftButton);
-                WireButton("rightButton", OnRightButton);
+            WireButton("closeButton", OnCloseButton);
+            WireButton("leftButton", OnLeftButton);
+            WireButton("rightButton", OnRightButton);
 
-                ammoText = new Label();
-                ammoText.Visual.X = 20;
-                ammoText.Visual.Y = 20;
-                AddChild(ammoText);
-                ShowAmmoString();
-
-                AddStaticText("SCREEN_EQUIP_SOLDIER_LEFT_SHOULDER");
-                AddStaticText("SCREEN_EQUIP_SOLDIER_RIGHT_SHOULDER");
-                AddStaticText("SCREEN_EQUIP_SOLDIER_LEFT_HAND");
-                AddStaticText("SCREEN_EQUIP_SOLDIER_RIGHT_HAND");
-                AddStaticText("SCREEN_EQUIP_SOLDIER_LEFT_LEG");
-                AddStaticText("SCREEN_EQUIP_SOLDIER_RIGHT_LEG");
-                AddStaticText("SCREEN_EQUIP_SOLDIER_BACKPACK");
-                AddStaticText("SCREEN_EQUIP_SOLDIER_BELT");
-                RepositionStaticTexts();
-
-                controller.CreateGumControls();
-                return;
-            }
-
-            // Text detailing ammo in weapon/clip
-            ammoText = new Label();
-            RootContainer.AddChild(ammoText);
+            ammoText = ThemedLabel.CreateBody("");
+            ammoText.Visual.X = 20;
+            ammoText.Visual.Y = 20;
+            AddChild(ammoText);
             ShowAmmoString();
-
-            // buttons
-            closeButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_CLOSE") };
-            RootContainer.AddChild(closeButton);
-            leftButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_SCROLL_LEFT") };
-            RootContainer.AddChild(leftButton);
-            rightButton = new Button() { Text = XenocideResourceManager.Get("BUTTON_SCROLL_RIGHT") };
-            RootContainer.AddChild(rightButton);
-
-            closeButton.Click += OnCloseButton;
-            leftButton.Click += OnLeftButton;
-            rightButton.Click += OnRightButton;
 
             AddStaticText("SCREEN_EQUIP_SOLDIER_LEFT_SHOULDER");
             AddStaticText("SCREEN_EQUIP_SOLDIER_RIGHT_SHOULDER");
@@ -205,20 +173,17 @@ namespace ProjectXenocide.UI.Screens
             AddStaticText("SCREEN_EQUIP_SOLDIER_RIGHT_LEG");
             AddStaticText("SCREEN_EQUIP_SOLDIER_BACKPACK");
             AddStaticText("SCREEN_EQUIP_SOLDIER_BELT");
+            RepositionStaticTexts();
 
             controller.CreateGumControls();
         }
 
         private Label ammoText;
-        private Button closeButton;
-        private Button leftButton;
-        private Button rightButton;
         private readonly List<Label> _staticTextLabels = new();
 
         private void AddStaticText(string resourceName)
         {
-            Label label = new Label();
-            label.Text = XenocideResourceManager.Get(resourceName);
+            Label label = ThemedLabel.CreateCaption(XenocideResourceManager.Get(resourceName));
             AddChild(label);
             _staticTextLabels.Add(label);
         }

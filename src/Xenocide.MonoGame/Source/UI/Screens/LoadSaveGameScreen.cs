@@ -130,7 +130,7 @@ namespace ProjectXenocide.UI.Screens
             savesgrid.AddRow(NameCol, NameCol, RealTimeCol, GameTimeCol);
         }
 
-        private GridPanel savesgrid;
+        private StyledGrid savesgrid;
         private TextBox filenameEditBox;
 
         #endregion Create the Gum controls

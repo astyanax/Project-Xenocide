@@ -120,8 +120,8 @@ namespace ProjectXenocide.UI.Screens
             InitializeFacilitiesGrid();
         }
 
-        private GridPanel staffGrid;
-        private GridPanel facilitiesGrid;
+        private StyledGrid staffGrid;
+        private StyledGrid facilitiesGrid;
         private ComboBox outpostsListComboBox;
         private TextBox nameEditBox;
 

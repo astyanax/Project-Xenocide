@@ -353,7 +353,7 @@ The `GetFrameworkElementByName<T>()` method requires `FormsControlAsObject` to b
 
 | Pattern | Code | Used By |
 |---------|------|---------|
-| `GetGraphicalUiElementByName` + `SetProperty` | `elem.SetProperty("Text", value)` | GumDialog, AeroscapeScreen |
+| `GetGraphicalUiElementByName` + `SetProperty` | `elem.SetProperty("Text", value)` | AeroscapeScreen |
 | Create programmatically | `var label = new Label(); ... label.Text = value;` | GeoscapeScreen, BattlescapeScreen |
 
 #### Button `Color` Is Not a Direct Property
@@ -421,7 +421,7 @@ Right-click / Escape / Backspace → CancelFacility → State = NotAdding, ghost
    - Base empty → `State = AddAccessLift` (auto-creates access lift ghost)
    - Has facilities → `ShowDialog(new BuildFacilityDialog(this))`
 
-2. **BuildFacilityDialog** (GumDialog subclass) populates `ContentPanel` with one `Button` per buildable facility. Each button embeds name, cost, build days, and monthly maintenance. A Cancel button is added last.
+2. **BuildFacilityDialog** (ModalDialog subclass) populates `ContentArea` with one `Button` per buildable facility. Each button embeds name, cost, build days, and monthly maintenance. A Cancel button is added last.
 
 3. **User clicks a facility** → `OnFacilitySelected(idx)` → checks `CanAfford` → checks `LimitIsOnePerOutpost` → `basesScreen.BuildFacility(handle)` → sets `scene.NewFacility` and `State = AddFacility`.
 
@@ -557,9 +557,8 @@ A `GraphicalUiElement` has writable `Children` **if and only if** it was created
 
 ### Remaining Gum Backlog
 
-- Dialog `.gusx` conversion — 9 dialogs currently programmatic (4 done: MessageBox, YesNo, Options, GumOptions)
 - Software cursor polish — context-sensitive cursors (hand/arrow per element), HW/SW toggle via settings
-- GridPanel XenocideButton styling — `RowButtonFactory` property added to GridPanel.cs; remaining: implement flat XenocideButton visual (NineSlice-based, avoiding hierarchical GUE limitation)
+- ViewportMode `FullScene` — EquipSoldierScreen + AeroscapeScreen still use `GetSceneRectangle()`/hard-coded pixel coordinates instead of `ScreenLayout` viewport modes
 
 ---
 
@@ -573,11 +572,13 @@ The project provides a set of reusable UI components that standardize screen lay
 
 | Component | File | Purpose |
 |-----------|------|---------|
-| `ScreenLayout` (.gucx + .cs) | `Content/Gum/Components/Controls/ScreenLayout.gucx`, `Source/UI/Controls/ScreenLayout.cs` | Standard screen structure: scrollable content area (75%), button bar (200px right), status bar (bottom) |
+| `ScreenLayout` (.gucx + .cs) | `Content/Gum/Components/Controls/ScreenLayout.gucx`, `Source/UI/Controls/ScreenLayout.cs` | Standard screen structure: scrollable content area (75%), button bar (200px right), status bar (bottom). Also provides `ViewportMode` (Standard/SplitViewport/FullScene) for 3D/2D scene screens |
 | `ScreenContent` (.gucx) | `Content/Gum/Components/Controls/ScreenContent.gucx` | Scrollable StackPanel child for ScreenLayout.ContentPanel |
 | `ContentArea` (.cs) | `Source/UI/Controls/ContentArea.cs` | Manages dynamic content: AddHeader, AddLabel, AddGrid, AddSpacer, Clear |
 | `ThemedLabel` (.cs) | `Source/UI/Controls/ThemedLabel.cs` | Factory for pre-styled Labels (Title 28px, H1 22px, H2 18px, H3 16px, Normal 14px, Small 12px, Tiny 10px) |
+| `ThemedButton` (.cs) | `Source/UI/Controls/ThemedButton.cs` | Single source of truth for button creation: `Create()` (textured XenocideButton 3-slice from XenoNew.png) + `CreateFlat()` (ButtonStandard for ColorCategoryState striping); auto-wires ButtonClick1 |
 | `StyledGrid` (.cs) | `Source/UI/Controls/StyledGrid.cs` | GridPanel subclass with alternating row colors, header styling, 25px rows |
+| `ModalDialog` (.cs) | `Source/UI/Dialogs/ModalDialog.cs` | Dialog base class (replaces the deleted GumDialog): title bar, centered panel, `CreateDialogWidgets()`, `AddButton()` helper |
 
 ### ScreenLayout Structure
 

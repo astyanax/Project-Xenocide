@@ -39,17 +39,11 @@ namespace ProjectXenocide.UI.Screens
                 foreach (ActionInfo action in item.ItemInfo.Actions)
                 {
                     int idx = index;
-                    var btn = new Button();
-                    btn.Text = action.MenuEntry(combatant, activeArm);
-                    btn.Click += (s, e) => DoSelectedAction(idx);
-                    ContentArea.AddChild(btn);
+                    AddButton(action.MenuEntry(combatant, activeArm), (s, e) => DoSelectedAction(idx));
                     ++index;
                 }
 
-                var cancelBtn = new Button();
-                cancelBtn.Text = Strings.BUTTON_CANCEL;
-                cancelBtn.Click += OnCancelClicked;
-                ContentArea.AddChild(cancelBtn);
+                AddButton(Strings.BUTTON_CANCEL, OnCancelClicked);
             }
 
             public void OnCancelClicked(object sender, EventArgs e)

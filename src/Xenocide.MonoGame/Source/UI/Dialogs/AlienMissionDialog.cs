@@ -21,16 +21,10 @@ namespace ProjectXenocide.UI.Dialogs
             for (int i = 0; i < missionNames.Length; i++)
             {
                 int idx = i;
-                var btn = new Button();
-                btn.Text = missionNames[i];
-                btn.Click += (s, e) => LaunchMission(idx);
-                ContentArea.AddChild(btn);
+                AddButton(missionNames[i], (s, e) => LaunchMission(idx));
             }
 
-            var cancelBtn = new Button();
-            cancelBtn.Text = "Cancel";
-            cancelBtn.Click += (s, e) => Dismiss();
-            ContentArea.AddChild(cancelBtn);
+            AddButton("Cancel", (s, e) => Dismiss());
         }
 
         private void LaunchMission(int selectedMission)

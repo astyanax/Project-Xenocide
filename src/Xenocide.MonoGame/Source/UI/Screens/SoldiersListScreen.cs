@@ -282,8 +282,8 @@ namespace ProjectXenocide.UI.Screens
         }
 
         private Label nameEditBox;
-        private GridPanel soldiersListGrid;
-        private GridPanel attributesGrid;
+        private StyledGrid soldiersListGrid;
+        private StyledGrid attributesGrid;
 
         #endregion
 
@@ -375,6 +375,8 @@ namespace ProjectXenocide.UI.Screens
         {
             get
             {
+                if (soldiersListGrid == null)
+                    return null;
                 object tag = soldiersListGrid.GetSelectedTag();
                 return tag as Person;
             }

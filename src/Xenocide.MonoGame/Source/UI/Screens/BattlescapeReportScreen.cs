@@ -111,8 +111,8 @@ namespace ProjectXenocide.UI.Screens
             PopulateRecoveredGrid();
         }
 
-        private GridPanel scoreGrid;
-        private GridPanel recoveredGrid;
+        private StyledGrid scoreGrid;
+        private StyledGrid recoveredGrid;
 
         /// <summary>
         /// Creates a GridPanel which holds score information about

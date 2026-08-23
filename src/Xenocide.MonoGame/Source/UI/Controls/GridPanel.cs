@@ -31,20 +31,11 @@ namespace ProjectXenocide.UI.Controls
         /// </summary>
         public static Button CreateStyledRowButton()
         {
-            var button = ScreenLayout.CreateXenocideButton("", null);
-            if (button != null)
-            {
-                button.Visual.Height = 25;
-                button.Visual.Width = 0;
-                button.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
-                return button;
-            }
-
-            var fallback = new Button();
-            fallback.Visual.Height = 25;
-            fallback.Visual.Width = 0;
-            fallback.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
-            return fallback;
+            var button = ThemedButton.Create("");
+            button.Visual.Height = 25;
+            button.Visual.Width = 0;
+            button.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
+            return button;
         }
 
         public GridPanel()
@@ -56,7 +47,7 @@ namespace ProjectXenocide.UI.Controls
             _container.AddChild(_bodyPanel);
         }
 
-        public void AddColumn(string header, int widthPixels)
+        public virtual void AddColumn(string header, int widthPixels)
         {
             var label = new Label { Text = header };
             label.Visual.Width = widthPixels;
@@ -164,7 +155,7 @@ namespace ProjectXenocide.UI.Controls
                 _selectedIndex--;
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             foreach (var row in _rows)
                 _bodyPanel.Visual.Children.Remove(row.RowButton.Visual);

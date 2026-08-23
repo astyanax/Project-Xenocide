@@ -43,53 +43,24 @@ namespace ProjectXenocide.UI.Dialogs
         protected override void CreateDialogWidgets()
         {
             // Music section
-            musicToggleBtn = new Button();
-            musicToggleBtn.Text = musicEnabled ? "Music: ON" : "Music: OFF";
-            musicToggleBtn.Click += OnMusicToggleClicked;
-            ContentArea.AddChild(musicToggleBtn);
-
-            musicDownBtn = new Button();
-            musicDownBtn.Text = "Music -";
-            musicDownBtn.Click += (s, e) => { musicLevel = Math.Max(0, musicLevel - 1); UpdateMusicLabel(); };
-            ContentArea.AddChild(musicDownBtn);
-
-            musicUpBtn = new Button();
-            musicUpBtn.Text = "Music +";
-            musicUpBtn.Click += (s, e) => { musicLevel = Math.Min(10, musicLevel + 1); UpdateMusicLabel(); };
-            ContentArea.AddChild(musicUpBtn);
+            musicToggleBtn = AddButton(musicEnabled ? "Music: ON" : "Music: OFF", OnMusicToggleClicked);
+            musicDownBtn = AddButton("Music -", (s, e) => { musicLevel = Math.Max(0, musicLevel - 1); UpdateMusicLabel(); });
+            musicUpBtn = AddButton("Music +", (s, e) => { musicLevel = Math.Min(10, musicLevel + 1); UpdateMusicLabel(); });
 
             musicLevelLabel = ThemedLabel.CreateBody("Music: " + (musicEnabled ? musicLevel.ToString(CultureInfo.InvariantCulture) : "OFF"));
             ContentArea.AddChild(musicLevelLabel);
 
             // Sound section
-            soundToggleBtn = new Button();
-            soundToggleBtn.Text = soundEnabled ? "Sound: ON" : "Sound: OFF";
-            soundToggleBtn.Click += OnSoundToggleClicked;
-            ContentArea.AddChild(soundToggleBtn);
-
-            soundDownBtn = new Button();
-            soundDownBtn.Text = "Sound -";
-            soundDownBtn.Click += (s, e) => { soundLevel = Math.Max(0, soundLevel - 1); UpdateSoundLabel(); };
-            ContentArea.AddChild(soundDownBtn);
-
-            soundUpBtn = new Button();
-            soundUpBtn.Text = "Sound +";
-            soundUpBtn.Click += (s, e) => { soundLevel = Math.Min(10, soundLevel + 1); UpdateSoundLabel(); };
-            ContentArea.AddChild(soundUpBtn);
+            soundToggleBtn = AddButton(soundEnabled ? "Sound: ON" : "Sound: OFF", OnSoundToggleClicked);
+            soundDownBtn = AddButton("Sound -", (s, e) => { soundLevel = Math.Max(0, soundLevel - 1); UpdateSoundLabel(); });
+            soundUpBtn = AddButton("Sound +", (s, e) => { soundLevel = Math.Min(10, soundLevel + 1); UpdateSoundLabel(); });
 
             soundLevelLabel = ThemedLabel.CreateBody("Sound: " + (soundEnabled ? soundLevel.ToString(CultureInfo.InvariantCulture) : "OFF"));
             ContentArea.AddChild(soundLevelLabel);
 
             // Action buttons
-            var saveBtn = new Button();
-            saveBtn.Text = "Save";
-            saveBtn.Click += OnSaveClicked;
-            ContentArea.AddChild(saveBtn);
-
-            var cancelBtn = new Button();
-            cancelBtn.Text = "Cancel";
-            cancelBtn.Click += OnCancelClicked;
-            ContentArea.AddChild(cancelBtn);
+            AddButton("Save", OnSaveClicked);
+            AddButton("Cancel", OnCancelClicked);
         }
 
         private void UpdateMusicLabel()

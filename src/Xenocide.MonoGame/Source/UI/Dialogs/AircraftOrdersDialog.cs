@@ -25,20 +25,9 @@ namespace ProjectXenocide.UI.Dialogs
             var details = ThemedLabel.CreateBody(MakeDialogText());
             ContentArea.AddChild(details);
 
-            var returnBtn = new Button();
-            returnBtn.Text = Strings.BUTTON_RETURN_TO_BASE;
-            returnBtn.Click += OnReturnClicked;
-            ContentArea.AddChild(returnBtn);
-
-            var targetBtn = new Button();
-            targetBtn.Text = "Target";
-            targetBtn.Click += OnTargetClicked;
-            ContentArea.AddChild(targetBtn);
-
-            var cancelBtn = new Button();
-            cancelBtn.Text = Strings.BUTTON_CANCEL;
-            cancelBtn.Click += OnCancelClicked;
-            ContentArea.AddChild(cancelBtn);
+            AddButton(Strings.BUTTON_RETURN_TO_BASE, OnReturnClicked);
+            AddButton("Target", OnTargetClicked);
+            AddButton(Strings.BUTTON_CANCEL, OnCancelClicked);
         }
 
         public void OnReturnClicked(object sender, EventArgs e)

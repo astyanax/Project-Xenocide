@@ -20,7 +20,7 @@ namespace ProjectXenocide.UI.Controls
     public class StyledGrid : GridPanel
     {
         private const int DefaultRowHeight = 25;
-        private bool _evenRow = false;
+        private bool _evenRow;
 
         public StyledGrid()
         {
@@ -30,23 +30,17 @@ namespace ProjectXenocide.UI.Controls
         /// <summary>
         /// Creates a row button with alternating row color theming.
         /// Even rows get a PrimaryLight tint; odd rows get default styling.
+        /// Uses a flat Forms Button because the alternating striping relies on
+        /// ColorCategoryState, which the textured XenocideButton does not support.
         /// </summary>
         private Button CreateThemedRowButton()
         {
-            var button = new Button();
+            var button = ThemedButton.CreateFlat("");
             button.Visual.Height = DefaultRowHeight;
             button.Visual.Width = 0;
             button.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
 
-            if (_evenRow)
-            {
-                button.Visual.SetProperty("ColorCategoryState", "PrimaryLight");
-            }
-            else
-            {
-                button.Visual.SetProperty("ColorCategoryState", "Primary");
-            }
-
+            button.Visual.SetProperty("ColorCategoryState", _evenRow ? "PrimaryLight" : "Primary");
             _evenRow = !_evenRow;
             return button;
         }
@@ -57,7 +51,7 @@ namespace ProjectXenocide.UI.Controls
         /// </summary>
         /// <param name="header">Column header text.</param>
         /// <param name="widthPixels">Column width in pixels.</param>
-        public new void AddColumn(string header, int widthPixels)
+        public override void AddColumn(string header, int widthPixels)
         {
             base.AddColumn(header, widthPixels);
         }
@@ -65,7 +59,7 @@ namespace ProjectXenocide.UI.Controls
         /// <summary>
         /// Clears all rows and resets the alternating row counter.
         /// </summary>
-        public new void Clear()
+        public override void Clear()
         {
             _evenRow = false;
             base.Clear();

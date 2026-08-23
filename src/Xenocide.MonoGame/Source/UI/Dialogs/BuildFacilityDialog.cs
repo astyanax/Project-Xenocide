@@ -39,16 +39,10 @@ namespace ProjectXenocide.UI.Dialogs
                     // Compact single-button-per-facility: embed name, cost, build time
                     // and monthly maintenance in one clickable row so the dialog stays
                     // short enough to fit on screen without scrolling.
-                    var rowBtn = new Button();
-                    rowBtn.Text = string.Format(CultureInfo.InvariantCulture,
+                    AddButton(string.Format(CultureInfo.InvariantCulture,
                         "{0}  —  ${1}  ({2}d, ${3}/mo)",
-                        facility.Name, facility.BuildCost, facility.BuildDays, facility.MonthlyMaintenance);
-                    // Stretch the button to fill the content panel width so the
-                    // entire row is clickable and the text doesn't get clipped.
-                    rowBtn.Visual.Width = 0;
-                    rowBtn.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
-                    rowBtn.Click += (s, e) => OnFacilitySelected(idx);
-                    ContentArea.AddChild(rowBtn);
+                        facility.Name, facility.BuildCost, facility.BuildDays, facility.MonthlyMaintenance),
+                        (s, e) => OnFacilitySelected(idx));
                     ++buttonCount;
                 }
                 ++index;
@@ -56,12 +50,7 @@ namespace ProjectXenocide.UI.Dialogs
 
             Logger.Debug("CreateDialogWidgets: added {0} facility buttons (plus Cancel)", buttonCount);
 
-            var cancelBtn = new Button();
-            cancelBtn.Text = Strings.BUTTON_CANCEL;
-            cancelBtn.Visual.Width = 0;
-            cancelBtn.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
-            cancelBtn.Click += OnCancelClicked;
-            ContentArea.AddChild(cancelBtn);
+            AddButton(Strings.BUTTON_CANCEL, OnCancelClicked);
         }
 
         private void OnFacilitySelected(int facilityIndex)

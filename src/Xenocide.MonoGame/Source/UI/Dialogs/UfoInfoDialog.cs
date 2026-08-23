@@ -29,10 +29,7 @@ namespace ProjectXenocide.UI.Dialogs
             var details = ThemedLabel.CreateBody(MakeDialogText());
             ContentArea.AddChild(details);
 
-            var cancelBtn = new Button();
-            cancelBtn.Text = Strings.BUTTON_CLOSE;
-            cancelBtn.Click += OnCancelClicked;
-            ContentArea.AddChild(cancelBtn);
+            AddButton(Strings.BUTTON_CLOSE, OnCancelClicked);
         }
 
         public void OnCancelClicked(object sender, EventArgs e)

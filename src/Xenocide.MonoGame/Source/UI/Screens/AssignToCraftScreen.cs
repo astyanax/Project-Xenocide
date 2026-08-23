@@ -111,9 +111,9 @@ namespace ProjectXenocide.UI.Screens
         }
 
         private Label baseNameText;
-        private GridPanel craftGrid;
-        private GridPanel soldierGrid;
-        private GridPanel xcapGrid;
+        private StyledGrid craftGrid;
+        private StyledGrid soldierGrid;
+        private StyledGrid xcapGrid;
 
         private void InitializeCraftGrid()
         {

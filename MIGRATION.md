@@ -281,12 +281,12 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] IntPtr serialization fix in `ModelJsonConverter` — ✅ Done
 - [x] BasesScreen NRE fix (WireButton return value not saved) — ✅ Done
 - [ ] **Remaining:** FBX model textures — add missing textures to MGCB (3 models fail preload)
-- [ ] **Remaining:** Gum dialog `.gusx` file conversion (13 dialogs — 4 fully converted with .gusx, 9 have stubs)
+- [x] **Gum dialog `.gusx` file conversion** — all 13 dialogs converted to fully programmatic content; orphaned `.gusx` files deleted — ✅ Done
 - [ ] **Remaining:** Software cursor polish (hotspot, context-sensitive cursors, HW/SW toggle)
 - [x] **Investigated:** FBX model failures — `Laser Rifle.FBX` importer fails on embedded textures; `Barracks.FBX` missing BUMP.JPG/SPECULAR.JPG; need `.X` format conversion or Blender re-export — ✅ Documented (see Phase 6)
 - [ ] **Remaining:** Content pipeline: add remaining FBX model textures
 - [x] **Investigated:** GridPanel XenocideButton styling — `RowButtonFactory` property added to GridPanel.cs with documentation explaining the hierarchical GUE limitation — ✅ Done (see Phase 8.5)
-- [ ] **Remaining:** ModalDialog migration — 12 of 13 dialogs still extend `GumDialog`; `ModalDialog` base class exists with title bar/centering/overlay/close; BuildFacilityDialog migrated ✅
+- [x] **ModalDialog migration** — all 13 dialogs migrated from `GumDialog` to `ModalDialog` base class — ✅ Done
 - [ ] **Remaining:** PendingActionsDialog — planned in docs/DIALOG.md but not implemented
 - [ ] **Remaining:** GeoEvent PostMessage migration — `FuelLowGeoEvent`, `FacilityFinishedGeoEvent`, `ResearchFinishedGeoEvent`, `UfoAttackingOutpostGeoEvent`, `MessageBoxGeoEvent` all still use blocking `Util.ShowMessageBox()` instead of non-blocking `PostMessage()`
 - [x] **New:** ScreenLayout component (.gucx + .cs) — standard screen structure with scrollable content, button bar, status bar — ✅ Done
@@ -318,12 +318,25 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] **New:** `ScreenLayout.Mode` property — repositions button bar and content area based on viewport mode — ✅ Done
 - [x] **New:** `ScreenLayout.ViewportRect` computed property — returns normalized viewport rectangle for scene rendering based on Mode and window dimensions — ✅ Done
 - [x] **New:** `PolarScreen.ViewportRect` public property — allows screens to override viewport rect for 3D scene rendering and mouse input — ✅ Done
-- [x] **Migrated:** GeoscapeScreen — uses `ScreenLayout { Mode = ViewportMode.SplitViewport }` for viewport computation, removed fallback code path (17 buttons + labels now from .gusx only) — ✅ Done
-- [x] **Migrated:** BattlescapeScreen — uses `ScreenLayout { Mode = ViewportMode.SplitViewport }` for viewport computation, removed fallback code path (5 buttons from .gusx only) — ✅ Done
+- [x] **Migrated:** GeoscapeScreen — uses `ScreenLayout { Mode = ViewportMode.SplitViewport }` for viewport computation, removed fallback code path (17 buttons + labels now from .gusx only); HUD labels migrated to ThemedLabel — ✅ Done
+- [x] **Migrated:** BattlescapeScreen — uses `ScreenLayout { Mode = ViewportMode.SplitViewport }` for viewport computation, removed fallback code path (5 buttons from .gusx only); combatant stats label migrated to ThemedLabel — ✅ Done
 - [x] **Migrated:** XNetScreen — uses `ScreenLayout { Mode = ViewportMode.SplitViewport }` for viewport computation, removed fallback code path (1 button + 2 ListBoxes from .gusx only) — ✅ Done
+- [x] **Migrated:** EquipSoldierScreen — HUD labels (ammoText + 8 static text labels) migrated to ThemedLabel — ✅ Done
+- [x] **Migrated:** AeroscapeScreen — no raw Labels/Buttons in code (all from .gusx), clean — ✅ Done
 - [ ] **Remaining:** EquipSoldierScreen — needs `FullScene` mode (full-screen 3D with Gum overlay); currently uses `GetSceneRectangle()` — deferred
 - [ ] **Remaining:** AeroscapeScreen — needs `FullScene` mode (2D radar with Gum HUD); currently uses hard-coded pixel coordinates — deferred
 - [ ] **Remaining:** StatisticsScreen — needs assessment (2D graph renderer, sceneWindowRect-based) — deferred
+
+#### Phase 4.9: ThemedButton Migration & UI Consolidation
+- [x] **New:** `ThemedButton` factory (.cs) — single source of truth for button creation; `Create()` (textured XenocideButton 3-slice) + `CreateFlat()` (ButtonStandard for `ColorCategoryState` striping); auto-wires `ButtonClick1` — ✅ Done
+- [x] **Refactored:** `ScreenLayout.AddButton` + `GridPanel.CreateStyledRowButton` delegate to `ThemedButton` — ✅ Done
+- [x] **Fixed:** `StyledGrid` — `AddColumn`/`Clear` now `override` (was `new` hiding a non-virtual method, which could silently skip `_evenRow` reset); striping routed through `ThemedButton.CreateFlat` — ✅ Done
+- [x] **Fixed:** `ContentArea.AddGrid` — collapsed duplicate `GridPanel`/`StyledGrid` overloads into one — ✅ Done
+- [x] **New:** `ModalDialog.AddButton()` helper — migrated all 13 dialogs (~36 buttons) to `ThemedButton`; removed redundant manual `PlaySound(ButtonClick1)` — ✅ Done
+- [x] **Migrated:** 5 screens (~29 buttons) — SettingsScreen, GeoscapeScreenState, StartScreen, StatisticsScreen, EquipSoldierScreen → `ThemedButton`; removed dead programmatic fallback branches — ✅ Done
+- [x] **Fixed:** `ThemedLabel` — styles were a no-op (`StyleCategoryState` is not a Gum variable); now sets `FontSize`/`IsBold`/`IsItalic` directly (values matching `Styles.gucx`) — ✅ Done
+- [x] **Deleted:** `GumDialog.cs` (dead base class, 0 subclasses) + 13 orphaned dialog `.gusx` files; cleaned `Xenocide.gumx` ScreenReferences — ✅ Done
+- [x] **Fixed:** 22 CA1859 warnings — grid fields declared `GridPanel` but holding `StyledGrid` changed to `StyledGrid` — ✅ Done
 
 #### Key Design Decisions for Gum Screen Pattern
 
@@ -645,14 +658,28 @@ The legacy architecture proposed splitting each screen into 3 separate classes f
  15. **Cross-platform validation** — Linux testing deferred to end-user validation; all code-level fixes done
  16. **FBX model textures** — `Laser Rifle.FBX` embedded textures fail MGCB import (cosmetic only, won't fix)
  17. **Manual testing** — verify all screens, dialogs, drag-drop, 3D overlays, input conflicts
- 18. **GridPanel flat XenocideButton visual** — `RowButtonFactory` property added; remaining: NineSlice-based button implementation
+ 18. ~~**GridPanel flat XenocideButton visual**~~ ✅ Complete (rows use `ThemedButton` → XenocideButton 3-slice; `StyledGrid` uses flat ButtonStandard for `ColorCategoryState` striping)
  19. ~~**Phase 9.5: Aeroscape**~~ ✅ Complete (715-line controller + simulation engine)
  20. ~~**Phase 9.6: Statistics graphs**~~ ✅ Complete (GraphBuilder + StatisticsRenderer + StatisticsScreenController)
  21. **Phase 9.7: Craft refueling edge cases** — handle Xenium shortages, partial refuel, mid-refuel launch
  22. ~~**Phase 9.8: Screen partitioning**~~ ✅ Complete (14+ screens refactored with controller extraction)
- 23. **ModalDialog migration** — migrate all 13 dialogs from `GumDialog` to `ModalDialog` base class
+ 23. ~~**ModalDialog migration**~~ ✅ Complete (all 13 dialogs migrated from `GumDialog` to `ModalDialog`)
  24. **PendingActionsDialog** — implement dialog for pending actions queue (planned in docs/DIALOG.md)
  25. **GeoEvent PostMessage migration** — convert blocking `Util.ShowMessageBox()` calls in GeoEvents to non-blocking `PostMessage()`
+ 26. ~~**ThemedButton migration**~~ ✅ Complete (all 63 raw `new Button()` calls migrated; only framework-internal factories/chrome remain)
+ 27. **ViewportMode FullScene** — EquipSoldierScreen + AeroscapeScreen still use `GetSceneRectangle()` instead of `ViewportMode.FullScene`
+ 28. ~~**ThemedLabel style fix**~~ ✅ Complete (was a no-op `StyleCategoryState`; now sets `FontSize`/`IsBold`/`IsItalic` directly)
+ 29. ~~**GumDialog teardown**~~ ✅ Complete (`GumDialog.cs` + 13 orphaned dialog `.gusx` files deleted; `Xenocide.gumx` ScreenReferences cleaned)
+
+### UI Modernization Status
+| Component | Status | Notes |
+|-----------|--------|-------|
+| ThemedLabel | ✅ 100% | All raw `new Label()` migrated; styles set concrete `FontSize`/`IsBold`/`IsItalic` |
+| StyledGrid | ✅ 100% | All raw `new GridPanel()` migrated across 17 screens |
+| ModalDialog | ✅ 100% | All 13 dialogs migrated from GumDialog base class (GumDialog.cs deleted) |
+| ThemedButton | ✅ 100% | Single factory (`Create` textured / `CreateFlat` striped); all raw `new Button()` migrated |
+| ViewportMode | ⚠️ Partial | SplitViewport working for 3 screens; FullScene mode not yet adopted by EquipSoldier/Aeroscape |
+| ScreenLayout | ✅ 14 screens | All non-scene screens use ScreenLayout; 5 scene screens use it for viewport computation only |
 
 ### Gum UI Layout & Theming (Next Major Task)
 The Gum WYSIWYG editor (`Gum UI Tool`) can be invoked to create a `.gumx` project for visual layout design. The tool creates XML-based project files that define component styles, layouts, and data bindings. All 27 screens and 13 dialogs load from `.gusx` layouts. The Gum editor would allow:

@@ -101,7 +101,7 @@ namespace ProjectXenocide.UI.Screens
             PopulateGrid();
         }
 
-        private GridPanel grid;
+        private StyledGrid grid;
 
         /// <summary>
         /// Create GridPanel which holds items being shiped

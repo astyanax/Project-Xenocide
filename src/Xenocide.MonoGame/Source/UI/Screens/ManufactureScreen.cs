@@ -129,8 +129,8 @@ namespace ProjectXenocide.UI.Screens
         }
 
         private Label availableText;
-        private GridPanel projectGrid;
-        private GridPanel requirementsGrid;
+        private StyledGrid projectGrid;
+        private StyledGrid requirementsGrid;
 
         private void InitializeGrids()
         {
