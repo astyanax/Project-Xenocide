@@ -22,11 +22,22 @@ namespace ProjectXenocide.UI.Dialogs
         private StackPanel _titleBar;
         private Label _titleLabel;
         private Button _closeButton;
+        private string _title;
 
-        public new string Title
+        /// <summary>
+        /// The dialog's title, shown in the title bar. Stored in a backing field
+        /// (not read back from the label) so that titles passed to the constructor
+        /// survive until <see cref="BuildTitleBar"/> creates the label.
+        /// </summary>
+        public override string Title
         {
-            get => _titleLabel?.Text;
-            set { if (_titleLabel != null) _titleLabel.Text = value; }
+            get => _title;
+            protected set
+            {
+                _title = value;
+                if (_titleLabel != null)
+                    _titleLabel.Text = value;
+            }
         }
 
         protected StackPanel ContentArea { get; private set; }

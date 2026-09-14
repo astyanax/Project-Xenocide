@@ -247,7 +247,13 @@ namespace ProjectXenocide.UI.Screens
             {
                 if (showingDialogs.Count > 0)
                 {
-                    CloseDialog(showingDialogs.Peek());
+                    // Let the dialog handle Escape itself so its Dismiss callback
+                    // (cancel/cleanup) runs; ModalDialog.HandleEscape closes it.
+                    // Fall back to a plain close for dialogs that don't handle it.
+                    if (!showingDialogs.Peek().HandleEscape())
+                    {
+                        CloseDialog(showingDialogs.Peek());
+                    }
                 }
                 else if (screenStack.Count > 0)
                 {
