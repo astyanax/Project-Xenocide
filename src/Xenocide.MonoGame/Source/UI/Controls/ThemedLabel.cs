@@ -47,12 +47,6 @@ namespace ProjectXenocide.UI.Controls
         /// <summary>Title style: 28px bold.</summary>
         public static Label CreateTitle(string text) => Create(text, TextStyle.Title);
 
-        /// <summary>H1 style: 22px bold.</summary>
-        public static Label CreateHeader(string text) => Create(text, TextStyle.H1);
-
-        /// <summary>H2 style: 18px bold.</summary>
-        public static Label CreateSubHeader(string text) => Create(text, TextStyle.H2);
-
         /// <summary>H3 style: 16px bold.</summary>
         public static Label CreateSection(string text) => Create(text, TextStyle.H3);
 
@@ -61,15 +55,6 @@ namespace ProjectXenocide.UI.Controls
 
         /// <summary>Small style: 12px.</summary>
         public static Label CreateCaption(string text) => Create(text, TextStyle.Small);
-
-        /// <summary>Tiny style: 10px.</summary>
-        public static Label CreateMicro(string text) => Create(text, TextStyle.Tiny);
-
-        /// <summary>Strong style: 14px bold.</summary>
-        public static Label CreateStrong(string text) => Create(text, TextStyle.Strong);
-
-        /// <summary>Emphasis style: 14px italic.</summary>
-        public static Label CreateEmphasis(string text) => Create(text, TextStyle.Emphasis);
 
         private static void ApplyStyle(Label label, TextStyle style)
         {

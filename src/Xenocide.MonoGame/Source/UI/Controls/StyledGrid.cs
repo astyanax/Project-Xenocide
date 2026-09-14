@@ -46,17 +46,6 @@ namespace ProjectXenocide.UI.Controls
         }
 
         /// <summary>
-        /// Adds a styled column header. Header uses DarkGray background
-        /// and Strong text style.
-        /// </summary>
-        /// <param name="header">Column header text.</param>
-        /// <param name="widthPixels">Column width in pixels.</param>
-        public override void AddColumn(string header, int widthPixels)
-        {
-            base.AddColumn(header, widthPixels);
-        }
-
-        /// <summary>
         /// Clears all rows and resets the alternating row counter.
         /// </summary>
         public override void Clear()

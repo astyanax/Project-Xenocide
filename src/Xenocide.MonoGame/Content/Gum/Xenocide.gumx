@@ -53,27 +53,11 @@
   <ShowLocalizationInGum>true</ShowLocalizationInGum>
   <CurrentLanguageIndex>0</CurrentLanguageIndex>
   <ScreenReference Name="AeroscapeScreen" />
-  <ScreenReference Name="AssignToCraftScreen" />
-  <ScreenReference Name="BaseInfoScreen" />
-  <ScreenReference Name="BasesScreen" />
-  <ScreenReference Name="BattlescapeReportScreen" />
   <ScreenReference Name="BattlescapeScreen" />
-  <ScreenReference Name="EquipCraftScreen" />
   <ScreenReference Name="EquipSoldierScreen" />
   <ScreenReference Name="GeoscapeScreen" />
-  <ScreenReference Name="LoadSaveGameScreen" />
-  <ScreenReference Name="MakeTransferScreen" />
-  <ScreenReference Name="Manufacture" />
-  <ScreenReference Name="MonthlyCosts" />
-  <ScreenReference Name="MonthlyReportScreen" />
-  <ScreenReference Name="PurchaseScreen" />
-  <ScreenReference Name="Research" />
-  <ScreenReference Name="SellScreen" />
-  <ScreenReference Name="ShowTransfers" />
-  <ScreenReference Name="SoldiersListScreen" />
   <ScreenReference Name="StartScreen" />
   <ScreenReference Name="StatisticsScreen" />
-  <ScreenReference Name="StoresScreen" />
   <ScreenReference Name="XNetScreen" />
   <ScreenReference Name="XenocideButtonTemplate" />
   <ComponentReference Name="Controls/ButtonClose" />
@@ -95,8 +79,6 @@
   <ComponentReference Name="Controls/Menu" />
   <ComponentReference Name="Controls/MenuItem" />
   <ComponentReference Name="Controls/Panel" />
-  <ComponentReference Name="Controls/ScreenContent" />
-  <ComponentReference Name="Controls/ScreenLayout" />
   <ComponentReference Name="Controls/PasswordBox" />
   <ComponentReference Name="Controls/RadioButton" />
   <ComponentReference Name="Controls/ScrollBar" />
@@ -112,8 +94,6 @@
   <ComponentReference Name="Controls/TreeViewToggle" />
   <ComponentReference Name="Controls/UserControl" />
   <ComponentReference Name="Controls/Window" />
-  <ComponentReference Name="DialogButton" />
-  <ComponentReference Name="DialogPanel" />
   <ComponentReference Name="Elements/CautionLines" />
   <ComponentReference Name="Elements/Divider" />
   <ComponentReference Name="Elements/DividerHorizontal" />

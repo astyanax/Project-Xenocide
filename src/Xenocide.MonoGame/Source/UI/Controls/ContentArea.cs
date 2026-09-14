@@ -38,18 +38,6 @@ namespace ProjectXenocide.UI.Controls
         }
 
         /// <summary>
-        /// Adds a sub-header (H3 style: 16px bold).
-        /// </summary>
-        /// <param name="text">Sub-header text.</param>
-        /// <returns>The created Label for further customization.</returns>
-        public Label AddSubHeader(string text)
-        {
-            var label = ThemedLabel.Create(text, TextStyle.H3);
-            _panel.AddChild(label);
-            return label;
-        }
-
-        /// <summary>
         /// Adds a body label (Normal style: 14px).
         /// </summary>
         /// <param name="text">Label text.</param>
