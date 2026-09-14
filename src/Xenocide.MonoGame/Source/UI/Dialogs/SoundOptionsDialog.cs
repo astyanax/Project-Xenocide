@@ -12,11 +12,7 @@ namespace ProjectXenocide.UI.Dialogs
     sealed class SoundOptionsDialog : ModalDialog
     {
         private Button musicToggleBtn;
-        private Button musicUpBtn;
-        private Button musicDownBtn;
         private Button soundToggleBtn;
-        private Button soundUpBtn;
-        private Button soundDownBtn;
         private Label musicLevelLabel;
         private Label soundLevelLabel;
 
@@ -38,22 +34,26 @@ namespace ProjectXenocide.UI.Dialogs
             musicLast = Xenocide.AudioSystem.MusicVolume;
             soundLast = Xenocide.AudioSystem.SoundVolume;
             PanelWidth = 500;
+
+            // Ensure Escape (which calls Dismiss) restores the previous volumes,
+            // matching the Cancel button.
+            DismissAction = RestoreVolumes;
         }
 
         protected override void CreateDialogWidgets()
         {
             // Music section
             musicToggleBtn = AddButton(musicEnabled ? "Music: ON" : "Music: OFF", OnMusicToggleClicked);
-            musicDownBtn = AddButton("Music -", (s, e) => { musicLevel = Math.Max(0, musicLevel - 1); UpdateMusicLabel(); });
-            musicUpBtn = AddButton("Music +", (s, e) => { musicLevel = Math.Min(10, musicLevel + 1); UpdateMusicLabel(); });
+            AddButton("Music -", (s, e) => { musicLevel = Math.Max(0, musicLevel - 1); UpdateMusicLabel(); });
+            AddButton("Music +", (s, e) => { musicLevel = Math.Min(10, musicLevel + 1); UpdateMusicLabel(); });
 
             musicLevelLabel = ThemedLabel.CreateBody("Music: " + (musicEnabled ? musicLevel.ToString(CultureInfo.InvariantCulture) : "OFF"));
             ContentArea.AddChild(musicLevelLabel);
 
             // Sound section
             soundToggleBtn = AddButton(soundEnabled ? "Sound: ON" : "Sound: OFF", OnSoundToggleClicked);
-            soundDownBtn = AddButton("Sound -", (s, e) => { soundLevel = Math.Max(0, soundLevel - 1); UpdateSoundLabel(); });
-            soundUpBtn = AddButton("Sound +", (s, e) => { soundLevel = Math.Min(10, soundLevel + 1); UpdateSoundLabel(); });
+            AddButton("Sound -", (s, e) => { soundLevel = Math.Max(0, soundLevel - 1); UpdateSoundLabel(); });
+            AddButton("Sound +", (s, e) => { soundLevel = Math.Min(10, soundLevel + 1); UpdateSoundLabel(); });
 
             soundLevelLabel = ThemedLabel.CreateBody("Sound: " + (soundEnabled ? soundLevel.ToString(CultureInfo.InvariantCulture) : "OFF"));
             ContentArea.AddChild(soundLevelLabel);
@@ -102,9 +102,17 @@ namespace ProjectXenocide.UI.Dialogs
 
         public void OnCancelClicked(object sender, EventArgs e)
         {
+            Dismiss();
+        }
+
+        /// <summary>
+        /// Restores the volumes captured when the dialog opened. Invoked from the
+        /// Cancel button (via <see cref="Dismiss"/>) and from Escape.
+        /// </summary>
+        private void RestoreVolumes()
+        {
             Xenocide.AudioSystem.MusicVolume = musicLast;
             Xenocide.AudioSystem.SoundVolume = soundLast;
-            Dismiss();
         }
     }
 }
