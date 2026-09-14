@@ -19,7 +19,6 @@ namespace ProjectXenocide.UI.Controls
     /// </summary>
     public class StyledGrid : GridPanel
     {
-        private const int DefaultRowHeight = 25;
         private bool _evenRow;
 
         public StyledGrid()

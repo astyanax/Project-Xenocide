@@ -9,6 +9,9 @@ namespace ProjectXenocide.UI.Controls
 {
     public class GridPanel
     {
+        /// <summary>Single source of truth for grid row height, in pixels.</summary>
+        public const int DefaultRowHeight = 25;
+
         private readonly StackPanel _container;
         private readonly StackPanel _headerPanel;
         private readonly StackPanel _bodyPanel;
@@ -32,7 +35,7 @@ namespace ProjectXenocide.UI.Controls
         public static Button CreateStyledRowButton()
         {
             var button = ThemedButton.Create("");
-            button.Visual.Height = 25;
+            button.Visual.Height = DefaultRowHeight;
             button.Visual.Width = 0;
             button.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
             return button;
@@ -102,11 +105,15 @@ namespace ProjectXenocide.UI.Controls
         {
             int rowIndex = _rows.Count;
 
+            // Height is owned by the row-button factory (DefaultRowHeight) so it
+            // matches the header/row styling; do not override it here.
             var rowButton = RowButtonFactory?.Invoke() ?? CreateStyledRowButton();
-            rowButton.Height = 24;
 
+            // Fill the button's width; _container.Width is not resolved yet at
+            // row-creation time, so an absolute value would be wrong.
             var rowPanel = new StackPanel();
-            rowPanel.Visual.Width = (int)(_container.Width);
+            rowPanel.Visual.Width = 0;
+            rowPanel.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
             rowButton.Visual.Children.Add(rowPanel.Visual);
 
             var labels = new Label[cellTexts.Length];
