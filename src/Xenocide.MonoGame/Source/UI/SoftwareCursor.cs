@@ -2,6 +2,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using ProjectXenocide.UI.Controls;
+
 namespace ProjectXenocide.UI
 {
     public class SoftwareCursor : DrawableGameComponent
@@ -11,9 +13,9 @@ namespace ProjectXenocide.UI
 
         public static bool IsSoftwareCursorEnabled { get; set; } = true;
 
-        private static readonly Rectangle DefaultCursorRect = new Rectangle(142, 127, 24, 24);
-        private static readonly Rectangle PointerCursorRect = new Rectangle(166, 127, 24, 24);
-        private static readonly Rectangle HandCursorRect = new Rectangle(190, 127, 24, 24);
+        private static readonly Rectangle DefaultCursorRect = XenoAtlas.Cursors.Default;
+        private static readonly Rectangle PointerCursorRect = XenoAtlas.Cursors.Arrow;
+        private static readonly Rectangle HandCursorRect = XenoAtlas.Cursors.Hand;
         private static readonly Point DefaultHotspot = new Point(0, 0);
         private static readonly Point PointerHotspot = new Point(12, 0);
         private static readonly Point HandHotspot = new Point(8, 4);
@@ -53,7 +55,7 @@ namespace ProjectXenocide.UI
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _cursorSheet = Texture2D.FromFile(GraphicsDevice, "Content/Textures/UI/XenoNew.png");
+            _cursorSheet = XenoAtlas.Texture;
 
             if (IsSoftwareCursorEnabled)
                 Game.IsMouseVisible = false;

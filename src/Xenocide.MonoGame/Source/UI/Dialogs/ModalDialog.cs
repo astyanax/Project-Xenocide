@@ -5,6 +5,7 @@ using Gum.Forms.Controls;
 using Microsoft.Xna.Framework;
 
 using MonoGameGum;
+using MonoGameGum.GueDeriving;
 
 using NLog;
 
@@ -22,6 +23,7 @@ namespace ProjectXenocide.UI.Dialogs
         private StackPanel _titleBar;
         private Label _titleLabel;
         private Button _closeButton;
+        private SpriteRuntime _background;
         private string _title;
 
         /// <summary>
@@ -66,6 +68,11 @@ namespace ProjectXenocide.UI.Dialogs
             BuildContentArea();
 
             CreateDialogWidgets();
+
+            // Themed atlas background sits behind the panel (added first so it
+            // renders underneath). Null if the atlas texture is unavailable.
+            if (_background != null)
+                GumService.Default.Root.Children.Add(_background);
 
             _panel.AddToRoot();
 
@@ -115,6 +122,15 @@ namespace ProjectXenocide.UI.Dialogs
             _panel.Visual.Y = y;
             _panel.Visual.Width = PanelWidth;
             _panel.Visual.Height = PanelHeight;
+
+            _background = XenoAtlas.CreateSprite(XenoAtlas.Panels.ContentBackground);
+            if (_background != null)
+            {
+                _background.X = x;
+                _background.Y = y;
+                _background.Width = PanelWidth;
+                _background.Height = PanelHeight;
+            }
         }
 
         private void BuildTitleBar()
@@ -178,6 +194,12 @@ namespace ProjectXenocide.UI.Dialogs
 
         private void RemoveFromScreen()
         {
+            if (_background != null)
+            {
+                GumService.Default.Root.Children.Remove(_background);
+                _background = null;
+            }
+
             if (_panel != null)
             {
                 GumService.Default.Root.Children.Remove(_panel.Visual);
