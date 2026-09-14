@@ -117,6 +117,7 @@ namespace ProjectXenocide.UI.Screens
             ScreenManager.ScheduleScreen(new SettingsScreen());
         }
 
+#if DEBUG
         private void OnRunTestsClicked(object sender, EventArgs e)
         {
             Logger.Debug("StartScreen: Run Tests clicked");
@@ -238,12 +239,16 @@ namespace ProjectXenocide.UI.Screens
             }
         }
 
+#endif
+
+#if DEBUG
         private void OnBattlescapeClicked(object sender, EventArgs e)
         {
             Logger.Debug("StartScreen: Battlescape clicked");
             Xenocide.DebugTesting = true;
             StartDebugBattlescape();
         }
+#endif
 
         private void OnNewGameClicked(object sender, EventArgs e)
         {
@@ -327,6 +332,7 @@ namespace ProjectXenocide.UI.Screens
             ScreenManager.ScheduleScreen(new CreditsScreen());
         }
 
+#if DEBUG
         private static void StartDebugBattlescape()
         {
             Logger.Debug("StartScreen: Starting debug battlescape");
@@ -350,5 +356,6 @@ namespace ProjectXenocide.UI.Screens
             Xenocide.GameState.Battlescape = new Battle(battlescapeMission);
             ScreenManager.ScheduleScreen(new BattlescapeScreen());
         }
+#endif
     }
 }

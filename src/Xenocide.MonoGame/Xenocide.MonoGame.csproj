@@ -49,6 +49,17 @@
     </AssemblyAttribute>
   </ItemGroup>
 
+  <!--
+    Test-only sources (in-game RunTests partial classes) are kept out of
+    Release builds. They are [Conditional("DEBUG")] and only invoked by the
+    DEBUG-only "Run Tests" button, so Release has no need for them.
+  -->
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <Compile Remove="Source\**\UnitTest*.cs" />
+    <Compile Remove="Source\Model\Battlescape\Terrain\TerrainBuilders\TestTerrainBuilder.cs" />
+    <Compile Remove="Source\Model\Battlescape\Missions\MockMission.cs" />
+  </ItemGroup>
+
   <ItemGroup>
     <Content Include="Content\**\*.xnb" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Content\**\*.xsd" CopyToOutputDirectory="PreserveNewest" />
