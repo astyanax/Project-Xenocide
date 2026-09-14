@@ -21,11 +21,8 @@ namespace ProjectXenocide.UI.Controls
         /// <summary>Standard layout: content area (left 75%) + button bar (right 190px). No scene viewport.</summary>
         Standard,
 
-        /// <summary>Split layout: scene viewport (left 74.5%) + Gum UI on right 25.5%. Used by GeoscapeScreen, BattlescapeScreen, XNetScreen.</summary>
-        SplitViewport,
-
-        /// <summary>Full scene: scene occupies entire screen, Gum UI overlays on top. Used by EquipSoldierScreen, AeroscapeScreen.</summary>
-        FullScene
+        /// <summary>Split layout: scene viewport (left 74.5%) + Gum UI on right. Used by GeoscapeScreen, BattlescapeScreen, XNetScreen, BasesScreen.</summary>
+        SplitViewport
     }
 
     /// <summary>
@@ -33,9 +30,8 @@ namespace ProjectXenocide.UI.Controls
     /// scrollable content area (left 75%), button bar (right 190px),
     /// and optional status bar (bottom 30px).
     ///
-    /// Also supports viewport modes for screens with 3D/2D scenes:
-    /// - SplitViewport: scene on left 74.5%, Gum UI on right 25.5%
-    /// - FullScene: scene fills entire screen, Gum UI overlaid
+    /// Also supports a viewport mode for screens with 3D/2D scenes:
+    /// - SplitViewport: scene on left 74.5%, Gum UI on right
     ///
     /// USAGE:
     ///   var layout = new ScreenLayout();
@@ -72,21 +68,30 @@ namespace ProjectXenocide.UI.Controls
             ContentPanel.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
             ContentScroll.Visual.Children.Add(ContentPanel.Visual);
 
+            // Button bar: fixed 190px column anchored to the top-right corner.
+            // Using an anchor + RelativeToParent keeps it correct on any window size.
             ButtonBar = new StackPanel();
             ButtonBar.Visual.Width = ButtonBarWidthPx;
             ButtonBar.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.Absolute;
             ButtonBar.Visual.Height = -StatusBarHeightPx - ContentMarginPx;
             ButtonBar.Visual.HeightUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
-            ButtonBar.Visual.X = 1280 - ButtonBarWidthPx - ContentMarginPx;
+            ButtonBar.Visual.XOrigin = RenderingLibrary.Graphics.HorizontalAlignment.Right;
+            ButtonBar.Visual.XUnits = Gum.Converters.GeneralUnitType.PixelsFromLarge;
+            ButtonBar.Visual.X = -ContentMarginPx;
+            ButtonBar.Visual.YOrigin = RenderingLibrary.Graphics.VerticalAlignment.Top;
+            ButtonBar.Visual.YUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
             ButtonBar.Visual.Y = ContentMarginPx;
             Visual.Children.Add(ButtonBar.Visual);
 
+            // Status bar: fills the width, anchored to the bottom edge.
             StatusBar = new StackPanel();
             StatusBar.Visual.Height = StatusBarHeightPx;
             StatusBar.Visual.HeightUnits = Gum.DataTypes.DimensionUnitType.Absolute;
             StatusBar.Visual.Width = 0;
             StatusBar.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
-            StatusBar.Visual.Y = 1024 - StatusBarHeightPx - ContentMarginPx;
+            StatusBar.Visual.YOrigin = RenderingLibrary.Graphics.VerticalAlignment.Bottom;
+            StatusBar.Visual.YUnits = Gum.Converters.GeneralUnitType.PixelsFromLarge;
+            StatusBar.Visual.Y = -ContentMarginPx;
             Visual.Children.Add(StatusBar.Visual);
 
             ApplyLayout();
@@ -140,68 +145,23 @@ namespace ProjectXenocide.UI.Controls
                 int vpW = device.Viewport.Width;
                 int vpH = device.Viewport.Height;
 
-                if (_mode == ViewportMode.SplitViewport)
-                {
-                    float sceneW = vpW * DefaultSceneWidthFraction;
-                    float sceneH = vpH;
-                    return new UiRect(0, 0, sceneW / vpW, sceneH / vpH);
-                }
-
-                // FullScene: entire window
-                return new UiRect(0, 0, 1.0f, 1.0f);
+                float sceneW = vpW * DefaultSceneWidthFraction;
+                float sceneH = vpH;
+                return new UiRect(0, 0, sceneW / vpW, sceneH / vpH);
             }
         }
 
         private ViewportMode _mode;
 
         /// <summary>
-        /// Repositions child elements based on the current Mode.
-        /// Standard: content on left, button bar on right.
-        /// SplitViewport/FullScene: button bar on far right, content hidden (scene renders behind).
+        /// Applies the current Mode. The button bar and status bar are anchored
+        /// (top-right / bottom) so they need no repositioning on resize; only the
+        /// content area visibility differs: it is hidden in SplitViewport because
+        /// the 3D/2D scene renders in that region.
         /// </summary>
         private void ApplyLayout()
         {
-            switch (_mode)
-            {
-                case ViewportMode.SplitViewport:
-                    // Hide content scroll (scene renders in that area)
-                    ContentScroll.Visual.Visible = false;
-
-                    // Button bar on far right
-                    ButtonBar.Visual.X = 1280 - ButtonBarWidthPx - ContentMarginPx;
-                    ButtonBar.Visual.Y = ContentMarginPx;
-                    ButtonBar.Visual.Height = -StatusBarHeightPx - ContentMarginPx;
-                    ButtonBar.Visual.HeightUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
-
-                    // Status bar at bottom
-                    StatusBar.Visual.Y = 1024 - StatusBarHeightPx - ContentMarginPx;
-                    break;
-
-                case ViewportMode.FullScene:
-                    // Hide content scroll (scene renders across full screen)
-                    ContentScroll.Visual.Visible = false;
-
-                    // Button bar on far right
-                    ButtonBar.Visual.X = 1280 - ButtonBarWidthPx - ContentMarginPx;
-                    ButtonBar.Visual.Y = ContentMarginPx;
-                    ButtonBar.Visual.Height = -StatusBarHeightPx - ContentMarginPx;
-                    ButtonBar.Visual.HeightUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
-
-                    // Status bar at bottom
-                    StatusBar.Visual.Y = 1024 - StatusBarHeightPx - ContentMarginPx;
-                    break;
-
-                default: // Standard
-                    ContentScroll.Visual.Visible = true;
-
-                    ButtonBar.Visual.X = 1280 - ButtonBarWidthPx - ContentMarginPx;
-                    ButtonBar.Visual.Y = ContentMarginPx;
-                    ButtonBar.Visual.Height = -StatusBarHeightPx - ContentMarginPx;
-                    ButtonBar.Visual.HeightUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
-
-                    StatusBar.Visual.Y = 1024 - StatusBarHeightPx - ContentMarginPx;
-                    break;
-            }
+            ContentScroll.Visual.Visible = _mode != ViewportMode.SplitViewport;
         }
 
         /// <summary>Adds this layout to the Gum root.</summary>

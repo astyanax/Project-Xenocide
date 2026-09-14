@@ -106,9 +106,16 @@ namespace ProjectXenocide.UI.Screens
             int x = (int)screenPos.X + 20;
             int y = (int)screenPos.Y - 20;
 
-            // Keep tooltip on screen (assuming 1280x1024 default)
-            if (x + 260 > 1280) x = 1280 - 260;
-            if (y + 120 > 1024) y = 1024 - 120;
+            // Clamp against the live viewport so the tooltip stays on screen
+            // at any resolution (and after a window resize).
+            var viewport = Xenocide.Instance.GraphicsDevice.Viewport;
+            float tooltipWidth = panel.Visual.GetAbsoluteWidth();
+            float tooltipHeight = Math.Max(120, panel.Visual.GetAbsoluteHeight());
+
+            if (x + tooltipWidth > viewport.Width) x = (int)(viewport.Width - tooltipWidth);
+            if (y + tooltipHeight > viewport.Height) y = (int)(viewport.Height - tooltipHeight);
+            if (x < 0) x = 0;
+            if (y < 0) y = 0;
 
             panel.Visual.X = x;
             panel.Visual.Y = y;
