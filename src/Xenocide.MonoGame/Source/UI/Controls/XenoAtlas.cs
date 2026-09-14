@@ -94,9 +94,14 @@ namespace ProjectXenocide.UI.Controls
         /// <summary>Mouse cursors (24×24 each).</summary>
         public static class Cursors
         {
-            public static readonly Rectangle Default = new(142, 127, 24, 24);
-            public static readonly Rectangle Arrow = new(166, 127, 24, 24);
-            public static readonly Rectangle Hand = new(190, 127, 24, 24);
+            /// <summary>Standard pointer (cyan arrow).</summary>
+            public static readonly Rectangle Arrow = new(142, 127, 24, 24);
+
+            /// <summary>Bracket/selection cursor.</summary>
+            public static readonly Rectangle Select = new(166, 127, 24, 24);
+
+            /// <summary>Circular targeting reticle (used over 3D scenes).</summary>
+            public static readonly Rectangle Target = new(190, 127, 24, 24);
         }
 
         /// <summary>Four-point compass/waypoint stars.</summary>
