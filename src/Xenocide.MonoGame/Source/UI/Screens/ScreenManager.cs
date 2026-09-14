@@ -488,8 +488,9 @@ namespace ProjectXenocide.UI.Screens
             double seconds = (rightNow - lastOutput).TotalMilliseconds / 1000.0;
             if (1.0 < seconds)
             {
-                Xenocide.Instance.Window.Title =
-                    Util.StringFormat("Xenocide.exe  fps = {0}", (frameCount / seconds));
+                Xenocide.Instance.Window.Title = Util.StringFormat(
+                    "Xenocide.exe  fps = {0}",
+                    (frameCount / seconds).ToString("F1", System.Globalization.CultureInfo.InvariantCulture));
                 frameCount = 0;
                 lastOutput = rightNow;
             }

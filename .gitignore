@@ -40,3 +40,6 @@ __pycache__/
 
 # macOS
 .DS_Store
+
+# UI review screenshots captured by tools/screenshot.ps1
+Screenshots/
