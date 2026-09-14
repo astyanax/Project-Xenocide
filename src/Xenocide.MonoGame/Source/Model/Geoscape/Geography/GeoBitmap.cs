@@ -437,7 +437,11 @@ namespace ProjectXenocide.Model.Geoscape.Geography
         /// <summary>
         /// Name of file holding the bitmap
         /// </summary>
-        private string filename;
+        // Protected (not private) so the reflection-based ModelJsonConverter, which
+        // enumerates declared fields of the concrete type, also serializes this field
+        // when the runtime type is a derived class (LandMaskedGeoBitmap). Otherwise
+        // it deserializes as null and OnDeserializedMethod -> Load() crashes.
+        protected string filename;
 
         /// <summary>
         /// Is the bitmap allowed to have areas that have no properties
