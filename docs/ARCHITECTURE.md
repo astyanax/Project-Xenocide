@@ -28,7 +28,7 @@ Program.cs              Xenocide.cs              ScreenManager           GumScre
 - `ScreenManager` — owns the screen stack, manages scheduling/push/pop, holds the dialog queue
 - `GumScreen` — base for all Gum-based screens; loads `.gusx` layout from `Xenocide.GumProject`
 - `PolarScreen` → `GeoscapeScreen` — 3D globe view with Gum overlay (date, funds, buttons)
-- `GumDialog` → dialogs load from `.gusx` layouts; `ModalDialog` → programmatic fallback
+- `ModalDialog` → all dialogs are programmatic (no dialog `.gusx` layouts); builds a title bar + content area
 
 ## AI / Mission System
 
@@ -372,28 +372,28 @@ public class GeoscapeScene : PolarScene, IDisposable
 
 | Screen | Pattern | Controller File | Lines (Screen/Controller) |
 |--------|---------|----------------|--------------------------|
-| GeoscapeScreen | B (State) | `GeoscapeScreenState.cs` | 700 / 615 |
-| BattlescapeScreen | B (State) | `Battlescape/` (6 files) | 272 / 609 |
-| BasesScreen | D (Scene) + enum state | `Bases/BasesScreenController.cs` | 939 / extracted |
-| EquipSoldierScreen | C (Strategy) + D | `EquipSoldier/` (5 files) | 518 / 718 |
-| XNetScreen | D (Scene) | None needed | 482 / — |
-| StatisticsScreen | D (Scene) | None needed | 410 / — |
-| ResearchScreen | A (Controller) | `Research/ResearchScreenController.cs` | ~300 / ~250 |
-| ManufactureScreen | A (Controller) | `Manufacture/` (4 files) | ~280 / ~300 |
-| AssignToCraftScreen | A (Controller) | `AssignToCraft/AssignToCraftScreenController.cs` | ~300 / ~250 |
-| EquipCraftScreen | A (Controller) | Nested in partial class | ~300 / ~120 |
-| BaseInfoScreen | A (Controller) | Nested in partial class | ~280 / ~150 |
-| AeroscapeScreen | A (Controller) | Nested `DogfightController` | ~150 / ~100 |
-| LoadSaveGameScreen | A (Controller) | Nested `SaveFileManager` | ~350 / ~120 |
-| PurchaseScreen | A (Controller) | Nested in partial class | ~300 / ~80 |
-| SellScreen | A (Controller) | Nested in partial class | ~250 / ~80 |
-| MakeTransferScreen | A (Controller) | Nested in partial class | ~250 / ~80 |
-| SoldiersListScreen | A (Controller) | Nested in partial class | ~350 / ~60 |
-| StartScreen | A (Helper) | Nested `DebugHelper` | ~300 / ~80 |
-| MonthlyReportScreen | Doc comments only | Too small to split | 214 / — |
-| MonthlyCostsScreen | Doc comments only | Too small to split | 201 / — |
-| BattlescapeReportScreen | Doc comments only | Too small to split | 238 / — |
-| SettingsScreen | Doc comments only | Too small to split | 245 / — |
-| CreditsScreen | Custom 2D rendering | No game logic | 264 / — |
-| ShowTransfersScreen | Display only | No game logic | 138 / — |
-| StoresScreen | Display only | No game logic | 133 / — |
+| GeoscapeScreen | B (State) | `GeoscapeScreenState.cs` | 455 / 533 |
+| BattlescapeScreen | B (State) | `Battlescape/` (6 files) | 202 / 154 |
+| BasesScreen | D (Scene) + enum state | `Bases/BasesScreenController.cs` | 745 / 170 |
+| EquipSoldierScreen | C (Strategy) + D | `EquipSoldier/` (5 files) | 427 / 73 |
+| XNetScreen | D (Scene) | None needed | 414 / — |
+| StatisticsScreen | D (Scene) | None needed | 213 / — |
+| ResearchScreen | A (Controller) | `Research/ResearchScreenController.cs` | 264 / 224 |
+| ManufactureScreen | A (Controller) | `Manufacture/ManufactureScreenController.cs` | 304 / 250 |
+| AssignToCraftScreen | A (Controller) | `AssignToCraft/AssignToCraftScreenController.cs` | 381 / 190 |
+| EquipCraftScreen | A (Controller) | `EquipCraft/EquipCraftScreenController.cs` | 282 / 149 |
+| BaseInfoScreen | A (Controller) | `BaseInfo/BaseInfoScreenController.cs` | 293 / 149 |
+| AeroscapeScreen | A (Controller) | `Aeroscape/AeroscapeScreenController.cs` | 721 / 618 |
+| LoadSaveGameScreen | A (Controller) | `LoadSaveGame/LoadSaveGameScreenController.cs` | 268 / 161 |
+| PurchaseScreen | A (Controller) | `Purchase/PurchaseScreenController.cs` | 233 / 136 |
+| SellScreen | A (Controller) | `Sell/SellScreenController.cs` | 234 / 106 |
+| MakeTransferScreen | A (Controller) | `MakeTransfer/MakeTransferScreenController.cs` | 212 / 118 |
+| SoldiersListScreen | Inline logic | None | 336 / — |
+| StartScreen | A (Helper) | `AssertFailureLogger` (debug only) | 309 / — |
+| MonthlyReportScreen | Doc comments only | Too small to split | 165 / — |
+| MonthlyCostsScreen | Doc comments only | Too small to split | 172 / — |
+| BattlescapeReportScreen | Doc comments only | Too small to split | 191 / — |
+| SettingsScreen | Doc comments only | Too small to split | 208 / — |
+| CreditsScreen | Custom 2D rendering | No game logic | 228 / — |
+| ShowTransfersScreen | Display only | No game logic | 129 / — |
+| StoresScreen | Display only | No game logic | 126 / — |

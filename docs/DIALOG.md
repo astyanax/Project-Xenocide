@@ -6,7 +6,7 @@
 |-------|--------|
 | `MessageLog` static queue + GameState persistence | ✅ Implemented |
 | `ModalDialog` base class (overlay + title bar + close X + centering) | ✅ Implemented |
-| All 13 dialogs refactored to extend `ModalDialog` | ✅ Done |
+| All 11 dialogs extend `ModalDialog` | ✅ Done |
 | `GumDialog` deleted (fully replaced) | ✅ Done |
 | `ToastNotification` component (auto-fading popups) | ✅ Implemented |
 | `NotificationMapping` event→type map | ✅ Implemented |
@@ -33,7 +33,7 @@ Xenocide's dialog system handles three categories of user interaction:
 ```
 Frame  (UI/Screens/Frame.cs)
   ├── Dialog  (UI/Dialogs/Dialog.cs) — "modal popup dialogs"
-  │     └── GumDialog  (UI/Dialogs/GumDialog.cs)
+  │     └── ModalDialog  (UI/Dialogs/ModalDialog.cs, abstract)
   │           ├── GumMessageBoxDialog    (simple OK message)
   │           ├── GumYesNoDialog         (Yes/No or OK/Cancel)
   │           ├── GumOptionsDialog       (Load/Save/Sound/Abandon menu)
@@ -43,8 +43,6 @@ Frame  (UI/Screens/Frame.cs)
   │           ├── AlienMissionDialog     (debug cheat: select alien mission)
   │           ├── StartBattlescapeDialog (confirm/auto-complete battlescape)
   │           ├── TrackingLostDialog     (what to do when tracking lost)
-  │           ├── UfoInfoDialog          (UFO detail info display)
-  │           ├── AircraftOrdersDialog   (give orders to aircraft)
   │           ├── BuildFacilityDialog    (select facility to build)
   │           └── PickActionDialog       (combat actions in battlescape)
   └── Screen  (UI/Screens/Screen.cs) — "full screens with background"
@@ -52,11 +50,11 @@ Frame  (UI/Screens/Frame.cs)
 
 ### Rendered Appearance
 
-All 13 dialogs share the same rendering approach:
-- **No window chrome** — no title bar, no close "X" button, no border, no background dim/overlay.
-- **Default Gum StackPanel** — all content is added via `RootContainer.AddChild()`, which uses a plain `StackPanel` that auto-sizes.
-- **No centering** — the `UiSize(0.5f, 0.3f)` passed to the constructor is never applied. The StackPanel renders at its parent's default position (top-left corner of the Gum root).
-- **Same typeface** — Buttons use the default Gum Button font. No differentiated styling for title vs body text.
+All dialogs share the same rendering approach, implemented in `ModalDialog`:
+- **Title bar** — a 28px bar (`ColorCategoryState = Primary`) with the dialog title on the left and a close "X" button on the right.
+- **Programmatic panel** — `ModalDialog` builds a `StackPanel` (`_panel`) sized from `PanelWidth`/`PanelHeight` and centered using the live `GraphicsDevice.Viewport`.
+- **Content area** — subclasses add controls via `ContentArea` in `CreateDialogWidgets()`; `AddButton()` wraps `ThemedButton`.
+- **Background dim** — `ScreenManager.DrawDialogOverlay()` draws a semi-transparent black quad over the scene between the 3D scene and the Gum dialogs.
 
 ### How Dialogs Are Shown and Dismissed
 
@@ -85,10 +83,10 @@ This was the default behavior in the CeGui system because dialogs were truly mod
 
 ### ESC Handling
 
-- **`ScreenManager.HandleEscapeKey()`** detects the ESC edge. If dialogs are showing, it unconditionally calls `CloseDialog(showingDialogs.Peek())` — dismissing the topmost dialog **without invoking any callbacks** (OkAction, YesAction, NoAction are skipped).
-- **No dialog subclass overrides `HandleEscape()`** — none have custom ESC behavior.
-- **For `GumYesNoDialog`**, ESC acts like "Cancel" (closes without side effects).
-- **For `GumMessageBoxDialog`**, the `OkAction` callback is silently discarded on ESC.
+- **`ScreenManager.HandleEscapeKey()`** detects the ESC edge. If dialogs are showing, it calls `showingDialogs.Peek().HandleEscape()` and only falls back to `CloseDialog` if the dialog returns false.
+- **`ModalDialog.HandleEscape()`** returns true and calls `Dismiss()`, which invokes `DismissAction` (cancel/cleanup) before closing.
+- **For `GumYesNoDialog`**, ESC triggers the registered `NoAction`.
+- **For `SoundOptionsDialog`**, ESC restores the previous volumes via `DismissAction`.
 
 ### Message Display Flow
 
@@ -108,18 +106,23 @@ Creates a blocking `GumMessageBoxDialog` with the formatted message text.
 
 **All messages are blocking.** There is no non-blocking notification channel, no message history, and no log.
 
-### Known Gaps (Before MessageLog System)
+### Resolved Gaps
+
+| Gap | Status |
+|-----|--------|
+| Message log | ✅ `MessageLog` static queue + `GameState.MessageLogEntries` persistence + Geoscape `ListBox` panel |
+| Dialog chrome | ✅ Title bar + close "X" + centered panel + background dim (`ScreenManager.DrawDialogOverlay`) |
+| ESC discards callbacks | ✅ ESC now routes through `ModalDialog.HandleEscape()` → `Dismiss()` → `DismissAction` |
+| Dialog titles dropped | ✅ Fixed: `ModalDialog` stores the title in a backing field |
+| Non-blocking channel | ✅ `ScreenManager.PostMessage()` + `ToastNotification` |
+
+### Remaining Gaps
 
 | Gap | Detail |
 |-----|--------|
-| No message log | All messages are ephemeral popups. Zero historical persistence. |
-| No dialog chrome | No title bar, close X button, background dim, or centering. |
-| UiSize ignored | `new UiSize(0.5f, 0.3f)` passed to constructors but never applied to the StackPanel. |
-| ESC discards callbacks | Closing a dialog via ESC skips any registered actions. |
-| Game pauses on ALL dialogs | Even informational messages ("Fuel low") block gameplay. |
-| No non-blocking channel | Every message forces a user interaction. |
-| No dialog visual differentiation | All dialogs look the same — stacked labels and buttons on a plain StackPanel. |
-| Geoscape bottom-left unused | ~930×540 pixels available below the time/funds labels and left of the 3D globe. |
+| `UiSize` unused | `Dialog(UiSize)` still stores no size; `ModalDialog` uses `PanelWidth`/`PanelHeight` instead. |
+| Game pauses on ALL dialogs | Even informational messages block gameplay. |
+| Envelope / `PendingActionsDialog` | Required-action inbox is not yet implemented (see Planned Architecture). |
 
 ---
 

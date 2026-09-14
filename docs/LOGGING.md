@@ -65,8 +65,8 @@ Project Xenocide uses **NLog** as its unified logging framework. All diagnostic 
   </targets>
 
   <rules>
-    <logger name="*" minlevel="Trace" writeTo="console" />
-    <logger name="*" minlevel="Info"  writeTo="file" />
+<logger name="*" minlevel="Debug" writeTo="console" />
+<logger name="*" minlevel="Debug" writeTo="file" />
   </rules>
 </nlog>
 ```
@@ -88,7 +88,7 @@ Project Xenocide uses **NLog** as its unified logging framework. All diagnostic 
 | `Warn` | Missing files, fallbacks triggered, validation warnings |
 | `Info` | Game startup info, max texture size, version info |
 | `Debug` | Screen transitions, dialog lifecycle, click events, state entry, GeoTime debug, profile timings, grid dumps |
-| `Trace` | Very verbose per-frame details (not currently used) |
+| `Trace` | Very verbose per-frame details (used by facility placement / mouse handling) |
 
 ## Getting a Logger
 
@@ -122,7 +122,7 @@ Logger.Debug("ScreenManager: ScheduleScreen {0}", name);
 
 ### NOT Changed (Not Logging)
 
-- **`Debug.Assert`** (~833 calls) — development-time invariant checks, not logging.
+- **`Debug.Assert`** (~828 calls) — development-time invariant checks, not logging.
 - **`MessageLog.cs`** — in-game player-facing event queue (serialized to save files, drives UI).
 - **`ScoreLog.cs`**, **`BattleLog.cs`**, **`MonthlyLog.cs`** — in-game data models.
 

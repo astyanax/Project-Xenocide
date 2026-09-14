@@ -73,33 +73,36 @@ The MGCB content pipeline compiles .fbx models, .fx shaders, textures, spritefon
 |---|---|
 | [MIGRATION.md](MIGRATION.md) | Full migration plan and progress (XNA 3.0 → MonoGame) |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | System architecture (screens, AI/missions, game state, UI) |
+| [docs/GUI.md](docs/GUI.md) | Gum GUI framework and Xenocide UI component architecture |
+| [docs/DIALOG.md](docs/DIALOG.md) | Dialog and message/notification system |
 | [docs/LOGGING.md](docs/LOGGING.md) | Logging architecture (NLog setup, log levels, configuration) |
+| [AGENTS.md](AGENTS.md) | Contributor/agent guide (architecture conventions) |
 | [LEGACY.md](LEGACY.md) | Historical context and legacy releases |
 
 ## Project Structure
 
 ```
+Xenocide.sln             — Solution file
+AGENTS.md                — Contributor/agent guide
 MIGRATION.md             — Migration plan and roadmap
-docs/
-  LOGGING.md             — Logging architecture documentation
-assets/                  — Artwork, design documents, sounds, historical installers
-xna/                     — Main source code
-  trunk/
-    Xenocide.MonoGame/   — MonoGame target (active development)
-      Source/
-        Audio/           — GameAudioComponent (MonoGame SoundEffect backend)
-        Model/           — Game state, geoscape, battlescape, static data
-        Services/        — Savegame service
-        UI/
-          Controls/      — Toast notifications, software cursor
-          Dialogs/       — 13 modal dialogs (4 with Gum .gusx layouts)
-          Scenes/        — 3D scenes (Geoscape, Battlescape, XNet, Facilities)
-          Screens/       — 27 game screens (Gum-based with .gusx layouts)
-        Utils/           — NLog logging, profiling, serialization, content cache
-      Content/           — MGCB assets (models, shaders, textures, fonts, audio)
-        Gum/             — Gum .gumx project + .gusx screen/dialog layouts
-    Tests/               — xUnit.net unit tests
-LICENSE                  — MIT License
+docs/                    — Architecture, GUI, dialog and logging documentation
+assets/                  — Artwork, design documents, sounds
+src/
+  Xenocide.MonoGame/     — Game project (active development)
+    Source/
+      Audio/             — GameAudioComponent (MonoGame SoundEffect backend)
+      Model/             — Game state, geoscape, battlescape, static data
+      Services/          — Savegame service
+      UI/
+        Controls/        — Themed controls (ScreenLayout, ThemedLabel/Button, StyledGrid)
+        Dialogs/         — Modal dialogs (programmatic ModalDialog subclasses)
+        Scenes/          — 3D scenes (Geoscape, Battlescape, XNet, Facilities, ...)
+        Screens/         — 24 game screens (Gum-based)
+      Utils/             — NLog logging, profiling, serialization, content cache
+    Content/             — MGCB assets (models, shaders, textures, fonts, audio)
+      Gum/               — Gum project (Xenocide.gumx) + .gusx/.gucx layouts
+    Content.mgcb         — MGCB content manifest
+  Xenocide.Test.MonoGame/ — xUnit.net unit tests
 ```
 
 ## Legacy Build (XNA 3.0)

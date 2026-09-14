@@ -64,7 +64,7 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 |-----------|---------|---------|
 | .NET SDK | 9.0+ | Runtime target |
 | `System.Text.Json` | Built-in | Replace BinaryFormatter for save/load |
-| **xUnit.net** | 2.9.2 | Test framework (already migrated from NUnit 2.2.9); 61 tests passing |
+| **xUnit.net** | 2.9.2 | Test framework (already migrated from NUnit 2.2.9); 81 tests passing |
 | `xunit.runner.visualstudio` | 2.8.2 | VS/dotnet test adapter |
 | `Microsoft.NET.Test.Sdk` | 17.12.0 | .NET test runner infrastructure |
 | `coverlet.collector` | 6.0.2 | Code coverage |
@@ -109,7 +109,7 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] Create new MonoGame DesktopGL project: `dotnet new mgdesktopgl -o src/Xenocide.MonoGame` — ✅ Done
 - [x] Add NuGet packages: `MonoGame.Framework.DesktopGL`, `MonoGame.Content.Builder.Task` — ✅ Done
 - [x] Set up MGCB content project (`.mgcb`) with all asset references — ✅ Models, shaders, textures, fonts, audio registered
-- [x] Replace NUnit with xUnit.net in test project — ✅ Already done (xunit 2.9.2, 61 tests passing)
+- [x] Replace NUnit with xUnit.net in test project — ✅ Already done (xunit 2.9.2, 81 tests passing)
 
 ### Phase 1: XNA 3.0 → 4.0 API Conversion
 - [x] Replace `effect.Begin()/End()` → `Pass.Apply()` only — ✅ Done
@@ -243,7 +243,7 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [ ] **Manual: You** — verify Gum overlay renders correctly on top of 3D (depth/stencil issues)
 - [ ] **Manual: You** — verify no input conflicts between Gum and 3D scene (click-through, focus)
 
-**All 27 screens + 13 dialogs converted to Gum.** Conversion is complete; remaining items are manual verification, CeGui stubs removal, and polish.
+**All 24 screens + 11 dialogs converted to Gum.** Conversion is complete; remaining items are manual verification, CeGui stubs removal, and polish.
 
 #### Phase 4.6: CeGui Stubs Teardown
 - [x] Remove `CeGuiStubs.cs` — ✅ Deleted (all 21 CeGui type references removed from codebase)
@@ -270,7 +270,7 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] Create 5 additional `.spritefont` files — ✅ Done (Xeno, XenoBig, LargeBaseName, GeoTime, GeoTimeBig)
 - [x] Register all spritefonts in `Content.mgcb` — ✅ Done
 - [x] Gum `.gumx` project with 23 screen layouts + XenocideButton component — ✅ Done
-- [x] All 24 screens converted to `.gusx` layouts (CreditsScreen exempt) — ✅ Done
+- [x] All screens converted to Gum; 7 use `.gusx` layouts (Aeroscape, Battlescape, EquipSoldier, Geoscape, Start, Statistics, XNet), the rest build programmatically via ScreenLayout — ✅ Done
 - [x] Programmatic control positioning fixed in 14 screens (overlapping text bug) — ✅ Done
 - [x] Content preloading (Earth textures, skybox, all XNet models) — ✅ Done
 - [x] `ProfileTimer` utility for debugging performance — ✅ Done
@@ -281,12 +281,12 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] IntPtr serialization fix in `ModelJsonConverter` — ✅ Done
 - [x] BasesScreen NRE fix (WireButton return value not saved) — ✅ Done
 - [ ] **Remaining:** FBX model textures — add missing textures to MGCB (3 models fail preload)
-- [x] **Gum dialog `.gusx` file conversion** — all 13 dialogs converted to fully programmatic content; orphaned `.gusx` files deleted — ✅ Done
+- [x] **Gum dialog `.gusx` file conversion** — all 11 dialogs converted to fully programmatic content; orphaned `.gusx` files deleted — ✅ Done
 - [ ] **Remaining:** Software cursor polish (hotspot, context-sensitive cursors, HW/SW toggle)
 - [x] **Investigated:** FBX model failures — `Laser Rifle.FBX` importer fails on embedded textures; `Barracks.FBX` missing BUMP.JPG/SPECULAR.JPG; need `.X` format conversion or Blender re-export — ✅ Documented (see Phase 6)
 - [ ] **Remaining:** Content pipeline: add remaining FBX model textures
 - [x] **Investigated:** GridPanel XenocideButton styling — `RowButtonFactory` property added to GridPanel.cs with documentation explaining the hierarchical GUE limitation — ✅ Done (see Phase 8.5)
-- [x] **ModalDialog migration** — all 13 dialogs migrated from `GumDialog` to `ModalDialog` base class — ✅ Done
+- [x] **ModalDialog migration** — all 11 dialogs migrated from `GumDialog` to `ModalDialog` base class — ✅ Done
 - [ ] **Remaining:** PendingActionsDialog — planned in docs/DIALOG.md but not implemented
 - [ ] **Remaining:** GeoEvent PostMessage migration — `FuelLowGeoEvent`, `FacilityFinishedGeoEvent`, `ResearchFinishedGeoEvent`, `UfoAttackingOutpostGeoEvent`, `MessageBoxGeoEvent` all still use blocking `Util.ShowMessageBox()` instead of non-blocking `PostMessage()`
 - [x] **New:** ScreenLayout component (.gucx + .cs) — standard screen structure with scrollable content, button bar, status bar — ✅ Done
@@ -332,7 +332,7 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] **Refactored:** `ScreenLayout.AddButton` + `GridPanel.CreateStyledRowButton` delegate to `ThemedButton` — ✅ Done
 - [x] **Fixed:** `StyledGrid` — `AddColumn`/`Clear` now `override` (was `new` hiding a non-virtual method, which could silently skip `_evenRow` reset); striping routed through `ThemedButton.CreateFlat` — ✅ Done
 - [x] **Fixed:** `ContentArea.AddGrid` — collapsed duplicate `GridPanel`/`StyledGrid` overloads into one — ✅ Done
-- [x] **New:** `ModalDialog.AddButton()` helper — migrated all 13 dialogs (~36 buttons) to `ThemedButton`; removed redundant manual `PlaySound(ButtonClick1)` — ✅ Done
+- [x] **New:** `ModalDialog.AddButton()` helper — migrated all 11 dialogs (~36 buttons) to `ThemedButton`; removed redundant manual `PlaySound(ButtonClick1)` — ✅ Done
 - [x] **Migrated:** 5 screens (~29 buttons) — SettingsScreen, GeoscapeScreenState, StartScreen, StatisticsScreen, EquipSoldierScreen → `ThemedButton`; removed dead programmatic fallback branches — ✅ Done
 - [x] **Fixed:** `ThemedLabel` — styles were a no-op (`StyleCategoryState` is not a Gum variable); now sets `FontSize`/`IsBold`/`IsItalic` directly (values matching `Styles.gucx`) — ✅ Done
 - [x] **Deleted:** `GumDialog.cs` (dead base class, 0 subclasses) + 13 orphaned dialog `.gusx` files; cleaned `Xenocide.gumx` ScreenReferences — ✅ Done
@@ -385,7 +385,7 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 - [x] Implement `IAudioSystem` interface — ✅ `GameAudioComponent` in `Source/Audio/GameAudioComponent.cs`
 - [x] Implement MonoGame `SoundEffect` backend (replacing `FmodGameComponent` stub) — ✅ All audio via `OggImporter` + `SoundEffectProcessor` in MGCB
 - [x] Wire audio into game loop (music per-screen, button click sounds, SFX) — ✅ Done
-- [x] Register all 16 `.ogg` audio files in `Content.mgcb` (10 SFX + 6 music) — ✅ Done
+- [x] Register all 18 `.ogg` audio files in `Content.mgcb` (11 SFX + 7 music) — ✅ Done
 - [x] Add `Content.RootDirectory = "Content"` in `Xenocide.cs` constructor — ✅ Required for ContentManager resolution
 - [x] Set resolution to 1280×1024 with Alt+Enter fullscreen toggle — ✅ Done
 - [x] Fix `Frame.Visible` null-ref crash (`rootWidget` null guard) — ✅ Done
@@ -413,10 +413,10 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 - FMOD Ex wrapper files (`fmod.cs`, `fmod_dsp.cs`, `fmodex.dll`) remain in legacy branches only — not carried forward
 
 ### Phase 6: Content Pipeline Rebuild
-- [x] Import 3D models (.fbx, .x) into MGCB — ✅ 37 model entries registered
+- [x] Import 3D models (.fbx, .x) into MGCB — ✅ 34 model entries registered
 - [x] Update shaders (.fx) for D3D11 profile — ✅ Done
 - [x] Set up spritefont in MGCB — ✅ 6 fonts registered
-- [x] Import all textures — ✅ 14 textures registered
+- [x] Import all textures — ✅ 13 textures registered
 - [x] Register all 16 audio .ogg files — ✅ Done
 - [x] Add missing facility models (17 .x files) — ✅ Done
 - [x] Fix `Content\` double-prefix path bugs — ✅ Done
@@ -459,8 +459,8 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 - 10 files — 31 sound name paths (PlaySound/LoadSound/AddButtonSound)
 
 ### Phase 8: Cleanup & Polish
-- [x] Remove NUnit dependency — ✅ Already migrated to xUnit.net 2.9.2 (61 tests passing)
-- [x] Remove old XNA 3.0 project files from active tree — ✅ Already removed; only `Xenocide.MonoGame.sln` remains
+- [x] Remove NUnit dependency — ✅ Already migrated to xUnit.net 2.9.2 (81 tests passing)
+- [x] Remove old XNA 3.0 project files from active tree — ✅ Already removed; only `Xenocide.sln` remains
 - [x] Remove Dependancies/ directory — ✅ Already removed
 - [x] Remove old Lib/ directory — ✅ Already removed
 - [x] Remove old Installers/ directory — ✅ Already removed
@@ -482,7 +482,7 @@ The legacy design explicitly calls for sanity checks against the XML-driven rese
 
 - [x] **No orphan topics** — every research topic must be reachable from a starting topic. `ResearchValidator` tracks visited nodes via DFS, reports unreachable topics with "missing: X" chain. 8 xUnit tests.
 - [x] **No prerequisite loops** — detect cycles. `ResearchValidator` uses white/gray/black DFS cycle detection. 8 xUnit tests.
-- [x] **All items reachable** — every item in `items.xml` can be granted by at least one research topic. `ResearchValidator` validates grant referent integrity. 8 xUnit tests.
+- [x] **All items reachable** — every item in `item.xml` can be granted by at least one research topic. `ResearchValidator` validates grant referent integrity. 8 xUnit tests.
 - [x] **All X-Net entries reachable** — every X-Net entry can be granted by at least one research topic. `ResearchValidator` validates grant referent integrity. 8 xUnit tests.
 - [x] **Prerequisite integrity** — no topic references a non-existent prerequisite (technology, item, facility, or X-Net entry). `ResearchValidator` validates prereq referent integrity. 8 xUnit tests.
 - [x] **Validation entry point** — `ResearchValidator.Validate()` called on game startup as `ResearchGraph.Validate()` via `StaticTables.Populate()`. 8 xUnit tests.
@@ -594,7 +594,7 @@ The legacy architecture proposed splitting each screen into 3 separate classes f
 | MakeTransferScreen | MakeTransferScreenController | MakeTransfer/ |
 | LoadSaveGameScreen | LoadSaveGameScreenController | LoadSaveGame/ |
 | EquipSoldierScreen | EquipSoldierScreenController + InOutpost + Battlescape | EquipSoldier/ |
-| ManufactureScreen | ManufactureScreenController + 3 LineItem files | Manufacture/ |
+| ManufactureScreen | ManufactureScreenController (LineItem types nested) | Manufacture/ |
 | ResearchScreen | ResearchScreenController | Research/ |
 | PurchaseScreen | PurchaseScreenController | Purchase/ |
 | SellScreen | SellScreenController | Sell/ |
@@ -641,13 +641,13 @@ The legacy architecture proposed splitting each screen into 3 separate classes f
 ### Completed
  1. ~~**Content Pipeline Setup**~~ ✅ Done
  2. ~~**Replace audio stubs**~~ ✅ Done
- 3. ~~**Convert all screens to Gum**~~ ✅ Done (27 screens + 13 dialogs)
+ 3. ~~**Convert all screens to Gum**~~ ✅ Done (24 screens + 11 dialogs)
  4. ~~**Hardware cursor**~~ ✅ Done
  5. ~~**Software cursor**~~ ✅ Done
  6. ~~**UI background rendering**~~ ✅ Done
  7. ~~**Register missing textures in MGCB**~~ ✅ Done
  8. ~~**Additional spritefonts**~~ ✅ Done
- 9. ~~**Gum Theme/Layout**~~ ✅ Done (.gumx project, XenocideButton, 23 .gusx screens)
+ 9. ~~**Gum Theme/Layout**~~ ✅ Done (.gumx project, XenocideButton, 7 screen .gusx layouts + template; other screens use the programmatic ScreenLayout)
 10. ~~**Remove CeGui# stubs**~~ ✅ Done (complete teardown — stubs, usings, dead code removed)
 11. ~~**Content preloading**~~ ✅ Done (Earth textures, skybox, XNet models cached)
 12. ~~**Performance optimizations**~~ ✅ Done (XNet text 88x speedup, profile timer, GeoscapeScreen 0ms)
@@ -663,7 +663,7 @@ The legacy architecture proposed splitting each screen into 3 separate classes f
  20. ~~**Phase 9.6: Statistics graphs**~~ ✅ Complete (GraphBuilder + StatisticsRenderer + StatisticsScreenController)
  21. **Phase 9.7: Craft refueling edge cases** — handle Xenium shortages, partial refuel, mid-refuel launch
  22. ~~**Phase 9.8: Screen partitioning**~~ ✅ Complete (14+ screens refactored with controller extraction)
- 23. ~~**ModalDialog migration**~~ ✅ Complete (all 13 dialogs migrated from `GumDialog` to `ModalDialog`)
+ 23. ~~**ModalDialog migration**~~ ✅ Complete (all 11 dialogs migrated from `GumDialog` to `ModalDialog`)
  24. **PendingActionsDialog** — implement dialog for pending actions queue (planned in docs/DIALOG.md)
  25. **GeoEvent PostMessage migration** — convert blocking `Util.ShowMessageBox()` calls in GeoEvents to non-blocking `PostMessage()`
  26. ~~**ThemedButton migration**~~ ✅ Complete (all 63 raw `new Button()` calls migrated; only framework-internal factories/chrome remain)
@@ -676,13 +676,13 @@ The legacy architecture proposed splitting each screen into 3 separate classes f
 |-----------|--------|-------|
 | ThemedLabel | ✅ 100% | All raw `new Label()` migrated; styles set concrete `FontSize`/`IsBold`/`IsItalic` |
 | StyledGrid | ✅ 100% | All raw `new GridPanel()` migrated across 17 screens |
-| ModalDialog | ✅ 100% | All 13 dialogs migrated from GumDialog base class (GumDialog.cs deleted) |
+| ModalDialog | ✅ 100% | All 11 dialogs migrated from GumDialog base class (GumDialog.cs deleted) |
 | ThemedButton | ✅ 100% | Single factory (`Create` textured / `CreateFlat` striped); all raw `new Button()` migrated |
 | ViewportMode | ⚠️ Partial | SplitViewport working for 3 screens; FullScene mode not yet adopted by EquipSoldier/Aeroscape |
 | ScreenLayout | ✅ 14 screens | All non-scene screens use ScreenLayout; 5 scene screens use it for viewport computation only |
 
 ### Gum UI Layout & Theming (Next Major Task)
-The Gum WYSIWYG editor (`Gum UI Tool`) can be invoked to create a `.gumx` project for visual layout design. The tool creates XML-based project files that define component styles, layouts, and data bindings. All 27 screens and 13 dialogs load from `.gusx` layouts. The Gum editor would allow:
+The Gum WYSIWYG editor (`Gum UI Tool`) can be invoked to create a `.gumx` project for visual layout design. The tool creates XML-based project files that define component styles, layouts, and data bindings. 7 screens load from `.gusx` layouts (Aeroscape, Battlescape, EquipSoldier, Geoscape, Start, Statistics, XNet); all dialogs and the remaining screens are built programmatically. The Gum editor would allow:
 
 1. **Visual layout design** — drag-and-drop controls, position elements precisely
 2. **Button theming** — create styled button components from the TaharezLook spritesheet (`XenoNew.png` has ButtonLeftNormal/Middle/RightNormal segments + highlight/pushed states)

@@ -56,8 +56,8 @@ src/
       Model/                   — Game state, geoscape, battlescape, static data, AI
       Services/                — Savegame service
       UI/
-        Controls/              — Toast notifications, software cursor
-        Dialogs/               — 13 modal dialogs (ModalDialog base class)
+        Controls/              — Themed controls (ScreenLayout, ThemedLabel/Button, StyledGrid)
+        Dialogs/               — Modal dialogs (programmatic ModalDialog subclasses)
         Scenes/                — 3D rendering scenes
           Battlescape/         — 3D battlefield rendering
           Common/              — Shared 3D utilities (PolarScene, LineMesh)
@@ -66,7 +66,7 @@ src/
           Geoscape/            — 3D globe, Earth, skybox, HUD
           Statistics/          — 3D statistics scene
           XNet/                — 3D model viewer for encyclopedia
-        Screens/               — 27 game screens (Gum-based)
+        Screens/               — 24 game screens (Gum-based)
           Battlescape/         — Battlescreen state machine files
           EquipSoldier/        — Controller + ItemSource strategy files
       Utils/                   — NLog, profiling, serialization, content cache
@@ -116,30 +116,30 @@ Frame (abstract)                         — lifecycle hooks, CeguiId
 |-----------|-------------|---------|
 | < 150 lines | Nested class in same file | `MonthlyReportScreen` |
 | 150-300 lines | Nested class in separate file via `partial class` | `ResearchScreen` + `Research/ResearchScreenController.cs` |
-| 3+ files / 4+ modes | Subdirectory with partial class files | `Manufacture/` (4 files), `AssignToCraft/` (2 files) |
+| 3+ files / 4+ modes | Subdirectory with partial class files | `EquipSoldier/` (5 files), `LoadSaveGame/` (1 controller file) |
 
 ### Screen Inventory
 
 | Screen | Controller Pattern | Scene? | Files |
 |--------|-------------------|--------|-------|
 | `GeoscapeScreen` | Nested `ScreenState` (state machine) | `GeoscapeScene` | 3 |
-| `BattlescapeScreen` | Nested `ScreenState` (state machine) | `BattlescapeScene` | 7 |
+| `BattlescapeScreen` | Nested `ScreenState` (state machine) | `BattlescapeScene` | 6 |
 | `BasesScreen` | Nested controller + `BasesScreenController` | `FacilityScene` | 3 |
 | `EquipSoldierScreen` | Nested `Controller` (strategy pattern) | `EquipSoldierScene` | 6 |
 | `XNetScreen` | None needed | `XNetScene` | 2 |
 | `StatisticsScreen` | None needed | `StatisticsScene` | 2 |
-| `ResearchScreen` | Nested `ResearchController` | None | 2 |
-| `ManufactureScreen` | Nested `Controller` + 3 LineItem files | None | 5 |
+| `ResearchScreen` | `ResearchController` (separate file) | None | 2 |
+| `ManufactureScreen` | `Controller` (LineItem types nested) | None | 2 |
 | `AssignToCraftScreen` | Nested `Controller` | None | 2 |
 | `EquipCraftScreen` | Nested `Controller` | None | 1 |
 | `BaseInfoScreen` | Nested `Controller` | None | 2 |
-| `AeroscapeScreen` | Nested `DogfightController` | None | 2 |
-| `LoadSaveGameScreen` | Nested `SaveFileManager` | None | 2 |
+| `AeroscapeScreen` | `AeroscapeSimulation` (separate file) | None | 2 |
+| `LoadSaveGameScreen` | `SaveFileController` (separate file) | None | 2 |
 | `PurchaseScreen` | Nested `Controller` | None | 1 |
 | `SellScreen` | Nested `Controller` | None | 1 |
 | `MakeTransferScreen` | Nested `Controller` | None | 1 |
-| `SoldiersListScreen` | Nested `Controller` | None | 2 |
-| `StartScreen` | Nested `DebugHelper` | None | 1 |
+| `SoldiersListScreen` | Inline logic | None | 1 |
+| `StartScreen` | `AssertFailureLogger` (debug only) | None | 1 |
 | `MonthlyReportScreen` | Doc comments only (small) | None | 1 |
 | `MonthlyCostsScreen` | Doc comments only (small) | None | 1 |
 | `BattlescapeReportScreen` | Doc comments only (small) | None | 1 |
@@ -153,7 +153,7 @@ Frame (abstract)                         — lifecycle hooks, CeguiId
 1. Create `Source/UI/Screens/MyNewScreen.cs` extending `GumScreen`
 2. Implement `CreateGumControls()` — wire Gum buttons via `WireButton(name, handler)`
 3. Add a `.gusx` layout in `Content/Gum/` matching the `CeguiId` string
-4. Register the screen in `Content/Gum/GumProject.gumx`
+4. Register the screen in `Content/Gum/Xenocide.gumx`
 5. If game logic > 150 lines, extract a nested `Controller` class via `partial class`
 6. If 3D rendering is needed, create a `Scene` class in `Source/UI/Scenes/`
 7. Schedule via `ScreenManager.ScheduleScreen(new MyNewScreen())`
@@ -312,7 +312,7 @@ GumService.Default.Draw();                  // Draw (after screen)
 
 ### Content Pipeline
 
-- Assets registered in `Content/Content.mgcb`
+- Assets registered in `src/Xenocide.MonoGame/Content.mgcb`
 - Models: `.fbx` / `.x` → MGCB → `.xnb` (via `FbxImporter` / `XImporter`)
 - Shaders: `.fx` → MGCB → `.xnb` (via `EffectImporter`, D3D11 profile)
 - Textures: `.jpg` / `.png` → MGCB → `.xnb` (via `TextureImporter`)
@@ -333,3 +333,4 @@ GumService.Default.Draw();                  // Draw (after screen)
 | `docs/GUI.md` | docs/ | Gum GUI framework documentation |
 | `docs/DIALOG.md` | docs/ | Dialog & message system architecture |
 | `docs/LOGGING.md` | docs/ | NLog logging architecture |
+| `LEGACY.md` | Root | Historical context and legacy releases |

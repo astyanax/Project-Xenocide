@@ -1,6 +1,8 @@
 # Legacy: ProgressReleases & Installers
 
-This repo's second commit will be the last to contain the old pre-built binary installers and installer build tooling from the original development cycle (~2007–2010).
+This repo's second commit was the last to contain the old pre-built binary installers and installer build tooling from the original development cycle (~2007–2010).
+
+> **Status:** The `assets/ProgressReleases/` and `xna/` (including `xna/Installers/`) directories described below have since been **removed from the repository**. They remain documented here for historical reference and can be recovered from the archival commit. See the note at `assets/` for the remaining subfolders.
 
 ## Historical Context
 

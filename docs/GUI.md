@@ -213,13 +213,13 @@ public class GumStartScreen
 ### Step 4: Using the Gum UI Tool (Designer Mode)
 
 1. **Download** the Gum UI Tool from [GitHub releases](https://github.com/vchelaru/Gum/releases)
-2. **Create** a new Gum project, save it as `Content/GumProject/GumProject.gumx`
+2. **Create** a new Gum project, save it as `Content/Gum/Xenocide.gumx`
 3. **Add Forms components**: In Gum, select `Content → Add Forms Components`
 4. **Design** screens visually by drag-dropping controls
 5. **Load** in game:
 
 ```csharp
-GumUI.Initialize(this, "GumProject/GumProject.gumx");
+GumUI.Initialize(this, "Gum/Xenocide.gumx");
 ```
 
 6. **Access controls** in code:
@@ -261,7 +261,7 @@ debugPanel.SetBinding(nameof(StackPanel.Visible), nameof(MainMenuViewModel.IsDeb
 
 ## Migration Status (Completed)
 
-All 27 screens and CeGui# stubs have been converted to Gum. See `MIGRATION.md` items 2-3 and 10-14 for details.
+All 24 game screens and CeGui# stubs have been converted to Gum. See `MIGRATION.md` items 2-3 and 10-14 for details.
 
 ### Architecture (GumScreen.Show pipeline)
 
@@ -462,15 +462,16 @@ This ensures the mouse handler is created with the correct non-zero viewport. Th
 
 **Without this fix**: The mouse handler has a zero-area viewport (Left=Top=Right=Bottom=0), so `inViewport` is always false, and no `MouseMoved`/`LeftClicked`/`RightClicked` events ever fire. The facility ghost never appears and placement clicks are silently swallowed.
 
-### GUSX Layout Notes (BuildFacilityDialog)
+### Dialog Layout Notes
 
-The `BuildFacilityDialog.gusx` file defines the dialog's visual container layout: a `DialogPanel` (500×450, centered on screen) containing a `TitleBar` (28px), `DialogBackground`, and `ScrollViewerInstance` (Y=28, Height=-28). The `ContentPanel` inside the ScrollViewer has Height=0 (fill remaining space).
+Dialogs are **programmatic** — there are no dialog `.gusx` files. Every dialog derives
+from `ModalDialog` (`Source/UI/Dialogs/ModalDialog.cs`), which builds its panel, title bar
+and content area in code. `BuildFacilityDialog` therefore has no `.gusx` layout; its buttons
+are created in `CreateDialogWidgets()`.
 
 Layout conventions in Gum for `DimensionUnitType.RelativeToParent`:
 - `0` = fill remaining space (100% of parent minus fixed-size siblings)
 - Negative values (e.g. `-28`) = parent dimension minus that many pixels (e.g. `Height = 100% - 28px`)
-
-This GUSX file CAN be loaded in the Gum UI Tool for visual layout editing — the container structure (ScrollViewer, ContentPanel, TitleBar, etc.) is all designer-defined. However, the individual facility buttons inside ContentPanel are populated **programmatically** in `WireGumControls()` (C#), so the designer shows an empty ContentPanel at design time. The layout values (heights, Y offsets) are shared between designer and runtime, which is why incorrect values (e.g. a zero-area ContentPanel) silently break the dialog at runtime.
 
 ### Logging Levels
 
@@ -572,10 +573,9 @@ The project provides a set of reusable UI components that standardize screen lay
 
 | Component | File | Purpose |
 |-----------|------|---------|
-| `ScreenLayout` (.gucx + .cs) | `Content/Gum/Components/Controls/ScreenLayout.gucx`, `Source/UI/Controls/ScreenLayout.cs` | Standard screen structure: scrollable content area (75%), button bar (200px right), status bar (bottom). Also provides `ViewportMode` (Standard/SplitViewport/FullScene) for 3D/2D scene screens |
-| `ScreenContent` (.gucx) | `Content/Gum/Components/Controls/ScreenContent.gucx` | Scrollable StackPanel child for ScreenLayout.ContentPanel |
+| `ScreenLayout` (.cs) | `Source/UI/Controls/ScreenLayout.cs` | Standard screen structure: scrollable content area (75%), button bar (190px, top-right anchored), status bar (bottom). Also provides `ViewportMode` (Standard/SplitViewport) for 3D/2D scene screens |
 | `ContentArea` (.cs) | `Source/UI/Controls/ContentArea.cs` | Manages dynamic content: AddHeader, AddLabel, AddGrid, AddSpacer, Clear |
-| `ThemedLabel` (.cs) | `Source/UI/Controls/ThemedLabel.cs` | Factory for pre-styled Labels (Title 28px, H1 22px, H2 18px, H3 16px, Normal 14px, Small 12px, Tiny 10px) |
+| `ThemedLabel` (.cs) | `Source/UI/Controls/ThemedLabel.cs` | Factory for pre-styled Labels: `Create(text, TextStyle)` with Title/H1/H2/H3/Normal/Strong/Emphasis/Small/Tiny sizes, plus `CreateTitle`/`CreateSection`/`CreateBody`/`CreateCaption` helpers |
 | `ThemedButton` (.cs) | `Source/UI/Controls/ThemedButton.cs` | Single source of truth for button creation: `Create()` (textured XenocideButton 3-slice from XenoNew.png) + `CreateFlat()` (ButtonStandard for ColorCategoryState striping); auto-wires ButtonClick1 |
 | `StyledGrid` (.cs) | `Source/UI/Controls/StyledGrid.cs` | GridPanel subclass with alternating row colors, header styling, 25px rows |
 | `ModalDialog` (.cs) | `Source/UI/Dialogs/ModalDialog.cs` | Dialog base class (replaces the deleted GumDialog): title bar, centered panel, `CreateDialogWidgets()`, `AddButton()` helper |
