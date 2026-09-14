@@ -103,7 +103,9 @@ namespace ProjectXenocide.Model
             }
             catch (Exception ex)
             {
-                Logger.Warn(ex, "Unable to save game options");
+                // User-facing: settings silently not persisting is a real problem,
+                // so log at Error (not Warn) to make it visible.
+                Logger.Error(ex, "Unable to save game options");
             }
         }
 

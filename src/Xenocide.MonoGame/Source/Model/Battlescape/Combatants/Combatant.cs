@@ -32,6 +32,8 @@ using System.Text.Json.Serialization;
 
 using Microsoft.Xna.Framework;
 
+using NLog;
+
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.Model.StaticData.Battlescape;
@@ -45,6 +47,8 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
     [Serializable]
     public partial class Combatant
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>Canon UFO Defense: stun damage caps at 255</summary>
         private const int MaxStunLevel = 255;
 
@@ -275,12 +279,17 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             else
             {
                 var itemList = Xenocide.StaticTables.ItemList;
-                try
+                if (itemList.IndexOf(Armor.Id) >= 0)
                 {
                     this.graphic = itemList[Armor.Id].BattlescapeInfo.Graphic;
                 }
-                catch (KeyNotFoundException)
+                else
                 {
+                    // Armor references an item id that isn't in the item table.
+                    // Fall back to the unarmored graphic rather than silently
+                    // leaving the previous model in place.
+                    Logger.Warn("Armor '{0}' not found in item list; using unarmored graphic", Armor.Id);
+                    UseUnarmoredXCorpSolider();
                 }
             }
             this.flyer = Armor.Flyer;

@@ -68,7 +68,8 @@ namespace ProjectXenocide.UI.Screens
         public void ScheduleScreen(Screen newScreen)
         {
             // we can only have one screen state change planed
-            Debug.Assert((null == nextScreen) && (null == pushScreen) && !popScreen);
+            AssertOrLog((null == nextScreen) && (null == pushScreen) && !popScreen,
+                "ScheduleScreen while another screen transition is already pending");
             Logger.Debug("ScreenManager: ScheduleScreen {0}", newScreen?.GetType().Name ?? "null");
             nextScreen = newScreen;
         }
@@ -84,8 +85,9 @@ namespace ProjectXenocide.UI.Screens
         public void PushScreen(Screen newScreen)
         {
             // we can only have one screen state change planed
-            Debug.Assert((null == nextScreen) && (null == pushScreen) && !popScreen);
-            Debug.Assert(0 < screenStack.Count);
+            AssertOrLog((null == nextScreen) && (null == pushScreen) && !popScreen,
+                "PushScreen while another screen transition is already pending");
+            AssertOrLog(0 < screenStack.Count, "PushScreen with an empty screen stack");
             Logger.Debug("ScreenManager: PushScreen {0}", newScreen?.GetType().Name ?? "null");
             pushScreen = newScreen;
         }
@@ -100,8 +102,9 @@ namespace ProjectXenocide.UI.Screens
         public void PopScreen()
         {
             // we can only have one screen state change planed
-            Debug.Assert((null == nextScreen) && (null == pushScreen) && !popScreen);
-            Debug.Assert(0 < screenStack.Count);
+            AssertOrLog((null == nextScreen) && (null == pushScreen) && !popScreen,
+                "PopScreen while another screen transition is already pending");
+            AssertOrLog(0 < screenStack.Count, "PopScreen with an empty screen stack");
             popScreen = true;
         }
 
@@ -110,7 +113,8 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void SwapScreens()
         {
-            Debug.Assert((null != nextScreen) ^ (null != pushScreen) ^ popScreen);
+            AssertOrLog((null != nextScreen) ^ (null != pushScreen) ^ popScreen,
+                "SwapScreens called without exactly one pending screen transition");
 
             // if replacing or popping, dispose of currently showing screen, else just hide the current screen
             if ((null != nextScreen) || popScreen)
@@ -231,7 +235,8 @@ namespace ProjectXenocide.UI.Screens
                     // pump current screen
                     // unless game is running slow, in which case skip the update
                     // we've probably been loading resources or something like that, and they don't count
-                    Debug.Assert(Xenocide.Instance.IsFixedTimeStep);
+                    AssertOrLog(Xenocide.Instance.IsFixedTimeStep,
+                        "gameTime-based update requires IsFixedTimeStep");
                     if (!gameTime.IsRunningSlowly && (gameTime.ElapsedGameTime.TotalMilliseconds < 20))
                     {
                         screenStack.Peek().Update(gameTime);
@@ -364,7 +369,8 @@ namespace ProjectXenocide.UI.Screens
         {
             Util.GeoTimeDebugWriteLine("Closing dialog {0}: \"{1}\"", dialog.GetType().Name, dialog.Title);
 
-            Debug.Assert(dialog == showingDialogs.Peek());
+            AssertOrLog(showingDialogs.Count > 0 && dialog == showingDialogs.Peek(),
+                "CloseDialog called for a dialog that is not the topmost dialog");
 
             // remove dialog
             showingDialogs.Pop().Dispose();
@@ -477,6 +483,21 @@ namespace ProjectXenocide.UI.Screens
         private SpriteBatch _overlayBatch;
 
         #endregion Fields
+
+        /// <summary>
+        /// Validates an internal invariant in both Debug and Release builds:
+        /// Debug builds break into the debugger, Release builds log an error.
+        /// A bare <see cref="Debug.Assert(bool)"/> vanishes in Release, which can
+        /// hide real bugs.
+        /// </summary>
+        private static void AssertOrLog(bool condition, string message)
+        {
+            if (!condition)
+            {
+                Logger.Error("ScreenManager invariant violated: {0}", message);
+                Debug.Assert(condition, message);
+            }
+        }
 
         /// <summary>
         /// Assorted calcs to put the FPS rate at top of screen
