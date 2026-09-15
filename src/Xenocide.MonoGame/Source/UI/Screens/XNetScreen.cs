@@ -80,12 +80,14 @@ namespace ProjectXenocide.UI.Screens
                 entriesTree.Visual.Y = 80;
                 entriesTree.Visual.Width = 300;
                 entriesTree.Visual.Height = 400;
+                ThemeList(entriesTree);
 
                 textWindow = new ListBox();
                 textWindow.Visual.X = 340;
                 textWindow.Visual.Y = 80;
                 textWindow.Visual.Width = 300;
                 textWindow.Visual.Height = 400;
+                ThemeList(textWindow);
                 AddChild(textWindow);
             }
         }
@@ -111,6 +113,13 @@ namespace ProjectXenocide.UI.Screens
             }
 
             entriesTree.SelectionChanged += (s, a) => OnEntrySelected(s, EventArgs.Empty);
+        }
+
+        /// <summary>Applies the X-COM panel theme to a Gum list box.</summary>
+        private static void ThemeList(ListBox list)
+        {
+            list.Visual.SetProperty("ColorCategoryState", "Primary");
+            list.Visual.SetProperty("Alpha", 210);
         }
 
         private ListBox entriesTree;

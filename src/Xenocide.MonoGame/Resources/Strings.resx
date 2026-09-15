@@ -1179,7 +1179,7 @@
     <value>Remove all engineers</value>
   </data>
   <data name="MSGBOX_NO_BUILDABLE_TECHNOLOGIES" xml:space="preserve">
-    <value>Your haven't researched anything that your engineers can build.</value>
+    <value>You haven't researched anything that your engineers can build.</value>
   </data>
   <data name="SCREEN_MANUFACTURE_COLUMN_BUILD_QUANTITY" xml:space="preserve">
     <value>Quantity</value>

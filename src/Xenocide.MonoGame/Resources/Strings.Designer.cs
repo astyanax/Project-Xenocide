@@ -2221,7 +2221,7 @@ namespace Xenocide.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your haven&apos;t researched anything that your engineers can build..
+        ///   Looks up a localized string similar to You haven&apos;t researched anything that your engineers can build..
         /// </summary>
         internal static string MSGBOX_NO_BUILDABLE_TECHNOLOGIES {
             get {

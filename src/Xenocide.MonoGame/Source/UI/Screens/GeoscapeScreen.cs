@@ -187,7 +187,7 @@ namespace ProjectXenocide.UI.Screens
             _messageLogList.Visual.Y = vp.Height - logHeight - 20;
             _messageLogList.Visual.Width = logWidth;
             _messageLogList.Visual.Height = logHeight;
-            _messageLogList.Visual.SetProperty("Alpha", 160);
+            _messageLogList.Visual.SetProperty("Alpha", 200);
             _messageLogList.Visual.SetProperty("ColorCategoryState", "Primary");
 
             GumRoot.Children.Add(_messageLogList.Visual);
@@ -196,12 +196,20 @@ namespace ProjectXenocide.UI.Screens
 
             foreach (var entry in MessageLog.Entries)
                 _messageLogList.Items.Add(FormatLogEntry(entry));
+
+            // Only show the log panel once there is something in it; an empty
+            // panel is otherwise a bare, unthemed grey rectangle.
+            _messageLogList.Visual.Visible = _messageLogList.Items.Count > 0;
         }
 
         private void OnMessagePostedToLog(MessageEntry entry)
         {
             Logger.Debug("[MSGLOG] {0} {1}: {2}", entry.TimeString, entry.Type, entry.Text);
-            _messageLogList?.Items.Add(FormatLogEntry(entry));
+            if (_messageLogList != null)
+            {
+                _messageLogList.Items.Add(FormatLogEntry(entry));
+                _messageLogList.Visual.Visible = true;
+            }
         }
 
         private static string FormatLogEntry(MessageEntry entry)

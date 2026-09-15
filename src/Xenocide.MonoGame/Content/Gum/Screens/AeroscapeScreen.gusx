@@ -21,19 +21,25 @@
       <Value xsi:type="xsd:float">100</Value>
     </Variable>
     <Variable Type="DimensionUnitType" Name="BGImage.HeightUnits" SetsValue="true">
-      <Value xsi:type="xsd:int">6</Value>
+      <Value xsi:type="xsd:int">1</Value>
     </Variable>
     <Variable Type="string" Name="BGImage.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">ContainerInstance</Value>
     </Variable>
     <Variable IsFile="true" Type="string" Name="BGImage.SourceFile" SetsValue="true">
-      <Value xsi:type="xsd:string">..\Textures\UI\GeoscapeScreenBackground.png</Value>
+      <Value xsi:type="xsd:string">..\Textures\UI\BasesScreenBackground.png</Value>
     </Variable>
     <Variable Type="float" Name="BGImage.Width" SetsValue="true">
       <Value xsi:type="xsd:float">100</Value>
     </Variable>
     <Variable Type="DimensionUnitType" Name="BGImage.WidthUnits" SetsValue="true">
-      <Value xsi:type="xsd:int">6</Value>
+      <Value xsi:type="xsd:int">1</Value>
+    </Variable>
+    <Variable Type="float" Name="BGImage.X" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
+    </Variable>
+    <Variable Type="float" Name="BGImage.Y" SetsValue="true">
+      <Value xsi:type="xsd:float">0</Value>
     </Variable>
     <!-- Top bar: status text, time, speed controls -->
     <Variable Type="string" Name="TopBar.Parent" SetsValue="true">
@@ -94,7 +100,7 @@
       <Value xsi:type="xsd:string">Pause</Value>
     </Variable>
     <Variable Type="float" Name="pauseBtn.Width" SetsValue="true">
-      <Value xsi:type="xsd:float">70</Value>
+      <Value xsi:type="xsd:float">120</Value>
     </Variable>
     <Variable Type="string" Name="normalBtn.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">SpeedPanel</Value>
@@ -103,7 +109,7 @@
       <Value xsi:type="xsd:string">Normal</Value>
     </Variable>
     <Variable Type="float" Name="normalBtn.Width" SetsValue="true">
-      <Value xsi:type="xsd:float">70</Value>
+      <Value xsi:type="xsd:float">120</Value>
     </Variable>
     <Variable Type="string" Name="fastBtn.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">SpeedPanel</Value>
@@ -112,7 +118,7 @@
       <Value xsi:type="xsd:string">Fast</Value>
     </Variable>
     <Variable Type="float" Name="fastBtn.Width" SetsValue="true">
-      <Value xsi:type="xsd:float">70</Value>
+      <Value xsi:type="xsd:float">120</Value>
     </Variable>
     <!-- Close button (top right) -->
     <Variable Type="string" Name="closeBtn.Parent" SetsValue="true">

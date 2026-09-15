@@ -103,6 +103,7 @@ namespace ProjectXenocide.UI.Screens
             }
 
             filenameEditBox = new TextBox();
+            filenameEditBox.Placeholder = "Enter save name";
             filenameEditBox.Visual.Width = 300;
             content.Panel.AddChild(filenameEditBox);
 

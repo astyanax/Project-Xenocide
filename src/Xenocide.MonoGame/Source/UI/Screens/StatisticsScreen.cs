@@ -133,6 +133,8 @@ namespace ProjectXenocide.UI.Screens
             seriesList.Visual.Y = 20;
             seriesList.Visual.Width = 300;
             seriesList.Visual.Height = 400;
+            seriesList.Visual.SetProperty("ColorCategoryState", "Primary");
+            seriesList.Visual.SetProperty("Alpha", 210);
             AddChild(seriesList);
             seriesList.SelectionChanged += (s, a) => OnSeriesSelected(s, EventArgs.Empty);
 
