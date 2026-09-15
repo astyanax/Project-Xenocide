@@ -24,22 +24,23 @@ namespace ProjectXenocide.UI.Dialogs
     /// Base class for all modal dialogs.
     ///
     /// <para>
-    /// LAYOUT MODEL: The dialog is a fixed-size, absolutely-positioned
-    /// <see cref="ContainerRuntime"/> (the "panel"). Children are positioned
-    /// explicitly — this is deliberate, because <see cref="StackPanel"/>
-    /// stacks vertically and cannot put a title on the left of a bar with a
-    /// close button on the right.
+    /// LAYOUT MODEL: The dialog is an absolutely-positioned
+    /// <see cref="ContainerRuntime"/> (the "panel") whose chrome is a 9-slice
+    /// window frame cut from <c>XenoNew.png</c> (see <see cref="AtlasNineSlice"/>).
+    /// Children are positioned explicitly — this is deliberate, because
+    /// <see cref="StackPanel"/> stacks vertically and cannot put a title on the
+    /// left of a bar with a close button on the right.
     /// </para>
     ///
     /// <para>
     /// STRUCTURE:
     /// <list type="bullet">
-    /// <item>panel background (themed atlas sprite) — fills the panel</item>
-    /// <item>title bar (28px) — title text left, close "X" right</item>
-    /// <item>content area (a vertical <see cref="StackPanel"/>) — for the
-    /// subclass's labels, lists and controls (add via <see cref="AddButton"/>)</item>
+    /// <item>9-slice window frame (corners fixed, edges/centre stretch) — fills the panel</item>
+    /// <item>title text over the frame's title bar, close "X" top-right</item>
+    /// <item>content area (a vertical <see cref="StackPanel"/>) — subclass labels,
+    /// lists and controls (add via <see cref="AddButton"/>)</item>
     /// <item>action-button row — a single centred horizontal row at the bottom
-    /// of the content area (add via <see cref="AddActionButton"/>)</item>
+    /// (add via <see cref="AddActionButton"/>)</item>
     /// </list>
     /// </para>
     /// </summary>
@@ -47,11 +48,16 @@ namespace ProjectXenocide.UI.Dialogs
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        /// <summary>Height of the title bar, in pixels.</summary>
-        protected const int TitleBarHeight = 28;
+        // Window-frame insets, in pixels. These match the border/title-bar
+        // thickness of the XenoNew.png window-frame region: the title bar is
+        // taller than the side borders, hence the asymmetric values.
+        private const int FrameLeft = 44;
+        private const int FrameRight = 44;
+        private const int FrameTop = 28;
+        private const int FrameBottom = 24;
 
-        /// <summary>Content inset from the panel edges, in pixels.</summary>
-        protected const int PanelPadding = 10;
+        /// <summary>Padding between the frame border and the content.</summary>
+        protected const int ContentPadding = 10;
 
         /// <summary>Default width of a button added via <see cref="AddActionButton"/>.</summary>
         protected const int DefaultActionButtonWidth = 130;
@@ -60,10 +66,10 @@ namespace ProjectXenocide.UI.Dialogs
         protected const int ActionRowHeight = 32;
 
         private ContainerRuntime _panel;
-        private ContainerRuntime _titleBar;
+        private AtlasNineSlice _frame;
+        private ColoredRectangleRuntime _contentBackdrop;
         private Label _titleLabel;
         private Button _closeButton;
-        private SpriteRuntime _background;
         private string _title;
 
         private ContainerRuntime _actionRow;
@@ -181,85 +187,66 @@ namespace ProjectXenocide.UI.Dialogs
             _panel.HeightUnits = DimensionUnitType.Absolute;
             _panel.ClipsChildren = true;
 
-            // Themed atlas background fills the panel and tracks its size.
-            // Added first so it renders behind the title bar and content.
-            _background = XenoAtlas.CreateSprite(XenoAtlas.Panels.ContentBackground);
-            if (_background != null)
-            {
-                _background.X = 0;
-                _background.Y = 0;
-                _background.XUnits = GeneralUnitType.PixelsFromSmall;
-                _background.YUnits = GeneralUnitType.PixelsFromSmall;
-                _background.Width = 0;
-                _background.WidthUnits = DimensionUnitType.RelativeToParent;
-                _background.Height = 0;
-                _background.HeightUnits = DimensionUnitType.RelativeToParent;
-                _panel.Children.Add(_background);
-            }
+            // 9-slice window frame, added first so it renders behind title/content.
+            _frame = new AtlasNineSlice(XenoAtlas.Panels.WindowFrame, FrameLeft, FrameRight, FrameTop, FrameBottom);
+            _frame.Visual.X = 0;
+            _frame.Visual.Y = 0;
+            _frame.Visual.XUnits = GeneralUnitType.PixelsFromSmall;
+            _frame.Visual.YUnits = GeneralUnitType.PixelsFromSmall;
+            _panel.Children.Add(_frame.Visual);
+
+            // Opaque-ish body fill over the frame's translucent centre so the
+            // scene behind does not show through the dialog and hurt readability.
+            _contentBackdrop = new ColoredRectangleRuntime();
+            _contentBackdrop.Color = new Color(22, 26, 44, 232);
+            _contentBackdrop.X = FrameLeft;
+            _contentBackdrop.XUnits = GeneralUnitType.PixelsFromSmall;
+            _contentBackdrop.Y = FrameTop;
+            _contentBackdrop.YUnits = GeneralUnitType.PixelsFromSmall;
+            _contentBackdrop.Width = -(FrameLeft + FrameRight);
+            _contentBackdrop.WidthUnits = DimensionUnitType.RelativeToParent;
+            _contentBackdrop.Height = -(FrameTop + FrameBottom);
+            _contentBackdrop.HeightUnits = DimensionUnitType.RelativeToParent;
+            _panel.Children.Add(_contentBackdrop);
         }
 
         private void BuildTitleBar()
         {
-            // A plain ContainerRuntime (not a StackPanel) so the title and the
-            // close button can be positioned independently on the same row.
-            _titleBar = new ContainerRuntime();
-            _titleBar.X = 0;
-            _titleBar.Y = 0;
-            _titleBar.XUnits = GeneralUnitType.PixelsFromSmall;
-            _titleBar.YUnits = GeneralUnitType.PixelsFromSmall;
-            _titleBar.Width = 0;
-            _titleBar.WidthUnits = DimensionUnitType.RelativeToParent;
-            _titleBar.Height = TitleBarHeight;
-            _titleBar.HeightUnits = DimensionUnitType.Absolute;
-
-            var bar = XenoAtlas.CreateSprite(XenoAtlas.Panels.TitleBar);
-            if (bar != null)
-            {
-                bar.X = 0;
-                bar.Y = 0;
-                bar.XUnits = GeneralUnitType.PixelsFromSmall;
-                bar.YUnits = GeneralUnitType.PixelsFromSmall;
-                bar.Width = 0;
-                bar.WidthUnits = DimensionUnitType.RelativeToParent;
-                bar.Height = TitleBarHeight;
-                bar.HeightUnits = DimensionUnitType.Absolute;
-                _titleBar.Children.Add(bar);
-            }
-
             _titleLabel = new Label { Text = Title ?? "" };
-            _titleLabel.X = 8;
-            _titleLabel.Y = 4;
+            _titleLabel.X = FrameLeft + 4;
+            _titleLabel.Y = 5;
             _titleLabel.XUnits = GeneralUnitType.PixelsFromSmall;
             _titleLabel.YUnits = GeneralUnitType.PixelsFromSmall;
-            _titleBar.Children.Add(_titleLabel.Visual);
+            _panel.Children.Add(_titleLabel.Visual);
 
-            // A plain (flat) button rather than the XenocideButton template: the
-            // template's 3-slice has a ~30px left cap, so it cannot render
-            // legibly at the small size of a title-bar close button.
-            _closeButton = ThemedButton.CreateFlat("X", OnCloseClicked);
-            _closeButton.Visual.Width = 24;
+            // Invisible hit area over the window frame's own close glyph (drawn as
+            // part of the 9-slice top-right corner). This keeps the chrome faithful
+            // without a second, off-theme "X". The flat button's own background and
+            // focus indicator are hidden so only the atlas glyph is visible.
+            _closeButton = ThemedButton.CreateFlat("", OnCloseClicked);
+            _closeButton.Visual.Width = 22;
             _closeButton.Visual.WidthUnits = DimensionUnitType.Absolute;
             _closeButton.Visual.Height = 20;
             _closeButton.Visual.HeightUnits = DimensionUnitType.Absolute;
-            _closeButton.Visual.X = -28;
+            _closeButton.Visual.XOrigin = RenderingLibrary.Graphics.HorizontalAlignment.Right;
             _closeButton.Visual.XUnits = GeneralUnitType.PixelsFromLarge;
-            _closeButton.Visual.Y = 4;
+            _closeButton.Visual.X = 0;
+            _closeButton.Visual.Y = 2;
             _closeButton.Visual.YUnits = GeneralUnitType.PixelsFromSmall;
-            _titleBar.Children.Add(_closeButton.Visual);
-
-            _panel.Children.Add(_titleBar);
+            HideBackground(_closeButton);
+            _panel.Children.Add(_closeButton.Visual);
         }
 
         private void BuildContentArea()
         {
             ContentArea = new StackPanel();
-            ContentArea.Visual.X = PanelPadding;
+            ContentArea.Visual.X = FrameLeft + ContentPadding;
             ContentArea.Visual.XUnits = GeneralUnitType.PixelsFromSmall;
-            ContentArea.Visual.Y = TitleBarHeight + 6;
+            ContentArea.Visual.Y = FrameTop + 10;
             ContentArea.Visual.YUnits = GeneralUnitType.PixelsFromSmall;
-            ContentArea.Visual.Width = -PanelPadding * 2;
+            ContentArea.Visual.Width = -(FrameLeft + FrameRight + ContentPadding * 2);
             ContentArea.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
-            ContentArea.Visual.Height = -(TitleBarHeight + 6 + PanelPadding);
+            ContentArea.Visual.Height = -(FrameTop + FrameBottom + ContentPadding * 2);
             ContentArea.Visual.HeightUnits = DimensionUnitType.RelativeToParent;
             _panel.Children.Add(ContentArea.Visual);
         }
@@ -314,15 +301,15 @@ namespace ProjectXenocide.UI.Dialogs
             // Anchored to the bottom of the panel (not inside the vertical content
             // stack) so a long list can never push the action buttons out of view.
             _actionRow = new ContainerRuntime();
-            _actionRow.X = PanelPadding;
+            _actionRow.X = FrameLeft + ContentPadding;
             _actionRow.XUnits = GeneralUnitType.PixelsFromSmall;
-            _actionRow.Y = -PanelPadding;
+            _actionRow.Y = -(FrameBottom + ContentPadding);
             _actionRow.YUnits = GeneralUnitType.PixelsFromLarge;
             _actionRow.YOrigin = RenderingLibrary.Graphics.VerticalAlignment.Bottom;
             // Absolute width: ThemedRow.CenterButtons reads Width to centre the
-            // buttons, and RelativeToParent would expose the raw offset (-20),
-            // not the resolved width.
-            _actionRow.Width = PanelWidth - PanelPadding * 2;
+            // buttons, and RelativeToParent would expose the raw offset, not the
+            // resolved width.
+            _actionRow.Width = PanelWidth - FrameLeft - FrameRight - ContentPadding * 2;
             _actionRow.WidthUnits = DimensionUnitType.Absolute;
             _actionRow.Height = ActionRowHeight;
             _actionRow.HeightUnits = DimensionUnitType.Absolute;
@@ -337,10 +324,25 @@ namespace ProjectXenocide.UI.Dialogs
             // Reserve the bottom strip for the action row so scrolling/stacking
             // content does not overlap it.
             ContentArea.Visual.Height =
-                -(TitleBarHeight + 6 + ActionRowHeight + PanelPadding + 4);
+                -(FrameTop + FrameBottom + ContentPadding * 2 + ActionRowHeight + 4);
             ContentArea.Visual.HeightUnits = DimensionUnitType.RelativeToParent;
 
             ThemedRow.CenterButtons(_actionRow, _actionButtons);
+        }
+
+        /// <summary>
+        /// Hides a Forms button's own background/focus chrome so it can act as a
+        /// transparent hit area over atlas-drawn artwork.
+        /// </summary>
+        private static void HideBackground(Button button)
+        {
+            var background = button.Visual.GetGraphicalUiElementByName("Background");
+            if (background != null)
+                background.Visible = false;
+
+            var focus = button.Visual.GetGraphicalUiElementByName("FocusedIndicator");
+            if (focus != null)
+                focus.Visible = false;
         }
 
         private void OnCloseClicked(object sender, EventArgs e)
@@ -359,8 +361,8 @@ namespace ProjectXenocide.UI.Dialogs
                 _panel.RemoveFromRoot();
                 _panel = null;
             }
-            _background = null;
-            _titleBar = null;
+            _frame = null;
+            _contentBackdrop = null;
             _actionRow = null;
             _actionButtons.Clear();
             ContentArea = null;
