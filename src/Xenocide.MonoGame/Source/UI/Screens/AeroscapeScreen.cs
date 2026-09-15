@@ -200,6 +200,7 @@ namespace ProjectXenocide.UI.Screens
         // Radar rendering resources
         private SpriteBatch spriteBatch;
         private Texture2D radarBackground;
+        private Texture2D whiteTexture;
         private Texture2D craftIcon;
         private Texture2D ufoBlob;
 
@@ -464,6 +465,7 @@ namespace ProjectXenocide.UI.Screens
 
             // Create programmatic textures for radar elements
             radarBackground = CreateSolidTexture(device, new Color(10, 30, 10));
+            whiteTexture = CreateSolidTexture(device, Color.White);
             craftIcon = CreateTriangleTexture(device, Color.LimeGreen, 24, 24);
             ufoBlob = CreateCircleTexture(device, Color.Red, 32);
         }
@@ -479,6 +481,7 @@ namespace ProjectXenocide.UI.Screens
                 radarBackground?.Dispose();
                 craftIcon?.Dispose();
                 ufoBlob?.Dispose();
+                whiteTexture?.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -525,94 +528,138 @@ namespace ProjectXenocide.UI.Screens
 
         #region Radar Rendering
 
+        /// <summary>How long (in simulation seconds) a weapon tracer is shown.</summary>
+        private const double TracerLifetime = 0.5;
+
         /// <summary>
-        /// Draw the 2D radar viewport showing aircraft, UFO, and weapon fire.
-        /// Uses smooth interpolated positions for artifact-free animation.
+        /// Draws the interception track: distance scale, weapon range band, the
+        /// craft and UFO (with hull/fuel bars) and weapon tracers. Geometry is
+        /// derived from the viewport so it scales with the window resolution.
         /// </summary>
         private void DrawRadarViewport(GraphicsDevice device)
         {
-            if (spriteBatch == null || radarBackground == null)
+            if (spriteBatch == null || whiteTexture == null)
                 return;
 
-            // Define radar viewport area (left 70% of screen, below top bar)
+            var vp = device.Viewport;
             int radarX = 20;
             int radarY = 50;
-            int radarWidth = 860;
-            int radarHeight = 640;
+            int radarWidth = Math.Max(240, vp.Width - radarX - 380);
+            int radarHeight = Math.Max(240, vp.Height - radarY - 330);
+            int centerX = radarX + radarWidth / 2;
+            int centerY = radarY + radarHeight / 2;
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
 
-            // Draw radar background
+            // Backdrop + border
             spriteBatch.Draw(radarBackground, new Rectangle(radarX, radarY, radarWidth, radarHeight), Color.White);
+            DrawBorder(radarX, radarY, radarWidth, radarHeight, new Color(60, 90, 60), 2);
 
-            // Draw radar grid lines (horizontal distance markers)
-            DrawRadarGrid(spriteBatch, radarX, radarY, radarWidth, radarHeight);
+            DrawDistanceScale(radarX, radarY, radarWidth, radarHeight);
 
-            // Draw weapon range indicators
-            DrawWeaponRanges(spriteBatch, radarX, radarY, radarWidth, radarHeight);
+            var interceptor = simState.SelectedInterceptor;
+            float normalized = (float)Math.Max(0, Math.Min(1, displayDistance / AeroscapeState.MaxDistance));
+            int craftY = (int)(centerY + (radarHeight * normalized / 2f));
+            int ufoY = (int)(centerY - (radarHeight * normalized / 2f));
 
-            // Use smooth interpolated distance for positions
-            double renderDistance = displayDistance;
+            // Weapon range band on the interceptor's side: it can fire once it is
+            // at or above this line (i.e. closer than the weapon's max range).
+            if (interceptor != null)
+            {
+                int maxRange = AeroscapeState.GetMaxWeaponRange(interceptor);
+                if (maxRange > 0 && maxRange < AeroscapeState.MaxDistance)
+                {
+                    float rangeN = (float)((double)maxRange / AeroscapeState.MaxDistance);
+                    int rangeY = (int)(centerY + (radarHeight * rangeN / 2f));
+                    spriteBatch.Draw(whiteTexture,
+                        new Rectangle(radarX + 1, rangeY, radarWidth - 2, Math.Max(0, radarY + radarHeight - rangeY)),
+                        new Color(120, 120, 0, 45));
+                }
+            }
 
-            // Both icons are centered in the radar, converging toward the middle.
-            // As distance decreases, they approach the center line but never cross it.
-            float normalized = (float)(renderDistance / AeroscapeState.MaxDistance);
-            int centerX = radarX + (radarWidth / 2);
+            DrawFlashes(centerX, craftY, ufoY);
+            PruneFlashes();
 
-            // Interceptor: starts at BOTTOM (far), ascends toward CENTER as it closes.
-            // At n=1 (MaxDistance): Y = radarY + radarHeight (bottom)
-            // At n=0 (contact):      Y = radarY + radarHeight/2 (center)
-            float craftY = radarY + (radarHeight / 2f) + (radarHeight * normalized / 2f);
-            spriteBatch.Draw(craftIcon,
-                new Rectangle(centerX - 12, (int)craftY - 12, 24, 24),
-                Color.LimeGreen);
+            // Craft icons
+            spriteBatch.Draw(craftIcon, new Rectangle(centerX - 12, craftY - 12, 24, 24), Color.LimeGreen);
+            spriteBatch.Draw(ufoBlob, new Rectangle(centerX - 16, ufoY - 16, 32, 32), Color.Red);
 
-            // UFO: starts at TOP (far), descends toward CENTER as interceptor closes.
-            // At n=1 (MaxDistance): Y = radarY (top)
-            // At n=0 (contact):      Y = radarY + radarHeight/2 (center)
-            float ufoY = radarY + (radarHeight / 2f) - (radarHeight * normalized / 2f);
-            spriteBatch.Draw(ufoBlob,
-                new Rectangle(centerX - 16, (int)ufoY - 16, 32, 32),
-                Color.Red);
+            // Hull / fuel bars
+            if (interceptor != null)
+            {
+                DrawBar(centerX - 42, craftY + 16, 84, 5, interceptor.Aircraft.HullPercent, Color.LimeGreen);
+                DrawBar(centerX - 42, craftY + 23, 84, 5, interceptor.Aircraft.FuelPercent, Color.Gold);
+            }
+            DrawBar(centerX - 42, ufoY - 27, 84, 5, ufo.HullPercent, Color.OrangeRed);
 
             spriteBatch.End();
         }
 
-        /// <summary>
-        /// Draw horizontal grid lines for distance reference.
-        /// </summary>
-        private void DrawRadarGrid(SpriteBatch sb, int x, int y, int w, int h)
+        /// <summary>Draws distance tick marks down both edges of the track.</summary>
+        private void DrawDistanceScale(int x, int y, int w, int h)
         {
-            // Draw subtle grid lines every 20% of height
-            Color gridColor = new Color(20, 60, 20);
-            for (int i = 1; i < 5; i++)
+            const double tickMeters = 5000.0;
+            Color minor = new Color(30, 70, 30);
+            Color major = new Color(60, 120, 60);
+
+            for (double d = tickMeters; d < AeroscapeState.MaxDistance; d += tickMeters)
             {
-                int lineY = y + (h * i / 5);
-                sb.Draw(radarBackground, new Rectangle(x, lineY, w, 1), gridColor);
+                float n = (float)(d / AeroscapeState.MaxDistance);
+                int lineY = (int)(y + (h * n));
+                bool isMajor = ((int)(d / 10000.0)) * 10000 == (int)d;
+                int length = isMajor ? w / 12 : w / 20;
+                Color color = isMajor ? major : minor;
+
+                spriteBatch.Draw(whiteTexture, new Rectangle(x + 1, lineY, length, 1), color);
+                spriteBatch.Draw(whiteTexture, new Rectangle(x + w - length - 1, lineY, length, 1), color);
             }
         }
 
-        /// <summary>
-        /// Draw weapon range indicator lines on the radar.
-        /// Shows maximum reachable firing distance from the interceptor.
-        /// </summary>
-        private void DrawWeaponRanges(SpriteBatch sb, int x, int y, int w, int h)
+        private void DrawBar(int x, int y, int width, int height, int percent, Color color)
         {
-            var interceptor = simState.SelectedInterceptor;
-            if (interceptor == null)
+            percent = Math.Max(0, Math.Min(100, percent));
+            spriteBatch.Draw(whiteTexture, new Rectangle(x, y, width, height), new Color(0, 0, 0, 160));
+            spriteBatch.Draw(whiteTexture, new Rectangle(x, y, width * percent / 100, height), color);
+        }
+
+        private void DrawBorder(int x, int y, int w, int h, Color color, int thickness)
+        {
+            spriteBatch.Draw(whiteTexture, new Rectangle(x, y, w, thickness), color);
+            spriteBatch.Draw(whiteTexture, new Rectangle(x, y + h - thickness, w, thickness), color);
+            spriteBatch.Draw(whiteTexture, new Rectangle(x, y, thickness, h), color);
+            spriteBatch.Draw(whiteTexture, new Rectangle(x + w - thickness, y, thickness, h), color);
+        }
+
+        private void DrawFlashes(int centerX, int craftY, int ufoY)
+        {
+            foreach (var flash in simState.Flashes)
+            {
+                if (simState.ElapsedSeconds - flash.Time > TracerLifetime)
+                    continue;
+
+                Color color = flash.FromInterceptor
+                    ? (flash.Hit ? Color.Orange : new Color(160, 140, 60))
+                    : (flash.Hit ? Color.Red : new Color(140, 60, 60));
+
+                DrawLine(new Vector2(centerX, craftY), new Vector2(centerX, ufoY), color, 2f);
+            }
+        }
+
+        private void DrawLine(Vector2 a, Vector2 b, Color color, float thickness)
+        {
+            Vector2 delta = b - a;
+            float length = delta.Length();
+            if (length < 0.01f)
                 return;
 
-            int maxRange = AeroscapeState.GetMaxWeaponRange(interceptor);
-            if (maxRange <= 0)
-                return;
+            float angle = (float)Math.Atan2(delta.Y, delta.X);
+            spriteBatch.Draw(whiteTexture, a, null, color, angle, Vector2.Zero,
+                new Vector2(length, thickness), SpriteEffects.None, 0f);
+        }
 
-            // Position the range line at the interceptor's Y when distance = maxRange
-            float normalized = (float)((double)maxRange / AeroscapeState.MaxDistance);
-            int rangeLineY = y + (int)((h / 2f) + (h * normalized / 2f));
-
-            // Draw range line
-            Color rangeColor = new Color(100, 100, 0, 128);
-            sb.Draw(radarBackground, new Rectangle(x, rangeLineY, w, 1), rangeColor);
+        private void PruneFlashes()
+        {
+            simState.Flashes.RemoveAll(f => simState.ElapsedSeconds - f.Time > TracerLifetime);
         }
 
         /// <summary>

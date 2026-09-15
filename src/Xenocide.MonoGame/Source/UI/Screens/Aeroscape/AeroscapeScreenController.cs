@@ -389,6 +389,13 @@ namespace ProjectXenocide.UI.Screens
                 // Call Shoot() directly to bypass IsCycling() check.
                 AttackResult result = pod.Shoot(state.Ufo, state.Log);
 
+                state.Flashes.Add(new AeroscapeState.FireFlash
+                {
+                    Time = state.ElapsedSeconds,
+                    FromInterceptor = true,
+                    Hit = result != AttackResult.Nothing,
+                });
+
                 Log.Debug("{0}: W{1} result={2}", interceptor.Aircraft.Name, podIndex + 1, result);
 
                 switch (result)
@@ -471,6 +478,14 @@ namespace ProjectXenocide.UI.Screens
                     state.Ufo.Name, target.Aircraft.Name, state.Distance, ufoMaxRange);
 
                 AttackResult result = state.Ufo.Attack(target.Aircraft, state.Log);
+
+                state.Flashes.Add(new AeroscapeState.FireFlash
+                {
+                    Time = state.ElapsedSeconds,
+                    FromInterceptor = false,
+                    Hit = result != AttackResult.Nothing,
+                });
+
                 Log.Debug("UFO {0} attack on {1}: {2}", state.Ufo.Name, target.Aircraft.Name, result);
 
                 switch (result)

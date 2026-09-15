@@ -162,6 +162,23 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         public BattleLog Log { get; private set; }
 
         /// <summary>
+        /// A weapon-fire event, used by the view layer to draw a tracer/flash.
+        /// </summary>
+        public sealed class FireFlash
+        {
+            public double Time { get; set; }
+            public bool FromInterceptor { get; set; }
+            public bool Hit { get; set; }
+        }
+
+        /// <summary>
+        /// Recent weapon fires (interceptor and UFO) with their simulation time.
+        /// The view draws tracers for entries younger than a short window and
+        /// prunes the rest.
+        /// </summary>
+        public List<FireFlash> Flashes { get; } = new List<FireFlash>();
+
+        /// <summary>
         /// Elapsed dogfight time in seconds.
         /// </summary>
         public double ElapsedSeconds { get; set; }
