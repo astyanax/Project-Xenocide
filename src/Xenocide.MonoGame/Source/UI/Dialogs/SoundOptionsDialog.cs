@@ -1,18 +1,34 @@
 using System;
 using System.Globalization;
 
+using Gum.DataTypes;
 using Gum.Forms.Controls;
 
+using ProjectXenocide.Assets;
 using ProjectXenocide.Model;
 using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Screens;
 
 namespace ProjectXenocide.UI.Dialogs
 {
+    /// <summary>
+    /// Music / sound-effect volume options.
+    ///
+    /// <para>
+    /// Each channel has an on/off toggle, a slider (0–10) and a readout. Volume
+    /// changes are applied live so the player can hear the result; the sound
+    /// slider also plays a test effect. Cancel/Escape restores the values that
+    /// were in effect when the dialog opened.
+    /// </para>
+    /// </summary>
     sealed class SoundOptionsDialog : ModalDialog
     {
+        private const int MaxLevel = 10;
+
         private Button musicToggleBtn;
         private Button soundToggleBtn;
+        private Slider musicSlider;
+        private Slider soundSlider;
         private Label musicLevelLabel;
         private Label soundLevelLabel;
 
@@ -24,17 +40,19 @@ namespace ProjectXenocide.UI.Dialogs
         private float musicLast;
         private float soundLast;
 
+        private bool _initializing;
+
         public SoundOptionsDialog()
             : base("Sound Options")
         {
-            musicLevel = (int)(Xenocide.AudioSystem.MusicVolume * 10);
+            musicLevel = (int)Math.Round(Xenocide.AudioSystem.MusicVolume * MaxLevel);
             musicEnabled = Xenocide.AudioSystem.MusicVolume > 0;
-            soundLevel = (int)(Xenocide.AudioSystem.SoundVolume * 10);
+            soundLevel = (int)Math.Round(Xenocide.AudioSystem.SoundVolume * MaxLevel);
             soundEnabled = Xenocide.AudioSystem.SoundVolume > 0;
             musicLast = Xenocide.AudioSystem.MusicVolume;
             soundLast = Xenocide.AudioSystem.SoundVolume;
-            PanelWidth = 500;
-            PanelHeight = 340;
+            PanelWidth = 520;
+            PanelHeight = 380;
 
             // Ensure Escape (which calls Dismiss) restores the previous volumes,
             // matching the Cancel button.
@@ -43,55 +61,112 @@ namespace ProjectXenocide.UI.Dialogs
 
         protected override void CreateDialogWidgets()
         {
+            _initializing = true;
+
             // Music section
             musicToggleBtn = AddButton(musicEnabled ? "Music: ON" : "Music: OFF", OnMusicToggleClicked);
-            AddButton("Music -", (s, e) => { musicLevel = Math.Max(0, musicLevel - 1); UpdateMusicLabel(); });
-            AddButton("Music +", (s, e) => { musicLevel = Math.Min(10, musicLevel + 1); UpdateMusicLabel(); });
-
-            musicLevelLabel = ThemedLabel.CreateBody("Music: " + (musicEnabled ? musicLevel.ToString(CultureInfo.InvariantCulture) : "OFF"));
-            ContentArea.AddChild(musicLevelLabel);
+            musicSlider = AddSlider(musicLevel, OnMusicSliderChanged);
+            musicLevelLabel = AddValueLabel();
 
             // Sound section
             soundToggleBtn = AddButton(soundEnabled ? "Sound: ON" : "Sound: OFF", OnSoundToggleClicked);
-            AddButton("Sound -", (s, e) => { soundLevel = Math.Max(0, soundLevel - 1); UpdateSoundLabel(); });
-            AddButton("Sound +", (s, e) => { soundLevel = Math.Min(10, soundLevel + 1); UpdateSoundLabel(); });
+            soundSlider = AddSlider(soundLevel, OnSoundSliderChanged);
+            soundLevelLabel = AddValueLabel();
 
-            soundLevelLabel = ThemedLabel.CreateBody("Sound: " + (soundEnabled ? soundLevel.ToString(CultureInfo.InvariantCulture) : "OFF"));
-            ContentArea.AddChild(soundLevelLabel);
+            UpdateLabels();
+
+            _initializing = false;
 
             // Action buttons
             AddActionButton("Save", OnSaveClicked);
             AddActionButton("Cancel", OnCancelClicked);
         }
 
-        private void UpdateMusicLabel()
+        private Slider AddSlider(int value, EventHandler onChanged)
         {
-            musicLevelLabel.Text = "Music: " + (musicEnabled ? musicLevel.ToString(CultureInfo.InvariantCulture) : "OFF");
+            var slider = new Slider();
+            slider.Minimum = 0;
+            slider.Maximum = MaxLevel;
+            slider.Value = value;
+            slider.Visual.Width = 0;
+            slider.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
+            slider.Visual.Height = 24;
+            slider.Visual.HeightUnits = DimensionUnitType.Absolute;
+            slider.ValueChanged += onChanged;
+            ContentArea.AddChild(slider);
+            return slider;
         }
 
-        private void UpdateSoundLabel()
+        private Label AddValueLabel()
         {
-            soundLevelLabel.Text = "Sound: " + (soundEnabled ? soundLevel.ToString(CultureInfo.InvariantCulture) : "OFF");
+            var label = ThemedLabel.CreateBody("");
+            ContentArea.AddChild(label);
+            return label;
+        }
+
+        private void UpdateLabels()
+        {
+            musicLevelLabel.Text = "Music: " + (musicEnabled
+                ? musicLevel.ToString(CultureInfo.InvariantCulture) : "OFF");
+            soundLevelLabel.Text = "Sound: " + (soundEnabled
+                ? soundLevel.ToString(CultureInfo.InvariantCulture) : "OFF");
+        }
+
+        private void ApplyMusicVolume()
+        {
+            Xenocide.AudioSystem.MusicVolume = musicEnabled ? musicLevel / (float)MaxLevel : 0;
+        }
+
+        private void ApplySoundVolume()
+        {
+            Xenocide.AudioSystem.SoundVolume = soundEnabled ? soundLevel / (float)MaxLevel : 0;
         }
 
         public void OnMusicToggleClicked(object sender, EventArgs e)
         {
             musicEnabled = !musicEnabled;
             musicToggleBtn.Text = musicEnabled ? "Music: ON" : "Music: OFF";
-            UpdateMusicLabel();
+            ApplyMusicVolume();
+            UpdateLabels();
         }
 
         public void OnSoundToggleClicked(object sender, EventArgs e)
         {
             soundEnabled = !soundEnabled;
             soundToggleBtn.Text = soundEnabled ? "Sound: ON" : "Sound: OFF";
-            UpdateSoundLabel();
+            ApplySoundVolume();
+            UpdateLabels();
+        }
+
+        private void OnMusicSliderChanged(object sender, EventArgs e)
+        {
+            if (_initializing)
+                return;
+
+            musicLevel = (int)Math.Round(musicSlider.Value);
+            if (musicEnabled)
+                ApplyMusicVolume();
+            UpdateLabels();
+        }
+
+        private void OnSoundSliderChanged(object sender, EventArgs e)
+        {
+            if (_initializing)
+                return;
+
+            soundLevel = (int)Math.Round(soundSlider.Value);
+            if (soundEnabled)
+                ApplySoundVolume();
+            UpdateLabels();
+
+            // Audible feedback for the new effect volume.
+            Xenocide.AudioSystem?.PlaySound(SoundId.ButtonClick2);
         }
 
         public void OnSaveClicked(object sender, EventArgs e)
         {
-            Xenocide.AudioSystem.MusicVolume = musicEnabled ? (musicLevel / 10.0f) : 0;
-            Xenocide.AudioSystem.SoundVolume = soundEnabled ? (soundLevel / 10.0f) : 0;
+            ApplyMusicVolume();
+            ApplySoundVolume();
 
             var options = GameOptions.LoadFromFile();
             options.MusicVolume = Xenocide.AudioSystem.MusicVolume;
