@@ -42,16 +42,18 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
     /// orchestrates ticks; the screen reads properties for display.
     ///
     /// DISTANCE MODEL:
-    /// - Maximum standoff distance: 80,000 meters
-    /// - Each interceptor closes toward a target distance based on its tactical mode
-    /// - Distance is shared (UFO perspective): the UFO sees the nearest interceptor
+    /// - Maximum standoff distance: 60,000 meters (see <see cref="MaxDistance"/>)
+    /// - Each interceptor tracks its own distance and closes toward a target
+    ///   distance based on its tactical mode (<see cref="InterceptorState.Distance"/>)
+    /// - The UFO perceives the nearest interceptor (<see cref="NearestDistance"/>),
+    ///   so multiple interceptors already resolve correctly.
     ///
-    /// TACTICAL MODES (per interceptor):
-    /// - Standoff: maintain 80,000m, no fire
-    /// - Cautious: target = max weapon range, 1.5x cooldown
-    /// - Standard: target = max weapon range (safe firing distance), 1.0x cooldown
-    /// - Aggressive: target = 1,000m, 0.75x cooldown
-    /// - Disengage: increase distance to 80,000m, then deactivate
+    /// TACTICAL MODES (per interceptor), matching the X-COM stance model:
+    /// - Standoff: hold at max weapon range (observe, low risk)
+    /// - Cautious: hold at ~90% of max weapon range (fire from range)
+    /// - Standard: hold at ~75% of max weapon range (balanced)
+    /// - Aggressive: close to ~1,000m (maximum damage, highest risk)
+    /// - Disengage: retreat to max distance, then leave the fight
     /// </remarks>
     public class AeroscapeState
     {
@@ -104,6 +106,50 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// Previous frame's distance, for smooth display interpolation.
         /// </summary>
         public double PrevDistance { get; set; }
+
+        /// <summary>
+        /// Distance from the UFO to the nearest active interceptor (what the UFO
+        /// "sees"). With a single interceptor this is simply its distance; the
+        /// value is derived per tick so multi-interceptor engagements resolve
+        /// without further refactoring.
+        /// </summary>
+        public double NearestDistance
+        {
+            get
+            {
+                double nearest = MaxDistance;
+                bool anyActive = false;
+                foreach (InterceptorState s in Interceptors)
+                {
+                    if (s.IsActive)
+                    {
+                        anyActive = true;
+                        if (s.Distance < nearest)
+                            nearest = s.Distance;
+                    }
+                }
+                return anyActive ? nearest : Distance;
+            }
+        }
+
+        /// <summary>The nearest active interceptor, or null if none are active.</summary>
+        public InterceptorState NearestInterceptor
+        {
+            get
+            {
+                InterceptorState nearest = null;
+                double best = double.MaxValue;
+                foreach (InterceptorState s in Interceptors)
+                {
+                    if (s.IsActive && s.Distance < best)
+                    {
+                        best = s.Distance;
+                        nearest = s;
+                    }
+                }
+                return nearest;
+            }
+        }
 
         /// <summary>
         /// Current dogfight outcome. Set when the fight ends.
@@ -284,21 +330,29 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// </summary>
         public static double GetTargetDistance(TacticalMode mode, InterceptorState interceptor)
         {
+            int maxRange = GetMaxWeaponRange(interceptor);
+
             switch (mode)
             {
                 case TacticalMode.Standoff:
-                    // Stand at max weapon range so long-range weapons can fire
-                    int standoffRange = GetMaxWeaponRange(interceptor);
-                    return standoffRange > 0 ? standoffRange : MaxDistance;
+                    // Hold at the edge of weapon range: observe, minimal risk.
+                    return maxRange > 0 ? maxRange : MaxDistance;
+
                 case TacticalMode.Cautious:
-                    return GetMaxWeaponRange(interceptor);
+                    // Fire from (near) maximum range.
+                    return maxRange > 0 ? maxRange * 0.90 : MaxDistance;
+
                 case TacticalMode.Standard:
-                    // Use max range for safety; min range for Standard would be risky
-                    return GetMaxWeaponRange(interceptor);
+                    // Balanced: close to three-quarters of maximum range.
+                    return maxRange > 0 ? maxRange * 0.75 : MaxDistance;
+
                 case TacticalMode.Aggressive:
+                    // Close to point-blank for maximum damage output.
                     return 1000.0;
+
                 case TacticalMode.Disengage:
                     return MaxDistance;
+
                 default:
                     return MaxDistance;
             }

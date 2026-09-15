@@ -226,71 +226,72 @@ namespace ProjectXenocide.UI.Screens
 
             private void MoveInterceptors(double seconds)
             {
-                // Process each active interceptor's distance movement
+                // Each interceptor moves its OWN distance toward its stance target.
+                // The engagement distance (state.Distance) is then set to the
+                // nearest active interceptor so the UFO reacts to the closest craft.
                 foreach (var interceptor in state.Interceptors)
                 {
                     if (!interceptor.IsActive)
                         continue;
 
+                    interceptor.PrevDistance = interceptor.Distance;
                     TacticalMode mode = interceptor.Mode;
 
                     if (mode == TacticalMode.Disengage)
                     {
                         // Disengaging interceptor: full speed retreat
                         double speed = interceptor.Aircraft.CraftItemInfo.MaxSpeed * DisengageSpeedFactor;
-                        double targetDistance = AeroscapeState.MaxDistance;
-                        double delta = targetDistance - state.Distance;
                         double maxMove = speed * seconds;
 
                         // Complete disengage when beyond UFO weapon range
                         int ufoRange = state.GetUfoMaxWeaponRange();
                         double escapeDistance = Math.Max(ufoRange * 1.5, AeroscapeState.MaxDistance * 0.5);
 
-                        if (state.Distance >= escapeDistance || Math.Abs(delta) <= maxMove)
+                        if (interceptor.Distance >= escapeDistance)
                         {
-                            state.Distance = Math.Min(targetDistance, state.Distance + maxMove);
+                            interceptor.Distance = AeroscapeState.MaxDistance;
                             interceptor.IsActive = false;
-                            Log.Debug("{0} disengaged at distance {1:F0}m", interceptor.Aircraft.Name, state.Distance);
+                            Log.Debug("{0} disengaged at distance {1:F0}m", interceptor.Aircraft.Name, interceptor.Distance);
                             state.Log.Record("{0} has disengaged", interceptor.Aircraft.Name);
                         }
                         else
                         {
-                            state.Distance += maxMove;
+                            interceptor.Distance = Math.Min(AeroscapeState.MaxDistance, interceptor.Distance + maxMove);
                             Log.Debug("{0} retreating, distance +{1:F0}m = {2:F0}m",
-                                interceptor.Aircraft.Name, maxMove, state.Distance);
+                                interceptor.Aircraft.Name, maxMove, interceptor.Distance);
                         }
                     }
                     else
                     {
-                        // Active interceptor: move toward target distance
+                        // Active interceptor: move toward its stance target distance
                         double speed = interceptor.Aircraft.CraftItemInfo.MaxSpeed * ApproachSpeedFactor;
                         double targetDistance = AeroscapeState.GetTargetDistance(mode, interceptor);
-                        double delta = targetDistance - state.Distance;
+                        double delta = targetDistance - interceptor.Distance;
                         double maxMove = speed * seconds;
 
                         if (Math.Abs(delta) <= maxMove)
                         {
-                            state.Distance = targetDistance;
+                            interceptor.Distance = targetDistance;
                             Log.Debug("{0} reached target distance {1:F0}m ({2})",
                                 interceptor.Aircraft.Name, targetDistance, mode);
                         }
                         else
                         {
-                            state.Distance += Math.Sign(delta) * maxMove;
-                            Log.Debug("{0} moving {1} target, dist {2:F0}m -> {3:F0}m ({4}, target {5:F0}m)",
+                            interceptor.Distance += Math.Sign(delta) * maxMove;
+                            Log.Debug("{0} moving {1} target, dist -> {2:F0}m ({3}, target {4:F0}m)",
                                 interceptor.Aircraft.Name,
                                 Math.Sign(delta) > 0 ? "toward" : "away from",
-                                state.Distance - Math.Sign(delta) * maxMove,
-                                state.Distance, mode, targetDistance);
+                                interceptor.Distance, mode, targetDistance);
                         }
                     }
+
+                    // Clamp this interceptor's distance
+                    interceptor.Distance = Math.Max(AeroscapeState.MinDistance,
+                        Math.Min(AeroscapeState.MaxDistance, interceptor.Distance));
                 }
 
-                // Clamp distance
-                double beforeClamp = state.Distance;
-                state.Distance = Math.Max(100, Math.Min(AeroscapeState.MaxDistance, state.Distance));
-                if (state.Distance != beforeClamp)
-                    Log.Debug("Distance clamped: {0:F0}m -> {1:F0}m", beforeClamp, state.Distance);
+                // The engagement distance is the nearest active interceptor's.
+                state.Distance = state.NearestDistance;
             }
 
             #endregion
@@ -323,15 +324,15 @@ namespace ProjectXenocide.UI.Screens
                         Log.Debug("{0}: no weapons, skipping fire", interceptor.Aircraft.Name);
                         continue;
                     }
-                    if (state.Distance > maxRange)
+                    if (interceptor.Distance > maxRange)
                     {
                         Log.Debug("{0}: distance {1:F0}m > max range {2}m, cannot fire",
-                            interceptor.Aircraft.Name, state.Distance, maxRange);
+                            interceptor.Aircraft.Name, interceptor.Distance, maxRange);
                         continue;
                     }
 
                     Log.Debug("{0}: distance {1:F0}m <= max range {2}m, checking weapons",
-                        interceptor.Aircraft.Name, state.Distance, maxRange);
+                        interceptor.Aircraft.Name, interceptor.Distance, maxRange);
 
                     // Fire weapon pod 1 if off cooldown
                     if (interceptor.Weapon1Enabled && interceptor.W1FireCountdown <= 0)
@@ -383,7 +384,7 @@ namespace ProjectXenocide.UI.Screens
                 double accuracy = pod.Accuracy;
                 int damage = pod.WeaponDamage;
                 Log.Debug("{0}: W{1} ({2}) firing, acc={3:F1}%, dmg={4}, dist={5:F0}m",
-                    interceptor.Aircraft.Name, podIndex + 1, pod.Name, accuracy * 100, damage, state.Distance);
+                    interceptor.Aircraft.Name, podIndex + 1, pod.Name, accuracy * 100, damage, interceptor.Distance);
 
                 // Call Shoot() directly to bypass IsCycling() check.
                 AttackResult result = pod.Shoot(state.Ufo, state.Log);
@@ -458,8 +459,8 @@ namespace ProjectXenocide.UI.Screens
                     return;
                 }
 
-                // Find the fastest active interceptor as target (closest proxy)
-                var target = GetFastestActiveInterceptor();
+                // Target the nearest active interceptor.
+                var target = state.NearestInterceptor;
                 if (target == null)
                 {
                     Log.Debug("UFO {0}: no active interceptor targets", state.Ufo.Name);
@@ -550,6 +551,17 @@ namespace ProjectXenocide.UI.Screens
 
                 state.Distance = Math.Max(100, Math.Min(AeroscapeState.MaxDistance, state.Distance));
 
+                // The UFO moved the engagement distance; keep the nearest
+                // interceptor's own distance in sync so both views agree.
+                // (In a multi-interceptor fight this would move the craft
+                // relative to the UFO instead.)
+                var nearest = state.NearestInterceptor;
+                if (nearest != null)
+                {
+                    nearest.PrevDistance = nearest.Distance;
+                    nearest.Distance = state.Distance;
+                }
+
                 // Update fire cooldown
                 state.UfoFireCountdown -= seconds;
                 if (state.UfoFireCountdown <= 0)
@@ -595,26 +607,6 @@ namespace ProjectXenocide.UI.Screens
                     Log.Debug("UFO {0}: escape countdown {1:F1}s (hull {2:F0}%, decay {3:F2}/s)",
                         state.Ufo.Name, state.UfoEscapeCountdown, hullPercent * 100, escapeDecay / seconds);
                 }
-            }
-
-            private InterceptorState GetFastestActiveInterceptor()
-            {
-                InterceptorState fastest = null;
-                double bestSpeed = 0;
-
-                foreach (var interceptor in state.Interceptors)
-                {
-                    if (!interceptor.IsActive)
-                        continue;
-
-                    double speed = interceptor.Aircraft.CraftItemInfo.MaxSpeed;
-                    if (speed > bestSpeed)
-                    {
-                        bestSpeed = speed;
-                        fastest = interceptor;
-                    }
-                }
-                return fastest;
             }
 
             #endregion

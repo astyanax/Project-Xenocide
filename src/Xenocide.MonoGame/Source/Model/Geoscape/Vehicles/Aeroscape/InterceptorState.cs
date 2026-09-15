@@ -67,6 +67,21 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         public TacticalMode Mode { get; set; } = TacticalMode.Standard;
 
         /// <summary>
+        /// Current distance from this interceptor to the UFO, in meters.
+        /// </summary>
+        /// <remarks>
+        /// Each interceptor tracks its own distance so multi-interceptor
+        /// engagements work correctly. With a single interceptor this equals the
+        /// engagement distance; the UFO reacts to the nearest value.
+        /// </remarks>
+        public double Distance { get; set; }
+
+        /// <summary>
+        /// Previous tick's distance, for smooth display interpolation.
+        /// </summary>
+        public double PrevDistance { get; set; }
+
+        /// <summary>
         /// Whether this interceptor is still actively engaged.
         /// Set to false when it disengages, runs out of ammo, or is destroyed.
         /// </summary>
@@ -109,6 +124,8 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         public InterceptorState(Aircraft aircraft)
         {
             Aircraft = aircraft ?? throw new ArgumentNullException(nameof(aircraft));
+            Distance = AeroscapeState.MaxDistance;
+            PrevDistance = AeroscapeState.MaxDistance;
         }
 
         /// <summary>
