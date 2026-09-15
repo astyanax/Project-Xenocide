@@ -207,6 +207,7 @@ namespace ProjectXenocide.UI.Screens
         private int speedMultiplier; // 0=paused, 1=normal, 3=fast
         private double elapsed;
         private bool isExiting;
+        private bool returnScheduled;
 
         // Radar rendering resources
         private SpriteBatch spriteBatch;
@@ -375,9 +376,17 @@ namespace ProjectXenocide.UI.Screens
             ScreenManager.ShowDialog(report);
         }
 
-        /// <summary>Schedules the screen to return to once the debrief is acknowledged.</summary>
+        /// <summary>
+        /// Schedules the screen to return to once the debrief is acknowledged.
+        /// Guarded so that a single acknowledgement can only ever queue one
+        /// transition, even if the click is delivered more than once.
+        /// </summary>
         private void ScheduleAfterDogfight()
         {
+            if (returnScheduled)
+                return;
+            returnScheduled = true;
+
             if (Xenocide.DebugTesting)
             {
                 Xenocide.DebugTesting = false;

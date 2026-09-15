@@ -280,7 +280,7 @@ namespace ProjectXenocide.UI.Screens
                             interceptor.Distance += Math.Sign(delta) * maxMove;
                             Log.Debug("{0} moving {1} target, dist -> {2:F0}m ({3}, target {4:F0}m)",
                                 interceptor.Aircraft.Name,
-                                Math.Sign(delta) > 0 ? "toward" : "away from",
+                                Math.Sign(delta) > 0 ? "away from" : "toward",
                                 interceptor.Distance, mode, targetDistance);
                         }
                     }
