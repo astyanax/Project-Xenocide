@@ -33,6 +33,8 @@ using Gum.Forms;
 using Gum.Forms.Controls;
 using Gum.Wireframe;
 
+using MonoGameGum.GueDeriving;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -59,11 +61,13 @@ namespace ProjectXenocide.UI.Screens
     /// AeroscapeSimulation handles all combat logic. Radar viewport is drawn
     /// via SpriteBatch in Draw(), overlaid with Gum HUD controls.
     ///
-    /// VISUAL: 2D side-view radar inspired by OpenXCOM. Aircraft at bottom,
-    /// UFO at top, distance mapped vertically. Weapons fire as projectiles.
+    /// VISUAL: 2D vertical interception track inspired by X-COM. The interceptor
+    /// starts at the bottom, the UFO at the top, and they close toward the middle
+    /// as the distance shrinks. Weapons fire instantly with a tracer.
     ///
-    /// REAL-TIME: Combat runs continuously at adjustable speed (Pause/1x/2x).
-    /// Weapons auto-fire on their cooldown timers. Player selects tactical mode.
+    /// REAL-TIME: Combat runs continuously at adjustable speed (Pause/Normal/Fast).
+    /// Weapons auto-fire on their cooldown timers. The player selects a tactical
+    /// stance. Shortcuts: Space pause/resume, 1/2/3 speeds, D disengage, Tab next craft.
     /// </remarks>
     public partial class AeroscapeScreen : GumScreen
     {
@@ -176,8 +180,13 @@ namespace ProjectXenocide.UI.Screens
                 aggressiveBtn = GumRoot.GetFrameworkElementByName<Button>("aggressiveBtn");
             }
 
+            // Themed backdrops behind the right-hand control panels and the
+            // bottom status/log strip, so HUD text stays readable over the art.
+            AddBackdrop(893, 42, 355, 566, 185);
+            AddBackdrop(14, 723, 1252, 292, 205);
+
             // Start paused — player presses Normal or Fast to begin
-            speedMultiplier = 0;
+            speedMultiplier = SpeedPaused;
             runRealTime = false;
 
             // Set initial display
@@ -193,7 +202,7 @@ namespace ProjectXenocide.UI.Screens
 
         // Speed control
         private bool runRealTime;
-        private int speedMultiplier; // 0=paused, 1=normal, 2=fast
+        private int speedMultiplier; // 0=paused, 1=normal, 3=fast
         private double elapsed;
         private bool isExiting;
 
@@ -285,26 +294,24 @@ namespace ProjectXenocide.UI.Screens
 
         #region Speed Control Handlers
 
-        private void OnPauseButton(object sender, EventArgs e)
+        /// <summary>Speed multipliers: 0 = paused, 1 = normal, 3 = fast.</summary>
+        private const int SpeedPaused = 0;
+        private const int SpeedNormal = 1;
+        private const int SpeedFast = 3;
+
+        /// <summary>Sets the simulation speed and refreshes the speed buttons.</summary>
+        private void SetSpeed(int multiplier)
         {
-            speedMultiplier = 0;
-            runRealTime = false;
+            speedMultiplier = multiplier;
+            runRealTime = multiplier > 0;
             DrawScreen();
         }
 
-        private void OnNormalButton(object sender, EventArgs e)
-        {
-            speedMultiplier = 1;
-            runRealTime = true;
-            DrawScreen();
-        }
+        private void OnPauseButton(object sender, EventArgs e) => SetSpeed(SpeedPaused);
 
-        private void OnFastButton(object sender, EventArgs e)
-        {
-            speedMultiplier = 3;
-            runRealTime = true;
-            DrawScreen();
-        }
+        private void OnNormalButton(object sender, EventArgs e) => SetSpeed(SpeedNormal);
+
+        private void OnFastButton(object sender, EventArgs e) => SetSpeed(SpeedFast);
 
         #endregion
 
@@ -505,19 +512,24 @@ namespace ProjectXenocide.UI.Screens
                 DrawScreen();
             }
 
-            // Space: toggle pause
+            // Space: toggle pause / resume
             if (keyboard.IsKeyDown(Keys.Space) && prevKeyboardState.IsKeyUp(Keys.Space))
             {
-                if (runRealTime)
-                {
-                    speedMultiplier = 0;
-                    runRealTime = false;
-                }
-                else
-                {
-                    speedMultiplier = 1;
-                    runRealTime = true;
-                }
+                SetSpeed(runRealTime ? SpeedPaused : SpeedNormal);
+            }
+
+            // 1 / 2 / 3: pause / normal / fast
+            if (keyboard.IsKeyDown(Keys.D1) && prevKeyboardState.IsKeyUp(Keys.D1))
+                SetSpeed(SpeedPaused);
+            else if (keyboard.IsKeyDown(Keys.D2) && prevKeyboardState.IsKeyUp(Keys.D2))
+                SetSpeed(SpeedNormal);
+            else if (keyboard.IsKeyDown(Keys.D3) && prevKeyboardState.IsKeyUp(Keys.D3))
+                SetSpeed(SpeedFast);
+
+            // D: order the selected interceptor to disengage
+            if (keyboard.IsKeyDown(Keys.D) && prevKeyboardState.IsKeyUp(Keys.D))
+            {
+                simulation.DisengageInterceptor(simState.SelectedInterceptorIndex);
                 DrawScreen();
             }
 
@@ -525,6 +537,28 @@ namespace ProjectXenocide.UI.Screens
         }
 
         #endregion
+
+        /// <summary>Adds a themed translucent backdrop behind the HUD panels.</summary>
+        private void AddBackdrop(int x, int y, int width, int height, int alpha)
+        {
+            if (GumRoot == null)
+                return;
+
+            var backdrop = new ColoredRectangleRuntime();
+            backdrop.Color = new Color(10, 16, 28, alpha);
+            backdrop.X = x;
+            backdrop.Y = y;
+            backdrop.XUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            backdrop.YUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            backdrop.Width = width;
+            backdrop.WidthUnits = Gum.DataTypes.DimensionUnitType.Absolute;
+            backdrop.Height = height;
+            backdrop.HeightUnits = Gum.DataTypes.DimensionUnitType.Absolute;
+
+            // Insert after the background sprite so the panels stay on top.
+            int index = Math.Min(1, GumRoot.Children.Count);
+            GumRoot.Children.Insert(index, backdrop);
+        }
 
         #region Radar Rendering
 
