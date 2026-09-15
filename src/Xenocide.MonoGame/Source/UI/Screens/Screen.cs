@@ -24,7 +24,7 @@ namespace ProjectXenocide.UI.Screens
         }
 
         protected Screen(string ceguiId)
-            : this(ceguiId, @"Content/Textures/UI/GeoscapeScreenBackground.png")
+            : this(ceguiId, ProjectXenocide.UI.ScreenBackgrounds.For(ceguiId))
         {
         }
 

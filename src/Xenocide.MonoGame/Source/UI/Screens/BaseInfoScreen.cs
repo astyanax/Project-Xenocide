@@ -68,7 +68,7 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         /// <param name="selectedOutpostIndex">Index to outpost screen is to show</param>
         public BaseInfoScreen(int selectedOutpostIndex)
-            : base("BaseInfoScreen", @"Content/Textures/UI/GeoscapeScreenBackground.png")
+            : base("BaseInfoScreen")
         {
             this.selectedOutpostIndex = selectedOutpostIndex;
             this.controller = new Controller(SelectedOutpost);
