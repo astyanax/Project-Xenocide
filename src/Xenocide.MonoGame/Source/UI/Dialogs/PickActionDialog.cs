@@ -43,7 +43,7 @@ namespace ProjectXenocide.UI.Screens
                     ++index;
                 }
 
-                AddButton(Strings.BUTTON_CANCEL, OnCancelClicked);
+                AddActionButton(Strings.BUTTON_CANCEL, OnCancelClicked);
             }
 
             public void OnCancelClicked(object sender, EventArgs e)

@@ -102,7 +102,23 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("CreditsButton", OnCreditsClicked);
                 WireButton("SettingsButton", OnSettingsClicked);
             }
+
+#if !DEBUG
+            // The debug buttons are defined in StartScreen.gusx but are only wired
+            // up in Debug builds; hide the panel entirely in Release so dead
+            // buttons are not shown.
+            HideDebugPanel();
+#endif
         }
+
+#if !DEBUG
+        private void HideDebugPanel()
+        {
+            var panel = GumRoot?.GetGraphicalUiElementByName("DebugPanel");
+            if (panel != null)
+                panel.Visible = false;
+        }
+#endif
 
         #region event handlers
 

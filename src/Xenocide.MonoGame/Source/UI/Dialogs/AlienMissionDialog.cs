@@ -13,6 +13,8 @@ namespace ProjectXenocide.UI.Dialogs
     {
         public AlienMissionDialog() : base("Alien Mission")
         {
+            PanelWidth = 500;
+            PanelHeight = 420;
         }
 
         protected override void CreateDialogWidgets()
@@ -24,7 +26,7 @@ namespace ProjectXenocide.UI.Dialogs
                 AddButton(missionNames[i], (s, e) => LaunchMission(idx));
             }
 
-            AddButton("Cancel", (s, e) => Dismiss());
+            AddActionButton("Cancel", (s, e) => Dismiss());
         }
 
         private void LaunchMission(int selectedMission)

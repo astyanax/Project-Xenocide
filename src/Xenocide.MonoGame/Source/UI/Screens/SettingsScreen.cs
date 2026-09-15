@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
+using Gum.Converters;
+using Gum.DataTypes;
 using Gum.Forms;
 using Gum.Forms.Controls;
 
-using Microsoft.Xna.Framework;
+using MonoGameGum.GueDeriving;
 
 using ProjectXenocide.Assets;
 using ProjectXenocide.Model;
@@ -20,19 +22,24 @@ namespace ProjectXenocide.UI.Screens
     /// and gameplay options.
     /// </summary>
     /// <remarks>
-    /// ARCHITECTURE: Settings screen with tab-based navigation. Uses ScreenLayout
-    /// for consistent button bar and programmatic content area.
-    /// 
+    /// ARCHITECTURE: This screen intentionally has no .gusx layout, so it is built
+    /// programmatically. The root is a vertical StackPanel (title, tab bar,
+    /// per-tab content, action row); each horizontal row inside it is a
+    /// <see cref="ThemedRow"/> container that positions its children explicitly
+    /// (Gum StackPanels only stack vertically).
+    ///
     /// SETTINGS MANAGED:
     /// - Display: Resolution, fullscreen, cursor mode
     /// - Sound: Music volume, sound volume
     /// - Notifications: Toast notification toggle
     /// - Gameplay: Difficulty, autosave toggle
-    /// 
+    ///
     /// PERSISTENCE: Uses GameOptions.LoadFromFile() / SaveToFile() for persistence.
     /// </remarks>
     public class SettingsScreen : GumScreen
     {
+        private const int ContentWidth = 600;
+
         private int _musicLevel;
         private int _soundLevel;
         private bool _fullscreen;
@@ -50,9 +57,8 @@ namespace ProjectXenocide.UI.Screens
         private StackPanel _rootPanel;
 
         public SettingsScreen()
-            : base("SettingsScreen")
+            : base("SettingsScreen", @"Content/Textures/UI/StartScreenBackground.png")
         {
-            var options = GameOptions.LoadFromFile();
             _musicLevel = (int)(Xenocide.AudioSystem.MusicVolume * 10);
             _soundLevel = (int)(Xenocide.AudioSystem.SoundVolume * 10);
             _fullscreen = Xenocide.Instance.GraphicsDevice.PresentationParameters.IsFullScreen;
@@ -67,52 +73,87 @@ namespace ProjectXenocide.UI.Screens
 
         protected override void CreateGumControls()
         {
+            var viewport = Xenocide.Instance.GraphicsDevice.Viewport;
+
             _rootPanel = RootContainer;
-            _rootPanel.Width = 600;
-            _rootPanel.Visual.X = 340;
-            _rootPanel.Visual.Y = 50;
+            _rootPanel.Width = ContentWidth;
+            _rootPanel.WidthUnits = DimensionUnitType.Absolute;
+            _rootPanel.Visual.X = Math.Max(20, (viewport.Width - ContentWidth) / 2);
+            _rootPanel.Visual.XUnits = GeneralUnitType.PixelsFromSmall;
+            _rootPanel.Visual.Y = 60;
+            _rootPanel.Visual.YUnits = GeneralUnitType.PixelsFromSmall;
 
-            var title = ThemedLabel.CreateTitle("Settings");
-            _rootPanel.AddChild(title);
+            _rootPanel.AddChild(ThemedLabel.CreateTitle("Settings"));
 
-            var tabBar = new StackPanel();
-            tabBar.Visual.Width = 600;
-            tabBar.Visual.Height = 35;
-
-            var displayTab = MakeTabButton("Display", () => ShowDisplayTab());
-            var soundTab = MakeTabButton("Sound", () => ShowSoundTab());
-            var notifTab = MakeTabButton("Notifications", () => ShowNotificationTab());
-            var gameTab = MakeTabButton("Gameplay", () => ShowGamePlayTab());
-
-            tabBar.AddChild(displayTab);
-            tabBar.AddChild(soundTab);
-            tabBar.AddChild(notifTab);
-            tabBar.AddChild(gameTab);
-            _rootPanel.AddChild(tabBar);
-
-            _contentPanel = new StackPanel();
-            _contentPanel.Visual.Width = 600;
-            _rootPanel.AddChild(_contentPanel);
-
-            var spacer = ThemedLabel.Create("");
-            spacer.Height = 20;
-            _rootPanel.AddChild(spacer);
-
-            var saveBtn = ThemedButton.Create("Save", OnSaveClicked);
-            _rootPanel.AddChild(saveBtn);
-
-            var cancelBtn = ThemedButton.Create("Cancel", OnCancelClicked);
-            _rootPanel.AddChild(cancelBtn);
+            _rootPanel.Visual.Children.Add(BuildTabBar());
+            _rootPanel.Visual.Children.Add(BuildContentPanel().Visual);
+            _rootPanel.Visual.Children.Add(BuildSpacer(12));
+            _rootPanel.Visual.Children.Add(BuildActionRow());
 
             ShowDisplayTab();
         }
 
-        private static Button MakeTabButton(string text, Action action)
+        private ContainerRuntime BuildTabBar()
         {
-            var btn = ThemedButton.Create(text);
-            btn.Visual.Width = 150;
-            btn.Click += (s, e) => action();
-            return btn;
+            var tabBar = ThemedRow.Create(ContentWidth, 30);
+
+            int x = 0;
+            foreach (var (text, action) in new (string, Action)[]
+            {
+                ("Display", ShowDisplayTab),
+                ("Sound", ShowSoundTab),
+                ("Notifications", ShowNotificationTab),
+                ("Gameplay", ShowGamePlayTab),
+            })
+            {
+                var tab = ThemedButton.Create(text);
+                ThemedButton.SetWidth(tab, 145);
+                tab.Visual.Height = 28;
+                tab.Visual.HeightUnits = DimensionUnitType.Absolute;
+                tab.Visual.X = x;
+                tab.Visual.XUnits = GeneralUnitType.PixelsFromSmall;
+                tab.Click += (s, e) => action();
+                tabBar.Children.Add(tab.Visual);
+                x += 149;
+            }
+
+            return tabBar;
+        }
+
+        private StackPanel BuildContentPanel()
+        {
+            _contentPanel = new StackPanel();
+            _contentPanel.Visual.Width = ContentWidth;
+            _contentPanel.Visual.WidthUnits = DimensionUnitType.Absolute;
+            return _contentPanel;
+        }
+
+        private ContainerRuntime BuildActionRow()
+        {
+            var row = ThemedRow.Create(ContentWidth, 32);
+
+            var saveBtn = ThemedButton.Create("Save", OnSaveClicked);
+            var cancelBtn = ThemedButton.Create("Cancel", OnCancelClicked);
+            ThemedButton.SetWidth(saveBtn, 160);
+            ThemedButton.SetWidth(cancelBtn, 160);
+            saveBtn.Visual.Height = 28;
+            saveBtn.Visual.HeightUnits = DimensionUnitType.Absolute;
+            cancelBtn.Visual.Height = 28;
+            cancelBtn.Visual.HeightUnits = DimensionUnitType.Absolute;
+
+            ThemedRow.Place(row, saveBtn, 130);
+            ThemedRow.Place(row, cancelBtn, 310);
+            return row;
+        }
+
+        private static ContainerRuntime BuildSpacer(int height)
+        {
+            var spacer = new ContainerRuntime();
+            spacer.Width = 1;
+            spacer.WidthUnits = DimensionUnitType.Absolute;
+            spacer.Height = height;
+            spacer.HeightUnits = DimensionUnitType.Absolute;
+            return spacer;
         }
 
         private void ShowDisplayTab()
@@ -179,12 +220,7 @@ namespace ProjectXenocide.UI.Screens
 
         private void ClearContent()
         {
-            if (_contentPanel?.Visual != null)
-            {
-                var children = _contentPanel.Visual.Children.ToList();
-                foreach (var child in children)
-                    _contentPanel.Visual.Children.Remove(child);
-            }
+            _contentPanel?.Visual?.Children.Clear();
         }
 
         private void AddLabel(string text)
@@ -194,44 +230,60 @@ namespace ProjectXenocide.UI.Screens
             _contentPanel.AddChild(label);
         }
 
+        /// <summary>
+        /// Adds a label-plus-control row. The control is right-aligned, the label
+        /// left-aligned (they share one horizontal <see cref="ThemedRow"/>).
+        /// </summary>
         private void AddSettingRow(string labelText, string initialValue, Func<string> onToggle)
         {
             if (_contentPanel == null) return;
-            var row = new StackPanel();
-            row.Visual.Width = 600;
-            row.Visual.Height = 30;
+
+            var row = ThemedRow.Create(ContentWidth, 30);
 
             var label = ThemedLabel.CreateBody(labelText);
-            label.Visual.Width = 350;
-            row.AddChild(label);
+            ThemedRow.Place(row, label, 0, 4);
 
             var btn = ThemedButton.Create(initialValue);
-            btn.Visual.Width = 200;
+            ThemedButton.SetWidth(btn, 220);
+            btn.Visual.Height = 26;
+            btn.Visual.HeightUnits = DimensionUnitType.Absolute;
+            btn.Visual.X = -220;
+            btn.Visual.XUnits = GeneralUnitType.PixelsFromLarge;
+            btn.Visual.Y = 0;
             btn.Click += (s, e) => { btn.Text = onToggle(); };
-            row.AddChild(btn);
+            row.Children.Add(btn.Visual);
 
-            _contentPanel.AddChild(row);
+            _contentPanel.Visual.Children.Add(row);
         }
 
+        /// <summary>
+        /// Adds a "- value +" volume row, right-aligned within the row.
+        /// </summary>
         private void AddVolumeRow(Func<int> getLevel, Action<int> setLevel)
         {
             if (_contentPanel == null) return;
 
-            var row = new StackPanel();
-            row.Visual.Width = 600;
-            row.Visual.Height = 30;
+            var row = ThemedRow.Create(ContentWidth, 30);
 
-            var downBtn = ThemedButton.Create("<");
+            // Flat buttons: the XenocideButton 3-slice cannot render legibly in
+            // a narrow (40px) control.
+            var downBtn = ThemedButton.CreateFlat("<");
             downBtn.Visual.Width = 40;
-            row.AddChild(downBtn);
+            downBtn.Visual.WidthUnits = DimensionUnitType.Absolute;
+            downBtn.Visual.Height = 26;
+            downBtn.Visual.HeightUnits = DimensionUnitType.Absolute;
 
             var levelLabel = ThemedLabel.CreateBody(getLevel().ToString(CultureInfo.InvariantCulture));
-            levelLabel.Visual.Width = 40;
-            row.AddChild(levelLabel);
 
-            var upBtn = ThemedButton.Create(">");
+            var upBtn = ThemedButton.CreateFlat(">");
             upBtn.Visual.Width = 40;
-            row.AddChild(upBtn);
+            upBtn.Visual.WidthUnits = DimensionUnitType.Absolute;
+            upBtn.Visual.Height = 26;
+            upBtn.Visual.HeightUnits = DimensionUnitType.Absolute;
+
+            ThemedRow.Place(row, downBtn, 400, 0);
+            ThemedRow.Place(row, levelLabel, 452, 6);
+            ThemedRow.Place(row, upBtn, 500, 0);
 
             downBtn.Click += (s, e) =>
             {
@@ -244,7 +296,7 @@ namespace ProjectXenocide.UI.Screens
                 levelLabel.Text = getLevel().ToString(CultureInfo.InvariantCulture);
             };
 
-            _contentPanel.AddChild(row);
+            _contentPanel.Visual.Children.Add(row);
         }
     }
 }

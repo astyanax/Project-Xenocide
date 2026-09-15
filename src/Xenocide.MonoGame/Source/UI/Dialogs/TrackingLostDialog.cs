@@ -20,16 +20,17 @@ namespace ProjectXenocide.UI.Dialogs
         {
             this.target = target;
             this.hunter = hunter;
+            PanelWidth = 560;
+            PanelHeight = 220;
         }
 
         protected override void CreateDialogWidgets()
         {
-            var details = ThemedLabel.CreateBody(Util.StringFormat(Strings.DLG_TRACKINGLOST_LOST_TRACKING, hunter.Name));
-            ContentArea.AddChild(details);
+            AddBodyText(Util.StringFormat(Strings.DLG_TRACKINGLOST_LOST_TRACKING, hunter.Name));
 
-            AddButton(Strings.BUTTON_RETURN_TO_BASE, OnReturnClicked);
-            AddButton(Strings.BUTTON_PATROL, OnPatrolClicked);
-            AddButton("Go to Last Known Position", OnLastKnownClicked);
+            AddActionButton(Strings.BUTTON_RETURN_TO_BASE, OnReturnClicked, 150);
+            AddActionButton(Strings.BUTTON_PATROL, OnPatrolClicked, 120);
+            AddActionButton("Last Position", OnLastKnownClicked, 150);
         }
 
         public void OnReturnClicked(object sender, EventArgs e)

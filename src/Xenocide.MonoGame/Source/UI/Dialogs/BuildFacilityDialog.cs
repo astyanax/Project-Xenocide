@@ -50,7 +50,7 @@ namespace ProjectXenocide.UI.Dialogs
 
             Logger.Debug("CreateDialogWidgets: added {0} facility buttons (plus Cancel)", buttonCount);
 
-            AddButton(Strings.BUTTON_CANCEL, OnCancelClicked);
+            AddActionButton(Strings.BUTTON_CANCEL, OnCancelClicked);
         }
 
         private void OnFacilitySelected(int facilityIndex)

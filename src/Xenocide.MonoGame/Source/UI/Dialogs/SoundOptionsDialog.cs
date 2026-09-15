@@ -34,6 +34,7 @@ namespace ProjectXenocide.UI.Dialogs
             musicLast = Xenocide.AudioSystem.MusicVolume;
             soundLast = Xenocide.AudioSystem.SoundVolume;
             PanelWidth = 500;
+            PanelHeight = 340;
 
             // Ensure Escape (which calls Dismiss) restores the previous volumes,
             // matching the Cancel button.
@@ -59,8 +60,8 @@ namespace ProjectXenocide.UI.Dialogs
             ContentArea.AddChild(soundLevelLabel);
 
             // Action buttons
-            AddButton("Save", OnSaveClicked);
-            AddButton("Cancel", OnCancelClicked);
+            AddActionButton("Save", OnSaveClicked);
+            AddActionButton("Cancel", OnCancelClicked);
         }
 
         private void UpdateMusicLabel()

@@ -25,10 +25,9 @@ namespace ProjectXenocide.UI.Dialogs
 
         protected override void CreateDialogWidgets()
         {
-            var messageLabel = ThemedLabel.CreateBody(_messageText);
-            ContentArea.AddChild(messageLabel);
+            AddBodyText(_messageText);
 
-            AddButton(Strings.BUTTON_OK, (s, e) => Close());
+            AddActionButton(Strings.BUTTON_OK, (s, e) => Close());
         }
 
         public Dialog.ButtonAction OkAction

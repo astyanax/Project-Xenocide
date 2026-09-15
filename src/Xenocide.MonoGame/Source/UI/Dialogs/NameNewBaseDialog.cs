@@ -20,39 +20,25 @@ namespace ProjectXenocide.UI.Dialogs
             this.pos = pos;
             this.isFirstBase = isFirstBase;
             PanelWidth = 600;
-            PanelHeight = 200;
+            PanelHeight = 220;
         }
 
         protected override void CreateDialogWidgets()
         {
-            var prompt = ThemedLabel.CreateBody(isFirstBase
+            AddBodyText(isFirstBase
                 ? "Choose a name for your first base:"
                 : "Name your new base:");
-            ContentArea.AddChild(prompt);
 
             baseNameInput = new TextBox();
             baseNameInput.Text = "New Base";
             baseNameInput.Visual.Width = 560;
+            baseNameInput.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.Absolute;
             baseNameInput.Visual.Height = 30;
+            baseNameInput.Visual.HeightUnits = Gum.DataTypes.DimensionUnitType.Absolute;
             ContentArea.AddChild(baseNameInput);
 
-            var buttonRow = new StackPanel();
-
-            var okBtn = ThemedButton.Create(Strings.BUTTON_OK, OnOkClicked);
-            okBtn.Visual.Width = 180;
-            okBtn.Visual.Height = 30;
-            buttonRow.AddChild(okBtn);
-
-            var spacer = ThemedLabel.Create("");
-            spacer.Visual.Width = 20;
-            buttonRow.AddChild(spacer);
-
-            var cancelBtn = ThemedButton.Create(Strings.BUTTON_CANCEL, (s, e) => Dismiss());
-            cancelBtn.Visual.Width = 180;
-            cancelBtn.Visual.Height = 30;
-            buttonRow.AddChild(cancelBtn);
-
-            ContentArea.AddChild(buttonRow);
+            AddActionButton(Strings.BUTTON_OK, OnOkClicked, 180);
+            AddActionButton(Strings.BUTTON_CANCEL, (s, e) => Dismiss(), 180);
         }
 
         private TextBox baseNameInput;

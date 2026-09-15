@@ -40,6 +40,11 @@ namespace ProjectXenocide.UI.Controls
         }
 
         /// <summary>Creates a SpriteRuntime showing the given atlas region, or null if unavailable.</summary>
+        /// <remarks>
+        /// <c>TextureAddress</c> must be <c>Custom</c> for a <c>SourceRectangle</c> to be
+        /// honoured; otherwise Gum renders the entire texture. This is the XNA/Gum
+        /// runtime equivalent of the <c>TextureAddress=1</c> used by the .gucx sprites.
+        /// </remarks>
         public static MonoGameGum.GueDeriving.SpriteRuntime CreateSprite(Rectangle source)
         {
             var atlas = Texture;
@@ -49,6 +54,7 @@ namespace ProjectXenocide.UI.Controls
             var sprite = new MonoGameGum.GueDeriving.SpriteRuntime
             {
                 Texture = atlas,
+                TextureAddress = Gum.Managers.TextureAddress.Custom,
                 SourceRectangle = source
             };
             return sprite;

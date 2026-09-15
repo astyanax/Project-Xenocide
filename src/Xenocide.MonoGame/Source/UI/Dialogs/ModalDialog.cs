@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
 
+using Gum.Converters;
+using Gum.DataTypes;
 using Gum.Forms.Controls;
+using Gum.Wireframe;
 
 using Microsoft.Xna.Framework;
 
@@ -12,19 +16,60 @@ using NLog;
 using ProjectXenocide.Assets;
 using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Screens;
+using ProjectXenocide.Utils;
 
 namespace ProjectXenocide.UI.Dialogs
 {
+    /// <summary>
+    /// Base class for all modal dialogs.
+    ///
+    /// <para>
+    /// LAYOUT MODEL: The dialog is a fixed-size, absolutely-positioned
+    /// <see cref="ContainerRuntime"/> (the "panel"). Children are positioned
+    /// explicitly — this is deliberate, because <see cref="StackPanel"/>
+    /// stacks vertically and cannot put a title on the left of a bar with a
+    /// close button on the right.
+    /// </para>
+    ///
+    /// <para>
+    /// STRUCTURE:
+    /// <list type="bullet">
+    /// <item>panel background (themed atlas sprite) — fills the panel</item>
+    /// <item>title bar (28px) — title text left, close "X" right</item>
+    /// <item>content area (a vertical <see cref="StackPanel"/>) — for the
+    /// subclass's labels, lists and controls (add via <see cref="AddButton"/>)</item>
+    /// <item>action-button row — a single centred horizontal row at the bottom
+    /// of the content area (add via <see cref="AddActionButton"/>)</item>
+    /// </list>
+    /// </para>
+    /// </summary>
     public abstract class ModalDialog : Dialog
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private StackPanel _panel;
-        private StackPanel _titleBar;
+        /// <summary>Height of the title bar, in pixels.</summary>
+        protected const int TitleBarHeight = 28;
+
+        /// <summary>Content inset from the panel edges, in pixels.</summary>
+        protected const int PanelPadding = 10;
+
+        /// <summary>Default width of a button added via <see cref="AddActionButton"/>.</summary>
+        protected const int DefaultActionButtonWidth = 130;
+
+        /// <summary>Height of the bottom action-button row, in pixels.</summary>
+        protected const int ActionRowHeight = 32;
+
+        private ContainerRuntime _panel;
+        private ContainerRuntime _titleBar;
         private Label _titleLabel;
         private Button _closeButton;
         private SpriteRuntime _background;
         private string _title;
+
+        private ContainerRuntime _actionRow;
+        private readonly List<Button> _actionButtons = new List<Button>();
+
+        private bool _isClosed;
 
         /// <summary>
         /// The dialog's title, shown in the title bar. Stored in a backing field
@@ -42,6 +87,7 @@ namespace ProjectXenocide.UI.Dialogs
             }
         }
 
+        /// <summary>Vertical container for the subclass's content.</summary>
         protected StackPanel ContentArea { get; private set; }
 
         public int PanelWidth { get; set; } = 500;
@@ -69,25 +115,34 @@ namespace ProjectXenocide.UI.Dialogs
 
             CreateDialogWidgets();
 
-            // Themed atlas background sits behind the panel (added first so it
-            // renders underneath). Null if the atlas texture is unavailable.
-            if (_background != null)
-                GumService.Default.Root.Children.Add(_background);
+            // The action row only exists if the subclass called AddActionButton.
+            // Size/centre it now that all content has been added.
+            FinishLayout();
 
             _panel.AddToRoot();
 
             Logger.Debug("[DIALOG] {0}: \"{1}\"", GetType().Name, Title);
         }
 
+        /// <summary>Closes the dialog, invoking <see cref="CloseAction"/>.</summary>
         public void Close()
         {
+            if (_isClosed)
+                return;
+            _isClosed = true;
+
             Logger.Debug("[DIALOG] {0} Close", GetType().Name);
             CloseAction?.Invoke();
             ScreenManager.CloseDialog(this);
         }
 
+        /// <summary>Dismisses the dialog, invoking <see cref="DismissAction"/> (cancel/cleanup).</summary>
         public void Dismiss()
         {
+            if (_isClosed)
+                return;
+            _isClosed = true;
+
             Logger.Debug("[DIALOG] {0} Dismiss", GetType().Name);
             DismissAction?.Invoke();
             ScreenManager.CloseDialog(this);
@@ -102,9 +157,7 @@ namespace ProjectXenocide.UI.Dialogs
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 RemoveFromScreen();
-            }
             base.Dispose(disposing);
         }
 
@@ -112,73 +165,110 @@ namespace ProjectXenocide.UI.Dialogs
 
         private void BuildPanel()
         {
-            _panel = new StackPanel();
+            _panel = new ContainerRuntime();
 
             var vp = Xenocide.Instance.GraphicsDevice.Viewport;
-            int x = (vp.Width - PanelWidth) / 2;
-            int y = (vp.Height - PanelHeight) / 2;
+            int x = Math.Max(0, (vp.Width - PanelWidth) / 2);
+            int y = Math.Max(0, (vp.Height - PanelHeight) / 2);
 
-            _panel.Visual.X = x;
-            _panel.Visual.Y = y;
-            _panel.Visual.Width = PanelWidth;
-            _panel.Visual.Height = PanelHeight;
+            _panel.X = x;
+            _panel.Y = y;
+            _panel.XUnits = GeneralUnitType.PixelsFromSmall;
+            _panel.YUnits = GeneralUnitType.PixelsFromSmall;
+            _panel.Width = PanelWidth;
+            _panel.WidthUnits = DimensionUnitType.Absolute;
+            _panel.Height = PanelHeight;
+            _panel.HeightUnits = DimensionUnitType.Absolute;
+            _panel.ClipsChildren = true;
 
+            // Themed atlas background fills the panel and tracks its size.
+            // Added first so it renders behind the title bar and content.
             _background = XenoAtlas.CreateSprite(XenoAtlas.Panels.ContentBackground);
             if (_background != null)
             {
-                _background.X = x;
-                _background.Y = y;
-                _background.Width = PanelWidth;
-                _background.Height = PanelHeight;
+                _background.X = 0;
+                _background.Y = 0;
+                _background.XUnits = GeneralUnitType.PixelsFromSmall;
+                _background.YUnits = GeneralUnitType.PixelsFromSmall;
+                _background.Width = 0;
+                _background.WidthUnits = DimensionUnitType.RelativeToParent;
+                _background.Height = 0;
+                _background.HeightUnits = DimensionUnitType.RelativeToParent;
+                _panel.Children.Add(_background);
             }
         }
 
         private void BuildTitleBar()
         {
-            _titleBar = new StackPanel();
-            _titleBar.Visual.X = 0;
-            _titleBar.Visual.Y = 0;
-            _titleBar.Visual.Width = 0;
-            _titleBar.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
-            _titleBar.Visual.Height = 28;
-            _titleBar.Visual.SetProperty("ColorCategoryState", "Primary");
+            // A plain ContainerRuntime (not a StackPanel) so the title and the
+            // close button can be positioned independently on the same row.
+            _titleBar = new ContainerRuntime();
+            _titleBar.X = 0;
+            _titleBar.Y = 0;
+            _titleBar.XUnits = GeneralUnitType.PixelsFromSmall;
+            _titleBar.YUnits = GeneralUnitType.PixelsFromSmall;
+            _titleBar.Width = 0;
+            _titleBar.WidthUnits = DimensionUnitType.RelativeToParent;
+            _titleBar.Height = TitleBarHeight;
+            _titleBar.HeightUnits = DimensionUnitType.Absolute;
 
-            _titleLabel = new Label();
-            _titleLabel.Text = Title ?? "";
-            _titleLabel.Visual.X = 8;
-            _titleLabel.Visual.Y = 4;
-            _titleBar.AddChild(_titleLabel);
+            var bar = XenoAtlas.CreateSprite(XenoAtlas.Panels.TitleBar);
+            if (bar != null)
+            {
+                bar.X = 0;
+                bar.Y = 0;
+                bar.XUnits = GeneralUnitType.PixelsFromSmall;
+                bar.YUnits = GeneralUnitType.PixelsFromSmall;
+                bar.Width = 0;
+                bar.WidthUnits = DimensionUnitType.RelativeToParent;
+                bar.Height = TitleBarHeight;
+                bar.HeightUnits = DimensionUnitType.Absolute;
+                _titleBar.Children.Add(bar);
+            }
 
-            _closeButton = new Button();
-            _closeButton.Text = "X";
-            _closeButton.Visual.X = PanelWidth - 40;
-            _closeButton.Visual.Y = 2;
+            _titleLabel = new Label { Text = Title ?? "" };
+            _titleLabel.X = 8;
+            _titleLabel.Y = 4;
+            _titleLabel.XUnits = GeneralUnitType.PixelsFromSmall;
+            _titleLabel.YUnits = GeneralUnitType.PixelsFromSmall;
+            _titleBar.Children.Add(_titleLabel.Visual);
+
+            // A plain (flat) button rather than the XenocideButton template: the
+            // template's 3-slice has a ~30px left cap, so it cannot render
+            // legibly at the small size of a title-bar close button.
+            _closeButton = ThemedButton.CreateFlat("X", OnCloseClicked);
             _closeButton.Visual.Width = 24;
-            _closeButton.Visual.Height = 24;
-            _closeButton.Click += OnCloseClicked;
-            _titleBar.AddChild(_closeButton);
+            _closeButton.Visual.WidthUnits = DimensionUnitType.Absolute;
+            _closeButton.Visual.Height = 20;
+            _closeButton.Visual.HeightUnits = DimensionUnitType.Absolute;
+            _closeButton.Visual.X = -28;
+            _closeButton.Visual.XUnits = GeneralUnitType.PixelsFromLarge;
+            _closeButton.Visual.Y = 4;
+            _closeButton.Visual.YUnits = GeneralUnitType.PixelsFromSmall;
+            _titleBar.Children.Add(_closeButton.Visual);
 
-            _panel.AddChild(_titleBar);
+            _panel.Children.Add(_titleBar);
         }
 
         private void BuildContentArea()
         {
             ContentArea = new StackPanel();
-            ContentArea.Visual.X = 0;
-            ContentArea.Visual.Y = 0;
-            ContentArea.Visual.Width = 0;
-            ContentArea.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
-
-            _panel.AddChild(ContentArea);
+            ContentArea.Visual.X = PanelPadding;
+            ContentArea.Visual.XUnits = GeneralUnitType.PixelsFromSmall;
+            ContentArea.Visual.Y = TitleBarHeight + 6;
+            ContentArea.Visual.YUnits = GeneralUnitType.PixelsFromSmall;
+            ContentArea.Visual.Width = -PanelPadding * 2;
+            ContentArea.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
+            ContentArea.Visual.Height = -(TitleBarHeight + 6 + PanelPadding);
+            ContentArea.Visual.HeightUnits = DimensionUnitType.RelativeToParent;
+            _panel.Children.Add(ContentArea.Visual);
         }
 
         /// <summary>
-        /// Creates a themed button and adds it to the dialog's content area.
-        /// The ButtonClick1 sound is auto-wired by ThemedButton.
+        /// Creates a themed button and adds it to the dialog's content area
+        /// (which stacks vertically — use for list/menu items). The ButtonClick1
+        /// sound is auto-wired by <see cref="ThemedButton"/>.
         /// </summary>
-        /// <param name="text">Button label text.</param>
-        /// <param name="onClick">Click event handler.</param>
-        /// <returns>The created Button for further customization.</returns>
         protected Button AddButton(string text, EventHandler onClick)
         {
             var button = ThemedButton.Create(text, onClick);
@@ -186,25 +276,94 @@ namespace ProjectXenocide.UI.Dialogs
             return button;
         }
 
+        /// <summary>
+        /// Adds a body-text label that wraps to the content width.
+        /// </summary>
+        protected Label AddBodyText(string text)
+        {
+            var label = ThemedLabel.CreateBody(text);
+            label.Visual.Width = 0;
+            label.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
+            ContentArea.AddChild(label);
+            return label;
+        }
+
+        /// <summary>
+        /// Creates a themed button and adds it to a single horizontal row centred
+        /// near the bottom of the content area. Use for action buttons
+        /// (OK/Cancel/Yes/No); use <see cref="AddButton"/> for list items.
+        /// </summary>
+        protected Button AddActionButton(string text, EventHandler onClick, int width = 0)
+        {
+            EnsureActionRow();
+
+            var button = ThemedButton.Create(text, onClick);
+            ThemedButton.SetWidth(button, width > 0 ? width : DefaultActionButtonWidth);
+            button.Visual.Height = 25;
+            button.Visual.HeightUnits = DimensionUnitType.Absolute;
+            _actionRow.Children.Add(button.Visual);
+            _actionButtons.Add(button);
+            return button;
+        }
+
+        private void EnsureActionRow()
+        {
+            if (_actionRow != null)
+                return;
+
+            // Anchored to the bottom of the panel (not inside the vertical content
+            // stack) so a long list can never push the action buttons out of view.
+            _actionRow = new ContainerRuntime();
+            _actionRow.X = PanelPadding;
+            _actionRow.XUnits = GeneralUnitType.PixelsFromSmall;
+            _actionRow.Y = -PanelPadding;
+            _actionRow.YUnits = GeneralUnitType.PixelsFromLarge;
+            _actionRow.YOrigin = RenderingLibrary.Graphics.VerticalAlignment.Bottom;
+            // Absolute width: ThemedRow.CenterButtons reads Width to centre the
+            // buttons, and RelativeToParent would expose the raw offset (-20),
+            // not the resolved width.
+            _actionRow.Width = PanelWidth - PanelPadding * 2;
+            _actionRow.WidthUnits = DimensionUnitType.Absolute;
+            _actionRow.Height = ActionRowHeight;
+            _actionRow.HeightUnits = DimensionUnitType.Absolute;
+            _panel.Children.Add(_actionRow);
+        }
+
+        private void FinishLayout()
+        {
+            if (_actionRow == null || _actionButtons.Count == 0)
+                return;
+
+            // Reserve the bottom strip for the action row so scrolling/stacking
+            // content does not overlap it.
+            ContentArea.Visual.Height =
+                -(TitleBarHeight + 6 + ActionRowHeight + PanelPadding + 4);
+            ContentArea.Visual.HeightUnits = DimensionUnitType.RelativeToParent;
+
+            ThemedRow.CenterButtons(_actionRow, _actionButtons);
+        }
+
         private void OnCloseClicked(object sender, EventArgs e)
         {
+            // The title-bar "X" is a cancel: it must run the dismiss path, not the
+            // affirmative CloseAction. Otherwise X on a Yes/No confirmation would
+            // act as "Yes" and let the player bypass the choice.
             Xenocide.AudioSystem?.PlaySound(SoundId.ButtonClick1);
-            Close();
+            Dismiss();
         }
 
         private void RemoveFromScreen()
         {
-            if (_background != null)
-            {
-                GumService.Default.Root.Children.Remove(_background);
-                _background = null;
-            }
-
             if (_panel != null)
             {
-                GumService.Default.Root.Children.Remove(_panel.Visual);
+                _panel.RemoveFromRoot();
                 _panel = null;
             }
+            _background = null;
+            _titleBar = null;
+            _actionRow = null;
+            _actionButtons.Clear();
+            ContentArea = null;
         }
     }
 }

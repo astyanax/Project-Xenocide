@@ -57,6 +57,7 @@ using Xenocide.Resources;
 #endregion
 
 [assembly: NeutralResourcesLanguage("en")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Xenocide.Test.MonoGame")]
 
 namespace ProjectXenocide
 {
@@ -71,6 +72,9 @@ namespace ProjectXenocide
         private static ScreenManager screenManager;
         private static Xenocide instance;
         private KeyboardState _prevKeyState;
+
+        /// <summary>Set when a screenshot key is pressed; serviced at the end of Draw.</summary>
+        private bool _screenshotRequested;
 
         /// <summary>
         /// The random number generator everyone should use
@@ -144,6 +148,8 @@ namespace ProjectXenocide
 
             gumProject = GumService.Default.Initialize(this, "Gum/Xenocide.gumx");
             ValidateGumx();
+
+            Logger.Info("Screenshots will be written to: {0}", ScreenshotCapture.OutputDirectory);
 
             screenManager.ScheduleScreen(new UI.Screens.StartScreen());
 
@@ -236,6 +242,20 @@ namespace ProjectXenocide
             {
                 graphics.ToggleFullScreen();
             }
+
+            // Print Screen (or F12 as a fallback) queues a screenshot; it is
+            // serviced at the end of Draw while the back buffer still holds the frame.
+            if (keyState.IsKeyDown(Keys.PrintScreen) && _prevKeyState.IsKeyUp(Keys.PrintScreen))
+            {
+                Logger.Info("Screenshot: Print Screen pressed; capture queued");
+                _screenshotRequested = true;
+            }
+            else if (keyState.IsKeyDown(Keys.F12) && _prevKeyState.IsKeyUp(Keys.F12))
+            {
+                Logger.Info("Screenshot: F12 pressed; capture queued");
+                _screenshotRequested = true;
+            }
+
             _prevKeyState = keyState;
 
             GumService.Default.Update(gameTime);
@@ -255,6 +275,22 @@ namespace ProjectXenocide
             screenManager.Draw(gameTime, graphics.GraphicsDevice);
             GumService.Default.Draw();
             base.Draw(gameTime);
+
+            if (_screenshotRequested)
+            {
+                _screenshotRequested = false;
+                var label = screenManager.TopmostFrame?.GetType().Name ?? "unknown";
+                Logger.Info("Screenshot: capturing '{0}' to {1}", label, ScreenshotCapture.OutputDirectory);
+                try
+                {
+                    var path = ScreenshotCapture.Capture(graphics.GraphicsDevice, label);
+                    Logger.Info("Screenshot: success -> {0}", path);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "Screenshot: FAILED to capture");
+                }
+            }
         }
 
         /// <summary>

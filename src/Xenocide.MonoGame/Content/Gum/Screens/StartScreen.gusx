@@ -100,13 +100,13 @@
       <Value xsi:type="xsd:float">250</Value>
     </Variable>
     <Variable Type="float" Name="DebugPanel.X" SetsValue="true">
-      <Value xsi:type="xsd:float">337</Value>
+      <Value xsi:type="xsd:float">-125</Value>
     </Variable>
     <Variable Type="PositionUnitType" Name="DebugPanel.XUnits" SetsValue="true">
       <Value xsi:type="xsd:int">6</Value>
     </Variable>
     <Variable Type="float" Name="DebugPanel.Y" SetsValue="true">
-      <Value xsi:type="xsd:float">-128</Value>
+      <Value xsi:type="xsd:float">-430</Value>
     </Variable>
     <Variable Type="PositionUnitType" Name="DebugPanel.YUnits" SetsValue="true">
       <Value xsi:type="xsd:int">5</Value>

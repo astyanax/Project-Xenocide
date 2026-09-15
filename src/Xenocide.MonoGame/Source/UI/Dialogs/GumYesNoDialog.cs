@@ -47,11 +47,10 @@ namespace ProjectXenocide.UI.Dialogs
 
         protected override void CreateDialogWidgets()
         {
-            var messageLabel = ThemedLabel.CreateBody(_messageText);
-            ContentArea.AddChild(messageLabel);
+            AddBodyText(_messageText);
 
-            AddButton(_yesButtonText ?? Strings.BUTTON_YES, (s, e) => Close());
-            AddButton(_noButtonText ?? Strings.BUTTON_NO, (s, e) => Dismiss());
+            AddActionButton(_yesButtonText ?? Strings.BUTTON_YES, (s, e) => Close());
+            AddActionButton(_noButtonText ?? Strings.BUTTON_NO, (s, e) => Dismiss());
 
             CloseAction = _yesAction;
             DismissAction = _noAction;

@@ -48,6 +48,47 @@ namespace ProjectXenocide.UI.Controls
         }
 
         /// <summary>
+        /// Creates a textured XenocideButton with a fixed absolute pixel width.
+        /// </summary>
+        public static Button Create(string text, int width, EventHandler onClick = null, bool playSound = true)
+        {
+            return SetWidth(Create(text, onClick, playSound), width);
+        }
+
+        /// <summary>
+        /// Sets an explicit, absolute pixel width on a button.
+        /// <para>
+        /// The <c>XenocideButton</c> template's width uses
+        /// <see cref="DimensionUnitType.RelativeToParent"/>, meaning a raw
+        /// <c>button.Visual.Width = N</c> is interpreted as "parent width + N" and
+        /// overflows its container. This helper sets the value <em>and</em> the
+        /// unit so <paramref name="width"/> is used verbatim.
+        /// </para>
+        /// </summary>
+        public static Button SetWidth(Button button, int width)
+        {
+            if (button?.Visual != null)
+            {
+                button.Visual.Width = width;
+                button.Visual.WidthUnits = DimensionUnitType.Absolute;
+            }
+            return button;
+        }
+
+        /// <summary>
+        /// Makes a button stretch to the full width of its parent (the template default).
+        /// </summary>
+        public static Button SetFullWidth(Button button)
+        {
+            if (button?.Visual != null)
+            {
+                button.Visual.Width = 0;
+                button.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
+            }
+            return button;
+        }
+
+        /// <summary>
         /// Creates a plain Forms Button (ButtonStandard component) with optional click handler.
         /// Used for grid row buttons and other elements that require ColorCategoryState
         /// styling, which the textured XenocideButton does not support.

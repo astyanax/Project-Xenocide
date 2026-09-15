@@ -17,19 +17,20 @@ namespace ProjectXenocide.UI.Dialogs
         public StartBattlescapeDialog(Mission mission) : base("Battlescape")
         {
             this.mission = mission;
+            PanelWidth = 560;
+            PanelHeight = 260;
         }
 
         protected override void CreateDialogWidgets()
         {
-            var details = ThemedLabel.CreateBody(mission.MakeStartMissionText());
-            ContentArea.AddChild(details);
+            AddBodyText(mission.MakeStartMissionText());
 
-            AddButton("OK", OnOkClicked);
-            AddButton("Cancel", OnCancelClicked);
+            AddActionButton("OK", OnOkClicked);
+            AddActionButton("Cancel", OnCancelClicked);
 
             if (Xenocide.StaticTables.StartSettings.Cheats.AllowAutoWinBattlescape)
             {
-                AddButton("Auto Complete", OnAutoCompleteClicked);
+                AddActionButton("Auto Complete", OnAutoCompleteClicked, 150);
             }
         }
 

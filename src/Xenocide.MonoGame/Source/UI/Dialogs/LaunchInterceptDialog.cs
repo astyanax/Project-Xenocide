@@ -22,6 +22,7 @@ namespace ProjectXenocide.UI.Dialogs
         public LaunchInterceptDialog() : base("Select Interceptor")
         {
             PanelWidth = 600;
+            PanelHeight = 400;
         }
 
         protected override void CreateDialogWidgets()
@@ -48,7 +49,7 @@ namespace ProjectXenocide.UI.Dialogs
                 }
             }
 
-            AddButton(Strings.BUTTON_CANCEL, OnCancelClicked);
+            AddActionButton(Strings.BUTTON_CANCEL, OnCancelClicked);
         }
 
         private Dictionary<int, Aircraft> rowToCraft = new Dictionary<int, Aircraft>();
