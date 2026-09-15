@@ -99,10 +99,9 @@ namespace ProjectXenocide.UI.Screens
             layout.AddToRoot();
             content = new ContentArea(layout.ContentPanel);
 
-            layout.AddButton(XenocideResourceManager.Get("BUTTON_ADD_IDLE_SCIENTISTS"), OnAddIdleButton);
-            layout.AddButton(XenocideResourceManager.Get("BUTTON_MORE_SCIENTISTS"), OnMoreButton);
-            layout.AddButton(XenocideResourceManager.Get("BUTTON_LESS_SCIENTISTS"), OnLessButton);
-            layout.AddButton(XenocideResourceManager.Get("BUTTON_REMOVE_ALL_SCIENTISTS"), OnRemoveAllButton);
+            // X-COM research model: a single active project, with every available
+            // scientist assigned to it. "Start Research" begins the selected topic.
+            layout.AddButton("Start Research", OnStartButton);
             layout.AddButton(XenocideResourceManager.Get("BUTTON_CLOSE"), OnCloseButton);
 
             availableText = ThemedLabel.Create(controller.MakeIdleScientistsString());
@@ -156,6 +155,51 @@ namespace ProjectXenocide.UI.Screens
         #endregion Create the Gum controls
 
         #region Event handlers
+
+        /// <summary>
+        /// Starts research on the selected topic as the single active project,
+        /// assigning all available scientists. Only one project may be active.
+        /// </summary>
+        private void OnStartButton(object sender, EventArgs e)
+        {
+            int? tag = GetSelectedTag();
+            if (!tag.HasValue)
+                return;
+
+            LineItem lineItem = lineItems[tag.Value];
+
+            // Already the active project — nothing to do.
+            if (lineItem is ProjectLineItem)
+                return;
+
+            if (0 < Controller.GetActiveProjects().Count)
+            {
+                Util.ShowMessageBox(
+                    "A research project is already in progress. Complete it before starting another.");
+                return;
+            }
+
+            if (controller.IdleScientistCount <= 0)
+            {
+                Util.ShowMessageBox(Strings.MSGBOX_NO_IDLE_SCIENTISTS);
+                return;
+            }
+
+            ProjectLineItem project = lineItem.GetProject();
+            controller.AddWorkersToProject(project, controller.IdleScientistCount);
+            controller.FindIdleScientists();
+
+            RefreshGrid();
+        }
+
+        /// <summary>Rebuilds the grid from current game state.</summary>
+        private void RefreshGrid()
+        {
+            grid.Clear();
+            lineItems.Clear();
+            PopulateGrid();
+            availableText.Text = controller.MakeIdleScientistsString();
+        }
 
         private void OnMoreButton(object sender, EventArgs e)
         {
