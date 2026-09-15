@@ -183,8 +183,9 @@ namespace ProjectXenocide.UI.Screens
 
             // Themed backdrops behind the right-hand control panels and the
             // bottom status/log strip, so HUD text stays readable over the art.
-            AddBackdrop(893, 42, 355, 566, 185);
-            AddBackdrop(14, 723, 1252, 292, 205);
+            AddBackdrop(896, 46, 348, 566, 150);   // right column: tactical, weapons, target
+            AddBackdrop(16, 696, 868, 38, 150);    // craft status bar
+            AddBackdrop(16, 726, 1248, 298, 150);  // combat log
 
             // Start paused — player presses Normal or Fast to begin
             speedMultiplier = SpeedPaused;
@@ -562,26 +563,40 @@ namespace ProjectXenocide.UI.Screens
 
         #endregion
 
-        /// <summary>Adds a themed translucent backdrop behind the HUD panels.</summary>
+        /// <summary>
+        /// Adds a themed panel (1px border + translucent fill) behind the HUD to
+        /// keep the labels readable over the background art.
+        /// </summary>
         private void AddBackdrop(int x, int y, int width, int height, int alpha)
         {
             if (GumRoot == null)
                 return;
 
-            var backdrop = new ColoredRectangleRuntime();
-            backdrop.Color = new Color(10, 16, 28, alpha);
-            backdrop.X = x;
-            backdrop.Y = y;
-            backdrop.XUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
-            backdrop.YUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
-            backdrop.Width = width;
-            backdrop.WidthUnits = Gum.DataTypes.DimensionUnitType.Absolute;
-            backdrop.Height = height;
-            backdrop.HeightUnits = Gum.DataTypes.DimensionUnitType.Absolute;
+            var border = new ColoredRectangleRuntime();
+            border.Color = new Color(60, 90, 60, 210);
+            Place(border, x - 1, y - 1, width + 2, height + 2);
 
-            // Insert after the background sprite so the panels stay on top.
+            var fill = new ColoredRectangleRuntime();
+            fill.Color = new Color(8, 20, 12, alpha);
+            Place(fill, x, y, width, height);
+
+            // Insert after the background sprite so the HUD panels stay on top.
             int index = Math.Min(1, GumRoot.Children.Count);
-            GumRoot.Children.Insert(index, backdrop);
+            GumRoot.Children.Insert(index, border);
+            GumRoot.Children.Insert(index + 1, fill);
+        }
+
+        /// <summary>Positions an absolutely-placed Gum rectangle.</summary>
+        private static void Place(GraphicalUiElement element, int x, int y, int width, int height)
+        {
+            element.X = x;
+            element.Y = y;
+            element.XUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            element.YUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            element.Width = width;
+            element.WidthUnits = Gum.DataTypes.DimensionUnitType.Absolute;
+            element.Height = height;
+            element.HeightUnits = Gum.DataTypes.DimensionUnitType.Absolute;
         }
 
         #region Radar Rendering
@@ -620,18 +635,27 @@ namespace ProjectXenocide.UI.Screens
             int craftY = (int)(centerY + (radarHeight * normalized / 2f));
             int ufoY = (int)(centerY - (radarHeight * normalized / 2f));
 
-            // Weapon range band on the interceptor's side: it can fire once it is
-            // at or above this line (i.e. closer than the weapon's max range).
+            // Engagement band: the two craft are within weapon range while the
+            // closing distance keeps them inside this central zone. It is centred
+            // on the meeting point because distance maps to the vertical gap.
             if (interceptor != null)
             {
                 int maxRange = AeroscapeState.GetMaxWeaponRange(interceptor);
                 if (maxRange > 0 && maxRange < AeroscapeState.MaxDistance)
                 {
                     float rangeN = (float)((double)maxRange / AeroscapeState.MaxDistance);
-                    int rangeY = (int)(centerY + (radarHeight * rangeN / 2f));
+                    int bandHalf = (int)(radarHeight * rangeN / 2f);
+                    int bandTop = Math.Max(radarY + 1, centerY - bandHalf);
+                    int bandBottom = Math.Min(radarY + radarHeight - 1, centerY + bandHalf);
+                    var bandColor = new Color(120, 150, 0, 40);
+
                     spriteBatch.Draw(whiteTexture,
-                        new Rectangle(radarX + 1, rangeY, radarWidth - 2, Math.Max(0, radarY + radarHeight - rangeY)),
-                        new Color(120, 120, 0, 45));
+                        new Rectangle(radarX + 1, bandTop, radarWidth - 2, Math.Max(0, bandBottom - bandTop)),
+                        bandColor);
+                    spriteBatch.Draw(whiteTexture,
+                        new Rectangle(radarX + 1, bandTop, radarWidth - 2, 1), new Color(150, 180, 0, 140));
+                    spriteBatch.Draw(whiteTexture,
+                        new Rectangle(radarX + 1, bandBottom, radarWidth - 2, 1), new Color(150, 180, 0, 140));
                 }
             }
 
