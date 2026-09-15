@@ -1,14 +1,14 @@
+using Gum.DataTypes;
 using Gum.Forms.Controls;
 
 namespace ProjectXenocide.UI.Controls
 {
     /// <summary>
-    /// GridPanel subclass with built-in theming. Applies consistent visual styling:
-    /// - Header row: DarkGray background, Strong text style
-    /// - Alternating row colors: PrimaryLight tint for even rows
+    /// GridPanel subclass with built-in theming:
+    /// - Header row: dark band with Strong text (from <see cref="GridPanel"/>)
+    /// - Alternating row colours: PrimaryLight tint for even rows
+    /// - Selection highlight: Primary colour
     /// - Row height: 25px
-    /// - Selection highlight: Primary color
-    /// - Cell text: Normal style
     ///
     /// USAGE:
     ///   var grid = new StyledGrid();
@@ -19,38 +19,27 @@ namespace ProjectXenocide.UI.Controls
     /// </summary>
     public class StyledGrid : GridPanel
     {
-        private bool _evenRow;
-
         public StyledGrid()
         {
             RowButtonFactory = CreateThemedRowButton;
         }
 
         /// <summary>
-        /// Creates a row button with alternating row color theming.
-        /// Even rows get a PrimaryLight tint; odd rows get default styling.
-        /// Uses a flat Forms Button because the alternating striping relies on
-        /// ColorCategoryState, which the textured XenocideButton does not support.
+        /// Creates a flat row button. Alternating colours are applied by
+        /// <see cref="GetRowColorState"/> so selection highlighting can override
+        /// and restore them; the textured XenocideButton cannot be tinted this way.
         /// </summary>
-        private Button CreateThemedRowButton()
+        private static Button CreateThemedRowButton()
         {
             var button = ThemedButton.CreateFlat("");
             button.Visual.Height = DefaultRowHeight;
+            button.Visual.HeightUnits = DimensionUnitType.Absolute;
             button.Visual.Width = 0;
-            button.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
-
-            button.Visual.SetProperty("ColorCategoryState", _evenRow ? "PrimaryLight" : "Primary");
-            _evenRow = !_evenRow;
+            button.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
             return button;
         }
 
-        /// <summary>
-        /// Clears all rows and resets the alternating row counter.
-        /// </summary>
-        public override void Clear()
-        {
-            _evenRow = false;
-            base.Clear();
-        }
+        protected override string GetRowColorState(int index) =>
+            index % 2 == 0 ? "PrimaryLight" : "Primary";
     }
 }
