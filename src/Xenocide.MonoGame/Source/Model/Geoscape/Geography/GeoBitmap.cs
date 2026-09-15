@@ -35,11 +35,12 @@ using System.Text.Json.Serialization;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StbImageSharp;
 
 using NLog;
 
 using ProjectXenocide.Utils;
+
+using StbImageSharp;
 
 namespace ProjectXenocide.Model.Geoscape.Geography
 {

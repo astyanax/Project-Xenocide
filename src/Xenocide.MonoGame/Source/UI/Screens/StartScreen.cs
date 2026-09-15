@@ -46,9 +46,8 @@ using ProjectXenocide.Model.Geoscape.AI;
 using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.Model.StaticData.Items;
-using ProjectXenocide.Utils;
-
 using ProjectXenocide.UI.Controls;
+using ProjectXenocide.Utils;
 
 #endregion Using Statements
 
