@@ -23,6 +23,7 @@ namespace ProjectXenocide.UI
 
         private static readonly Point ArrowHotspot = new Point(0, 0);
         private static readonly Point TargetHotspot = new Point(12, 0);
+        private static readonly Point SelectHotspot = new Point(12, 12);
 
         private Rectangle _cursorSourceRect = XenoAtlas.Cursors.Arrow;
         private Point _hotspot = ArrowHotspot;
@@ -32,7 +33,7 @@ namespace ProjectXenocide.UI
             DrawOrder = int.MaxValue;
         }
 
-        public enum CursorType { Arrow, Target }
+        public enum CursorType { Arrow, Target, Select }
 
         public CursorType CurrentCursorType
         {
@@ -43,6 +44,10 @@ namespace ProjectXenocide.UI
                     case CursorType.Target:
                         _cursorSourceRect = XenoAtlas.Cursors.Target;
                         _hotspot = TargetHotspot;
+                        break;
+                    case CursorType.Select:
+                        _cursorSourceRect = XenoAtlas.Cursors.Select;
+                        _hotspot = SelectHotspot;
                         break;
                     default:
                         _cursorSourceRect = XenoAtlas.Cursors.Arrow;
@@ -80,6 +85,12 @@ namespace ProjectXenocide.UI
             var overElement = GumService.Default.Cursor?.FrameworkElementOver;
             if (overElement != null)
                 return CursorType.Arrow;
+
+            // A screen/state-specific cursor takes precedence over the generic
+            // scene reticle (e.g. the placement cursor during base selection).
+            var requested = Xenocide.ScreenManager?.TopmostFrame?.RequestedCursor;
+            if (requested.HasValue)
+                return requested.Value;
 
             // Over a 3D scene viewport (geoscape globe, battlescape, facility map).
             if (Xenocide.ScreenManager?.TopmostFrame is PolarScreen polar)

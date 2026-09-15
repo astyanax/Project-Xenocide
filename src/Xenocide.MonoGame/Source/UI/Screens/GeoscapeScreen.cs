@@ -517,6 +517,9 @@ namespace ProjectXenocide.UI.Screens
             set { state = value; }
         }
 
+        /// <summary>The current state's requested cursor (e.g. placement).</summary>
+        public override UI.SoftwareCursor.CursorType? RequestedCursor => state?.RequestedCursor;
+
         /// <summary>
         /// Return the scene field as it's real type (a GeoscapeScene)
         /// </summary>

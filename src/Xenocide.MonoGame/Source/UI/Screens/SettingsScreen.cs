@@ -216,6 +216,8 @@ namespace ProjectXenocide.UI.Screens
 
             Xenocide.SetDisplayMode(_displayMode);
 
+            // 0 = software cursor (hide the OS pointer), 1 = hardware (show it).
+            SoftwareCursor.IsSoftwareCursorEnabled = _cursorMode == 0;
             Xenocide.Instance.IsMouseVisible = _cursorMode == 1;
             ScreenManager.ScheduleScreen(new StartScreen());
         }

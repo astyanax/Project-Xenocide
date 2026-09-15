@@ -163,6 +163,12 @@ namespace ProjectXenocide.UI.Screens
             }
 
             /// <summary>
+            /// Software cursor this state wants shown over the globe, or null for
+            /// the context default (arrow over UI, reticle over the globe).
+            /// </summary>
+            public virtual SoftwareCursor.CursorType? RequestedCursor => null;
+
+            /// <summary>
             /// Return the UFO closest to a position on the Geoscape.
             /// </summary>
             /// <remarks>UFOs more than ~500km away are ignored.</remarks>
@@ -377,6 +383,9 @@ namespace ProjectXenocide.UI.Screens
                 GeoscapeScreen.AddControl(cancelNewBaseButton);
             }
 
+            /// <summary>Use the placement cursor while choosing a base site.</summary>
+            public override SoftwareCursor.CursorType? RequestedCursor => SoftwareCursor.CursorType.Select;
+
             /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>
             /// <param name="pos">Position on earth where mouse was clicked</param>
             public override void OnLeftMouseDownInScene(GeoPosition pos)
@@ -411,6 +420,9 @@ namespace ProjectXenocide.UI.Screens
                 setFirstBaseTextWindow = ThemedLabel.CreateBody(Strings.SCREEN_GEOSCAPE_FIRST_BASE);
                 GeoscapeScreen.AddControl(setFirstBaseTextWindow);
             }
+
+            /// <summary>Use the placement cursor while choosing the first base site.</summary>
+            public override SoftwareCursor.CursorType? RequestedCursor => SoftwareCursor.CursorType.Select;
 
             /// <summary>React to user clicking left mouse button in the 3D geoscape scene</summary>
             /// <param name="pos">Position on earth where mouse was clicked</param>

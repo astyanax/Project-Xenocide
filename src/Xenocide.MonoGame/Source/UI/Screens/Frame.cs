@@ -64,6 +64,14 @@ namespace ProjectXenocide.UI.Screens
 
         public virtual bool Visible { get; set; } = true;
 
+        /// <summary>
+        /// Optional software-cursor override for this frame. When set (and the
+        /// pointer is not over a Gum control) the <see cref="UI.SoftwareCursor"/>
+        /// draws this cursor instead of the context default. Used for the
+        /// base-placement cursor.
+        /// </summary>
+        public virtual UI.SoftwareCursor.CursorType? RequestedCursor => null;
+
         protected string CeguiId { get { return ceguiId; } }
 
         protected static ScreenManager ScreenManager { get { return Xenocide.ScreenManager; } }
