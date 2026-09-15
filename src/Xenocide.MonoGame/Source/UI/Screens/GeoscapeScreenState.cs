@@ -162,6 +162,30 @@ namespace ProjectXenocide.UI.Screens
             {
             }
 
+            /// <summary>
+            /// Return the UFO closest to a position on the Geoscape.
+            /// </summary>
+            /// <remarks>UFOs more than ~500km away are ignored.</remarks>
+            protected static Ufo FindClosestUfo(GeoPosition pos)
+            {
+                return pos.FindClosest(Xenocide.GameState.GeoData.Overmind.Ufos, FindClosestMaxDistance);
+            }
+
+            /// <summary>
+            /// Return the Alien Site closest to a position on the Geoscape.
+            /// </summary>
+            /// <remarks>Sites more than ~500km away are ignored.</remarks>
+            protected static AlienSite FindClosestAlienSite(GeoPosition pos)
+            {
+                return pos.FindClosest(Xenocide.GameState.GeoData.Overmind.Sites, FindClosestMaxDistance);
+            }
+
+            /// <summary>
+            /// Maximum distance to look at when using the FindClosestXXXXX() helpers.
+            /// Currently 500 km.
+            /// </summary>
+            protected static readonly double FindClosestMaxDistance = GeoPosition.KilometersToRadians(501);
+
             #region Fields
 
             /// <summary>
@@ -273,6 +297,26 @@ namespace ProjectXenocide.UI.Screens
             {
                 // bring up the launch intercept Dialog
                 GeoscapeScreen.ScreenManager.ShowDialog(new LaunchInterceptDialog());
+            }
+
+            /// <summary>
+            /// Clicking a UFO (or alien site) on the globe opens the intercept dialog
+            /// targeted at it, so the player can pick a craft to send after it.
+            /// </summary>
+            public override void OnLeftMouseDownInScene(GeoPosition pos)
+            {
+                Ufo ufo = FindClosestUfo(pos);
+                if (ufo != null)
+                {
+                    GeoscapeScreen.ScreenManager.ShowDialog(new LaunchInterceptDialog(ufo));
+                    return;
+                }
+
+                AlienSite site = FindClosestAlienSite(pos);
+                if (site != null)
+                {
+                    GeoscapeScreen.ScreenManager.ShowDialog(new LaunchInterceptDialog(site));
+                }
             }
 
             /// <summary>React to user clicking on one of the "time rate" buttons</summary>
@@ -435,30 +479,6 @@ namespace ProjectXenocide.UI.Screens
             }
 
             /// <summary>
-            /// Return the UFO that is closest to position on the Geoscape.
-            /// <remarks>
-            /// 1. UFOs more than 500km away from position will be ignored.</remarks>
-            /// </summary>
-            /// <param name="pos">center of search</param>
-            /// <returns>closest UFO, or null if nothing found</returns>
-            private static Ufo FindClosestUfo(GeoPosition pos)
-            {
-                return pos.FindClosest(Xenocide.GameState.GeoData.Overmind.Ufos, FindClosestMaxDistance);
-            }
-
-            /// <summary>
-            /// Return the AlienSite that is closest to position on the Geoscape.
-            /// <remarks>
-            /// 1. Sites more than 500km away from position will be ignored.</remarks>
-            /// </summary>
-            /// <param name="pos">center of search</param>
-            /// <returns>closest Alien site, or null if nothing found</returns>
-            private static AlienSite FindClosestAlienSite(GeoPosition pos)
-            {
-                return pos.FindClosest(Xenocide.GameState.GeoData.Overmind.Sites, FindClosestMaxDistance);
-            }
-
-            /// <summary>
             /// If player approves, set UFO as craft's target
             /// </summary>
             /// <param name="ufo">Ufo to set as target</param>
@@ -544,12 +564,6 @@ namespace ProjectXenocide.UI.Screens
             private Button cancelTargetingButton;
 
             #region Fields
-
-            /// <summary>
-            /// Maximum distance to look at when using FindClosestXXXXX() functions.
-            /// Currently 500 km.
-            /// </summary>
-            private static readonly double FindClosestMaxDistance = GeoPosition.KilometersToRadians(501);
 
             /// <summary>
             /// The craft we're setting a destination for

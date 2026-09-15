@@ -409,6 +409,13 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>
+        /// The screen currently being shown (topmost screen, regardless of any
+        /// dialogs on top of it).
+        /// </summary>
+        public Frame TopmostScreen =>
+            (0 == screenStack.Count) ? null : screenStack.Peek();
+
+        /// <summary>
         /// Implement IDisposable
         /// </summary>
         public void Dispose()

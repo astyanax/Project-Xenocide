@@ -42,7 +42,7 @@ namespace ProjectXenocide.UI.Screens
 
         private int _musicLevel;
         private int _soundLevel;
-        private bool _fullscreen;
+        private WindowMode _displayMode;
         private bool _notifications;
         private bool _autosave;
         private int _cursorMode;
@@ -61,7 +61,7 @@ namespace ProjectXenocide.UI.Screens
         {
             _musicLevel = (int)(Xenocide.AudioSystem.MusicVolume * 10);
             _soundLevel = (int)(Xenocide.AudioSystem.SoundVolume * 10);
-            _fullscreen = Xenocide.Instance.GraphicsDevice.PresentationParameters.IsFullScreen;
+            _displayMode = GameOptions.LoadFromFile().WindowMode;
             _notifications = true;
             _autosave = false;
             _cursorMode = Xenocide.Instance.IsMouseVisible ? 1 : 0;
@@ -161,10 +161,20 @@ namespace ProjectXenocide.UI.Screens
             ClearContent();
             AddSettingRow("Resolution:", _resolutions[_resolutionIdx],
                 () => { _resolutionIdx = (_resolutionIdx + 1) % _resolutions.Length; return _resolutions[_resolutionIdx]; });
-            AddSettingRow("Fullscreen:", _fullscreen ? "ON" : "OFF",
-                () => { _fullscreen = !_fullscreen; return _fullscreen ? "ON" : "OFF"; });
+            AddSettingRow("Display mode:", DisplayModeManager.Label(_displayMode),
+                () => { _displayMode = NextDisplayMode(_displayMode); return DisplayModeManager.Label(_displayMode); });
             AddSettingRow("Cursor:", _cursorModes[_cursorMode],
                 () => { _cursorMode = (_cursorMode + 1) % _cursorModes.Length; return _cursorModes[_cursorMode]; });
+        }
+
+        private static WindowMode NextDisplayMode(WindowMode mode)
+        {
+            switch (mode)
+            {
+                case WindowMode.Windowed: return WindowMode.Borderless;
+                case WindowMode.Borderless: return WindowMode.Exclusive;
+                default: return WindowMode.Windowed;
+            }
         }
 
         private void ShowSoundTab()
@@ -201,13 +211,10 @@ namespace ProjectXenocide.UI.Screens
             var options = GameOptions.LoadFromFile();
             options.MusicVolume = Xenocide.AudioSystem.MusicVolume;
             options.SoundVolume = Xenocide.AudioSystem.SoundVolume;
+            options.WindowMode = _displayMode;
             options.SaveToFile();
 
-            if (_fullscreen != Xenocide.Instance.GraphicsDevice.PresentationParameters.IsFullScreen)
-            {
-                var gdm = Xenocide.Instance.Services.GetService<Microsoft.Xna.Framework.IGraphicsDeviceManager>() as Microsoft.Xna.Framework.GraphicsDeviceManager;
-                gdm.ToggleFullScreen();
-            }
+            Xenocide.SetDisplayMode(_displayMode);
 
             Xenocide.Instance.IsMouseVisible = _cursorMode == 1;
             ScreenManager.ScheduleScreen(new StartScreen());

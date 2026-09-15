@@ -77,6 +77,7 @@ namespace ProjectXenocide.Model
                     r.ReadStartElement("settings");
                     int oldVersion = 0;
                     ReadIntElement(r, "GameVersion", ref oldVersion);
+                    ReadIntElement(r, "WindowMode", ref gameOptions.windowMode);
                     ReadFloatElement(r, "SoundVolume", ref gameOptions.soundVolume);
                     ReadFloatElement(r, "MusicVolume", ref gameOptions.musicVolume);
                 }
@@ -91,11 +92,18 @@ namespace ProjectXenocide.Model
         {
             try
             {
-                using (var f = new FileStream(gameOptionsPathName, FileMode.CreateNew))
+                // Ensure the options directory exists (it is not shipped), and
+                // overwrite any previous file rather than throwing if it exists.
+                var directory = Path.GetDirectoryName(gameOptionsPathName);
+                if (!string.IsNullOrEmpty(directory))
+                    Directory.CreateDirectory(directory);
+
+                using (var f = new FileStream(gameOptionsPathName, FileMode.Create))
                 using (var w = new XmlTextWriter(f, Encoding.UTF8))
                 {
                     w.WriteStartElement("settings");
                     WriteElement(w, "GameVersion", gameVersion);
+                    WriteElement(w, "WindowMode", WindowMode);
                     WriteElement(w, "SoundVolume", soundVolume);
                     WriteElement(w, "MusicVolume", musicVolume);
                     w.WriteEndElement();
@@ -153,6 +161,16 @@ namespace ProjectXenocide.Model
                 val = r.ReadContentAsFloat();
                 r.ReadEndElement();
             }
+        }
+
+        /// <summary>
+        /// Persisted display mode (windowed / borderless / exclusive).
+        /// </summary>
+        private int windowMode;
+        public WindowMode WindowMode
+        {
+            get { return (WindowMode)windowMode; }
+            set { windowMode = (int)value; }
         }
 
         /// <summary>

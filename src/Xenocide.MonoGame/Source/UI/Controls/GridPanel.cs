@@ -140,7 +140,12 @@ namespace ProjectXenocide.UI.Controls
             rowButton.Visual.Width = 0;
             rowButton.Visual.WidthUnits = DimensionUnitType.RelativeToParent;
 
+            // The cell container and labels must NOT be interactive: Gum click
+            // handling is single-target (it does not bubble), so if a child has
+            // HasEvents the row Button never receives the click and selection
+            // silently fails.
             var rowPanel = new ContainerRuntime();
+            rowPanel.HasEvents = false;
             rowPanel.Width = 0;
             rowPanel.WidthUnits = DimensionUnitType.RelativeToParent;
             rowPanel.Height = DefaultRowHeight;
@@ -152,6 +157,7 @@ namespace ProjectXenocide.UI.Controls
             for (int i = 0; i < cellTexts.Length; i++)
             {
                 var label = ThemedLabel.CreateBody(cellTexts[i] ?? "");
+                label.Visual.HasEvents = false;
                 label.Visual.X = x + CellPaddingLeft;
                 label.Visual.XUnits = GeneralUnitType.PixelsFromSmall;
                 label.Visual.Y = 5;

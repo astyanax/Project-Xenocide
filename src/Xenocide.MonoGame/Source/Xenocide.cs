@@ -195,6 +195,16 @@ namespace ProjectXenocide
         {
             var gameOptions = GameOptions.LoadFromFile();
             gameOptions.Apply();
+
+            // Apply the persisted display mode (borderless full-screen is the
+            // default full-screen mode because it toggles instantly and Alt-Tabs).
+            DisplayModeManager.Apply(instance.graphics, gameOptions.WindowMode);
+        }
+
+        /// <summary>Applies a display mode (windowed / borderless / exclusive).</summary>
+        public static void SetDisplayMode(WindowMode mode)
+        {
+            DisplayModeManager.Apply(instance.graphics, mode);
         }
 
         /// <summary>
@@ -240,7 +250,9 @@ namespace ProjectXenocide
             if (keyState.IsKeyDown(Keys.LeftAlt) && keyState.IsKeyDown(Keys.Enter) &&
                 (_prevKeyState.IsKeyUp(Keys.Enter) || _prevKeyState.IsKeyUp(Keys.LeftAlt)))
             {
-                graphics.ToggleFullScreen();
+                // Alt-Enter toggles borderless full-screen (instant, Alt-Tab friendly)
+                // rather than an exclusive mode switch.
+                SetDisplayMode(graphics.IsFullScreen ? WindowMode.Windowed : WindowMode.Borderless);
             }
 
             // Print Screen (or F12 as a fallback) queues a screenshot; it is
@@ -279,7 +291,16 @@ namespace ProjectXenocide
             if (_screenshotRequested)
             {
                 _screenshotRequested = false;
-                var label = screenManager.TopmostFrame?.GetType().Name ?? "unknown";
+
+                // Include both the screen and (when present) the dialog on top.
+                var screenName = screenManager.TopmostScreen?.GetType().Name;
+                var top = screenManager.TopmostFrame;
+                var label = top == null
+                    ? "unknown"
+                    : (top == screenManager.TopmostScreen || screenName == null
+                        ? top.GetType().Name
+                        : screenName + "_" + top.GetType().Name);
+
                 Logger.Info("Screenshot: capturing '{0}' to {1}", label, ScreenshotCapture.OutputDirectory);
                 try
                 {

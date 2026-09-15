@@ -189,6 +189,9 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             Ufo = ufo ?? throw new ArgumentNullException(nameof(ufo));
             Log = new BattleLog();
             Distance = MaxDistance;
+            // Seed the interpolation baseline, otherwise the first running frame
+            // interpolates from 0 (centre) and the craft visibly teleport.
+            PrevDistance = MaxDistance;
             UfoPreferredDistance = 10000.0;
             UfoEscapeCountdown = 120.0;
             UfoFireCountdown = 3.0;

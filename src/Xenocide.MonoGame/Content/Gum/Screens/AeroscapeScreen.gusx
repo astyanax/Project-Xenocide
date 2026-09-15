@@ -93,6 +93,12 @@
     <Variable Type="float" Name="SpeedPanel.X" SetsValue="true">
       <Value xsi:type="xsd:float">500</Value>
     </Variable>
+    <Variable Type="float" Name="SpeedPanel.Width" SetsValue="true">
+      <Value xsi:type="xsd:float">376</Value>
+    </Variable>
+    <Variable Type="float" Name="SpeedPanel.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">30</Value>
+    </Variable>
     <Variable Type="string" Name="pauseBtn.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">SpeedPanel</Value>
     </Variable>
@@ -151,6 +157,9 @@
     </Variable>
     <Variable Type="float" Name="TacticalPanel.Width" SetsValue="true">
       <Value xsi:type="xsd:float">340</Value>
+    </Variable>
+    <Variable Type="float" Name="TacticalPanel.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">180</Value>
     </Variable>
     <!-- Tactical header -->
     <Variable Type="string" Name="tacticalHeaderLabel.Parent" SetsValue="true">
@@ -239,6 +248,9 @@
     <Variable Type="float" Name="WeaponPanel.Width" SetsValue="true">
       <Value xsi:type="xsd:float">340</Value>
     </Variable>
+    <Variable Type="float" Name="WeaponPanel.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">170</Value>
+    </Variable>
     <!-- Weapon 1 -->
     <Variable Type="string" Name="weapon1Label.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">WeaponPanel</Value>
@@ -305,6 +317,9 @@
     <Variable Type="float" Name="UfoInfoPanel.Width" SetsValue="true">
       <Value xsi:type="xsd:float">340</Value>
     </Variable>
+    <Variable Type="float" Name="UfoInfoPanel.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">110</Value>
+    </Variable>
     <Variable Type="string" Name="ufoHeaderLabel.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">UfoInfoPanel</Value>
     </Variable>
@@ -350,6 +365,9 @@
     </Variable>
     <Variable Type="float" Name="StatusBar.Width" SetsValue="true">
       <Value xsi:type="xsd:float">860</Value>
+    </Variable>
+    <Variable Type="float" Name="StatusBar.Height" SetsValue="true">
+      <Value xsi:type="xsd:float">30</Value>
     </Variable>
     <Variable Type="string" Name="craftNameLabel.Parent" SetsValue="true">
       <Value xsi:type="xsd:string">StatusBar</Value>
