@@ -36,6 +36,8 @@ using Gum.Forms;
 using Gum.Forms.Controls;
 using Gum.Wireframe;
 
+using MonoGameGum.GueDeriving;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -135,30 +137,7 @@ namespace ProjectXenocide.UI.Screens
                 WireButton("cameraInButton", OnMoveCameraButtonClicked);
                 WireButton("cameraOutButton", OnMoveCameraButtonClicked);
 
-                var labelPanel = new StackPanel();
-                labelPanel.Visual.X = 20;
-                labelPanel.Visual.Y = 10;
-                GumRoot.Children.Add(labelPanel.Visual);
-
-                gameTimeTop = ThemedLabel.CreateSection("");
-                gameTimeHour = ThemedLabel.CreateBody("");
-                gameTimeSec = ThemedLabel.CreateBody("");
-                fundsText = ThemedLabel.CreateCaption(Strings.SCREEN_GEOSCAPE_FUNDS);
-                fundsAmount = ThemedLabel.CreateBody("");
-                sceneToolTip = ThemedLabel.CreateBody("");
-                timeText = ThemedLabel.CreateCaption(Strings.SCREEN_GEOSCAPE_GMT);
-
-                labelPanel.AddChild(gameTimeTop);
-                labelPanel.AddChild(gameTimeHour);
-                labelPanel.AddChild(gameTimeSec);
-                labelPanel.AddChild(fundsText);
-                labelPanel.AddChild(fundsAmount);
-                labelPanel.AddChild(sceneToolTip);
-                labelPanel.AddChild(timeText);
-
-                var gameState = Xenocide.GameState;
-                if (gameState?.GeoData?.XCorp?.Bank != null)
-                    fundsAmount.Text = gameState.GeoData.XCorp.Bank.DisplayCurrentBalance;
+                BuildHudPanel();
 
                 InitializeMessageLog();
 
@@ -168,12 +147,66 @@ namespace ProjectXenocide.UI.Screens
 
         private Label gameTimeTop;
         private Label gameTimeHour;
-        private Label gameTimeSec;
         private Label fundsText;
         private Label fundsAmount;
-        private Label sceneToolTip;
         private Label timeText;
         private ListBox _messageLogList;
+
+        /// <summary>
+        /// Builds the top-left HUD (date, clock, funds, GMT) inside a themed panel.
+        /// A Forms <see cref="Panel"/> is used (rather than a bare StackPanel) so
+        /// the software cursor treats the HUD as UI (arrow) instead of scene.
+        /// </summary>
+        private void BuildHudPanel()
+        {
+            var hud = new Panel();
+            hud.Visual.X = 20;
+            hud.Visual.Y = 10;
+            hud.Visual.XUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            hud.Visual.YUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            hud.Visual.Width = 230;
+            hud.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.Absolute;
+            hud.Visual.Height = 104;
+            hud.Visual.HeightUnits = Gum.DataTypes.DimensionUnitType.Absolute;
+
+            var background = new ColoredRectangleRuntime();
+            background.Color = new Color(10, 16, 28, 210);
+            background.X = 0;
+            background.Y = 0;
+            background.XUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            background.YUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            background.Width = 0;
+            background.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
+            background.Height = 0;
+            background.HeightUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
+            hud.Visual.Children.Add(background);
+
+            var stack = new StackPanel();
+            stack.Visual.X = 8;
+            stack.Visual.Y = 6;
+            stack.Visual.XUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            stack.Visual.YUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            stack.Visual.Width = -16;
+            stack.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
+            hud.AddChild(stack);
+
+            gameTimeTop = ThemedLabel.CreateSection("");
+            gameTimeHour = ThemedLabel.CreateBody("");
+            fundsText = ThemedLabel.CreateCaption(Strings.SCREEN_GEOSCAPE_FUNDS);
+            fundsAmount = ThemedLabel.CreateBody("");
+            timeText = ThemedLabel.CreateCaption(Strings.SCREEN_GEOSCAPE_GMT);
+            stack.AddChild(gameTimeTop);
+            stack.AddChild(gameTimeHour);
+            stack.AddChild(fundsText);
+            stack.AddChild(fundsAmount);
+            stack.AddChild(timeText);
+
+            GumRoot.Children.Add(hud.Visual);
+
+            var gameState = Xenocide.GameState;
+            if (gameState?.GeoData?.XCorp?.Bank != null)
+                fundsAmount.Text = gameState.GeoData.XCorp.Bank.DisplayCurrentBalance;
+        }
 
         private void InitializeMessageLog()
         {
@@ -282,12 +315,16 @@ namespace ProjectXenocide.UI.Screens
                 gametime.Append(time.ToString("yyyy", culture));
 
                 gameTimeTop.Text = gametime.ToString();
-                gameTimeHour.Text = time.ToString("HH:mm", culture);
-                gameTimeSec.Text = time.ToString(":ss", culture);
+                gameTimeHour.Text = time.ToString("HH:mm:ss", culture);
 
                 //Set time
                 gameTimeText = newTime;
             }
+
+            // Keep the funds readout current.
+            string balance = Xenocide.GameState?.GeoData?.XCorp?.Bank?.DisplayCurrentBalance;
+            if (balance != null && fundsAmount.Text != balance)
+                fundsAmount.Text = balance;
         }
 
         /// <summary>
