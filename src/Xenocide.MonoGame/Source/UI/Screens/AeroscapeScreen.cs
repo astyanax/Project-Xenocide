@@ -45,6 +45,7 @@ using NLog;
 using ProjectXenocide.Assets;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.Utils;
 
 using Xenocide.Resources;
@@ -367,6 +368,15 @@ namespace ProjectXenocide.UI.Screens
 
             EndDogfight();
 
+            // Show a short debrief before returning, then leave the fight.
+            var report = new GumMessageBoxDialog(BuildDebriefText(), "Dogfight Report");
+            report.OkAction = ScheduleAfterDogfight;
+            ScreenManager.ShowDialog(report);
+        }
+
+        /// <summary>Schedules the screen to return to once the debrief is acknowledged.</summary>
+        private void ScheduleAfterDogfight()
+        {
             if (Xenocide.DebugTesting)
             {
                 Xenocide.DebugTesting = false;
@@ -376,6 +386,20 @@ namespace ProjectXenocide.UI.Screens
             {
                 ScreenManager.ScheduleScreen(new GeoscapeScreen());
             }
+        }
+
+        /// <summary>Formats the post-battle summary.</summary>
+        private string BuildDebriefText()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("Result: " + GetOutcomeString(simState.Outcome));
+            sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "Time: {0:F0}s    Distance: {1}km",
+                simState.ElapsedSeconds, (int)(simState.Distance / 1000.0)));
+            sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "{0}: Hull {1}%  Fuel {2}%",
+                aircraft.Name, aircraft.HullPercent, aircraft.FuelPercent));
+            sb.AppendLine(string.Format(CultureInfo.InvariantCulture, "{0}: Hull {1}%",
+                ufo.Name, ufo.HullPercent));
+            return sb.ToString().TrimEnd();
         }
 
         private static string GetOutcomeString(DogfightOutcome outcome)
