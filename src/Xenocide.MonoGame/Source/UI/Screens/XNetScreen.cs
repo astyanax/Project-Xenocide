@@ -67,26 +67,37 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// add the buttons to the screen
         /// </summary>
+        /// <summary>
+        /// The region the 3D model renders into. This is the transparent "model
+        /// window" in the X-Net background art (top-left), matching the original
+        /// CeGUI layout — not the generic left column.
+        /// </summary>
+        private static readonly UiRect XNetViewport = new UiRect(0.005f, 0.0733f, 0.5088f, 0.515f);
+
         protected override void CreateGumControls()
         {
-            var viewportLayout = new ScreenLayout { Mode = ViewportMode.SplitViewport };
-            ViewportRect = viewportLayout.ViewportRect ?? new UiRect(0.005f, 0.0733f, 0.5088f, 0.515f);
+            ViewportRect = XNetViewport;
 
             if (GumRoot != null)
             {
+                var vp = Xenocide.Instance.GraphicsDevice.Viewport;
+
                 WireButton("closeButton", OnCloseButton);
                 InitEntriesTree();
-                entriesTree.Visual.X = 20;
-                entriesTree.Visual.Y = 80;
-                entriesTree.Visual.Width = 300;
-                entriesTree.Visual.Height = 400;
+
+                // Tree of topics: right column.
+                entriesTree.Visual.X = (int)(0.606f * vp.Width);
+                entriesTree.Visual.Y = (int)(0.073f * vp.Height);
+                entriesTree.Visual.Width = (int)(0.366f * vp.Width);
+                entriesTree.Visual.Height = (int)(0.860f * vp.Height);
                 ThemeList(entriesTree);
 
+                // Description text: bottom-left.
                 textWindow = new ListBox();
-                textWindow.Visual.X = 340;
-                textWindow.Visual.Y = 80;
-                textWindow.Visual.Width = 300;
-                textWindow.Visual.Height = 400;
+                textWindow.Visual.X = (int)(0.010f * vp.Width);
+                textWindow.Visual.Y = (int)(0.520f * vp.Height);
+                textWindow.Visual.Width = (int)(0.540f * vp.Width);
+                textWindow.Visual.Height = (int)(0.470f * vp.Height);
                 ThemeList(textWindow);
                 AddChild(textWindow);
             }
