@@ -28,8 +28,8 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Xml;
+using System.Linq;
+using System.Xml.Linq;
 
 using NLog;
 
@@ -69,18 +69,26 @@ namespace ProjectXenocide.Model
         {
             var gameOptions = new GameOptions();
 
-            if (FileUtil.DoesFileExist(gameOptionsPathName))
+            if (!FileUtil.DoesFileExist(gameOptionsPathName))
+                return gameOptions;
+
+            try
             {
-                using (var f = new FileStream(gameOptionsPathName, FileMode.Open))
-                using (var r = new XmlTextReader(f))
-                {
-                    r.ReadStartElement("settings");
-                    int oldVersion = 0;
-                    ReadIntElement(r, "GameVersion", ref oldVersion);
-                    ReadIntElement(r, "WindowMode", ref gameOptions.windowMode);
-                    ReadFloatElement(r, "SoundVolume", ref gameOptions.soundVolume);
-                    ReadFloatElement(r, "MusicVolume", ref gameOptions.musicVolume);
-                }
+                var root = XElement.Load(gameOptionsPathName);
+                gameOptions.gameVersion = (int?)root.Element("GameVersion") ?? gameOptions.gameVersion;
+                gameOptions.windowMode = (int?)root.Element("WindowMode") ?? gameOptions.windowMode;
+                gameOptions.soundVolume = (float?)root.Element("SoundVolume") ?? gameOptions.soundVolume;
+                gameOptions.musicVolume = (float?)root.Element("MusicVolume") ?? gameOptions.musicVolume;
+                gameOptions.toastNotifications = (bool?)root.Element("ToastNotifications") ?? gameOptions.toastNotifications;
+                gameOptions.pauseOnAlerts = (bool?)root.Element("PauseOnAlerts") ?? gameOptions.pauseOnAlerts;
+                gameOptions.disabledNotifications = root.Elements("DisabledNotification")
+                    .Select(e => (string)e)
+                    .Where(s => !string.IsNullOrEmpty(s))
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn(ex, "Unable to read game options; using defaults");
             }
             return gameOptions;
         }
@@ -98,68 +106,22 @@ namespace ProjectXenocide.Model
                 if (!string.IsNullOrEmpty(directory))
                     Directory.CreateDirectory(directory);
 
-                using (var f = new FileStream(gameOptionsPathName, FileMode.Create))
-                using (var w = new XmlTextWriter(f, Encoding.UTF8))
-                {
-                    w.WriteStartElement("settings");
-                    WriteElement(w, "GameVersion", gameVersion);
-                    WriteElement(w, "WindowMode", WindowMode);
-                    WriteElement(w, "SoundVolume", soundVolume);
-                    WriteElement(w, "MusicVolume", musicVolume);
-                    w.WriteEndElement();
-                }
+                var root = new XElement("settings",
+                    new XElement("GameVersion", gameVersion),
+                    new XElement("WindowMode", windowMode),
+                    new XElement("SoundVolume", soundVolume),
+                    new XElement("MusicVolume", musicVolume),
+                    new XElement("ToastNotifications", toastNotifications),
+                    new XElement("PauseOnAlerts", pauseOnAlerts),
+                    disabledNotifications.Select(id => new XElement("DisabledNotification", id)));
+
+                root.Save(gameOptionsPathName);
             }
             catch (Exception ex)
             {
                 // User-facing: settings silently not persisting is a real problem,
                 // so log at Error (not Warn) to make it visible.
                 Logger.Error(ex, "Unable to save game options");
-            }
-        }
-
-        /// <summary>
-        /// Write an element to the XML file
-        /// </summary>
-        /// <typeparam name="T">type of content</typeparam>
-        /// <param name="r">the XML writer</param>
-        /// <param name="name">name of element</param>
-        /// <param name="val">content of element</param>
-        private static void WriteElement<T>(XmlTextWriter r, string name, T val)
-        {
-            r.WriteStartElement(name);
-            r.WriteValue(val);
-            r.WriteEndElement();
-        }
-
-        /// <summary>
-        /// Read an integer element from XML source
-        /// </summary>
-        /// <param name="r">the source</param>
-        /// <param name="elementName">Name of element</param>
-        /// <param name="val">where to put the value</param>
-        private static void ReadIntElement(XmlTextReader r, string elementName, ref int val)
-        {
-            if (r.IsStartElement(elementName))
-            {
-                r.ReadStartElement(elementName);
-                val = r.ReadContentAsInt();
-                r.ReadEndElement();
-            }
-        }
-
-        /// <summary>
-        /// Read a float element from XML source
-        /// </summary>
-        /// <param name="r">the source</param>
-        /// <param name="elementName">Name of element</param>
-        /// <param name="val">where to put the value</param>
-        private static void ReadFloatElement(XmlTextReader r, string elementName, ref float val)
-        {
-            if (r.IsStartElement(elementName))
-            {
-                r.ReadStartElement(elementName);
-                val = r.ReadContentAsFloat();
-                r.ReadEndElement();
             }
         }
 
@@ -191,6 +153,36 @@ namespace ProjectXenocide.Model
         {
             get { return musicVolume; }
             set { musicVolume = value; }
+        }
+
+        /// <summary>
+        /// Persisted master switch for toast notifications.
+        /// </summary>
+        private bool toastNotifications = true;
+        public bool ToastNotifications
+        {
+            get { return toastNotifications; }
+            set { toastNotifications = value; }
+        }
+
+        /// <summary>
+        /// Persisted preference to pause geoscape time on alerts.
+        /// </summary>
+        private bool pauseOnAlerts = true;
+        public bool PauseOnAlerts
+        {
+            get { return pauseOnAlerts; }
+            set { pauseOnAlerts = value; }
+        }
+
+        /// <summary>
+        /// Persisted set of notification event ids the player has switched off.
+        /// </summary>
+        private List<string> disabledNotifications = new List<string>();
+        public IList<string> DisabledNotifications
+        {
+            get { return disabledNotifications; }
+            set { disabledNotifications = value?.ToList() ?? new List<string>(); }
         }
 
         /// <summary>

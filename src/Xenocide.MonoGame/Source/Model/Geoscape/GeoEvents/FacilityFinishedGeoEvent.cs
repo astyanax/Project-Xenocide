@@ -63,8 +63,10 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
         /// </summary>
         public override void Process()
         {
-            Xenocide.GameState.GeoData.GeoTime.StopTime();
-            Util.ShowMessageBox(Strings.MSGBOX_FINISHED_BUILDING_FACILITY, facility.FacilityInfo.Name);
+            // Non-blocking info (de-duplicated, offers "Go To Base").
+            MessageLog.PostNotification(
+                "FacilityFinishedGeoEvent",
+                Util.StringFormat(Strings.MSGBOX_FINISHED_BUILDING_FACILITY, facility.FacilityInfo.Name));
         }
 
         #region Fields

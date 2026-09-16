@@ -90,7 +90,10 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
         /// </summary>
         private void UfoVapourized()
         {
-            Util.ShowMessageBox(Strings.MSGBOX_OUTPOST_ATTACKING_UFO_VAPOURIZED, outpost.Name, craft.Name);
+            MessageLog.PostNotification(
+                "UfoAttackingOutpostGeoEvent",
+                Util.StringFormat(Strings.MSGBOX_OUTPOST_ATTACKING_UFO_VAPOURIZED, outpost.Name, craft.Name),
+                targetId: outpost.Name);
         }
 
         /// <summary>
@@ -99,8 +102,10 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
         private void UfoCrashed()
         {
             craft.OnDogfightFinished();
-            Xenocide.GameState.GeoData.GeoTime.StopTime();
-            Util.ShowMessageBox(Strings.MSGBOX_OUTPOST_ATTACKING_UFO_CRASHED, outpost.Name, craft.Name);
+            MessageLog.PostNotification(
+                "UfoAttackingOutpostGeoEvent",
+                Util.StringFormat(Strings.MSGBOX_OUTPOST_ATTACKING_UFO_CRASHED, outpost.Name, craft.Name),
+                targetId: outpost.Name);
         }
 
         /// <summary>

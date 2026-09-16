@@ -61,8 +61,10 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
         /// </summary>
         public override void Process()
         {
-            Xenocide.GameState.GeoData.GeoTime.StopTime();
-            Util.ShowMessageBox(Strings.MSGBOX_RESEARCH_FINISHED, topic.Name);
+            // Non-blocking notification (Required: pauses time, offers "Go To Research").
+            MessageLog.PostNotification(
+                "ResearchFinishedGeoEvent",
+                Util.StringFormat(Strings.MSGBOX_RESEARCH_FINISHED, topic.Name));
         }
 
         #region Fields

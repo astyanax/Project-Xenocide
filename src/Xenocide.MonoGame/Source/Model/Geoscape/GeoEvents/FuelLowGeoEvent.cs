@@ -63,8 +63,11 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
         /// </summary>
         public override void Process()
         {
-            Xenocide.GameState.GeoData.GeoTime.StopTime();
-            Util.ShowMessageBox(Strings.MSGBOX_FUEL_LOW, craft.Name);
+            // Non-blocking warning (pauses time, de-duplicated, offers "Go To Aircraft").
+            MessageLog.PostNotification(
+                "FuelLowGeoEvent",
+                Util.StringFormat(Strings.MSGBOX_FUEL_LOW, craft.Name),
+                targetId: craft.Name);
         }
 
         #region Fields
