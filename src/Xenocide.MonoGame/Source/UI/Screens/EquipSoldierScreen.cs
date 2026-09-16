@@ -159,6 +159,11 @@ namespace ProjectXenocide.UI.Screens
             WireButton("leftButton", OnLeftButton);
             WireButton("rightButton", OnRightButton);
 
+            // Keep the button bar (authored at x=1040 on a 1280-wide design)
+            // pinned to the right edge at other window sizes.
+            if (GumRoot != null)
+                ResponsiveHud.Position(GumRoot.GetGraphicalUiElementByName("ButtonBar"), 1040, 10, 200);
+
             ammoText = ThemedLabel.CreateBody("");
             ammoText.Visual.X = 20;
             ammoText.Visual.Y = 20;
@@ -351,14 +356,25 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>
+        /// Screen layout providing the scene viewport. The soldier model is
+        /// rendered full-window (ViewportMode.FullScene) with the Gum HUD on top.
+        /// </summary>
+        private readonly ScreenLayout viewportLayout = new ScreenLayout { Mode = ViewportMode.FullScene };
+
+        /// <summary>
         /// Get coordinates where scene will be drawn on window
         /// </summary>
         /// <param name="device">Device to render the screen to</param>
         /// <returns>the co-ordinates</returns>
-        private static Rectangle GetSceneRectangle(GraphicsDevice device)
+        private Rectangle GetSceneRectangle(GraphicsDevice device)
         {
             Viewport port = device.Viewport;
-            return new Rectangle(port.X, port.Y, port.Width, port.Height);
+            UiRect rect = viewportLayout.ViewportRect ?? new UiRect(0, 0, 1, 1);
+            return new Rectangle(
+                (int)(port.Width * rect.Left),
+                (int)(port.Height * rect.Top),
+                (int)(port.Width * rect.Width),
+                (int)(port.Height * rect.Height));
         }
 
         /// <summary>

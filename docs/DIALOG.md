@@ -14,7 +14,7 @@
 | GeoscapeScreen message log panel (ListBox) | ✅ Implemented |
 | Envelope icon + `PendingActionsDialog` (email inbox) | Pending |
 | GeoEvent integration (non-blocking PostMessage) | Pending |
-| Settings screen "Notifications" section | TODO |
+| Settings screen "Notifications" section | ✅ Implemented (`SettingsScreen.ShowNotificationTab` — toast toggle) |
 
 ## Overview
 

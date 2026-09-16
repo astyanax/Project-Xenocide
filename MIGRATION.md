@@ -64,7 +64,7 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 |-----------|---------|---------|
 | .NET SDK | 9.0+ | Runtime target |
 | `System.Text.Json` | Built-in | Replace BinaryFormatter for save/load |
-| **xUnit.net** | 2.9.2 | Test framework (already migrated from NUnit 2.2.9); 81 tests passing |
+| **xUnit.net** | 2.9.2 | Test framework (already migrated from NUnit 2.2.9); 83 tests passing |
 | `xunit.runner.visualstudio` | 2.8.2 | VS/dotnet test adapter |
 | `Microsoft.NET.Test.Sdk` | 17.12.0 | .NET test runner infrastructure |
 | `coverlet.collector` | 6.0.2 | Code coverage |
@@ -109,7 +109,7 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] Create new MonoGame DesktopGL project: `dotnet new mgdesktopgl -o src/Xenocide.MonoGame` — ✅ Done
 - [x] Add NuGet packages: `MonoGame.Framework.DesktopGL`, `MonoGame.Content.Builder.Task` — ✅ Done
 - [x] Set up MGCB content project (`.mgcb`) with all asset references — ✅ Models, shaders, textures, fonts, audio registered
-- [x] Replace NUnit with xUnit.net in test project — ✅ Already done (xunit 2.9.2, 81 tests passing)
+- [x] Replace NUnit with xUnit.net in test project — ✅ Already done (xunit 2.9.2, 83 tests passing)
 
 ### Phase 1: XNA 3.0 → 4.0 API Conversion
 - [x] Replace `effect.Begin()/End()` → `Pass.Apply()` only — ✅ Done
@@ -282,7 +282,7 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] BasesScreen NRE fix (WireButton return value not saved) — ✅ Done
 - [ ] **Remaining:** FBX model textures — add missing textures to MGCB (3 models fail preload)
 - [x] **Gum dialog `.gusx` file conversion** — all 11 dialogs converted to fully programmatic content; orphaned `.gusx` files deleted — ✅ Done
-- [ ] **Remaining:** Software cursor polish (hotspot, context-sensitive cursors, HW/SW toggle)
+- [x] **Software cursor** — hardware/software toggle in Settings, `Select` placement cursor during base selection, and the `Select` bracket shown over clickable Gum controls (buttons/sliders/combos/edits) — ✅ Done
 - [x] **Investigated:** FBX model failures — `Laser Rifle.FBX` importer fails on embedded textures; `Barracks.FBX` missing BUMP.JPG/SPECULAR.JPG; need `.X` format conversion or Blender re-export — ✅ Documented (see Phase 6)
 - [ ] **Remaining:** Content pipeline: add remaining FBX model textures
 - [x] **Investigated:** GridPanel XenocideButton styling — `RowButtonFactory` property added to GridPanel.cs with documentation explaining the hierarchical GUE limitation — ✅ Done (see Phase 8.5)
@@ -323,8 +323,8 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [x] **Migrated:** XNetScreen — uses `ScreenLayout { Mode = ViewportMode.SplitViewport }` for viewport computation, removed fallback code path (1 button + 2 ListBoxes from .gusx only) — ✅ Done
 - [x] **Migrated:** EquipSoldierScreen — HUD labels (ammoText + 8 static text labels) migrated to ThemedLabel — ✅ Done
 - [x] **Migrated:** AeroscapeScreen — no raw Labels/Buttons in code (all from .gusx), clean — ✅ Done
-- [ ] **Remaining:** EquipSoldierScreen — needs `FullScene` mode (full-screen 3D with Gum overlay); currently uses `GetSceneRectangle()` — deferred
-- [ ] **Remaining:** AeroscapeScreen — needs `FullScene` mode (2D radar with Gum HUD); currently uses hard-coded pixel coordinates — deferred
+- [x] **Migrated:** EquipSoldierScreen — adopts `ViewportMode.FullScene`; its scene rectangle is now sourced from `ScreenLayout` instead of the old `GetSceneRectangle()`, and the button bar is anchored via `ResponsiveHud` — ✅ Done
+- [x] **Migrated:** AeroscapeScreen — HUD panels re-positioned by `ResponsiveHud` (right-hand panels hug the right edge, status/log strip hugs the bottom) so the 2D radar + HUD is correct at any window size — ✅ Done
 - [ ] **Remaining:** StatisticsScreen — needs assessment (2D graph renderer, sceneWindowRect-based) — deferred
 
 #### Phase 4.9: ThemedButton Migration & UI Consolidation
@@ -459,7 +459,7 @@ Everything else (NuGet addition, code changes, control wiring, data binding, eve
 - 10 files — 31 sound name paths (PlaySound/LoadSound/AddButtonSound)
 
 ### Phase 8: Cleanup & Polish
-- [x] Remove NUnit dependency — ✅ Already migrated to xUnit.net 2.9.2 (81 tests passing)
+- [x] Remove NUnit dependency — ✅ Already migrated to xUnit.net 2.9.2 (83 tests passing)
 - [x] Remove old XNA 3.0 project files from active tree — ✅ Already removed; only `Xenocide.sln` remains
 - [x] Remove Dependancies/ directory — ✅ Already removed
 - [x] Remove old Lib/ directory — ✅ Already removed
@@ -667,7 +667,7 @@ The legacy architecture proposed splitting each screen into 3 separate classes f
  24. **PendingActionsDialog** — implement dialog for pending actions queue (planned in docs/DIALOG.md)
  25. **GeoEvent PostMessage migration** — convert blocking `Util.ShowMessageBox()` calls in GeoEvents to non-blocking `PostMessage()`
  26. ~~**ThemedButton migration**~~ ✅ Complete (all 63 raw `new Button()` calls migrated; only framework-internal factories/chrome remain)
- 27. **ViewportMode FullScene** — EquipSoldierScreen + AeroscapeScreen still use `GetSceneRectangle()` instead of `ViewportMode.FullScene`
+ 27. ~~**ViewportMode FullScene**~~ ✅ Complete (added to `ScreenLayout`; EquipSoldier adopts it; Aeroscape HUD anchored via `ResponsiveHud`)
  28. ~~**ThemedLabel style fix**~~ ✅ Complete (was a no-op `StyleCategoryState`; now sets `FontSize`/`IsBold`/`IsItalic` directly)
  29. ~~**GumDialog teardown**~~ ✅ Complete (`GumDialog.cs` + 13 orphaned dialog `.gusx` files deleted; `Xenocide.gumx` ScreenReferences cleaned)
 
@@ -678,7 +678,7 @@ The legacy architecture proposed splitting each screen into 3 separate classes f
 | StyledGrid | ✅ 100% | All raw `new GridPanel()` migrated across 17 screens |
 | ModalDialog | ✅ 100% | All 11 dialogs migrated from GumDialog base class (GumDialog.cs deleted) |
 | ThemedButton | ✅ 100% | Single factory (`Create` textured / `CreateFlat` striped); all raw `new Button()` migrated |
-| ViewportMode | ⚠️ Partial | SplitViewport working for 3 screens; FullScene mode not yet adopted by EquipSoldier/Aeroscape |
+| ViewportMode | ✅ 100% | `Standard`/`SplitViewport`/`FullScene`; EquipSoldier uses `FullScene`, Aeroscape HUD anchored via `ResponsiveHud` |
 | ScreenLayout | ✅ 14 screens | All non-scene screens use ScreenLayout; 5 scene screens use it for viewport computation only |
 
 ### Gum UI Layout & Theming (Next Major Task)

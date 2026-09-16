@@ -24,7 +24,10 @@ namespace ProjectXenocide.UI.Controls
         Standard,
 
         /// <summary>Split layout: scene viewport (left 74.5%) + Gum UI on right. Used by GeoscapeScreen, BattlescapeScreen, XNetScreen, BasesScreen.</summary>
-        SplitViewport
+        SplitViewport,
+
+        /// <summary>Full-window scene (100%) with the Gum HUD drawn on top. Used by EquipSoldierScreen and AeroscapeScreen.</summary>
+        FullScene
     }
 
     /// <summary>
@@ -140,6 +143,10 @@ namespace ProjectXenocide.UI.Controls
                 if (_mode == ViewportMode.Standard)
                     return null;
 
+                // FullScene covers the whole window; the Gum HUD sits on top.
+                if (_mode == ViewportMode.FullScene)
+                    return new UiRect(0, 0, 1, 1);
+
                 var device = Xenocide.Instance?.GraphicsDevice;
                 if (device == null)
                     return null;
@@ -163,7 +170,8 @@ namespace ProjectXenocide.UI.Controls
         /// </summary>
         private void ApplyLayout()
         {
-            ContentScroll.Visual.Visible = _mode != ViewportMode.SplitViewport;
+            // Both scene modes render the scene where the content area would be.
+            ContentScroll.Visual.Visible = _mode == ViewportMode.Standard;
         }
 
         /// <summary>Adds this layout to the Gum root.</summary>

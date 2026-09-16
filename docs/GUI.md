@@ -558,8 +558,8 @@ A `GraphicalUiElement` has writable `Children` **if and only if** it was created
 
 ### Remaining Gum Backlog
 
-- Software cursor polish — context-sensitive cursors (hand/arrow per element), HW/SW toggle via settings
-- ViewportMode `FullScene` — EquipSoldierScreen + AeroscapeScreen still use `GetSceneRectangle()`/hard-coded pixel coordinates instead of `ScreenLayout` viewport modes
+- Software cursor polish — the `Select` bracket is shown over clickable controls; a dedicated hand-cursor frame could replace it later (the atlas has unassigned cursor frames at x=118/214/238).
+- ViewportMode `FullScene` — ✅ Done. `ScreenLayout` supports `Standard`/`SplitViewport`/`FullScene`; EquipSoldierScreen adopts `FullScene`, and the Aeroscape HUD is anchored responsively via `ResponsiveHud` (design resolution 1280×1024).
 
 ---
 

@@ -45,6 +45,7 @@ using NLog;
 using ProjectXenocide.Assets;
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Geoscape.Vehicles;
+using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Dialogs;
 using ProjectXenocide.Utils;
 
@@ -180,6 +181,17 @@ namespace ProjectXenocide.UI.Screens
                 standardBtn = GumRoot.GetFrameworkElementByName<Button>("standardBtn");
                 aggressiveBtn = GumRoot.GetFrameworkElementByName<Button>("aggressiveBtn");
             }
+
+            // Keep the fixed-coordinate .gusx HUD correct at other window sizes:
+            // the right-hand panels hug the right edge and the status/log strip
+            // hugs the bottom. At the 1280x1024 design resolution this is a no-op.
+            MakeResponsive("TacticalPanel", 900, 50, 340, 180);
+            MakeResponsive("WeaponPanel", 900, 300, 340, 170);
+            MakeResponsive("UfoInfoPanel", 900, 500, 340, 110);
+            MakeResponsive("StatusBar", 20, 700, 860, 30);
+            MakeResponsive("LogPanel", 20, 730, 1240, 290);
+            MakeResponsive("TopBar", 20, 10, 1240, 30);
+            MakeResponsive("closeBtn", 1180, 10, 80, 30);
 
             // Themed backdrops behind the right-hand control panels and the
             // bottom status/log strip, so HUD text stays readable over the art.
@@ -572,6 +584,13 @@ namespace ProjectXenocide.UI.Screens
 
         #endregion
 
+        /// <summary>Repositions a named .gusx element for the current window size.</summary>
+        private void MakeResponsive(string name, int designX, int designY, int width, int height)
+        {
+            if (GumRoot != null)
+                ResponsiveHud.Position(GumRoot.GetGraphicalUiElementByName(name), designX, designY, width, height);
+        }
+
         /// <summary>
         /// Adds a themed panel (1px border + translucent fill) behind the HUD to
         /// keep the labels readable over the background art.
@@ -583,29 +602,16 @@ namespace ProjectXenocide.UI.Screens
 
             var border = new ColoredRectangleRuntime();
             border.Color = new Color(60, 90, 60, 210);
-            Place(border, x - 1, y - 1, width + 2, height + 2);
+            ResponsiveHud.Position(border, x - 1, y - 1, width + 2, height + 2);
 
             var fill = new ColoredRectangleRuntime();
             fill.Color = new Color(8, 20, 12, alpha);
-            Place(fill, x, y, width, height);
+            ResponsiveHud.Position(fill, x, y, width, height);
 
             // Insert after the background sprite so the HUD panels stay on top.
             int index = Math.Min(1, GumRoot.Children.Count);
             GumRoot.Children.Insert(index, border);
             GumRoot.Children.Insert(index + 1, fill);
-        }
-
-        /// <summary>Positions an absolutely-placed Gum rectangle.</summary>
-        private static void Place(GraphicalUiElement element, int x, int y, int width, int height)
-        {
-            element.X = x;
-            element.Y = y;
-            element.XUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
-            element.YUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
-            element.Width = width;
-            element.WidthUnits = Gum.DataTypes.DimensionUnitType.Absolute;
-            element.Height = height;
-            element.HeightUnits = Gum.DataTypes.DimensionUnitType.Absolute;
         }
 
         #region Radar Rendering

@@ -2,6 +2,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Gum.Forms;
+using Gum.Forms.Controls;
+
 using MonoGameGum;
 
 using ProjectXenocide.UI.Controls;
@@ -81,10 +84,11 @@ namespace ProjectXenocide.UI
         /// </summary>
         private static CursorType DetermineCursorType()
         {
-            // Over an interactive Gum Forms control (button, slider, list, ...).
+            // Over an interactive Gum Forms control: show the selection bracket
+            // to signal it can be clicked/dragged, otherwise the plain arrow.
             var overElement = GumService.Default.Cursor?.FrameworkElementOver;
             if (overElement != null)
-                return CursorType.Arrow;
+                return IsClickable(overElement) ? CursorType.Select : CursorType.Arrow;
 
             // A screen/state-specific cursor takes precedence over the generic
             // scene reticle (e.g. the placement cursor during base selection).
@@ -109,6 +113,21 @@ namespace ProjectXenocide.UI
             }
 
             return CursorType.Arrow;
+        }
+
+        /// <summary>
+        /// True if the hovered Forms element is an interactive control, so the
+        /// pointer should indicate that it can be used.
+        /// </summary>
+        private static bool IsClickable(FrameworkElement element)
+        {
+            return (element is Button)
+                || (element is Slider)
+                || (element is ComboBox)
+                || (element is TextBox)
+                || (element is CheckBox)
+                || (element is RadioButton)
+                || (element is ListBoxItem);
         }
 
         public override void Draw(GameTime gameTime)
