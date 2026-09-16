@@ -59,6 +59,39 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         {
             VisibilityFlyByTest();
             ResearchMissionTest();
+            CrashSitePersistsTest();
+        }
+
+        /// <summary>
+        /// A UFO that crashes becomes a crash site that persists until it is
+        /// recovered - it must not repair and fly away after a fixed time.
+        /// </summary>
+        [Conditional("DEBUG")]
+        private static void CrashSitePersistsTest()
+        {
+            GeoPosition start = new GeoPosition();
+            GeoPosition end = new GeoPosition((float)Math.PI * -0.4f, 0);
+            Ufo ufo = new Ufo("ITEM_UFO_RECON", start, null);
+            ufo.Mission = new ResearchMission(ufo, end, 1, 0);
+
+            // force the UFO to have crashed, then resolve the dogfight
+            ufo.HullDamage = ufo.HullCapacity * 0.6;
+            Debug.Assert(ufo.IsCrashed);
+            ufo.Mission.OnDogfightFinished();
+            Debug.Assert(ufo.Mission.State.GetType().Name == "WaitState");
+
+            GeoPosition crashPosition = ufo.Position;
+            double fiveDays = 5 * 24 * 3600 * 1000.0;
+
+            // far beyond any old crashSiteDuration the site must still be there,
+            // stationary and targetable
+            for (int i = 0; i < 10; ++i)
+            {
+                ufo.Update(fiveDays);
+                Debug.Assert(ufo.Mission.State.GetType().Name == "WaitState");
+                Debug.Assert(0 == ufo.Mission.State.CurrentSpeed);
+                Debug.Assert(ufo.Position.Equals(crashPosition));
+            }
         }
 
         /// <summary>

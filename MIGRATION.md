@@ -536,9 +536,9 @@ Hardcoded timing values from the legacy design should be externalized to XML con
 - [x] **Terror site duration** — 2h (original hardcoded). Externalized to `ufobehavior.xml` `<terrorSiteDuration hours="2" />`, loaded by `UfoBehaviorSettings.TerrorSiteDuration`. Used in `TerrorMissionAlienSite` and `Aircraft` radar range.
 - [x] **Retaliation scout detection range** — 240 nautical miles. Externalized to `ufobehavior.xml` `<retaliationSearchRadius kilometers="444" />`, loaded by `UfoBehaviorSettings.RetaliationSearchRadius`. Used in `RetaliationTask.SearchRadius`.
 - [x] **Aircraft radar range** — was hardcoded as `480f` (nautical miles). Externalized to `ufobehavior.xml` `<aircraftRadarRange nauticalMiles="480" />`, loaded by `UfoBehaviorSettings.AircraftRadarRange`. Used in `Aircraft.RadarRange`.
-- [ ] **UFO never directly attacks X-Corp craft** — X-Corp is always the initiator of air-to-air combat (`UfoBehaviour.html:79`). Verify AI logic respects this.
-- [ ] **Crash site expiration** — crash sites auto-remove after duration expires. Verify `GeoData` cleanup logic.
-- [ ] **Landed UFO detection** — UFOs on the ground should be detectable and targetable for ground assault (Battlescape launch). Verify this path exists.
+- [x] **UFO never directly attacks X-Corp craft** — Verified: the only offensive craft-vs-craft mission (`InterceptMission`) is created from player UI (`LaunchInterceptDialog`, `GeoscapeScreenState`). No UFO mission ever starts an interception or registers as a hunter. UFO return fire exists only inside the player-started Aeroscape dogfight. (`UfoMission` subclasses never set `Craft.Prey`/`AddHunter`; the only geoscape attack a UFO starts is on an X-Corp outpost via `RetaliationMission`.)
+- [x] **Crash site persistence** — Changed to match the original X-COM (per UFOpaedia *Geoscape (EU)*): a crashed UFO becomes a crash site that **persists until recovered**; it no longer repairs and flies away. Implemented with an indefinite `WaitState` in `UfoMission.OnDogfightFinished`. (Only *landed* UFOs take off on a timer; only *terror sites* expire.)
+- [x] **Landed UFO detection** — Verified: landed/crashed UFOs are drawn with distinct icons (`GeoscapeScene`), are clickable via `FindClosestUfo`, and an interceptor reaching a stationary (speed 0) UFO launches a ground assault (`InterceptCraftState` → `UfoSiteMission` → `StartBattlescapeGeoEvent`).
 
 #### 9.5: Aeroscape — ✅ Complete
 
@@ -573,10 +573,10 @@ The Statistics screen includes full graph rendering via `SpriteBatch`-based 2D r
 
 The legacy design explicitly decided NOT to use the Scheduler/Appointment system for craft refueling due to several edge cases. Verify the current implementation handles these:
 
-- [ ] **Xenium consumed at refuel start** — deduct required Xenium from outpost stores when refueling begins, to prevent issues if Xenium is transferred/sold mid-refuel (`SchedulerAndAppointments.txt:12`)
-- [ ] **Insufficient Xenium at start** — handle case where outpost lacks sufficient Xenium: pause refueling, raise warning/notification, auto-resume when Xenium becomes available (`SchedulerAndAppointments.txt:13`)
-- [ ] **Craft launch during refuel** — allow craft to launch before fully refueled (unlike X-COM 1 behavior which blocked this). Track partial fuel state correctly (`SchedulerAndAppointments.txt:14`)
-- [ ] **Refuel progress tracking** — refueling is a continuous process (not a scheduled appointment). Progress is tracked per-update based on refuel rate and elapsed time. Verify update loop handles this correctly.
+- [x] **Xenium consumed at refuel start** — `Aircraft.EnterOutpost()`/`Refuel()` now call `ReserveXeniumFuel()`, which deducts the whole tank's worth of Xenium from the base's stores up front (and tops it up each tick), so a transfer/sale cannot steal fuel mid-refuel (`Aircraft.cs`).
+- [x] **Insufficient Xenium at start** — if the base cannot supply the full reservation, only what is available is reserved, a `MGSBOX_BASE_OUT_OF_CRAFT_SUPPLIES` message is queued once, and `ReserveXeniumFuel()` keeps topping up so refuelling auto-resumes when more Xenium arrives.
+- [x] **Craft launch during refuel** — launching (mission `Abort()` → `ExitOutpost()`) is allowed at any time; `Aircraft.ExitOutpost()` now also returns any reserved-but-unused Xenium to the base. Partial fuel is retained in the continuous `fuel` field.
+- [x] **Refuel progress tracking** — continuous, driven by `RefuelRate` × elapsed milliseconds with `surplusFuel` carrying the fractional remainder; not a scheduled appointment. Covered by the in-game tests `TestXeniumRefuel`, `TestParitalXeniumRefuel` and `TestXeniumReservedAtRefuelStart`.
 
 #### 9.8: Screen Partitioning Pattern — ✅ Complete
 
@@ -661,7 +661,7 @@ The legacy architecture proposed splitting each screen into 3 separate classes f
  18. ~~**GridPanel flat XenocideButton visual**~~ ✅ Complete (rows use `ThemedButton` → XenocideButton 3-slice; `StyledGrid` uses flat ButtonStandard for `ColorCategoryState` striping)
  19. ~~**Phase 9.5: Aeroscape**~~ ✅ Complete (715-line controller + simulation engine)
  20. ~~**Phase 9.6: Statistics graphs**~~ ✅ Complete (GraphBuilder + StatisticsRenderer + StatisticsScreenController)
- 21. **Phase 9.7: Craft refueling edge cases** — handle Xenium shortages, partial refuel, mid-refuel launch
+ 21. ~~**Phase 9.7: Craft refueling edge cases**~~ ✅ Complete (Xenium reserved at refuel start, returned on launch, shortages pause/warn/auto-resume)
  22. ~~**Phase 9.8: Screen partitioning**~~ ✅ Complete (14+ screens refactored with controller extraction)
  23. ~~**ModalDialog migration**~~ ✅ Complete (all 11 dialogs migrated from `GumDialog` to `ModalDialog`)
  24. **PendingActionsDialog** — implement dialog for pending actions queue (planned in docs/DIALOG.md)

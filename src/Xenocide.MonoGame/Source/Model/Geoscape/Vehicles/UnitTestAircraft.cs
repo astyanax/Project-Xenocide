@@ -58,8 +58,52 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             TestReloadingWeaponPod();
             TestParitalXeniumRefuel();
             TestXeniumRefuel();
+            TestXeniumReservedAtRefuelStart();
             TestRepair();
             TestDestruction();
+        }
+
+        /// <summary>
+        /// Check Xenium is taken from the base's stores up front (reserved) and
+        /// that unused reservation is returned when the craft launches.
+        /// </summary>
+        [Conditional("DEBUG")]
+        private static void TestXeniumReservedAtRefuelStart()
+        {
+            Outpost outpost = OutpostInventory.ConstructTestOutpost();
+
+            Aircraft aircraft = (Aircraft)Xenocide.StaticTables.ItemList["ITEM_XC-22_ECLIPSE"].Manufacture();
+            outpost.Inventory.Add(aircraft, false);
+            aircraft.fuel = 0.0;
+
+            int maxFuel = (int)aircraft.MaxFuel;
+            outpost.Inventory.AddTestItem("ITEM_XENIUM-122", maxFuel);
+            Debug.Assert(maxFuel == XeniumInOutpost(outpost));
+
+            // landing reserves (and deducts) the whole tank's worth immediately
+            aircraft.EnterOutpost();
+            Debug.Assert(0 == XeniumInOutpost(outpost));
+            Debug.Assert(maxFuel == aircraft.reservedFuel);
+
+            // a unit of refuelling draws from the reservation, not the base
+            aircraft.Refuel(1.0 / aircraft.RefuelRate);
+            Debug.Assert(1.0 == aircraft.fuel);
+            Debug.Assert((maxFuel - 1) == aircraft.reservedFuel);
+            Debug.Assert(0 == XeniumInOutpost(outpost));
+
+            // launching returns whatever was reserved but unused
+            aircraft.ExitOutpost();
+            Debug.Assert(0 == aircraft.reservedFuel);
+            Debug.Assert((maxFuel - 1) == XeniumInOutpost(outpost));
+        }
+
+        /// <summary>
+        /// Number of Xenium units currently in an outpost's stores
+        /// </summary>
+        private static int XeniumInOutpost(Outpost outpost)
+        {
+            Item xenium = Xenocide.StaticTables.ItemList["ITEM_XENIUM-122"].Manufacture();
+            return outpost.Inventory.NumberInInventory(xenium.ItemInfo);
         }
 
         /// <summary>

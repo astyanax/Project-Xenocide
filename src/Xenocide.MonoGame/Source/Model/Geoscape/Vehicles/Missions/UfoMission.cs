@@ -141,19 +141,15 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// </summary>
         public override void OnDogfightFinished()
         {
-            // if UFO lost the dogfight and crashed it will remain on ground for
-            // crashSiteDuration before repairs are completed and it flies away.
-            // otherwise, it continues its mission.
-            //
-            // ORIGINAL BEHAVIOR: 12 hours hardcoded.
-            // NEW: value loaded from ufobehavior.xml (Phase 9.4).
-            // The legacy design doc (UfoBehaviour.html:81) suggests 1-4 days;
-            // we keep 12h for backward compat.
+            // If the UFO lost the dogfight and crashed it becomes a crash site.
+            // Following the original X-COM (UFO: Enemy Unknown), a crash site
+            // persists (and stays targetable for a ground assault) until the
+            // player recovers it - the UFO does not repair and fly away.  Only
+            // UFOs that land normally take off again after a fixed time.
             if (Craft.IsCrashed)
             {
                 landings = 0;
-                double seconds = Xenocide.StaticTables.UfoBehavior.CrashSiteDuration.TotalSeconds;
-                SetState(new WaitState(this, seconds));
+                SetState(new WaitState(this, true));
             }
         }
 

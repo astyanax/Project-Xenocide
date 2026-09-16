@@ -47,9 +47,29 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <param name="secondsToWait">Time craft is to wait</param>
         public WaitState(Mission mission, double secondsToWait)
             :
+            this(mission, secondsToWait, false)
+        {
+        }
+
+        /// <summary>
+        /// Constructor for a wait that never ends.  Used for UFO crash sites,
+        /// which persist until the player recovers them (mirroring the original
+        /// X-COM) rather than taking off again after a fixed time.
+        /// </summary>
+        /// <param name="mission">mission that owns this state</param>
+        /// <param name="waitIndefinitely">true if the wait should never end</param>
+        public WaitState(Mission mission, bool waitIndefinitely)
+            :
+            this(mission, 0.0, waitIndefinitely)
+        {
+        }
+
+        private WaitState(Mission mission, double secondsToWait, bool waitIndefinitely)
+            :
             base(mission)
         {
             this.secondsToWait = secondsToWait;
+            this.waitIndefinitely = waitIndefinitely;
         }
 
         /// <summary>
@@ -58,6 +78,11 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// <param name="milliseconds">Time that has passed</param>
         protected override void UpdateState(double milliseconds)
         {
+            if (waitIndefinitely)
+            {
+                return;
+            }
+
             secondsToWait -= (milliseconds / 1000.0);
             if (secondsToWait <= 0.0)
             {
@@ -69,5 +94,10 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// Time craft is to wait
         /// </summary>
         private double secondsToWait;
+
+        /// <summary>
+        /// True if this wait never expires
+        /// </summary>
+        private bool waitIndefinitely;
     }
 }

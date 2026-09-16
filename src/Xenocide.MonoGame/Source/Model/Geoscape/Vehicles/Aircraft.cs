@@ -125,20 +125,108 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
                 return false;
             }
 
-            // figure out how much fuel should have been put in craft, based on elapsed time
-            double increment = Math.Min((RefuelRate * milliseconds) + surplusFuel, (MaxFuel - fuel));
-
             if (AircraftItemInfo.FuelType == FuelType.Hydrogen)
             {
                 // special case, hydrogen fuel is unlimited
+                double increment = Math.Min((RefuelRate * milliseconds) + surplusFuel, (MaxFuel - fuel));
                 fuel += increment;
+                return (fuel < MaxFuel);
+            }
+
+            // Xenium fuel is reserved (and deducted from the base's stores) up
+            // front, then drawn from that reservation.  Taking the fuel when
+            // refuelling begins stops a transfer or sale from stealing it out
+            // from under a craft that is mid-refuel.
+            ReserveXeniumFuel();
+
+            if (reservedFuel <= 0)
+            {
+                // base is out of Xenium: make no progress, but keep trying so
+                // refuelling resumes automatically once more Xenium arrives.
+                surplusFuel = 0.0;
+                return true;
+            }
+
+            // figure out how much fuel should have been put in craft, based on elapsed time
+            double wanted = (RefuelRate * milliseconds) + surplusFuel;
+            double allowed = Math.Min(wanted, Math.Min(MaxFuel - fuel, reservedFuel));
+            int units = (int)allowed;
+            surplusFuel = allowed - units;
+
+            fuel += units;
+            reservedFuel -= units;
+
+            return (fuel < MaxFuel);
+        }
+
+        /// <summary>
+        /// Reserve (and remove from the base's stores) the Xenium needed to fill
+        /// this craft's tank.  Called when refuelling begins and topped up each
+        /// tick, so a shortage pauses refuelling until more Xenium arrives.
+        /// </summary>
+        private void ReserveXeniumFuel()
+        {
+            if ((AircraftItemInfo.FuelType != FuelType.Xenium) || (null == HomeBase))
+            {
+                return;
+            }
+
+            // how many more units do we need on top of what's already reserved?
+            int stillNeeded = (int)Math.Ceiling(MaxFuel - fuel) - reservedFuel;
+            if (stillNeeded <= 0)
+            {
+                return;
+            }
+
+            Item xenium = Xenocide.StaticTables.ItemList["ITEM_XENIUM-122"].Manufacture();
+            int available = HomeBase.Inventory.NumberInInventory(xenium.ItemInfo);
+            int toReserve = Math.Min(stillNeeded, available);
+
+            for (int i = 0; i < toReserve; ++i)
+            {
+                HomeBase.Inventory.Remove(xenium);
+            }
+            reservedFuel += toReserve;
+
+            if (toReserve < stillNeeded)
+            {
+                // tell user (if we haven't already)
+                if (!outpostOutOfFuel)
+                {
+                    outpostOutOfFuel = true;
+                    MessageBoxGeoEvent.Queue(
+                        Strings.MGSBOX_BASE_OUT_OF_CRAFT_SUPPLIES, HomeBase.Name, xenium.Name, Name
+                    );
+                }
             }
             else
             {
-                fuel += TakeXeniumFuelFromOutpostSupplies(increment);
+                outpostOutOfFuel = false;
+            }
+        }
+
+        /// <summary>
+        /// Return any Xenium that was reserved but not used back to the base
+        /// (e.g. the craft launches before its tank is full).
+        /// </summary>
+        private void ReturnReservedXeniumFuel()
+        {
+            if (reservedFuel <= 0)
+            {
+                return;
             }
 
-            return (fuel < MaxFuel);
+            if (null != HomeBase)
+            {
+                Item xenium = Xenocide.StaticTables.ItemList["ITEM_XENIUM-122"].Manufacture();
+                for (int i = 0; i < reservedFuel; ++i)
+                {
+                    HomeBase.Inventory.Add(xenium, false);
+                }
+            }
+
+            reservedFuel = 0;
+            outpostOutOfFuel = false;
         }
 
         /// <summary>
@@ -214,6 +302,10 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             fuel = Math.Round(fuel);
             surplusFuel = 0.0;
             outpostOutOfFuel = false;
+
+            // take the Xenium we'll need out of the base's stores up front
+            ReserveXeniumFuel();
+
             foreach (WeaponPod pod in WeaponPods)
             {
                 if (null != pod)
@@ -224,6 +316,16 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
 
             // and default behaviour
             base.EnterOutpost();
+        }
+
+        /// <summary>
+        /// Craft has departed an Outpost.  Any Xenium reserved for refuelling
+        /// but not yet consumed is returned to the base's stores.
+        /// </summary>
+        public override void ExitOutpost()
+        {
+            ReturnReservedXeniumFuel();
+            base.ExitOutpost();
         }
 
         /// <summary>
@@ -307,55 +409,6 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             {
                 return Util.StringFormat(Strings.XCAP_COUNT_STATUS, XCaps.Count, AircraftItemInfo.MaxXcaps);
             }
-        }
-
-        /// <summary>
-        /// Remove the xenium going into the craft from the outpost's stores
-        /// </summary>
-        /// <param name="units">Number of units going into craft</param>
-        /// <returns>number of units to remove from outpost's store</returns>
-        private int TakeXeniumFuelFromOutpostSupplies(double units)
-        {
-            // Assumes refueling occurs in integer units
-            Debug.Assert(0 == (fuel - (int)fuel));
-
-            // number of units to remove from outpost
-            int unitsToRemove = (int)units;
-
-            // excess fuel (time was not integer number of units)
-            // remember for next update
-            surplusFuel = units - unitsToRemove;
-
-            // check quantity of fuel in outpost
-            Item xenium = Xenocide.StaticTables.ItemList["ITEM_XENIUM-122"].Manufacture();
-            int available = HomeBase.Inventory.NumberInInventory(xenium.ItemInfo);
-
-            // remove as much fuel as we need/is available, whichever is less
-            for (int i = 0; (i < unitsToRemove) && (i < available); ++i)
-            {
-                HomeBase.Inventory.Remove(xenium);
-
-                // we haven't run out of fuel... yet.
-                outpostOutOfFuel = false;
-            }
-
-            // handle case of insufficient fuel
-            if (available < unitsToRemove)
-            {
-                unitsToRemove = available;
-                surplusFuel = 0.0;
-
-                // tell user (if we haven't already)
-                if (!outpostOutOfFuel)
-                {
-                    outpostOutOfFuel = true;
-                    MessageBoxGeoEvent.Queue(
-                        Strings.MGSBOX_BASE_OUT_OF_CRAFT_SUPPLIES, HomeBase.Name, xenium.Name, Name
-                    );
-                }
-            }
-
-            return unitsToRemove;
         }
 
         /// <summary>
@@ -479,6 +532,12 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         /// any fuel units left over increment left over from previous Refuel() call
         /// </summary>
         private double surplusFuel;
+
+        /// <summary>
+        /// Xenium units reserved (and already removed from the base's stores)
+        /// for this craft's current refuelling session.
+        /// </summary>
+        private int reservedFuel;
 
         /// <summary>
         /// Record that outpost ran out of fuel, and we've informed the user
