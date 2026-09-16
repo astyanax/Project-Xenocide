@@ -84,6 +84,9 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// create the widgets we're going to show on the screen
         /// </summary>
+        /// <summary>This screen edits a filename, so global letter shortcuts must not fire.</summary>
+        public override bool HandlesTextInput => true;
+
         protected override void CreateGumControls()
         {
             layout = new ScreenLayout();

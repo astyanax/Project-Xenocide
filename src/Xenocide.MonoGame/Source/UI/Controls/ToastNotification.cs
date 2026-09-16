@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ProjectXenocide.Assets;
 using ProjectXenocide.Utils;
 
 namespace ProjectXenocide.UI.Controls
@@ -106,7 +107,15 @@ namespace ProjectXenocide.UI.Controls
 
         private void OnMessagePosted(MessageEntry entry)
         {
-            _items.Insert(0, new ToastItem { Text = entry.Text, Type = entry.Type, Elapsed = 0 });
+            // Respect the global toast switch and the event's own preference.
+            if (!NotificationSettings.ToastsEnabled || !NotificationMapping.Get(entry.EventId).Toast)
+                return;
+
+            _items.Insert(0, new ToastItem { Text = entry.DisplayText, Type = entry.Type, Elapsed = 0 });
+
+            // Keep the backing list bounded even if toasts are never drawn.
+            while (_items.Count > MaxVisible * 2)
+                _items.RemoveAt(_items.Count - 1);
         }
 
         protected override void Dispose(bool disposing)

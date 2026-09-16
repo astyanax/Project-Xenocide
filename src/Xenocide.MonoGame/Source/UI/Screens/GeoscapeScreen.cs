@@ -94,6 +94,8 @@ namespace ProjectXenocide.UI.Screens
             {
                 if (disposing)
                 {
+                    MessageLog.Changed -= RefreshLogPanel;
+
                     if (geoscapeScene != null)
                     {
                         geoscapeScene.Dispose();
@@ -208,41 +210,102 @@ namespace ProjectXenocide.UI.Screens
                 fundsAmount.Text = gameState.GeoData.XCorp.Bank.DisplayCurrentBalance;
         }
 
+        private Panel _logPanel;
+        private Button _envelopeButton;
+
+        private const int LogPanelWidth = 600;
+        private const int LogPanelHeight = 190;
+        private const int LogHeaderHeight = 26;
+
+        /// <summary>
+        /// Builds the bottom-left "Situation Log": a themed panel with a header,
+        /// an INBOX button (pending-actions count) and the scrolling message list.
+        /// </summary>
         private void InitializeMessageLog()
         {
-            _messageLogList = new ListBox();
-
             var vp = Xenocide.Instance.GraphicsDevice.Viewport;
-            int logWidth = 600;
-            int logHeight = 180;
 
-            _messageLogList.Visual.X = 20;
-            _messageLogList.Visual.Y = vp.Height - logHeight - 20;
-            _messageLogList.Visual.Width = logWidth;
-            _messageLogList.Visual.Height = logHeight;
-            _messageLogList.Visual.SetProperty("Alpha", 200);
-            _messageLogList.Visual.SetProperty("ColorCategoryState", "Primary");
+            _logPanel = new Panel();
+            _logPanel.Visual.X = 20;
+            _logPanel.Visual.Y = vp.Height - LogPanelHeight - 20;
+            _logPanel.Visual.XUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            _logPanel.Visual.YUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            _logPanel.Visual.Width = LogPanelWidth;
+            _logPanel.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.Absolute;
+            _logPanel.Visual.Height = LogPanelHeight;
+            _logPanel.Visual.HeightUnits = Gum.DataTypes.DimensionUnitType.Absolute;
 
-            GumRoot.Children.Add(_messageLogList.Visual);
+            var background = new ColoredRectangleRuntime();
+            background.Color = new Color(10, 16, 28, 215);
+            background.X = 0;
+            background.Y = 0;
+            background.XUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            background.YUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            background.Width = 0;
+            background.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
+            background.Height = 0;
+            background.HeightUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
+            _logPanel.Visual.Children.Add(background);
 
-            MessageLog.MessagePosted += OnMessagePostedToLog;
+            var header = ThemedLabel.CreateSection("SITUATION LOG");
+            header.Visual.X = 8;
+            header.Visual.Y = 4;
+            header.Visual.XUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            header.Visual.YUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            _logPanel.Visual.Children.Add(header.Visual);
 
+            _envelopeButton = ThemedButton.Create("INBOX", OnEnvelopeClicked);
+            ThemedButton.SetWidth(_envelopeButton, 130);
+            _envelopeButton.Visual.Height = 22;
+            _envelopeButton.Visual.HeightUnits = Gum.DataTypes.DimensionUnitType.Absolute;
+            _envelopeButton.Visual.Y = 2;
+            _envelopeButton.Visual.YUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            _envelopeButton.Visual.XOrigin = RenderingLibrary.Graphics.HorizontalAlignment.Right;
+            _envelopeButton.Visual.XUnits = Gum.Converters.GeneralUnitType.PixelsFromLarge;
+            _envelopeButton.Visual.X = -8;
+            _logPanel.Visual.Children.Add(_envelopeButton.Visual);
+
+            _messageLogList = new ListBox();
+            _messageLogList.Visual.X = 6;
+            _messageLogList.Visual.Y = LogHeaderHeight;
+            _messageLogList.Visual.XUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            _messageLogList.Visual.YUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            _messageLogList.Visual.Width = -12;
+            _messageLogList.Visual.WidthUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
+            _messageLogList.Visual.Height = -(LogHeaderHeight + 6);
+            _messageLogList.Visual.HeightUnits = Gum.DataTypes.DimensionUnitType.RelativeToParent;
+            _logPanel.Visual.Children.Add(_messageLogList.Visual);
+
+            GumRoot.Children.Add(_logPanel.Visual);
+
+            MessageLog.Changed += RefreshLogPanel;
+            RefreshLogPanel();
+        }
+
+        /// <summary>Open the pending-actions inbox.</summary>
+        private void OnEnvelopeClicked(object sender, EventArgs e)
+        {
+            ScreenManager.ShowDialog(new PendingActionsDialog());
+        }
+
+        /// <summary>Rebuild the log rows, badge and visibility from the message log.</summary>
+        private void RefreshLogPanel()
+        {
+            if ((_messageLogList == null) || (_logPanel == null))
+                return;
+
+            _messageLogList.Items.Clear();
             foreach (var entry in MessageLog.Entries)
                 _messageLogList.Items.Add(FormatLogEntry(entry));
 
-            // Only show the log panel once there is something in it; an empty
-            // panel is otherwise a bare, unthemed grey rectangle.
-            _messageLogList.Visual.Visible = _messageLogList.Items.Count > 0;
-        }
+            int pending = MessageLog.RequiredCount;
+            _envelopeButton.Text = pending > 0 ? $"INBOX ({pending})" : "INBOX";
 
-        private void OnMessagePostedToLog(MessageEntry entry)
-        {
-            Logger.Debug("[MSGLOG] {0} {1}: {2}", entry.TimeString, entry.Type, entry.Text);
-            if (_messageLogList != null)
-            {
-                _messageLogList.Items.Add(FormatLogEntry(entry));
-                _messageLogList.Visual.Visible = true;
-            }
+            _logPanel.Visual.Visible = MessageLog.Entries.Count > 0;
+
+            // Auto-scroll to the newest message.
+            if (_messageLogList.Items.Count > 0)
+                _messageLogList.SelectedIndex = _messageLogList.Items.Count - 1;
         }
 
         private static string FormatLogEntry(MessageEntry entry)
@@ -254,7 +317,7 @@ namespace ProjectXenocide.UI.Screens
                 MessageType.Required => "* ",
                 _ => "  ",
             };
-            return $"{entry.TimeString} {prefix}{entry.Text}";
+            return $"{entry.TimeString} {prefix}{entry.DisplayText}";
         }
 
         //Used to keep track of time and avoid updating if needed.

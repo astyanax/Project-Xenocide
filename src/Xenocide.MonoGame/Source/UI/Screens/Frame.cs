@@ -72,6 +72,12 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         public virtual UI.SoftwareCursor.CursorType? RequestedCursor => null;
 
+        /// <summary>
+        /// True if this frame expects raw text input (e.g. contains a focused
+        /// text box), so global single-key shortcuts should be suppressed.
+        /// </summary>
+        public virtual bool HandlesTextInput => false;
+
         protected string CeguiId { get { return ceguiId; } }
 
         protected static ScreenManager ScreenManager { get { return Xenocide.ScreenManager; } }

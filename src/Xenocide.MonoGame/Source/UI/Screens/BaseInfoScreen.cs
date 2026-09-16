@@ -81,6 +81,9 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// Builds the screen layout using ScreenLayout and ContentArea.
         /// </summary>
+        /// <summary>This screen edits the base name, so global letter shortcuts must not fire.</summary>
+        public override bool HandlesTextInput => true;
+
         protected override void CreateGumControls()
         {
             layout = new ScreenLayout();

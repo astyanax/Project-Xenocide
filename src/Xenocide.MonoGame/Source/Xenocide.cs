@@ -195,6 +195,7 @@ namespace ProjectXenocide
         {
             var gameOptions = GameOptions.LoadFromFile();
             gameOptions.Apply();
+            Utils.NotificationSettings.Load(gameOptions);
 
             // Apply the persisted display mode (borderless full-screen is the
             // default full-screen mode because it toggles instantly and Alt-Tabs).
@@ -266,6 +267,18 @@ namespace ProjectXenocide
             {
                 Logger.Info("Screenshot: F12 pressed; capture queued");
                 _screenshotRequested = true;
+            }
+
+            // "M" opens the situation report (pending-actions inbox) from any
+            // screen, unless a dialog is already open or the current screen is
+            // taking text input (so it doesn't eat the letter M).
+            if (keyState.IsKeyDown(Keys.M) && _prevKeyState.IsKeyUp(Keys.M))
+            {
+                var top = ScreenManager?.TopmostFrame;
+                if ((top != null) && !(top is UI.Dialogs.Dialog) && !top.HandlesTextInput)
+                {
+                    ScreenManager.ShowDialog(new UI.Dialogs.PendingActionsDialog());
+                }
             }
 
             _prevKeyState = keyState;

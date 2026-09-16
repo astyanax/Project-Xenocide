@@ -287,8 +287,9 @@ See [README.md](README.md) for build prerequisites and quick-start instructions.
 - [ ] **Remaining:** Content pipeline: add remaining FBX model textures
 - [x] **Investigated:** GridPanel XenocideButton styling — `RowButtonFactory` property added to GridPanel.cs with documentation explaining the hierarchical GUE limitation — ✅ Done (see Phase 8.5)
 - [x] **ModalDialog migration** — all 11 dialogs migrated from `GumDialog` to `ModalDialog` base class — ✅ Done
-- [ ] **Remaining:** PendingActionsDialog — planned in docs/DIALOG.md but not implemented
-- [ ] **Remaining:** GeoEvent PostMessage migration — `FuelLowGeoEvent`, `FacilityFinishedGeoEvent`, `ResearchFinishedGeoEvent`, `UfoAttackingOutpostGeoEvent`, `MessageBoxGeoEvent` all still use blocking `Util.ShowMessageBox()` instead of non-blocking `PostMessage()`
+- [x] **PendingActionsDialog** — implemented (`Source/UI/Dialogs/PendingActionsDialog.cs`): required-action inbox with per-entry Dismiss, Dismiss All, and context actions. Opened from the geoscape INBOX button or the global "M" hotkey.
+- [x] **Notification system** — `MessageLog` now supports event ids, de-duplication, badge semantics and pause-on-alert; `NotificationMapping` carries type/pause/toast/dedup/action specs; per-event toggles and pause/toast preferences persist via `GameOptions`.
+- [x] **GeoEvent PostMessage migration** — `FuelLowGeoEvent`, `FacilityFinishedGeoEvent`, `ResearchFinishedGeoEvent` and `UfoAttackingOutpostGeoEvent` now use non-blocking `MessageLog.PostNotification()`. `MessageBoxGeoEvent`, `GameOverGeoEvent`, `TrackingLostGeoEvent` and `StartBattlescapeGeoEvent` remain modal by design (see docs/DIALOG.md "Remaining message modals to migrate").
 - [x] **New:** ScreenLayout component (.gucx + .cs) — standard screen structure with scrollable content, button bar, status bar — ✅ Done
 - [x] **New:** ScreenContent component (.gucx) — scrollable StackPanel child for ContentPanel — ✅ Done
 - [x] **New:** ContentArea manager (.cs) — AddHeader, AddLabel, AddGrid, AddSpacer, Clear — ✅ Done
@@ -664,8 +665,8 @@ The legacy architecture proposed splitting each screen into 3 separate classes f
  21. ~~**Phase 9.7: Craft refueling edge cases**~~ ✅ Complete (Xenium reserved at refuel start, returned on launch, shortages pause/warn/auto-resume)
  22. ~~**Phase 9.8: Screen partitioning**~~ ✅ Complete (14+ screens refactored with controller extraction)
  23. ~~**ModalDialog migration**~~ ✅ Complete (all 11 dialogs migrated from `GumDialog` to `ModalDialog`)
- 24. **PendingActionsDialog** — implement dialog for pending actions queue (planned in docs/DIALOG.md)
- 25. **GeoEvent PostMessage migration** — convert blocking `Util.ShowMessageBox()` calls in GeoEvents to non-blocking `PostMessage()`
+ 24. ~~**PendingActionsDialog**~~ ✅ Complete (inbox with Dismiss / Dismiss All + context actions; geoscape INBOX button and global "M")
+ 25. ~~**GeoEvent PostMessage migration**~~ ✅ Done for the game-event GeoEvents (research, fuel low, facility, outpost attack); validation modals intentionally remain blocking (tracked in docs/DIALOG.md)
  26. ~~**ThemedButton migration**~~ ✅ Complete (all 63 raw `new Button()` calls migrated; only framework-internal factories/chrome remain)
  27. ~~**ViewportMode FullScene**~~ ✅ Complete (added to `ScreenLayout`; EquipSoldier adopts it; Aeroscape HUD anchored via `ResponsiveHud`)
  28. ~~**ThemedLabel style fix**~~ ✅ Complete (was a no-op `StyleCategoryState`; now sets `FontSize`/`IsBold`/`IsItalic` directly)

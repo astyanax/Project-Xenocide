@@ -14,6 +14,7 @@ using ProjectXenocide.Assets;
 using ProjectXenocide.Model;
 using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.UI.Controls;
+using ProjectXenocide.Utils;
 
 namespace ProjectXenocide.UI.Screens
 {
@@ -44,6 +45,8 @@ namespace ProjectXenocide.UI.Screens
         private int _soundLevel;
         private WindowMode _displayMode;
         private bool _notifications;
+        private bool _pauseOnAlerts;
+        private readonly HashSet<string> _disabledEvents = new(StringComparer.OrdinalIgnoreCase);
         private bool _autosave;
         private int _cursorMode;
         private int _resolutionIdx;
@@ -62,7 +65,10 @@ namespace ProjectXenocide.UI.Screens
             _musicLevel = (int)(Xenocide.AudioSystem.MusicVolume * 10);
             _soundLevel = (int)(Xenocide.AudioSystem.SoundVolume * 10);
             _displayMode = GameOptions.LoadFromFile().WindowMode;
-            _notifications = true;
+            _notifications = NotificationSettings.ToastsEnabled;
+            _pauseOnAlerts = NotificationSettings.PauseOnAlerts;
+            foreach (var id in NotificationSettings.DisabledEvents)
+                _disabledEvents.Add(id);
             _autosave = false;
             _cursorMode = Xenocide.Instance.IsMouseVisible ? 1 : 0;
             _resolutionIdx = 0;
@@ -192,6 +198,24 @@ namespace ProjectXenocide.UI.Screens
             ClearContent();
             AddSettingRow("Show Toast Notifications:", _notifications ? "ON" : "OFF",
                 () => { _notifications = !_notifications; return _notifications ? "ON" : "OFF"; });
+            AddSettingRow("Pause Time On Alerts:", _pauseOnAlerts ? "ON" : "OFF",
+                () => { _pauseOnAlerts = !_pauseOnAlerts; return _pauseOnAlerts ? "ON" : "OFF"; });
+
+            AddLabel("Per-event notifications:");
+            foreach (var spec in NotificationMapping.Wired)
+            {
+                string id = spec.EventId;
+                AddSettingRow(spec.DisplayName + ":", _disabledEvents.Contains(id) ? "OFF" : "ON",
+                    () =>
+                    {
+                        bool enable = _disabledEvents.Contains(id);
+                        if (enable)
+                            _disabledEvents.Remove(id);
+                        else
+                            _disabledEvents.Add(id);
+                        return enable ? "ON" : "OFF";
+                    });
+            }
         }
 
         private void ShowGamePlayTab()
@@ -208,10 +232,13 @@ namespace ProjectXenocide.UI.Screens
             Xenocide.AudioSystem.MusicVolume = _musicLevel / 10.0f;
             Xenocide.AudioSystem.SoundVolume = _soundLevel / 10.0f;
 
+            NotificationSettings.Apply(_notifications, _pauseOnAlerts, _disabledEvents);
+
             var options = GameOptions.LoadFromFile();
             options.MusicVolume = Xenocide.AudioSystem.MusicVolume;
             options.SoundVolume = Xenocide.AudioSystem.SoundVolume;
             options.WindowMode = _displayMode;
+            NotificationSettings.Save(options);
             options.SaveToFile();
 
             Xenocide.SetDisplayMode(_displayMode);

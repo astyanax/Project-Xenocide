@@ -9,12 +9,14 @@
 | All 11 dialogs extend `ModalDialog` | ✅ Done |
 | `GumDialog` deleted (fully replaced) | ✅ Done |
 | `ToastNotification` component (auto-fading popups) | ✅ Implemented |
-| `NotificationMapping` event→type map | ✅ Implemented |
+| `NotificationMapping` specs (type + pause + toast + dedup + action) | ✅ Implemented |
 | `ScreenManager.PostMessage()` | ✅ Implemented |
-| GeoscapeScreen message log panel (ListBox) | ✅ Implemented |
-| Envelope icon + `PendingActionsDialog` (email inbox) | Pending |
-| GeoEvent integration (non-blocking PostMessage) | Pending |
-| Settings screen "Notifications" section | ✅ Implemented (`SettingsScreen.ShowNotificationTab` — toast toggle) |
+| GeoscapeScreen **situation log** panel (themed, header, auto-scroll) | ✅ Implemented |
+| Envelope/INBOX badge + `PendingActionsDialog` (Dismiss / Dismiss All) | ✅ Implemented (context actions partial) |
+| GeoEvent integration (non-blocking notifications) | ✅ Done for the 4 game-event GeoEvents; validation modals intentionally kept |
+| Per-event toggles + pause-on-alert + toast switch (persisted) | ✅ Implemented (`SettingsScreen.ShowNotificationTab` → `GameOptions`) |
+| De-duplication / grouping of repeats | ✅ Implemented (`MessageLog` dedup window) |
+| Global "M" hotkey → situation report | ✅ Implemented (`Xenocide.Update`) |
 
 ## Overview
 
@@ -121,8 +123,26 @@ Creates a blocking `GumMessageBoxDialog` with the formatted message text.
 | Gap | Detail |
 |-----|--------|
 | `UiSize` unused | `Dialog(UiSize)` still stores no size; `ModalDialog` uses `PanelWidth`/`PanelHeight` instead. |
-| Game pauses on ALL dialogs | Even informational messages block gameplay. |
-| Envelope / `PendingActionsDialog` | Required-action inbox is not yet implemented (see Planned Architecture). |
+| Validation messages still block | The ~60 `Util.ShowMessageBox` **validation/feedback** calls (no selection, insufficient funds, base needs a name, ...) are deliberately still modal. Only game-event notifications were migrated (see list below). |
+| Context actions partial | `GoToResearch` / `GoToManufacture` / `GoToBase` / `GoToAircraft` / `GoToGlobe` exist; globe centring and aircraft selection are still TODO. |
+| "Home" zoom-to-last-event | Not implemented (OpenXCOM-style shortcut). |
+| Notification sound | No dedicated alert SFX yet; no sound is played on notifications. |
+
+### Remaining message modals to migrate (tracked, not yet done)
+
+These GeoEvents/messages still use blocking `Util.ShowMessageBox` and are candidates
+for conversion to `MessageLog.PostNotification`:
+
+| Source | Suggested type |
+|--------|----------------|
+| `MessageBoxGeoEvent` | dynamic (Warning/Info) |
+| `GameOverGeoEvent` | Required (keep modal until a dedicated screen exists) |
+| `TrackingLostGeoEvent` | Required |
+| `StartBattlescapeGeoEvent` | Required (confirmation — likely stays modal) |
+| `Bank` insufficient funds, save/load errors, screen validation | Error (stay modal) |
+
+`NotificationMapping` already contains placeholder specs for the un-wired events —
+flip `Wired = true` and route the call site through `MessageLog.PostNotification`.
 
 ---
 
