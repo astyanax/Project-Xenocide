@@ -10,7 +10,6 @@ env:
   SOLUTION: Xenocide.sln
   PROJECT: src/Xenocide.MonoGame/Xenocide.MonoGame.csproj
   DOTNET_VERSION: '9.0.x'
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
   format:
@@ -19,12 +18,12 @@ jobs:
       contents: write
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         ref: ${{ github.head_ref || github.ref_name }}
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -38,7 +37,7 @@ jobs:
       run: dotnet format style ${{ env.SOLUTION }} --verbosity diagnostic
 
     - name: Commit formatting fixes
-      uses: stefanzweifel/git-auto-commit-action@v5
+      uses: stefanzweifel/git-auto-commit-action@v7
       with:
         commit_message: '[skip ci] style: auto-fix imports ordering and formatting'
         commit_user_name: github-actions[bot]
@@ -53,10 +52,10 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -117,10 +116,10 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -161,7 +160,7 @@ jobs:
       run: Compress-Archive -Path publish/${{ matrix.runtime }}/* -DestinationPath Xenocide-${{ matrix.runtime }}.zip
 
     - name: Upload
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: Xenocide-${{ matrix.runtime }}
         path: Xenocide-${{ matrix.runtime }}.zip
