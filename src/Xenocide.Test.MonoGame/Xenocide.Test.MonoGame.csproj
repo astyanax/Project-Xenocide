@@ -22,6 +22,15 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <!--
+    The in-game RunTests methods are [Conditional("DEBUG")], and the main
+    project excludes their definitions (Source/**/UnitTest*.cs) from Release.
+    Only wrap them for Debug, otherwise a Release build cannot resolve them.
+  -->
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <Compile Remove="InGameUnitTests.cs" />
+  </ItemGroup>
+
   <ItemGroup>
     <Content Include="..\Xenocide.MonoGame\Content\**\*.xnb" CopyToOutputDirectory="PreserveNewest" Link="Content\%(RecursiveDir)%(Filename)%(Extension)" />
     <Content Include="..\Xenocide.MonoGame\Content\Schema\**\*.xml" CopyToOutputDirectory="PreserveNewest" Link="Content\Schema\%(RecursiveDir)%(Filename)%(Extension)" />

@@ -100,7 +100,7 @@ jobs:
 
     - name: Test
       if: runner.os == 'Windows'
-      run: dotnet test ${{ env.SOLUTION }} --configuration Release --no-build --verbosity normal
+      run: dotnet test ${{ env.SOLUTION }} --configuration Debug --verbosity normal
 
   publish:
     needs: build
