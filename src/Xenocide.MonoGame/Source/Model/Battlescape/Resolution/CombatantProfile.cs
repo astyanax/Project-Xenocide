@@ -24,6 +24,10 @@ namespace ProjectXenocide.Model.Battlescape
         public int Accuracy { get; init; }
 
         public int Health { get; init; }
+
+        /// <summary>Effective hit points when the engagement starts (Health less any existing injury).</summary>
+        public int CurrentHealth { get; init; }
+
         public int Reactions { get; init; }
         public int Bravery { get; init; }
 
@@ -47,6 +51,7 @@ namespace ProjectXenocide.Model.Battlescape
                 IsXCorp = isXCorp,
                 Accuracy = (int)combatant.Accuracy(Combatant.ActiveArm.Both),
                 Health = combatant.Stats[Statistic.Health],
+                CurrentHealth = Math.Max(1, combatant.Stats[Statistic.Health] - combatant.Stats[Statistic.InjuryDamage]),
                 Reactions = combatant.Stats[Statistic.Reactions],
                 Bravery = combatant.Stats[Statistic.Bravery],
                 Damage = Math.Max(0, damage),
@@ -65,6 +70,7 @@ namespace ProjectXenocide.Model.Battlescape
                 IsXCorp = isXCorp,
                 Accuracy = accuracy,
                 Health = health,
+                CurrentHealth = health,
                 Reactions = reactions,
                 Bravery = bravery,
                 Damage = damage,

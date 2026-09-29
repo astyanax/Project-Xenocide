@@ -113,7 +113,7 @@ namespace ProjectXenocide.Model.Battlescape
                 Log = log,
                 Units = units,
                 XCorpKia = xcorpUnits.Count(u => u.Dead),
-                XCorpWounded = xcorpUnits.Count(u => !u.Dead && (u.Hp < u.P.Health)),
+                XCorpWounded = xcorpUnits.Count(u => !u.Dead && (u.Hp < u.P.CurrentHealth)),
                 AlienKills = alienUnits.Count(u => u.Dead),
             };
         }
@@ -175,14 +175,17 @@ namespace ProjectXenocide.Model.Battlescape
                     continue;
                 }
 
-                int health = combatant.Stats[Statistic.Health];
+                int maxHealth = combatant.Stats[Statistic.Health];
                 if (outcome.Dead)
                 {
-                    combatant.Stats[Statistic.InjuryDamage] = health + 1;
+                    combatant.Stats[Statistic.InjuryDamage] = maxHealth + 1;
                 }
-                else if (outcome.RemainingHealth < health)
+                else
                 {
-                    combatant.Stats[Statistic.InjuryDamage] = Math.Max(0, health - outcome.RemainingHealth);
+                    // RemainingHealth is measured from the unit's starting HP, which already
+                    // excludes any injury carried into the mission, so this never heals a
+                    // pre-existing wound.
+                    combatant.Stats[Statistic.InjuryDamage] = Math.Max(0, maxHealth - outcome.RemainingHealth);
                 }
             }
         }
@@ -254,7 +257,7 @@ namespace ProjectXenocide.Model.Battlescape
             }
             foreach (CombatantProfile profile in profiles)
             {
-                units.Add(new Unit { P = profile, Hp = profile.Health });
+                units.Add(new Unit { P = profile, Hp = profile.CurrentHealth });
             }
             return units;
         }
