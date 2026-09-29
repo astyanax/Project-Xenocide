@@ -283,6 +283,20 @@ namespace ProjectXenocide
                 }
             }
 
+            // "Home" centres the globe on the most recent event that has a location.
+            if (keyState.IsKeyDown(Keys.Home) && _prevKeyState.IsKeyUp(Keys.Home))
+            {
+                var top = ScreenManager?.TopmostFrame;
+                if ((top is UI.Screens.GeoscapeScreen geoscape) && !top.HandlesTextInput)
+                {
+                    var located = Utils.MessageLog.NewestLocated();
+                    if (located != null)
+                    {
+                        geoscape.CenterOn(located.Longitude, located.Latitude);
+                    }
+                }
+            }
+
             _prevKeyState = keyState;
 
             GumService.Default.Update(gameTime);

@@ -113,6 +113,17 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>
+        /// Centre the globe on a location (animated via the smoothing target).
+        /// </summary>
+        public void CenterOn(float longitude, float latitude)
+        {
+            EnsureTargetCamera();
+            targetCamera.X = longitude;
+            targetCamera.Y = latitude;
+            WrapAndClampTarget();
+        }
+
+        /// <summary>
         /// Snap the smoothing target to the scene's current camera.  Call after
         /// setting <see cref="PolarScene.CameraPosition"/> directly.
         /// </summary>

@@ -93,7 +93,8 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
             MessageLog.PostNotification(
                 "UfoAttackingOutpostGeoEvent",
                 Util.StringFormat(Strings.MSGBOX_OUTPOST_ATTACKING_UFO_VAPOURIZED, outpost.Name, craft.Name),
-                targetId: outpost.Name);
+                targetId: outpost.Name,
+                position: outpost.Position);
         }
 
         /// <summary>
@@ -105,7 +106,8 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
             MessageLog.PostNotification(
                 "UfoAttackingOutpostGeoEvent",
                 Util.StringFormat(Strings.MSGBOX_OUTPOST_ATTACKING_UFO_CRASHED, outpost.Name, craft.Name),
-                targetId: outpost.Name);
+                targetId: outpost.Name,
+                position: outpost.Position);
         }
 
         /// <summary>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using ProjectXenocide.Assets;
+using ProjectXenocide.Model.Geoscape;
 
 namespace ProjectXenocide.Utils
 {
@@ -52,6 +53,15 @@ namespace ProjectXenocide.Utils
 
         /// <summary>Argument for <see cref="ActionId"/> (craft/base name, coordinates, ...).</summary>
         public string TargetId { get; set; } = string.Empty;
+
+        /// <summary>True if this entry has a location on the globe (for "zoom to event").</summary>
+        public bool HasPosition { get; set; }
+
+        /// <summary>Latitude of the location, in radians.</summary>
+        public float Latitude { get; set; }
+
+        /// <summary>Longitude of the location, in radians.</summary>
+        public float Longitude { get; set; }
 
         public string TimeString =>
             $"{GameDay:000}-{GameHour:D2}:{GameMinute:D2}";
@@ -125,7 +135,7 @@ namespace ProjectXenocide.Utils
         /// </summary>
         /// <returns>The new or merged entry, or null if the event is disabled.</returns>
         public static MessageEntry PostNotification(string eventId, string text,
-            string targetId = "", MessageType? typeOverride = null)
+            string targetId = "", MessageType? typeOverride = null, GeoPosition position = null)
         {
             if (!NotificationSettings.IsEventEnabled(eventId))
             {
@@ -140,7 +150,7 @@ namespace ProjectXenocide.Utils
                 return null;
             }
 
-            MessageEntry entry = AddEntry(eventId, text, type, spec.ActionId, targetId);
+            MessageEntry entry = AddEntry(eventId, text, type, spec.ActionId, targetId, position);
 
             if (type == MessageType.Warning || type == MessageType.Required)
             {
@@ -254,8 +264,13 @@ namespace ProjectXenocide.Utils
             Changed?.Invoke();
         }
 
+        /// <summary>
+        /// Newest entry that has a globe location (used by the "zoom to last event" hotkey).
+        /// </summary>
+        public static MessageEntry NewestLocated() => _entries.LastOrDefault(e => e.HasPosition);
+
         private static MessageEntry AddEntry(string eventId, string text, MessageType type,
-            string actionId, string targetId)
+            string actionId, string targetId, GeoPosition position = null)
         {
             var (day, hour, minute) = CurrentGameTime();
             var entry = new MessageEntry
@@ -268,6 +283,9 @@ namespace ProjectXenocide.Utils
                 GameDay = day,
                 GameHour = hour,
                 GameMinute = minute,
+                HasPosition = position != null,
+                Latitude = position?.Latitude ?? 0f,
+                Longitude = position?.Longitude ?? 0f,
             };
 
             _entries.Add(entry);

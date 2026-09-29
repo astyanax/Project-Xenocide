@@ -179,7 +179,8 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
                     MessageLog.PostNotification(
                         "UfoDetectedGeoEvent",
                         Util.StringFormat(Strings.MSGBOX_UFO_DETECTED, Name),
-                        targetId: Name);
+                        targetId: Name,
+                        position: Position);
                 }
                 else
                 {

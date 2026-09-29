@@ -4,6 +4,7 @@ using System.Reflection;
 
 using ProjectXenocide;
 using ProjectXenocide.Model;
+using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.StaticData;
 using ProjectXenocide.Utils;
 
@@ -104,6 +105,22 @@ namespace Xenocide.Test.MonoGame
 
             Assert.Null(entry);
             Assert.Empty(MessageLog.Entries);
+        }
+
+        [Fact]
+        public void PostNotification_StoresPositionForZoomToEvent()
+        {
+            var entry = MessageLog.PostNotification(
+                "UfoDetectedGeoEvent", "UFO-1 detected",
+                targetId: "UFO-1", position: new GeoPosition(0.5f, 0.25f));
+
+            Assert.NotNull(entry);
+            Assert.True(entry!.HasPosition);
+
+            var newest = MessageLog.NewestLocated();
+            Assert.Same(entry, newest);
+            Assert.Equal(0.5f, newest!.Longitude);
+            Assert.Equal(0.25f, newest.Latitude);
         }
 
         [Fact]
