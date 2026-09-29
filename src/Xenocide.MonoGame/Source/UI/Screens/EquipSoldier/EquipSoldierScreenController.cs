@@ -74,6 +74,19 @@ namespace ProjectXenocide.UI.Screens
             /// <summary>React to user pressing the Close button</summary>
             public abstract void OnCloseButton();
 
+            /// <summary>Save the soldier's current kit as their default loadout.</summary>
+            public virtual void SaveLoadout()
+            {
+            }
+
+            /// <summary>Re-equip the soldier from their saved default loadout.</summary>
+            public virtual void ApplyLoadout()
+            {
+            }
+
+            /// <summary>True where loadouts can be saved/applied (i.e. in an outpost).</summary>
+            public virtual bool SupportsLoadouts => false;
+
             #endregion event handlers
 
             #region fields

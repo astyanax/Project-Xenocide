@@ -106,6 +106,24 @@ namespace ProjectXenocide.UI.Screens
                 ReturnToParentScreen();
             }
 
+            /// <summary>Save the soldier's kit as their default loadout.</summary>
+            public override void SaveLoadout()
+            {
+                Combatant.Inventory.RecordLoadout();
+            }
+
+            /// <summary>Re-equip the soldier from their saved default loadout.</summary>
+            public override void ApplyLoadout()
+            {
+                if (!Combatant.Inventory.RestoreLoadout(Soldier.Outpost.Inventory))
+                {
+                    Util.ShowMessageBox("Some loadout items were not available in the base stores.");
+                }
+            }
+
+            /// <summary>Loadouts are managed while the soldier is in an outpost.</summary>
+            public override bool SupportsLoadouts => true;
+
             /// <summary>Player wants to look at a different soldier</summary>
             /// <param name="sender">Not used</param>
             /// <param name="e">Not used</param>

@@ -164,6 +164,13 @@ namespace ProjectXenocide.UI.Screens
             if (GumRoot != null)
                 ResponsiveHud.Position(GumRoot.GetGraphicalUiElementByName("ButtonBar"), 1040, 10, 200);
 
+            // Loadout save/apply, only when equipping in an outpost.
+            if (controller.SupportsLoadouts)
+            {
+                AddLoadoutButton("Save Loadout", 120, OnSaveLoadoutButton);
+                AddLoadoutButton("Apply Loadout", 150, OnApplyLoadoutButton);
+            }
+
             ammoText = ThemedLabel.CreateBody("");
             ammoText.Visual.X = 20;
             ammoText.Visual.Y = 20;
@@ -185,6 +192,28 @@ namespace ProjectXenocide.UI.Screens
 
         private Label ammoText;
         private readonly List<Label> _staticTextLabels = new();
+
+        /// <summary>Adds a loadout button in the right-hand column.</summary>
+        private void AddLoadoutButton(string text, int designY, EventHandler handler)
+        {
+            var button = ThemedButton.Create(text, handler);
+            ThemedButton.SetWidth(button, 200);
+            button.Visual.Height = 26;
+            button.Visual.HeightUnits = Gum.DataTypes.DimensionUnitType.Absolute;
+            AddChild(button);
+            ResponsiveHud.Position(button.Visual, 1040, designY, 200);
+        }
+
+        private void OnSaveLoadoutButton(object sender, EventArgs e)
+        {
+            controller.SaveLoadout();
+        }
+
+        private void OnApplyLoadoutButton(object sender, EventArgs e)
+        {
+            controller.ApplyLoadout();
+            ShowAmmoString();
+        }
 
         private void AddStaticText(string resourceName)
         {
