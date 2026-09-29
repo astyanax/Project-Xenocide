@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.UI.Screens;
@@ -6,33 +8,38 @@ using ProjectXenocide.UI.Screens;
 namespace ProjectXenocide.Model.Battlescape
 {
     /// <summary>
-    /// TEMPORARY headless battle resolver.
+    /// Glue between a geoscape ground mission and the Strategic Engagement
+    /// resolver: builds the forces, resolves the engagement, applies the
+    /// casualties, runs the existing mission result contract, and shows the
+    /// report screen.
     /// </summary>
     /// <remarks>
-    /// Phase 0 of the Strategic Engagement refactor: the 3D battlescape has been
-    /// removed, so ground missions are resolved headlessly.  This simply builds
-    /// the mission's forces, picks a winner by numbers, and hands the result to
-    /// the mission's existing <see cref="Mission.OnFinish"/> contract so the
-    /// report/geoscape side effects keep working.  It is replaced by the
-    /// Strategic Engagement resolver in the next phase.
+    /// The dedicated Engagement screen (shown before committing, with the odds
+    /// prediction and the log) will drive <see cref="EngagementResolver"/>
+    /// directly; this headless path remains for auto-resolution.
     /// </remarks>
     public static class AutoResolveMission
     {
-        public static void Resolve(Mission mission)
+        public static EngagementResult Resolve(Mission mission)
         {
             var battle = new Battle(mission);
 
-            int xcorpCount = battle.Teams[Team.XCorp].Combatants.Count;
-            int alienCount = battle.Teams[Team.Aliens].Combatants.Count;
-            BattleFinish finish = (xcorpCount >= alienCount)
-                ? BattleFinish.XCorpVictory
-                : BattleFinish.AlienVictory;
+            List<CombatantProfile> xcorp = battle.Teams[Team.XCorp].Combatants
+                .Select(c => CombatantProfile.Build(c, true, EngagementResolver.DefaultUnarmedDamage))
+                .ToList();
+            List<CombatantProfile> aliens = battle.Teams[Team.Aliens].Combatants
+                .Select(c => CombatantProfile.Build(c, false, EngagementResolver.DefaultUnarmedDamage))
+                .ToList();
 
-            mission.OnFinish(battle, finish);
+            EngagementResult result = EngagementResolver.Simulate(xcorp, aliens, new Random());
+            EngagementResolver.Apply(result);
+
+            mission.OnFinish(battle, result.Finish);
             battle.PostMissionCleanup();
             Xenocide.GameState.Battlescape = null;
 
             Xenocide.ScreenManager.ScheduleScreen(new BattlescapeReportScreen(mission));
+            return result;
         }
     }
 }

@@ -127,6 +127,14 @@ namespace ProjectXenocide.Model.StaticData.Battlescape
         /// <returns>Damage inflicted.  X = points of physical damage, Y = stun</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
            Justification = "will throw if damageInfo is null")]
+        /// <summary>Armor value protecting the given facing.</summary>
+        /// <param name="side">The facing being hit</param>
+        /// <returns>Armor points</returns>
+        public int Plate(Side side)
+        {
+            return plates[(int)side];
+        }
+
         public Vector2 DamageInflicted(DamageInfo damageInfo, Side side)
         {
             int points = GameBalanceClass.RandomWeaponDamage(damageInfo.Points);
