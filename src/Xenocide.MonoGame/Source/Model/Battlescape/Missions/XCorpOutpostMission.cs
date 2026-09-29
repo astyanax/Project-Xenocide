@@ -60,7 +60,7 @@ namespace ProjectXenocide.Model.Battlescape
         }
 
         /// <summary>
-        /// Text to show on the start mission dialog
+        /// Text to show on the engagement screen before the player commits
         /// </summary>
         /// <returns>message to show</returns>
         public override string MakeStartMissionText()
@@ -71,7 +71,7 @@ namespace ProjectXenocide.Model.Battlescape
         /// <summary>
         /// Any mission ending handling that's specific to this type of mission goes here
         /// </summary>
-        /// <param name="finishType">Who won the battle</param>
+        /// <param name="finishType">Who won the engagement</param>
         protected override void OnFinishCore(BattleFinish finishType)
         {
             // Note results of mission
@@ -94,14 +94,14 @@ namespace ProjectXenocide.Model.Battlescape
         }
 
         /// <summary>
-        /// Create the Alien force for the battlescape
+        /// Create the Alien force for the engagement
         /// </summary>
         public override Team CreateAlienTeam()
         {
             return ufo.CreateCrew(StartSettings.Difficulty);
         }
 
-        /// <summary>Create the XCorp side for the battlescape</summary>
+        /// <summary>Create the XCorp side for the engagement</summary>
         /// <returns>The XCorp force</returns>
         public override Team CreateXCorpTeam()
         {

@@ -56,7 +56,7 @@ namespace ProjectXenocide.Model.Battlescape
         }
 
         /// <summary>
-        /// Text to show on the start mission dialog
+        /// Text to show on the engagement screen before the player commits
         /// </summary>
         /// <returns>message to show</returns>
         public override string MakeStartMissionText()
@@ -65,7 +65,7 @@ namespace ProjectXenocide.Model.Battlescape
         }
 
         /// <summary>
-        /// Called if we're not going to start the battlescape at this point in time.
+        /// Called if we're not going to start the engagement at this point in time.
         /// </summary>
         public override void DontStart()
         {
@@ -76,7 +76,7 @@ namespace ProjectXenocide.Model.Battlescape
         /// <summary>
         /// Any mission ending handling that's specific to this type of mission goes here
         /// </summary>
-        /// <param name="finishType">Who won the battle</param>
+        /// <param name="finishType">Who won the engagement</param>
         protected override void OnFinishCore(BattleFinish finishType)
         {
             // Note results of mission
@@ -113,7 +113,7 @@ namespace ProjectXenocide.Model.Battlescape
         }
 
         /// <summary>
-        /// Create the Alien force for the battlescape
+        /// Create the Alien force for the engagement
         /// </summary>
         public override Team CreateAlienTeam()
         {

@@ -121,7 +121,7 @@ namespace ProjectXenocide.UI.Screens
             continueButton.Visual.Visible = true;
 
             content.Clear();
-            content.AddHeader("Engagement — " + FinishText(result.Finish));
+            content.AddHeader("Engagement — " + EngagementText.Finish(result.Finish));
             content.AddLabel(ThemedLabel.CreateBody(ResultText(result)));
 
             logList = new ListBox();
@@ -192,15 +192,5 @@ namespace ProjectXenocide.UI.Screens
                 result.Rounds, result.XCorpKia, result.XCorpWounded, result.AlienKills);
         }
 
-        private static string FinishText(BattleFinish finish)
-        {
-            switch (finish)
-            {
-                case BattleFinish.XCorpVictory: return "X-Corp Victory";
-                case BattleFinish.AlienVictory: return "Alien Victory";
-                case BattleFinish.Aborted: return "Disengaged";
-                default: return "Unknown";
-            }
-        }
     }
 }

@@ -29,6 +29,9 @@ namespace ProjectXenocide.Model.Battlescape
         public int CurrentHealth { get; init; }
 
         public int Reactions { get; init; }
+
+        /// <summary>Bravery rating, for the planned morale/panic rules.</summary>
+        // TODO: used once the resolver models morale (fleeing, surrender).
         public int Bravery { get; init; }
 
         /// <summary>Points of damage this unit's weapon does (0 if unarmed).</summary>

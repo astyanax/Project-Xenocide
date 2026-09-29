@@ -42,7 +42,8 @@ using ProjectXenocide.Model.StaticData.Items;
 namespace ProjectXenocide.Model.Battlescape.Combatants
 {
     /// <summary>
-    /// An entity that fights on a battlescape
+    /// A combat-capable entity (soldier, alien or civilian) that belongs to a team
+    /// and takes part in ground engagements.
     /// </summary>
     [Serializable]
     public partial class Combatant
@@ -78,7 +79,8 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             }
         }
 
-        /// <summary>Update Combatant in response to a turn on the battlescape starting</summary>
+        /// <summary>Update Combatant in response to a turn starting</summary>
+        // TODO: used once ground engagements gain a turn-based model (refresh Time Units and energy).
         public void OnStartTurn()
         {
             stats.OnStartTurn();
@@ -86,6 +88,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
 
         /// <summary>Record that combatant did something that counts as a "learning experience"</summary>
         /// <param name="act">what was done</param>
+        // TODO: wired into the planned engagement experience/stat-advancement model.
         public void RecordAchievement(Experience.Act act)
         {
             experience.RecordAchievement(act);
@@ -108,7 +111,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             }
         }
 
-        /// <summary>Called after battlescape if X-Corp soldier died</summary>
+        /// <summary>Called after a mission if an X-Corp soldier died</summary>
         /// <param name="bodyRecovered">true if body was recovered</param>
         /// <param name="outpostInventory">where to put items soldier was carrying</param>
         /// <remarks>basically, salvage soldiers equipement, if possible</remarks>
@@ -120,7 +123,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             }
         }
 
-        /// <summary>Null out battlescape references, so garbage collector gets battlescape</summary>
+        /// <summary>Clear per-mission state after an engagement (currently, heal fatal wounds)</summary>
         public void PostMissionCleanup()
         {
             // Fatal wounds are healed automatically after mission
@@ -183,6 +186,9 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             return stats.Accuracy(activeArm) * kneelingFactor * otherArmOccupiedFactor;
         }
 
+        /// <summary>Apply a field dressing to one body part</summary>
+        /// <param name="bodyPart">Body part being treated</param>
+        // TODO: used by the planned wound model (battlefield medkits and post-mission treatment).
         public void Heal(BodyParts bodyPart)
         {
             int healedWounds = GameBalanceClass.HealFatalWounds();
@@ -235,10 +241,12 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             }
         }
 
-        /// <summary>Location on battlescape (in cells)</summary>
+        /// <summary>Location in the engagement area (in cells)</summary>
+        // TODO: used by the planned positional model (flanking and side/rear armor).
         public Vector3 Position { get { return position; } set { position = value; } }
 
         /// <summary>Direction facing, in radians.  0 = along positive X axis, clockwise is positive</summary>
+        // TODO: used by the planned positional model (flanking and side/rear armor).
         public float Heading
         {
             get { return heading; }
@@ -254,6 +262,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         }
 
         /// <summary>Direction facing, as a vector</summary>
+        // TODO: used by the planned positional model (flanking and side/rear armor).
         public Vector3 HeadingVector
         {
             get { return new Vector3((float)Math.Cos(heading), 0, (float)-Math.Sin(heading)); }
@@ -262,7 +271,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// <summary>Assorted properties</summary>
         public CombatantInfo CombatantInfo { get { return combatantInfo; } }
 
-        /// <summary>3D model to draw on battlescpe</summary>
+        /// <summary>3D model used to represent this combatant (e.g. on the equip screen)</summary>
         public Graphic Graphic { get { return graphic; } set { graphic = value; } }
 
         /// <summary>The various numerical values describing a soldier's capabilities</summary>
@@ -275,10 +284,8 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         public int TeamId { get { return teamId; } }
 
         /// <summary>Combatant's position in team array</summary>
+        // TODO: set when a team is assembled, for stable ordering in the engagement UI/report.
         public int PlaceInTeam { get { return placeInTeam; } set { placeInTeam = value; } }
-
-        /// <summary>Unique code to ID this combatant on a battlescape</summary>
-        public byte CombatantId { get { return (byte)(((TeamId + 1) << 6) + PlaceInTeam); } }
 
         /// <summary>Does combatant have injuries</summary>
         public bool IsInjured { get { return 0 < stats[Statistic.InjuryDamage]; } }
@@ -293,6 +300,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         }
 
         /// <summary>The total number of fatal wounds.</summary>
+        // TODO: used by the planned wound model (bleeding and treatment).
         public int TotalFatalWounds
         {
             get
@@ -303,7 +311,8 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             }
         }
 
-        /// <summary>Kneeling status of the combatant.</summary>
+        /// <summary>Kneeling status of the combatant (feeds the accuracy bonus above)</summary>
+        // TODO: set by the planned stance/cover model.
         public bool Kneeling { get { return kneeling; } }
 
         /// <summary>
@@ -351,7 +360,7 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// <summary>
         /// Table that holds the Fatal Wounds stat for each body part
         /// </summary>
-        /// <param name="bodyPart"></param>
+        // TODO: used by the planned wound model (PostMissionCleanup still clears these).
         static Statistic[] fatalWoundsStat =
         {
             Statistic.FatalWoundsHead,

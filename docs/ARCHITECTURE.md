@@ -53,7 +53,7 @@ UfoMission (abstract)
   └─ State (abstract)
        └─ MoveToTarget    → UFO flies to destination
        └─ PatrolMission   → UFO patrols area
-       └─ LandMission     → UFO lands, creates battlescape
+       └─ LandMission     → UFO lands, starts a ground engagement
        └─ ReturnToBase    → UFO exits map
 ```
 

@@ -54,9 +54,9 @@ using ScoreEntry = ProjectXenocide.Utils.Pair<string, int>;
 namespace ProjectXenocide.UI.Screens
 {
     /// <summary>
-    /// This is the screen that shows the results of a Battlescape mission
-    /// At moment, as we don't have battlescape, use salvage from UFO
-    /// ToDo: results of real battlescape
+    /// Shows the results of a ground mission: the score breakdown, recovered
+    /// salvage, and (when the mission was resolved through it) the Strategic
+    /// Engagement summary and combat log.
     /// </summary>
     /// <remarks>
     /// ARCHITECTURE: Post-mission report screen. Performs game state mutations in event
@@ -124,7 +124,7 @@ namespace ProjectXenocide.UI.Screens
             content.AddHeader("Engagement");
             content.AddLabel(ThemedLabel.CreateBody(string.Format(CultureInfo.InvariantCulture,
                 "Result: {0}.  Rounds: {1}.  Losses: {2} KIA, {3} wounded.  Aliens killed: {4}.",
-                engagement.Finish, engagement.Rounds, engagement.XCorpKia,
+                EngagementText.Finish(engagement.Finish), engagement.Rounds, engagement.XCorpKia,
                 engagement.XCorpWounded, engagement.AlienKills)));
 
             content.AddHeader("Combat log");
@@ -240,7 +240,7 @@ namespace ProjectXenocide.UI.Screens
         #region Fields
 
         /// <summary>
-        /// Details of the battlescape mission
+        /// Details of the ground mission
         /// </summary>
         private Mission mission;
 

@@ -20,7 +20,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// </summary>
         /// <param name="actionElement">XML element holding data to construct ShootActionInfo</param>
         public ShootActionInfo(XPathNavigator actionElement)
-            : base(actionElement, true)
+            : base(actionElement)
         {
             this.name = Util.LoadString(Util.GetStringAttribute(actionElement, "name"));
             this.accuracy = Util.GetFloatAttribute(actionElement, "accuracy");

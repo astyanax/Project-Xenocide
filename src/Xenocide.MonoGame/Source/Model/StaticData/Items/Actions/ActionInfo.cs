@@ -22,12 +22,10 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// Construct ActionInfo from information in an XML element
         /// </summary>
         /// <param name="actionElement">XML element holding data to construct ActionInfo</param>
-        /// <param name="needsLocation">Is a location on the battlefield needed to perform the action?</param>
-        protected ActionInfo(XPathNavigator actionElement, bool needsLocation)
+        protected ActionInfo(XPathNavigator actionElement)
         {
             string timeName = Util.AttributePresent(actionElement, "percentage") ? "percentage" : "time";
             this.duration = Util.GetFloatAttribute(actionElement, timeName);
-            this.needsLocation = needsLocation;
         }
 
         /// <summary>Add stats specific to this item type to string collection for display on X-Net</summary>
@@ -58,11 +56,7 @@ namespace ProjectXenocide.Model.StaticData.Items
         /// <remarks>if less than 1.0, then is % of combatant's max TUs, if greater than 1.0, then is TUs</remarks>
         public float Duration { get { return duration; } }
 
-        /// <summary>Is a location on the battlefield needed to perform the action?</summary>
-        public bool NeedsLocation { get { return needsLocation; } }
-
         private float duration;
-        private bool needsLocation;
 
         #endregion Fields
     }

@@ -46,6 +46,7 @@ namespace ProjectXenocide.Model.Battlescape
     public class Team
     {
         /// <summary>Perform actions that are done at start of turn</summary>
+        // TODO: driven once ground engagements gain a turn-based model.
         public void OnStartTurn()
         {
             foreach (Combatant combatant in combatants)

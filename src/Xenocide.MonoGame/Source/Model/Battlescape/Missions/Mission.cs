@@ -60,7 +60,8 @@ namespace ProjectXenocide.Model.Battlescape
     }
 
     /// <summary>
-    /// Base class for type of Battlescape mission, e.g. Attacking landed UFO, Terror site, Alien Outpost, etc.
+    /// Base class for a ground mission (attacking a landed UFO, terror site, alien
+    /// outpost, defending a base, ...) resolved by the Strategic Engagement resolver.
     /// </summary>
     [Serializable]
     public abstract partial class Mission
@@ -84,7 +85,7 @@ namespace ProjectXenocide.Model.Battlescape
         }
 
         /// <summary>
-        /// Text to show on the start mission dialog
+        /// Text to show on the engagement screen before the player commits
         /// </summary>
         /// <returns>message to show</returns>
         public abstract string MakeStartMissionText();
@@ -111,13 +112,13 @@ namespace ProjectXenocide.Model.Battlescape
         /// <summary>
         /// Any mission ending handling that's specific to this type of mission goes here
         /// </summary>
-        /// <param name="finishType">Who won the battle</param>
+        /// <param name="finishType">Who won the engagement</param>
         protected virtual void OnFinishCore(BattleFinish finishType)
         {
         }
 
         /// <summary>
-        /// Create the Alien force for the battlescape
+        /// Create the Alien force for the engagement
         /// </summary>
         /// <returns>The alien force</returns>
         public virtual Team CreateAlienTeam()
@@ -128,7 +129,7 @@ namespace ProjectXenocide.Model.Battlescape
             return team;
         }
 
-        /// <summary>Create the XCorp side for the battlescape</summary>
+        /// <summary>Create the XCorp side for the engagement</summary>
         /// <returns>The XCorp force</returns>
         public virtual Team CreateXCorpTeam()
         {
@@ -142,9 +143,10 @@ namespace ProjectXenocide.Model.Battlescape
         }
 
         /// <summary>
-        /// Create the Civilian side for the battlescape
+        /// Create the Civilian side for the engagement
         /// </summary>
         /// <returns>The civilian targets</returns>
+        // TODO: return actual civilians for terror missions once that mission type is implemented.
         public virtual Team CreateCivilianTeam()
         {
             // only terror missions have civilians

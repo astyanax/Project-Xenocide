@@ -46,6 +46,7 @@ namespace ProjectXenocide.Model
         /// </summary>
         /// <param name="inflictedDamage">The damage inflicted to the target.</param>
         /// <returns>The number of fatal wounds.</returns>
+        // TODO: used by the planned wound model (when a hit rolls fatal wounds).
         public static int GenerateFatalWounds(int inflictedDamage)
         {
             if (inflictedDamage > 10)
@@ -69,6 +70,7 @@ namespace ProjectXenocide.Model
         /// Function that generates the number of fatal wounds healed at a time by a med kit.
         /// </summary>
         /// <returns>Number of fatal wounds healed.</returns>
+        // TODO: used by the planned wound model (Combatant.Heal / medkits).
         public static int HealFatalWounds()
         {
             // Heal one wound each time
@@ -80,6 +82,7 @@ namespace ProjectXenocide.Model
         /// med kit.
         /// </summary>
         /// <returns>The number of injury points healed.</returns>
+        // TODO: used by the planned wound model (Combatant.Heal / medkits).
         public static int HealInjuryDamage()
         {
             // Heal three injury damage each time
