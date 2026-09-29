@@ -74,7 +74,16 @@ namespace ProjectXenocide.Model.Geoscape
         public override void OnFinish()
         {
             Item.ReleaseBuildResources(outpost);
-            outpost.Inventory.Add(Item.Manufacture(), false);
+
+            if (AutoSell)
+            {
+                // sell the finished item immediately instead of storing it
+                bank.Credit(Item.SellPrice);
+            }
+            else
+            {
+                outpost.Inventory.Add(Item.Manufacture(), false);
+            }
 
             // auto-build keeps producing until the project is cancelled
             if (!Infinite)
@@ -169,6 +178,12 @@ namespace ProjectXenocide.Model.Geoscape
         /// ("auto-build").
         /// </summary>
         public bool Infinite { get; set; }
+
+        /// <summary>
+        /// When true each finished item is sold immediately instead of stored
+        /// ("auto-sell").
+        /// </summary>
+        public bool AutoSell { get; set; }
 
         /// <summary>
         /// Man hours required to build ALL items in project

@@ -259,6 +259,7 @@ namespace ProjectXenocide.UI.Screens
             public override string DisplayQuantity => project.Infinite ? "AUTO" : Util.ToString(project.BuildCount);
             public int BuildCount { get => project.BuildCount; set => project.BuildCount = value; }
             public bool Infinite { get => project.Infinite; set => project.Infinite = value; }
+            public bool AutoSell { get => project.AutoSell; set => project.AutoSell = value; }
             public override string Eta => project.Infinite ? "-" : project.CalcTotalItemsEtaToShow();
             public override BuildInfo BuildInfo => Item.BuildInfo;
             public ItemInfo Item => project.Item;

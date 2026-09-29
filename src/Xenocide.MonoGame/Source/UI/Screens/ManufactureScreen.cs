@@ -111,7 +111,8 @@ namespace ProjectXenocide.UI.Screens
 
             layout.AddButton(XenocideResourceManager.Get("BUTTON_BUILD_MORE"), OnBuildMoreButton);
             layout.AddButton(XenocideResourceManager.Get("BUTTON_BUILD_LESS"), OnBuildLessButton);
-            layout.AddButton("Auto Build", OnAutoBuildButton);
+            autoBuildButton = layout.AddButton("Auto Build: OFF", OnAutoBuildButton);
+            autoSellButton = layout.AddButton("Auto Sell: OFF", OnAutoSellButton);
             layout.AddButton(XenocideResourceManager.Get("BUTTON_CANCEL_BUILD"), OnCancelBuildButton);
             layout.AddButton(XenocideResourceManager.Get("BUTTON_ADD_IDLE_ENGINEERS"), OnAddIdleButton);
             layout.AddButton(XenocideResourceManager.Get("BUTTON_MORE_ENGINEERS"), OnMoreButton);
@@ -234,6 +235,33 @@ namespace ProjectXenocide.UI.Screens
                 Util.ShowMessageBox("Start the project before enabling auto-build.");
             }
         }
+
+        /// <summary>Toggle immediate sale of the selected project's output.</summary>
+        private void OnAutoSellButton(object sender, EventArgs e)
+        {
+            LineItem lineItem = GetSelectedItem();
+            if (lineItem is ProjectLineItem project)
+            {
+                project.AutoSell = !project.AutoSell;
+                UpdateDetails(project);
+            }
+            else
+            {
+                Util.ShowMessageBox("Start the project before enabling auto-sell.");
+            }
+        }
+
+        private void UpdateAutoButtons(ProjectLineItem project)
+        {
+            if (autoBuildButton != null)
+            {
+                autoBuildButton.Text = "Auto Build: " + ((project != null) && project.Infinite ? "ON" : "OFF");
+            }
+            if (autoSellButton != null)
+            {
+                autoSellButton.Text = "Auto Sell: " + ((project != null) && project.AutoSell ? "ON" : "OFF");
+            }
+        }
         private void OnCancelBuildButton(object sender, EventArgs e) => CancelProject();
         private void OnMoreButton(object sender, EventArgs e) => AddIdleEngineers(1);
         private void OnAddIdleButton(object sender, EventArgs e) => AddIdleEngineers(controller.IdleEngineerCount);
@@ -347,6 +375,8 @@ namespace ProjectXenocide.UI.Screens
             projectGrid.SetCell(row, 2, lineItem.DisplayQuantity);
             projectGrid.SetCell(row, 3, lineItem.Eta);
 
+            UpdateAutoButtons(lineItem as ProjectLineItem);
+
             ShowRequirements(lineItem.BuildInfo);
         }
 
@@ -371,6 +401,9 @@ namespace ProjectXenocide.UI.Screens
         /// Controller handling all manufacturing game logic (engineer assignment, project management).
         /// </summary>
         private Controller controller;
+
+        private Gum.Forms.Controls.Button autoBuildButton;
+        private Gum.Forms.Controls.Button autoSellButton;
 
         private BuildProjectManager ProjectMgr
             => SelectedOutpost.BuildProjectManager;
