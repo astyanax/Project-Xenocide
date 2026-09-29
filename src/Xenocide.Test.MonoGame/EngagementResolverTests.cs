@@ -125,5 +125,105 @@ namespace Xenocide.Test.MonoGame
             Assert.InRange(result.XCorpKia, 0, 3);
             Assert.InRange(result.AlienKills, 0, 3);
         }
+
+        [Fact]
+        public void SyntheticProfile_StartsAtFullHealth()
+        {
+            var profile = CombatantProfile.Synthetic("x", true, 50, 42, 30, 10, 5);
+
+            Assert.Equal(42, profile.Health);
+            Assert.Equal(42, profile.CurrentHealth);
+        }
+
+        [Fact]
+        public void EmptyEnemyForce_IsAnImmediateVictory()
+        {
+            var xcorp = Squad(true, 2, 60, 40, 30, 5);
+
+            var result = EngagementResolver.Simulate(xcorp, new List<CombatantProfile>(), new Random(1));
+
+            Assert.Equal(BattleFinish.XCorpVictory, result.Finish);
+            Assert.Equal(0, result.Rounds);
+            Assert.Equal(0, result.XCorpKia);
+        }
+
+        [Fact]
+        public void EmptySquad_IsDefeated()
+        {
+            var aliens = Squad(false, 2, 60, 40, 30, 5);
+
+            var result = EngagementResolver.Simulate(new List<CombatantProfile>(), aliens, new Random(1));
+
+            Assert.Equal(BattleFinish.AlienVictory, result.Finish);
+        }
+
+        [Fact]
+        public void BothSidesEmpty_IsAbortedWithoutThrowing()
+        {
+            var result = EngagementResolver.Simulate(
+                (IReadOnlyList<CombatantProfile>)null!, null!, new Random(1));
+
+            Assert.Equal(BattleFinish.Aborted, result.Finish);
+            Assert.Empty(result.Units);
+        }
+
+        [Fact]
+        public void ArmorThatAbsorbsEverything_NeverKills()
+        {
+            var xcorp = Squad(true, 1, 100, 100, 0, 100);
+            var aliens = Squad(false, 1, 100, 100, 0, 100);
+
+            var result = EngagementResolver.Simulate(xcorp, aliens, new Random(5));
+
+            Assert.Equal(EngagementResolver.MaxRounds, result.Rounds);
+            Assert.Equal(0, result.XCorpKia);
+            Assert.Equal(0, result.AlienKills);
+        }
+
+        [Fact]
+        public void OverwhelmingForce_PredictionReportsKillsAndNoLosses()
+        {
+            var xcorp = Squad(true, 6, 100, 100, 100, 20);
+            var aliens = Squad(false, 1, 10, 20, 5, 0);
+
+            var prediction = EngagementResolver.Predict(xcorp, aliens, samples: 50, seed: 7);
+
+            Assert.Equal(1.0, prediction.ExpectedAlienKills);
+            Assert.Equal(0.0, prediction.ExpectedXCorpWounded);
+        }
+
+        [Fact]
+        public void Prediction_ClampsNonPositiveSampleCountToOne()
+        {
+            var xcorp = Squad(true, 1, 80, 40, 30, 5);
+            var aliens = Squad(false, 1, 80, 40, 30, 5);
+
+            var prediction = EngagementResolver.Predict(xcorp, aliens, samples: 0, seed: 3);
+
+            Assert.Equal(1, prediction.Samples);
+        }
+
+        [Fact]
+        public void Apply_NullResult_DoesNotThrow()
+        {
+            EngagementResolver.Apply(null);
+        }
+
+        [Fact]
+        public void Log_IsOrderedByRoundAndRecordsTheOutcome()
+        {
+            var xcorp = Squad(true, 6, 100, 100, 100, 20);
+            var aliens = Squad(false, 1, 10, 20, 5, 0);
+
+            var result = EngagementResolver.Simulate(xcorp, aliens, new Random(11));
+
+            var lastRound = 0;
+            foreach (var entry in result.Log.Entries)
+            {
+                Assert.True(entry.Round >= lastRound, "log entries must be in round order");
+                lastRound = entry.Round;
+            }
+            Assert.Contains(result.Log.Entries, e => e.Text.Contains("All aliens neutralised"));
+        }
     }
 }
