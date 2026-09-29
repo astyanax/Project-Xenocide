@@ -44,8 +44,14 @@ namespace ProjectXenocide.Model.Battlescape
         }
 
         /// <summary>Resolve the engagement for real and apply the casualties.</summary>
+        /// <remarks>Idempotent: a second call returns the already-resolved result.</remarks>
         public EngagementResult Engage()
         {
+            if (Result != null)
+            {
+                return Result;
+            }
+
             Result = EngagementResolver.Simulate(XCorp, Aliens, rng);
             EngagementResolver.Apply(Result);
             Mission.OnFinish(Result.Finish, AlienTeam);
