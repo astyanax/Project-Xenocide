@@ -87,7 +87,39 @@ namespace ProjectXenocide.UI.Screens
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            EnsureTargetCamera();
             HandleMouseInput();
+            ApplyCameraSmoothing(gameTime);
+        }
+
+        /// <summary>
+        /// Rotate the camera (used by the on-screen camera arrow buttons).
+        /// </summary>
+        public void RotateBy(float longitude, float latitude)
+        {
+            EnsureTargetCamera();
+            targetCamera.X += longitude;
+            targetCamera.Y += latitude;
+            WrapAndClampTarget();
+        }
+
+        /// <summary>
+        /// Zoom the camera (used by the on-screen zoom buttons).
+        /// </summary>
+        public void ZoomBy(float notches)
+        {
+            EnsureTargetCamera();
+            targetCamera.Z = ClampZoom(targetCamera.Z + (notches * ZoomStep * CameraSettings.ZoomSensitivity));
+        }
+
+        /// <summary>
+        /// Snap the smoothing target to the scene's current camera.  Call after
+        /// setting <see cref="PolarScene.CameraPosition"/> directly.
+        /// </summary>
+        public void SnapCameraTarget()
+        {
+            targetCamera = scene.CameraPosition;
+            _cameraTargetInitialized = true;
         }
 
         private void HandleMouseInput()
@@ -103,18 +135,19 @@ namespace ProjectXenocide.UI.Screens
             bool inViewport = mouse.X >= vpX && mouse.X <= vpX + vpW
                            && mouse.Y >= vpY && mouse.Y <= vpY + vpH;
 
-            if (inViewport)
+            // Right-drag rotates the globe. Always track the previous position so
+            // dragging out of (and back into) the viewport doesn't jump.
+            if (_prevRightDown && mouse.RightButton == ButtonState.Pressed)
             {
-                if (_prevRightDown && mouse.RightButton == ButtonState.Pressed)
-                {
-                    float deltaX = mouse.X - _prevMouseX;
-                    float deltaY = mouse.Y - _prevMouseY;
-                    float rotateSpeed = 0.005f + 0.004f * scene.CameraHeight;
-                    scene.RotateCamera(deltaX * rotateSpeed, deltaY * -rotateSpeed);
-                }
-                _prevMouseX = mouse.X;
-                _prevMouseY = mouse.Y;
+                float deltaX = mouse.X - _prevMouseX;
+                float deltaY = mouse.Y - _prevMouseY;
+                float rotateSpeed = (0.005f + 0.004f * scene.CameraHeight) * CameraSettings.RotateSensitivity;
+                targetCamera.X += deltaX * rotateSpeed;
+                targetCamera.Y += (CameraSettings.InvertY ? -deltaY : deltaY) * rotateSpeed;
+                WrapAndClampTarget();
             }
+            _prevMouseX = mouse.X;
+            _prevMouseY = mouse.Y;
 
             if (mouse.LeftButton == ButtonState.Pressed && !_prevLeftDown)
             {
@@ -132,14 +165,75 @@ namespace ProjectXenocide.UI.Screens
             int wheelDelta = mouse.ScrollWheelValue - _prevScrollValue;
             if (inViewport && wheelDelta != 0)
             {
-                float zoomSpeed = 0.005f;
-                scene.ZoomCamera(zoomSpeed * wheelDelta);
+                ZoomAtCursor(wheelDelta / 120f, mouse, vpX, vpY, vpW, vpH);
             }
             _prevScrollValue = mouse.ScrollWheelValue;
 
             _prevLeftDown = mouse.LeftButton == ButtonState.Pressed;
             _prevRightDown = mouse.RightButton == ButtonState.Pressed;
         }
+
+        /// <summary>
+        /// Zoom by a number of notches, pulling the point under the cursor toward
+        /// the centre (configurable) so zooming keeps the area of interest in view.
+        /// </summary>
+        private void ZoomAtCursor(float notches, MouseState mouse, int vpX, int vpY, int vpW, int vpH)
+        {
+            float oldZ = targetCamera.Z;
+            float newZ = ClampZoom(oldZ + (notches * ZoomStep * CameraSettings.ZoomSensitivity));
+            float zoomDelta = newZ - oldZ;
+
+            if (CameraSettings.ZoomToCursor && (zoomDelta != 0f))
+            {
+                float offX = Math.Clamp((mouse.X - (vpX + (vpW * 0.5f))) / (vpW * 0.5f), -1f, 1f);
+                float offY = Math.Clamp((mouse.Y - (vpY + (vpH * 0.5f))) / (vpH * 0.5f), -1f, 1f);
+                targetCamera.X -= offX * zoomDelta * 0.35f;
+                targetCamera.Y += (CameraSettings.InvertY ? -offY : offY) * zoomDelta * 0.35f;
+                WrapAndClampTarget();
+            }
+
+            targetCamera.Z = newZ;
+        }
+
+        private void ApplyCameraSmoothing(GameTime gameTime)
+        {
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (dt <= 0f)
+            {
+                return;
+            }
+
+            float factor = 1f - (float)Math.Exp(-12f * dt);
+            Vector3 current = scene.CameraPosition;
+            Vector3 next = Vector3.Lerp(current, targetCamera, factor);
+            next.Z = ClampZoom(next.Z);
+            scene.CameraPosition = next;
+        }
+
+        private void EnsureTargetCamera()
+        {
+            if (!_cameraTargetInitialized)
+            {
+                targetCamera = scene.CameraPosition;
+                _cameraTargetInitialized = true;
+            }
+        }
+
+        private void WrapAndClampTarget()
+        {
+            const float latLimit = MathHelper.Pi * 0.5f * 85f / 90f;
+            while (targetCamera.X > MathHelper.Pi)
+            {
+                targetCamera.X -= MathHelper.TwoPi;
+            }
+            while (targetCamera.X < -MathHelper.Pi)
+            {
+                targetCamera.X += MathHelper.TwoPi;
+            }
+            targetCamera.Y = MathHelper.Clamp(targetCamera.Y, -latLimit, latLimit);
+        }
+
+        private float ClampZoom(float z) => Math.Clamp(z, scene.MinZoom, scene.MaxZoom);
 
         protected virtual void OnLeftMouseDownInScene(float relX, float relY)
         {
@@ -161,8 +255,13 @@ namespace ProjectXenocide.UI.Screens
             set => _viewportRect = value;
         }
 
+        /// <summary>Zoom amount per wheel notch / button press, in world units.</summary>
+        private const float ZoomStep = 0.15f;
+
         private PolarScene scene;
         private UiRect _viewportRect;
+        private Vector3 targetCamera;
+        private bool _cameraTargetInitialized;
         private bool _prevLeftDown;
         private bool _prevRightDown;
         private int _prevMouseX;

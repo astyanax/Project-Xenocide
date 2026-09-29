@@ -55,6 +55,10 @@ namespace ProjectXenocide.UI.Screens
         private readonly string[] _resolutions = { "1280x1024", "1280x720", "1920x1080", "3840x2160" };
         private readonly string[] _cursorModes = { "Software", "Hardware" };
         private readonly Difficulty[] _difficultyValues = { Difficulty.Easy, Difficulty.Hard, Difficulty.Sadistic };
+        private readonly float[] _cameraSensitivities = { 0.3f, 0.6f, 1.0f, 1.5f };
+        private int _cameraSensitivityIdx;
+        private bool _invertY;
+        private bool _zoomToCursor;
 
         private StackPanel _contentPanel;
         private StackPanel _rootPanel;
@@ -70,6 +74,9 @@ namespace ProjectXenocide.UI.Screens
             foreach (var id in NotificationSettings.DisabledEvents)
                 _disabledEvents.Add(id);
             _autosave = AutosaveService.Enabled;
+            _cameraSensitivityIdx = IndexOfSensitivity(CameraSettings.RotateSensitivity);
+            _invertY = CameraSettings.InvertY;
+            _zoomToCursor = CameraSettings.ZoomToCursor;
             _cursorMode = Xenocide.Instance.IsMouseVisible ? 1 : 0;
             _resolutionIdx = 0;
             _difficultyIdx = (int)StartSettings.Difficulty;
@@ -225,6 +232,29 @@ namespace ProjectXenocide.UI.Screens
                 () => { _difficultyIdx = (_difficultyIdx + 1) % _difficultyValues.Length; return _difficultyValues[_difficultyIdx].ToString(); });
             AddSettingRow("Autosave:", _autosave ? "ON" : "OFF",
                 () => { _autosave = !_autosave; return _autosave ? "ON" : "OFF"; });
+
+            AddSettingRow("Globe Rotation:", _cameraSensitivities[_cameraSensitivityIdx].ToString("0.0#", CultureInfo.InvariantCulture),
+                () => { _cameraSensitivityIdx = (_cameraSensitivityIdx + 1) % _cameraSensitivities.Length; return _cameraSensitivities[_cameraSensitivityIdx].ToString("0.0#", CultureInfo.InvariantCulture); });
+            AddSettingRow("Invert Y Axis:", _invertY ? "ON" : "OFF",
+                () => { _invertY = !_invertY; return _invertY ? "ON" : "OFF"; });
+            AddSettingRow("Zoom To Cursor:", _zoomToCursor ? "ON" : "OFF",
+                () => { _zoomToCursor = !_zoomToCursor; return _zoomToCursor ? "ON" : "OFF"; });
+        }
+
+        private int IndexOfSensitivity(float value)
+        {
+            int best = 0;
+            float bestDelta = float.MaxValue;
+            for (int i = 0; i < _cameraSensitivities.Length; ++i)
+            {
+                float delta = Math.Abs(_cameraSensitivities[i] - value);
+                if (delta < bestDelta)
+                {
+                    bestDelta = delta;
+                    best = i;
+                }
+            }
+            return best;
         }
 
         private void OnSaveClicked(object sender, EventArgs e)
@@ -234,6 +264,9 @@ namespace ProjectXenocide.UI.Screens
 
             NotificationSettings.Apply(_notifications, _pauseOnAlerts, _disabledEvents);
             AutosaveService.Enabled = _autosave;
+            CameraSettings.RotateSensitivity = _cameraSensitivities[_cameraSensitivityIdx];
+            CameraSettings.InvertY = _invertY;
+            CameraSettings.ZoomToCursor = _zoomToCursor;
 
             var options = GameOptions.LoadFromFile();
             options.MusicVolume = Xenocide.AudioSystem.MusicVolume;
@@ -241,6 +274,7 @@ namespace ProjectXenocide.UI.Screens
             options.WindowMode = _displayMode;
             NotificationSettings.Save(options);
             AutosaveService.Save(options);
+            CameraSettings.Save(options);
             options.SaveToFile();
 
             Xenocide.SetDisplayMode(_displayMode);

@@ -88,6 +88,10 @@ namespace ProjectXenocide.Model
                 gameOptions.autosaveEnabled = (bool?)root.Element("AutosaveEnabled") ?? gameOptions.autosaveEnabled;
                 gameOptions.autosaveIntervalDays = (int?)root.Element("AutosaveIntervalDays") ?? gameOptions.autosaveIntervalDays;
                 gameOptions.autosaveSlots = (int?)root.Element("AutosaveSlots") ?? gameOptions.autosaveSlots;
+                gameOptions.cameraRotateSensitivity = (float?)root.Element("CameraRotateSensitivity") ?? gameOptions.cameraRotateSensitivity;
+                gameOptions.cameraZoomSensitivity = (float?)root.Element("CameraZoomSensitivity") ?? gameOptions.cameraZoomSensitivity;
+                gameOptions.cameraInvertY = (bool?)root.Element("CameraInvertY") ?? gameOptions.cameraInvertY;
+                gameOptions.cameraZoomToCursor = (bool?)root.Element("CameraZoomToCursor") ?? gameOptions.cameraZoomToCursor;
             }
             catch (Exception ex)
             {
@@ -119,6 +123,10 @@ namespace ProjectXenocide.Model
                     new XElement("AutosaveEnabled", autosaveEnabled),
                     new XElement("AutosaveIntervalDays", autosaveIntervalDays),
                     new XElement("AutosaveSlots", autosaveSlots),
+                    new XElement("CameraRotateSensitivity", cameraRotateSensitivity),
+                    new XElement("CameraZoomSensitivity", cameraZoomSensitivity),
+                    new XElement("CameraInvertY", cameraInvertY),
+                    new XElement("CameraZoomToCursor", cameraZoomToCursor),
                     disabledNotifications.Select(id => new XElement("DisabledNotification", id)));
 
                 root.Save(gameOptionsPathName);
@@ -219,6 +227,38 @@ namespace ProjectXenocide.Model
         {
             get { return autosaveSlots; }
             set { autosaveSlots = value; }
+        }
+
+        /// <summary>Globe camera rotation sensitivity (multiplier).</summary>
+        private float cameraRotateSensitivity = 0.6f;
+        public float CameraRotateSensitivity
+        {
+            get { return cameraRotateSensitivity; }
+            set { cameraRotateSensitivity = value; }
+        }
+
+        /// <summary>Globe camera zoom sensitivity (multiplier).</summary>
+        private float cameraZoomSensitivity = 1.0f;
+        public float CameraZoomSensitivity
+        {
+            get { return cameraZoomSensitivity; }
+            set { cameraZoomSensitivity = value; }
+        }
+
+        /// <summary>Invert vertical globe rotation.</summary>
+        private bool cameraInvertY = true;
+        public bool CameraInvertY
+        {
+            get { return cameraInvertY; }
+            set { cameraInvertY = value; }
+        }
+
+        /// <summary>Zoom toward the mouse cursor rather than the globe centre.</summary>
+        private bool cameraZoomToCursor = true;
+        public bool CameraZoomToCursor
+        {
+            get { return cameraZoomToCursor; }
+            set { cameraZoomToCursor = value; }
         }
 
         /// <summary>

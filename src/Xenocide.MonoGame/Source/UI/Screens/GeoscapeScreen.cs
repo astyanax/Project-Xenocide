@@ -514,23 +514,23 @@ namespace ProjectXenocide.UI.Screens
         private void OnMoveCameraButtonClicked(object sender, EventArgs e)
         {
             const float rotation = (float)(Math.PI / 4);
-            const float zoomStep = 0.5f;
+            const float zoomNotches = 2.0f;
 
             if (sender is Button btn)
             {
                 string name = btn.Name ?? string.Empty;
                 if (name.Contains("Left", StringComparison.OrdinalIgnoreCase))
-                    Scene.RotateCamera(-rotation, 0.0f);
+                    RotateBy(-rotation, 0.0f);
                 else if (name.Contains("Right", StringComparison.OrdinalIgnoreCase))
-                    Scene.RotateCamera(rotation, 0.0f);
+                    RotateBy(rotation, 0.0f);
                 else if (name.Contains("Up", StringComparison.OrdinalIgnoreCase))
-                    Scene.RotateCamera(0.0f, rotation);
+                    RotateBy(0.0f, rotation);
                 else if (name.Contains("Down", StringComparison.OrdinalIgnoreCase))
-                    Scene.RotateCamera(0.0f, -rotation);
+                    RotateBy(0.0f, -rotation);
                 else if (name.Contains("In", StringComparison.OrdinalIgnoreCase))
-                    Scene.ZoomCamera(-zoomStep);
+                    ZoomBy(-zoomNotches);
                 else if (name.Contains("Out", StringComparison.OrdinalIgnoreCase))
-                    Scene.ZoomCamera(zoomStep);
+                    ZoomBy(zoomNotches);
             }
         }
 
@@ -676,7 +676,7 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// Remember where camera has been, to prevent Geoscape jumping around
         /// </summary>
-        private static Vector3 oldCameraPosition = new Vector3(0.0f, 0.0f, 3.5f);
+        private static Vector3 oldCameraPosition = new Vector3(0.0f, 0.0f, 2.4f);
 
 
         #endregion fields

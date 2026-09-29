@@ -37,6 +37,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.UI;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -117,24 +118,16 @@ namespace ProjectXenocide.UI.Scenes.Common
         }
 
         /// <summary>
-        /// Move the camera towards (or away) from the model
+        /// Move the camera towards (or away from) the model by a number of zoom
+        /// "notches".  A fixed step is used (rather than one proportional to the
+        /// current distance) so zooming feels the same at every level.
         /// </summary>
-        /// <param name="distance">Distance to move the camera</param>
-        public void ZoomCamera(float distance)
+        /// <param name="notches">Positive zooms out, negative zooms in.</param>
+        public void ZoomCamera(float notches)
         {
-            cameraPosition.Z += distance * (CameraHeight + 0.01f);
-
-            // don't let the camera go inside the earth (earth's radius is 1)
-            if (cameraPosition.Z < MinZoom)
-            {
-                cameraPosition.Z = MinZoom;
-            }
-
-            // don't want camera to go too far away either
-            if (MaxZoom < cameraPosition.Z)
-            {
-                cameraPosition.Z = MaxZoom;
-            }
+            const float zoomStep = 0.15f;
+            float target = cameraPosition.Z + (notches * zoomStep * CameraSettings.ZoomSensitivity);
+            cameraPosition.Z = Math.Clamp(target, MinZoom, MaxZoom);
         }
 
         /// <summary>
@@ -208,14 +201,14 @@ namespace ProjectXenocide.UI.Scenes.Common
         private float aspectRatio;
 
         /// <summary>
-        /// Maximum distance camera can be from the origin
+        /// Maximum distance camera can be from the origin (how far out you can zoom).
         /// </summary>
-        protected virtual float MaxZoom { get { return 5.0f; } }
+        public virtual float MaxZoom { get { return 3.0f; } }
 
         /// <summary>
-        /// Minimum distance camera can be from the origin
+        /// Minimum distance camera can be from the origin (how far in you can zoom).
         /// </summary>
-        protected virtual float MinZoom { get { return 1.0f + nearClipPlane + 0.05f; } }
+        public virtual float MinZoom { get { return 1.25f; } }
 
         #endregion
 
