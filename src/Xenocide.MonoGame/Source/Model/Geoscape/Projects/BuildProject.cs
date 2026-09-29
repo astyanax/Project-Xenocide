@@ -75,10 +75,15 @@ namespace ProjectXenocide.Model.Geoscape
         {
             Item.ReleaseBuildResources(outpost);
             outpost.Inventory.Add(Item.Manufacture(), false);
-            --buildCount;
+
+            // auto-build keeps producing until the project is cancelled
+            if (!Infinite)
+            {
+                --buildCount;
+            }
 
             // now we're either done, or we have another item to build
-            if (0 == buildCount)
+            if (!Infinite && (0 == buildCount))
             {
                 // we're done
                 Cleanup();
@@ -158,6 +163,12 @@ namespace ProjectXenocide.Model.Geoscape
                 }
             }
         }
+
+        /// <summary>
+        /// When true the project keeps producing the item until it is cancelled
+        /// ("auto-build").
+        /// </summary>
+        public bool Infinite { get; set; }
 
         /// <summary>
         /// Man hours required to build ALL items in project

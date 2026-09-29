@@ -256,9 +256,10 @@ namespace ProjectXenocide.UI.Screens
             public override string Name => project.Name;
             public override string DisplayNumWorkers => Util.ToString(NumWorkers);
             public override int NumWorkers => project.NumWorkers;
-            public override string DisplayQuantity => Util.ToString(project.BuildCount);
+            public override string DisplayQuantity => project.Infinite ? "AUTO" : Util.ToString(project.BuildCount);
             public int BuildCount { get => project.BuildCount; set => project.BuildCount = value; }
-            public override string Eta => project.CalcTotalItemsEtaToShow();
+            public bool Infinite { get => project.Infinite; set => project.Infinite = value; }
+            public override string Eta => project.Infinite ? "-" : project.CalcTotalItemsEtaToShow();
             public override BuildInfo BuildInfo => Item.BuildInfo;
             public ItemInfo Item => project.Item;
 

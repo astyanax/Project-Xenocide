@@ -111,6 +111,7 @@ namespace ProjectXenocide.UI.Screens
 
             layout.AddButton(XenocideResourceManager.Get("BUTTON_BUILD_MORE"), OnBuildMoreButton);
             layout.AddButton(XenocideResourceManager.Get("BUTTON_BUILD_LESS"), OnBuildLessButton);
+            layout.AddButton("Auto Build", OnAutoBuildButton);
             layout.AddButton(XenocideResourceManager.Get("BUTTON_CANCEL_BUILD"), OnCancelBuildButton);
             layout.AddButton(XenocideResourceManager.Get("BUTTON_ADD_IDLE_ENGINEERS"), OnAddIdleButton);
             layout.AddButton(XenocideResourceManager.Get("BUTTON_MORE_ENGINEERS"), OnMoreButton);
@@ -213,6 +214,26 @@ namespace ProjectXenocide.UI.Screens
 
         private void OnBuildMoreButton(object sender, EventArgs e) => ChangeBuildNumber(1);
         private void OnBuildLessButton(object sender, EventArgs e) => ChangeBuildNumber(-1);
+
+        /// <summary>Toggle continuous (auto) production for the selected project.</summary>
+        private void OnAutoBuildButton(object sender, EventArgs e)
+        {
+            LineItem lineItem = GetSelectedItem();
+            if (lineItem == null)
+            {
+                return;
+            }
+
+            if (lineItem is ProjectLineItem project)
+            {
+                project.Infinite = !project.Infinite;
+                UpdateDetails(project);
+            }
+            else
+            {
+                Util.ShowMessageBox("Start the project before enabling auto-build.");
+            }
+        }
         private void OnCancelBuildButton(object sender, EventArgs e) => CancelProject();
         private void OnMoreButton(object sender, EventArgs e) => AddIdleEngineers(1);
         private void OnAddIdleButton(object sender, EventArgs e) => AddIdleEngineers(controller.IdleEngineerCount);
