@@ -319,6 +319,20 @@ namespace ProjectXenocide.Model.Geoscape.AI
         }
 
         /// <summary>
+        /// Construct a TerrorTask targeting a specific city (used by debug mission creation).
+        /// </summary>
+        /// <param name="overmind">Overmind that owns the task</param>
+        /// <param name="city">City to terrorise</param>
+        /// <returns>the task</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Performance", "CA1822:MarkMembersAsStatic",
+            Justification = "Instance method to match existing public API; data is XML-driven.")]
+        public TerrorTask CreateTerrorTask(Overmind overmind, City city)
+        {
+            return new TerrorTask(overmind, GetPlan(AlienMission.Terror), city);
+        }
+
+        /// <summary>
         /// Construct a SupplyOutpostTask
         /// </summary>
         /// <param name="overmind">Overmind that owns the task</param>

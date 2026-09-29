@@ -29,7 +29,10 @@ San Francisco, California, 94105, USA.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
+
+using NLog;
 
 using ProjectXenocide.Model.Geoscape.Geography;
 using ProjectXenocide.Model.Geoscape.Vehicles;
@@ -47,6 +50,11 @@ namespace ProjectXenocide.Model.Geoscape.AI
     [Serializable]
     public class Overmind
     {
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
+        /// <summary>How close (km) a clicked position must be to a site/city to target it directly.</summary>
+        private const double DebugTargetNearKm = 500.0;
+
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -179,35 +187,134 @@ namespace ProjectXenocide.Model.Geoscape.AI
         }
 
         /// <summary>
-        /// For debugging usage, create a mission at or near the specified position.
+        /// For debugging usage, create a mission of the requested type targeting
+        /// (or near) the specified position.  If the clicked position is not a
+        /// valid target, a random valid target is chosen; if none exists the
+        /// mission is refused.
         /// </summary>
-        /// <param name="missionType"></param>
-        /// <param name="position"></param>
-        public void DebugCreateMission(AlienMission missionType, GeoPosition position)
+        /// <param name="missionType">Type of mission to create</param>
+        /// <param name="position">Position clicked on the geoscape</param>
+        /// <returns>true if a task was created</returns>
+        public bool DebugCreateMission(AlienMission missionType, GeoPosition position)
         {
-            // TODO: Implement all mission types. Will probably have to find the
-            //       nearest outpost or city for some.
+            Planet planet = Xenocide.GameState.GeoData.Planet;
+            InvasionTask task = null;
+            string refusal = null;
+
             switch (missionType)
             {
-                case AlienMission.Abduction:
-                case AlienMission.Harvest:
                 case AlienMission.Research:
-                    AddTask(taskFactory.CreateResearchTask(missionType, this, position));
+                case AlienMission.Harvest:
+                case AlienMission.Abduction:
+                    // These all behave like a research mission over land.
+                    task = taskFactory.CreateResearchTask(missionType, this, planet.GetClosestLand(position));
                     break;
+
                 case AlienMission.Infiltration:
-                    AddTask(TaskFactory.CreateInfiltrationTask(this, position));
-                    break;
+                    {
+                        Country country = planet.GetCountryAtLocation(position);
+                        if (country != null)
+                        {
+                            // clicked inside a country: infiltrate that one
+                            task = taskFactory.CreateInfiltrationTask(this, position);
+                        }
+                        else
+                        {
+                            // fall back to a random country
+                            country = planet.SelectCountryToInfiltrate();
+                            if (country == null)
+                            {
+                                refusal = "no countries to infiltrate";
+                                break;
+                            }
+                            task = taskFactory.CreateInfiltrationTask(this, planet.GetRandomPositionInCountry(country));
+                        }
+                        break;
+                    }
+
                 case AlienMission.Outpost:
-                    AddTask(taskFactory.CreateBuildOutpostTask(this, position));
+                    task = taskFactory.CreateBuildOutpostTask(this, planet.GetClosestLand(position));
                     break;
+
                 case AlienMission.Retaliation:
-                    AddTask(taskFactory.CreateRetaliationTask(this, position));
+                    if ((Xenocide.GameState.GeoData.Outposts == null) || (Xenocide.GameState.GeoData.Outposts.Count == 0))
+                    {
+                        refusal = "X-Corp has no outposts to retaliate against";
+                        break;
+                    }
+                    task = taskFactory.CreateRetaliationTask(this, position);
                     break;
+
                 case AlienMission.Supply:
-                    break;
+                    {
+                        OutpostAlienSite outpost = PickTarget(
+                            Sites.OfType<OutpostAlienSite>(), position, site => site.Position);
+                        if (outpost == null)
+                        {
+                            refusal = "no alien outposts to resupply";
+                            break;
+                        }
+                        task = taskFactory.CreateSupplyTask(this, outpost);
+                        break;
+                    }
+
                 case AlienMission.Terror:
+                    {
+                        City city = PickTarget(planet.AllCities, position, c => c.Position);
+                        if (city == null)
+                        {
+                            refusal = "no cities to terrorise";
+                            break;
+                        }
+                        task = taskFactory.CreateTerrorTask(this, city);
+                        break;
+                    }
+
+                default:
+                    refusal = "unsupported mission type";
                     break;
             }
+
+            if (task == null)
+            {
+                Log.Info("DebugCreateMission({0}) refused: {1}", missionType, refusal ?? "no valid target");
+                return false;
+            }
+
+            AddTask(task);
+            Log.Info("DebugCreateMission({0}) -> {1}", missionType, task.GetType().Name);
+            return true;
+        }
+
+        /// <summary>
+        /// Pick the valid target nearest the clicked position, or a random one if
+        /// none is within range (so a stray click still produces a mission).
+        /// </summary>
+        private static T PickTarget<T>(IEnumerable<T> candidates, GeoPosition position, Func<T, GeoPosition> location)
+        {
+            List<T> list = candidates.ToList();
+            if (list.Count == 0)
+            {
+                return default;
+            }
+
+            T nearest = list[0];
+            double nearestDistance = double.MaxValue;
+            foreach (T candidate in list)
+            {
+                double distance = position.Distance(location(candidate));
+                if (distance < nearestDistance)
+                {
+                    nearestDistance = distance;
+                    nearest = candidate;
+                }
+            }
+
+            if (nearestDistance <= GeoPosition.KilometersToRadians(DebugTargetNearKm))
+            {
+                return nearest;
+            }
+            return list[Xenocide.Rng.Next(list.Count)];
         }
 
         /// <summary>

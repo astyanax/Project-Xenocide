@@ -619,8 +619,15 @@ namespace ProjectXenocide.UI.Screens
                 Justification = "FxCop false positive")]
             public override void OnLeftMouseDownInScene(GeoPosition pos)
             {
-                // Generate mission at selected point
-                Xenocide.GameState.GeoData.Overmind.DebugCreateMission(missionType, pos);
+                // Generate mission at the selected point (random valid target if
+                // the click isn't near one; refused if none exists at all).
+                bool created = Xenocide.GameState.GeoData.Overmind.DebugCreateMission(missionType, pos);
+                if (!created)
+                {
+                    MessageLog.Post(
+                        $"Could not create a {missionType} mission: no valid target.",
+                        MessageType.Warning);
+                }
                 GeoscapeScreen.ScreenManager.ScheduleScreen(new GeoscapeScreen());
             }
 

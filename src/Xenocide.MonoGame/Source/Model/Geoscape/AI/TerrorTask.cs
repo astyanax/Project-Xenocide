@@ -51,8 +51,22 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// <param name="taskPlan">The Missions this task requires</param>
         public TerrorTask(Overmind overmind, TaskPlan taskPlan)
             :
+            this(overmind, taskPlan, null)
+        {
+        }
+
+        /// <summary>
+        /// Constructor targeting a specific city (used by debug mission creation).
+        /// When null, a random city is chosen at launch time.
+        /// </summary>
+        /// <param name="overmind">Overmind that owns this task</param>
+        /// <param name="taskPlan">The Missions this task requires</param>
+        /// <param name="targetCity">City to terrorise, or null for a random city</param>
+        public TerrorTask(Overmind overmind, TaskPlan taskPlan, City targetCity)
+            :
             base(overmind, new GeoPosition(), taskPlan)
         {
+            this.city = targetCity;
         }
 
         /// <summary>
@@ -75,7 +89,7 @@ namespace ProjectXenocide.Model.Geoscape.AI
         /// <returns>landing site's GeoPosition</returns>
         protected override GeoPosition SelectFirstLandingSite()
         {
-            city = Xenocide.GameState.GeoData.Planet.SelectRandomCity();
+            city ??= Xenocide.GameState.GeoData.Planet.SelectRandomCity();
             Centroid = city.Position;
             return Centroid;
         }
