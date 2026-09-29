@@ -81,10 +81,12 @@ namespace ProjectXenocide.UI.Screens
         /// Constructor (obviously)
         /// </summary>
         /// <param name="mission">Details of the battlescape mission</param>
-        public BattlescapeReportScreen(Mission mission)
+        /// <param name="engagement">Strategic Engagement result (optional log/summary)</param>
+        public BattlescapeReportScreen(Mission mission, EngagementResult engagement = null)
             : base("BattlescapeReportScreen")
         {
             this.mission = mission;
+            this.engagement = engagement;
         }
 
         protected override bool HasGumxLayout => false;
@@ -109,6 +111,32 @@ namespace ProjectXenocide.UI.Screens
             content.AddGrid(recoveredGrid);
             PopulateScoreGrid();
             PopulateRecoveredGrid();
+
+            if (engagement != null)
+            {
+                AddEngagementSummary();
+            }
+        }
+
+        /// <summary>Adds the Strategic Engagement summary and combat log.</summary>
+        private void AddEngagementSummary()
+        {
+            content.AddHeader("Engagement");
+            content.AddLabel(ThemedLabel.CreateBody(string.Format(CultureInfo.InvariantCulture,
+                "Result: {0}.  Rounds: {1}.  Losses: {2} KIA, {3} wounded.  Aliens killed: {4}.",
+                engagement.Finish, engagement.Rounds, engagement.XCorpKia,
+                engagement.XCorpWounded, engagement.AlienKills)));
+
+            content.AddHeader("Combat log");
+            var logGrid = new StyledGrid();
+            logGrid.AddColumn("Round", 60);
+            logGrid.AddColumn("Event", 520);
+            int row = 0;
+            foreach (EngagementLogEntry entry in engagement.Log.Entries)
+            {
+                logGrid.AddRow(row++, entry.Round.ToString(CultureInfo.InvariantCulture), entry.Text);
+            }
+            content.AddGrid(logGrid);
         }
 
         private StyledGrid scoreGrid;
@@ -215,6 +243,9 @@ namespace ProjectXenocide.UI.Screens
         /// Details of the battlescape mission
         /// </summary>
         private Mission mission;
+
+        /// <summary>Strategic Engagement result, if the mission was resolved via it.</summary>
+        private EngagementResult engagement;
 
         /// <summary>
         /// Points this mission is worth

@@ -32,6 +32,7 @@ using System.Text;
 
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.UI.Screens;
 
 #endregion
 
@@ -59,8 +60,8 @@ namespace ProjectXenocide.Model.Geoscape.GeoEvents
         {
             Xenocide.GameState.GeoData.GeoTime.StopTime();
 
-            // The tactical battlescape has been removed; resolve headlessly for now.
-            AutoResolveMission.Resolve(mission);
+            // The tactical battlescape is replaced by the Strategic Engagement screen.
+            Xenocide.ScreenManager.ScheduleScreen(new EngagementScreen(mission));
         }
 
         #region Fields

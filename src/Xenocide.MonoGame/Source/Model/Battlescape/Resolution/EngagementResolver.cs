@@ -51,7 +51,7 @@ namespace ProjectXenocide.Model.Battlescape
 
         /// <summary>Run the simulation once.</summary>
         public static EngagementResult Simulate(
-            IList<CombatantProfile> xcorp, IList<CombatantProfile> aliens, Random rng)
+            IReadOnlyList<CombatantProfile> xcorp, IReadOnlyList<CombatantProfile> aliens, Random rng)
         {
             var xcorpUnits = MakeUnits(xcorp);
             var alienUnits = MakeUnits(aliens);
@@ -123,7 +123,7 @@ namespace ProjectXenocide.Model.Battlescape
         /// Uses its own RNG so it never disturbs the game's random stream.
         /// </summary>
         public static EngagementPrediction Predict(
-            IList<CombatantProfile> xcorp, IList<CombatantProfile> aliens,
+            IReadOnlyList<CombatantProfile> xcorp, IReadOnlyList<CombatantProfile> aliens,
             int samples = DefaultSamples, int seed = 0)
         {
             if (samples <= 0)
@@ -245,7 +245,7 @@ namespace ProjectXenocide.Model.Battlescape
             return (xFraction > aFraction) ? BattleFinish.XCorpVictory : BattleFinish.AlienVictory;
         }
 
-        private static List<Unit> MakeUnits(IList<CombatantProfile> profiles)
+        private static List<Unit> MakeUnits(IReadOnlyList<CombatantProfile> profiles)
         {
             var units = new List<Unit>();
             if (profiles == null)

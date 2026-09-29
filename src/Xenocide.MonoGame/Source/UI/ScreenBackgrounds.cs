@@ -39,6 +39,7 @@ namespace ProjectXenocide.UI
             ["BaseInfoScreen"] = BaseView,
             ["SoldiersListScreen"] = BaseView,
             ["AssignToCraftScreen"] = BaseView,
+            ["EngagementScreen"] = BaseView,
         };
 
         /// <summary>Background path for the given screen id (falls back to <see cref="Default"/>).</summary>
