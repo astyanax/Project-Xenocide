@@ -35,6 +35,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using MonoGameGum;
+
 using ProjectXenocide.UI.Scenes.Common;
 using ProjectXenocide.Utils;
 
@@ -116,7 +118,10 @@ namespace ProjectXenocide.UI.Screens
 
             if (mouse.LeftButton == ButtonState.Pressed && !_prevLeftDown)
             {
-                if (inViewport)
+                // Don't turn a click on a Gum HUD control (button, list, ...) into a
+                // scene action such as a move order or a waypoint.
+                bool overGumControl = GumService.Default.Cursor?.FrameworkElementOver != null;
+                if (inViewport && !overGumControl)
                 {
                     float relX = (mouse.X - vpX) / (float)vpW;
                     float relY = (mouse.Y - vpY) / (float)vpH;

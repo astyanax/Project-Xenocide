@@ -27,6 +27,7 @@ San Francisco, California, 94105, USA.
 #region Using Statements
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
@@ -624,6 +625,15 @@ namespace ProjectXenocide.UI.Screens
         /// Return the scene field as it's real type (a GeoscapeScene)
         /// </summary>
         private GeoscapeScene geoscapeScene { get { return (GeoscapeScene)Scene; } }
+
+        /// <summary>
+        /// Waypoint route currently being plotted, or null. Rendered by the scene.
+        /// </summary>
+        public IList<GeoPosition> PlottedRoute
+        {
+            get { return (Scene as GeoscapeScene)?.PlottedRoute; }
+            set { if (Scene is GeoscapeScene scene) scene.PlottedRoute = value; }
+        }
 
         /// <summary>
         /// What mode are we in?

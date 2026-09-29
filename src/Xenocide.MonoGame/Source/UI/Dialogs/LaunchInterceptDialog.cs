@@ -83,6 +83,10 @@ namespace ProjectXenocide.UI.Dialogs
                             (s, e) => BringUpGeoscapeInTargetingMode(aircraft), playSound: false);
                         ContentArea.AddChild(selectBtn);
 
+                        var routeBtn = ThemedButton.Create("Set Patrol Route",
+                            (s, e) => BringUpGeoscapeInWaypointsMode(aircraft), playSound: false);
+                        ContentArea.AddChild(routeBtn);
+
                         rowToCraft[rowNum] = aircraft;
                         ++rowNum;
                         continue;
@@ -158,6 +162,15 @@ namespace ProjectXenocide.UI.Dialogs
             Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick2);
             GeoscapeScreen geoscapeScreen = new GeoscapeScreen();
             geoscapeScreen.State = new GeoscapeScreen.TargetingScreenState(geoscapeScreen, aircraft);
+            ScreenManager.ScheduleScreen(geoscapeScreen);
+            Close();
+        }
+
+        private void BringUpGeoscapeInWaypointsMode(Aircraft aircraft)
+        {
+            Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick2);
+            GeoscapeScreen geoscapeScreen = new GeoscapeScreen();
+            geoscapeScreen.State = new GeoscapeScreen.WaypointsScreenState(geoscapeScreen, aircraft);
             ScreenManager.ScheduleScreen(geoscapeScreen);
             Close();
         }

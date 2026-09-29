@@ -56,6 +56,18 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         }
 
         /// <summary>
+        /// Constructor for a route of waypoints
+        /// </summary>
+        /// <param name="craft">The craft this mission is for</param>
+        /// <param name="waypoints">ordered route the craft is to patrol</param>
+        public PatrolMission(Craft craft, IList<GeoPosition> waypoints)
+            :
+            base(craft)
+        {
+            SetState(new PatrolState(this, waypoints));
+        }
+
+        /// <summary>
         /// We've returned to our home base
         /// </summary>
         public override void OnDestinationReached()
@@ -63,6 +75,14 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             // we're back at home base
             SetState(new InBaseState(this));
         }
+
+        /// <summary>The route this mission is patrolling, or null if not a route.</summary>
+        public IReadOnlyList<GeoPosition> Waypoints =>
+            (State as PatrolState)?.Waypoints;
+
+        /// <summary>Waypoint the craft is currently heading for.</summary>
+        public int CurrentWaypointIndex =>
+            (State as PatrolState)?.CurrentWaypointIndex ?? 0;
 
         #region Fields
 

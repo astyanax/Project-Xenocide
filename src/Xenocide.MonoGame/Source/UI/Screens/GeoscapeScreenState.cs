@@ -586,6 +586,134 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>
+        /// Screen behaviour while the player plots a patrol route: each click on
+        /// the globe appends a waypoint (up to the maximum); Confirm assigns the
+        /// route, Clear empties it and Cancel abandons it.
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
+        public class WaypointsScreenState : ScreenState
+        {
+            /// <summary>Maximum number of waypoints on a single route.</summary>
+            public const int MaxWaypoints = 8;
+
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            /// <param name="geoscapeScreen">The parent geoscape</param>
+            /// <param name="craft">The craft the route is for</param>
+            public WaypointsScreenState(GeoscapeScreen geoscapeScreen, Craft craft)
+                :
+                base(geoscapeScreen)
+            {
+                this.craft = craft;
+                GeoscapeScreen.PlottedRoute = waypoints;
+            }
+
+            /// <summary>
+            /// Create the widgets shown when in this state
+            /// </summary>
+            public override void CreateGumControls()
+            {
+                GeoscapeScreen.EnableButtonSounds = false;
+
+                statusLabel = ThemedLabel.CreateBody(Prompt());
+                Place(statusLabel.Visual, 20, 130);
+                GeoscapeScreen.AddControl(statusLabel);
+
+                confirmButton = ThemedButton.Create("Confirm Route", OnConfirm);
+                ThemedButton.SetWidth(confirmButton, 170);
+                Place(confirmButton.Visual, 20, 160);
+                GeoscapeScreen.AddControl(confirmButton);
+
+                clearButton = ThemedButton.Create("Clear", OnClear);
+                ThemedButton.SetWidth(clearButton, 100);
+                Place(clearButton.Visual, 200, 160);
+                GeoscapeScreen.AddControl(clearButton);
+
+                cancelButton = ThemedButton.Create(XenocideResourceManager.Get("BUTTON_CANCEL_TARGETING"), OnCancel);
+                ThemedButton.SetWidth(cancelButton, 100);
+                Place(cancelButton.Visual, 310, 160);
+                GeoscapeScreen.AddControl(cancelButton);
+            }
+
+            /// <summary>React to the player clicking the globe: append a waypoint.</summary>
+            /// <param name="pos">Position on earth where mouse was clicked</param>
+            public override void OnLeftMouseDownInScene(GeoPosition pos)
+            {
+                if (waypoints.Count >= MaxWaypoints)
+                {
+                    return;
+                }
+
+                waypoints.Add(new GeoPosition(pos));
+                UpdateStatus();
+            }
+
+            /// <summary>A waypoint cursor while plotting.</summary>
+            public override SoftwareCursor.CursorType? RequestedCursor => SoftwareCursor.CursorType.Select;
+
+            private string Prompt()
+            {
+                return Util.StringFormat(
+                    "Plot a patrol route for {0} ({1}/{2}). Click the globe; Confirm when done.",
+                    craft.Name, waypoints.Count, MaxWaypoints);
+            }
+
+            private void UpdateStatus()
+            {
+                if (statusLabel != null)
+                {
+                    statusLabel.Text = Prompt();
+                }
+            }
+
+            private void OnConfirm(object sender, EventArgs e)
+            {
+                if (0 == waypoints.Count)
+                {
+                    EndState();
+                    return;
+                }
+
+                craft.Mission?.Abort();
+                craft.Mission = new PatrolMission(craft, new List<GeoPosition>(waypoints));
+                EndState();
+            }
+
+            private void OnClear(object sender, EventArgs e)
+            {
+                waypoints.Clear();
+                UpdateStatus();
+            }
+
+            private void OnCancel(object sender, EventArgs e)
+            {
+                EndState();
+            }
+
+            private void EndState()
+            {
+                GeoscapeScreen.PlottedRoute = null;
+                GeoscapeScreen.ScreenManager.ScheduleScreen(new GeoscapeScreen());
+            }
+
+            private static void Place(Gum.Wireframe.GraphicalUiElement visual, int x, int y)
+            {
+                visual.X = x;
+                visual.Y = y;
+                visual.XUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+                visual.YUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            }
+
+            private readonly Craft craft;
+            private readonly List<GeoPosition> waypoints = new List<GeoPosition>();
+            private Label statusLabel;
+            private Button confirmButton;
+            private Button clearButton;
+            private Button cancelButton;
+        }
+
+        /// <summary>
         /// Screen behaviour, when selecting an alien mission site
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]

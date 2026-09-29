@@ -174,7 +174,12 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             {
                 if (isOnRadar)
                 {
-                    MessageBoxGeoEvent.Queue(Strings.MSGBOX_UFO_DETECTED, Name);
+                    // Non-blocking notification (may pause time / be de-duplicated
+                    // according to the player's notification settings).
+                    MessageLog.PostNotification(
+                        "UfoDetectedGeoEvent",
+                        Util.StringFormat(Strings.MSGBOX_UFO_DETECTED, Name),
+                        targetId: Name);
                 }
                 else
                 {

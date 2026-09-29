@@ -46,18 +46,43 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
     public class PatrolState : MissionState
     {
         /// <summary>
-        /// Constructor
+        /// Constructor for a single patrol point
         /// </summary>
         /// <param name="mission">mission that owns this state</param>
         /// <param name="destination">position the craft is to patrol</param>
+        public PatrolState(Mission mission, GeoPosition destination)
+            :
+            this(mission, new List<GeoPosition> { destination })
+        {
+        }
+
+        /// <summary>
+        /// Constructor for a patrol route (craft visits each waypoint in turn, then
+        /// loiters at the last one).
+        /// </summary>
+        /// <param name="mission">mission that owns this state</param>
+        /// <param name="waypoints">ordered route the craft is to patrol</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
             Justification = "Is validated in base class")]
-        public PatrolState(Mission mission, GeoPosition destination)
+        public PatrolState(Mission mission, IList<GeoPosition> waypoints)
             :
             base(mission, mission.Craft.MaxSpeed)
         {
-            this.destination = new GeoPosition(destination);
+            Debug.Assert((waypoints != null) && (0 < waypoints.Count));
+
+            this.waypoints = new List<GeoPosition>();
+            foreach (GeoPosition waypoint in waypoints)
+            {
+                this.waypoints.Add(new GeoPosition(waypoint));
+            }
+            currentIndex = 0;
         }
+
+        /// <summary>The ordered route the craft patrols.</summary>
+        public IReadOnlyList<GeoPosition> Waypoints { get { return waypoints; } }
+
+        /// <summary>Index of the waypoint the craft is currently heading for.</summary>
+        public int CurrentWaypointIndex { get { return currentIndex; } }
 
         /// <summary>
         /// Respond to craft running low on fuel
@@ -76,6 +101,7 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         protected override void UpdateState(double milliseconds)
         {
             Craft craft = Mission.Craft;
+            GeoPosition destination = waypoints[currentIndex];
 
             // get azimuth and distance to destination.
             float targetDistance = craft.Position.Distance(destination);
@@ -85,10 +111,16 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
             double range = craft.MaxSpeed * milliseconds / 1000.0;
 
             // now move craft towards target, or put it AT target
-            // note that reaching traget doesn't complete mision. Runing low in fuel does
+            // note that reaching target doesn't complete mission. Running low in fuel does
             if (targetDistance <= range)
             {
                 craft.Position = destination;
+
+                // advance to the next waypoint (loiter at the last one)
+                if (currentIndex < (waypoints.Count - 1))
+                {
+                    ++currentIndex;
+                }
             }
             else
             {
@@ -103,8 +135,13 @@ namespace ProjectXenocide.Model.Geoscape.Vehicles
         }
 
         /// <summary>
-        /// position the craft is to patrol
+        /// Ordered route the craft patrols
         /// </summary>
-        private GeoPosition destination;
+        private List<GeoPosition> waypoints;
+
+        /// <summary>
+        /// Waypoint the craft is currently heading for
+        /// </summary>
+        private int currentIndex;
     }
 }

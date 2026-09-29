@@ -60,6 +60,17 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         Effect effect;
         String geoTechnique = String.Empty;
 
+        private readonly LineMesh navPathMesh = new LineMesh();
+        private readonly WaypointRouteMeshBuilder navPathBuilder = new WaypointRouteMeshBuilder();
+        private readonly List<IReadOnlyList<GeoPosition>> navRoutes = new List<IReadOnlyList<GeoPosition>>();
+        private int navPathSignature = -1;
+
+        /// <summary>
+        /// Route currently being plotted by the player (null when not plotting).
+        /// The route mesh is rebuilt when this list changes.
+        /// </summary>
+        public IList<GeoPosition> PlottedRoute { get; set; }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -97,6 +108,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
                     skybox.Dispose();
                     skybox = null;
                 }
+                navPathMesh?.Dispose();
             }
         }
 
@@ -250,11 +262,71 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             geoHud.End();
 
             // Draw Nav Paths
+            DrawNavPaths(device, cartesianCamera);
 
             // Draw Radar
 
             // restore viewport
             device.Viewport = oldview;
+        }
+
+        /// <summary>
+        /// Draws the plot currently being edited plus every active craft patrol
+        /// route as a great-circle polyline with a marker at each waypoint.
+        /// </summary>
+        private void DrawNavPaths(GraphicsDevice device, Vector3 cartesianCamera)
+        {
+            navRoutes.Clear();
+            if ((PlottedRoute != null) && (0 < PlottedRoute.Count))
+            {
+                navRoutes.Add(new List<GeoPosition>(PlottedRoute));
+            }
+
+            foreach (Outpost outpost in Xenocide.GameState.GeoData.Outposts)
+            {
+                foreach (Craft craft in outpost.Fleet)
+                {
+                    if (!craft.InBase
+                        && (craft.Mission is PatrolMission patrol)
+                        && (patrol.Waypoints != null)
+                        && (0 < patrol.Waypoints.Count))
+                    {
+                        navRoutes.Add(patrol.Waypoints);
+                    }
+                }
+            }
+
+            if (0 == navRoutes.Count)
+            {
+                navPathSignature = -1;
+                return;
+            }
+
+            // Rebuild the mesh only when the route geometry actually changes
+            // (not every frame).
+            int signature = 17;
+            unchecked
+            {
+                foreach (IReadOnlyList<GeoPosition> route in navRoutes)
+                {
+                    foreach (GeoPosition point in route)
+                    {
+                        signature = (signature * 31) + point.Latitude.GetHashCode() + point.Longitude.GetHashCode();
+                    }
+                }
+            }
+
+            if (signature != navPathSignature)
+            {
+                navPathBuilder.Routes = navRoutes;
+                navPathMesh.BuildMesh(device, navPathBuilder);
+                navPathSignature = signature;
+            }
+
+            navPathMesh.ConfigureEffect(basicEffect);
+            basicEffect.View = Matrix.CreateLookAt(cartesianCamera, Vector3.Zero, Vector3.Up);
+            basicEffect.Projection = GetProjectionMatrix(AspectRatio);
+            navPathMesh.Draw(device, basicEffect);
         }
 
         /// <summary>
