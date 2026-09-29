@@ -32,7 +32,6 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 
-using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Utils;
 
@@ -61,7 +60,6 @@ namespace ProjectXenocide.Model
         public void SetToStartGameCondition()
         {
             GeoData.SetToStartGameCondition();
-            battlescape = null;
             AutosaveService.Reset();
         }
 
@@ -71,11 +69,6 @@ namespace ProjectXenocide.Model
         /// Data specific to the geoscape
         /// </summary>
         public GeoData GeoData { get { return geodata; } }
-
-        /// <summary>
-        /// The current battlescape (if there is one)
-        /// </summary>
-        public Battle Battlescape { get { return battlescape; } set { battlescape = value; } }
 
         public List<Utils.MessageEntry> MessageLogEntries
         {
@@ -87,11 +80,6 @@ namespace ProjectXenocide.Model
         /// Data specific to the geoscape
         /// </summary>
         private GeoData geodata;
-
-        /// <summary>
-        /// The current battlescape (if there is one)
-        /// </summary>
-        private Battle battlescape;
 
         private List<Utils.MessageEntry> messageLogEntries = new();
 

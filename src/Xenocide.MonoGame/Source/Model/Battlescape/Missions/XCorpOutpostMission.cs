@@ -114,33 +114,30 @@ namespace ProjectXenocide.Model.Battlescape
             return team;
         }
 
-        /// <summary>Figure out number of X-Corp soliders and civilians killed if mission aborted</summary>
-        /// <param name="battlescape">Details of battle</param>
-        protected override void CalcXCorpLossesOnAbort(Battle battlescape)
+        /// <summary>Figure out number of X-Corp soldiers killed if mission aborted</summary>
+        protected override void CalcXCorpLossesOnAbort()
         {
-            // same results as XCorp loosing
-            CalcXCorpLossesOnAlienVictory(battlescape);
+            // same results as XCorp losing
+            CalcXCorpLossesOnAlienVictory();
         }
 
         /// <summary>Figure out number of Aliens killed if mission aborted</summary>
-        /// <param name="battlescape">Details of battle</param>
-        protected override void CalcAlienLossesOnAbort(Battle battlescape)
+        /// <param name="alienTeam">The alien force that was engaged</param>
+        protected override void CalcAlienLossesOnAbort(Team alienTeam)
         {
-            // same results as XCorp loosing
-            CalcAlienLossesOnAlienVictory(battlescape);
+            // same results as XCorp losing
+            CalcAlienLossesOnAlienVictory();
         }
 
-        /// <summary>Figure out number of X-Corp soliders and civilians killed if aliens win</summary>
-        /// <param name="battlescape">Details of battle</param>
-        protected override void CalcXCorpLossesOnAlienVictory(Battle battlescape)
+        /// <summary>Figure out number of X-Corp soldiers killed if aliens win</summary>
+        protected override void CalcXCorpLossesOnAlienVictory()
         {
             // all X-Corp soldiers in base are dead
             CalcXCorpLosses(true);
         }
 
-        /// <summary>Figure out number of X-Corp soliders and civilians killed if X-Corp win</summary>
-        /// <param name="battlescape">Details of battle</param>
-        protected override void CalcXCorpLossesOnXCorpVictory(Battle battlescape)
+        /// <summary>Figure out number of X-Corp soldiers killed if X-Corp win</summary>
+        protected override void CalcXCorpLossesOnXCorpVictory()
         {
             // only casualties are dead soldiers
             CalcXCorpLosses(false);

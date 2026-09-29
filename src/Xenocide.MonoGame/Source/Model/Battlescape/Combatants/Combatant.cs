@@ -84,30 +84,6 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             stats.OnStartTurn();
         }
 
-        /// <summary>Update combatant's state, based on passage of time</summary>
-        /// <param name="seconds">length of time that has passed</param>
-        /// <returns>true if order is finished</returns>
-        public bool BattlescapeUpdate(double seconds)
-        {
-            // If combatant has no order, then obviously it's done
-            if (null == order)
-            {
-                return true;
-            }
-
-            // update order, and check if still running.
-            order.Update(seconds);
-            if (FinishCode.Executing != order.Finished)
-            {
-                // order is finished, so dispose of it
-                order = null;
-                return true;
-            }
-
-            // if get here, order still running
-            return false;
-        }
-
         /// <summary>Record that combatant did something that counts as a "learning experience"</summary>
         /// <param name="act">what was done</param>
         public void RecordAchievement(Experience.Act act)
@@ -121,110 +97,6 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
                     ++stats[Statistic.Kills];
                     break;
             }
-        }
-
-        /// <summary>Update state to reflect being attacked</summary>
-        /// <param name="damageInfo">attack damage information</param>
-        /// <param name="direction">the attack came from</param>
-        public void Hit(DamageInfo damageInfo, Vector3 direction)
-        {
-            // ToDo: need to treat explosive (grenade) differently, as it attacks underside
-
-            // normalize attack direction
-            direction.Y = 0;
-            direction.Normalize();
-
-            // angle between attack direction and combatant's facing
-            Armor.Side side = Armor.Side.Side;
-            float dot = Vector3.Dot(HeadingVector, direction);
-            float limit = (float)Math.Sqrt(0.5);
-            if (limit < dot)
-            {
-                side = Armor.Side.Rear;
-            }
-            else if (dot <= -limit)
-            {
-                side = Armor.Side.Front;
-            }
-
-            Vector2 damage = Armor.DamageInflicted(damageInfo, side);
-            int penetratingDamage = (int)damage.X;
-            int incomingStunDamage = (int)damage.Y;
-            TakeDamage(penetratingDamage, incomingStunDamage);
-
-            // Canon UFO Defense: conventional weapons (all damage types except
-            // Incendiary, Smoke, and dedicated Stun weapons) inflict 0 to pen/4
-            // stun damage on top of the weapon's base stun output.
-            if (damageInfo.DamageType != DamageType.Fire
-                && damageInfo.DamageType != DamageType.Smoke
-                && damageInfo.DamageType != DamageType.Stun
-                && penetratingDamage > 0)
-            {
-                int bonusStun = Xenocide.Rng.Next(penetratingDamage / 4 + 1);
-                if (bonusStun > 0)
-                {
-                    stats[Statistic.StunDamage] += bonusStun;
-                    if (stats[Statistic.StunDamage] > MaxStunLevel)
-                        stats[Statistic.StunDamage] = MaxStunLevel;
-                }
-            }
-
-            // Damage may result in fatal wounds
-            // Randomize body part that gets the fatal wounds
-            int bodyPart = Xenocide.Rng.Next(6);
-            stats[fatalWoundsStat[bodyPart]] +=
-                GameBalanceClass.GenerateFatalWounds((int)damage.X);
-        }
-
-        /// <summary>Update state to reflect injury</summary>
-        /// <param name="injuryDamage">points of physical damage</param>
-        /// <param name="stunDamage">points of stun damage</param>
-        public void TakeDamage(int injuryDamage, int stunDamage)
-        {
-            stats[Statistic.InjuryDamage] += injuryDamage;
-            stats[Statistic.StunDamage] += stunDamage;
-
-            // Canon UFO Defense: stun damage caps at 255 before overflow
-            if (stats[Statistic.StunDamage] > MaxStunLevel)
-                stats[Statistic.StunDamage] = MaxStunLevel;
-
-            // additional processing of injury
-            // dead & unconscious combatants don't see anything.
-            if (!CanTakeOrders)
-            {
-                ClearOpponentsInView();
-            }
-            // dead combatants don't block travel or line of sight
-            if (IsDead)
-            {
-                battlescape.Terrain.RemoveCombatant(this);
-                //ToDo: Play(ActionSound.Death);
-            }
-        }
-
-        /// <summary>Find path from combatant's current location to other place on battlescape</summary>
-        /// <param name="destination">combatant's destination</param>
-        /// <param name="path">found path to destination</param>
-        /// <returns>true if a path was found</returns>
-        public bool FindPath(Vector3 destination, IList<MoveData> path)
-        {
-            return battlescape.Terrain.Pathfinder.FindPath(
-                (int)position.X, (int)position.Y, (int)position.Z,
-                Flyer,
-                (int)destination.X, (int)destination.Y, (int)destination.Z,
-                path);
-        }
-
-        /// <summary>
-        /// Calculate shortest angle combatant needs to turn through to face a specifed position on the terrain
-        /// </summary>
-        /// <param name="pos">target cell combatant is to face</param>
-        /// <returns>shortest angle, in radians</returns>
-        public double CalcTurnAngle(Vector3 pos)
-        {
-            MoveData origin = new MoveData(Position);
-            MoveData dest = new MoveData(pos);
-            return Terrain.CalcTurnAngle(Heading, dest.X - origin.X, dest.Z - origin.Z);
         }
 
         /// <summary>Apply one day of healing to combatant</summary>
@@ -251,21 +123,11 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// <summary>Null out battlescape references, so garbage collector gets battlescape</summary>
         public void PostMissionCleanup()
         {
-            ai = null;
-            battlescape = null;
-
             // Fatal wounds are healed automatically after mission
             foreach (Statistic s in fatalWoundsStat)
             {
                 stats[s] = 0;
             }
-        }
-
-        /// <summary>Is combatant standing on an X-Corp exit tile?</summary>
-        /// <returns>true if combatant is on an exit tile</returns>
-        public bool IsOnExitTile()
-        {
-            return battlescape.Terrain.GetGroundFace((int)position.X, (int)position.Y, (int)position.Z).IsExitTile;
         }
 
         /// <summary>Update combatant's members, to reflect the armor being worn</summary>
@@ -299,33 +161,6 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         private void UseUnarmoredXCorpSolider()
         {
             this.graphic = new Graphic(@"Characters/XCorp/FemaleShirt", 0, MathHelper.PiOver2, 0);
-        }
-
-        /// <summary>Tag combatant as seeing nothing</summary>
-        /// <remarks>Used when unit is unconscious/dead</remarks>
-        private void ClearOpponentsInView()
-        {
-            int opposingTeam = (Team.Aliens == teamId) ? Team.XCorp : Team.Aliens;
-            int combatantFlag = ~(1 << PlaceInTeam);
-            foreach (Combatant combatant in battlescape.Teams[opposingTeam].Combatants)
-            {
-                combatant.OponentsViewing &= combatantFlag;
-            }
-            OpponentsInView = 0;
-        }
-
-        /// <summary>
-        /// Increases the injury damage of the combatant due to fatal wounds.
-        /// </summary>
-        /// <remarks>The injury damage is increased by the number of fatal wounds. This function should 
-        /// be called when the turn of the team ends.</remarks>
-        public void Bleed()
-        {
-            // Don't process combatants that are dead
-            if (!IsDead)
-            {
-                TakeDamage(TotalFatalWounds, 0);
-            }
         }
 
         /// <summary>
@@ -433,13 +268,6 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// <summary>The various numerical values describing a soldier's capabilities</summary>
         public Stats Stats { get { return stats; } }
 
-        /// <summary>Order combatant is currently performing</summary>
-        public Order Order
-        {
-            get { return order; }
-            set { Debug.Assert((null == order) || (null == value)); order = value; }
-        }
-
         /// <summary>Can this combatant fly?</summary>
         public bool Flyer { get { return flyer; } }
 
@@ -463,18 +291,6 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         {
             get { return (stats[Statistic.InjuryDamage] + stats[Statistic.StunDamage]) <= stats[Statistic.Health]; }
         }
-
-        /// <summary>Set of bits indicating the enemy forces that this combatant can see</summary>
-        public int OpponentsInView { get { return opponentsInView; } set { opponentsInView = value; } }
-
-        /// <summary>Set of bits indicating the enemy forces that can see this combatant</summary>
-        public int OponentsViewing { get { return oponentsViewing; } set { oponentsViewing = value; } }
-
-        /// <summary>The AI directly responsible for this combatant</summary>
-        public CombatantAI AI { get { return ai; } set { ai = value; } }
-
-        /// <summary>Battlescape combatant is currently on</summary>
-        public Battle Battlescape { get { return battlescape; } set { battlescape = value; } }
 
         /// <summary>The total number of fatal wounds.</summary>
         public int TotalFatalWounds
@@ -515,10 +331,6 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         /// <summary>The various numerical values describing a soldier's capabilities</summary>
         private Stats stats = new Stats();
 
-        /// <summary>Order combatant is currently performing</summary>
-        [JsonIgnore]
-        private Order order;
-
         /// <summary>Can this combatant fly?</summary>
         private bool flyer;
 
@@ -530,18 +342,6 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
 
         /// <summary>Acts done this battlescape mission that qualify as learning experience</summary>
         private Experience experience = new Experience();
-
-        /// <summary>Set of bits indicating the enemy forces that this combatant can see</summary>
-        private int opponentsInView;
-
-        /// <summary>Set of bits indicating the enemy forces that can see this combatant</summary>
-        private int oponentsViewing;
-
-        /// <summary>The AI directly responsible for this combatant</summary>
-        private CombatantAI ai;
-
-        /// <summary>Battlescape combatant is currently on</summary>
-        private Battle battlescape;
 
         /// <summary>Indicates if the combatant is kneeling or not.</summary>
 #pragma warning disable CS0649 // Intended future feature - kneeling functionality planned

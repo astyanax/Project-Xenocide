@@ -34,7 +34,6 @@ public class InGameUnitTests : IDisposable
     }
 
     [Fact] public void Planet_RunTests() => RunInGameTest(() => ProjectXenocide.Model.Geoscape.Geography.Planet.RunTests());
-    [Fact] public void Mission_RunTests() => RunInGameTest(() => ProjectXenocide.Model.Battlescape.Mission.RunTests());
     [Fact] public void Combatant_RunTests() => RunInGameTest(() => ProjectXenocide.Model.Battlescape.Combatants.Combatant.RunTests());
     [Fact] public void CrewBuilder_RunTests() => RunInGameTest(() => ProjectXenocide.Model.Battlescape.CrewBuilder.RunTests());
     [Fact] public void CombatantFactory_RunTests() => RunInGameTest(() => ProjectXenocide.Model.StaticData.Battlescape.CombatantFactory.RunTests());

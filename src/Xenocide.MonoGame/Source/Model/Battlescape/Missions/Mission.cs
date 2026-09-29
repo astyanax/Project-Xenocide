@@ -90,44 +90,19 @@ namespace ProjectXenocide.Model.Battlescape
         public abstract string MakeStartMissionText();
 
         /// <summary>
-        /// Create the Battlescape's terrain
-        /// </summary>
-        /// <returns>the created terrain</returns>
-        public Terrain CreateTerrain()
-        {
-            // ToDo: put any steps specific to all missions here
-            Terrain terrain = new Terrain(this);
-            CreateTerrainCore(terrain);
-            return terrain;
-        }
-
-        /// <summary>
-        /// Called if we're not going to start the battlescape at this point in time.
+        /// Called if we're not going to start the engagement at this point in time.
         /// </summary>
         public virtual void DontStart()
         {
         }
 
-        /// <summary>
-        /// Battlescape terrain creation steps that are specific to this mission type
-        /// </summary>
-        /// <param name="terrain">The terrain we're creating</param>
-        protected virtual void CreateTerrainCore(Terrain terrain)
-        {
-            // for moment, use "random city" terrain
-            //Terrain.TerrainBuilder builder = new Terrain.RandomCityTerrainBuilder();
-            // for moment, use "random dungeon" terrain
-            Terrain.TerrainBuilder builder = new Terrain.MazeTerrainBuilder();
-            builder.BuildCells(terrain);
-        }
-
         /// <summary>Handle mission ending</summary>
-        /// <param name="battlescape">Details of battle</param>
-        /// <param name="finishType">Who won the battle</param>
+        /// <param name="finishType">Who won the engagement</param>
+        /// <param name="alienTeam">The alien force that was engaged</param>
         /// <remarks>Method Template pattern</remarks>
-        public void OnFinish(Battle battlescape, BattleFinish finishType)
+        public void OnFinish(BattleFinish finishType, Team alienTeam)
         {
-            CalcLosses(battlescape, finishType);
+            CalcLosses(finishType, alienTeam);
 
             // ToDo: put any steps specific to all missions here
             OnFinishCore(finishType);
@@ -204,10 +179,14 @@ namespace ProjectXenocide.Model.Battlescape
         }
 
         /// <summary>Figure out number of each type of alien killed</summary>
-        /// <param name="battlescape">Details of battle</param>
-        protected virtual void ScoreKilledAliens(Battle battlescape)
+        /// <param name="alienTeam">The alien force that was engaged</param>
+        protected virtual void ScoreKilledAliens(Team alienTeam)
         {
-            foreach (Combatant combatant in battlescape.Teams[Team.Aliens].Combatants)
+            if (alienTeam == null)
+            {
+                return;
+            }
+            foreach (Combatant combatant in alienTeam.Combatants)
             {
                 if (combatant.IsDead)
                 {
@@ -216,40 +195,26 @@ namespace ProjectXenocide.Model.Battlescape
             }
         }
 
-        /// <summary>Figure out number of X-Corp soliders and civilians killed if mission aborted</summary>
-        /// <param name="battlescape">Details of battle</param>
-        protected virtual void CalcXCorpLossesOnAbort(Battle battlescape)
+        /// <summary>Figure out number of X-Corp soldiers killed if mission aborted</summary>
+        protected virtual void CalcXCorpLossesOnAbort()
         {
-            // any soldier not on an exit square is dead
+            // Everyone who survived the withdrawal is recovered.
             for (int i = aircraft.Soldiers.Keys.Count - 1; 0 <= i; --i)
             {
                 Person soldier = aircraft.Soldiers.Keys[i];
-                Combatant combatant = soldier.Combatant;
-                bool onExit = combatant.IsOnExitTile();
-                if (combatant.IsDead || !onExit)
+                if (soldier.Combatant.IsDead)
                 {
-                    soldier.DiedOnMission(onExit);
+                    soldier.DiedOnMission(true);
                     ScoreXCorpKia(soldier);
                 }
             }
         }
 
-        /// <summary>Figure out number of Aliens killed if mission aborted</summary>
-        /// <param name="battlescape">Details of battle</param>
-        protected virtual void CalcAlienLossesOnAbort(Battle battlescape)
+        /// <summary>Figure out number of Aliens recovered if mission aborted</summary>
+        /// <param name="alienTeam">The alien force that was engaged</param>
+        protected virtual void CalcAlienLossesOnAbort(Team alienTeam)
         {
-            foreach (Combatant combatant in battlescape.Teams[Team.Aliens].Combatants)
-            {
-                // will gain any aliens in craft on exit
-                if (combatant.IsOnExitTile())
-                {
-                    if (!combatant.IsDead)
-                    {
-                        RecordAlien(captures, false, combatant.CombatantInfo);
-                    }
-                    RecoverAlien(combatant);
-                }
-            }
+            // The engagement was broken off; nothing is recovered.
         }
 
         /// <summary>Record killing or capturing an alien</summary>
@@ -290,9 +255,8 @@ namespace ProjectXenocide.Model.Battlescape
             }
         }
 
-        /// <summary>Figure out number of X-Corp soliders and civilians killed if aliens win</summary>
-        /// <param name="battlescape">Details of battle</param>
-        protected virtual void CalcXCorpLossesOnAlienVictory(Battle battlescape)
+        /// <summary>Figure out number of X-Corp soldiers killed if aliens win</summary>
+        protected virtual void CalcXCorpLossesOnAlienVictory()
         {
             // all X-Corp soldiers are dead
             for (int i = aircraft.Soldiers.Keys.Count - 1; 0 <= i; --i)
@@ -304,15 +268,13 @@ namespace ProjectXenocide.Model.Battlescape
         }
 
         /// <summary>Figure out number of Aliens killed if aliens win</summary>
-        /// <param name="battlescape">Details of battle</param>
-        protected virtual void CalcAlienLossesOnAlienVictory(Battle battlescape)
+        protected virtual void CalcAlienLossesOnAlienVictory()
         {
             // nothing to do
         }
 
-        /// <summary>Figure out number of X-Corp soliders and civilians killed if X-Corp win</summary>
-        /// <param name="battlescape">Details of battle</param>
-        protected virtual void CalcXCorpLossesOnXCorpVictory(Battle battlescape)
+        /// <summary>Figure out number of X-Corp soldiers killed if X-Corp win</summary>
+        protected virtual void CalcXCorpLossesOnXCorpVictory()
         {
             for (int i = aircraft.Soldiers.Keys.Count - 1; 0 <= i; --i)
             {
@@ -326,11 +288,15 @@ namespace ProjectXenocide.Model.Battlescape
         }
 
         /// <summary>Figure out number of Aliens killed if X-Corp win</summary>
-        /// <param name="battlescape">Details of battle</param>
-        protected virtual void CalcAlienLossesOnXCorpVictory(Battle battlescape)
+        /// <param name="alienTeam">The alien force that was engaged</param>
+        protected virtual void CalcAlienLossesOnXCorpVictory(Team alienTeam)
         {
+            if (alienTeam == null)
+            {
+                return;
+            }
             // any surviving aliens are captured
-            foreach (Combatant combatant in battlescape.Teams[Team.Aliens].Combatants)
+            foreach (Combatant combatant in alienTeam.Combatants)
             {
                 if (!combatant.IsDead)
                 {
@@ -375,28 +341,28 @@ namespace ProjectXenocide.Model.Battlescape
             }
         }
 
-        /// <summary>Figure out number of X-Corp soliders, Aliens and civilians killed</summary>
-        /// <param name="battlescape">Details of battle</param>
-        /// <param name="finishType">Who won the battle</param>
-        private void CalcLosses(Battle battlescape, BattleFinish finishType)
+        /// <summary>Figure out number of X-Corp soldiers, Aliens and civilians killed</summary>
+        /// <param name="finishType">Who won the engagement</param>
+        /// <param name="alienTeam">The alien force that was engaged</param>
+        private void CalcLosses(BattleFinish finishType, Team alienTeam)
         {
-            ScoreKilledAliens(battlescape);
+            ScoreKilledAliens(alienTeam);
             switch (finishType)
             {
                 case BattleFinish.Aborted:
-                    CalcXCorpLossesOnAbort(battlescape);
-                    CalcAlienLossesOnAbort(battlescape);
+                    CalcXCorpLossesOnAbort();
+                    CalcAlienLossesOnAbort(alienTeam);
                     break;
 
                 case BattleFinish.AlienVictory:
                     CalcLossOfAircraft();
-                    CalcXCorpLossesOnAlienVictory(battlescape);
-                    CalcAlienLossesOnAlienVictory(battlescape);
+                    CalcXCorpLossesOnAlienVictory();
+                    CalcAlienLossesOnAlienVictory();
                     break;
 
                 case BattleFinish.XCorpVictory:
-                    CalcXCorpLossesOnXCorpVictory(battlescape);
-                    CalcAlienLossesOnXCorpVictory(battlescape);
+                    CalcXCorpLossesOnXCorpVictory();
+                    CalcAlienLossesOnXCorpVictory(alienTeam);
                     break;
 
                 default:

@@ -54,16 +54,6 @@ namespace ProjectXenocide.Model.Battlescape
             }
         }
 
-        /// <summary>Perform actions after each turn</summary>
-        public void OnEndOfTurn()
-        {
-            // ToDo: additional end of turn processing.  e.g. Recover from stun
-            foreach (Combatant combatant in combatants)
-            {
-                combatant.Bleed();
-            }
-        }
-
         /// <summary>Have all team members been defeated</summary>
         /// <returns>true if team has been defeated</returns>
         public bool IsDefeated()

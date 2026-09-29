@@ -24,12 +24,7 @@ San Francisco, California, 94105, USA.
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-
-using Microsoft.Xna.Framework;
 
 using ProjectXenocide.Model.Geoscape;
 using ProjectXenocide.Model.Geoscape.Outposts;
@@ -51,7 +46,6 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
         public static void RunTests()
         {
             TestHealing();
-            TestFatalWoundsAndBleeding();
         }
 
         /// <summary>Basic Alive/Dead test</summary>
@@ -76,146 +70,6 @@ namespace ProjectXenocide.Model.Battlescape.Combatants
             Debug.Assert(combatant.IsDead);
             --combatant.Stats[Statistic.Health];
             Debug.Assert(combatant.IsDead);
-        }
-
-        /// <summary>What it says on the tin :-)</summary>
-        [Conditional("DEBUG")]
-        private static void TestFatalWoundsAndBleeding()
-        {
-            // get a soldier
-            Mission mission = new MockMission();
-            Battle battlescape = new Battle(mission);
-            Combatant combatant = battlescape.Teams[Team.XCorp].Combatants[0];
-
-            // Use Cloak armor (side=35) so 50 damage produces the expected 15 injury
-            combatant.Armor = Xenocide.StaticTables.ArmorList["Cloak"];
-
-            // Set stats to match expected assertion values
-            combatant.Stats[Statistic.FiringAccuracy] = 70;
-            combatant.Stats[Statistic.Stamina] = 50;
-            combatant.Stats[Statistic.EnergyRecharge] = 50;
-
-            // Setup random generator
-            List<int> randomNumbers = new List<int>();
-            randomNumbers.Add(49); // Damage (hit 1)
-            randomNumbers.Add(0);  // Bonus stun (hit 1)
-            randomNumbers.Add(1);  // Body part (hit 1)
-            randomNumbers.Add(1);  // Fatal wounds (hit 1)
-            randomNumbers.Add(48); // Damage (hit 2)
-            randomNumbers.Add(0);  // Bonus stun (hit 2)
-            randomNumbers.Add(2);  // Body part (hit 2)
-            randomNumbers.Add(2);  // Fatal wounds (hit 2)
-            Xenocide.Rng.RigDice(randomNumbers);
-
-            // Set health of soldier
-            combatant.Stats[Statistic.Health] = 35;
-            combatant.Stats[Statistic.TimeUnits] = 60;
-
-            // Run OnStartTurn
-            combatant.OnStartTurn();
-
-            //Verify time units, stamina and accuracy
-            Debug.Assert(combatant.Stats[Statistic.TimeUnitsLeft] == 60);
-            Debug.Assert(combatant.Accuracy(ActiveArm.Both) == 70);
-            Debug.Assert(combatant.Stats[Statistic.StaminaLeft] == 50);
-
-            // Hit the soldier (consumes: damage randomization, bonus stun, body part,
-            // and fatal wounds count — 4 RNG values per hit)
-            combatant.Hit(new DamageInfo(50, DamageType.Plasma), new Vector3(1, 0, 0));
-            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 15);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsHead] == 0);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsBody] == 2);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftArm] == 0);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsRightArm] == 0);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftLeg] == 0);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsRightLeg] == 0);
-            Debug.Assert(combatant.TotalFatalWounds == 2);
-            //Hit the soldier again
-            combatant.Hit(new DamageInfo(50, DamageType.Plasma), new Vector3(1, 0, 0));
-            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 29);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsHead] == 0);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsBody] == 2);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftArm] == 3);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsRightArm] == 0);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftLeg] == 0);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsRightLeg] == 0);
-            Debug.Assert(combatant.TotalFatalWounds == 5);
-
-            // Let the soldier bleed
-            combatant.Bleed();
-            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 34);
-
-            // Heal one wound
-            combatant.Heal(BodyParts.Body);
-            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 34);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsHead] == 0);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsBody] == 1);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftArm] == 3);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsRightArm] == 0);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftLeg] == 0);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsRightLeg] == 0);
-            Debug.Assert(combatant.TotalFatalWounds == 4);
-
-            // limb that has no fatal wound
-            combatant.Heal(BodyParts.LeftLeg);
-            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 31);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftLeg] == 0);
-            Debug.Assert(combatant.TotalFatalWounds == 4);
-
-            // Let the soldier bleed again, the soldier should die from fatal wounds.
-            combatant.Bleed();
-            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 35);
-            combatant.Bleed();
-            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 39);
-            Debug.Assert(combatant.IsDead);
-
-            // Perform post mission cleanup
-            combatant.PostMissionCleanup();
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsHead] == 0);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsBody] == 0);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftArm] == 0);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsRightArm] == 0);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsLeftLeg] == 0);
-            Debug.Assert(combatant.Stats[Statistic.FatalWoundsRightLeg] == 0);
-
-            // Wake up the soldier from the dead and test wound recovery days
-            combatant.Stats[Statistic.InjuryDamage] = 17;
-            Debug.Assert(!combatant.IsDead);
-            Debug.Assert(combatant.IsInjured);
-            combatant.PostMissionCleanup();
-            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 17);
-
-            // Test wound recovery
-            combatant.DailyHealing();
-            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 16);
-            combatant.DailyHealing();
-            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 15);
-            for (int i = 0; i < 14; i++)
-            {
-                combatant.DailyHealing();
-            }
-            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 1);
-            combatant.DailyHealing();
-            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 0);
-            combatant.DailyHealing();
-            Debug.Assert(combatant.Stats[Statistic.InjuryDamage] == 0);
-
-            // Injure the combatant everywhere
-            combatant.Stats[Statistic.FatalWoundsBody] = 2;
-            combatant.Stats[Statistic.FatalWoundsHead] = 2;
-            combatant.Stats[Statistic.FatalWoundsLeftArm] = 2;
-            combatant.Stats[Statistic.FatalWoundsLeftLeg] = 2;
-            combatant.Stats[Statistic.FatalWoundsRightArm] = 3;
-            combatant.Stats[Statistic.FatalWoundsRightLeg] = 3;
-            combatant.Stats[Statistic.TimeUnits] = 100;
-            combatant.Stats[Statistic.TimeUnitsLeft] = 100;
-            combatant.Stats[Statistic.StaminaLeft] = 0;
-            combatant.OnStartTurn();
-
-            // Check time units, energy and accuracy
-            Debug.Assert(combatant.Stats[Statistic.TimeUnitsLeft] == 50);
-            Debug.Assert(combatant.Accuracy(ActiveArm.Both) == 49);
-            Debug.Assert(combatant.Stats[Statistic.StaminaLeft] == 10);
         }
 
         #endregion UnitTests

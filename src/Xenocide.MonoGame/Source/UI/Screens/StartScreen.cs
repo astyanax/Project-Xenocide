@@ -151,7 +151,6 @@ namespace ProjectXenocide.UI.Screens
             try
             {
                 RunTest("Planet.RunTests", () => ProjectXenocide.Model.Geoscape.Geography.Planet.RunTests(), failures);
-                RunTest("Mission.RunTests", () => ProjectXenocide.Model.Battlescape.Mission.RunTests(), failures);
                 RunTest("Combatant.RunTests", () => ProjectXenocide.Model.Battlescape.Combatants.Combatant.RunTests(), failures);
                 RunTest("CrewBuilder.RunTests", () => ProjectXenocide.Model.Battlescape.CrewBuilder.RunTests(), failures);
                 RunTest("CombatantFactory.RunTests", () => ProjectXenocide.Model.StaticData.Battlescape.CombatantFactory.RunTests(), failures);

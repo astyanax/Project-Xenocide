@@ -12,7 +12,9 @@ namespace ProjectXenocide.Model.Battlescape
     public sealed class EngagementSession
     {
         public Mission Mission { get; }
-        public Battle Battle { get; }
+
+        /// <summary>The alien force, kept so the mission's result contract can read it.</summary>
+        public Team AlienTeam { get; }
 
         public IReadOnlyList<CombatantProfile> XCorp { get; }
         public IReadOnlyList<CombatantProfile> Aliens { get; }
@@ -28,12 +30,13 @@ namespace ProjectXenocide.Model.Battlescape
         public EngagementSession(Mission mission, int predictionSamples = EngagementResolver.DefaultSamples)
         {
             Mission = mission;
-            Battle = new Battle(mission);
+            AlienTeam = mission.CreateAlienTeam();
+            Team xcorpTeam = mission.CreateXCorpTeam();
 
-            XCorp = Battle.Teams[Team.XCorp].Combatants
+            XCorp = xcorpTeam.Combatants
                 .Select(c => CombatantProfile.Build(c, true, EngagementResolver.DefaultUnarmedDamage))
                 .ToList();
-            Aliens = Battle.Teams[Team.Aliens].Combatants
+            Aliens = AlienTeam.Combatants
                 .Select(c => CombatantProfile.Build(c, false, EngagementResolver.DefaultUnarmedDamage))
                 .ToList();
 
@@ -45,8 +48,14 @@ namespace ProjectXenocide.Model.Battlescape
         {
             Result = EngagementResolver.Simulate(XCorp, Aliens, rng);
             EngagementResolver.Apply(Result);
-            Mission.OnFinish(Battle, Result.Finish);
-            Battle.PostMissionCleanup();
+            Mission.OnFinish(Result.Finish, AlienTeam);
+
+            // fatal wounds are healed after the mission (formerly done by Battle)
+            foreach (CombatantProfile profile in XCorp.Concat(Aliens))
+            {
+                profile.Combatant?.PostMissionCleanup();
+            }
+
             return Result;
         }
 
