@@ -160,15 +160,29 @@ namespace ProjectXenocide.UI.Screens
 
                 // Assume it's a move command
                 pos = BattlescapeScene.RoundToCell(pos);
-                if (Battlescape.Terrain.IsOnTerrain(pos))
+                if (!Battlescape.Terrain.IsOnTerrain(pos))
                 {
-                    // check there's a path to the new position
-                    List<MoveData> path = new List<MoveData>();
-                    if (Combatant.FindPath(pos, path))
-                    {
-                        Combatant.Order = new MoveOrder(Combatant, Battlescape, path);
-                        BattlescapeScreen.ChangeState(new CombatantActivityScreenState(BattlescapeScreen, Combatant));
-                    }
+                    return;
+                }
+
+                // Misclick protection: a move only happens on a double-click on the
+                // same cell (within 500ms). The first click just arms the destination.
+                long now = Environment.TickCount64;
+                bool confirmed = (now - lastClickMilliseconds <= 500)
+                    && (Vector3.Distance(lastClickCell, pos) < 0.5f);
+                lastClickMilliseconds = now;
+                lastClickCell = pos;
+                if (!confirmed)
+                {
+                    return;
+                }
+
+                // check there's a path to the new position
+                List<MoveData> path = new List<MoveData>();
+                if (Combatant.FindPath(pos, path))
+                {
+                    Combatant.Order = new MoveOrder(Combatant, Battlescape, path);
+                    BattlescapeScreen.ChangeState(new CombatantActivityScreenState(BattlescapeScreen, Combatant));
                 }
             }
 
@@ -239,6 +253,13 @@ namespace ProjectXenocide.UI.Screens
             #endregion buttons being clicked
 
             #region Fields
+
+            /// <summary>Cell the previous move-click landed on (double-click confirm).</summary>
+            private Vector3 lastClickCell;
+
+            /// <summary>Tick count (ms) of the previous move-click.</summary>
+            private long lastClickMilliseconds;
+
             #endregion Fields
         }
     }

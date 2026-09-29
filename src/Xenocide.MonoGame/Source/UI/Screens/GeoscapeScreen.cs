@@ -213,6 +213,8 @@ namespace ProjectXenocide.UI.Screens
 
         private Panel _logPanel;
         private Button _envelopeButton;
+        private Button _filterButton;
+        private MessageType? _logFilter;
 
         private const int LogPanelWidth = 600;
         private const int LogPanelHeight = 190;
@@ -266,6 +268,17 @@ namespace ProjectXenocide.UI.Screens
             _envelopeButton.Visual.X = -8;
             _logPanel.Visual.Children.Add(_envelopeButton.Visual);
 
+            _filterButton = ThemedButton.Create("Filter: All", OnFilterClicked);
+            ThemedButton.SetWidth(_filterButton, 130);
+            _filterButton.Visual.Height = 22;
+            _filterButton.Visual.HeightUnits = Gum.DataTypes.DimensionUnitType.Absolute;
+            _filterButton.Visual.Y = 2;
+            _filterButton.Visual.YUnits = Gum.Converters.GeneralUnitType.PixelsFromSmall;
+            _filterButton.Visual.XOrigin = RenderingLibrary.Graphics.HorizontalAlignment.Right;
+            _filterButton.Visual.XUnits = Gum.Converters.GeneralUnitType.PixelsFromLarge;
+            _filterButton.Visual.X = -146;
+            _logPanel.Visual.Children.Add(_filterButton.Visual);
+
             _messageLogList = new ListBox();
             _messageLogList.Visual.X = 6;
             _messageLogList.Visual.Y = LogHeaderHeight;
@@ -289,6 +302,20 @@ namespace ProjectXenocide.UI.Screens
             ScreenManager.ShowDialog(new PendingActionsDialog());
         }
 
+        /// <summary>Cycle the situation log through the message-type filters.</summary>
+        private void OnFilterClicked(object sender, EventArgs e)
+        {
+            _logFilter = _logFilter switch
+            {
+                null => MessageType.Info,
+                MessageType.Info => MessageType.Warning,
+                MessageType.Warning => MessageType.Error,
+                MessageType.Error => MessageType.Required,
+                _ => null,
+            };
+            RefreshLogPanel();
+        }
+
         /// <summary>Rebuild the log rows, badge and visibility from the message log.</summary>
         private void RefreshLogPanel()
         {
@@ -297,7 +324,13 @@ namespace ProjectXenocide.UI.Screens
 
             _messageLogList.Items.Clear();
             foreach (var entry in MessageLog.Entries)
-                _messageLogList.Items.Add(FormatLogEntry(entry));
+            {
+                if ((_logFilter == null) || (entry.Type == _logFilter))
+                    _messageLogList.Items.Add(FormatLogEntry(entry));
+            }
+
+            if (_filterButton != null)
+                _filterButton.Text = "Filter: " + (_logFilter?.ToString() ?? "All");
 
             int pending = MessageLog.RequiredCount;
             _envelopeButton.Text = pending > 0 ? $"INBOX ({pending})" : "INBOX";
