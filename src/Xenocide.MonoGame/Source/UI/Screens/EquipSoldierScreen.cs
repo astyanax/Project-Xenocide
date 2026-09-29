@@ -81,25 +81,6 @@ namespace ProjectXenocide.UI.Screens
         }
 
         /// <summary>
-        /// Constructor used to adjust combatants on a battlescape
-        /// </summary>
-        /// <param name="combatant">Combatant who's inventory is being examined/adjusted</param>
-        /// <param name="battlescape">the battlescape</param>
-        /// <param name="lookOnly">Is screen look only mode? (i.e. combatant is being psi probed)</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods",
-            Justification = "Will throw if soldier is null")]
-        public EquipSoldierScreen(Combatant combatant, Battle battlescape, bool lookOnly)
-            : base("EquipSoldierScreen", null)
-        {
-            this.itemSource = new BattlescapeItemSource(battlescape, combatant.Position);
-            this.controller = new BattlescapeController(this, battlescape, combatant);
-            this.lookOnly = lookOnly;
-        }
-
-        //ToDo:
-        //A second constructor, used on the battlescape
-
-        /// <summary>
         /// Removes the frame from the display
         /// </summary>
         protected override void Dispose(bool disposing)
@@ -515,13 +496,11 @@ namespace ProjectXenocide.UI.Screens
         /// <summary>
         /// where we're getting the items we're adding to a soldier
         /// </summary>
-        private ItemSource itemSource;
+        private OutpostItemSource itemSource;
 
         /// <summary>Control screen behaviour that's specific to mode screen is running in</summary>
-        private Controller controller;
+        private InOutpostController controller;
 
-        /// <summary>Is screen look only mode? (i.e. combatant is being psi probed)</summary>
-        private bool lookOnly;
 
         #endregion Fields
     }

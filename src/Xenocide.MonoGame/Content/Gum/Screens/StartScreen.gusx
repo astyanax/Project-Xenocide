@@ -15,18 +15,6 @@
     <Variable Type="DimensionUnitType" Name="AeroscapeDebugButton.WidthUnits" SetsValue="true">
       <Value xsi:type="xsd:int">1</Value>
     </Variable>
-    <Variable Type="string" Name="BattlescapeButton.Parent" SetsValue="true">
-      <Value xsi:type="xsd:string">DebugPanel</Value>
-    </Variable>
-    <Variable Type="string" Name="BattlescapeButton.TextInstance.Text" SetsValue="true">
-      <Value xsi:type="xsd:string">Debug Battlescape</Value>
-    </Variable>
-    <Variable Type="float" Name="BattlescapeButton.Width" SetsValue="true">
-      <Value xsi:type="xsd:float">100</Value>
-    </Variable>
-    <Variable Type="DimensionUnitType" Name="BattlescapeButton.WidthUnits" SetsValue="true">
-      <Value xsi:type="xsd:int">1</Value>
-    </Variable>
     <Variable Type="float" Name="BGImage.Height" SetsValue="true">
       <Value xsi:type="xsd:float">106.8</Value>
     </Variable>
@@ -211,7 +199,6 @@
   <Instance Name="CreditsButton" BaseType="XenocideButton" />
   <Instance Name="QuitButton" BaseType="XenocideButton" />
   <Instance Name="RunTestsButton" BaseType="XenocideButton" />
-  <Instance Name="BattlescapeButton" BaseType="XenocideButton" />
   <Instance Name="XNetDebugButton" BaseType="XenocideButton" />
   <Instance Name="AeroscapeDebugButton" BaseType="XenocideButton" />
   <Instance Name="ContainerInstance" BaseType="Container" />

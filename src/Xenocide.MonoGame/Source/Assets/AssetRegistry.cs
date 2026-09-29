@@ -49,7 +49,6 @@ namespace ProjectXenocide.Assets
             [TextureId.EarthNormalMap] = "Content/Textures/Geoscape/EarthNormalMap.png",
             [TextureId.EquipScreenBackground] = "Content/Textures/EquipSoldier/EquipScreenBackground.png",
             [TextureId.InventorySprites] = "Content/Textures/EquipSoldier/InventorySprites.png",
-            [TextureId.BattlescapeTextureAtlas] = "Content/Textures/Battlescape/textureAtlas.png",
         };
 
         public static readonly Dictionary<UIBackgroundId, string> UIBackgroundPaths = new()

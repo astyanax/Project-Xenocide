@@ -91,7 +91,6 @@ namespace ProjectXenocide.UI.Screens
             {
 #if DEBUG
                 WireButton("RunTestsButton", OnRunTestsClicked);
-                WireButton("BattlescapeButton", OnBattlescapeClicked);
                 WireButton("XNetDebugButton", OnXNetDebugClicked);
                 WireButton("AeroscapeDebugButton", OnAeroscapeDebugClicked);
 #endif
@@ -154,12 +153,7 @@ namespace ProjectXenocide.UI.Screens
                 RunTest("Planet.RunTests", () => ProjectXenocide.Model.Geoscape.Geography.Planet.RunTests(), failures);
                 RunTest("Mission.RunTests", () => ProjectXenocide.Model.Battlescape.Mission.RunTests(), failures);
                 RunTest("Combatant.RunTests", () => ProjectXenocide.Model.Battlescape.Combatants.Combatant.RunTests(), failures);
-                RunTest("Trajectory.RunTests", () => ProjectXenocide.Model.Battlescape.Trajectory.RunTests(), failures);
-                RunTest("Terrain.RunTests", () => ProjectXenocide.Model.Battlescape.Terrain.RunTests(), failures);
-                RunTest("ShootOrder.RunTests", () => ProjectXenocide.Model.Battlescape.Combatants.ShootOrder.RunTests(), failures);
-                RunTest("MoveOrder.RunTests", () => ProjectXenocide.Model.Battlescape.Combatants.MoveOrder.RunTests(), failures);
                 RunTest("CrewBuilder.RunTests", () => ProjectXenocide.Model.Battlescape.CrewBuilder.RunTests(), failures);
-                RunTest("Pathfinder.RunTests", () => ProjectXenocide.Model.Battlescape.Pathfinder.RunTests(), failures);
                 RunTest("CombatantFactory.RunTests", () => ProjectXenocide.Model.StaticData.Battlescape.CombatantFactory.RunTests(), failures);
                 RunTest("Armor.RunTests", () => ProjectXenocide.Model.StaticData.Battlescape.Armor.RunTests(), failures);
                 RunTest("Item.RunItemTests", () => ProjectXenocide.Model.StaticData.Items.Item.RunItemTests(), failures);
@@ -256,15 +250,6 @@ namespace ProjectXenocide.UI.Screens
 
 #endif
 
-#if DEBUG
-        private void OnBattlescapeClicked(object sender, EventArgs e)
-        {
-            Logger.Debug("StartScreen: Battlescape clicked");
-            Xenocide.DebugTesting = true;
-            StartDebugBattlescape();
-        }
-#endif
-
         private void OnNewGameClicked(object sender, EventArgs e)
         {
             Logger.Debug("StartScreen: New Game clicked");
@@ -347,30 +332,5 @@ namespace ProjectXenocide.UI.Screens
             ScreenManager.ScheduleScreen(new CreditsScreen());
         }
 
-#if DEBUG
-        private static void StartDebugBattlescape()
-        {
-            Logger.Debug("StartScreen: Starting debug battlescape");
-            Xenocide.GameState.SetToStartGameCondition();
-
-            GeoPosition pos = new GeoPosition();
-            Outpost outpost = new Outpost(pos, "Dummy");
-            outpost.SetupPlayersFirstBase();
-            Xenocide.GameState.GeoData.Outposts.Add(outpost);
-
-            Overmind overmind = Xenocide.GameState.GeoData.Overmind;
-            overmind.DiableStartOfMonth();
-            overmind.DebugCreateMission(AlienMission.Retaliation, pos);
-            RetaliationTask task = overmind.Tasks[0] as RetaliationTask;
-            InvasionTask.TestReleaseUfo(task);
-            Ufo ufo = overmind.Ufos[0];
-
-            ufo.DebugTransmute(Xenocide.StaticTables.ItemList["ITEM_UFO_RECON"]);
-
-            ProjectXenocide.Model.Battlescape.Mission battlescapeMission = new UfoSiteMission(ufo, outpost.Fleet[2]);
-            Xenocide.GameState.Battlescape = new Battle(battlescapeMission);
-            ScreenManager.ScheduleScreen(new BattlescapeScreen());
-        }
-#endif
     }
 }

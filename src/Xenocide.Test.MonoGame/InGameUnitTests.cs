@@ -36,12 +36,7 @@ public class InGameUnitTests : IDisposable
     [Fact] public void Planet_RunTests() => RunInGameTest(() => ProjectXenocide.Model.Geoscape.Geography.Planet.RunTests());
     [Fact] public void Mission_RunTests() => RunInGameTest(() => ProjectXenocide.Model.Battlescape.Mission.RunTests());
     [Fact] public void Combatant_RunTests() => RunInGameTest(() => ProjectXenocide.Model.Battlescape.Combatants.Combatant.RunTests());
-    [Fact] public void Trajectory_RunTests() => RunInGameTest(() => ProjectXenocide.Model.Battlescape.Trajectory.RunTests());
-    [Fact] public void Terrain_RunTests() => RunInGameTest(() => ProjectXenocide.Model.Battlescape.Terrain.RunTests());
-    [Fact] public void ShootOrder_RunTests() => RunInGameTest(() => ProjectXenocide.Model.Battlescape.Combatants.ShootOrder.RunTests());
-    [Fact] public void MoveOrder_RunTests() => RunInGameTest(() => ProjectXenocide.Model.Battlescape.Combatants.MoveOrder.RunTests());
     [Fact] public void CrewBuilder_RunTests() => RunInGameTest(() => ProjectXenocide.Model.Battlescape.CrewBuilder.RunTests());
-    [Fact] public void Pathfinder_RunTests() => RunInGameTest(() => ProjectXenocide.Model.Battlescape.Pathfinder.RunTests());
     [Fact] public void CombatantFactory_RunTests() => RunInGameTest(() => ProjectXenocide.Model.StaticData.Battlescape.CombatantFactory.RunTests());
     [Fact] public void Armor_RunTests() => RunInGameTest(() => ProjectXenocide.Model.StaticData.Battlescape.Armor.RunTests());
     [Fact] public void Item_RunItemTests() => RunInGameTest(() => ProjectXenocide.Model.StaticData.Items.Item.RunItemTests());

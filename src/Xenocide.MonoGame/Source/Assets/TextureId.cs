@@ -11,6 +11,5 @@ namespace ProjectXenocide.Assets
         SkyboxPng,
         EquipScreenBackground,
         InventorySprites,
-        BattlescapeTextureAtlas,
     }
 }

@@ -112,11 +112,6 @@
 /processor:TextureProcessor
 /build:Content/Textures/EquipSoldier/InventorySprites.png
 
-#begin Content/Textures/Battlescape/textureAtlas.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/build:Content/Textures/Battlescape/textureAtlas.png
-
 #begin Content/Models/Characters/Alien/Morlock.X
 /importer:FbxImporter
 /processor:ModelProcessor
