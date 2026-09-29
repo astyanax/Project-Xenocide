@@ -683,7 +683,7 @@ The legacy architecture proposed splitting each screen into 3 separate classes f
 | ScreenLayout | ✅ 14 screens | All non-scene screens use ScreenLayout; 5 scene screens use it for viewport computation only |
 
 ### Gum UI Layout & Theming (Next Major Task)
-The Gum WYSIWYG editor (`Gum UI Tool`) can be invoked to create a `.gumx` project for visual layout design. The tool creates XML-based project files that define component styles, layouts, and data bindings. 7 screens load from `.gusx` layouts (Aeroscape, Battlescape, EquipSoldier, Geoscape, Start, Statistics, XNet); all dialogs and the remaining screens are built programmatically. The Gum editor would allow:
+The Gum WYSIWYG editor (`Gum UI Tool`) can be invoked to create a `.gumx` project for visual layout design. The tool creates XML-based project files that define component styles, layouts, and data bindings. 6 screens load from `.gusx` layouts (Aeroscape, EquipSoldier, Geoscape, Start, Statistics, XNet); all dialogs and the remaining screens are built programmatically. The Gum editor would allow:
 
 1. **Visual layout design** — drag-and-drop controls, position elements precisely
 2. **Button theming** — create styled button components from the TaharezLook spritesheet (`XenoNew.png` has ButtonLeftNormal/Middle/RightNormal segments + highlight/pushed states)
@@ -691,3 +691,32 @@ The Gum WYSIWYG editor (`Gum UI Tool`) can be invoked to create a `.gumx` projec
 4. **Background images** — replace programmatic texture loading with Gum `Sprite` components
 
 The Gum editor can be installed via: `dotnet tool install -g GumUiTool`
+
+## Ground Combat: Battlescape → Strategic Engagement
+
+The tile-based tactical battlescape (terrain, cells, pathfinder, move/shoot
+orders, per-unit AI, 3D battlefield) was removed and replaced by an abstract
+**Strategic Engagement** model:
+
+| Removed | Replaced by |
+|---------|-------------|
+| `Model/Battlescape/Battle.cs`, `Terrain/`, `Projectiles/`, `Combatants/Orders/`, `AI/` | `Model/Battlescape/Resolution/EngagementResolver.cs` |
+| `UI/Screens/Battlescape/`, `UI/Scenes/Battlescape/`, `BattlescapeScreen.gusx` | `UI/Screens/EngagementScreen.cs` |
+| `PickActionDialog`, `StartBattlescapeDialog`, tactical tests | Monte-Carlo odds + round log |
+
+- `EngagementResolver` runs a round-based simulation over `CombatantProfile`
+  snapshots (initiative order, clamped accuracy, armor-mitigated damage) and
+  returns casualties; `Predict()` runs the same model N times for the pre-battle
+  odds shown on the screen.
+- `EngagementSession` builds the teams via `Mission.CreateXCorpTeam()` /
+  `CreateAlienTeam()`, applies the result and calls the mission's result contract.
+- `Mission.OnFinish(BattleFinish, Team)` and the per-finish loss hooks now take
+  the engaged alien `Team` instead of a `Battle`; abort recovers all survivors.
+- `ActionInfo`/`ShootActionInfo` are now metadata-only (X-Net display); the
+  `ActionError` enum and execution methods were deleted.
+- `Combatant` keeps `Stats`/`Inventory`/`Armor`/`Accuracy`/`IsDead`/`PostMissionCleanup`;
+  `Team` is a plain force container. `GameState.Battlescape` was removed.
+
+Roadmap beyond this refactor: mission-type differentiation (outpost/terror/
+retaliation), doctrine/roles/squad training, and richer fidelity (detailed XP,
+wound model, capture mechanics).

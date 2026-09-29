@@ -24,7 +24,7 @@ Xenocide's dialog system handles three categories of user interaction:
 
 | Category | Behavior | Examples |
 |----------|----------|----------|
-| **Critical (Required)** | Blocks gameplay, demands user action. Can be temporarily dismissed but stays in a pending queue with an envelope indicator. Only removed when explicitly actioned or expired. | Tracking lost, Battlescape start confirmation, Game over |
+| **Critical (Required)** | Blocks gameplay, demands user action. Can be temporarily dismissed but stays in a pending queue with an envelope indicator. Only removed when explicitly actioned or expired. | Tracking lost, Game over |
 | **Informational (Blocking)** | Blocks gameplay, user clicks OK to dismiss. Used for validation errors and transient confirmations. | Duplicate filename, insufficient funds, base needs name |
 | **Notification (Non-blocking)** | Does NOT pause gameplay. Appears as a toast + persists in the message log. | Fuel low, research finished, facility built, item arrived |
 
@@ -43,10 +43,8 @@ Frame  (UI/Screens/Frame.cs)
   │           ├── LaunchInterceptDialog  (select craft to intercept)
   │           ├── NameNewBaseDialog      (name input for new base)
   │           ├── AlienMissionDialog     (debug cheat: select alien mission)
-  │           ├── StartBattlescapeDialog (confirm/auto-complete battlescape)
   │           ├── TrackingLostDialog     (what to do when tracking lost)
-  │           ├── BuildFacilityDialog    (select facility to build)
-  │           └── PickActionDialog       (combat actions in battlescape)
+  │           └── BuildFacilityDialog    (select facility to build)
   └── Screen  (UI/Screens/Screen.cs) — "full screens with background"
 ```
 
@@ -138,7 +136,7 @@ for conversion to `MessageLog.PostNotification`:
 | `MessageBoxGeoEvent` | dynamic (Warning/Info) |
 | `GameOverGeoEvent` | Required (keep modal until a dedicated screen exists) |
 | `TrackingLostGeoEvent` | Required |
-| `StartBattlescapeGeoEvent` | Required (confirmation — likely stays modal) |
+| `StartBattlescapeGeoEvent` | Opens the `EngagementScreen` (not a dialog) |
 | `Bank` insufficient funds, save/load errors, screen validation | Error (stay modal) |
 
 `NotificationMapping` already contains placeholder specs for the un-wired events —
@@ -276,7 +274,7 @@ Currently hardcoded mapping (future: user-configurable settings screen):
 | UfoAttackingOutpost | Warning | PostMessage (non-blocking) |
 | GameOverGeoEvent | Required | ShowCriticalDialog |
 | TrackingLostGeoEvent | Required | ShowCriticalDialog |
-| StartBattlescapeGeoEvent | Required | ShowCriticalDialog |
+| StartBattlescapeGeoEvent | Opens EngagementScreen | ScheduleScreen |
 | MessageBoxGeoEvent | depends on content | Dynamic |
 | DuplicateFilename | (blocking) | ShowMessageBox |
 | InsufficientFunds | (blocking) | ShowMessageBox |

@@ -296,7 +296,6 @@ GumScreen.Show()
 |---------|-------------------|
 | `StartScreen` | `StartScreen` |
 | `AeroscapeScreen` | `AeroscapeScreen` |
-| `BattlescapeScreen` | `BattlescapeScreen` |
 | `GeoscapeScreen` | `GeoscapeScreen` |
 | `XNetScreen` | `XNetScreen` |
 | `BasesScreen` | `BasesScreen` |
@@ -354,7 +353,7 @@ The `GetFrameworkElementByName<T>()` method requires `FormsControlAsObject` to b
 | Pattern | Code | Used By |
 |---------|------|---------|
 | `GetGraphicalUiElementByName` + `SetProperty` | `elem.SetProperty("Text", value)` | AeroscapeScreen |
-| Create programmatically | `var label = new Label(); ... label.Text = value;` | GeoscapeScreen, BattlescapeScreen |
+| Create programmatically | `var label = new Label(); ... label.Text = value;` | GeoscapeScreen, EngagementScreen |
 
 #### Button `Color` Is Not a Direct Property
 

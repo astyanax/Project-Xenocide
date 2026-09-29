@@ -53,21 +53,19 @@ src/
   Xenocide.MonoGame/           — Main game project
     Source/
       Audio/                   — GameAudioComponent (MonoGame SoundEffect backend)
-      Model/                   — Game state, geoscape, battlescape, static data, AI
+      Model/                   — Game state, geoscape, engagement resolution, static data, AI
       Services/                — Savegame service
       UI/
         Controls/              — Themed controls (ScreenLayout, ThemedLabel/Button, StyledGrid)
         Dialogs/               — Modal dialogs (programmatic ModalDialog subclasses)
         Scenes/                — 3D rendering scenes
-          Battlescape/         — 3D battlefield rendering
           Common/              — Shared 3D utilities (PolarScene, LineMesh)
           EquipSoldier/        — 3D soldier model viewer
           Facility/            — 3D base facility grid rendering
           Geoscape/            — 3D globe, Earth, skybox, HUD
           Statistics/          — 3D statistics scene
           XNet/                — 3D model viewer for encyclopedia
-        Screens/               — 24 game screens (Gum-based)
-          Battlescape/         — Battlescreen state machine files
+        Screens/               — 23 game screens (Gum-based)
           EquipSoldier/        — Controller + ItemSource strategy files
       Utils/                   — NLog, profiling, serialization, content cache
     Content/                   — MGCB assets
@@ -123,7 +121,7 @@ Frame (abstract)                         — lifecycle hooks, CeguiId
 | Screen | Controller Pattern | Scene? | Files |
 |--------|-------------------|--------|-------|
 | `GeoscapeScreen` | Nested `ScreenState` (state machine) | `GeoscapeScene` | 3 |
-| `BattlescapeScreen` | Nested `ScreenState` (state machine) | `BattlescapeScene` | 6 |
+| `EngagementScreen` | `EngagementSession` (separate file) | None | 1 |
 | `BasesScreen` | Nested controller + `BasesScreenController` | `FacilityScene` | 3 |
 | `EquipSoldierScreen` | Nested `Controller` (strategy pattern) | `EquipSoldierScene` | 6 |
 | `XNetScreen` | None needed | `XNetScene` | 2 |
@@ -211,9 +209,13 @@ GameState (root, serialized to save files)
   │    ├── Outposts    — X-Corp and alien bases
   │    ├── Ufos        — active UFO craft
   │    └── XCorp       — player organization (bank, tech, personnel)
-  ├── Battlescape      — current tactical mission (null on geoscape)
   └── MessageLogEntries — in-game event messages
 ```
+
+Ground combat is resolved by the **Strategic Engagement** model (no persistent
+tactical state): `EngagementResolver` runs a round-based simulation over
+`CombatantProfile` snapshots of a mission's teams, `EngagementSession` drives it,
+and `EngagementScreen` presents the odds, the round log and the result.
 
 ### Save/Load
 

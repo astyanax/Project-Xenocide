@@ -28,16 +28,13 @@
 - Funding model — monthly country-by-country support based on performance
 - **Alien AI** — 3-layer strategic system: Overmind (monthly planning), InvasionTask (mission coordination), Craft (HFSM behaviors)
 
-### Battlescape (Tactical Combat)
-- Turn-based squad combat on tile-based 3D maps
-- Teams: X-Corp, Aliens, Civilians
-- Cell-based terrain with line-of-sight, cover, and height mechanics
-- 6 hit locations (head, body, arms, legs) with armor front/side/rear values
-- Fatal wounds system with medkit healing
-- Experience and stat advancement for soldiers
-- A* pathfinding with flyer/non-flyer support
-- Combatant AI and team-level tactical AI
-- Procedural terrain generation
+### Strategic Engagement (Ground Combat)
+- Abstract, round-based resolution of ground missions (no tactical map)
+- Teams: X-Corp vs Aliens, with armor, weapon damage and accuracy stats
+- Monte-Carlo odds prediction shown before you commit (win %, expected losses)
+- Round-by-round combat log with a speed-up/skip-to-end option
+- Wipe-out, survival and round-cap outcomes; casualties applied to the roster
+- Fatal-wound healing and per-mission salvage/capture processing
 
 ### Aeroscape (Air Combat)
 - Interceptor-vs-UFO air combat (partially implemented)
@@ -91,13 +88,13 @@ src/
   Xenocide.MonoGame/     — Game project (active development)
     Source/
       Audio/             — GameAudioComponent (MonoGame SoundEffect backend)
-      Model/             — Game state, geoscape, battlescape, static data
+      Model/             — Game state, geoscape, engagement resolution, static data
       Services/          — Savegame service
       UI/
         Controls/        — Themed controls (ScreenLayout, ThemedLabel/Button, StyledGrid)
         Dialogs/         — Modal dialogs (programmatic ModalDialog subclasses)
-        Scenes/          — 3D scenes (Geoscape, Battlescape, XNet, Facilities, ...)
-        Screens/         — 24 game screens (Gum-based)
+        Scenes/          — 3D scenes (Geoscape, XNet, Facilities, EquipSoldier, ...)
+        Screens/         — 23 game screens (Gum-based)
       Utils/             — NLog logging, profiling, serialization, content cache
     Content/             — MGCB assets (models, shaders, textures, fonts, audio)
       Gum/               — Gum project (Xenocide.gumx) + .gusx/.gucx layouts

@@ -73,9 +73,13 @@ GameState (root object, serialized to save files)
   │    ├─ Outposts    — X-Corp and alien bases
   │    ├─ Ufos        — active UFO craft
   │    └─ XCorp       — player organization (bank, tech, personnel)
-  ├─ Battlescape      — current tactical mission (null when on geoscape)
   └─ MessageLogEntries — in-game event messages (persisted)
 ```
+
+Ground combat holds no persistent tactical state. A mission is turned into
+`CombatantProfile` snapshots and resolved by `EngagementResolver` (round-based
+simulation + Monte-Carlo prediction); `EngagementSession` drives it and
+`EngagementScreen` presents the result.
 
 **Save/Load:**
 - `GameStateSerializer.Save(Stream, GameState, version)` → JSON
@@ -245,7 +249,7 @@ public partial class ResearchScreen
 
 ### Pattern B: State Machine (Complex Navigation)
 
-Used by: GeoscapeScreen, BattlescapeScreen
+Used by: GeoscapeScreen
 
 ```csharp
 // GeoscapeScreen.cs — GUI layer
@@ -300,12 +304,10 @@ public partial class EquipSoldierScreen : PolarScreen
     private Controller controller;
 
     // Mode determined at construction
-    public EquipSoldierScreen(Combatant combatant, bool inOutpost)
+    public EquipSoldierScreen(IEnumerable<Person> soldiers, Person soldier)
         : base("EquipSoldier")
     {
-        controller = inOutpost
-            ? new InOutpostController(this, combatant)
-            : new BattlescapeController(this, combatant);
+        controller = new InOutpostController(this, soldiers, soldier);
     }
 }
 
@@ -333,7 +335,7 @@ public partial class EquipSoldierScreen
 
 ### Pattern D: Separate Scene (3D Rendering)
 
-Used by: GeoscapeScreen, BattlescapeScreen, BasesScreen, XNetScreen, StatisticsScreen, EquipSoldierScreen
+Used by: GeoscapeScreen, BasesScreen, XNetScreen, StatisticsScreen, EquipSoldierScreen
 
 ```csharp
 // GeoscapeScene.cs — Scene layer (pure rendering)
@@ -373,7 +375,7 @@ public class GeoscapeScene : PolarScene, IDisposable
 | Screen | Pattern | Controller File | Lines (Screen/Controller) |
 |--------|---------|----------------|--------------------------|
 | GeoscapeScreen | B (State) | `GeoscapeScreenState.cs` | 455 / 533 |
-| BattlescapeScreen | B (State) | `Battlescape/` (6 files) | 202 / 154 |
+| EngagementScreen | Inline session | `Resolution/EngagementSession.cs` | — / — |
 | BasesScreen | D (Scene) + enum state | `Bases/BasesScreenController.cs` | 745 / 170 |
 | EquipSoldierScreen | C (Strategy) + D | `EquipSoldier/` (5 files) | 427 / 73 |
 | XNetScreen | D (Scene) | None needed | 414 / — |

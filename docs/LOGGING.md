@@ -141,7 +141,7 @@ Logger.Debug("ScreenManager: ScheduleScreen {0}", name);
 - [x] GeoscapeScreen.cs
 - [x] LoadSaveGameScreen.cs
 - [x] EquipSoldierScreen.cs
-- [x] BattlescapeScreen.cs
+- [x] EngagementScreen.cs
 - [x] EarthGlobe.cs
 - [x] CombatantMeshes.cs
 - [x] ProjectileMesh.cs
