@@ -196,6 +196,7 @@ namespace ProjectXenocide
             var gameOptions = GameOptions.LoadFromFile();
             gameOptions.Apply();
             Utils.NotificationSettings.Load(gameOptions);
+            Utils.AutosaveService.Load(gameOptions);
 
             // Apply the persisted display mode (borderless full-screen is the
             // default full-screen mode because it toggles instantly and Alt-Tabs).

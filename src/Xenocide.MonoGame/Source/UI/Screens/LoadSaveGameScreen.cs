@@ -108,6 +108,11 @@ namespace ProjectXenocide.UI.Screens
             filenameEditBox = new TextBox();
             filenameEditBox.Placeholder = "Enter save name";
             filenameEditBox.Visual.Width = 300;
+            if (mode == Mode.Save)
+            {
+                // Sensible auto-name from the in-game date, without the extension.
+                filenameEditBox.Text = SaveFileController.StripExtension(saveFileController.GenerateDefaultName());
+            }
             content.Panel.AddChild(filenameEditBox);
 
             InitializeGrid();
@@ -146,19 +151,32 @@ namespace ProjectXenocide.UI.Screens
         /// <param name="e">Not used</param>
         private void OnSaveGame(object sender, EventArgs e)
         {
-            String saveName = filenameEditBox.Text;
+            string saveName = (filenameEditBox.Text ?? string.Empty).Trim();
+            if (string.IsNullOrEmpty(saveName))
+            {
+                Util.ShowMessageBox("Please enter a name for the save.");
+                return;
+            }
+
             if (saveFileController.SaveGameExists(saveName))
             {
-                Util.ShowMessageBox(Strings.SCREEN_LOADSAVEGAME_DUPLICATE_FILENAME);
+                // Ask before overwriting an existing save.
+                var confirm = new GumYesNoDialog(
+                    Util.StringFormat("Overwrite the existing save '{0}'?", saveName));
+                confirm.YesAction += () => SaveAndReturn(saveName);
+                ScreenManager.ShowDialog(confirm);
+                return;
             }
-            else
+
+            SaveAndReturn(saveName);
+        }
+
+        private void SaveAndReturn(string saveName)
+        {
+            if (saveFileController.TrySaveGame(saveName))
             {
-                if (saveFileController.TrySaveGame(saveName))
-                {
-                    AddSaveGameToGrid(saveName);
-                    Util.ShowMessageBox("Game saved successfully.");
-                    ScreenManager.ScheduleScreen(new GeoscapeScreen());
-                }
+                Util.ShowMessageBox("Game saved successfully.");
+                ScreenManager.ScheduleScreen(new GeoscapeScreen());
             }
         }
 
@@ -175,6 +193,7 @@ namespace ProjectXenocide.UI.Screens
                 {
                     Xenocide.GameState = game;
                     Xenocide.GameState.GeoData.GeoTime.StopTime();
+                    AutosaveService.Reset();
                     Util.ShowMessageBox("Game loaded successfully.");
                     ScreenManager.ScheduleScreen(new GeoscapeScreen());
                 }
@@ -232,7 +251,7 @@ namespace ProjectXenocide.UI.Screens
             if (savesgrid.SelectedRow != null)
             {
                 Xenocide.AudioSystem.PlaySound(SoundId.ButtonClick2);
-                filenameEditBox.Text = savesgrid.GetSelectedCellText();
+                filenameEditBox.Text = SaveFileController.StripExtension(savesgrid.GetSelectedCellText());
             }
         }
 

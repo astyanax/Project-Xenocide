@@ -85,6 +85,9 @@ namespace ProjectXenocide.Model
                     .Select(e => (string)e)
                     .Where(s => !string.IsNullOrEmpty(s))
                     .ToList();
+                gameOptions.autosaveEnabled = (bool?)root.Element("AutosaveEnabled") ?? gameOptions.autosaveEnabled;
+                gameOptions.autosaveIntervalDays = (int?)root.Element("AutosaveIntervalDays") ?? gameOptions.autosaveIntervalDays;
+                gameOptions.autosaveSlots = (int?)root.Element("AutosaveSlots") ?? gameOptions.autosaveSlots;
             }
             catch (Exception ex)
             {
@@ -113,6 +116,9 @@ namespace ProjectXenocide.Model
                     new XElement("MusicVolume", musicVolume),
                     new XElement("ToastNotifications", toastNotifications),
                     new XElement("PauseOnAlerts", pauseOnAlerts),
+                    new XElement("AutosaveEnabled", autosaveEnabled),
+                    new XElement("AutosaveIntervalDays", autosaveIntervalDays),
+                    new XElement("AutosaveSlots", autosaveSlots),
                     disabledNotifications.Select(id => new XElement("DisabledNotification", id)));
 
                 root.Save(gameOptionsPathName);
@@ -183,6 +189,36 @@ namespace ProjectXenocide.Model
         {
             get { return disabledNotifications; }
             set { disabledNotifications = value?.ToList() ?? new List<string>(); }
+        }
+
+        /// <summary>
+        /// Persisted master switch for the periodic autosave.
+        /// </summary>
+        private bool autosaveEnabled = true;
+        public bool AutosaveEnabled
+        {
+            get { return autosaveEnabled; }
+            set { autosaveEnabled = value; }
+        }
+
+        /// <summary>
+        /// Persisted number of geoscape days between autosaves.
+        /// </summary>
+        private int autosaveIntervalDays = 10;
+        public int AutosaveIntervalDays
+        {
+            get { return autosaveIntervalDays; }
+            set { autosaveIntervalDays = value; }
+        }
+
+        /// <summary>
+        /// Persisted number of rotating autosave slots.
+        /// </summary>
+        private int autosaveSlots = 5;
+        public int AutosaveSlots
+        {
+            get { return autosaveSlots; }
+            set { autosaveSlots = value; }
         }
 
         /// <summary>

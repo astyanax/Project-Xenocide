@@ -142,6 +142,7 @@ namespace ProjectXenocide.Model.Geoscape
                     return;
                 }
                 geoTime.AddMilliseconds(step);
+                AutosaveService.Update();
                 Overmind.Update(step);
 
                 // can't use foreach, because tasks may be removed from collection

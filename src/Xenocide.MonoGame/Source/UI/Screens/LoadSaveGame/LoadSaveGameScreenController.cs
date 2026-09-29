@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 using NLog;
 
 using ProjectXenocide.Model;
+using ProjectXenocide.Services;
 using ProjectXenocide.Utils;
 
 using Xenocide.Resources;
@@ -15,164 +15,83 @@ namespace ProjectXenocide.UI.Screens
     public partial class LoadSaveGameScreen
     {
         /// <summary>
-        /// Handles all game logic for save/load operations: file I/O, validation,
-        /// and save directory management.
+        /// Handles game logic for save/load operations, delegating file I/O to
+        /// <see cref="SavegameService"/>.
         /// </summary>
         /// <remarks>
-        /// ARCHITECTURE: This controller owns all file system operations for saving
-        /// and loading games. The Screen class delegates to this controller for
-        /// business logic and updates GUI elements based on results.
-        ///
         /// GAME MECHANICS:
-        /// - Save files are stored in LocalApplicationData/Xenocide/saves/
-        /// - Save files contain a header with real-time and game-time info
-        /// - Duplicate save names are not allowed (overwrite prevention)
-        /// - Load validates file format and version compatibility
+        /// - Save files live in LocalApplicationData/Xenocide/saves/ with a .xsv extension.
+        /// - Listings are sorted newest-first; only .xsv files are considered.
+        /// - Duplicate names prompt the player to overwrite.
+        /// - Load validates file format and version compatibility.
         /// </remarks>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic",
+            Justification = "Stateless facade kept as instance methods so the screen's call sites stay unchanged.")]
         private class SaveFileController
         {
             private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-            private readonly string savesDirectory;
-
-            public SaveFileController()
-            {
-                savesDirectory = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    "Xenocide", "saves");
-            }
-
-            /// <summary>
-            /// Gets the list of save files in the saves directory.
-            /// </summary>
-            /// <returns>Collection of filenames (not full paths)</returns>
+            /// <summary>Save file names (with extension), newest first.</summary>
             public string[] GetSaveFiles()
             {
-                if (Directory.Exists(savesDirectory))
+                var names = new List<string>();
+                foreach (SaveFileInfo info in SavegameService.List())
                 {
-                    return Directory.GetFiles(savesDirectory);
+                    names.Add(info.FileName);
                 }
-                return Array.Empty<string>();
+                return names.ToArray();
             }
 
-            /// <summary>
-            /// Reads the header information from a save file.
-            /// </summary>
-            /// <param name="filename">Name of the save file</param>
-            /// <returns>Header info, or null if file doesn't exist or is invalid</returns>
             public GameStateSerializer.SaveFileHeader ReadSaveHeader(string filename)
-            {
-                string path = Path.Combine(savesDirectory, filename);
-                if (!File.Exists(path))
-                    return null;
+                => SavegameService.ReadHeader(filename);
 
-                using (FileStream stream = File.Open(path, FileMode.Open))
-                {
-                    stream.Position = 0;
-                    return GameStateSerializer.ReadHeader(stream);
-                }
-            }
+            public bool SaveGameExists(string filename) => SavegameService.Exists(filename);
 
-            /// <summary>
-            /// Checks if a save file with the given name already exists.
-            /// </summary>
-            public bool SaveGameExists(string filename)
-            {
-                return File.Exists(Path.Combine(savesDirectory, filename));
-            }
-
-            /// <summary>
-            /// Saves the current game state to a file.
-            /// </summary>
-            /// <param name="saveName">Name for the save file</param>
-            /// <returns>True if save was successful</returns>
+            /// <summary>Saves the current game state under the given name.</summary>
             public bool TrySaveGame(string saveName)
             {
                 try
                 {
-                    if (!Directory.Exists(savesDirectory))
-                        Directory.CreateDirectory(savesDirectory);
-
-                    string filename = Path.Combine(savesDirectory, saveName);
-                    using (FileStream stream = File.Create(filename))
+                    if (SavegameService.Save(Xenocide.GameState, saveName))
                     {
-                        GameStateSerializer.Save(stream, Xenocide.GameState, Xenocide.CurrentVersion);
+                        return true;
                     }
-                    return true;
                 }
                 catch (Exception e)
                 {
                     Logger.Error(e, "Save failed");
-                    Util.ShowMessageBox(Strings.MSGBOX_UNABLE_TO_SAVE_FILE, e.Message);
-                    return false;
                 }
+
+                Util.ShowMessageBox(Strings.MSGBOX_UNABLE_TO_SAVE_FILE, "see the log for details");
+                return false;
             }
 
-            /// <summary>
-            /// Loads a game state from a file.
-            /// </summary>
-            /// <param name="filename">Name of the save file to load</param>
-            /// <returns>Loaded GameState, or null on failure</returns>
+            /// <summary>Loads a game state from the named file.</summary>
             public GameState TryLoadGame(string filename)
             {
                 if (string.IsNullOrEmpty(filename))
                 {
-                    Util.ShowMessageBox("Please enter a filename to load.");
+                    Util.ShowMessageBox("Please select a save to load.");
                     return null;
                 }
 
-                string path = Path.Combine(savesDirectory, filename);
-                if (!File.Exists(path))
+                GameState game = SavegameService.Load(filename, out string error);
+                if (game == null)
                 {
-                    Util.ShowMessageBox($"No save file found named '{filename}'.");
-                    return null;
+                    Util.ShowMessageBox(error ?? Strings.SCREEN_LOADSAVEGAME_VERSION_CONFLICT);
                 }
-
-                try
-                {
-                    using (FileStream stream = File.Open(path, FileMode.Open))
-                    {
-                        string error;
-                        GameState gameState = GameStateSerializer.Load(stream, Xenocide.CurrentVersion, out error);
-                        if (gameState != null)
-                        {
-                            return gameState;
-                        }
-                        else
-                        {
-                            Util.ShowMessageBox(Strings.SCREEN_LOADSAVEGAME_VERSION_CONFLICT);
-                            return null;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e, "Load failed");
-                    Util.ShowMessageBox($"Failed to load save file: {e.Message}");
-                    return null;
-                }
+                return game;
             }
 
-            /// <summary>
-            /// Deletes a save file.
-            /// </summary>
-            /// <param name="filename">Name of the file to delete</param>
-            /// <returns>True if file was deleted</returns>
-            public bool TryDeleteSave(string filename)
-            {
-                string path = Path.Combine(savesDirectory, filename);
-                if (File.Exists(path))
-                {
-                    File.Delete(path);
-                    return true;
-                }
-                return false;
-            }
+            public bool TryDeleteSave(string filename) => SavegameService.Delete(filename);
 
-            /// <summary>
-            /// Gets the full path to the saves directory.
-            /// </summary>
-            public string SavesDirectory => savesDirectory;
+            public string SavesDirectory => SavegameService.SavesDirectory;
+
+            /// <summary>A sensible, unique default name based on the in-game date.</summary>
+            public string GenerateDefaultName() => SavegameService.GenerateDefaultName();
+
+            /// <summary>Remove the save extension for display in the name box.</summary>
+            public static string StripExtension(string name) => SavegameService.StripExtension(name);
         }
     }
 }

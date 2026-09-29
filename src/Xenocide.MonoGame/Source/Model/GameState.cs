@@ -34,6 +34,7 @@ using Microsoft.Xna.Framework;
 
 using ProjectXenocide.Model.Battlescape;
 using ProjectXenocide.Model.Geoscape;
+using ProjectXenocide.Utils;
 
 #endregion
 
@@ -61,6 +62,7 @@ namespace ProjectXenocide.Model
         {
             GeoData.SetToStartGameCondition();
             battlescape = null;
+            AutosaveService.Reset();
         }
 
         #region Fields

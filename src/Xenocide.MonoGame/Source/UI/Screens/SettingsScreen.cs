@@ -69,7 +69,7 @@ namespace ProjectXenocide.UI.Screens
             _pauseOnAlerts = NotificationSettings.PauseOnAlerts;
             foreach (var id in NotificationSettings.DisabledEvents)
                 _disabledEvents.Add(id);
-            _autosave = false;
+            _autosave = AutosaveService.Enabled;
             _cursorMode = Xenocide.Instance.IsMouseVisible ? 1 : 0;
             _resolutionIdx = 0;
             _difficultyIdx = (int)StartSettings.Difficulty;
@@ -233,12 +233,14 @@ namespace ProjectXenocide.UI.Screens
             Xenocide.AudioSystem.SoundVolume = _soundLevel / 10.0f;
 
             NotificationSettings.Apply(_notifications, _pauseOnAlerts, _disabledEvents);
+            AutosaveService.Enabled = _autosave;
 
             var options = GameOptions.LoadFromFile();
             options.MusicVolume = Xenocide.AudioSystem.MusicVolume;
             options.SoundVolume = Xenocide.AudioSystem.SoundVolume;
             options.WindowMode = _displayMode;
             NotificationSettings.Save(options);
+            AutosaveService.Save(options);
             options.SaveToFile();
 
             Xenocide.SetDisplayMode(_displayMode);
