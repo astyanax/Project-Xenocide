@@ -76,15 +76,20 @@ namespace ProjectXenocide.Model.Battlescape
         {
             // Note results of mission
             Location = Outpost.Position;
-            //... Pretend fight occured, and was complete success
-            if (BattleFinish.XCorpVictory == finishType)
+            switch (finishType)
             {
-                // Tell UFO that it has been killed
-                ufo.OnDestroyed();
-            }
-            else
-            {
-                Outpost.OnDestroyed();
+                case BattleFinish.XCorpVictory:
+                    // Tell UFO that it has been killed
+                    ufo.OnDestroyed();
+                    break;
+
+                case BattleFinish.AlienVictory:
+                    Outpost.OnDestroyed();
+                    break;
+
+                case BattleFinish.Aborted:
+                    // A draw at the round cap: the outpost holds and the UFO withdraws.
+                    break;
             }
         }
 
@@ -117,8 +122,8 @@ namespace ProjectXenocide.Model.Battlescape
         /// <summary>Figure out number of X-Corp soldiers killed if mission aborted</summary>
         protected override void CalcXCorpLossesOnAbort()
         {
-            // same results as XCorp losing
-            CalcXCorpLossesOnAlienVictory();
+            // The engagement was broken off; only the soldiers who fell are lost.
+            CalcXCorpLosses(false);
         }
 
         /// <summary>Figure out number of Aliens killed if mission aborted</summary>

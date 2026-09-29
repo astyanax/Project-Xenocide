@@ -237,15 +237,21 @@ namespace ProjectXenocide.Model.Battlescape
                 return BattleFinish.AlienVictory;
             }
 
-            // Round cap reached: the attacker withdraws unless clearly winning.
+            // Round cap reached: decide on relative remaining strength.
             double xFraction = HealthFraction(xcorpUnits);
             double aFraction = HealthFraction(alienUnits);
-            log.Add(round, "Stalemate at round cap; engagement broken off.");
             if (Math.Abs(xFraction - aFraction) <= StalemateBand)
             {
+                log.Add(round, "Stalemate at the round cap; engagement broken off.");
                 return BattleFinish.Aborted;
             }
-            return (xFraction > aFraction) ? BattleFinish.XCorpVictory : BattleFinish.AlienVictory;
+            if (xFraction > aFraction)
+            {
+                log.Add(round, "Round cap reached; X-Corp holds the field.");
+                return BattleFinish.XCorpVictory;
+            }
+            log.Add(round, "Round cap reached; the aliens hold the field.");
+            return BattleFinish.AlienVictory;
         }
 
         private static List<Unit> MakeUnits(IReadOnlyList<CombatantProfile> profiles)
