@@ -44,6 +44,7 @@ using NLog;
 
 using ProjectXenocide.Assets;
 using ProjectXenocide.Model.Battlescape;
+using ProjectXenocide.Model.Geoscape.GeoEvents;
 using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.UI.Controls;
 using ProjectXenocide.UI.Dialogs;
@@ -442,6 +443,13 @@ namespace ProjectXenocide.UI.Screens
         /// </summary>
         private void EndDogfight()
         {
+            // If the UFO outran the interceptor, offer the same tracking-lost
+            // follow-up as a radar contact loss (return / patrol / last position).
+            if (simState.Outcome == DogfightOutcome.UFOEscaped)
+            {
+                Xenocide.GameState.GeoData.QueueEvent(new TrackingLostGeoEvent(ufo.Position, aircraft));
+            }
+
             if (!ufo.IsDestroyed)
                 ufo.OnDogfightFinished();
             if (!aircraft.IsDestroyed)

@@ -28,31 +28,40 @@ namespace ProjectXenocide.UI.Dialogs
         {
             AddBodyText(Util.StringFormat(Strings.DLG_TRACKINGLOST_LOST_TRACKING, hunter.Name));
 
-            AddActionButton(Strings.BUTTON_RETURN_TO_BASE, OnReturnClicked, 150);
+            // Default action (Escape / close): keep chasing the UFO's last known
+            // position. The craft auto-patrols there unless the player chooses
+            // otherwise.
+            DismissAction = () => SetPatrolOrder(target);
+
+            AddActionButton(Strings.BUTTON_LAST_POSITION, OnLastKnownClicked, 160);
+            AddActionButton(Strings.BUTTON_RETURN_TO_BASE, OnReturnClicked, 160);
             AddActionButton(Strings.BUTTON_PATROL, OnPatrolClicked, 120);
-            AddActionButton("Last Position", OnLastKnownClicked, 150);
         }
 
+        /// <summary>The craft is already heading home; keep that order.</summary>
         public void OnReturnClicked(object sender, EventArgs e)
         {
-            Dismiss();
+            Close();
         }
 
+        /// <summary>Patrol where the craft currently is.</summary>
         public void OnPatrolClicked(object sender, EventArgs e)
         {
-            SetPatrol(hunter.Position);
+            SetPatrolOrder(hunter.Position);
+            Close();
         }
 
+        /// <summary>Patrol the UFO's last known position.</summary>
         public void OnLastKnownClicked(object sender, EventArgs e)
         {
-            SetPatrol(target);
+            SetPatrolOrder(target);
+            Close();
         }
 
-        private void SetPatrol(GeoPosition position)
+        private void SetPatrolOrder(GeoPosition position)
         {
-            hunter.Mission.Abort();
+            hunter.Mission?.Abort();
             hunter.Mission = new PatrolMission(hunter, position);
-            Close();
         }
 
         private GeoPosition target;
