@@ -38,6 +38,19 @@ using Xenocide.Source.Utils;
 
 namespace ProjectXenocide.Model
 {
+    /// <summary>How the geoscape sky is projected from its panorama texture.</summary>
+    public enum SkyboxMode
+    {
+        /// <summary>Let the renderer choose the best available option (currently equirectangular).</summary>
+        Auto,
+
+        /// <summary>Sample a single 2:1 equirectangular panorama on a sphere (skybox.fx).</summary>
+        Equirectangular,
+
+        /// <summary>Bake the panorama into a cube map and sample it (skyboxcube.fx).</summary>
+        Cubemap,
+    }
+
     /// <summary>
     /// This class holds a list of game options that are persisted when saving out of an options
     /// dialog, and are applied on launch of the game.
@@ -92,6 +105,7 @@ namespace ProjectXenocide.Model
                 gameOptions.cameraZoomSensitivity = (float?)root.Element("CameraZoomSensitivity") ?? gameOptions.cameraZoomSensitivity;
                 gameOptions.cameraInvertY = (bool?)root.Element("CameraInvertY") ?? gameOptions.cameraInvertY;
                 gameOptions.cameraZoomToCursor = (bool?)root.Element("CameraZoomToCursor") ?? gameOptions.cameraZoomToCursor;
+                gameOptions.skyboxMode = (int?)root.Element("SkyboxMode") ?? gameOptions.skyboxMode;
             }
             catch (Exception ex)
             {
@@ -127,6 +141,7 @@ namespace ProjectXenocide.Model
                     new XElement("CameraZoomSensitivity", cameraZoomSensitivity),
                     new XElement("CameraInvertY", cameraInvertY),
                     new XElement("CameraZoomToCursor", cameraZoomToCursor),
+                    new XElement("SkyboxMode", skyboxMode),
                     disabledNotifications.Select(id => new XElement("DisabledNotification", id)));
 
                 root.Save(gameOptionsPathName);
@@ -259,6 +274,14 @@ namespace ProjectXenocide.Model
         {
             get { return cameraZoomToCursor; }
             set { cameraZoomToCursor = value; }
+        }
+
+        /// <summary>Persisted sky projection (Auto/Equirectangular/Cubemap).</summary>
+        private int skyboxMode = (int)SkyboxMode.Auto;
+        public SkyboxMode SkyboxMode
+        {
+            get { return (SkyboxMode)skyboxMode; }
+            set { skyboxMode = (int)value; }
         }
 
         /// <summary>

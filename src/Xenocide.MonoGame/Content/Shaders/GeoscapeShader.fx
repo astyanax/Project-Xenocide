@@ -16,15 +16,28 @@ San Francisco, California, 94105, USA.
 */
 
 /*
-* @file GeoscapeShader.fx
-* @date Created: 2007/08/23
-* @author File creator: dteviot
-* @author Credits: riemer, hazymind
-*/
-
-/*
-This is the set of shaders that render the Geoscape scene
-*/
+ * @file GeoscapeShader.fx
+ * @date Created: 2007/08/23
+ * @author File creator: dteviot
+ * @author Credits: riemer, hazymind
+ *
+ * Renders the Earth globe on the geoscape.
+ *
+ * Two techniques:
+ *   RenderGlobeWithBump  (preferred) - normal-mapped day/night lighting,
+ *                                      ocean specular and an atmospheric rim.
+ *   RenderGlobeStandard  (fallback)  - flat texture, no lighting.
+ *
+ * Lighting model (classic Blinn-Phong against a directional "sun"):
+ *   L = direction from the surface toward the sun (the LightDirection input is
+ *       negated in the vertex shader for this reason)
+ *   N = world-space surface normal, perturbed by the normal map
+ *   V = direction from the surface toward the eye = -ViewDirection
+ *   H = normalize(L + V)  (half-vector for the specular term)
+ *
+ * The day/night terminator uses smoothstep (rather than a hard clamp) so the
+ * shadow line and the city lights fade in gradually instead of banding.
+ */
 
 float4x4 World;
 float4x4 View;
@@ -34,16 +47,27 @@ Texture GeoscapeTexture;
 Texture NightTexture;
 Texture NormalMapTexture;
 
+// Direction the sunlight travels (world space). Negated in the vertex shader.
 float3  LightDirection;
 
+// Tunables (set from C# so the look can be adjusted without recompiling art).
+float   Ambient;              // minimum lit colour on the night side
+float   SunIntensity;         // sunlight strength
+float3  AtmosphereColor;      // rim/limb glow tint
+float   RimPower;             // higher = thinner atmosphere glow
+float   SpecularPower;        // higher = tighter ocean highlight
+float   SpecularIntensity;    // ocean highlight strength
+
+// The Earth textures are equirectangular (longitude/latitude), so U repeats
+// around the globe (WRAP) and V is clamped at the poles (CLAMP).
 sampler GeoscapeTextureSampler = sampler_state
 {
     texture   = <GeoscapeTexture>;
     magfilter = LINEAR;
     minfilter = LINEAR;
     mipfilter = LINEAR;
-    AddressU  = mirror;
-    AddressV  = mirror;
+    AddressU  = wrap;
+    AddressV  = clamp;
 };
 
 sampler NightTextureSampler = sampler_state
@@ -52,8 +76,8 @@ sampler NightTextureSampler = sampler_state
     magfilter = LINEAR;
     minfilter = LINEAR;
     mipfilter = LINEAR;
-    AddressU  = mirror;
-    AddressV  = mirror;
+    AddressU  = wrap;
+    AddressV  = clamp;
 };
 
 sampler NormalMapTextureSampler = sampler_state
@@ -62,18 +86,18 @@ sampler NormalMapTextureSampler = sampler_state
     magfilter = LINEAR;
     minfilter = LINEAR;
     mipfilter = LINEAR;
-    AddressU  = mirror;
-    AddressV  = mirror;
+    AddressU  = wrap;
+    AddressV  = clamp;
 };
 
 
-struct VS_INPUT 
+struct VS_INPUT
 {
     float4 Position : POSITION0;
     float3 Normal   : NORMAL0;
     float3 Tangent  : TANGENT0;
     float3 Binormal : BINORMAL0;
-    float2 TexCoord : TEXCOORD0; 
+    float2 TexCoord : TEXCOORD0;
 };
 
 struct VS_OUTPUT
@@ -86,11 +110,11 @@ struct VS_OUTPUT
 
 struct VS_OUTPUT_WITH_BUMP
 {
-    float4 Position			   : POSITION0;
-    float2 TexCoord            : TEXCOORD0;
-    float3 LightDirection	   : TEXCOORD1;
-    float3 ViewDirection	   : TEXCOORD2;
-    float3x3 TangentToWorld    : TEXCOORD3;
+    float4 Position         : POSITION0;
+    float2 TexCoord         : TEXCOORD0;
+    float3 LightDirection   : TEXCOORD1;  // direction toward the sun (world space)
+    float3 ViewDirection    : TEXCOORD2;  // eye -> surface (world space)
+    float3x3 TangentToWorld : TEXCOORD3;
 };
 
 VS_OUTPUT TransformGlobe(VS_INPUT Input)
@@ -101,7 +125,7 @@ VS_OUTPUT TransformGlobe(VS_INPUT Input)
     Output.Position           = mul(Input.Position, WorldViewProjection);
     Output.Normal             = mul(Input.Normal, (float3x3)World);
     Output.Texcoord           = Input.TexCoord;
-    Output.LightDirection.xyz = -LightDirection;
+    Output.LightDirection.xyz = -LightDirection;   // negate: travel -> towards light
     Output.LightDirection.w   = 1;
     return Output;
 }
@@ -109,28 +133,26 @@ VS_OUTPUT TransformGlobe(VS_INPUT Input)
 VS_OUTPUT_WITH_BUMP TransformGlobeWithBump(VS_INPUT Input)
 {
     VS_OUTPUT_WITH_BUMP Output;
-		
-    // Transform the position into projection space
+
+    // Transform the position into projection space.
     float4 worldSpacePos = mul(Input.Position, World);
     Output.Position = mul(worldSpacePos, View);
     Output.Position = mul(Output.Position, Projection);
 
-    Output.LightDirection.xyz = -LightDirection;
+    // Direction toward the sun (LightDirection is where the light travels from).
+    Output.LightDirection = -LightDirection;
 
-    // Similarly, calculate the view direction, from the eye to the surface.  
-    // Not normalized, in world space.
-    float3 eyePosition = mul(-View._m30_m31_m32, (float3x3)transpose(View));    
-    Output.ViewDirection = worldSpacePos.xyz - eyePosition;  
+    // Eye position derived from the view matrix, then the eye->surface ray.
+    float3 eyePosition = mul(-View._m30_m31_m32, (float3x3)transpose(View));
+    Output.ViewDirection = worldSpacePos.xyz - eyePosition;
 
-	// Calculate tangent space to world space matrix using the world space tangent,
-    // binormal, and normal as basis vectors.  the pixel shader will normalize these
-    // in case the world matrix has scaling.
+    // Tangent space -> world space basis (columns are the world-space T/B/N).
     Output.TangentToWorld[0] = mul(Input.Tangent, (float3x3)World);
     Output.TangentToWorld[1] = mul(Input.Binormal, (float3x3)World);
     Output.TangentToWorld[2] = mul(Input.Normal, (float3x3)World);
-    
-    Output.TexCoord = Input.TexCoord; 
-   
+
+    Output.TexCoord = Input.TexCoord;
+
     return Output;
 }
 
@@ -140,14 +162,8 @@ PS_OUTPUT RenderGlobe(VS_OUTPUT Input)
 {
     PS_OUTPUT Output = (PS_OUTPUT)0;
 
-    // ToDo: I just can't get this to work with Shader 1.1.
-    // ambient is hard coded to 0.25
-    // and we multiply sunlight by 3 to quickly ramp to full daylight.
-    // float sunlight = dot(Input.Normal, Input.LightDirection);
-    // Output.Color = tex2D(GeoscapeTextureSampler, Input.Texcoord) * clamp(sunlight * 3, 0.25, 1.0);
+    // Low-spec fallback: flat texture, no lighting.
     Output.Color = tex2D(GeoscapeTextureSampler, Input.Texcoord);
-
-    // make sure the base texture's alpha is always 100% 
     Output.Color.a = 1.0;
 
     return Output;
@@ -155,46 +171,44 @@ PS_OUTPUT RenderGlobe(VS_OUTPUT Input)
 
 PS_OUTPUT RenderGlobeWithBump(VS_OUTPUT_WITH_BUMP Input)
 {
-    PS_OUTPUT Output = (PS_OUTPUT)1;
-    
-    // Look up the normal from the normal map, and transform from tangent space
-    // into world space using the matrix created above.  normalize the result
-    // in case the matrix contains scaling.
-    float3 normalFromMap = tex2D(NormalMapTextureSampler, Input.TexCoord).xyz;
+    PS_OUTPUT Output;
+
+    // Decode the normal map (stored 0..1) and bring it into world space.
+    float3 normalFromMap = tex2D(NormalMapTextureSampler, Input.TexCoord).xyz * 2.0 - 1.0;
     normalFromMap = mul(normalFromMap, Input.TangentToWorld);
     normalFromMap = normalize(normalFromMap);
-    
-    // Interpolation can mess up with our normalization, so we normalize again.
-    Input.ViewDirection = normalize(Input.ViewDirection);
-    Input.LightDirection = normalize(Input.LightDirection);         
-    
-    // Calculates light intensity using the normal map instead of the model normal
-    // Ambient is hard coded to 0.25
-    // and we multiply sunlight by 3 to quickly ramp to full daylight.
-    float dotL = max(dot(normalFromMap, Input.LightDirection), 0);
-    float sunlight = clamp(dotL * 3, 0.25, 1.0);
 
-    // Night lights bitmap.  (Note, lights start going on at twilight)
-    // and make lights ramp up quickly to full
-    float nightTerm = saturate((0.2 - dotL) * 3.0);
+    float3 L = normalize(Input.LightDirection);   // surface -> sun
+    float3 V = normalize(-Input.ViewDirection);   // surface -> eye
+    float3 H = normalize(L + V);                  // Blinn-Phong half vector
 
-	// Base Color
-    float4 diffuseTexture = tex2D(GeoscapeTextureSampler, Input.TexCoord);
-	float4 nightTexture = tex2D(NightTextureSampler, Input.TexCoord);
+    float dotL = dot(normalFromMap, L);
 
-    Output.Color =  diffuseTexture * sunlight + nightTexture * nightTerm;    
-    // Make sure the base texture's alpha is always 100% 
-    Output.Color.a = 1.0;
+    // Soft terminator: fully lit by dotL ~= 0.35, fully dark by ~= -0.1.
+    float sunlight  = smoothstep(-0.1, 0.35, dotL) * SunIntensity;
+    float nightTerm = 1.0 - smoothstep(-0.1, 0.2, dotL);
 
+    float4 diffuse = tex2D(GeoscapeTextureSampler, Input.TexCoord);
+    float4 night   = tex2D(NightTextureSampler, Input.TexCoord);
+
+    // Ocean mask: the sea is the "bluest" part of the day texture. Used to keep
+    // the specular highlight over water instead of over land.
+    float water = saturate((diffuse.b - max(diffuse.r, diffuse.g)) * 2.0);
+
+    // Ocean glint (sun only reflects over water, on the lit side).
+    float specular = pow(saturate(dot(normalFromMap, H)), SpecularPower) * SpecularIntensity * water * sunlight;
+
+    // Atmospheric limb glow: strongest where the surface faces away from the eye.
+    float rim = pow(1.0 - saturate(dot(normalFromMap, V)), RimPower) * sunlight;
+
+    float3 color = diffuse.rgb * max(sunlight, Ambient);
+    color += night.rgb * nightTerm;                    // city lights on the dark side
+    color += AtmosphereColor * rim * 0.6;              // blue atmosphere edge
+    color += specular.xxx;                             // white ocean highlight
+
+    Output.Color = float4(color, 1.0);
     return Output;
 };
-
-
-
-
-
-
-
 
 technique RenderGlobeStandard
 {

@@ -42,6 +42,7 @@ using ProjectXenocide.Model.Geoscape.Outposts;
 using ProjectXenocide.Model.Geoscape.Vehicles;
 using ProjectXenocide.UI;
 using ProjectXenocide.UI.Scenes.Common;
+using ProjectXenocide.UI.Scenes.Geoscape.Skybox;
 using ProjectXenocide.Utils;
 
 #endregion
@@ -55,7 +56,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
     {
         BasicEffect basicEffect;
         EarthGlobe earth = new EarthGlobe();
-        SkyBox skybox = new SkyBox();
+        ISkybox skybox;
         GeoHud geoHud = new GeoHud();
         Effect effect;
         String geoTechnique = String.Empty;
@@ -124,7 +125,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             {
                 InitializeEffect(device);
                 earth.LoadContent(device);
-                skybox.LoadContent(content, device);
+                skybox = SkyboxFactory.Create(content, device);
                 geoHud.LoadContent(content, device);
                 effect = content.Load<Effect>(@"Shaders/GeoscapeShader");
 
@@ -172,12 +173,10 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
                 Vector3.Up
                 );
 
-            // Position skybox in world (it's centered on camera position)
-            Matrix skyboxMatrix = Matrix.CreateTranslation(cartesianCamera) * viewMatrix;
-            skyboxMatrix *= GetProjectionMatrix(AspectRatio);
-
-            // draw the skybox
-            skybox.Draw(device, skyboxMatrix, 0.6f);
+            // Draw the sky. The renderer centres it on the camera and strips the
+            // view translation, so the sky rotates with the camera but never
+            // shows parallax (it is effectively infinitely far away).
+            skybox.Draw(device, viewMatrix, GetProjectionMatrix(AspectRatio));
 
 
             // Set the state for the globe
@@ -204,6 +203,15 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             effect.Parameters["View"].SetValue(viewMatrix);
             effect.Parameters["Projection"].SetValue(basicEffect.Projection);
             effect.Parameters["LightDirection"].SetValue(basicEffect.DirectionalLight0.Direction);
+
+            // Lighting/atmosphere tunables (only present in the bump technique;
+            // the low-spec fallback has no such parameters).
+            effect.Parameters["Ambient"]?.SetValue(0.15f);
+            effect.Parameters["SunIntensity"]?.SetValue(1.0f);
+            effect.Parameters["AtmosphereColor"]?.SetValue(new Vector3(0.30f, 0.55f, 1.0f));
+            effect.Parameters["RimPower"]?.SetValue(3.0f);
+            effect.Parameters["SpecularPower"]?.SetValue(60.0f);
+            effect.Parameters["SpecularIntensity"]?.SetValue(0.5f);
 
             earth.Draw(device, effect);
 

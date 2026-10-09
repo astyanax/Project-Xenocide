@@ -20,6 +20,12 @@
 /processorParam:DebugMode=Auto
 /build:Content/Shaders/skybox.fx
 
+#begin Content/Shaders/skyboxcube.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Content/Shaders/skyboxcube.fx
+
 #begin Content/SpriteFont1.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
