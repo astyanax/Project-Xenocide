@@ -99,7 +99,7 @@ VS_OUTPUT TransformGlobe(VS_INPUT Input)
 
     VS_OUTPUT Output;
     Output.Position           = mul(Input.Position, WorldViewProjection);
-    Output.Normal             = mul(Input.Normal, World);
+    Output.Normal             = mul(Input.Normal, (float3x3)World);
     Output.Texcoord           = Input.TexCoord;
     Output.LightDirection.xyz = -LightDirection;
     Output.LightDirection.w   = 1;
@@ -119,15 +119,15 @@ VS_OUTPUT_WITH_BUMP TransformGlobeWithBump(VS_INPUT Input)
 
     // Similarly, calculate the view direction, from the eye to the surface.  
     // Not normalized, in world space.
-    float3 eyePosition = mul(-View._m30_m31_m32, transpose(View));    
-    Output.ViewDirection = worldSpacePos - eyePosition;  
+    float3 eyePosition = mul(-View._m30_m31_m32, (float3x3)transpose(View));    
+    Output.ViewDirection = worldSpacePos.xyz - eyePosition;  
 
 	// Calculate tangent space to world space matrix using the world space tangent,
     // binormal, and normal as basis vectors.  the pixel shader will normalize these
     // in case the world matrix has scaling.
-    Output.TangentToWorld[0] = mul(Input.Tangent, World);
-    Output.TangentToWorld[1] = mul(Input.Binormal, World);
-    Output.TangentToWorld[2] = mul(Input.Normal, World);
+    Output.TangentToWorld[0] = mul(Input.Tangent, (float3x3)World);
+    Output.TangentToWorld[1] = mul(Input.Binormal, (float3x3)World);
+    Output.TangentToWorld[2] = mul(Input.Normal, (float3x3)World);
     
     Output.TexCoord = Input.TexCoord; 
    
@@ -136,7 +136,7 @@ VS_OUTPUT_WITH_BUMP TransformGlobeWithBump(VS_INPUT Input)
 
 struct PS_OUTPUT { float4 Color : COLOR0; };
 
-PS_OUTPUT RenderGlobe(VS_OUTPUT Input) : COLOR0
+PS_OUTPUT RenderGlobe(VS_OUTPUT Input)
 {
     PS_OUTPUT Output = (PS_OUTPUT)0;
 
@@ -153,14 +153,14 @@ PS_OUTPUT RenderGlobe(VS_OUTPUT Input) : COLOR0
     return Output;
 };
 
-PS_OUTPUT RenderGlobeWithBump(VS_OUTPUT_WITH_BUMP Input) : COLOR0
+PS_OUTPUT RenderGlobeWithBump(VS_OUTPUT_WITH_BUMP Input)
 {
     PS_OUTPUT Output = (PS_OUTPUT)1;
     
     // Look up the normal from the normal map, and transform from tangent space
     // into world space using the matrix created above.  normalize the result
     // in case the matrix contains scaling.
-    float3 normalFromMap = tex2D(NormalMapTextureSampler, Input.TexCoord);
+    float3 normalFromMap = tex2D(NormalMapTextureSampler, Input.TexCoord).xyz;
     normalFromMap = mul(normalFromMap, Input.TangentToWorld);
     normalFromMap = normalize(normalFromMap);
     
