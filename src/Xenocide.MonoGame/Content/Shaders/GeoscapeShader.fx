@@ -115,6 +115,7 @@ struct VS_OUTPUT_WITH_BUMP
     float3 LightDirection   : TEXCOORD1;  // direction toward the sun (world space)
     float3 ViewDirection    : TEXCOORD2;  // eye -> surface (world space)
     float3x3 TangentToWorld : TEXCOORD3;
+    float3 GeometryNormal   : TEXCOORD6;  // smooth sphere normal (no normal map)
 };
 
 VS_OUTPUT TransformGlobe(VS_INPUT Input)
@@ -151,6 +152,10 @@ VS_OUTPUT_WITH_BUMP TransformGlobeWithBump(VS_INPUT Input)
     Output.TangentToWorld[1] = mul(Input.Binormal, (float3x3)World);
     Output.TangentToWorld[2] = mul(Input.Normal, (float3x3)World);
 
+    // Smooth (unperturbed) world-space normal. On this unit sphere the vertex
+    // normal equals its position, so this is just the sphere's own normal.
+    Output.GeometryNormal = mul(Input.Normal, (float3x3)World);
+
     Output.TexCoord = Input.TexCoord;
 
     return Output;
@@ -174,32 +179,45 @@ PS_OUTPUT RenderGlobeWithBump(VS_OUTPUT_WITH_BUMP Input)
     PS_OUTPUT Output;
 
     // Decode the normal map (stored 0..1) and bring it into world space.
-    float3 normalFromMap = tex2D(NormalMapTextureSampler, Input.TexCoord).xyz * 2.0 - 1.0;
-    normalFromMap = mul(normalFromMap, Input.TangentToWorld);
-    normalFromMap = normalize(normalFromMap);
+    float3 mapNormal = tex2D(NormalMapTextureSampler, Input.TexCoord).xyz * 2.0 - 1.0;
+    mapNormal = normalize(mul(mapNormal, Input.TangentToWorld));
+
+    // Smooth sphere normal. Used (a) over water and (b) near the poles so that
+    // the normal map's bathymetry/relief never creates glints on the ocean and
+    // its degenerate tangent frame never creates a starburst at the poles.
+    float3 geometryNormal = normalize(Input.GeometryNormal);
 
     float3 L = normalize(Input.LightDirection);   // surface -> sun
     float3 V = normalize(-Input.ViewDirection);   // surface -> eye
     float3 H = normalize(L + V);                  // Blinn-Phong half vector
 
-    float dotL = dot(normalFromMap, L);
-
-    // Soft terminator: fully lit by dotL ~= 0.35, fully dark by ~= -0.1.
-    float sunlight  = smoothstep(-0.1, 0.35, dotL) * SunIntensity;
-    float nightTerm = 1.0 - smoothstep(-0.1, 0.2, dotL);
-
     float4 diffuse = tex2D(GeoscapeTextureSampler, Input.TexCoord);
     float4 night   = tex2D(NightTextureSampler, Input.TexCoord);
 
-    // Ocean mask: the sea is the "bluest" part of the day texture. Used to keep
-    // the specular highlight over water instead of over land.
+    // Ocean mask: the sea is the "bluest" part of the day texture.
     float water = saturate((diffuse.b - max(diffuse.r, diffuse.g)) * 2.0);
 
-    // Ocean glint (sun only reflects over water, on the lit side).
-    float specular = pow(saturate(dot(normalFromMap, H)), SpecularPower) * SpecularIntensity * water * sunlight;
+    // Fade the normal map out at the poles (v -> 0/1) and over water, so only
+    // land away from the poles uses the terrain relief.
+    float poleFade = smoothstep(0.0, 0.06, Input.TexCoord.y) * smoothstep(1.0, 0.94, Input.TexCoord.y);
+    float relief = poleFade * (1.0 - water);
+    float3 N = normalize(lerp(geometryNormal, mapNormal, relief));
+
+    float dotL = dot(N, L);
+
+    // Soft terminator: fully lit by dotL ~= 0.35, fully dark by ~= -0.1.
+    float sunlight = smoothstep(-0.1, 0.35, dotL) * SunIntensity;
+
+    // City lights only on the clearly dark side: they are fully gone by dotL = -0.02
+    // so they cannot leak onto the day/twilight side.
+    float nightTerm = 1.0 - smoothstep(-0.15, -0.02, dotL);
+
+    // Ocean glint follows the smooth sphere (not the terrain), giving a single
+    // sun highlight that tracks the sun instead of scattered bathymetry glints.
+    float specular = pow(saturate(dot(geometryNormal, H)), SpecularPower) * SpecularIntensity * water * sunlight;
 
     // Atmospheric limb glow: strongest where the surface faces away from the eye.
-    float rim = pow(1.0 - saturate(dot(normalFromMap, V)), RimPower) * sunlight;
+    float rim = pow(1.0 - saturate(dot(geometryNormal, V)), RimPower) * sunlight;
 
     float3 color = diffuse.rgb * max(sunlight, Ambient);
     color += night.rgb * nightTerm;                    // city lights on the dark side
@@ -223,7 +241,10 @@ technique RenderGlobeWithBump
 {
     pass P0
     {
-        VertexShader = compile vs_2_0 TransformGlobeWithBump();
-        PixelShader = compile ps_2_0 RenderGlobeWithBump();
+        // Shader model 3.0: the normal-mapped lighting + ocean/atmosphere terms
+        // exceed the 64-instruction budget of ps_2_0. DesktopGL always reports
+        // shader model 3 (Util.GetShaderVersion), so this is the path taken.
+        VertexShader = compile vs_3_0 TransformGlobeWithBump();
+        PixelShader = compile ps_3_0 RenderGlobeWithBump();
     }
 }
