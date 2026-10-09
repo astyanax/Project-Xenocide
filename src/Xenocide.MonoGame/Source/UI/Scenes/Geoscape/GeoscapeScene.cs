@@ -212,6 +212,7 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             effect.Parameters["RimPower"]?.SetValue(3.0f);
             effect.Parameters["SpecularPower"]?.SetValue(60.0f);
             effect.Parameters["SpecularIntensity"]?.SetValue(0.5f);
+            effect.Parameters["FresnelIntensity"]?.SetValue(0.5f);
 
             earth.Draw(device, effect);
 

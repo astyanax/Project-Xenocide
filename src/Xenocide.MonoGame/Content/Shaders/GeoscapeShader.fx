@@ -57,6 +57,7 @@ float3  AtmosphereColor;      // rim/limb glow tint
 float   RimPower;             // higher = thinner atmosphere glow
 float   SpecularPower;        // higher = tighter ocean highlight
 float   SpecularIntensity;    // ocean highlight strength
+float   FresnelIntensity;     // how strongly grazing water reflects the atmosphere
 
 // The Earth textures are equirectangular (longitude/latitude), so U repeats
 // around the globe (WRAP) and V is clamped at the poles (CLAMP).
@@ -223,6 +224,13 @@ PS_OUTPUT RenderGlobeWithBump(VS_OUTPUT_WITH_BUMP Input)
     color += night.rgb * nightTerm;                    // city lights on the dark side
     color += AtmosphereColor * rim * 0.6;              // blue atmosphere edge
     color += specular.xxx;                             // white ocean highlight
+
+    // Fresnel reflection (Schlick approximation, F0 ~= 0.02 for water): water is
+    // far more reflective at grazing angles, so the ocean picks up the sky /
+    // atmosphere colour toward the limb. Based on the smooth sphere normal and
+    // the water mask so it never appears on land.
+    float fresnel = 0.02 + 0.98 * pow(1.0 - saturate(dot(geometryNormal, V)), 5.0);
+    color = lerp(color, AtmosphereColor, saturate(fresnel * water * sunlight * FresnelIntensity));
 
     Output.Color = float4(color, 1.0);
     return Output;
