@@ -56,8 +56,6 @@
   -->
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
     <Compile Remove="Source\**\UnitTest*.cs" />
-    <Compile Remove="Source\Model\Battlescape\Terrain\TerrainBuilders\TestTerrainBuilder.cs" />
-    <Compile Remove="Source\Model\Battlescape\Missions\MockMission.cs" />
   </ItemGroup>
 
   <ItemGroup>
