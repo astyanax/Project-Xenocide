@@ -206,12 +206,12 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
 
             // Lighting/atmosphere tunables (only present in the bump technique;
             // the low-spec fallback has no such parameters).
-            effect.Parameters["Ambient"]?.SetValue(0.15f);
+            effect.Parameters["Ambient"]?.SetValue(0.22f);
             effect.Parameters["SunIntensity"]?.SetValue(1.0f);
             effect.Parameters["AtmosphereColor"]?.SetValue(new Vector3(0.30f, 0.55f, 1.0f));
             effect.Parameters["RimPower"]?.SetValue(3.0f);
-            effect.Parameters["SpecularPower"]?.SetValue(60.0f);
-            effect.Parameters["SpecularIntensity"]?.SetValue(0.5f);
+            effect.Parameters["SpecularPower"]?.SetValue(32.0f);
+            effect.Parameters["SpecularIntensity"]?.SetValue(0.45f);
             effect.Parameters["FresnelIntensity"]?.SetValue(0.5f);
 
             earth.Draw(device, effect);

@@ -117,6 +117,7 @@ struct VS_OUTPUT_WITH_BUMP
     float3 ViewDirection    : TEXCOORD2;  // eye -> surface (world space)
     float3x3 TangentToWorld : TEXCOORD3;
     float3 GeometryNormal   : TEXCOORD6;  // smooth sphere normal (no normal map)
+    float4 ClipPos          : TEXCOORD7;  // for the deband dither (see pixel shader)
 };
 
 VS_OUTPUT TransformGlobe(VS_INPUT Input)
@@ -156,6 +157,8 @@ VS_OUTPUT_WITH_BUMP TransformGlobeWithBump(VS_INPUT Input)
     // Smooth (unperturbed) world-space normal. On this unit sphere the vertex
     // normal equals its position, so this is just the sphere's own normal.
     Output.GeometryNormal = mul(Input.Normal, (float3x3)World);
+
+    Output.ClipPos = Output.Position;
 
     Output.TexCoord = Input.TexCoord;
 
@@ -198,20 +201,25 @@ PS_OUTPUT RenderGlobeWithBump(VS_OUTPUT_WITH_BUMP Input)
     // Ocean mask: the sea is the "bluest" part of the day texture.
     float water = saturate((diffuse.b - max(diffuse.r, diffuse.g)) * 2.0);
 
-    // Fade the normal map out at the poles (v -> 0/1) and over water, so only
-    // land away from the poles uses the terrain relief.
-    float poleFade = smoothstep(0.0, 0.06, Input.TexCoord.y) * smoothstep(1.0, 0.94, Input.TexCoord.y);
+    // Fade the normal map out near the poles and over water so only land away
+    // from the poles uses the terrain relief. The southern fade is wide because
+    // the normal map's Antarctic data is noisy/streaky; using it there just
+    // produced a jagged dark band around the coast.
+    float poleFade = smoothstep(0.0, 0.05, Input.TexCoord.y) * smoothstep(1.0, 0.82, Input.TexCoord.y);
     float relief = poleFade * (1.0 - water);
     float3 N = normalize(lerp(geometryNormal, mapNormal, relief));
 
     float dotL = dot(N, L);
 
-    // Soft terminator: fully lit by dotL ~= 0.35, fully dark by ~= -0.1.
-    float sunlight = smoothstep(-0.1, 0.35, dotL) * SunIntensity;
+    // Soft terminator. A narrow band (lit by ~84 degrees from the sub-solar
+    // point, dark by ~91) reads as a day/night line rather than a broad murky
+    // twilight zone, while smoothstep keeps the gradient gradual.
+    float sunlight = smoothstep(-0.03, 0.10, dotL) * SunIntensity;
 
-    // City lights only on the clearly dark side: they are fully gone by dotL = -0.02
-    // so they cannot leak onto the day/twilight side.
-    float nightTerm = 1.0 - smoothstep(-0.15, -0.02, dotL);
+    // City lights fade in from just before the terminator (dotL = 0.02) to the
+    // dark side, so they do not leak into daylight but the transition to the lit
+    // night side (whose texture has a soft base glow) is continuous.
+    float nightTerm = 1.0 - smoothstep(-0.10, 0.02, dotL);
 
     // Ocean glint follows the smooth sphere (not the terrain), giving a single
     // sun highlight that tracks the sun instead of scattered bathymetry glints.
@@ -225,12 +233,28 @@ PS_OUTPUT RenderGlobeWithBump(VS_OUTPUT_WITH_BUMP Input)
     color += AtmosphereColor * rim * 0.6;              // blue atmosphere edge
     color += specular.xxx;                             // white ocean highlight
 
+    // Sunlit oceans are lifted slightly by atmospheric scattering in the source
+    // imagery; without it the day-side water reads almost as dark as the night.
+    color += AtmosphereColor * water * sunlight * 0.10;
+
+    // Atmospheric terminator glow: a soft band centred on the day/night boundary.
+    // The night texture carries a faint base glow, so without this the boundary is
+    // a dark stripe that is actually darker than the night side it borders.
+    color += AtmosphereColor * exp(-(dotL * dotL) * 25.0) * 0.09;
+
     // Fresnel reflection (Schlick approximation, F0 ~= 0.02 for water): water is
     // far more reflective at grazing angles, so the ocean picks up the sky /
     // atmosphere colour toward the limb. Based on the smooth sphere normal and
     // the water mask so it never appears on land.
     float fresnel = 0.02 + 0.98 * pow(1.0 - saturate(dot(geometryNormal, V)), 5.0);
     color = lerp(color, AtmosphereColor, saturate(fresnel * water * sunlight * FresnelIntensity));
+
+    // Deband: the night/terminator sits only a few levels above black, so its
+    // smooth gradient quantizes into visible bands (and the source JPEG's
+    // blocking shows through). A sub-LSB ordered dither breaks those steps up.
+    // The screen-space position varies per pixel, so hashing it gives noise.
+    float dither = frac(sin(dot(Input.ClipPos.xy, float2(12.9898, 78.233))) * 43758.5453);
+    color += (dither - 0.5) * (1.0 / 255.0);
 
     Output.Color = float4(color, 1.0);
     return Output;

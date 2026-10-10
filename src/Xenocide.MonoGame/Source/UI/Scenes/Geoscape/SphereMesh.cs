@@ -19,16 +19,12 @@ San Francisco, California, 94105, USA.
 /*
 * @file SphereMesh.cs
 * @date Created: 2007/01/25
-* @author File creator: dteviot
+* @author File creator: David Teviotdale
 * @author Credits: none
 */
 #endregion
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -36,31 +32,93 @@ using Microsoft.Xna.Framework.Graphics;
 namespace ProjectXenocide.UI.Scenes.Geoscape
 {
     /// <summary>
-    /// Generate a spherical mesh of VertexPositionNormalTexture vertexes
+    /// Generates a latitude/longitude ("UV") sphere of <see cref="GlobeVertex"/>es
+    /// for the Earth globe.
     /// </summary>
+    /// <remarks>
+    /// <paramref name="slices"/> segments go around the equator and
+    /// <paramref name="stacks"/> bands run from pole to pole, mapping the
+    /// equirectangular textures directly (u = longitude, v = latitude).
+    ///
+    /// This replaces the original hand-rolled sphere, whose pole was a single
+    /// 4-triangle fan and whose coarse tessellation produced visible facets and a
+    /// "pyramid"/concentric-square artifact at the poles. Here the pole is a fan
+    /// of <paramref name="slices"/> triangles, so the texture converges smoothly.
+    ///
+    /// The tangent frame keeps the original convention
+    /// (tangent = position x UnitX, binormal = position x tangent) so the normal
+    /// map behaves as before; only the resolution changes.
+    /// </remarks>
     sealed class SphereMesh
     {
-        private int numStrips;
-        private int nextIndex;
-        private int nextVertex;
-        private short[] triangleListIndices;
-        private GlobeVertex[] vertexes;
+        private readonly GlobeVertex[] vertexes;
+        private readonly short[] triangleListIndices;
 
         /// <summary>
-        /// construtor
-        /// <param name="numStrips">Number of strips we sphere has between pole and equator</param>
+        /// Build the sphere.
         /// </summary>
-        public SphereMesh(int numStrips)
+        /// <param name="slices">Longitudinal segments (around the Y axis).</param>
+        /// <param name="stacks">Latitudinal bands (pole to pole).</param>
+        public SphereMesh(int slices = 96, int stacks = 48)
         {
-            this.numStrips = numStrips;
-            Debug.Assert(1 <= numStrips && numStrips < 20);
+            slices = Math.Max(3, slices);
+            stacks = Math.Max(2, stacks);
 
-            AllocateStorage();
-            ConstructMeshStructure();
+            int columns = slices + 1;
+            int rows = stacks + 1;
+            vertexes = new GlobeVertex[rows * columns];
 
-            // check calculations
-            Debug.Assert(TotalVertexes == nextVertex);
-            Debug.Assert(TotalIndexes == nextIndex * 2);
+            for (int stack = 0; stack <= stacks; ++stack)
+            {
+                // v goes 0 at the north pole to 1 at the south pole.
+                float v = (float)stack / stacks;
+                double latitude = Math.PI * v;
+                float y = (float)Math.Cos(latitude);
+                float r = (float)Math.Sin(latitude);
+
+                for (int slice = 0; slice <= slices; ++slice)
+                {
+                    // u goes 0..1 the whole way around (the last column repeats the
+                    // first so the texture wraps without a seam).
+                    float u = (float)slice / slices;
+                    double longitude = Math.PI * 2.0 * u;
+                    // Note the negated X: this matches the original sphere's
+                    // coordinate convention (together with the scene's -90 degree
+                    // Y rotation) so the texture is not mirrored east<->west.
+                    float x = -r * (float)Math.Cos(longitude);
+                    float z = r * (float)Math.Sin(longitude);
+
+                    Vector3 position = new Vector3(x, y, z);
+                    Vector3 tangent = Vector3.Cross(position, Vector3.UnitX);
+                    Vector3 binormal = Vector3.Cross(position, tangent);
+
+                    vertexes[(stack * columns) + slice] =
+                        new GlobeVertex(position, position, tangent, binormal, new Vector2(u, v));
+                }
+            }
+
+            triangleListIndices = new short[stacks * slices * 6];
+            int i = 0;
+            for (int stack = 0; stack < stacks; ++stack)
+            {
+                for (int slice = 0; slice < slices; ++slice)
+                {
+                    short topLeft = (short)((stack * columns) + slice);
+                    short topRight = (short)(topLeft + 1);
+                    short bottomLeft = (short)(((stack + 1) * columns) + slice);
+                    short bottomRight = (short)(bottomLeft + 1);
+
+                    // Two triangles per quad. The winding is not critical because
+                    // the globe is drawn with back-face culling disabled.
+                    triangleListIndices[i++] = topLeft;
+                    triangleListIndices[i++] = bottomLeft;
+                    triangleListIndices[i++] = topRight;
+
+                    triangleListIndices[i++] = topRight;
+                    triangleListIndices[i++] = bottomLeft;
+                    triangleListIndices[i++] = bottomRight;
+                }
+            }
         }
 
         /// <summary>
@@ -93,267 +151,6 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
             indexBuffer.SetData(triangleListIndices);
             return indexBuffer;
         }
-
-        /// <summary>
-        /// Based on number of strips, calculate number space
-        /// needed to store Vertexes and allocate it.  
-        /// </summary>
-        private void AllocateStorage()
-        {
-            nextIndex = 0;
-            nextVertex = 0;
-
-            int numFaces = 8 * numStrips * numStrips;
-            triangleListIndices = new short[numFaces * 3];
-
-            // nodes in a given strip = (4 x (n-1)) + 1
-            // and there are 2n - 1 strips. So:
-            int numVertexes = ((4 * (numStrips - 1)) + 10) * (numStrips - 1) + 7;
-            vertexes = new GlobeVertex[numVertexes];
-        }
-
-        private void ConstructMeshStructure()
-        {
-            AddFirstMeshStrip();
-
-            // first two vertexes in array are the poles, so first vertex of strip will be at [2]
-            int previousStripStart = 2;
-            for (int strip = 2; strip <= numStrips; ++strip)
-            {
-                previousStripStart = AddTriangleStrip(strip, previousStripStart);
-            }
-        }
-
-        /// <summary>
-        /// first strip requires special handling, as all vertexes attach to the pole
-        /// </summary>
-        private void AddFirstMeshStrip()
-        {
-            Vector3 position = new Vector3(0.0f, 1.0f, 0.0f);
-            Vector3 tangent = Vector3.Cross(position, Vector3.UnitX);
-            Vector3 binormal = Vector3.Cross(position, tangent);
-
-            // add north (and south) pole vertex
-            AddVertex(position, tangent, binormal, new Vector2(0.5f, 0.0f), false);
-
-            // first two vertexes in array are the poles, so first vertex of strip will be at [2]
-            int firstIndex = 2;
-
-            // if we're on the equator, then vertexes are adjacent, otherwise they're alternating
-            int stepSize = isEquator(1) ? 1 : 2;
-
-            // now compute the Vertices along this strip
-            int numVertex = CreateStripVertexes(1, isEquator(1));
-
-            // construct the faces
-            for (int i = 0; i < numVertex; ++i)
-            {
-                AddFace(0, firstIndex, firstIndex + stepSize);
-                firstIndex += stepSize;
-            }
-        }
-
-        /// <summary>
-        /// create set of faces, between previous latitude and this one
-        /// <param name="strip">Band on sphere we're rendering</param>
-        /// <param name="previousStripVertex">Index into vertices to first vertex of pervious "strip"</param>
-        /// </summary>
-        private int AddTriangleStrip(int strip, int previousStripVertex)
-        {
-            // the vertices for this strip will start here
-            int thisStripVertex = nextVertex;
-
-            // create the strip
-            CreateStripVertexes(strip, isEquator(strip));
-
-            // if we're on the equator, then vertexes are adjacent, otherwise they're alternating
-            // with their southern hemisphere counterpart
-            int stepSize = isEquator(strip) ? 1 : 2;
-
-            // now do the faces between the strips
-            // construct the faces
-            for (int i = 0; i < 4; ++i)
-            {
-                for (int j = 0; j < strip - 1; ++j)
-                {
-                    AddFace(previousStripVertex, thisStripVertex, thisStripVertex + stepSize);
-                    thisStripVertex += stepSize;
-
-                    AddFace(thisStripVertex, previousStripVertex + 2, previousStripVertex);
-                    previousStripVertex += 2;
-                }
-                AddFace(previousStripVertex, thisStripVertex, thisStripVertex + stepSize);
-                thisStripVertex += stepSize;
-            }
-
-            // return pointer to first vectex in this strip
-            return previousStripVertex + 2;
-        }
-
-        /// <summary>
-        /// compute the vertexes in this strip, and load into the array
-        /// <param name="strip">Band on sphere we're rendering</param>
-        /// <param name="isOnEquator">Does this band touch the equator?</param>
-        /// <returns>number of vertexes added</returns>
-        /// </summary>
-        private int CreateStripVertexes(int strip, bool isOnEquator)
-        {
-            // we're going to cheat a bit and go from 0 to 90 degrees
-            double longitude = (Math.PI * 0.5 * strip) / numStrips;
-            float y = (float)Math.Cos(longitude);
-            double s = Math.Sin(longitude);
-
-            Vector3 position;
-            Vector3 tangent;
-            Vector3 binormal;
-
-            // number of vertexes in this strip
-            int numVertexes = (strip * 4);
-            for (int v = 0; v < numVertexes; ++v)
-            {
-                double latitudue = (Math.PI * 2.0 * v) / numVertexes;
-                float x = (float)(-s * Math.Cos(latitudue));
-                float z = (float)(s * Math.Sin(latitudue));
-
-                position = new Vector3(x, y, z);
-                tangent = Vector3.Cross(position, Vector3.UnitX);
-                binormal = Vector3.Cross(position, tangent);
-
-                AddVertex(position,
-                            tangent,
-                            binormal,
-                            new Vector2((float)(v) / numVertexes, (float)(strip) * 0.5f / numStrips),
-                            isOnEquator);
-            }
-
-            position = new Vector3((float)-s, y, 0.0f);
-            tangent = Vector3.Cross(position, Vector3.UnitX);
-            binormal = Vector3.Cross(position, tangent);
-
-            // and we need to add one extra one, to let texture wrap around
-            AddVertex(position,
-                       tangent,
-                       binormal,
-                       new Vector2(1.0f, (float)(strip) * 0.5f / numStrips),
-                       isOnEquator);
-
-            return numVertexes;
-        }
-
-        /// <summary>
-        /// add the vectorIndexes making up a northern face (and it's southern complement) to the index
-        /// </summary>
-        private void AddFace(int vectorIndex1, int vectorIndex2, int vectorIndex3)
-        {
-            // northern face
-            AddIndexIntoBuffer(vectorIndex1);
-            AddIndexIntoBuffer(vectorIndex3);
-            AddIndexIntoBuffer(vectorIndex2);
-        }
-
-        /// <summary>
-        /// add vectorIndex to end of northern indexes we've added so far
-        /// and add the matching southern hemisphere index as well
-        /// and update count of number
-        /// </summary>
-        private void AddIndexIntoBuffer(int vectorIndex)
-        {
-            // as we need to add a southern face for every northen one
-            // we must not fill more than half the index array with northern vertex indices.
-            Debug.Assert(nextIndex < (triangleListIndices.Length / 2));
-
-
-            // yes, I know that the vectorIndex should be a short, but due to the nature of
-            // how it's called, its cleaner to put one cast in here than multiple elsewhere
-            triangleListIndices[nextIndex] = (short)vectorIndex;
-
-            // we put southern faces at end of list, in reverse order, because
-            // vertex order needs to change (because faces are inverted)
-            triangleListIndices[TotalIndexes - nextIndex - 1] = GetSouthernVertexIndex((short)vectorIndex);
-            ++nextIndex;
-        }
-
-        /// <summary>
-        /// return the index to where the matching vertex in southern hemisphere is
-        /// </summary>
-        private short GetSouthernVertexIndex(short index)
-        {
-            // if we're on the equator then vertex is it's own complement
-            // otherwise, it's the next vertex in the array
-            if (index < TotalVertexes - ((4 * numStrips) + 1))
-            {
-                ++index;
-            }
-            return index;
-        }
-
-        /// <summary>
-        /// add VertexPositionNormalTexture to end of vertexes we've calculated so far
-        /// note that vertexes will be loaded into array as pairs, with the matching
-        /// southern hemisphere immediately after the northern one.
-        /// </summary>
-        private void AddVertex(Vector3 position, Vector3 tangent, Vector3 binormal, Vector2 texture, bool isOnEquator)
-        {
-            vertexes[nextVertex] = new GlobeVertex(position, position, tangent, binormal, texture);
-
-            nextVertex++;
-            if (!isOnEquator)
-            {
-                vertexes[nextVertex] = CreateSouthernVertex(position, tangent, texture);
-                nextVertex++;
-            }
-        }
-
-        /// <summary>
-        /// returns a VertexPositionNormalTexture that is the southern hemisphere's complement
-        /// to the supplied "Vertex"
-        /// </summary>
-        private static GlobeVertex CreateSouthernVertex(Vector3 position, Vector3 tangent, Vector2 texture)
-        {
-            Vector3 southPosition = new Vector3(position.X, -position.Y, position.Z);
-            Vector3 southBinormal = Vector3.Cross(southPosition, tangent);
-            Vector2 southTexture = new Vector2(texture.X, 1.0f - texture.Y);
-
-            return new GlobeVertex(southPosition, southPosition, tangent, southBinormal, southTexture);
-        }
-
-        /// <summary>
-        /// <returns>true if this strip is the "equator"</returns>
-        /// </summary>
-        private bool isEquator(int strip)
-        {
-            return (strip == numStrips);
-        }
-
-
-        /*
-        /// <summary>
-        /// Diagnostic output, dump the list of vertices
-        /// </summary>
-        private void dumpVertexes()
-        {
-            foreach (VertexPositionNormalTexture v in vertexes)
-            {
-                Debug.WriteLine(v.ToString());
-            }
-        }
-
-        /// <summary>
-        /// Diagnostic output, dump the vertex indexes making up the faces
-        /// </summary>
-        private void dumpFaces()
-        {
-            for (int i = 0; i < TotalIndexes; i += 3)
-            {
-                Debug.WriteLine(
-                    String.Format("( {0}, {1}, {2} )",
-                        triangleListIndices[i],
-                        triangleListIndices[i+1],
-                        triangleListIndices[i+2]
-                        ) );
-            }
-        }
-        */
 
         public int TotalVertexes { get { return vertexes.Length; } }
         public int TotalIndexes { get { return triangleListIndices.Length; } }

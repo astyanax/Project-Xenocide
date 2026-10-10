@@ -193,12 +193,85 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
                     @"Content/Textures/Geoscape/_LEGACY_EarthDiffuseMap.jpg");
                 nightTexture = LoadTextureCached(device, @"Content/Textures/Geoscape/EarthNightMap.jpg",
                     @"Content/Textures/Geoscape/_LEGACY_EarthNightMap.png");
-                normapMapTexture = LoadTextureCached(device, @"Content/Textures/Geoscape/EarthNormalMap.png", null);
+                normapMapTexture = LoadBlurredNormalMap(device);
 
-                sphereMesh = new SphereMesh(15);
+                // Higher resolution than the old sphere so the poles and texture
+                // mapping are smooth instead of faceted.
+                sphereMesh = new SphereMesh(96, 48);
                 vertexBuffer = sphereMesh.CreateVertexBuffer(device);
                 indexBuffer = sphereMesh.CreateIndexBuffer(device);
             }
+        }
+
+        /// <summary>
+        /// Load the normal map and blur it slightly.
+        /// </summary>
+        /// <remarks>
+        /// The source normal map carries 8x8 compression blocks. They are barely
+        /// visible over lit terrain, but at the terminator (where brightness changes
+        /// steeply with the surface normal) they show up as faint square "steps".
+        /// A small box blur removes the blocking while keeping the large-scale relief.
+        /// </remarks>
+        private static Texture2D LoadBlurredNormalMap(GraphicsDevice device)
+        {
+            const string cacheKey = @"Content/Textures/Geoscape/EarthNormalMap.png#blur3";
+            if (ContentCache.TryGetTexture(cacheKey, out var cached))
+            {
+                return cached;
+            }
+
+            var raw = LoadTextureCached(device, @"Content/Textures/Geoscape/EarthNormalMap.png", null);
+            var blurred = BoxBlur(device, raw, 3);
+            ContentCache.StoreTexture(cacheKey, blurred);
+            return blurred;
+        }
+
+        /// <summary>Separable box blur of a texture (radius in texels).</summary>
+        private static Texture2D BoxBlur(GraphicsDevice device, Texture2D source, int radius)
+        {
+            int width = source.Width;
+            int height = source.Height;
+            var src = new Color[width * height];
+            source.GetData(src);
+
+            var horizontal = new Color[width * height];
+            var result = new Color[width * height];
+            int window = (radius * 2) + 1;
+
+            // Horizontal pass.
+            for (int y = 0; y < height; ++y)
+            {
+                int row = y * width;
+                for (int x = 0; x < width; ++x)
+                {
+                    int r = 0, g = 0, b = 0;
+                    for (int k = -radius; k <= radius; ++k)
+                    {
+                        Color c = src[row + Math.Clamp(x + k, 0, width - 1)];
+                        r += c.R; g += c.G; b += c.B;
+                    }
+                    horizontal[row + x] = new Color(r / window, g / window, b / window);
+                }
+            }
+
+            // Vertical pass.
+            for (int x = 0; x < width; ++x)
+            {
+                for (int y = 0; y < height; ++y)
+                {
+                    int r = 0, g = 0, b = 0;
+                    for (int k = -radius; k <= radius; ++k)
+                    {
+                        Color c = horizontal[(Math.Clamp(y + k, 0, height - 1) * width) + x];
+                        r += c.R; g += c.G; b += c.B;
+                    }
+                    result[(y * width) + x] = new Color(r / window, g / window, b / window);
+                }
+            }
+
+            var texture = new Texture2D(device, width, height, false, SurfaceFormat.Color);
+            texture.SetData(result);
+            return texture;
         }
 
         private static Texture2D LoadTextureCached(GraphicsDevice device, string primaryPath, string fallbackPath)
@@ -245,6 +318,10 @@ namespace ProjectXenocide.UI.Scenes.Geoscape
         /// <param name="effect">effect to use to draw the globe</param>
         public void Draw(GraphicsDevice device, Effect effect)
         {
+            // The sphere is closed; drawing both faces makes the result
+            // independent of the triangle winding.
+            device.RasterizerState = RasterizerState.CullNone;
+
             device.SetVertexBuffer(vertexBuffer);
             device.Indices = indexBuffer;
 
