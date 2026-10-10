@@ -47,7 +47,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        # ubuntu-24.04 is pinned: the MonoGame install-wine action only maps
+        # 24.04 (noble) and 22.04 (jammy) to a WineHQ source, and ubuntu-latest
+        # migrates to Ubuntu 26 on 2026-10-19.
+        os: [windows-latest, ubuntu-24.04]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -62,18 +65,21 @@ jobs:
     - name: Install MonoGame templates
       run: dotnet new install MonoGame.Templates.CSharp
 
-    - name: Install MGCB tools
-      run: |
-        dotnet tool install -g dotnet-mgcb
-        dotnet tool install -g dotnet-mgcb-editor
+    - name: Restore MGCB tools
+      run: dotnet tool restore --tool-manifest src/Xenocide.MonoGame/.config/dotnet-tools.json
 
-    - name: Setup Linux content build deps (Wine + fonts)
+    - name: Install Linux fonts (spritefonts use Arial / Courier New)
       if: runner.os == 'Linux'
       run: |
-        sudo dpkg --add-architecture i386
         sudo apt-get update
         echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
-        sudo apt-get install -y wine wine32:i386 ttf-mscorefonts-installer
+        sudo apt-get install -y ttf-mscorefonts-installer
+
+    # Provides Wine + d3dcompiler_47 + .NET in the prefix and exports
+    # MGFXC_WINE_PATH so MGCB can compile .fx shaders on Linux.
+    - name: Setup Wine for MGFXC shader compilation
+      if: runner.os == 'Linux'
+      uses: monogame/monogame-actions/install-wine@v1.0.3
 
     - name: Skip broken FBX models (absolute paths)
       shell: pwsh
@@ -84,12 +90,6 @@ jobs:
         $content = $content -replace '(?ms)^#begin Content/Models/Characters/XCorp/FemaleShirt\.FBX.*?(?=\n#begin|\n$)', ''
         $content = $content -replace '(?ms)^#begin Content/Models/Facility/Xnet/Barracks\.FBX.*?(?=\n#begin|\n$)', ''
         [IO.File]::WriteAllText($mgcb, $content)
-
-    - name: Skip shader compilation on Linux (Wine setup incomplete)
-      if: runner.os == 'Linux'
-      run: |
-        sed -i '/^#begin Content\/Shaders\/GeoscapeShader\.fx/,/^$/d' src/Xenocide.MonoGame/Content.mgcb
-        sed -i '/^#begin Content\/Shaders\/skybox\.fx/,/^$/d' src/Xenocide.MonoGame/Content.mgcb
 
     - name: Restore
       run: dotnet restore ${{ env.SOLUTION }}
@@ -111,7 +111,7 @@ jobs:
           - runtime: win-x64
             os: windows-latest
           - runtime: linux-x64
-            os: ubuntu-latest
+            os: ubuntu-24.04
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -126,12 +126,18 @@ jobs:
     - name: Install MonoGame templates
       run: dotnet new install MonoGame.Templates.CSharp
 
-    - name: Setup Linux deps (fonts)
+    - name: Install Linux fonts (spritefonts use Arial / Courier New)
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
         echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
         sudo apt-get install -y ttf-mscorefonts-installer
+
+    # Provides Wine + d3dcompiler_47 + .NET in the prefix and exports
+    # MGFXC_WINE_PATH so MGCB can compile .fx shaders on Linux.
+    - name: Setup Wine for MGFXC shader compilation
+      if: runner.os == 'Linux'
+      uses: monogame/monogame-actions/install-wine@v1.0.3
 
     - name: Skip broken FBX models (absolute paths)
       shell: pwsh
@@ -142,12 +148,6 @@ jobs:
         $content = $content -replace '(?ms)^#begin Content/Models/Characters/XCorp/FemaleShirt\.FBX.*?(?=\n#begin|\n$)', ''
         $content = $content -replace '(?ms)^#begin Content/Models/Facility/Xnet/Barracks\.FBX.*?(?=\n#begin|\n$)', ''
         [IO.File]::WriteAllText($mgcb, $content)
-
-    - name: Skip shaders on Linux (no Wine)
-      if: runner.os == 'Linux'
-      run: |
-        sed -i '/^#begin Content\/Shaders\/GeoscapeShader\.fx/,/^$/d' src/Xenocide.MonoGame/Content.mgcb
-        sed -i '/^#begin Content\/Shaders\/skybox\.fx/,/^$/d' src/Xenocide.MonoGame/Content.mgcb
 
     - name: Restore
       run: dotnet restore ${{ env.SOLUTION }}
